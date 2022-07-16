@@ -3,10 +3,15 @@ import os
 
 class Constants:
     def __init__(self):
-        self.POKEMON_DB_PATH = os.path.join(os.path.dirname(os.path.abspath(__file__)), "pokemon.json")
-        self.TRAINER_DB_PATH = os.path.join(os.path.dirname(os.path.abspath(__file__)), "trainers.json")
-        self.MIN_BATTLES_DB_PATH = os.path.join(os.path.dirname(os.path.abspath(__file__)), "min_battles.json")
-        self.SAVED_ROUTES_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), "saved_routes")
+        self.DEBUG_MODE = False
+
+        self.SOURCE_ROOT_PATH = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+        self.POKEMON_RAW_DATA = os.path.join(self.SOURCE_ROOT_PATH, "raw_pkmn_data")
+
+        self.POKEMON_DB_PATH = os.path.join(self.POKEMON_RAW_DATA, "pokemon.json")
+        self.TRAINER_DB_PATH = os.path.join(self.POKEMON_RAW_DATA, "trainers.json")
+        self.MIN_BATTLES_DB_PATH = os.path.join(self.POKEMON_RAW_DATA, "min_battles.json")
+        self.SAVED_ROUTES_DIR = os.path.join(self.SOURCE_ROOT_PATH, "saved_routes")
 
         self.NAME_KEY = "name"
         self.BASE_HP_KEY = "base_hp"

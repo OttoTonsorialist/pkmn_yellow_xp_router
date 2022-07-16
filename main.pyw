@@ -1,17 +1,17 @@
+import argparse
+
 import tkinter as tk
 from tkinter import ttk
 
-from pip import main
-
-import custom_tkinter
-from constants import const
-import database
-import gui_backend
+from gui import custom_tkinter
+from utils.constants import const
+import pkmn.pkmn_db as pkmn_db
+import pkmn.router as router
 
 
 class Main(object):
     def __init__(self, root):
-        self._data = gui_backend.Router()
+        self._data = router.Router()
 
         self._root = root
         self._root.minsize(2000, 1200)
@@ -29,11 +29,11 @@ class Main(object):
 
         self.solo_selector_label = tk.Label(self.top_controls, text="Solo Species:")
         self.solo_selector_label.grid(row=0, column=0)
-        self.solo_selector = custom_tkinter.SimpleOptionMenu(self.top_controls, list(database.pkmn_db.data.keys()), callback=self.new_solo_pkmn)
+        self.solo_selector = custom_tkinter.SimpleOptionMenu(self.top_controls, list(pkmn_db.pkmn_db.data.keys()), callback=self.new_solo_pkmn)
         self.solo_selector.grid(row=0, column=1)
         self.min_battles_selector_label = tk.Label(self.top_controls, text="Reset to Minimum Battles:")
         self.min_battles_selector_label.grid(row=1, column=0)
-        self.min_battles_selector = custom_tkinter.SimpleOptionMenu(self.top_controls, list(database.min_battles_db.data.keys()), callback=self.reset_to_min_battles)
+        self.min_battles_selector = custom_tkinter.SimpleOptionMenu(self.top_controls, list(pkmn_db.min_battles_db.data.keys()), callback=self.reset_to_min_battles)
         self.min_battles_selector.grid(row=1, column=1)
         self.route_save_button = tk.Button(self.top_controls, text="Save Route", command=self.save_route)
         self.route_save_button.grid(row=2, column=0)
@@ -158,7 +158,7 @@ class Main(object):
         self.refresh_event_list()
 
     def reset_to_min_battles(self, *args, **kwargs):
-        self._data.bulk_fight_trainers(database.min_battles_db.data[self.min_battles_selector.get()])
+        self._data.bulk_fight_trainers(pkmn_db.min_battles_db.data[self.min_battles_selector.get()])
         self.refresh_event_list()
 
     def move_task_up(self, event=None):
@@ -226,15 +226,15 @@ class NewEventWindow(tk.Toplevel):
         self._vitamin_types = custom_tkinter.SimpleOptionMenu(self._input_frame, const.VITAMIN_TYPES, callback=self._vitamin_type_callback)
 
         self._trainers_by_loc_label = tk.Label(self._input_frame, text="Trainer Location Filter:")
-        trainer_locs = [const.ALL_TRAINERS] + sorted(database.trainer_db.get_all_locations())
+        trainer_locs = [const.ALL_TRAINERS] + sorted(pkmn_db.trainer_db.get_all_locations())
         self._trainers_by_loc = custom_tkinter.SimpleOptionMenu(self._input_frame, trainer_locs, callback=self._trainer_filter_callback)
 
         self._trainers_by_class_label = tk.Label(self._input_frame, text="Trainer Class Filter:")
-        trainer_classes = [const.ALL_TRAINERS] + sorted(database.trainer_db.get_all_classes())
+        trainer_classes = [const.ALL_TRAINERS] + sorted(pkmn_db.trainer_db.get_all_classes())
         self._trainers_by_class = custom_tkinter.SimpleOptionMenu(self._input_frame, trainer_classes, callback=self._trainer_filter_callback)
 
         self._trainer_names_label = tk.Label(self._input_frame, text="Trainer Name:")
-        self._trainer_names = custom_tkinter.SimpleOptionMenu(self._input_frame, list(database.trainer_db.data.keys()), callback=self._trainer_name_callback)
+        self._trainer_names = custom_tkinter.SimpleOptionMenu(self._input_frame, list(pkmn_db.trainer_db.data.keys()), callback=self._trainer_name_callback)
 
         self._trainer_team = custom_tkinter.EnemyPkmnTeam(self._input_frame)
 
@@ -281,7 +281,7 @@ class NewEventWindow(tk.Toplevel):
         loc_filter = self._trainers_by_loc.get()
         class_filter = self._trainers_by_class.get()
 
-        valid_trainers = database.trainer_db.get_valid_trainers(
+        valid_trainers = pkmn_db.trainer_db.get_valid_trainers(
             trainer_class=class_filter,
             trainer_loc=loc_filter,
             defeated_trainers=self._cur_defeated_trainers
@@ -295,7 +295,7 @@ class NewEventWindow(tk.Toplevel):
         if self._trainer_names.get() != const.NO_TRAINERS:
             self._create_new_event_button.enable()
             self._trainer_team.grid(row=5, column=0, columnspan=2)
-            self._trainer_team.set_team(database.trainer_db.data.get(self._trainer_names.get()))
+            self._trainer_team.set_team(pkmn_db.trainer_db.data.get(self._trainer_names.get()))
         else:
             self._create_new_event_button.disable()
             self._trainer_team.grid_forget()
@@ -353,4 +353,12 @@ def fixed_map(option, style):
 
 
 if __name__ == '__main__':
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--debug", action="store_true")
+
+    args = parser.parse_args()
+
+    if args.debug:
+        const.DEBUG_MODE = True
+
     Main(tk.Tk()).run()

@@ -1,11 +1,10 @@
 import os
 import json
 
-from constants import const
-import data_objects
-import database
-import pkmn_utils
-import utils
+from utils.constants import const
+import pkmn.data_objects as data_objects
+import pkmn.pkmn_db as pkmn_db
+import utils.io_utils as io_utils
 
 event_id_counter = 0
 
@@ -87,7 +86,7 @@ class EventGroup:
             self.name = self.event_items[0].name
             
         if len(self.event_items) == 0:
-            print(f"Something went wrong generating event group: {self.trainer_obj}")
+            raise ValueError(f"Something went wrong generating event group: {self.trainer_obj}")
         self.final_solo_pkmn = self.event_items[-1].post_event_solo_pkmn
     
     def get_pkmn_after_levelups(self):
@@ -127,7 +126,7 @@ class Router:
             os.mkdir(const.SAVED_ROUTES_DIR)
 
         final_path = os.path.join(const.SAVED_ROUTES_DIR, f"{name}.json")
-        utils.backup_file_if_exists(final_path)
+        io_utils.backup_file_if_exists(final_path)
 
         global event_id_counter
 
@@ -140,11 +139,12 @@ class Router:
     
     def refresh_existing_routes(self):
         result = []
-        for fragment in os.listdir(const.SAVED_ROUTES_DIR):
-            name, ext = os.path.splitext(fragment)
-            if ext != ".json":
-                continue
-            result.append(name)
+        if os.path.exists(const.SAVED_ROUTES_DIR):
+            for fragment in os.listdir(const.SAVED_ROUTES_DIR):
+                name, ext = os.path.splitext(fragment)
+                if ext != ".json":
+                    continue
+                result.append(name)
         
         return result
     
@@ -165,7 +165,7 @@ class Router:
             )
     
     def set_solo_pkmn(self, pkmn_name):
-        pkmn_base = database.pkmn_db.data.get(pkmn_name)
+        pkmn_base = pkmn_db.pkmn_db.data.get(pkmn_name)
         if pkmn_base is None:
             raise ValueError(f"Could not find base stats for Pokemon: {pkmn_name}")
         
@@ -182,7 +182,7 @@ class Router:
             self.get_final_solo_pkmn(),
             is_rare_candy=is_rare_candy,
             vitamin=vitamin,
-            trainer_obj=database.trainer_db.data.get(trainer_name)
+            trainer_obj=pkmn_db.trainer_db.data.get(trainer_name)
         )
 
         if insert_before is None:

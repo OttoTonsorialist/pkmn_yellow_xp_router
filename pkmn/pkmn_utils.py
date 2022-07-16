@@ -1,7 +1,7 @@
 import math
 import copy
 
-from constants import const
+from utils.constants import const
 
 VIT_AMT = 2560
 VIT_CAP = 25600

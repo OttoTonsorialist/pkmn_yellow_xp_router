@@ -2,9 +2,9 @@ from secrets import choice
 import tkinter as tk
 from tkinter import ttk
 
-import data_objects
-import gui_backend
-from constants import const
+import pkmn.data_objects as data_objects
+import pkmn.router as router
+from utils.constants import const
 
 def fixed_map(option, style):
     # Fix for setting text colour for Tkinter 8.6.9
@@ -56,7 +56,7 @@ class CustomGridview(tk.ttk.Treeview):
             self.heading(cur_col.id, text=cur_col.name)
     
     def custom_insert(self, obj):
-        if not isinstance(obj, gui_backend.EventGroup):
+        if not isinstance(obj, router.EventGroup):
             raise TypeError('Can only support rendering EventGroups')
 
         if not(len(self._custom_col_data)):

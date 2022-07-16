@@ -1,7 +1,8 @@
 import copy
+from multiprocessing.sharedctypes import Value
 
-from constants import const
-import pkmn_utils
+from utils.constants import const
+import pkmn.pkmn_utils as pkmn_utils
 
 
 class BadgeList:
@@ -188,14 +189,16 @@ class SoloPokemon:
         if gained_stat_xp is None:
             gained_stat_xp = StatBlock(0, 0, 0, 0, 0, is_stat_xp=True)
         
-        print(f"Gaining {gained_xp}, was at {self.cur_xp}, now at {self.cur_xp + gained_xp}. Before gain, needed {self.xp_to_next_level} TNL")
+        if const.DEBUG_MODE:
+            print(f"Gaining {gained_xp}, was at {self.cur_xp}, now at {self.cur_xp + gained_xp}. Before gain, needed {self.xp_to_next_level} TNL")
         self.cur_xp += gained_xp
         if gained_xp < self.xp_to_next_level:
             # gained xp did not cause a level up
             # just keep collecting unrealized stat xp, and keep track of new XP
             self.xp_to_next_level -= gained_xp
             self.unrealized_stat_xp = self.unrealized_stat_xp.add(gained_stat_xp)
-            print(f"NO level up ocurred, still need {self.xp_to_next_level} TNL")
+            if const.DEBUG_MODE:
+                print(f"NO level up ocurred, still need {self.xp_to_next_level} TNL")
         else:
             # gained xp DID cause a level up
             # realize ALL stat XP into new stats, reset unrealized stat XP, and then update level metadata
@@ -205,10 +208,12 @@ class SoloPokemon:
             level_info = pkmn_utils.level_lookups[self.species_def.growth_rate].get_level_info(self.cur_xp)
             self.cur_level = level_info[0]
             self.xp_to_next_level = level_info[1]
-            print(f"Now level {self.cur_level}, {self.xp_to_next_level} TNL")
+            if const.DEBUG_MODE:
+                print(f"Now level {self.cur_level}, {self.xp_to_next_level} TNL")
         
-        print(f"Realized StatXP {self.realized_stat_xp}")
-        print(f"Unrealized StatXP {self.unrealized_stat_xp}")
+        if const.DEBUG_MODE:
+            print(f"Realized StatXP {self.realized_stat_xp}")
+            print(f"Unrealized StatXP {self.unrealized_stat_xp}")
         self.cur_stats = self.species_def.stats.calc_level_stats(self.cur_level, self.dvs, self.realized_stat_xp, self.badges)
     
     def get_renderable_pkmn(self):
@@ -285,14 +290,14 @@ class SoloPokemon:
                 return None
             new_unrealized_stat_xp = self.unrealized_stat_xp.add(StatBlock(0, 0, 0, 0, pkmn_utils.VIT_AMT, is_stat_xp=True))
         else:
-            print(f"Unknown vitamin: {vit_name}")
-            return None
+            raise ValueError(f"Unknown vitamin: {vit_name}")
 
         return SoloPokemon(
             self.name,
             self.species_def,
             self.cur_xp,
             dvs=self.dvs,
-            realized_stat_xp=self.realized_stat_xp.add(new_unrealized_stat_xp),
+            realized_stat_xp=self.realized_stat_xp,
+            unrealized_stat_xp=new_unrealized_stat_xp,
             badges=BadgeList.copy(self.badges),
         )

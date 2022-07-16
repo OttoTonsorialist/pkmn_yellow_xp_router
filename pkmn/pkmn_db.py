@@ -1,7 +1,7 @@
 import json
 
-from constants import const
-import data_objects
+from utils.constants import const
+import pkmn.data_objects as data_objects
 
 
 class MinBattlesDB:
