@@ -55,7 +55,7 @@ class CustomGridview(tk.ttk.Treeview):
                 self.column(cur_col.id, stretch=tk.YES)
             self.heading(cur_col.id, text=cur_col.name)
     
-    def custom_insert(self, obj):
+    def custom_insert(self, obj, selection_id=None):
         if not isinstance(obj, router.EventGroup):
             raise TypeError('Can only support rendering EventGroups')
 
@@ -72,13 +72,22 @@ class CustomGridview(tk.ttk.Treeview):
             text=text,
             values=tuple(self._get_attr_helper(obj, x.attr) for x in self._custom_col_data)
         )
+
+        if selection_id is not None and text == selection_id:
+            self.selection_set(self.get_children()[-1])
     
     def refresh(self, ordered_objects):
+        raw_selection = self.selection()
+        if len(raw_selection) == 1:
+            cur_selection = self.item(raw_selection[0])['text']
+        else:
+            cur_selection = None
+
         for x in self.get_children():
             self.delete(x)
         
         for x in ordered_objects:
-            self.custom_insert(x)
+            self.custom_insert(x, selection_id=cur_selection)
 
     @staticmethod
     def _get_attr_helper(obj, attr):

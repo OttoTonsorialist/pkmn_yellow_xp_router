@@ -10,7 +10,7 @@ STAT_XP_CAP = 65535
 
 def calc_stat(base_val, level, dv, stat_xp, is_hp=False, is_badge_bosted=False):
     temp = (base_val + dv) * 2
-    temp += (math.sqrt(stat_xp) / 4)
+    temp += math.floor(math.ceil(math.sqrt(stat_xp)) / 4)
     temp = math.floor(temp * level / 100)
 
     if is_hp:
