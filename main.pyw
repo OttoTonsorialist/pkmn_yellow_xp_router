@@ -15,6 +15,7 @@ class Main(object):
 
         self._root = root
         self._root.minsize(2000, 1200)
+        self._root.title("Pokemon Yellow XP Router")
 
         # fix tkinter bug
         style = ttk.Style()
@@ -30,21 +31,32 @@ class Main(object):
         self.solo_selector_label = tk.Label(self.top_controls, text="Solo Species:")
         self.solo_selector_label.grid(row=0, column=0)
         self.solo_selector = custom_tkinter.SimpleOptionMenu(self.top_controls, list(pkmn_db.pkmn_db.data.keys()), callback=self.new_solo_pkmn)
+        self.solo_selector.config(width=20)
         self.solo_selector.grid(row=0, column=1)
+        self.pkmn_filter_label = tk.Label(self.top_controls, text="Solo Species Filter:")
+        self.pkmn_filter_label.grid(row=0, column=2)
+        self.pkmn_filter_value = tk.StringVar()
+        self.pkmn_filter = tk.Entry(self.top_controls, textvariable=self.pkmn_filter_value)
+        self.pkmn_filter.config(width=30)
+        self.pkmn_filter_value.trace_add("write", self._pkmn_filter_callback)
+        self.pkmn_filter.grid(row=0, column=3)
+
         self.min_battles_selector_label = tk.Label(self.top_controls, text="Reset to Minimum Battles:")
-        self.min_battles_selector_label.grid(row=1, column=0)
+        self.min_battles_selector_label.grid(row=0, column=4)
         self.min_battles_selector = custom_tkinter.SimpleOptionMenu(self.top_controls, list(pkmn_db.min_battles_db.data.keys()), callback=self.reset_to_min_battles)
-        self.min_battles_selector.grid(row=1, column=1)
+        self.min_battles_selector.grid(row=0, column=5)
         self.route_save_button = tk.Button(self.top_controls, text="Save Route", command=self.save_route)
-        self.route_save_button.grid(row=2, column=0)
-        self.route_load_button = tk.Button(self.top_controls, text="Load Route", command=self.load_route)
-        self.route_load_button.grid(row=2, column=1)
+        self.route_save_button.grid(row=1, column=1)
         self.route_name_label = tk.Label(self.top_controls, text="Route Name")
-        self.route_name_label.grid(row=3, column=0)
+        self.route_name_label.grid(row=1, column=2)
         self.route_name = tk.Entry(self.top_controls)
-        self.route_name.grid(row=3, column=1)
+        self.route_name.grid(row=1, column=3)
+        self.route_name.config(width=30)
+        self.previous_route_label = tk.Label(self.top_controls, text="Previous Routes")
+        self.previous_route_label.grid(row=1, column=4)
         self.previous_route_names = custom_tkinter.SimpleOptionMenu(self.top_controls, ["N/A"], callback=self.update_route_name)
-        self.previous_route_names.grid(row=3, column=2)
+        self.previous_route_names.grid(row=1, column=5)
+        self.previous_route_names.config(width=25)
 
         self.info_panel = tk.Frame(self.primary_window)
         self.info_panel.pack(expand=True, fill=tk.BOTH)
@@ -120,6 +132,9 @@ class Main(object):
     
     def run(self):
         self._root.mainloop()
+
+    def _pkmn_filter_callback(self, *args, **kwargs):
+        self.solo_selector.new_values(pkmn_db.pkmn_db.get_filtered_names(filter_val=self.pkmn_filter_value.get().strip()))
     
     def save_route(self, *args, **kwargs):
         self._data.save(self.route_name.get())
@@ -128,6 +143,7 @@ class Main(object):
     def update_route_name(self, *args, **kwargs):
         self.route_name.delete(0, tk.END)
         self.route_name.insert(0, self.previous_route_names.get())
+        self.load_route()
 
     def refresh_existing_routes(self, *args, **kwargs):
         self.previous_route_names.new_values(self._data.refresh_existing_routes(), default_val=self.route_name.get())
@@ -155,8 +171,9 @@ class Main(object):
             self.solo_pkmn_post_viewer.set_pkmn(event_group.final_solo_pkmn.get_renderable_pkmn())
 
     def load_route(self, *args, **kwargs):
-        self._data.load(self.route_name.get())
-        self.refresh_event_list()
+        if self.route_name.get():
+            self._data.load(self.route_name.get())
+            self.refresh_event_list()
 
     def new_solo_pkmn(self, *args, **kwargs):
         self._data.set_solo_pkmn(self.solo_selector.get())
@@ -215,6 +232,7 @@ class NewEventWindow(tk.Toplevel):
         super().__init__(*args, **kwargs, width=800, height=600)
         if main_window is None:
             raise ValueError('Must set main_window when creating RoutingWindow')
+        self.title("Create New Event")
         self._main_window = main_window
         self._cur_defeated_trainers = cur_defeated_trainers
 
