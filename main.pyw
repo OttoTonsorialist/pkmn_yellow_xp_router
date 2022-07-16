@@ -28,12 +28,12 @@ class Main(object):
         self.top_controls = tk.Frame(self.primary_window)
         self.top_controls.pack(expand=False)
 
-        self.solo_selector_label = tk.Label(self.top_controls, text="Solo Species:")
+        self.solo_selector_label = tk.Label(self.top_controls, text="Solo Pokemon:")
         self.solo_selector_label.grid(row=0, column=0)
         self.solo_selector = custom_tkinter.SimpleOptionMenu(self.top_controls, list(pkmn_db.pkmn_db.data.keys()), callback=self.new_solo_pkmn)
         self.solo_selector.config(width=20)
         self.solo_selector.grid(row=0, column=1)
-        self.pkmn_filter_label = tk.Label(self.top_controls, text="Solo Species Filter:")
+        self.pkmn_filter_label = tk.Label(self.top_controls, text="Solo Pokemon Filter:")
         self.pkmn_filter_label.grid(row=0, column=2)
         self.pkmn_filter_value = tk.StringVar()
         self.pkmn_filter = tk.Entry(self.top_controls, textvariable=self.pkmn_filter_value)
@@ -66,7 +66,10 @@ class Main(object):
 
         # create the main thingy
         self.event_list = custom_tkinter.RouteList(self.left_info_panel)
-        self.event_list.pack(padx=10, pady=10, fill=tk.BOTH, expand=True)
+        self.event_list.pack(padx=10, pady=10, fill=tk.BOTH, expand=True, side="left")
+        self.scroll_bar = tk.Scrollbar(self.left_info_panel, orient="vertical", command=self.event_list.yview)
+        self.scroll_bar.pack(side="right", fill=tk.BOTH)
+        self.event_list.configure(yscrollcommand=self.scroll_bar.set)
 
         self.right_info_panel = tk.Frame(self.info_panel)
         self.right_info_panel.grid(row=0, column=1, sticky="nsew")
@@ -347,7 +350,11 @@ class NewEventWindow(tk.Toplevel):
         if self._trainer_names.get() != const.NO_TRAINERS:
             self._create_new_event_button.enable()
             self._trainer_team.grid(row=5, column=0, columnspan=2)
-            self._trainer_team.set_team(pkmn_db.trainer_db.data.get(self._trainer_names.get()))
+            trainer = pkmn_db.trainer_db.data.get(self._trainer_names.get())
+            if trainer is not None:
+                self._trainer_team.set_team(trainer.pkmn)
+            else:
+                self._trainer_team.set_team(None)
         else:
             self._create_new_event_button.disable()
             self._trainer_team.grid_forget()
