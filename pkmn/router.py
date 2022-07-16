@@ -33,6 +33,10 @@ class EventItem:
             self.name = f"Vitamin: {self.vitamin}"
             self.post_event_solo_pkmn =  cur_solo_pkmn.take_vitamin(self.vitamin)
 
+            if self.post_event_solo_pkmn is None:
+                self.name = f"Ineffective Vitamin: {self.vitamin} (Already above vitamin cap)"
+                self.post_event_solo_pkmn = cur_solo_pkmn
+
 
 class EventGroup:
     def __init__(self, cur_solo_pkmn, trainer_obj=None, is_rare_candy=False, vitamin=None):
@@ -53,6 +57,7 @@ class EventGroup:
     def apply(self, cur_solo_pkmn):
         self.init_solo_pkmn = cur_solo_pkmn
         self.pkmn_after_levelups = []
+        self.event_items = []
         if self.trainer_obj is not None:
             self.name = f"Trainer: {self.trainer_obj.name} ({self.trainer_obj.location})"
             pkmn_counter = {}
@@ -178,8 +183,18 @@ class Router:
         if trainer_name:
             self.defeated_trainers.add(trainer_name)
 
+        if insert_before is None:
+            init_pkmn = self.get_final_solo_pkmn()
+            insert_idx = None
+        else:
+            insert_idx = self.get_event_group_info(insert_before)[1]
+            if insert_idx == 0:
+                init_pkmn = self.solo_pkmn_base
+            else:
+                init_pkmn = self.all_events[insert_idx-1].final_solo_pkmn
+
         new_event = EventGroup(
-            self.get_final_solo_pkmn(),
+            init_pkmn,
             is_rare_candy=is_rare_candy,
             vitamin=vitamin,
             trainer_obj=pkmn_db.trainer_db.data.get(trainer_name)
@@ -188,9 +203,8 @@ class Router:
         if insert_before is None:
             self.all_events.append(new_event)
         else:
-            insert_idx = self.get_event_group_info(insert_before)[1]
             self.all_events.insert(insert_idx, new_event)
-            self._recalc_from(insert_idx)
+            self._recalc_from(max(insert_idx - 1, 0))
 
     def get_event_group_info(self, event_group_id):
         for idx, cur_event in enumerate(self.all_events):
@@ -216,6 +230,9 @@ class Router:
         return self.solo_pkmn_base
     
     def _recalc_from(self, start_idx):
+        # dumb, but it's ultimately easier to just forcibly recalc the entire list
+        # instead of worrying about only starting from the exact right place
+        # TODO: only recalc what's necessary
         start_idx = 0
         for recalc_idx in range(start_idx, len(self.all_events)):
             if recalc_idx == 0:
