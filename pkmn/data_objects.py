@@ -53,6 +53,9 @@ class BadgeList:
             earth=bl.earth
         )
     
+    def __repr__(self):
+        return f"Boulder: {self.boulder}, Cascade: {self.cascade}, Thunder: {self.thunder}, Rainbow: {self.rainbow}, Soul: {self.soul}, Marsh: {self.marsh}, Volcano: {self.volcano}, Earth: {self.earth}"
+    
 
 class StatBlock:
     def __init__(self, hp, attack, defense, speed, special, is_stat_xp=False):

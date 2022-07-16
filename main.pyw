@@ -79,11 +79,11 @@ class Main(object):
 
         self.solo_pkmn_pre_label = tk.Label(self.solo_pkmn_frame, text="Pre-event Solo Pokemon:")
         self.solo_pkmn_pre_label.grid(column=0, row=0, padx=10, pady=10)
-        self.solo_pkmn_pre_viewer = custom_tkinter.PkmnViewer(self.solo_pkmn_frame)
+        self.solo_pkmn_pre_viewer = custom_tkinter.PkmnViewer(True, self.solo_pkmn_frame)
         self.solo_pkmn_pre_viewer.grid(column=0, row=1, padx=10, pady=10)
         self.solo_pkmn_post_label = tk.Label(self.solo_pkmn_frame, text="Post-event Solo Pokemon:")
         self.solo_pkmn_post_label.grid(column=1, row=0, padx=10, pady=10)
-        self.solo_pkmn_post_viewer = custom_tkinter.PkmnViewer(self.solo_pkmn_frame)
+        self.solo_pkmn_post_viewer = custom_tkinter.PkmnViewer(True, self.solo_pkmn_frame)
         self.solo_pkmn_post_viewer.grid(column=1, row=1, padx=10, pady=10)
 
         self.enemy_team_label = tk.Label(self.right_info_panel, text="Enemy Team:")
@@ -161,8 +161,8 @@ class Main(object):
         event_group = self._data.get_event_group_info(self.get_event_group_id())[0]
         if event_group is None:
             self.enemy_team_viewer.set_team(None)
-            self.solo_pkmn_pre_viewer.set_pkmn(self._data.solo_pkmn_base.get_renderable_pkmn())
-            self.solo_pkmn_post_viewer.set_pkmn(self._data.get_final_solo_pkmn().get_renderable_pkmn())
+            self.solo_pkmn_pre_viewer.set_pkmn(self._data.solo_pkmn_base.get_renderable_pkmn(), badges=self._data.solo_pkmn_base.badges)
+            self.solo_pkmn_post_viewer.set_pkmn(self._data.get_final_solo_pkmn().get_renderable_pkmn(), badges=self._data.get_final_solo_pkmn().badges)
         else:
             if event_group.trainer_obj is not None:
                 self.enemy_team_viewer.set_team(event_group.trainer_obj.pkmn)
@@ -170,8 +170,9 @@ class Main(object):
                 self.enemy_team_viewer.set_team([event_group.wild_pkmn])
             else:
                 self.enemy_team_viewer.set_team(None)
-            self.solo_pkmn_pre_viewer.set_pkmn(event_group.init_solo_pkmn.get_renderable_pkmn())
-            self.solo_pkmn_post_viewer.set_pkmn(event_group.final_solo_pkmn.get_renderable_pkmn())
+            
+            self.solo_pkmn_pre_viewer.set_pkmn(event_group.init_solo_pkmn.get_renderable_pkmn(), badges=event_group.init_solo_pkmn.badges)
+            self.solo_pkmn_post_viewer.set_pkmn(event_group.final_solo_pkmn.get_renderable_pkmn(), badges=event_group.final_solo_pkmn.badges)
 
     def load_route(self, *args, **kwargs):
         if self.route_name.get():
