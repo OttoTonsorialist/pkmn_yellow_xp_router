@@ -87,15 +87,18 @@ class Constants:
         self.TASK_TRAINER_BATTLE = "Fight Trainer"
         self.TASK_RARE_CANDY = "Use Rare Candy"
         self.TASK_VITAMIN = "Use Vitamin"
+        self.TASK_FIGHT_WILD_PKMN = "Fight Wild Pkmn"
 
         self.ROUTE_EVENT_TYPES = [
             self.TASK_TRAINER_BATTLE,
             self.TASK_RARE_CANDY,
-            self.TASK_VITAMIN
+            self.TASK_VITAMIN,
+            self.TASK_FIGHT_WILD_PKMN,
         ]
 
         self.ALL_TRAINERS = "ALL"
         self.NO_TRAINERS = "No Valid Trainers"
+        self.NO_POKEMON = "No Valid Pokemon"
         self.UNUSED_TRAINER_LOC = "Unused"
         self.EVENTS = "events"
         self.EVENT_ID_COUNTER = "event_id_counter"

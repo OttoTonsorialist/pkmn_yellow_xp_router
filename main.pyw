@@ -145,7 +145,12 @@ class Main(object):
             self.solo_pkmn_pre_viewer.set_pkmn(self._data.solo_pkmn_base.get_renderable_pkmn())
             self.solo_pkmn_post_viewer.set_pkmn(self._data.get_final_solo_pkmn().get_renderable_pkmn())
         else:
-            self.enemy_team_viewer.set_team(event_group.trainer_obj)
+            if event_group.trainer_obj is not None:
+                self.enemy_team_viewer.set_team(event_group.trainer_obj.pkmn)
+            elif event_group.wild_pkmn is not None:
+                self.enemy_team_viewer.set_team([event_group.wild_pkmn])
+            else:
+                self.enemy_team_viewer.set_team(None)
             self.solo_pkmn_pre_viewer.set_pkmn(event_group.init_solo_pkmn.get_renderable_pkmn())
             self.solo_pkmn_post_viewer.set_pkmn(event_group.final_solo_pkmn.get_renderable_pkmn())
 
@@ -186,11 +191,12 @@ class Main(object):
             self.new_event_window.destroy()
             self.new_event_window = None
     
-    def new_event(self, trainer_name=None, is_rare_candy=False, vitamin=None):
+    def new_event(self, trainer_name=None, is_rare_candy=False, vitamin=None, wild_pkmn_info=None):
         self._data.add_event(
             is_rare_candy=is_rare_candy,
             vitamin=vitamin,
             trainer_name=trainer_name,
+            wild_pkmn_info=wild_pkmn_info,
             insert_before=self.get_event_group_id()
         )
         self.new_event_window.destroy()
@@ -224,6 +230,18 @@ class NewEventWindow(tk.Toplevel):
 
         self._vitamin_label = tk.Label(self._input_frame, text="Vitamin Type:")
         self._vitamin_types = custom_tkinter.SimpleOptionMenu(self._input_frame, const.VITAMIN_TYPES, callback=self._vitamin_type_callback)
+
+        self._pkmn_label = tk.Label(self._input_frame, text="Wild Pokemon Type:")
+        self._pkmn_types = custom_tkinter.SimpleOptionMenu(self._input_frame, list(pkmn_db.pkmn_db.data.keys()))
+        self._pkmn_filter_label = tk.Label(self._input_frame, text="Wild Pokemon Type Filter:")
+        self._pkmn_filter_value = tk.StringVar()
+        self._pkmn_filter = tk.Entry(self._input_frame, textvariable=self._pkmn_filter_value)
+        self._pkmn_filter_value.trace_add("write", self._pkmn_filter_callback)
+
+        self._pkmn_level_label = tk.Label(self._input_frame, text="Wild Pokemon Level:")
+        self._pkmn_level_value = tk.StringVar()
+        self._pkmn_level = tk.Entry(self._input_frame, textvariable=self._pkmn_level_value)
+        self._pkmn_level_value.trace_add("write", self._pkmn_level_callback)
 
         self._trainers_by_loc_label = tk.Label(self._input_frame, text="Trainer Location Filter:")
         trainer_locs = [const.ALL_TRAINERS] + sorted(pkmn_db.trainer_db.get_all_locations())
@@ -277,6 +295,22 @@ class NewEventWindow(tk.Toplevel):
         self._vitamin_label.grid(row=1, column=0)
         self._vitamin_types.grid(row=1, column=1)
     
+    def _hide_wild_pkmn(self):
+        self._pkmn_label.grid_remove()
+        self._pkmn_types.grid_remove()
+        self._pkmn_filter_label.grid_remove()
+        self._pkmn_filter.grid_remove()
+        self._pkmn_level_label.grid_remove()
+        self._pkmn_level.grid_remove()
+
+    def _show_wild_pkmn(self):
+        self._pkmn_label.grid(row=1, column=0)
+        self._pkmn_types.grid(row=1, column=1)
+        self._pkmn_filter_label.grid(row=2, column=0)
+        self._pkmn_filter.grid(row=2, column=1)
+        self._pkmn_level_label.grid(row=3, column=0)
+        self._pkmn_level.grid(row=3, column=1)
+    
     def _trainer_filter_callback(self, *args, **kwargs):
         loc_filter = self._trainers_by_loc.get()
         class_filter = self._trainers_by_class.get()
@@ -302,22 +336,48 @@ class NewEventWindow(tk.Toplevel):
     
     def _vitamin_type_callback(self, *args, **kwargs):
         self._create_new_event_button.enable()
+
+    def _pkmn_filter_callback(self, *args, **kwargs):
+        self._pkmn_types.new_values(pkmn_db.pkmn_db.get_filtered_names(filter_val=self._pkmn_filter_value.get().strip()))
+
+    def _pkmn_level_callback(self, *args, **kwargs):
+        try:
+            val = int(self._pkmn_level_value.get().strip())
+            if val < 2 or val > 100:
+                raise ValueError
+        except Exception:
+            self._create_new_event_button.disable()
+            return
+        
+        if self._pkmn_types.get().strip().startswith(const.NO_POKEMON):
+            self._create_new_event_button.disable()
+        else:
+            self._create_new_event_button.enable()
     
     def _task_type_callback(self, *args, **kwargs):
         task_type = self._task_type.get()
         if task_type == const.TASK_TRAINER_BATTLE:
             self._show_trainers()
             self._hide_vitamins()
+            self._hide_wild_pkmn()
             self._create_new_event_button.disable()
 
         elif task_type == const.TASK_RARE_CANDY:
             self._hide_trainers()
             self._hide_vitamins()
+            self._hide_wild_pkmn()
             self._create_new_event_button.enable()
 
         elif task_type == const.TASK_VITAMIN:
             self._hide_trainers()
             self._show_vitamins()
+            self._hide_wild_pkmn()
+            self._create_new_event_button.disable()
+
+        elif task_type == const.TASK_FIGHT_WILD_PKMN:
+            self._hide_trainers()
+            self._hide_vitamins()
+            self._show_wild_pkmn()
             self._create_new_event_button.disable()
 
         else:
@@ -333,6 +393,14 @@ class NewEventWindow(tk.Toplevel):
 
         elif task_type == const.TASK_VITAMIN:
             self._main_window.new_event(vitamin=self._vitamin_types.get())
+
+        elif task_type == const.TASK_FIGHT_WILD_PKMN:
+            self._main_window.new_event(
+                wild_pkmn_info=[
+                    self._pkmn_types.get(),
+                    int(self._pkmn_level_value.get().strip()),
+                ]
+            )
 
         else:
             raise ValueError(f"Unexpected task type: {task_type}")

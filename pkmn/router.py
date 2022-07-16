@@ -39,7 +39,7 @@ class EventItem:
 
 
 class EventGroup:
-    def __init__(self, cur_solo_pkmn, trainer_obj=None, is_rare_candy=False, vitamin=None):
+    def __init__(self, cur_solo_pkmn, trainer_obj=None, is_rare_candy=False, vitamin=None, wild_pkmn_info=None):
         global event_id_counter
         self.group_id = event_id_counter
         event_id_counter += 1
@@ -50,6 +50,8 @@ class EventGroup:
         self.is_rare_candy = is_rare_candy
         self.vitamin = vitamin
         self.trainer_obj = trainer_obj
+        self.wild_pkmn_info = wild_pkmn_info
+        self.wild_pkmn = None
         self.pkmn_after_levelups = []
 
         self.apply(cur_solo_pkmn)
@@ -82,6 +84,11 @@ class EventGroup:
                     else:
                         self.pkmn_after_levelups.append("after_final_pkmn")
                 cur_solo_pkmn = next_solo_pkmn
+        
+        elif self.wild_pkmn_info is not None:
+            self.name = f"Wild Pkmn: {self.wild_pkmn_info}"
+            self.wild_pkmn = pkmn_db.pkmn_db.create_wild_pkmn(self.wild_pkmn_info[0], self.wild_pkmn_info[1])
+            self.event_items.append(EventItem(cur_solo_pkmn, enemy_pkmn=self.wild_pkmn, trainer_name=self.name, is_final_pkmn=True))
                         
         elif self.is_rare_candy:
             self.event_items.append(EventItem(cur_solo_pkmn, is_rare_candy=True))
@@ -111,9 +118,10 @@ class EventGroup:
 
     def to_dict(self):
         return {
-            const.TASK_RARE_CANDY: self.event_items[0].is_rare_candy,
-            const.TASK_VITAMIN: self.event_items[0].vitamin,
-            const.TASK_TRAINER_BATTLE: self.event_items[0].trainer_name
+            const.TASK_RARE_CANDY: self.is_rare_candy,
+            const.TASK_VITAMIN: self.vitamin,
+            const.TASK_TRAINER_BATTLE: self.event_items[0].trainer_name,
+            const.TASK_FIGHT_WILD_PKMN: self.wild_pkmn_info
         }
 
 class Router:
@@ -167,6 +175,7 @@ class Router:
                 trainer_name=cur_event[const.TASK_TRAINER_BATTLE],
                 vitamin=cur_event[const.TASK_VITAMIN],
                 is_rare_candy=cur_event[const.TASK_RARE_CANDY],
+                wild_pkmn_info=cur_event.get(const.TASK_FIGHT_WILD_PKMN),
             )
     
     def set_solo_pkmn(self, pkmn_name):
@@ -177,7 +186,7 @@ class Router:
         self.solo_pkmn_base = data_objects.SoloPokemon(pkmn_name, pkmn_base)
         self._reset_events()
     
-    def add_event(self, is_rare_candy=False, vitamin=None, trainer_name=None, insert_before=None):
+    def add_event(self, is_rare_candy=False, vitamin=None, trainer_name=None, insert_before=None, wild_pkmn_info=None):
         if not self.solo_pkmn_base:
             raise ValueError("Cannot add an event when solo pokmn is not yet selected")
         if trainer_name:
@@ -197,7 +206,8 @@ class Router:
             init_pkmn,
             is_rare_candy=is_rare_candy,
             vitamin=vitamin,
-            trainer_obj=pkmn_db.trainer_db.data.get(trainer_name)
+            trainer_obj=pkmn_db.trainer_db.data.get(trainer_name),
+            wild_pkmn_info=wild_pkmn_info,
         )
 
         if insert_before is None:

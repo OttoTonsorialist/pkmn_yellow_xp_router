@@ -71,7 +71,7 @@ def instantiate_trainer_pokemon(pkmn_data, target_level, special_moves=None):
         const.SPD: calc_stat(pkmn_data[const.BASE_SPD_KEY], target_level, 8, 0),
         const.SPC: calc_stat(pkmn_data[const.BASE_SPC_KEY], target_level, 8, 0),
         const.XP: calc_xp_yield(pkmn_data[const.BASE_XP_KEY], target_level, True),
-        const.MOVES: get_move_list(pkmn_data, target_level, special_moves=special_moves)
+        const.MOVES: get_move_list(pkmn_data[const.INITIAL_MOVESET_KEY], pkmn_data[const.LEARNED_MOVESET_KEY], target_level, special_moves=special_moves),
     }
 
 
@@ -86,7 +86,7 @@ def instantiate_wild_pokemon(pkmn_data, target_level):
         const.SPD: calc_stat(pkmn_data[const.BASE_SPD_KEY], target_level, 15, 0),
         const.SPC: calc_stat(pkmn_data[const.BASE_SPC_KEY], target_level, 15, 0),
         const.XP: calc_xp_yield(pkmn_data[const.BASE_XP_KEY], target_level, False),
-        const.MOVES: get_move_list(pkmn_data, target_level)
+        const.MOVES: get_move_list(pkmn_data[const.INITIAL_MOVESET_KEY], pkmn_data[const.LEARNED_MOVESET_KEY], target_level),
     }
 
 

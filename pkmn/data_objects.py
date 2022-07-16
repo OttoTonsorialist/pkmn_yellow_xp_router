@@ -117,6 +117,19 @@ class PokemonSpecies:
         self.levelup_moves = copy.deepcopy(raw_dict[const.LEARNED_MOVESET_KEY])
         self.tmhm_moves = copy.copy(raw_dict[const.TM_HM_LEARNSET_KEY])
 
+    def to_dict(self):
+        return {
+            const.NAME_KEY: self.name,
+            const.BASE_HP_KEY: self.stats.hp,
+            const.BASE_ATK_KEY: self.stats.attack,
+            const.BASE_DEF_KEY: self.stats.defense,
+            const.BASE_SPD_KEY: self.stats.speed,
+            const.BASE_SPC_KEY: self.stats.special,
+            const.BASE_XP_KEY: self.base_xp,
+            const.INITIAL_MOVESET_KEY: self.initial_moves,
+            const.LEARNED_MOVESET_KEY: self.levelup_moves,
+        }
+
 
 class EnemyPkmn:
     def __init__(self, pkmn_dict, base_stat_block):

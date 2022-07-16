@@ -286,14 +286,12 @@ class EnemyPkmnTeam(tk.Frame):
         self._all_pkmn.append(PkmnViewer(self))
         self._all_pkmn.append(PkmnViewer(self))
 
-    def set_team(self, enemy_team:data_objects.Trainer):
-        if enemy_team is None:
-            pkmn = []
-        else:
-            pkmn = enemy_team.pkmn
+    def set_team(self, enemy_pkmn):
+        if enemy_pkmn is None:
+            enemy_pkmn = []
 
         idx = -1
-        for idx, cur_pkmn in enumerate(pkmn):
+        for idx, cur_pkmn in enumerate(enemy_pkmn):
             self._all_pkmn[idx].set_pkmn(cur_pkmn)
             self._all_pkmn[idx].grid(row=idx//3,column=idx%3, padx=15, pady=15)
         

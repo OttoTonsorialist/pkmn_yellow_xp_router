@@ -2,6 +2,7 @@ import json
 
 from utils.constants import const
 import pkmn.data_objects as data_objects
+from pkmn import pkmn_utils
 
 
 class MinBattlesDB:
@@ -20,6 +21,23 @@ class PkmnDB:
 
         for cur_pkmn in raw_db.values():
             self.data[cur_pkmn[const.NAME_KEY]] = data_objects.PokemonSpecies(cur_pkmn)
+    
+    def create_wild_pkmn(self, pkmn_name, pkmn_level):
+        return data_objects.EnemyPkmn(
+            pkmn_utils.instantiate_wild_pokemon(self.data[pkmn_name].to_dict(), pkmn_level),
+            self.data[pkmn_name].stats
+        )
+    
+    def get_filtered_names(self, filter_val=None):
+        if filter_val is None:
+            return list(self.data.keys())
+        
+        filter_val = filter_val.lower()
+        result = [x for x in self.data.keys() if filter_val in x]
+        if not result:
+            result = [f"{const.NO_POKEMON} match filter: '{filter_val}'"]
+        
+        return result
 
 
 class TrainerDB:
