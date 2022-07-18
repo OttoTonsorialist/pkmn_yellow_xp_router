@@ -1,4 +1,5 @@
 import json
+import os
 
 from utils.constants import const
 import pkmn.data_objects as data_objects
@@ -7,9 +8,13 @@ from pkmn import pkmn_utils
 
 class MinBattlesDB:
     def __init__(self):
-
-        with open(const.MIN_BATTLES_DB_PATH, 'r') as f:
-            self.data = json.load(f)
+        self.data = []
+        if os.path.exists(const.MIN_BATTLES_DIR):
+            for fragment in os.listdir(const.MIN_BATTLES_DIR):
+                name, ext = os.path.splitext(fragment)
+                if ext != ".json":
+                    continue
+                self.data.append(name)
 
 
 class PkmnDB:
@@ -106,6 +111,57 @@ class TrainerDB:
         return valid_trainers
 
 
+class ItemDB:
+    def __init__(self):
+        self.data = {}
+        self.mart_items = {}
+        self.key_items = []
+        self.tms = []
+        self.other_items = []
+
+        with open(const.ITEM_DB_PATH, 'r') as f:
+            raw_db = json.load(f)
+
+        for cur_dict_item in raw_db.values():
+            cur_base_item = data_objects.BaseItem(cur_dict_item)
+            self.data[cur_base_item.name] = cur_base_item
+
+            if cur_base_item.is_key_item:
+                self.key_items.append(cur_base_item.name)
+            elif cur_base_item.name.startswith("TM") or cur_base_item.name.startswith("HM"):
+                self.tms.append(cur_base_item.name)
+            else:
+                self.other_items.append(cur_base_item.name)
+
+            for mart in cur_base_item.marts:
+                if mart not in self.mart_items:
+                    self.mart_items[mart] = []
+                self.mart_items[mart].append(cur_base_item.name)
+    
+    def get_filtered_names(self, item_type=const.ITEM_TYPE_ALL_ITEMS, source_mart=const.ITEM_TYPE_ALL_ITEMS):
+        if item_type == const.ITEM_TYPE_ALL_ITEMS and source_mart == const.ITEM_TYPE_ALL_ITEMS:
+            return list(self.data.keys())
+        elif item_type == const.ITEM_TYPE_ALL_ITEMS:
+            return self.mart_items[source_mart]
+        elif source_mart == const.ITEM_TYPE_ALL_ITEMS:
+            if item_type == const.ITEM_TYPE_KEY_ITEMS:
+                return self.key_items
+            elif item_type == const.ITEM_TYPE_TM:
+                return self.tms
+            else:
+                return self.other_items
+        else:
+            if item_type == const.ITEM_TYPE_KEY_ITEMS:
+                result = self.key_items
+            elif item_type == const.ITEM_TYPE_TM:
+                result = self.tms
+            else:
+                result = self.other_items
+            
+            return [x for x in result if x in self.mart_items[source_mart]]
+
+
 pkmn_db = PkmnDB()
 trainer_db = TrainerDB(pkmn_db)
 min_battles_db = MinBattlesDB()
+item_db = ItemDB()

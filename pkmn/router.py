@@ -1,154 +1,67 @@
 import os
 import json
+from typing import Tuple
 
 from utils.constants import const
-import pkmn.data_objects as data_objects
-import pkmn.pkmn_db as pkmn_db
-import utils.io_utils as io_utils
+from pkmn import data_objects
+from pkmn import pkmn_db
+from utils import io_utils
+from pkmn import route_events
+from pkmn import route_state_objects
 
-event_id_counter = 0
-
-
-class EventItem:
-    def __init__(self, cur_solo_pkmn, is_rare_candy=False, vitamin=None, enemy_pkmn=None, trainer_name=None, is_final_pkmn=False):
-        self.name = None
-
-        self.trainer_name = trainer_name
-        self.enemy_pkmn = enemy_pkmn
-        self.is_rare_candy = is_rare_candy
-        self.vitamin = vitamin
-        self.is_final_pkmn = is_final_pkmn
-
-        self.post_event_solo_pkmn = None
-        self.apply(cur_solo_pkmn)
-    
-    def apply(self, cur_solo_pkmn: data_objects.SoloPokemon):
-        if self.enemy_pkmn is not None:
-            self.name = f"{self.trainer_name}: {self.enemy_pkmn}"
-            self.post_event_solo_pkmn =  cur_solo_pkmn.defeat_pkmn(self.enemy_pkmn, trainer_name=self.trainer_name, is_final_pkmn=self.is_final_pkmn)
-        elif self.is_rare_candy:
-            self.name = "Rare Candy"
-            self.post_event_solo_pkmn =  cur_solo_pkmn.rare_candy()
-        elif self.vitamin is not None:
-            self.name = f"Vitamin: {self.vitamin}"
-            self.post_event_solo_pkmn =  cur_solo_pkmn.take_vitamin(self.vitamin)
-
-            if self.post_event_solo_pkmn is None:
-                self.name = f"Ineffective Vitamin: {self.vitamin} (Already above vitamin cap)"
-                self.post_event_solo_pkmn = cur_solo_pkmn
-
-
-class EventGroup:
-    def __init__(self, cur_solo_pkmn, trainer_obj=None, is_rare_candy=False, vitamin=None, wild_pkmn_info=None):
-        global event_id_counter
-        self.group_id = event_id_counter
-        event_id_counter += 1
-
-        self.name = None
-        self.event_items = []
-        self.init_solo_pkmn = cur_solo_pkmn
-        self.is_rare_candy = is_rare_candy
-        self.vitamin = vitamin
-        self.trainer_obj = trainer_obj
-        self.wild_pkmn_info = wild_pkmn_info
-        self.wild_pkmn = None
-        self.pkmn_after_levelups = []
-
-        self.apply(cur_solo_pkmn)
-    
-    def apply(self, cur_solo_pkmn):
-        self.init_solo_pkmn = cur_solo_pkmn
-        self.pkmn_after_levelups = []
-        self.event_items = []
-        if self.trainer_obj is not None:
-            self.name = f"Trainer: {self.trainer_obj.name} ({self.trainer_obj.location})"
-            pkmn_counter = {}
-            for pkmn_idx, trainer_pkmn in enumerate(self.trainer_obj.pkmn):
-                self.event_items.append(
-                    EventItem(
-                        cur_solo_pkmn,
-                        enemy_pkmn=trainer_pkmn,
-                        trainer_name=self.trainer_obj.name,
-                        is_final_pkmn=pkmn_idx==len(self.trainer_obj.pkmn)-1
-                    )
-                )
-                cur_pkmn_name = self.trainer_obj.pkmn[pkmn_idx].name
-                pkmn_counter[cur_pkmn_name] = pkmn_counter.get(cur_pkmn_name, 0) + 1
-                
-                next_solo_pkmn = self.event_items[-1].post_event_solo_pkmn
-                if next_solo_pkmn.cur_level != cur_solo_pkmn.cur_level:
-                    if pkmn_idx + 1 < len(self.trainer_obj.pkmn):
-                        next_pkmn_name = self.trainer_obj.pkmn[pkmn_idx + 1].name
-                        next_pkmn_count = pkmn_counter.get(next_pkmn_name, 0) + 1
-                        self.pkmn_after_levelups.append(f"#{next_pkmn_count} {next_pkmn_name}")
-                    else:
-                        self.pkmn_after_levelups.append("after_final_pkmn")
-                cur_solo_pkmn = next_solo_pkmn
-        
-        elif self.wild_pkmn_info is not None:
-            self.name = f"Wild Pkmn: {self.wild_pkmn_info}"
-            self.wild_pkmn = pkmn_db.pkmn_db.create_wild_pkmn(self.wild_pkmn_info[0], self.wild_pkmn_info[1])
-            self.event_items.append(EventItem(cur_solo_pkmn, enemy_pkmn=self.wild_pkmn, trainer_name=self.name, is_final_pkmn=True))
-                        
-        elif self.is_rare_candy:
-            self.event_items.append(EventItem(cur_solo_pkmn, is_rare_candy=True))
-            self.name = self.event_items[0].name
-        elif self.vitamin is not None:
-            self.event_items.append(EventItem(cur_solo_pkmn, vitamin=self.vitamin))
-            self.name = self.event_items[0].name
-            
-        if len(self.event_items) == 0:
-            raise ValueError(f"Something went wrong generating event group: {self.trainer_obj}")
-        self.final_solo_pkmn = self.event_items[-1].post_event_solo_pkmn
-    
-    def get_pkmn_after_levelups(self):
-        return ",".join(self.pkmn_after_levelups)
-
-    def pkmn_level(self):
-        return self.final_solo_pkmn.cur_level
-    
-    def xp_to_next_level(self):
-        return self.final_solo_pkmn.xp_to_next_level
-
-    def xp_gain(self):
-        return self.final_solo_pkmn.cur_xp - self.init_solo_pkmn.cur_xp
-
-    def total_xp(self):
-        return self.final_solo_pkmn.cur_xp
-
-    def to_dict(self):
-        return {
-            const.TASK_RARE_CANDY: self.is_rare_candy,
-            const.TASK_VITAMIN: self.vitamin,
-            const.TASK_TRAINER_BATTLE: self.event_items[0].trainer_name,
-            const.TASK_FIGHT_WILD_PKMN: self.wild_pkmn_info
-        }
 
 class Router:
     def __init__(self):
-        self.solo_pkmn_base = None
+        self.init_route_state = None
         self.all_events = []
         self.defeated_trainers = set()
     
     def _reset_events(self):
         self.all_events = []
         self.defeated_trainers = set()
+
+    def _get_event_group_info(self, event_group_id) -> Tuple[route_events.EventGroup, int]:
+        for idx, cur_event in enumerate(self.all_events):
+            if cur_event.group_id == event_group_id:
+                return cur_event, idx
+        
+        return None, None
     
-    def save(self, name):
-        if not os.path.exists(const.SAVED_ROUTES_DIR):
-            os.mkdir(const.SAVED_ROUTES_DIR)
+    def get_post_event_state(self, group_id):
+        group_event = self._get_event_group_info(group_id)[0]
+        if group_event is None:
+            return None
+        return group_event.final_state
+    
+    def get_final_state(self):
+        if len(self.all_events):
+            return self.all_events[-1].final_state
+        return self.init_route_state
+    
+    def set_solo_pkmn(self, pkmn_name):
+        pkmn_base = pkmn_db.pkmn_db.data.get(pkmn_name)
+        if pkmn_base is None:
+            raise ValueError(f"Could not find base stats for Pokemon: {pkmn_name}")
+        
+        self.init_route_state = route_state_objects.RouteState(
+            route_state_objects.SoloPokemon(pkmn_name, pkmn_base),
+            route_state_objects.BadgeList(),
+            route_state_objects.Inventory()
+        )
+        self._reset_events()
 
-        final_path = os.path.join(const.SAVED_ROUTES_DIR, f"{name}.json")
-        io_utils.backup_file_if_exists(final_path)
+    def _recalc_from(self, start_idx):
+        # dumb, but it's ultimately easier to just forcibly recalc the entire list
+        # instead of worrying about only starting from the exact right place
+        # TODO: only recalc what's necessary
+        start_idx = 0
+        for recalc_idx in range(start_idx, len(self.all_events)):
+            if recalc_idx == 0:
+                prev_state = self.init_route_state
+            else:
+                prev_state = self.all_events[recalc_idx - 1].final_state
 
-        global event_id_counter
-
-        with open(final_path, 'w') as f:
-            json.dump({
-                const.EVENT_ID_COUNTER: event_id_counter,
-                const.NAME_KEY: self.solo_pkmn_base.name,
-                const.EVENTS: [x.to_dict() for x in self.all_events]
-            }, f)
+            self.all_events[recalc_idx].apply(prev_state)
     
     def refresh_existing_routes(self):
         result = []
@@ -161,115 +74,89 @@ class Router:
         
         return result
     
-    def load(self, name):
-        final_path = os.path.join(const.SAVED_ROUTES_DIR, f"{name}.json")
-
-        with open(final_path, 'r') as f:
-            result = json.load(f)
-        
-        global event_id_counter
-        event_id_counter = result[const.EVENT_ID_COUNTER]
-        self.set_solo_pkmn(result[const.NAME_KEY])
-        for cur_event in result[const.EVENTS]:
-            self.add_event(
-                trainer_name=cur_event[const.TASK_TRAINER_BATTLE],
-                vitamin=cur_event[const.TASK_VITAMIN],
-                is_rare_candy=cur_event[const.TASK_RARE_CANDY],
-                wild_pkmn_info=cur_event.get(const.TASK_FIGHT_WILD_PKMN),
-            )
-    
-    def set_solo_pkmn(self, pkmn_name):
-        pkmn_base = pkmn_db.pkmn_db.data.get(pkmn_name)
-        if pkmn_base is None:
-            raise ValueError(f"Could not find base stats for Pokemon: {pkmn_name}")
-        
-        self.solo_pkmn_base = data_objects.SoloPokemon(pkmn_name, pkmn_base)
-        self._reset_events()
-    
-    def add_event(self, is_rare_candy=False, vitamin=None, trainer_name=None, insert_before=None, wild_pkmn_info=None):
-        if not self.solo_pkmn_base:
+    def add_event(self, event_def, insert_before=None):
+        if not self.init_route_state:
             raise ValueError("Cannot add an event when solo pokmn is not yet selected")
-        if trainer_name:
-            self.defeated_trainers.add(trainer_name)
+        if event_def.trainer_name:
+            self.defeated_trainers.add(event_def.trainer_name)
 
         if insert_before is None:
-            init_pkmn = self.get_final_solo_pkmn()
+            init_pkmn = self.get_final_state()
             insert_idx = None
         else:
-            insert_idx = self.get_event_group_info(insert_before)[1]
+            insert_idx = self._get_event_group_info(insert_before)[1]
             if insert_idx == 0:
-                init_pkmn = self.solo_pkmn_base
+                init_pkmn = self.init_route_state
             else:
-                init_pkmn = self.all_events[insert_idx-1].final_solo_pkmn
+                init_pkmn = self.all_events[insert_idx-1].final_state
 
-        new_event = EventGroup(
-            init_pkmn,
-            is_rare_candy=is_rare_candy,
-            vitamin=vitamin,
-            trainer_obj=pkmn_db.trainer_db.data.get(trainer_name),
-            wild_pkmn_info=wild_pkmn_info,
-        )
+        new_event = route_events.EventGroup(init_pkmn, event_def)
 
         if insert_before is None:
             self.all_events.append(new_event)
         else:
             self.all_events.insert(insert_idx, new_event)
             self._recalc_from(max(insert_idx - 1, 0))
-
-    def get_event_group_info(self, event_group_id):
-        for idx, cur_event in enumerate(self.all_events):
-            if cur_event.group_id == event_group_id:
-                return cur_event, idx
-        
-        return None, None
     
     def bulk_fight_trainers(self, trainer_name_list):
         self._reset_events()
         for trainer_name in trainer_name_list:
-            self.add_event(trainer_name=trainer_name)
-    
-    def get_post_event_solo_pkmn(self, group_id):
-        group_event = self.get_event_group_info(group_id)[0]
-        if group_event is None:
-            return None
-        return group_event.final_solo_pkmn
-    
-    def get_final_solo_pkmn(self):
-        if len(self.all_events):
-            return self.all_events[-1].final_solo_pkmn
-        return self.solo_pkmn_base
-    
-    def _recalc_from(self, start_idx):
-        # dumb, but it's ultimately easier to just forcibly recalc the entire list
-        # instead of worrying about only starting from the exact right place
-        # TODO: only recalc what's necessary
-        start_idx = 0
-        for recalc_idx in range(start_idx, len(self.all_events)):
-            if recalc_idx == 0:
-                prev_pkmn = self.solo_pkmn_base
-            else:
-                prev_pkmn = self.all_events[recalc_idx - 1].final_solo_pkmn
-
-            self.all_events[recalc_idx].apply(prev_pkmn)
+            self.add_event(route_events.EventDefinition(trainer_name=trainer_name))
     
     def remove_group(self, group_id):
-        group_obj, group_idx = self.get_event_group_info(group_id)
-        if group_obj.trainer_obj is not None:
-            self.defeated_trainers.remove(group_obj.trainer_obj.name)
+        group_obj, group_idx = self._get_event_group_info(group_id)
+        if group_obj.event_definition.trainer_name is not None:
+            self.defeated_trainers.remove(group_obj.event_definition.trainer_name)
         del self.all_events[group_idx]
         self._recalc_from(group_idx)
 
-    def move_group_up(self, group_id):
-        group_obj, group_idx = self.get_event_group_info(group_id)
-        self._move_group_to(group_obj, max(group_idx - 1, 0))
-    
-    def move_group_down(self, group_id):
-        group_obj, group_idx = self.get_event_group_info(group_id)
+    def move_group(self, group_id, move_up):
+        group_obj, group_idx = self._get_event_group_info(group_id)
         if group_obj is None:
             raise ValueError(f"No group found with group_id: {group_id}")
-        self._move_group_to(group_obj, min(group_idx + 1, len(self.all_events) - 1))
-    
-    def _move_group_to(self, group_obj, insert_idx):
+
+        if move_up:
+            insert_idx = max(group_idx - 1, 0)
+        else:
+            insert_idx = min(group_idx + 1, len(self.all_events) - 1)
+        
         self.all_events.remove(group_obj)
         self.all_events.insert(insert_idx, group_obj)
         self._recalc_from(insert_idx)
+
+    def save(self, name):
+        if not os.path.exists(const.SAVED_ROUTES_DIR):
+            os.mkdir(const.SAVED_ROUTES_DIR)
+
+        final_path = os.path.join(const.SAVED_ROUTES_DIR, f"{name}.json")
+        io_utils.backup_file_if_exists(final_path)
+
+        with open(final_path, 'w') as f:
+            json.dump({
+                const.EVENT_ID_COUNTER: route_events.event_id_counter,
+                const.NAME_KEY: self.init_route_state.solo_pkmn.name,
+                const.EVENTS: [x.to_dict() for x in self.all_events]
+            }, f, indent=4)
+    
+    def load_min_battle(self, name):
+        final_path = os.path.join(const.MIN_BATTLES_DIR, f"{name}.json")
+
+        with open(final_path, 'r') as f:
+            result = json.load(f)
+        
+        route_events.event_id_counter = result[const.EVENT_ID_COUNTER]
+        # kinda weird, but just reset to same mon to trigger cleanup in helper function
+        self.set_solo_pkmn(self.init_route_state.solo_pkmn.name)
+        for cur_event in result[const.EVENTS]:
+            self.add_event(route_events.EventDefinition.deserialize(cur_event))
+    
+    def load(self, name):
+        final_path = os.path.join(const.SAVED_ROUTES_DIR, f"{name}.json")
+
+        with open(final_path, 'r') as f:
+            result = json.load(f)
+        
+        route_events.event_id_counter = result[const.EVENT_ID_COUNTER]
+        self.set_solo_pkmn(result[const.NAME_KEY])
+        for cur_event in result[const.EVENTS]:
+            self.add_event(route_events.EventDefinition.deserialize(cur_event))

@@ -1,0 +1,274 @@
+{
+    "event_id_counter": 2401,
+    "name": "parasect",
+    "events": [
+        {
+            "Fight Trainer": "Rival1 1"
+        },
+        {
+            "Inventory Event": [
+                "Poke Ball",
+                1,
+                true,
+                true
+            ]
+        },
+        {
+            "Fight Trainer": "BugCatcher 3"
+        },
+        {
+            "Inventory Event": [
+                "Poke Ball",
+                1,
+                false,
+                false
+            ]
+        },
+        {
+            "Fight Trainer": "Brock 1"
+        },
+        {
+            "Fight Trainer": "BugCatcher 4"
+        },
+        {
+            "Fight Trainer": "Youngster 1"
+        },
+        {
+            "Fight Trainer": "Lass 2"
+        },
+        {
+            "Fight Trainer": "BugCatcher 6"
+        },
+        {
+            "Fight Trainer": "SuperNerd 2"
+        },
+        {
+            "Fight Trainer": "Jessie & James 1"
+        },
+        {
+            "Fight Trainer": "JrTrainerF 1"
+        },
+        {
+            "Fight Trainer": "Misty 1"
+        },
+        {
+            "Fight Trainer": "Rival1 3"
+        },
+        {
+            "Fight Trainer": "BugCatcher 9"
+        },
+        {
+            "Fight Trainer": "Lass 8"
+        },
+        {
+            "Fight Trainer": "Youngster 4"
+        },
+        {
+            "Fight Trainer": "Lass 7"
+        },
+        {
+            "Fight Trainer": "JrTrainerM 3"
+        },
+        {
+            "Fight Trainer": "Rocket 6"
+        },
+        {
+            "Fight Trainer": "Hiker 2"
+        },
+        {
+            "Fight Trainer": "Lass 9"
+        },
+        {
+            "Fight Trainer": "JrTrainerM 2 Duplicate"
+        },
+        {
+            "Fight Trainer": "Lass 10"
+        },
+        {
+            "Inventory Event": [
+                "SS Anne Ticket",
+                1,
+                true,
+                false
+            ]
+        },
+        {
+            "Fight Trainer": "Rocket 5"
+        },
+        {
+            "Fight Trainer": "JrTrainerF 3"
+        },
+        {
+            "Fight Trainer": "JrTrainerM 5"
+        },
+        {
+            "Fight Trainer": "Rival2 1"
+        },
+        {
+            "Inventory Event": [
+                "HM01 Cut",
+                1,
+                true,
+                false
+            ]
+        },
+        {
+            "Fight Trainer": "LtSurge 1"
+        },
+        {
+            "Fight Trainer": "JrTrainerF 5"
+        },
+        {
+            "Fight Trainer": "BugCatcher 14"
+        },
+        {
+            "Fight Trainer": "Pokemaniac 7"
+        },
+        {
+            "Fight Trainer": "Pokemaniac 5"
+        },
+        {
+            "Fight Trainer": "JrTrainerF 10"
+        },
+        {
+            "Fight Trainer": "Hiker 9"
+        },
+        {
+            "Fight Trainer": "JrTrainerF 18"
+        },
+        {
+            "Fight Trainer": "Gambler 7"
+        },
+        {
+            "Fight Trainer": "Beauty 3"
+        },
+        {
+            "Fight Trainer": "Erika 1"
+        },
+        {
+            "Inventory Event": [
+                "Poke Doll",
+                1,
+                true,
+                true
+            ]
+        },
+        {
+            "Inventory Event": [
+                "HM02 Fly",
+                1,
+                true,
+                false
+            ]
+        },
+        {
+            "Fight Trainer": "Rival2 2 Flareon"
+        },
+        {
+            "Fight Trainer": "Channeler 10"
+        },
+        {
+            "Fight Trainer": "Channeler 6"
+        },
+        {
+            "Fight Trainer": "Channeler 9"
+        },
+        {
+            "Fight Trainer": "Jessie & James 3"
+        },
+        {
+            "Fight Trainer": "Rocket 28"
+        },
+        {
+            "Fight Trainer": "Rival2 3 Flareon"
+        },
+        {
+            "Fight Trainer": "Jessie & James 4"
+        },
+        {
+            "Fight Trainer": "Giovanni 2"
+        },
+        {
+            "Inventory Event": [
+                "Gold Teeth",
+                1,
+                true,
+                false
+            ]
+        },
+        {
+            "Inventory Event": [
+                "HM03 Surf",
+                1,
+                true,
+                false
+            ]
+        },
+        {
+            "Fight Trainer": "Juggler 3"
+        },
+        {
+            "Fight Trainer": "Juggler 4"
+        },
+        {
+            "Fight Trainer": "Koga 1"
+        },
+        {
+            "Inventory Event": [
+                "Gold Teeth",
+                1,
+                false,
+                false
+            ]
+        },
+        {
+            "Inventory Event": [
+                "HM04 Strength",
+                1,
+                true,
+                false
+            ]
+        },
+        {
+            "Fight Trainer": "Sabrina 1"
+        },
+        {
+            "Inventory Event": [
+                "Secret Key",
+                1,
+                true,
+                false
+            ]
+        },
+        {
+            "Fight Trainer": "Blaine 1"
+        },
+        {
+            "Fight Trainer": "CooltrainerM 10"
+        },
+        {
+            "Fight Trainer": "Blackbelt 8"
+        },
+        {
+            "Fight Trainer": "Giovanni 3"
+        },
+        {
+            "Fight Trainer": "Rival2 4 Flareon"
+        },
+        {
+            "Fight Trainer": "Lorelei 1"
+        },
+        {
+            "Fight Trainer": "Bruno 1"
+        },
+        {
+            "Fight Trainer": "Agatha 1"
+        },
+        {
+            "Fight Trainer": "Lance 1"
+        },
+        {
+            "Fight Trainer": "Rival3 Flareon"
+        }
+    ]
+}

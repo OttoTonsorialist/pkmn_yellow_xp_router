@@ -1,8 +1,14 @@
+from cgitb import text
+from mimetypes import init
+from posixpath import split
 from secrets import choice
+from subprocess import call
 import tkinter as tk
 from tkinter import ttk
 
 import pkmn.data_objects as data_objects
+from pkmn import route_state_objects
+from pkmn import route_events
 import pkmn.router as router
 from utils.constants import const
 
@@ -55,8 +61,8 @@ class CustomGridview(tk.ttk.Treeview):
                 self.column(cur_col.id, stretch=tk.YES)
             self.heading(cur_col.id, text=cur_col.name)
     
-    def custom_insert(self, obj, selection_id=None):
-        if not isinstance(obj, router.EventGroup):
+    def custom_insert(self, obj, selection_id=None, tags=None):
+        if not isinstance(obj, route_events.EventGroup):
             raise TypeError('Can only support rendering EventGroups')
 
         if not(len(self._custom_col_data)):
@@ -70,7 +76,8 @@ class CustomGridview(tk.ttk.Treeview):
             '',
             tk.END,
             text=text,
-            values=tuple(self._get_attr_helper(obj, x.attr) for x in self._custom_col_data)
+            values=tuple(self._get_attr_helper(obj, x.attr) for x in self._custom_col_data),
+            tags=tags
         )
 
         if selection_id is not None and text == selection_id:
@@ -106,15 +113,21 @@ class RouteList(CustomGridview):
             *args,
             custom_col_data=[
                 CustomGridview.CustomColumn('Event', 'name'),
-                CustomGridview.CustomColumn('LevelUpsInto', 'pkmn_after_levelups', width=300),
+                CustomGridview.CustomColumn('LevelUpsInto', 'pkmn_after_levelups', width=220),
                 CustomGridview.CustomColumn('Level', 'pkmn_level', width=50),
-                CustomGridview.CustomColumn('Total XP', 'total_xp', width=80),
-                CustomGridview.CustomColumn('XP Gain', 'xp_gain', width=80),
-                CustomGridview.CustomColumn('NextLevel', 'xp_to_next_level', width=80),
+                CustomGridview.CustomColumn('Total Exp', 'total_xp', width=80),
+                CustomGridview.CustomColumn('Exp Gain', 'xp_gain', width=80),
+                CustomGridview.CustomColumn('ToNextLevel', 'xp_to_next_level', width=80),
+                CustomGridview.CustomColumn('% TNL', 'percent_xp_to_next_level', width=80),
             ],
             text_field_attr='group_id',
             **kwargs
         )
+        self.tag_configure(const.EVENT_TAG_ERRORS, background='#d98880')
+        self.tag_configure(const.EVENT_TAG_IMPORTANT, background='#b3b6b7')
+    
+    def custom_insert(self, obj, selection_id=None):
+        super(RouteList, self).custom_insert(obj, selection_id=selection_id, tags=(obj.get_tag(),))
 
     def selected_event_id(self):
         return self.item(self.focus())['text']
@@ -136,6 +149,10 @@ class SimpleOptionMenu(tk.OptionMenu):
     
     def get(self):
         return self._val.get()
+
+    def set(self, val):
+        # TODO: should double check to make sure it's valid... what happens if it's not in the option list?
+        return self._val.set(val)
     
     def new_values(self, option_list, default_val=None):
         self._menu.delete(0, "end")
@@ -148,6 +165,52 @@ class SimpleOptionMenu(tk.OptionMenu):
             default_val = option_list[0]
         self._val.set(default_val)
 
+class SimpleEntry(tk.Entry):
+    def __init__(self, *args, initial_value="", callback=None, **kwargs):
+        self._value = tk.StringVar(value=initial_value)
+
+        super().__init__(*args, **kwargs, textvariable=self._value)
+        if callback is not None:
+            self._value.trace_add("write", callback)
+    
+    def get(self):
+        return self._value.get()
+    
+    def set(self, value):
+        self._value.set(value)
+
+class AmountEntry(tk.Frame):
+    def __init__(self, *args, callback=None, **kwargs):
+        super().__init__(*args, **kwargs)
+
+        self._down_button = tk.Button(self, text="v", command=self._lower_amt)
+        self._down_button.grid(row=0, column=0)
+        self._amount = SimpleEntry(self, initial_value="1", callback=callback)
+        self._amount.grid(row=0, column=1)
+        self._up_button = tk.Button(self, text="^", command=self._raise_amt)
+        self._up_button.grid(row=0, column=2)
+    
+    def _lower_amt(self, *args, **kwargs):
+        try:
+            val = int(self._amount.get().strip())
+            self._amount.set(str(val - 1))
+        except Exception:
+            pass
+
+    def _raise_amt(self, *args, **kwargs):
+        try:
+            val = int(self._amount.get().strip())
+            self._amount.set(str(val + 1))
+        except Exception:
+            pass
+    
+    def get(self):
+        return self._amount.get()
+    
+    def set(self, value):
+        self._amount.set(value)
+
+
 class SimpleButton(tk.Button):
     def enable(self):
         self["state"] = "normal"
@@ -156,101 +219,122 @@ class SimpleButton(tk.Button):
         self["state"] = "disabled"
 
 
-class PkmnViewer(tk.Frame):
-    def __init__(self, show_badge_boost_label, *args, **kwargs):
+class InventoryViewer(tk.Frame):
+    def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.config(bg="white", padx=10, pady=10, height=150, width=250)
 
-        self._name_label = tk.Label(self, text="Pkmn:")
-        self._name_label.config(bg="white")
-        self._name_label.grid(row=0, column=0)
-        self._name_value = tk.Label(self)
+        self._money_label = tk.Label(self, text="Current Money: ")
+        self._money_label.grid(row=0, column=0, columnspan=2)
+
+        self._all_items = []
+        split_point = const.BAG_LIMIT // 2
+        for i in range(const.BAG_LIMIT):
+            cur_item_label = tk.Label(self, text=f"# {i:0>2}: ", anchor=tk.W)
+            cur_item_label.config(bg="white", width=20)
+            cur_item_label.grid(row=(i % split_point) + 1, column=i // split_point, sticky=tk.W)
+            self._all_items.append(cur_item_label)
+
+    
+    def set_inventory(self, inventory:route_state_objects.Inventory):
+        self._money_label.config(text=f"Current Money: {inventory.cur_money}")
+
+        idx = -1
+        for idx in range(len(inventory.cur_items)):
+            cur_item = inventory.cur_items[idx]
+            self._all_items[idx].config(text=f"# {idx:0>2}: {cur_item.num}x {cur_item.base_item.name}")
+        
+        for missing_idx in range(idx + 1, const.BAG_LIMIT):
+            self._all_items[missing_idx].config(text=f"# {missing_idx:0>2}:")
+
+
+class PkmnViewer(tk.Frame):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.config(bg="white", padx=10, pady=10, height=150, width=250)
+
+        self._name_value = tk.Label(self, anchor=tk.W)
         self._name_value.config(bg="white")
-        self._name_value.grid(row=0, column=1)
+        self._name_value.grid(row=0, column=0, columnspan=2, sticky=tk.W)
 
-        self._level_label = tk.Label(self, text="LV:")
+        self._level_label = tk.Label(self, text="Lv:", anchor=tk.W)
         self._level_label.config(bg="white")
-        self._level_label.grid(row=0, column=2)
-        self._level_value = tk.Label(self)
+        self._level_label.grid(row=0, column=2, sticky=tk.W)
+        self._level_value = tk.Label(self, anchor=tk.E)
         self._level_value.config(bg="white")
-        self._level_value.grid(row=0, column=3)
+        self._level_value.grid(row=0, column=3, sticky=tk.E)
 
-        self._hp_label = tk.Label(self, text="HP:")
+        self._hp_label = tk.Label(self, text="HP:", anchor=tk.W)
         self._hp_label.config(bg="white")
-        self._hp_label.grid(row=1, column=0)
-        self._hp_value = tk.Label(self)
+        self._hp_label.grid(row=1, column=0, sticky=tk.W)
+        self._hp_value = tk.Label(self, anchor=tk.E)
         self._hp_value.config(bg="white")
-        self._hp_value.grid(row=1, column=1)
+        self._hp_value.grid(row=1, column=1, sticky=tk.E)
 
-        self._xp_label = tk.Label(self, text="XP:")
+        self._xp_label = tk.Label(self, text="Exp:", anchor=tk.W)
         self._xp_label.config(bg="white")
-        self._xp_label.grid(row=1, column=2)
-        self._xp_value = tk.Label(self)
+        self._xp_label.grid(row=1, column=2, sticky=tk.W)
+        self._xp_value = tk.Label(self, anchor=tk.E)
         self._xp_value.config(bg="white")
-        self._xp_value.grid(row=1, column=3)
+        self._xp_value.grid(row=1, column=3, sticky=tk.E)
 
-        self._attack_label = tk.Label(self, text="Attack:")
+        self._attack_label = tk.Label(self, text="Attack:", anchor=tk.W)
         self._attack_label.config(bg="white")
-        self._attack_label.grid(row=2, column=0)
-        self._attack_value = tk.Label(self)
+        self._attack_label.grid(row=2, column=0, sticky=tk.W)
+        self._attack_value = tk.Label(self, anchor=tk.E)
         self._attack_value.config(bg="white")
-        self._attack_value.grid(row=2, column=1)
+        self._attack_value.grid(row=2, column=1, sticky=tk.E)
 
-        self._move_one_label = tk.Label(self, text="Move 1:")
+        self._move_one_label = tk.Label(self, text="Move 1:", anchor=tk.W)
         self._move_one_label.config(bg="white")
-        self._move_one_label.grid(row=2, column=2)
+        self._move_one_label.grid(row=2, column=2, sticky=tk.W)
         self._move_one_value = tk.Label(self)
         self._move_one_value.config(bg="white")
         self._move_one_value.grid(row=2, column=3)
 
-        self._defense_label = tk.Label(self, text="Defense:")
+        self._defense_label = tk.Label(self, text="Defense:", anchor=tk.W)
         self._defense_label.config(bg="white")
-        self._defense_label.grid(row=3, column=0)
-        self._defense_value = tk.Label(self)
+        self._defense_label.grid(row=3, column=0, sticky=tk.W)
+        self._defense_value = tk.Label(self, anchor=tk.E)
         self._defense_value.config(bg="white")
-        self._defense_value.grid(row=3, column=1)
+        self._defense_value.grid(row=3, column=1, sticky=tk.E)
 
-        self._move_two_label = tk.Label(self, text="Move 2:")
+        self._move_two_label = tk.Label(self, text="Move 2:", anchor=tk.W)
         self._move_two_label.config(bg="white")
-        self._move_two_label.grid(row=3, column=2)
+        self._move_two_label.grid(row=3, column=2, sticky=tk.W)
         self._move_two_value = tk.Label(self)
         self._move_two_value.config(bg="white")
         self._move_two_value.grid(row=3, column=3)
 
-        self._special_label = tk.Label(self, text="Special:")
+        self._special_label = tk.Label(self, text="Special:", anchor=tk.W)
         self._special_label.config(bg="white")
-        self._special_label.grid(row=4, column=0)
-        self._special_value = tk.Label(self)
+        self._special_label.grid(row=4, column=0, sticky=tk.W)
+        self._special_value = tk.Label(self, anchor=tk.E)
         self._special_value.config(bg="white")
-        self._special_value.grid(row=4, column=1)
+        self._special_value.grid(row=4, column=1, sticky=tk.E)
 
-        self._move_three_label = tk.Label(self, text="Move 3:")
+        self._move_three_label = tk.Label(self, text="Move 3:", anchor=tk.W)
         self._move_three_label.config(bg="white")
-        self._move_three_label.grid(row=4, column=2)
+        self._move_three_label.grid(row=4, column=2, sticky=tk.W)
         self._move_three_value = tk.Label(self)
         self._move_three_value.config(bg="white")
         self._move_three_value.grid(row=4, column=3)
 
-        self._speed_label = tk.Label(self, text="Speed:")
+        self._speed_label = tk.Label(self, text="Speed:", anchor=tk.W)
         self._speed_label.config(bg="white")
-        self._speed_label.grid(row=5, column=0)
-        self._speed_value = tk.Label(self)
+        self._speed_label.grid(row=5, column=0, sticky=tk.W)
+        self._speed_value = tk.Label(self, anchor=tk.E)
         self._speed_value.config(bg="white")
-        self._speed_value.grid(row=5, column=1)
+        self._speed_value.grid(row=5, column=1, sticky=tk.E)
 
-        self._move_four_label = tk.Label(self, text="Move 3:")
+        self._move_four_label = tk.Label(self, text="Move 3:", anchor=tk.W)
         self._move_four_label.config(bg="white")
-        self._move_four_label.grid(row=5, column=2)
+        self._move_four_label.grid(row=5, column=2, sticky=tk.W)
         self._move_four_value = tk.Label(self)
         self._move_four_value.config(bg="white")
         self._move_four_value.grid(row=5, column=3)
 
-        if show_badge_boost_label:
-            self._info_label = tk.Label(self, text="Stats with * are calculated with a badge boost")
-            self._info_label.config(bg="white")
-            self._info_label.grid(row=6, column=0, columnspan=4)
-    
-    def set_pkmn(self, pkmn:data_objects.EnemyPkmn, badges:data_objects.BadgeList=None):
+    def set_pkmn(self, pkmn:data_objects.EnemyPkmn, badges:route_state_objects.BadgeList=None):
         self._name_value.config(text=pkmn.name)
         self._level_value.config(text=str(pkmn.level))
         self._xp_value.config(text=str(pkmn.xp))
@@ -294,18 +378,31 @@ class PkmnViewer(tk.Frame):
             self._move_four_value.config(text="")
 
 
+class StateViewer(tk.Frame):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.inventory = InventoryViewer(self)
+        self.inventory.pack(padx=10, pady=10)
+        self.pkmn = PkmnViewer(self)
+        self.pkmn.pack(padx=10, pady=10)
+    
+    def set_state(self, cur_state:route_state_objects.RouteState):
+        self.inventory.set_inventory(cur_state.inventory)
+        self.pkmn.set_pkmn(cur_state.solo_pkmn.get_renderable_pkmn(), cur_state.badges)
+
+
 class EnemyPkmnTeam(tk.Frame):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
         self._all_pkmn = []
 
-        self._all_pkmn.append(PkmnViewer(False, self))
-        self._all_pkmn.append(PkmnViewer(False, self))
-        self._all_pkmn.append(PkmnViewer(False, self))
-        self._all_pkmn.append(PkmnViewer(False, self))
-        self._all_pkmn.append(PkmnViewer(False, self))
-        self._all_pkmn.append(PkmnViewer(False, self))
+        self._all_pkmn.append(PkmnViewer(self))
+        self._all_pkmn.append(PkmnViewer(self))
+        self._all_pkmn.append(PkmnViewer(self))
+        self._all_pkmn.append(PkmnViewer(self))
+        self._all_pkmn.append(PkmnViewer(self))
+        self._all_pkmn.append(PkmnViewer(self))
 
     def set_team(self, enemy_pkmn):
         if enemy_pkmn is None:
