@@ -1,4 +1,5 @@
 
+from shutil import move
 from pkmn import data_objects
 from utils.constants import const
 from pkmn import pkmn_utils
@@ -149,9 +150,16 @@ class SoloPokemon:
 
     Moves are not yet handled, only level/stats/statxp are handled
     """
-    def __init__(self, name, species_def, cur_xp=0, dvs=None, realized_stat_xp=None, unrealized_stat_xp=None, badges=None, gained_xp=0, gained_stat_xp=None):
+    def __init__(self, name, species_def, move_list=None, cur_xp=0, dvs=None, realized_stat_xp=None, unrealized_stat_xp=None, badges=None, gained_xp=0, gained_stat_xp=None):
         self.name = name
         self.species_def = species_def
+
+        if move_list is None:
+            self.move_list = [x for x in species_def.initial_moves]
+            while len(self.move_list) < 4:
+                self.move_list.append("")
+        else:
+            self.move_list = move_list
 
         if cur_xp == 0:
             # if no initial XP is defined, assume creating a new level 5 pkmn
@@ -227,7 +235,7 @@ class SoloPokemon:
                 const.SPD: self.cur_stats.speed,
                 const.SPC: self.cur_stats.special,
                 const.XP: -1,
-                const.MOVES: ["N/A"],
+                const.MOVES: self.move_list,
             },
             self.cur_stats
         )
@@ -237,6 +245,7 @@ class SoloPokemon:
         return SoloPokemon(
             self.name,
             self.species_def,
+            move_list=self.move_list,
             cur_xp=self.cur_xp,
             dvs=self.dvs,
             realized_stat_xp=self.realized_stat_xp,
@@ -250,12 +259,55 @@ class SoloPokemon:
         return SoloPokemon(
             self.name,
             self.species_def,
+            move_list=self.move_list,
             cur_xp=self.cur_xp,
             dvs=self.dvs,
             realized_stat_xp=self.realized_stat_xp,
             unrealized_stat_xp=self.unrealized_stat_xp,
             badges=badges,
             gained_xp=self.xp_to_next_level,
+        )
+    
+    def get_move_destination(self, move_name, dest):
+        # if one were to attempt to learn a move defined by the params
+        # return what would the actual destination would be
+
+        # if we already know the move, ignore dest entirely and just don't learn it
+        if move_name in self.move_list:
+            return None
+        
+        added = False
+        for cur_idx in range(len(self.move_list)):
+            # if we're learning the move and we have empty slots, always learn the move
+            if self.move_list[cur_idx] == "":
+                return cur_idx
+        
+        # if we have 4 moves already, and none of those moves are what we're trying to learn
+        # Then, we finally care about the destination passed in
+        if dest is None:
+            return None
+
+        if not added and dest is not None:
+            return dest
+
+    def learn_move(self, move_name, dest, badges):
+        # kinda ugly logic below, since move learning has several possible behaviors
+        new_movelist = self.move_list
+
+        actual_dest = self.get_move_destination(move_name, dest)
+        if actual_dest is not None:
+            new_movelist = [x for x in new_movelist]
+            new_movelist[actual_dest] = move_name
+
+        return SoloPokemon(
+            self.name,
+            self.species_def,
+            move_list=new_movelist,
+            cur_xp=self.cur_xp,
+            dvs=self.dvs,
+            realized_stat_xp=self.realized_stat_xp,
+            unrealized_stat_xp=self.unrealized_stat_xp,
+            badges=badges,
         )
     
     def take_vitamin(self, vit_name, badges):
@@ -292,7 +344,8 @@ class SoloPokemon:
         return SoloPokemon(
             self.name,
             self.species_def,
-            self.cur_xp,
+            move_list=self.move_list,
+            cur_xp=self.cur_xp,
             dvs=self.dvs,
             realized_stat_xp=self.realized_stat_xp.add(new_unrealized_stat_xp),
             badges=badges,
@@ -305,6 +358,21 @@ class RouteState:
         self.badges = badges
         self.inventory = inventory
     
+    def learn_move(self, move_name, dest, source):
+        try:
+            if source == const.MOVE_SOURCE_LEVELUP:
+                inv = self.inventory
+            else:
+                inv = self.inventory.remove_item(pkmn_db.item_db.data[source], 1, False)
+
+            return RouteState(
+                self.solo_pkmn.learn_move(move_name, dest, self.badges),
+                self.badges,
+                inv
+            ), ""
+        except Exception as e:
+            return self, str(e)
+
     def vitamin(self, vitamin_name):
         try:
             return RouteState(
@@ -313,6 +381,7 @@ class RouteState:
                 self.inventory.remove_item(pkmn_db.item_db.data[vitamin_name], 1, False)
             ), ""
         except Exception as e:
+            print(f"vit error: {e}")
             return self, str(e)
 
     def rare_candy(self):

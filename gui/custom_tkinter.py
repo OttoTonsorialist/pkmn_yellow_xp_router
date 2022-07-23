@@ -38,7 +38,6 @@ class CustomGridview(tk.ttk.Treeview):
         self._text_field_attr = text_field_attr
 
         kwargs['columns'] = len(self._custom_col_data)
-        kwargs['show'] = ['headings']
         super().__init__(*args, **kwargs, selectmode="browse")
 
         self._cfg_custom_columns()
@@ -53,6 +52,9 @@ class CustomGridview(tk.ttk.Treeview):
         # configure treeview columns attr
         self['columns'] = tuple(x.id for x in self._custom_col_data)
 
+        # special column gets special formatting
+        self.column("#0", width=20, stretch=tk.NO)
+
         # configure actual thingy thing
         for idx, cur_col in enumerate(self._custom_col_data):
             if cur_col.width:
@@ -61,27 +63,27 @@ class CustomGridview(tk.ttk.Treeview):
                 self.column(cur_col.id, stretch=tk.YES)
             self.heading(cur_col.id, text=cur_col.name)
     
-    def custom_insert(self, obj, selection_id=None, tags=None):
-        if not isinstance(obj, route_events.EventGroup):
-            raise TypeError('Can only support rendering EventGroups')
-
+    def custom_insert(self, obj, selection_id=None, tags=None, parent=''):
         if not(len(self._custom_col_data)):
             raise ValueError('CustomColumns not set, cannot custom insert')
         
         text = ''
         if self._text_field_attr:
-            text = self._get_attr_helper(obj, self._text_field_attr)
+            text = " " + str(self._get_attr_helper(obj, self._text_field_attr))
 
-        self.insert(
-            '',
+        item_id = self.insert(
+            parent,
             tk.END,
             text=text,
             values=tuple(self._get_attr_helper(obj, x.attr) for x in self._custom_col_data),
-            tags=tags
+            tags=tags,
+            open=False
         )
 
         if selection_id is not None and text == selection_id:
             self.selection_set(self.get_children()[-1])
+        
+        return item_id
     
     def refresh(self, ordered_objects):
         raw_selection = self.selection()
@@ -113,7 +115,7 @@ class RouteList(CustomGridview):
             *args,
             custom_col_data=[
                 CustomGridview.CustomColumn('Event', 'name'),
-                CustomGridview.CustomColumn('LevelUpsInto', 'pkmn_after_levelups', width=220),
+                CustomGridview.CustomColumn('LevelUpsInto', 'get_pkmn_after_levelups', width=220),
                 CustomGridview.CustomColumn('Level', 'pkmn_level', width=50),
                 CustomGridview.CustomColumn('Total Exp', 'total_xp', width=80),
                 CustomGridview.CustomColumn('Exp Gain', 'xp_gain', width=80),
@@ -126,11 +128,29 @@ class RouteList(CustomGridview):
         self.tag_configure(const.EVENT_TAG_ERRORS, background='#d98880')
         self.tag_configure(const.EVENT_TAG_IMPORTANT, background='#b3b6b7')
     
-    def custom_insert(self, obj, selection_id=None):
-        super(RouteList, self).custom_insert(obj, selection_id=selection_id, tags=(obj.get_tag(),))
+    def custom_insert(self, obj, selection_id=None, parent=""):
+        return super(RouteList, self).custom_insert(obj, selection_id=selection_id, tags=(obj.get_tag(),), parent=parent)
 
-    def selected_event_id(self):
-        return self.item(self.focus())['text']
+    def get_selected_event_id(self):
+        print(f"full val: {self.item(self.focus())['text']}")
+        return int(self.item(self.focus())['text'][1:])
+
+    def refresh(self, ordered_event_groups):
+        raw_selection = self.selection()
+        if len(raw_selection) == 1:
+            cur_selection = self.item(raw_selection[0])['text']
+        else:
+            cur_selection = None
+
+        for x in self.get_children():
+            self.delete(x)
+        
+        for x in ordered_event_groups:
+            parent_id = self.custom_insert(x, selection_id=cur_selection)
+            if len(x.event_items) > 1:
+                for y in x.event_items:
+                    self.custom_insert(y, selection_id=cur_selection, parent=parent_id)
+
 
 
 class SimpleOptionMenu(tk.OptionMenu):
@@ -327,7 +347,7 @@ class PkmnViewer(tk.Frame):
         self._speed_value.config(bg="white")
         self._speed_value.grid(row=5, column=1, sticky=tk.E)
 
-        self._move_four_label = tk.Label(self, text="Move 3:", anchor=tk.W)
+        self._move_four_label = tk.Label(self, text="Move 4:", anchor=tk.W)
         self._move_four_label.config(bg="white")
         self._move_four_label.grid(row=5, column=2, sticky=tk.W)
         self._move_four_value = tk.Label(self)

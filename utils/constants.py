@@ -126,6 +126,8 @@ class Constants:
             self.PROTEIN
         ]
 
+        self.DEFAULT_FOLDER_NAME = "Main"
+        self.EVENT_FOLDER_NAME = "Event Folder Name"
         self.INVENTORY_EVENT_DEFINITON = "Inventory Event"
         self.TASK_TRAINER_BATTLE = "Fight Trainer"
         self.TASK_RARE_CANDY = "Use Rare Candy"
@@ -167,7 +169,6 @@ class Constants:
         self.NO_ITEM = "No Valid Items"
         self.UNUSED_TRAINER_LOC = "Unused"
         self.EVENTS = "events"
-        self.EVENT_ID_COUNTER = "event_id_counter"
 
         self.IS_KEY_ITEM = "key_item"
         self.PURCHASE_PRICE = "purchase_price"
@@ -175,6 +176,9 @@ class Constants:
 
         self.EVENT_TAG_IMPORTANT = "important"
         self.EVENT_TAG_ERRORS = "errors"
+
+        self.MOVE_SOURCE_LEVELUP = "LevelUp"
+        self.LEVEL_ANY = "AnyLevel"
 
         self.BAG_LIMIT = 20
 

@@ -1,5 +1,6 @@
 import os
 import json
+from tokenize import group
 from typing import Tuple
 
 from utils.constants import const
@@ -14,6 +15,7 @@ class Router:
     def __init__(self):
         self.init_route_state = None
         self.all_events = []
+        self.level_up_move_defs = {}
         self.defeated_trainers = set()
     
     def _reset_events(self):
@@ -48,8 +50,13 @@ class Router:
             route_state_objects.BadgeList(),
             route_state_objects.Inventory()
         )
-        self._reset_events()
+        self.level_up_move_defs = {
+            int(x[0]): route_events.LearnMoveEventDefinition(x[1], None, const.MOVE_SOURCE_LEVELUP, level=int(x[0]))
+            for x in pkmn_base.levelup_moves
+        }
 
+        self._recalc_from(0)
+    
     def _recalc_from(self, start_idx):
         # dumb, but it's ultimately easier to just forcibly recalc the entire list
         # instead of worrying about only starting from the exact right place
@@ -60,8 +67,43 @@ class Router:
                 prev_state = self.init_route_state
             else:
                 prev_state = self.all_events[recalc_idx - 1].final_state
+            
+            self._calc_single_event(self.all_events[recalc_idx], prev_state)
 
-            self.all_events[recalc_idx].apply(prev_state)
+    def _calc_single_event(self, event_group, prev_state):
+        # kind of ugly, we're going to double-calculate some events this way
+        # but basically, need to run once, and see if a particular event causes a level up that results in a new move
+        event_group.apply(prev_state)
+        post_state = event_group.final_state
+
+        # to make sure we catch the edge case where we learn a move while leveling up multiple times in battle
+        # start by enumerating all "new" levels
+        new_levels = [x for x in range(prev_state.solo_pkmn.cur_level + 1, post_state.solo_pkmn.cur_level + 1)]
+
+        to_learn = []
+        for cur_new_level in new_levels:
+            if cur_new_level in self.level_up_move_defs:
+                to_learn.append(self.level_up_move_defs[cur_new_level])
+        
+        if to_learn:
+            event_group.apply(prev_state, level_up_learn_event_defs=to_learn)
+    
+    def _insert_levelup_move_event(self, cur_group, level_up_event_def, target_level, prev_state):
+        for cur_idx in range(len(cur_group.event_items)):
+            cur_item = cur_group.event_items[cur_idx]
+            if (
+                cur_item.init_state.solo_pkmn.cur_level != target_level and
+                cur_item.final_state.solo_pkmn.cur_level == target_level
+            ):
+                cur_group.event_items.insert(
+                    cur_idx + 1,
+                    route_events.EventItem(level_up_event_def)
+                )
+                cur_group.apply(prev_state)
+
+    def _clean_levelup_move_events(self, group_to_clean, prev_state, reapply_on_clean=True):
+        group_to_clean.level_up_learn_events = []
+
     
     def refresh_existing_routes(self):
         result = []
@@ -80,28 +122,15 @@ class Router:
         if event_def.trainer_name:
             self.defeated_trainers.add(event_def.trainer_name)
 
-        if insert_before is None:
-            init_pkmn = self.get_final_state()
-            insert_idx = None
-        else:
-            insert_idx = self._get_event_group_info(insert_before)[1]
-            if insert_idx == 0:
-                init_pkmn = self.init_route_state
-            else:
-                init_pkmn = self.all_events[insert_idx-1].final_state
-
-        new_event = route_events.EventGroup(init_pkmn, event_def)
+        new_event = route_events.EventGroup(event_def)
 
         if insert_before is None:
+            self._calc_single_event(new_event, self.get_final_state())
             self.all_events.append(new_event)
         else:
+            insert_idx = self._get_event_group_info(insert_before)[1]
             self.all_events.insert(insert_idx, new_event)
             self._recalc_from(max(insert_idx - 1, 0))
-    
-    def bulk_fight_trainers(self, trainer_name_list):
-        self._reset_events()
-        for trainer_name in trainer_name_list:
-            self.add_event(route_events.EventDefinition(trainer_name=trainer_name))
     
     def remove_group(self, group_id):
         group_obj, group_idx = self._get_event_group_info(group_id)
@@ -133,7 +162,6 @@ class Router:
 
         with open(final_path, 'w') as f:
             json.dump({
-                const.EVENT_ID_COUNTER: route_events.event_id_counter,
                 const.NAME_KEY: self.init_route_state.solo_pkmn.name,
                 const.EVENTS: [x.to_dict() for x in self.all_events]
             }, f, indent=4)
@@ -144,8 +172,8 @@ class Router:
         with open(final_path, 'r') as f:
             result = json.load(f)
         
-        route_events.event_id_counter = result[const.EVENT_ID_COUNTER]
         # kinda weird, but just reset to same mon to trigger cleanup in helper function
+        self._reset_events()
         self.set_solo_pkmn(self.init_route_state.solo_pkmn.name)
         for cur_event in result[const.EVENTS]:
             self.add_event(route_events.EventDefinition.deserialize(cur_event))
@@ -156,7 +184,7 @@ class Router:
         with open(final_path, 'r') as f:
             result = json.load(f)
         
-        route_events.event_id_counter = result[const.EVENT_ID_COUNTER]
+        self._reset_events()
         self.set_solo_pkmn(result[const.NAME_KEY])
         for cur_event in result[const.EVENTS]:
             self.add_event(route_events.EventDefinition.deserialize(cur_event))

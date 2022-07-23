@@ -152,14 +152,8 @@ class Main(object):
     def refresh_existing_routes(self, *args, **kwargs):
         self.previous_route_names.new_values(self._data.refresh_existing_routes(), default_val=self.route_name.get())
     
-    def get_event_group_id(self):
-        cur_selection = self.event_list.selection()
-        if len(cur_selection) == 0:
-            return None
-        return self.event_list.item(cur_selection[0])['text']
-
     def show_event_details(self, *args, **kwargs):
-        event_group = self._data._get_event_group_info(self.get_event_group_id())[0]
+        event_group = self._data._get_event_group_info(self.event_list.get_selected_event_id())[0]
         if event_group is None:
             self.enemy_team_viewer.set_team(None)
             self.state_pre_viewer.set_state(self._data.init_route_state)
@@ -189,11 +183,11 @@ class Main(object):
         self.refresh_event_list()
 
     def move_task_up(self, event=None):
-        self._data.move_group(self.get_event_group_id(), True)
+        self._data.move_group(self.event_list.get_selected_event_id(), True)
         self.refresh_event_list()
 
     def move_task_down(self, event=None):
-        self._data.move_group(self.get_event_group_id(), False)
+        self._data.move_group(self.event_list.get_selected_event_id(), False)
         self.refresh_event_list()
 
     def clear_selection(self, event=None):
@@ -201,17 +195,17 @@ class Main(object):
             self.event_list.selection_remove(sel)
 
     def delete_task(self, event=None):
-        self._data.remove_group(self.get_event_group_id())
+        self._data.remove_group(self.event_list.get_selected_event_id())
         self.refresh_event_list()
 
     def open_new_event_window(self, event=None):
         if self._is_active_window():
-            event_group_id = self.get_event_group_id()
+            event_group_id = self.event_list.get_selected_event_id()
 
             if event_group_id is None:
                 state = self._data.get_final_state()
             else:
-                state = self._data._get_event_group_info(self.get_event_group_id())[0].init_state
+                state = self._data._get_event_group_info(self.event_list.get_selected_event_id())[0].init_state
 
             self.new_event_window = NewEventWindow(self, self._data.defeated_trainers, state, self._root)
 
@@ -221,7 +215,7 @@ class Main(object):
             self.new_event_window = None
     
     def new_event(self, event_def):
-        self._data.add_event(event_def, insert_before=self.get_event_group_id())
+        self._data.add_event(event_def, insert_before=self.event_list.get_selected_event_id())
         self.new_event_window.destroy()
         self.new_event_window = None
         self.refresh_event_list()
