@@ -571,6 +571,7 @@ class InventoryEventEditor(EventEditorBase):
         self._item_mart_selector.set(const.ITEM_TYPE_ALL_ITEMS)
         self._item_type_selector.set(const.ITEM_TYPE_ALL_ITEMS)
         self._item_amount.set("1")
+        self.set_event_type(self.editor_params.event_type)
 
     def load_event(self, event_def):
         super().load_event(event_def)
