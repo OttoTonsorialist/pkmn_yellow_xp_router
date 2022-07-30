@@ -104,6 +104,7 @@ class Trainer:
         self.name = trainer_dict[const.TRAINER_NAME]
         self.location = trainer_dict[const.TRAINER_LOC]
         self.money = trainer_dict[const.MONEY]
+        self.route_one_offset = trainer_dict[const.ROUTE_ONE_OFFSET]
 
         self.pkmn = pkmn
     
@@ -115,4 +116,7 @@ class BaseItem:
         self.purchase_price = raw_dict[const.PURCHASE_PRICE]
         self.sell_price = self.purchase_price // 2
         self.marts = raw_dict[const.MARTS]
+        self.move_name = None
+        if self.name.startswith("TM") or self.name.startswith("HM"):
+            self.move_name = self.name.split(" ", 1)[1].lower().replace(" ", "_")
 

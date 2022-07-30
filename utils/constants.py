@@ -6,6 +6,8 @@ class Constants:
         self.DEBUG_MODE = False
 
         self.SOURCE_ROOT_PATH = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+        self.CONFIG_PATH = os.path.join(self.SOURCE_ROOT_PATH, "config.json")
+        self.ROUTE_ONE_OUTPUT_PATH = os.path.join(self.SOURCE_ROOT_PATH, "route_one_output")
         self.POKEMON_RAW_DATA = os.path.join(self.SOURCE_ROOT_PATH, "raw_pkmn_data")
 
         self.POKEMON_DB_PATH = os.path.join(self.POKEMON_RAW_DATA, "pokemon.json")
@@ -45,6 +47,7 @@ class Constants:
         self.TRAINER_POKEMON = "pokemon"
         self.SPECIAL_MOVES = "special_moves"
         self.MONEY = "money"
+        self.ROUTE_ONE_OFFSET = "route_one_offset"
 
         self.GROWTH_RATE_FAST = "growth_fast"
         self.GROWTH_RATE_MEDIUM_FAST = "growth_medium_fast"
@@ -129,6 +132,7 @@ class Constants:
         self.DEFAULT_FOLDER_NAME = "Main"
         self.EVENT_FOLDER_NAME = "Event Folder Name"
         self.INVENTORY_EVENT_DEFINITON = "Inventory Event"
+
         self.TASK_TRAINER_BATTLE = "Fight Trainer"
         self.TASK_RARE_CANDY = "Use Rare Candy"
         self.TASK_VITAMIN = "Use Vitamin"
@@ -137,6 +141,16 @@ class Constants:
         self.TASK_PURCHASE_ITEM = "Purchase Item"
         self.TASK_USE_ITEM = "Use/Drop Item"
         self.TASK_SELL_ITEM = "Sell Item"
+        self.TASK_LEARN_MOVE_LEVELUP = "Learn Levelup Move"
+        self.TASK_LEARN_MOVE_TM = "Learn TM/HM Move"
+        self.TASK_NOTES_ONLY = "Just Notes"
+
+        self.ITEM_ROUTE_EVENT_TYPES = [
+            self.TASK_GET_FREE_ITEM,
+            self.TASK_PURCHASE_ITEM,
+            self.TASK_USE_ITEM,
+            self.TASK_SELL_ITEM,
+        ]
 
         self.ROUTE_EVENT_TYPES = [
             self.TASK_TRAINER_BATTLE,
@@ -147,6 +161,8 @@ class Constants:
             self.TASK_PURCHASE_ITEM,
             self.TASK_USE_ITEM,
             self.TASK_SELL_ITEM,
+            self.TASK_LEARN_MOVE_TM,
+            self.TASK_NOTES_ONLY,
         ]
 
         self.ITEM_TYPE_ALL_ITEMS = "All Items"
@@ -177,10 +193,23 @@ class Constants:
         self.EVENT_TAG_IMPORTANT = "important"
         self.EVENT_TAG_ERRORS = "errors"
 
+        self.LEARN_MOVE_KEY = "LearnMove"
+        self.MOVE_SLOT_TEMPLATE = "Move #{} (Over {})"
+        self.MOVE_DONT_LEARN = "Don't Learn"
         self.MOVE_SOURCE_LEVELUP = "LevelUp"
         self.LEVEL_ANY = "AnyLevel"
 
+        self.SPEED_WIN_COLOR = "#abebc6"
+        self.SPEED_TIE_COLOR = "#f9e79f"
+        self.SPEED_LOSS_COLOR = "#f5b7b1"
+
+        self.VALID_COLOR = "#abebc6"
+        self.ERROR_COLOR = "#f9e79f"
+        self.IMPORTANT_COLOR = "#b3b6b7"
+
         self.BAG_LIMIT = 20
+
+        self.CONFIG_ROUTE_ONE_PATH = "route_one_path"
 
 
 

@@ -1,7 +1,9 @@
 # Pokemon Yellow XP Router
 
 This is a tool that is intended to allow easy experience routing of Solo Pokemon playthroughs of Pokemon Yellow.
-It keeps track of the experience and stat experience gained over the course of a run.
+It keeps track of the experience and stat experience gained over the course of a run, as well as your moveset.
+It also tracks your inventory, and your money.
+While it will allow you to route any item usage, and any purchases, if it detects an invalid game state, it will flag events (e.g. using items you don't have, using money you don't have).
 It is not intended to route the game for you, merely allow you to quickly test out ideas without requiring you replay large chunks of the game.
 It assumes that a single pokemon has been injected to Pokemon Yellow as your starter, via the Universal Pokemon Randomizer, and that the pokemon will be receiving 100% of the experience over the course of the run.
 
@@ -13,9 +15,15 @@ I recommend playing through the route once after mapping it out with this tool (
 This tool lets you easily define and reorder all the following events that take place over the course of a run:
 
 - Trainer Battles
+- Fighting Wild Pokemon (some limitations apply)
 - Rare Candies
 - Using Vitamins
-- Fighting Wild Pokemon (some limitations apply)
+- Learning moves through level up
+- Learning moves through TM/HM
+- Picking up items/Acquiring items for free
+- Purchasing items
+- Using/dropping items
+- Selling items
 
 The tool tells you, for any given event:
 
@@ -25,7 +33,7 @@ The tool tells you, for any given event:
 - Stats of all enemy pokemon relevant to the current event
 - Which enemy pokemon you will be presented with after a mid-battle level up occurs
 
-The tool will also restrict you from fighting the same trainer multiple times, to prevent any accidents in routing that are impossible in reality.
+The tool will also restrict you from fighting the same trainer multiple times, to prevent accidents in routing that are impossible in reality.
 
 ## Limitations
 
@@ -33,15 +41,12 @@ This tool, however does have the following limitations:
 
 - When routing in wild pokemon battles, a specific species/level must be chosen
 - When fighting wild pokemon, the wild pokemon is assumed to have perfect IVs (instead of the random IVs it would actually have)
-- Solo Pokemon moves are not tracked in any way, this must be done by the user separately
-- The Solo Pokemon is never allowed to evolve over the course of the run
-- This tool does not tell you whether a fight is possible to win, just assumes you _do_ win the fight, and tells you the XP/stat XP you get from it
-- This tool does not track Rare Candy usage, and will let you use more Rare Candies than you have, or than exist in the game. You must route and track your own Rare Candy usage
+- Evolving the solo pokemon is not currently supported
+- This tool does not tell you whether a fight is possible to win, just assumes you _do_ win the fight, and tracks the XP/stat XP you get from it
 - This tool does not prevent you from selecting an impossible order of battles
 - This tool does not attempt to time anything, or track movement between locations in any way
-- This tool does not track money
-- This tool does not let you see what stats you would get via setups moves/badge boosts, mid battle
-- 2 trainer classes (Juggler and Agatha) are capable of switching pokemon mid-battle, which effectively cancels out this tool's ability to predict mid-battle level ups. These edge cases are ignored entirely, and up to the user to handle appropriately
+- This tool does not yet do any battle calculations
+- 2 trainer classes (Juggler and Agatha) are capable of switching pokemon mid-battle, which effectively negates out this tool's ability to predict mid-battle level ups. These edge cases are ignored entirely, and up to the user to handle appropriately
 
 ## Using the tool
 
@@ -51,23 +56,28 @@ When starting a new route from scratch, first, select the Solo Pokemon to route 
 
 **NOTE:** Any time you pick from this dropdown, or type in the filter box, the event list will reset entirely, under the assumption you are starting a new route. Make sure your current route is saved first, if needed!
 
-Once you have selected a Solo Pokemon, select the Eevee-lution you are planning your rival to have from the final dropdown on the first row. This will populate the route with only the minimum battles required to beat the game, with the rival fights picked appropriately for the Eevee-lution you picked.
+Once you have selected a Solo Pokemon, select the Eevee-lution you are planning your rival to have from the final dropdown on the first row.
+This will populate the route with only the minimum battles required to beat the game, with the rival fights picked appropriately for the Eevee-lution you picked.
+Note that this dropdown is populated from normal routes that have been saved in a particular location ("raw_pkmn_data/min_battles", relative to main executable).
+So if you have a favorite route that you'd prefer to use as the default, save that route, copy the file into that folder, and restart the program.
+It will appear as a new option in the minimum battles dropdown.
 
 ### Checking important battles
 
 One thing that's very important in routing is making sure you have the appropriate level/stats before major battles.
 This can be easily checked by clicking on a particular Trainer Fight that is important.
 This will show you not only the stats of your pokemon going into that fight, but also the stats, level, and moveset of all enemy pokemon for that fight.
+Important battles are highlighted in gray.
 
 ### Mid-battle level ups
 
 On the list view, the second column, "LevelUpsInto" tells you which pokemon will be *entering* the battle for a given trainer fight, when a level up occurs.
-For example, against the Jolteon Rival in Silph Co., you might see the following value: "{#1 kadabra} after_final_pkmn".
+For example, against the Jolteon Rival in Silph Co., you might see the following value: "#1 kadabra, after_final_pkmn".
 This indicates that you level up twice.
 After you defeat Cloyster, the 3rd pokemon on his team, you level up, and the first (and only) Kadabra comes out.
 After you defeat Jolteon, you level up a second time at the end of the battle.
 
-If you were to level up against second Oddish from the Lass immediately prior to Bill's House, you would see "{#2 oddish}"
+If you were to level up against second Oddish from the Lass immediately prior to Bill's House, you would see "#2 oddish"
 
 ### Other columns
 
@@ -88,6 +98,17 @@ If your list of old routes is getting excessively long and you would like to cle
 In the folder where the executable lives, there should be a directory, "saved_routes".
 Inside, you can manually delete any old routes that are no longer relevant anymore.
 
+### Exporting routes
+
+This tool supports some integration with RouteOne, which provides very in-depth battle calculations.
+Once you have a route defined that you'd like to get battle calculations for, click the "Export to RouteOne" button in the top.
+This will immediately generate the config file and route file needed to run RouteOne.
+The paths of these files will be shown in a pop-up.
+If RouteOne is fully configured on your machine, you click on the "Set R1 jar path" button, and navigate to the "RouteOne.jar" file on your machine.
+After setting the path (the tool will remember your path between restarts), you can click the "Run RouteOne" button, and it will automatically run RouteOne on the file generated from your route.
+The final output path will be displayed.in the pop-up as well.
+Note that you should _always_ double-check the top of the RouteOne output, and make sure it completed without errors.
+
 ### Adding a trainer battle to your route
 
 Now that you have the basis for the playthrough that you want to route, it's time to add in optional battles.
@@ -104,16 +125,58 @@ If no valid trainers exist for the filters applied, it will say as such, and you
 Otherwise, the trainer list should now be (relatively) short.
 Select trainers manually from the list to see their full team populated.
 Once you have found the correct trainer, then click "Add Event".
+The boxes will be colored based on comparing the speed of your pokemon to the enemy pokemon.
+Green indicates you outspeed, yellow is a speed tie, and red means the enemy outspeed.
 
 ### Adding other events to your route
 
 Additionally, by selecting other values from the drop downs, you can add other event types.
 These are much simpler, however, so I will not describe them here.
 
+### Learning moves through level-up
+
+Most events are controlled directly by the user.
+However, moves learned through level-up are controlled by the tool itself.
+This allows the tool to automatically place the learn move event at the correct location, including in the middle of a battle.
+This also means that any time you change your route, the timing of any level-up learn move events will be updated automatically as well.
+While the tool completely controls the placement of the event, the user can select the event in question, and update the outcome of the learn move event.
+By default, all level-up learn move events will learn the move if there is space (since the game forces that behavior), or chooses not to learn the move if the slots are full.
+When you choose to change the behavior of a given event, it will remember your choice, even when moving around.
+Note that it remembers specifically the slot it overwrites, not the move.
+
 ### Reordering/Removing Events
 
-If the events are not in the order you desire, then select an event you'd like to move, and by clicking the "Move Up" or "Move Down" button on the bottom of the window, you can reorder events. Similarly, if you'd like to delete an event entirely, there's a button for that as well.
+If the events are not in the order you desire, then select an event you'd like to move, and by clicking the "Move Up" or "Move Down" button on the bottom of the window, you can reorder events.
+Similarly, if you'd like to delete an event entirely, there's a button for that as well.
 
+### Event Warnings
+
+The tool will notice certain "invalid" events, and in cases where an event is determined to be invalid, it will flag the event in yellow, and mark the whole run as "invalid" in the top.
+The effects of the event in question will still apply, despite the error.
+This allows for quick testing.
+
+NOTE! There is one exception to this.
+Any attempt to add an item to your inventory will fail, and the tool will not track it at all.
+This is because the tool keeps track of only 20 spaces for your inventory, and has nowhere to put the extra item, so it does not track the item that exceeds the inventory space.
+
+The other errors that it tracks:
+- Using/Selling an item that is not in your bag
+- Spending money you do not have
+- Using a vitamin when past the vitamin cap
+
+If a folder has any events in it that have a warning, it will be highlighted in yellow as well.
+
+### Event Folders
+
+You can also group events into folders, for easier management.
+By default, there is only one folder, "Main".
+You can easily just add all events into this folder and not use folders at all, if desired.
+Folders can be renamed, reordered, and new folders can be created. Folders can only be deleted when they are fully empty.
+In order to perform any actions on folders, you must select a folder in the list, and then use the buttons at the bottom of the screen.
+Note that moving events up and down can only done within a folder.
+To move an event to a new folder, select the desired event, and click the "Transfer Event" button at the bottom of the screen.
+Then, from the pop-up, select the destination folder desired, and click "Update Folder".
+Doing so will _always_ move the event to the very end of the destination folder.
 
 ## Final Notes
 

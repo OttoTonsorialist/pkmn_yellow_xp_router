@@ -27,11 +27,12 @@ def fixed_map(option, style):
 
 class CustomGridview(tk.ttk.Treeview):
     class CustomColumn(object):
-        def __init__(self, name, attr, width=None):
+        def __init__(self, name, attr, width=None, hidden=False):
             self.id = None
             self.name = name
             self.width = width
             self.attr = attr
+            self.hidden = hidden
 
     def __init__(self, *args, custom_col_data=None, text_field_attr=None, **kwargs):
         self._custom_col_data = custom_col_data
@@ -51,52 +52,17 @@ class CustomGridview(tk.ttk.Treeview):
 
         # configure treeview columns attr
         self['columns'] = tuple(x.id for x in self._custom_col_data)
-
-        # special column gets special formatting
-        self.column("#0", width=20, stretch=tk.NO)
+        self["displaycolumns"] = tuple(x.id for x in self._custom_col_data if not x.hidden)
 
         # configure actual thingy thing
         for idx, cur_col in enumerate(self._custom_col_data):
+            if cur_col.hidden:
+                continue
             if cur_col.width:
                 self.column(cur_col.id, width=cur_col.width, stretch=tk.NO)
             else:
                 self.column(cur_col.id, stretch=tk.YES)
             self.heading(cur_col.id, text=cur_col.name)
-    
-    def custom_insert(self, obj, selection_id=None, tags=None, parent=''):
-        if not(len(self._custom_col_data)):
-            raise ValueError('CustomColumns not set, cannot custom insert')
-        
-        text = ''
-        if self._text_field_attr:
-            text = " " + str(self._get_attr_helper(obj, self._text_field_attr))
-
-        item_id = self.insert(
-            parent,
-            tk.END,
-            text=text,
-            values=tuple(self._get_attr_helper(obj, x.attr) for x in self._custom_col_data),
-            tags=tags,
-            open=False
-        )
-
-        if selection_id is not None and text == selection_id:
-            self.selection_set(self.get_children()[-1])
-        
-        return item_id
-    
-    def refresh(self, ordered_objects):
-        raw_selection = self.selection()
-        if len(raw_selection) == 1:
-            cur_selection = self.item(raw_selection[0])['text']
-        else:
-            cur_selection = None
-
-        for x in self.get_children():
-            self.delete(x)
-        
-        for x in ordered_objects:
-            self.custom_insert(x, selection_id=cur_selection)
 
     @staticmethod
     def _get_attr_helper(obj, attr):
@@ -114,48 +80,117 @@ class RouteList(CustomGridview):
         super().__init__(
             *args,
             custom_col_data=[
-                CustomGridview.CustomColumn('Event', 'name'),
+                #CustomGridview.CustomColumn('Event', 'name'),
                 CustomGridview.CustomColumn('LevelUpsInto', 'get_pkmn_after_levelups', width=220),
                 CustomGridview.CustomColumn('Level', 'pkmn_level', width=50),
                 CustomGridview.CustomColumn('Total Exp', 'total_xp', width=80),
                 CustomGridview.CustomColumn('Exp Gain', 'xp_gain', width=80),
                 CustomGridview.CustomColumn('ToNextLevel', 'xp_to_next_level', width=80),
                 CustomGridview.CustomColumn('% TNL', 'percent_xp_to_next_level', width=80),
+                CustomGridview.CustomColumn('event_id', 'group_id', hidden=True),
             ],
-            text_field_attr='group_id',
+            text_field_attr='name',
             **kwargs
         )
-        self.tag_configure(const.EVENT_TAG_ERRORS, background='#d98880')
-        self.tag_configure(const.EVENT_TAG_IMPORTANT, background='#b3b6b7')
+        self.tag_configure(const.EVENT_TAG_ERRORS, background=const.ERROR_COLOR)
+        self.tag_configure(const.EVENT_TAG_IMPORTANT, background=const.IMPORTANT_COLOR)
+        # maps group id values to tkinter list ids
+        self._treeview_id_lookup = {}
+        self._event_description_lookup = {}
     
-    def custom_insert(self, obj, selection_id=None, parent=""):
-        return super(RouteList, self).custom_insert(obj, selection_id=selection_id, tags=(obj.get_tag(),), parent=parent)
+    def custom_upsert(self, obj, parent="", force_open=False):
+        if not(len(self._custom_col_data)):
+            raise ValueError('CustomColumns not set, cannot custom insert')
+        
+        semantic_id = self._get_attr_helper(obj, self._text_field_attr)
+
+        if semantic_id in self._treeview_id_lookup:
+            item_id = self._treeview_id_lookup[semantic_id]
+            self.item(
+                item_id,
+                text=str(semantic_id),
+                values=tuple(self._get_attr_helper(obj, x.attr) for x in self._custom_col_data),
+                tags=(obj.get_tag(),)
+            )
+
+        else:
+            item_id = self.insert(
+                parent,
+                tk.END,
+                text=str(semantic_id),
+                values=tuple(self._get_attr_helper(obj, x.attr) for x in self._custom_col_data),
+                tags=(obj.get_tag(), ),
+                open=force_open
+            )
+
+            self._treeview_id_lookup[semantic_id] = item_id
+            self._event_description_lookup[semantic_id] = obj.name
+
+        return item_id
 
     def get_selected_event_id(self):
-        print(f"full val: {self.item(self.focus())['text']}")
-        return int(self.item(self.focus())['text'][1:])
+        try:
+            # super ugly. extract the value of the 'group_id' column. right now this is the last column, so just hard coding the index
+            return int(self.item(self.focus())['values'][-1])
+        except ValueError:
+            return -1
 
-    def refresh(self, ordered_event_groups):
-        raw_selection = self.selection()
-        if len(raw_selection) == 1:
-            cur_selection = self.item(raw_selection[0])['text']
-        else:
-            cur_selection = None
-
-        for x in self.get_children():
-            self.delete(x)
+    def refresh(self, ordered_folders):
+        # begin keeping track of the stuff we already know we're displaying
+        # so we can eventually delete stuff that has been removed
+        to_delete_ids = set(self._treeview_id_lookup.keys())
         
-        for x in ordered_event_groups:
-            parent_id = self.custom_insert(x, selection_id=cur_selection)
-            if len(x.event_items) > 1:
-                for y in x.event_items:
-                    self.custom_insert(y, selection_id=cur_selection, parent=parent_id)
+        for folder_idx, folder_obj in enumerate(ordered_folders):
+            folder_semantic_id = self._get_attr_helper(folder_obj, self._text_field_attr)
+            if folder_semantic_id in to_delete_ids:
+                folder_list_id = self._treeview_id_lookup[folder_semantic_id]
+                to_delete_ids.remove(folder_semantic_id)
+                self.custom_upsert(folder_obj, force_open=True)
+            else:
+                folder_list_id = self.custom_upsert(folder_obj, force_open=True)
 
+            self.move(folder_list_id, '', folder_idx)
+
+            for group_idx, group_obj in enumerate(folder_obj.event_groups):
+                group_semantic_id = self._get_attr_helper(group_obj, self._text_field_attr)
+                if group_semantic_id in to_delete_ids:
+                    group_list_id = self._treeview_id_lookup[group_semantic_id]
+                    to_delete_ids.remove(group_semantic_id)
+                    self.custom_upsert(group_obj)
+                else:
+                    group_list_id = self.custom_upsert(group_obj)
+
+                self.move(group_list_id, folder_list_id, group_idx)
+
+                if len(group_obj.event_items) > 1:
+                    for item_idx, item_obj in enumerate(group_obj.event_items):
+                        item_semantic_id = self._get_attr_helper(item_obj, self._text_field_attr)
+                        if item_semantic_id in to_delete_ids:
+                            item_id = self._treeview_id_lookup[item_semantic_id]
+                            to_delete_ids.remove(item_semantic_id)
+                            self.custom_upsert(item_obj, parent=group_list_id)
+                        else:
+                            item_id = self.custom_upsert(item_obj, parent=group_list_id)
+
+                        self.move(item_id, group_list_id, item_idx)
+
+        # we have now updated all relevant records, created missing ones, and ordered everything correctly
+        # just need to remove any potentially deleted records
+        for cur_del_id in to_delete_ids:
+            try:
+                self.delete(self._treeview_id_lookup[cur_del_id])
+            except Exception:
+                # note: this occurs because deleting an entry with children automatically removes all children too
+                # so it will fail to remove the children aftewards
+                # No actual problem though, just remove from the lookup and continue
+                pass
+            del self._treeview_id_lookup[cur_del_id]
 
 
 class SimpleOptionMenu(tk.OptionMenu):
     def __init__(self, root, option_list, callback=None, default_val=None):
         self._val = tk.StringVar()
+        self.cur_options = option_list
 
         if default_val is None:
             default_val = option_list[0]
@@ -167,6 +202,12 @@ class SimpleOptionMenu(tk.OptionMenu):
         super().__init__(root, self._val, *option_list)
         self._menu = self.children["menu"]
     
+    def enable(self):
+        self.configure(state="active")
+    
+    def disable(self):
+        self.configure(state="disabled")
+    
     def get(self):
         return self._val.get()
 
@@ -175,6 +216,7 @@ class SimpleOptionMenu(tk.OptionMenu):
         return self._val.set(val)
     
     def new_values(self, option_list, default_val=None):
+        self.cur_options = option_list
         self._menu.delete(0, "end")
         if not len(option_list):
             option_list = [""]
@@ -272,139 +314,134 @@ class PkmnViewer(tk.Frame):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.config(bg="white", padx=10, pady=10, height=150, width=250)
+        self._labels = []
 
         self._name_value = tk.Label(self, anchor=tk.W)
-        self._name_value.config(bg="white")
         self._name_value.grid(row=0, column=0, columnspan=2, sticky=tk.W)
 
         self._level_label = tk.Label(self, text="Lv:", anchor=tk.W)
-        self._level_label.config(bg="white")
         self._level_label.grid(row=0, column=2, sticky=tk.W)
+        self._labels.append(self._level_label)
         self._level_value = tk.Label(self, anchor=tk.E)
-        self._level_value.config(bg="white")
         self._level_value.grid(row=0, column=3, sticky=tk.E)
 
         self._hp_label = tk.Label(self, text="HP:", anchor=tk.W)
-        self._hp_label.config(bg="white")
         self._hp_label.grid(row=1, column=0, sticky=tk.W)
+        self._labels.append(self._hp_label)
         self._hp_value = tk.Label(self, anchor=tk.E)
-        self._hp_value.config(bg="white")
         self._hp_value.grid(row=1, column=1, sticky=tk.E)
 
         self._xp_label = tk.Label(self, text="Exp:", anchor=tk.W)
-        self._xp_label.config(bg="white")
         self._xp_label.grid(row=1, column=2, sticky=tk.W)
+        self._labels.append(self._xp_label)
         self._xp_value = tk.Label(self, anchor=tk.E)
-        self._xp_value.config(bg="white")
         self._xp_value.grid(row=1, column=3, sticky=tk.E)
 
         self._attack_label = tk.Label(self, text="Attack:", anchor=tk.W)
-        self._attack_label.config(bg="white")
         self._attack_label.grid(row=2, column=0, sticky=tk.W)
+        self._labels.append(self._attack_label)
         self._attack_value = tk.Label(self, anchor=tk.E)
-        self._attack_value.config(bg="white")
         self._attack_value.grid(row=2, column=1, sticky=tk.E)
 
         self._move_one_label = tk.Label(self, text="Move 1:", anchor=tk.W)
-        self._move_one_label.config(bg="white")
         self._move_one_label.grid(row=2, column=2, sticky=tk.W)
+        self._labels.append(self._move_one_label)
         self._move_one_value = tk.Label(self)
-        self._move_one_value.config(bg="white")
         self._move_one_value.grid(row=2, column=3)
 
         self._defense_label = tk.Label(self, text="Defense:", anchor=tk.W)
-        self._defense_label.config(bg="white")
         self._defense_label.grid(row=3, column=0, sticky=tk.W)
+        self._labels.append(self._defense_label)
         self._defense_value = tk.Label(self, anchor=tk.E)
-        self._defense_value.config(bg="white")
         self._defense_value.grid(row=3, column=1, sticky=tk.E)
 
         self._move_two_label = tk.Label(self, text="Move 2:", anchor=tk.W)
-        self._move_two_label.config(bg="white")
         self._move_two_label.grid(row=3, column=2, sticky=tk.W)
+        self._labels.append(self._move_two_label)
         self._move_two_value = tk.Label(self)
-        self._move_two_value.config(bg="white")
         self._move_two_value.grid(row=3, column=3)
 
         self._special_label = tk.Label(self, text="Special:", anchor=tk.W)
-        self._special_label.config(bg="white")
         self._special_label.grid(row=4, column=0, sticky=tk.W)
+        self._labels.append(self._special_label)
         self._special_value = tk.Label(self, anchor=tk.E)
-        self._special_value.config(bg="white")
         self._special_value.grid(row=4, column=1, sticky=tk.E)
 
         self._move_three_label = tk.Label(self, text="Move 3:", anchor=tk.W)
-        self._move_three_label.config(bg="white")
         self._move_three_label.grid(row=4, column=2, sticky=tk.W)
+        self._labels.append(self._move_three_label)
         self._move_three_value = tk.Label(self)
-        self._move_three_value.config(bg="white")
         self._move_three_value.grid(row=4, column=3)
 
         self._speed_label = tk.Label(self, text="Speed:", anchor=tk.W)
-        self._speed_label.config(bg="white")
         self._speed_label.grid(row=5, column=0, sticky=tk.W)
+        self._labels.append(self._speed_label)
         self._speed_value = tk.Label(self, anchor=tk.E)
-        self._speed_value.config(bg="white")
         self._speed_value.grid(row=5, column=1, sticky=tk.E)
 
         self._move_four_label = tk.Label(self, text="Move 4:", anchor=tk.W)
-        self._move_four_label.config(bg="white")
         self._move_four_label.grid(row=5, column=2, sticky=tk.W)
+        self._labels.append(self._move_four_label)
         self._move_four_value = tk.Label(self)
-        self._move_four_value.config(bg="white")
         self._move_four_value.grid(row=5, column=3)
 
-    def set_pkmn(self, pkmn:data_objects.EnemyPkmn, badges:route_state_objects.BadgeList=None):
-        self._name_value.config(text=pkmn.name)
-        self._level_value.config(text=str(pkmn.level))
-        self._xp_value.config(text=str(pkmn.xp))
-        self._hp_value.config(text=str(pkmn.hp))
+    def set_pkmn(self, pkmn:data_objects.EnemyPkmn, badges:route_state_objects.BadgeList=None, bg_color=None):
+        if bg_color is None:
+            bg_color = "white"
+        
+        for cur_label in self._labels:
+            cur_label.config(bg=bg_color)
+
+        self._name_value.config(text=pkmn.name, bg=bg_color)
+        self._level_value.config(text=str(pkmn.level), background=bg_color)
+        self._xp_value.config(text=str(pkmn.xp), background=bg_color)
+        self._hp_value.config(text=str(pkmn.hp), background=bg_color)
 
         speed_val = str(pkmn.speed)
         if badges is not None and badges.soul:
             speed_val = "*" + speed_val
-        self._speed_value.config(text=speed_val)
+        self._speed_value.config(text=speed_val, background=bg_color)
 
         attack_val = str(pkmn.attack)
         if badges is not None and badges.boulder:
             attack_val = "*" + attack_val
-        self._attack_value.config(text=attack_val)
+        self._attack_value.config(text=attack_val, background=bg_color)
 
         defense_val = str(pkmn.defense)
         if badges is not None and badges.thunder:
             defense_val = "*" + defense_val
-        self._defense_value.config(text=defense_val)
+        self._defense_value.config(text=defense_val, background=bg_color)
 
         special_val = str(pkmn.special)
         if badges is not None and badges.volcano:
             special_val = "*" + special_val
-        self._special_value.config(text=special_val)
+        self._special_value.config(text=special_val, background=bg_color)
 
-        self._move_one_value.config(text=pkmn.move_list[0])
+        self._move_one_value.config(text=pkmn.move_list[0], background=bg_color)
 
         if len(pkmn.move_list) > 1:
-            self._move_two_value.config(text=pkmn.move_list[1])
+            self._move_two_value.config(text=pkmn.move_list[1], background=bg_color)
         else:
-            self._move_two_value.config(text="")
+            self._move_two_value.config(text="", background=bg_color)
 
         if len(pkmn.move_list) > 2:
-            self._move_three_value.config(text=pkmn.move_list[2])
+            self._move_three_value.config(text=pkmn.move_list[2], background=bg_color)
         else:
-            self._move_three_value.config(text="")
+            self._move_three_value.config(text="", background=bg_color)
 
         if len(pkmn.move_list) > 3:
-            self._move_four_value.config(text=pkmn.move_list[3])
+            self._move_four_value.config(text=pkmn.move_list[3], background=bg_color)
         else:
-            self._move_four_value.config(text="")
+            self._move_four_value.config(text="", background=bg_color)
 
 
 class StateViewer(tk.Frame):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.inventory = InventoryViewer(self)
-        self.inventory.pack(padx=10, pady=10)
         self.pkmn = PkmnViewer(self)
-        self.pkmn.pack(padx=10, pady=10)
+        self.pkmn.grid(row=0, column=0, padx=10, pady=10)
+        self.inventory = InventoryViewer(self)
+        self.inventory.grid(row=0, column=1, padx=10, pady=10)
     
     def set_state(self, cur_state:route_state_objects.RouteState):
         self.inventory.set_inventory(cur_state.inventory)
@@ -424,13 +461,25 @@ class EnemyPkmnTeam(tk.Frame):
         self._all_pkmn.append(PkmnViewer(self))
         self._all_pkmn.append(PkmnViewer(self))
 
-    def set_team(self, enemy_pkmn):
+    def set_team(self, enemy_pkmn, cur_state:route_state_objects.RouteState=None):
         if enemy_pkmn is None:
             enemy_pkmn = []
 
         idx = -1
         for idx, cur_pkmn in enumerate(enemy_pkmn):
-            self._all_pkmn[idx].set_pkmn(cur_pkmn)
+            if cur_state is not None:
+                if cur_state.solo_pkmn.cur_stats.speed > cur_pkmn.speed:
+                    bg_color = const.SPEED_WIN_COLOR
+                elif cur_state.solo_pkmn.cur_stats.speed == cur_pkmn.speed:
+                    bg_color = const.SPEED_TIE_COLOR
+                else:
+                    bg_color = const.SPEED_LOSS_COLOR
+                cur_state = cur_state.defeat_pkmn(cur_pkmn)[0]
+            else:
+                bg_color = "white"
+
+            self._all_pkmn[idx].set_pkmn(cur_pkmn, bg_color=bg_color)
+            self._all_pkmn[idx].configure(background=bg_color)
             self._all_pkmn[idx].grid(row=idx//3,column=idx%3, padx=15, pady=15)
         
         for missing_idx in range(idx+1, 6):

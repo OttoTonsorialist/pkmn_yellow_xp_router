@@ -1,11 +1,11 @@
 
-from cgitb import reset
 from utils.constants import const
 from pkmn import data_objects
 from pkmn import route_state_objects
 from pkmn import pkmn_db
 
 event_id_counter = 0
+
 
 class InventoryEventDefinition:
     def __init__(self, item_name, item_amount, is_acquire, with_money):
@@ -36,6 +36,48 @@ class InventoryEventDefinition:
         return f"{action} {self.item_name} x{self.item_amount}"
 
 
+class VitaminEventDefinition:
+    def __init__(self, vitamin, amount):
+        self.vitamin = vitamin
+        self.amount = amount
+
+    def serialize(self):
+        return [self.vitamin, self.amount]
+    
+    @staticmethod
+    def deserialize(raw_val):
+        if not raw_val:
+            return None
+        # backwards compatibility
+        if isinstance(raw_val, str):
+            return VitaminEventDefinition(raw_val, 1)
+        else:
+            return VitaminEventDefinition(raw_val[0], raw_val[1])
+    
+    def __str__(self):
+        return f"Vitamin {self.vitamin}, x{self.amount}"
+
+
+class RareCandyEventDefinition:
+    def __init__(self, amount):
+        self.amount = amount
+
+    def serialize(self):
+        return self.amount
+    
+    @staticmethod
+    def deserialize(raw_val):
+        if not raw_val:
+            return None
+        # backwards compatibility
+        if raw_val is True:
+            raw_val = 1
+        return RareCandyEventDefinition(raw_val)
+    
+    def __str__(self):
+        return f"Rare Candy, x{self.amount}"
+
+
 class WildPkmnEventDefinition:
     def __init__(self, name, level):
         self.name = name
@@ -53,6 +95,7 @@ class WildPkmnEventDefinition:
     def __str__(self):
         return f"{self.name}, LV: {self.level}"
 
+
 class LearnMoveEventDefinition:
     def __init__(self, move_to_learn, destination, source, level=const.LEVEL_ANY):
         self.move_to_learn = move_to_learn
@@ -67,16 +110,16 @@ class LearnMoveEventDefinition:
     def deserialize(raw_val):
         if not raw_val:
             return None
-        return LearnMoveEventDefinition(raw_val[0], raw_val[1], raw_val[2], raw_val[3])
+        return LearnMoveEventDefinition(raw_val[0], raw_val[1], raw_val[2], level=raw_val[3])
     
     def __str__(self):
         if self.destination is None:
-            return f"Ignoring {self.move_to_learn}, from {self.source}"
+            return f"Ignoring move {self.move_to_learn}, from {self.source}"
         return f"Learning move {self.move_to_learn} in slot #: {self.destination + 1}, from {self.source}"
 
 
 class EventDefinition:
-    def __init__(self, original_folder_name=None, is_rare_candy=False, vitamin=None, trainer_name=None, wild_pkmn_info=None, item_event_def=None, learn_move=None):
+    def __init__(self, original_folder_name=None, rare_candy=None, vitamin=None, trainer_name=None, wild_pkmn_info=None, item_event_def=None, learn_move=None, notes=""):
         # ugly hack, but basically we heavily flatten the event structure when serializing
         # so when we deserialize, each event definition is "where" we know which folder it belongs to
         # store it on this object, for reference when deserializing
@@ -84,7 +127,7 @@ class EventDefinition:
         self.original_folder_name = original_folder_name
 
         # the actual data associated with the EventDefinition
-        self.is_rare_candy = is_rare_candy
+        self.rare_candy = rare_candy
         self.vitamin = vitamin
         self.trainer_name = trainer_name
         self._trainer_obj = None
@@ -92,6 +135,7 @@ class EventDefinition:
         self._wild_pkmn = None
         self.item_event_def = item_event_def
         self.learn_move = learn_move
+        self.notes = notes
 
     def get_trainer_obj(self):
         if self._trainer_obj is None and self.trainer_name is not None:
@@ -114,11 +158,36 @@ class EventDefinition:
         
         return []
     
-    def get_label(self):
-        if self.is_rare_candy:
-            return const.RARE_CANDY
+    def get_event_type(self):
+        if self.rare_candy is not None:
+            return const.TASK_RARE_CANDY
         elif self.vitamin is not None:
-            return f"Vitamin: {self.vitamin}"
+            return const.TASK_VITAMIN
+        elif self.wild_pkmn_info is not None:
+            return const.TASK_FIGHT_WILD_PKMN
+        elif self.trainer_name is not None:
+            return const.TASK_TRAINER_BATTLE
+        elif self.item_event_def is not None:
+            if self.item_event_def.is_acquire and self.item_event_def.with_money:
+                return const.TASK_PURCHASE_ITEM
+            elif self.item_event_def.is_acquire and not self.item_event_def.with_money:
+                return const.TASK_GET_FREE_ITEM
+            elif self.item_event_def.with_money:
+                return const.TASK_SELL_ITEM
+            else:
+                return const.TASK_USE_ITEM
+        elif self.learn_move is not None:
+            if self.learn_move.source == const.MOVE_SOURCE_LEVELUP:
+                return const.TASK_LEARN_MOVE_LEVELUP
+            return const.TASK_LEARN_MOVE_TM
+        
+        return const.TASK_NOTES_ONLY
+
+    def get_item_label(self):
+        if self.rare_candy is not None:
+            return "Rare Candy x1"
+        elif self.vitamin is not None:
+            return f"Vitamin: {self.vitamin.vitamin} x1"
         elif self.wild_pkmn_info is not None:
             return f"Wild Pkmn: {self.wild_pkmn_info}"
         elif self.trainer_name is not None:
@@ -129,7 +198,24 @@ class EventDefinition:
         elif self.learn_move is not None:
             return str(self.learn_move)
         
-        return "Invalid Event!"
+        return f"Notes: {self.notes}"
+    
+    def get_label(self):
+        if self.rare_candy is not None:
+            return str(self.rare_candy)
+        elif self.vitamin is not None:
+            return str(self.vitamin)
+        elif self.wild_pkmn_info is not None:
+            return f"Wild Pkmn: {self.wild_pkmn_info}"
+        elif self.trainer_name is not None:
+            trainer = self.get_trainer_obj()
+            return f"Trainer: {trainer.name} ({trainer.location})"
+        elif self.item_event_def is not None:
+            return str(self.item_event_def)
+        elif self.learn_move is not None:
+            return str(self.learn_move)
+        
+        return f"Notes: {self.notes}"
     
     def __str__(self):
         return self.get_label()
@@ -137,26 +223,38 @@ class EventDefinition:
     
     def serialize(self, folder_name):
         result = {const.EVENT_FOLDER_NAME: folder_name}
-        if self.is_rare_candy:
-            return result.update({const.TASK_RARE_CANDY: self.is_rare_candy})
+        if self.notes:
+            result[const.TASK_NOTES_ONLY] = self.notes
+
+        if self.rare_candy is not None:
+            result.update({const.TASK_RARE_CANDY: self.rare_candy.serialize()})
         elif self.vitamin is not None:
-            return result.update({const.TASK_VITAMIN: self.vitamin})
+            result.update({const.TASK_VITAMIN: self.vitamin.serialize()})
         elif self.trainer_name is not None:
-            return result.update({const.TASK_TRAINER_BATTLE: self.trainer_name})
+            result.update({const.TASK_TRAINER_BATTLE: self.trainer_name})
         elif self.wild_pkmn_info is not None:
-            return result.update({const.TASK_FIGHT_WILD_PKMN: self.wild_pkmn_info.serialize()})
-        else:
-            return result.update({const.INVENTORY_EVENT_DEFINITON: self.item_event_definition.serialize()})
-    
+            result.update({const.TASK_FIGHT_WILD_PKMN: self.wild_pkmn_info.serialize()})
+        elif self.item_event_def is not None:
+            result.update({const.INVENTORY_EVENT_DEFINITON: self.item_event_def.serialize()})
+        elif self.learn_move is not None:
+            result.update({const.LEARN_MOVE_KEY: self.learn_move.serialize()})
+        
+        return result    
+
     @staticmethod
     def deserialize(raw_val):
+        folder_name = raw_val.get(const.EVENT_FOLDER_NAME, const.DEFAULT_FOLDER_NAME)
+        if folder_name is None:
+            folder_name = const.DEFAULT_FOLDER_NAME
         result = EventDefinition(
-            original_folder_name=raw_val.get(const.EVENT_FOLDER_NAME, const.DEFAULT_FOLDER_NAME),
-            is_rare_candy=raw_val.get(const.TASK_RARE_CANDY),
-            vitamin=raw_val.get(const.TASK_VITAMIN),
+            original_folder_name=folder_name,
+            notes=raw_val.get(const.TASK_NOTES_ONLY, ""),
+            rare_candy=RareCandyEventDefinition.deserialize(raw_val.get(const.TASK_RARE_CANDY)),
+            vitamin=VitaminEventDefinition.deserialize(raw_val.get(const.TASK_VITAMIN)),
             trainer_name=raw_val.get(const.TASK_TRAINER_BATTLE),
             wild_pkmn_info=WildPkmnEventDefinition.deserialize(raw_val.get(const.TASK_FIGHT_WILD_PKMN)),
             item_event_def=InventoryEventDefinition.deserialize(raw_val.get(const.INVENTORY_EVENT_DEFINITON)),
+            learn_move=LearnMoveEventDefinition.deserialize(raw_val.get(const.LEARN_MOVE_KEY)),
         )
         if result.wild_pkmn_info is not None:
             result.trainer_name = None
@@ -172,7 +270,7 @@ class EventItem:
         self.group_id = event_id_counter
         event_id_counter += 1
 
-        self.name = event_definition.get_label()
+        self.name = event_definition.get_item_label()
         self.to_defeat_idx = to_defeat_idx
         self.event_definition = event_definition
 
@@ -198,10 +296,14 @@ class EventItem:
                 trainer_name = self.event_definition.trainer_name if self.to_defeat_idx == len(enemy_team) - 1 else None
                 self.name = f"{self.event_definition.trainer_name}: {enemy_team[self.to_defeat_idx].name}"
                 self.final_state, self.error_message = cur_state.defeat_pkmn(enemy_team[self.to_defeat_idx], trainer_name=trainer_name)
-        elif self.event_definition.is_rare_candy:
+        elif self.event_definition.rare_candy is not None:
+            # note: deliberatley ignoring amount here, that's handled at the group level
+            # just apply one rare candy at the item level
             self.final_state, self.error_message = cur_state.rare_candy()
         elif self.event_definition.vitamin is not None:
-            self.final_state, self.error_message = cur_state.vitamin(self.event_definition.vitamin)
+            # note: deliberatley ignoring amount here, that's handled at the group level
+            # just apply one vitamin at the item level
+            self.final_state, self.error_message = cur_state.vitamin(self.event_definition.vitamin.vitamin)
         elif self.event_definition.item_event_def is not None:
             if self.event_definition.item_event_def.is_acquire:
                 self.final_state, self.error_message = cur_state.add_item(
@@ -217,17 +319,22 @@ class EventItem:
                 )
         elif self.event_definition.learn_move is not None:
             # little bit of book-keeping. Manually update the definition to accurately reflect what happened to the move
-            self.event_definition.learn_move.destination = cur_state.solo_pkmn.get_move_destination(
+            dest_info = cur_state.solo_pkmn.get_move_destination(
                 self.event_definition.learn_move.move_to_learn,
                 self.event_definition.learn_move.destination,
             )
-            self.name = self.event_definition.get_label()
+            self.event_definition.learn_move.destination = dest_info[0]
 
+            self.name = self.event_definition.get_label()
             self.final_state, self.error_message = cur_state.learn_move(
                 self.event_definition.learn_move.move_to_learn,
                 self.event_definition.learn_move.destination,
                 self.event_definition.learn_move.source,
             )
+        else:
+            # Notes only, no processing just pass through
+            self.final_state = self.init_state
+            self.error_message = ""
 
 
     def get_pkmn_after_levelups(self):
@@ -317,6 +424,21 @@ class EventGroup:
             self.event_items.append(EventItem(self.event_definition, to_defeat_idx=0, cur_state=cur_state))
             if self.level_up_learn_event_defs:
                 self.event_items.append(EventItem(EventDefinition(learn_move=self.level_up_learn_event_defs[0]), cur_state=self.event_items[0].final_state))
+        elif self.event_definition.rare_candy is not None:
+            for _ in range(self.event_definition.rare_candy.amount):
+                self.event_items.append(EventItem(self.event_definition, cur_state=cur_state))
+                # TODO: duplicated logic for handling level up moves. How can this be unified?
+                next_state = self.event_items[-1].final_state
+                if next_state.solo_pkmn.cur_level != cur_state.solo_pkmn.cur_level:
+                    for learn_move in self.level_up_learn_event_defs:
+                        if learn_move.level == next_state.solo_pkmn.cur_level:
+                            self.event_items.append(EventItem(EventDefinition(learn_move=learn_move), cur_state=next_state))
+                            next_state = self.event_items[-1].final_state
+                cur_state = next_state
+        elif self.event_definition.vitamin is not None:
+            for _ in range(self.event_definition.vitamin.amount):
+                self.event_items.append(EventItem(self.event_definition, cur_state=cur_state))
+                cur_state = self.event_items[-1].final_state
         else:
             # assumption: can only have at most one level up per event group of non-trainer battle types
             # This allows us to simplify the level up move learn checks
@@ -356,7 +478,7 @@ class EventGroup:
     def total_xp(self):
         return self.final_state.solo_pkmn.cur_xp
 
-    def to_dict(self, folder_name=None):
+    def serialize(self, folder_name=None):
         return self.event_definition.serialize(folder_name)
     
     def has_errors(self):
@@ -427,38 +549,37 @@ class EventFolder:
         
         return any([x.contains_id(id_val) for x in self.event_items])
 
-    def pkmn_after_levelups(self):
+    def get_pkmn_after_levelups(self):
         return ""
 
     def pkmn_level(self):
+        return ""
         return self.final_state.solo_pkmn.cur_level
     
     def xp_to_next_level(self):
+        return ""
         return self.final_state.solo_pkmn.xp_to_next_level
 
     def percent_xp_to_next_level(self):
+        return ""
         return self.final_state.solo_pkmn.percent_xp_to_next_level
 
     def xp_gain(self):
+        return ""
         return self.final_state.solo_pkmn.cur_xp - self.init_state.solo_pkmn.cur_xp
 
     def total_xp(self):
+        return ""
         return self.final_state.solo_pkmn.cur_xp
 
     def serialize(self):
-        return [x.to_dict(self.name) for x in self.event_groups]
+        return [x.serialize(self.name) for x in self.event_groups]
     
     def has_errors(self):
         return self.child_errors
     
-    def is_major_fight(self):
-        return False
-    
     def get_tag(self):
         if self.has_errors():
             return const.EVENT_TAG_ERRORS
-
-        if self.is_major_fight():
-            return const.EVENT_TAG_IMPORTANT
         
         return None

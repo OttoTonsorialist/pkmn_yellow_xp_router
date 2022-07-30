@@ -1,4 +1,5 @@
 
+from distutils.log import error
 from shutil import move
 from pkmn import data_objects
 from utils.constants import const
@@ -100,40 +101,46 @@ class Inventory:
                 pass
         return result
     
-    def add_item(self, base_item:data_objects.BaseItem, num, is_purchase=False):
+    def add_item(self, base_item:data_objects.BaseItem, num, is_purchase=False, force=False):
         result = self._copy()
         if is_purchase:
             total_cost = num * base_item.purchase_price
-            if total_cost > result.cur_money:
+            if total_cost > result.cur_money and not force:
                 raise ValueError(f"Cannot purchase {num} {base_item.name} for {total_cost} with only {result.cur_money} money")
+            # when forcing, allow money to go negative, so you can get a sense for the rest of the money management of the route
             result.cur_money -= total_cost
 
         if base_item.name in result._item_lookup:
-            if base_item.is_key_item:
+            if base_item.is_key_item and not force:
                 raise ValueError(f"Cannot have multiple of the same key item: {base_item.name}")
 
             result.cur_items[result._item_lookup[base_item.name]].num += num
-        elif len(result.cur_items) >= const.BAG_LIMIT:
+        elif len(result.cur_items) >= const.BAG_LIMIT and not force:
             raise ValueError(f"Cannot add more than {const.BAG_LIMIT} items to bag")
-        else:
+        elif len(result.cur_items) < const.BAG_LIMIT:
+            # looks kind of weird, but when we're forcing, we don't want to error
+            # but we still don't have room in the bag. So we just have to ignore that item...
             result._item_lookup[base_item.name] = len(result.cur_items)
             result.cur_items.append(BagItem(base_item, num))
         
         return result
     
-    def remove_item(self, base_item:data_objects.BaseItem, num, is_sale=False):
-        result = self._copy()
-        if base_item.name not in result._item_lookup:
+    def remove_item(self, base_item:data_objects.BaseItem, num, is_sale=False, force=False):
+        if base_item.name not in self._item_lookup:
+            if force:
+                return self
             raise ValueError(f"Cannot sell/use item that you do not have: {base_item.name}")
-        if base_item.is_key_item and is_sale:
+
+        if base_item.is_key_item and is_sale and not force:
             raise ValueError(f"Cannot sell key item: {base_item.name}")
         
+        result = self._copy()
         bag_item = result.cur_items[result._item_lookup[base_item.name]]
-        if bag_item.num < num:
+        if bag_item.num < num and not force:
             raise ValueError(f"Cannot sell/use {num} {base_item.name} when you only have {bag_item.num}")
         
         bag_item.num -= num
-        if bag_item.num == 0:
+        if bag_item.num <= 0:
             del result.cur_items[result._item_lookup[base_item.name]]
             result._reindex_lookup()
         
@@ -274,27 +281,27 @@ class SoloPokemon:
 
         # if we already know the move, ignore dest entirely and just don't learn it
         if move_name in self.move_list:
-            return None
+            return None, False
         
         added = False
         for cur_idx in range(len(self.move_list)):
             # if we're learning the move and we have empty slots, always learn the move
             if self.move_list[cur_idx] == "":
-                return cur_idx
+                return cur_idx, False
         
         # if we have 4 moves already, and none of those moves are what we're trying to learn
         # Then, we finally care about the destination passed in
         if dest is None:
-            return None
+            return None, True
 
         if not added and dest is not None:
-            return dest
+            return dest, True
 
     def learn_move(self, move_name, dest, badges):
         # kinda ugly logic below, since move learning has several possible behaviors
         new_movelist = self.move_list
 
-        actual_dest = self.get_move_destination(move_name, dest)
+        actual_dest = self.get_move_destination(move_name, dest)[0]
         if actual_dest is not None:
             new_movelist = [x for x in new_movelist]
             new_movelist[actual_dest] = move_name
@@ -310,7 +317,7 @@ class SoloPokemon:
             badges=badges,
         )
     
-    def take_vitamin(self, vit_name, badges):
+    def take_vitamin(self, vit_name, badges, force=False):
         # NOTE: some potentially buggy reporting of how much stat xp is actually possible when nearing the stat XP cap
         # this is due to the fact that we are keeping unrealized stat XP separate,
         # so any stat XP over the hard cap won't be properly ignored until it's realized
@@ -319,24 +326,24 @@ class SoloPokemon:
         cur_stat_xp_total = self.realized_stat_xp.add(self.unrealized_stat_xp)
 
         if vit_name == const.HP_UP:
-            if cur_stat_xp_total.hp >= pkmn_utils.VIT_CAP:
-                raise ValueError(f"Ineffective Vitamin: {self.vitamin} (Already above vitamin cap)")
+            if cur_stat_xp_total.hp >= pkmn_utils.VIT_CAP and not force:
+                raise ValueError(f"Ineffective Vitamin: {vit_name} (Already above vitamin cap)")
             new_unrealized_stat_xp = self.unrealized_stat_xp.add(data_objects.StatBlock(pkmn_utils.VIT_AMT, 0, 0, 0, 0, is_stat_xp=True))
         elif vit_name == const.PROTEIN:
-            if cur_stat_xp_total.attack >= pkmn_utils.VIT_CAP:
-                raise ValueError(f"Ineffective Vitamin: {self.vitamin} (Already above vitamin cap)")
+            if cur_stat_xp_total.attack >= pkmn_utils.VIT_CAP and not force:
+                raise ValueError(f"Ineffective Vitamin: {vit_name} (Already above vitamin cap)")
             new_unrealized_stat_xp = self.unrealized_stat_xp.add(data_objects.StatBlock(0, pkmn_utils.VIT_AMT, 0, 0, 0, is_stat_xp=True))
         elif vit_name == const.IRON:
-            if cur_stat_xp_total.defense >= pkmn_utils.VIT_CAP:
-                raise ValueError(f"Ineffective Vitamin: {self.vitamin} (Already above vitamin cap)")
+            if cur_stat_xp_total.defense >= pkmn_utils.VIT_CAP and not force:
+                raise ValueError(f"Ineffective Vitamin: {vit_name} (Already above vitamin cap)")
             new_unrealized_stat_xp = self.unrealized_stat_xp.add(data_objects.StatBlock(0, 0, pkmn_utils.VIT_AMT, 0, 0, is_stat_xp=True))
         elif vit_name == const.CARBOS:
-            if cur_stat_xp_total.speed >= pkmn_utils.VIT_CAP:
-                raise ValueError(f"Ineffective Vitamin: {self.vitamin} (Already above vitamin cap)")
+            if cur_stat_xp_total.speed >= pkmn_utils.VIT_CAP and not force:
+                raise ValueError(f"Ineffective Vitamin: {vit_name} (Already above vitamin cap)")
             new_unrealized_stat_xp = self.unrealized_stat_xp.add(data_objects.StatBlock(0, 0, 0, pkmn_utils.VIT_AMT, 0, is_stat_xp=True))
         elif vit_name == const.CALCIUM:
-            if cur_stat_xp_total.special >= pkmn_utils.VIT_CAP:
-                raise ValueError(f"Ineffective Vitamin: {self.vitamin} (Already above vitamin cap)")
+            if cur_stat_xp_total.special >= pkmn_utils.VIT_CAP and not force:
+                raise ValueError(f"Ineffective Vitamin: {vit_name} (Already above vitamin cap)")
             new_unrealized_stat_xp = self.unrealized_stat_xp.add(data_objects.StatBlock(0, 0, 0, 0, pkmn_utils.VIT_AMT, is_stat_xp=True))
         else:
             raise ValueError(f"Unknown vitamin: {vit_name}")
@@ -353,74 +360,91 @@ class SoloPokemon:
 
 
 class RouteState:
+    # note: paradigm of this is kind of clunky
+    # basically we ask each aspect of the current state of the run (represented by an object)
+    # to update to reflect the new state represented by the event in question
+    # if any update fails, we record the error, and then redo it with "force=True"
+    # this allows us to collect errors, while still making sure that the effects happen
+
     def __init__(self, solo_pkmn:SoloPokemon, badges:BadgeList, inventory:Inventory):
         self.solo_pkmn = solo_pkmn
         self.badges = badges
         self.inventory = inventory
     
     def learn_move(self, move_name, dest, source):
-        try:
-            if source == const.MOVE_SOURCE_LEVELUP:
-                inv = self.inventory
-            else:
+        error_message = ""
+        if source == const.MOVE_SOURCE_LEVELUP:
+            inv = self.inventory
+        else:
+            try:
                 inv = self.inventory.remove_item(pkmn_db.item_db.data[source], 1, False)
+            except Exception as e:
+                error_message = str(e)
+                inv = self.inventory.remove_item(pkmn_db.item_db.data[source], 1, is_sale=False, force=True)
 
-            return RouteState(
-                self.solo_pkmn.learn_move(move_name, dest, self.badges),
-                self.badges,
-                inv
-            ), ""
-        except Exception as e:
-            return self, str(e)
+        return RouteState(
+            self.solo_pkmn.learn_move(move_name, dest, self.badges),
+            self.badges,
+            inv
+        ), error_message
 
     def vitamin(self, vitamin_name):
+        error_message = []
         try:
-            return RouteState(
-                self.solo_pkmn.take_vitamin(vitamin_name, self.badges),
-                self.badges,
-                self.inventory.remove_item(pkmn_db.item_db.data[vitamin_name], 1, False)
-            ), ""
+            new_mon = self.solo_pkmn.take_vitamin(vitamin_name, self.badges)
         except Exception as e:
-            print(f"vit error: {e}")
-            return self, str(e)
+            error_message.append(str(e))
+            new_mon = self.solo_pkmn.take_vitamin(vitamin_name, self.badges, force=True)
+
+        try:
+            inv = self.inventory.remove_item(pkmn_db.item_db.data[vitamin_name], 1, False)
+        except Exception as e:
+            error_message.append(str(e))
+            inv = self.inventory.remove_item(pkmn_db.item_db.data[vitamin_name], 1, False, force=True)
+
+        return RouteState(new_mon, self.badges, inv), ', '.join(error_message)
 
     def rare_candy(self):
+        error_message = ""
+
         try:
-            return RouteState(
-                self.solo_pkmn.rare_candy(self.badges),
-                self.badges,
-                self.inventory.remove_item(pkmn_db.item_db.data[const.RARE_CANDY], 1, False)
-            ), ""
+            inv = self.inventory.remove_item(pkmn_db.item_db.data[const.RARE_CANDY], 1, False)
         except Exception as e:
-            return self, str(e)
+            error_message = str(e)
+            inv = self.inventory.remove_item(pkmn_db.item_db.data[const.RARE_CANDY], 1, False, force=True)
+
+        return RouteState(
+            self.solo_pkmn.rare_candy(self.badges),
+            self.badges,
+            inv
+        ), error_message
 
     def defeat_pkmn(self, enemy_pkmn, trainer_name=None):
-        try:
-            new_badges = self.badges.award_badge(trainer_name)
-            return RouteState(
-                self.solo_pkmn.defeat_pkmn(enemy_pkmn, new_badges),
-                new_badges,
-                self.inventory.defeat_trainer(pkmn_db.trainer_db.data.get(trainer_name))
-            ), ""
-        except Exception as e:
-            return self, str(e)
+        new_badges = self.badges.award_badge(trainer_name)
+        return RouteState(
+            self.solo_pkmn.defeat_pkmn(enemy_pkmn, new_badges),
+            new_badges,
+            self.inventory.defeat_trainer(pkmn_db.trainer_db.data.get(trainer_name))
+        ), ""
     
     def add_item(self, item_name, amount, is_purchase):
+        error_message = ""
+
         try:
-            return RouteState(
-                self.solo_pkmn,
-                self.badges,
-                self.inventory.add_item(pkmn_db.item_db.data[item_name], amount, is_purchase)
-            ), ""
+            inv = self.inventory.add_item(pkmn_db.item_db.data[item_name], amount, is_purchase)
         except Exception as e:
-            return self, str(e)
+            error_message = str(e)
+            inv = self.inventory.add_item(pkmn_db.item_db.data[item_name], amount, is_purchase, force=True)
+
+        return RouteState(self.solo_pkmn, self.badges, inv), error_message
 
     def remove_item(self, item_name, amount, is_purchase):
+        error_message = ""
+
         try:
-            return RouteState(
-                self.solo_pkmn,
-                self.badges,
-                self.inventory.remove_item(pkmn_db.item_db.data[item_name], amount, is_purchase)
-            ), ""
+            inv = self.inventory.remove_item(pkmn_db.item_db.data[item_name], amount, is_purchase)
         except Exception as e:
-            return self, str(e)
+            error_message = str(e)
+            inv = self.inventory.remove_item(pkmn_db.item_db.data[item_name], amount, is_purchase, force=True)
+
+        return RouteState(self.solo_pkmn, self.badges, inv), error_message
