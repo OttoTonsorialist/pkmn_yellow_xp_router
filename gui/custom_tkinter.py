@@ -316,123 +316,124 @@ class PkmnViewer(tk.Frame):
         self.config(bg="white", padx=5, pady=5, height=150, width=250)
         self._labels = []
 
-        self._name_value = tk.Label(self, anchor=tk.W)
+        self._name_value = tk.Label(self, anchor=tk.W, background="white")
         self._name_value.grid(row=0, column=0, columnspan=2, sticky=tk.W)
 
-        self._level_label = tk.Label(self, text="Lv:", anchor=tk.W)
+        self._level_label = tk.Label(self, text="Lv:", anchor=tk.W, background="white")
         self._level_label.grid(row=0, column=2, sticky=tk.W)
         self._labels.append(self._level_label)
-        self._level_value = tk.Label(self, anchor=tk.E)
+        self._level_value = tk.Label(self, anchor=tk.E, background="white")
         self._level_value.grid(row=0, column=3, sticky=tk.E)
 
-        self._hp_label = tk.Label(self, text="HP:", anchor=tk.W)
+        self._hp_label = tk.Label(self, text="HP:", anchor=tk.W, background="white")
         self._hp_label.grid(row=1, column=0, sticky=tk.W)
         self._labels.append(self._hp_label)
-        self._hp_value = tk.Label(self, anchor=tk.E)
+        self._hp_value = tk.Label(self, anchor=tk.E, background="white")
         self._hp_value.grid(row=1, column=1, sticky=tk.E)
 
-        self._xp_label = tk.Label(self, text="Exp:", anchor=tk.W)
+        self._xp_label = tk.Label(self, text="Exp:", anchor=tk.W, background="white")
         self._xp_label.grid(row=1, column=2, sticky=tk.W)
         self._labels.append(self._xp_label)
-        self._xp_value = tk.Label(self, anchor=tk.E)
+        self._xp_value = tk.Label(self, anchor=tk.E, background="white")
         self._xp_value.grid(row=1, column=3, sticky=tk.E)
 
-        self._attack_label = tk.Label(self, text="Attack:", anchor=tk.W)
+        self._attack_label = tk.Label(self, text="Attack:", anchor=tk.W, background="white")
         self._attack_label.grid(row=2, column=0, sticky=tk.W)
         self._labels.append(self._attack_label)
-        self._attack_value = tk.Label(self, anchor=tk.E)
+        self._attack_value = tk.Label(self, anchor=tk.E, background="white")
         self._attack_value.grid(row=2, column=1, sticky=tk.E)
 
-        self._move_one_label = tk.Label(self, text="Move 1:", anchor=tk.W)
+        self._move_one_label = tk.Label(self, text="Move 1:", anchor=tk.W, background="white")
         self._move_one_label.grid(row=2, column=2, sticky=tk.W)
         self._labels.append(self._move_one_label)
-        self._move_one_value = tk.Label(self)
+        self._move_one_value = tk.Label(self, background="white")
         self._move_one_value.grid(row=2, column=3)
 
-        self._defense_label = tk.Label(self, text="Defense:", anchor=tk.W)
+        self._defense_label = tk.Label(self, text="Defense:", anchor=tk.W, background="white")
         self._defense_label.grid(row=3, column=0, sticky=tk.W)
         self._labels.append(self._defense_label)
-        self._defense_value = tk.Label(self, anchor=tk.E)
+        self._defense_value = tk.Label(self, anchor=tk.E, background="white")
         self._defense_value.grid(row=3, column=1, sticky=tk.E)
 
-        self._move_two_label = tk.Label(self, text="Move 2:", anchor=tk.W)
+        self._move_two_label = tk.Label(self, text="Move 2:", anchor=tk.W, background="white")
         self._move_two_label.grid(row=3, column=2, sticky=tk.W)
         self._labels.append(self._move_two_label)
-        self._move_two_value = tk.Label(self)
+        self._move_two_value = tk.Label(self, background="white")
         self._move_two_value.grid(row=3, column=3)
 
-        self._special_label = tk.Label(self, text="Special:", anchor=tk.W)
+        self._special_label = tk.Label(self, text="Special:", anchor=tk.W, background="white")
         self._special_label.grid(row=4, column=0, sticky=tk.W)
         self._labels.append(self._special_label)
-        self._special_value = tk.Label(self, anchor=tk.E)
+        self._special_value = tk.Label(self, anchor=tk.E, background="white")
         self._special_value.grid(row=4, column=1, sticky=tk.E)
 
-        self._move_three_label = tk.Label(self, text="Move 3:", anchor=tk.W)
+        self._move_three_label = tk.Label(self, text="Move 3:", anchor=tk.W, background="white")
         self._move_three_label.grid(row=4, column=2, sticky=tk.W)
         self._labels.append(self._move_three_label)
-        self._move_three_value = tk.Label(self)
+        self._move_three_value = tk.Label(self, background="white")
         self._move_three_value.grid(row=4, column=3)
 
-        self._speed_label = tk.Label(self, text="Speed:", anchor=tk.W)
-        self._speed_label.grid(row=5, column=0, sticky=tk.W)
+        self._speed_frame = tk.Frame(self, background="white")
+        self._speed_frame.grid(row=5, column=0, sticky=tk.EW, columnspan=2)
+        self._speed_label = tk.Label(self._speed_frame, text="Speed:", anchor=tk.W, background="white")
+        self._speed_label.grid(row=0, column=0, sticky=tk.EW)
         self._labels.append(self._speed_label)
-        self._speed_value = tk.Label(self, anchor=tk.E)
-        self._speed_value.grid(row=5, column=1, sticky=tk.E)
+        self._speed_value = tk.Label(self._speed_frame, anchor=tk.E, background="white")
+        self._speed_value.grid(row=0, column=1, sticky=tk.EW)
+        self._speed_frame.columnconfigure(1, weight=1)
 
-        self._move_four_label = tk.Label(self, text="Move 4:", anchor=tk.W)
+        self._move_four_label = tk.Label(self, text="Move 4:", anchor=tk.W, background="white")
         self._move_four_label.grid(row=5, column=2, sticky=tk.W)
         self._labels.append(self._move_four_label)
-        self._move_four_value = tk.Label(self)
+        self._move_four_value = tk.Label(self, background="white")
         self._move_four_value.grid(row=5, column=3)
 
-    def set_pkmn(self, pkmn:data_objects.EnemyPkmn, badges:route_state_objects.BadgeList=None, bg_color=None):
-        if bg_color is None:
-            bg_color = "white"
+    def set_pkmn(self, pkmn:data_objects.EnemyPkmn, badges:route_state_objects.BadgeList=None, speed_bg_color=None):
+        if speed_bg_color is None:
+            speed_bg_color = "white"
         
-        for cur_label in self._labels:
-            cur_label.config(bg=bg_color)
-
-        self._name_value.config(text=pkmn.name, bg=bg_color)
-        self._level_value.config(text=str(pkmn.level), background=bg_color)
-        self._xp_value.config(text=str(pkmn.xp), background=bg_color)
-        self._hp_value.config(text=str(pkmn.hp), background=bg_color)
+        self._name_value.config(text=pkmn.name)
+        self._level_value.config(text=str(pkmn.level))
+        self._xp_value.config(text=str(pkmn.xp))
+        self._hp_value.config(text=str(pkmn.hp))
 
         speed_val = str(pkmn.speed)
         if badges is not None and badges.soul:
             speed_val = "*" + speed_val
-        self._speed_value.config(text=speed_val, background=bg_color)
+        self._speed_value.config(text=speed_val, background=speed_bg_color)
+        self._speed_label.config(background=speed_bg_color)
 
         attack_val = str(pkmn.attack)
         if badges is not None and badges.boulder:
             attack_val = "*" + attack_val
-        self._attack_value.config(text=attack_val, background=bg_color)
+        self._attack_value.config(text=attack_val)
 
         defense_val = str(pkmn.defense)
         if badges is not None and badges.thunder:
             defense_val = "*" + defense_val
-        self._defense_value.config(text=defense_val, background=bg_color)
+        self._defense_value.config(text=defense_val)
 
         special_val = str(pkmn.special)
         if badges is not None and badges.volcano:
             special_val = "*" + special_val
-        self._special_value.config(text=special_val, background=bg_color)
+        self._special_value.config(text=special_val)
 
-        self._move_one_value.config(text=pkmn.move_list[0], background=bg_color)
+        self._move_one_value.config(text=pkmn.move_list[0])
 
         if len(pkmn.move_list) > 1:
-            self._move_two_value.config(text=pkmn.move_list[1], background=bg_color)
+            self._move_two_value.config(text=pkmn.move_list[1])
         else:
-            self._move_two_value.config(text="", background=bg_color)
+            self._move_two_value.config(text="")
 
         if len(pkmn.move_list) > 2:
-            self._move_three_value.config(text=pkmn.move_list[2], background=bg_color)
+            self._move_three_value.config(text=pkmn.move_list[2])
         else:
-            self._move_three_value.config(text="", background=bg_color)
+            self._move_three_value.config(text="")
 
         if len(pkmn.move_list) > 3:
-            self._move_four_value.config(text=pkmn.move_list[3], background=bg_color)
+            self._move_four_value.config(text=pkmn.move_list[3])
         else:
-            self._move_four_value.config(text="", background=bg_color)
+            self._move_four_value.config(text="")
 
 
 class StateViewer(tk.Frame):
@@ -478,8 +479,7 @@ class EnemyPkmnTeam(tk.Frame):
             else:
                 bg_color = "white"
 
-            self._all_pkmn[idx].set_pkmn(cur_pkmn, bg_color=bg_color)
-            self._all_pkmn[idx].configure(background=bg_color)
+            self._all_pkmn[idx].set_pkmn(cur_pkmn, speed_bg_color=bg_color)
             self._all_pkmn[idx].grid(row=idx//3,column=idx%3, padx=5, pady=5)
         
         for missing_idx in range(idx+1, 6):
