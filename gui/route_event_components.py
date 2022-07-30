@@ -23,8 +23,8 @@ class EventEditorBase(tk.Frame):
         self._notes_label = tk.Label(self, text="Notes:")
         self._notes_label.grid(row=self._cur_row, column=0, columnspan=2)
         self._cur_row += 1
-        self._notes = tk.Text(self, height=3)
-        self._notes.grid(row=self._cur_row, column=0, columnspan=2, sticky=tk.EW, padx=15, pady=10)
+        self._notes = tk.Text(self, height=2)
+        self._notes.grid(row=self._cur_row, column=0, columnspan=2, sticky=tk.EW, padx=15, pady=5)
         self._cur_row += 1
     
     def configure(self, editor_params):

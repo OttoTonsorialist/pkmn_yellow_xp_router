@@ -1,4 +1,5 @@
 import argparse
+from multiprocessing import Event
 import subprocess
 
 import tkinter as tk
@@ -102,15 +103,23 @@ class Main(object):
 
         self.event_details_frame = tk.Frame(self.right_info_panel, highlightbackground="black", highlightthickness=2)
         self.event_details_frame.pack(anchor=tk.N, fill=tk.BOTH, expand=True, padx=10)
-        self.event_details_label = tk.Label(self.event_details_frame, text="Event Details:")
-        self.event_details_label.pack()
         self.event_details_button = custom_tkinter.SimpleButton(self.event_details_frame, text="Update Event", command=self.update_existing_event)
         self.event_details_button.pack()
         self.event_details_button.disable()
-        self.enemy_team_viewer = custom_tkinter.EnemyPkmnTeam(self.event_details_frame)
-        self.enemy_team_viewer.pack()
+
         self.event_editor_lookup = route_event_components.EventEditorFactory(self.event_details_frame, self.event_details_button)
         self.current_event_editor = None
+
+        self.trainer_notes = self.event_editor_lookup.get_editor(
+            route_event_components.EditorParams(
+                const.TASK_NOTES_ONLY,
+                self._data.defeated_trainers,
+                None
+            )
+        )
+        self.trainer_notes.pack()
+        self.enemy_team_viewer = custom_tkinter.EnemyPkmnTeam(self.event_details_frame)
+        self.enemy_team_viewer.pack()
 
         self.post_state_frame = tk.Frame(self.right_info_panel)
         self.post_state_frame.pack()
@@ -203,6 +212,7 @@ class Main(object):
             self.folder_controls.pack_forget()
             self.group_controls.pack_forget()
             self.event_details_button.pack_forget()
+            self.trainer_notes.pack_forget()
             self.enemy_team_viewer.pack_forget()
             self.enemy_team_viewer.set_team(None)
             self.state_pre_viewer.set_state(self._data.init_route_state)
@@ -212,12 +222,14 @@ class Main(object):
         else:
             self.state_pre_viewer.set_state(event_group.init_state)
             self.state_post_viewer.set_state(event_group.final_state)
+            self.trainer_notes.pack_forget()
             self.enemy_team_viewer.pack_forget()
 
             if isinstance(event_group, EventFolder):
                 self.folder_controls.pack()
                 self.group_controls.pack_forget()
                 self.event_details_button.pack_forget()
+                self.trainer_notes.pack_forget()
                 self.enemy_team_viewer.set_team(None)
                 if self.current_event_editor is not None:
                     self.current_event_editor.pack_forget()
@@ -241,12 +253,15 @@ class Main(object):
                     self.delete_event_button.enable()
 
             if event_group.event_definition.trainer_name is not None:
-                self.event_details_button.pack_forget()
-                self.enemy_team_viewer.pack()
-                self.enemy_team_viewer.set_team(event_group.event_definition.get_trainer_obj().pkmn, cur_state=event_group.init_state)
                 if self.current_event_editor is not None:
                     self.current_event_editor.pack_forget()
+                self.event_details_button.pack()
+                self.trainer_notes.pack()
+                self.trainer_notes.load_event(event_group.event_definition)
+                self.enemy_team_viewer.pack()
+                self.enemy_team_viewer.set_team(event_group.event_definition.get_trainer_obj().pkmn, cur_state=event_group.init_state)
             else:
+                self.trainer_notes.pack_forget()
                 self.enemy_team_viewer.set_team(None)
                 if self.current_event_editor is not None:
                     self.current_event_editor.pack_forget()
@@ -267,9 +282,21 @@ class Main(object):
 
     def update_existing_event(self, *args, **kwargs):
         if self.current_event_editor is None:
-            raise ValueError(f"Cannot update existing event when no event is being edited!")
+            cur_event = self._data.get_event_obj(self.event_list.get_selected_event_id())
+            if isinstance(cur_event, EventGroup) and cur_event.event_definition.trainer_name is not None:
+                self._data.replace_group(
+                    self.event_list.get_selected_event_id(),
+                    EventDefinition(
+                        trainer_name=cur_event.event_definition.trainer_name,
+                        notes=self.trainer_notes.get_event().notes
+                    )
+                )
+            else:
+                raise ValueError(f"Cannot update existing event when no event is being edited!")
         
-        self._data.replace_group(self.event_list.get_selected_event_id(), self.current_event_editor.get_event())
+        else:
+            self._data.replace_group(self.event_list.get_selected_event_id(), self.current_event_editor.get_event())
+
         self.refresh_event_list()
         self.show_event_details()
     
@@ -578,6 +605,7 @@ class RouteOneWindow(tk.Toplevel):
                 self._route_one_results_label.config(text=f"Error encountered: {result.stdout}")
         except Exception as e:
             self._route_one_results_label.config(text=f"Exception encountered: {type(e)}: {e}")
+        self.lift()
 
 def fixed_map(option, style):
     # Fix for setting text colour for Tkinter 8.6.9

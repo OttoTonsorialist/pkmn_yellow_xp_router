@@ -132,7 +132,7 @@ class RouteList(CustomGridview):
         try:
             # super ugly. extract the value of the 'group_id' column. right now this is the last column, so just hard coding the index
             return int(self.item(self.focus())['values'][-1])
-        except ValueError:
+        except [ValueError, IndexError]:
             return -1
 
     def refresh(self, ordered_folders):
@@ -313,7 +313,7 @@ class InventoryViewer(tk.Frame):
 class PkmnViewer(tk.Frame):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.config(bg="white", padx=10, pady=10, height=150, width=250)
+        self.config(bg="white", padx=5, pady=5, height=150, width=250)
         self._labels = []
 
         self._name_value = tk.Label(self, anchor=tk.W)
@@ -439,9 +439,9 @@ class StateViewer(tk.Frame):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.pkmn = PkmnViewer(self)
-        self.pkmn.grid(row=0, column=0, padx=10, pady=10)
+        self.pkmn.grid(row=0, column=0, padx=5, pady=5)
         self.inventory = InventoryViewer(self)
-        self.inventory.grid(row=0, column=1, padx=10, pady=10)
+        self.inventory.grid(row=0, column=1, padx=5, pady=5)
     
     def set_state(self, cur_state:route_state_objects.RouteState):
         self.inventory.set_inventory(cur_state.inventory)
@@ -480,7 +480,7 @@ class EnemyPkmnTeam(tk.Frame):
 
             self._all_pkmn[idx].set_pkmn(cur_pkmn, bg_color=bg_color)
             self._all_pkmn[idx].configure(background=bg_color)
-            self._all_pkmn[idx].grid(row=idx//3,column=idx%3, padx=15, pady=15)
+            self._all_pkmn[idx].grid(row=idx//3,column=idx%3, padx=5, pady=5)
         
         for missing_idx in range(idx+1, 6):
             self._all_pkmn[missing_idx].grid_forget()
