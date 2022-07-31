@@ -77,7 +77,7 @@ class Router:
         return self.init_route_state
     
     def set_solo_pkmn(self, pkmn_name, level_up_moves=None):
-        pkmn_base = pkmn_db.pkmn_db.data.get(pkmn_name)
+        pkmn_base = pkmn_db.pkmn_db.get_pkmn(pkmn_name)
         if pkmn_base is None:
             raise ValueError(f"Could not find base stats for Pokemon: {pkmn_name}")
         

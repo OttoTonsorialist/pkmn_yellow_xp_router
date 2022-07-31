@@ -96,7 +96,7 @@ class Inventory:
         if fight_reward is not None:
             # it's ok to fail to add a fight reward to your bag
             try:
-                result = result.add_item(pkmn_db.item_db.data[fight_reward], 1)
+                result = result.add_item(pkmn_db.item_db.get_item(fight_reward), 1)
             except Exception:
                 pass
         return result
@@ -377,10 +377,10 @@ class RouteState:
             inv = self.inventory
         else:
             try:
-                inv = self.inventory.remove_item(pkmn_db.item_db.data[source], 1, False)
+                inv = self.inventory.remove_item(pkmn_db.item_db.get_item(source), 1, False)
             except Exception as e:
                 error_message = str(e)
-                inv = self.inventory.remove_item(pkmn_db.item_db.data[source], 1, is_sale=False, force=True)
+                inv = self.inventory.remove_item(pkmn_db.item_db.get_item(source), 1, is_sale=False, force=True)
 
         return RouteState(
             self.solo_pkmn.learn_move(move_name, dest, self.badges),
@@ -397,10 +397,10 @@ class RouteState:
             new_mon = self.solo_pkmn.take_vitamin(vitamin_name, self.badges, force=True)
 
         try:
-            inv = self.inventory.remove_item(pkmn_db.item_db.data[vitamin_name], 1, False)
+            inv = self.inventory.remove_item(pkmn_db.item_db.get_item(vitamin_name), 1, False)
         except Exception as e:
             error_message.append(str(e))
-            inv = self.inventory.remove_item(pkmn_db.item_db.data[vitamin_name], 1, False, force=True)
+            inv = self.inventory.remove_item(pkmn_db.item_db.get_item(vitamin_name), 1, False, force=True)
 
         return RouteState(new_mon, self.badges, inv), ', '.join(error_message)
 
@@ -408,10 +408,10 @@ class RouteState:
         error_message = ""
 
         try:
-            inv = self.inventory.remove_item(pkmn_db.item_db.data[const.RARE_CANDY], 1, False)
+            inv = self.inventory.remove_item(pkmn_db.item_db.get_item(const.RARE_CANDY), 1, False)
         except Exception as e:
             error_message = str(e)
-            inv = self.inventory.remove_item(pkmn_db.item_db.data[const.RARE_CANDY], 1, False, force=True)
+            inv = self.inventory.remove_item(pkmn_db.item_db.get_item(const.RARE_CANDY), 1, False, force=True)
 
         return RouteState(
             self.solo_pkmn.rare_candy(self.badges),
@@ -424,17 +424,17 @@ class RouteState:
         return RouteState(
             self.solo_pkmn.defeat_pkmn(enemy_pkmn, new_badges),
             new_badges,
-            self.inventory.defeat_trainer(pkmn_db.trainer_db.data.get(trainer_name))
+            self.inventory.defeat_trainer(pkmn_db.trainer_db.get_trainer(trainer_name))
         ), ""
     
     def add_item(self, item_name, amount, is_purchase):
         error_message = ""
 
         try:
-            inv = self.inventory.add_item(pkmn_db.item_db.data[item_name], amount, is_purchase)
+            inv = self.inventory.add_item(pkmn_db.item_db.get_item(item_name), amount, is_purchase)
         except Exception as e:
             error_message = str(e)
-            inv = self.inventory.add_item(pkmn_db.item_db.data[item_name], amount, is_purchase, force=True)
+            inv = self.inventory.add_item(pkmn_db.item_db.get_item(item_name), amount, is_purchase, force=True)
 
         return RouteState(self.solo_pkmn, self.badges, inv), error_message
 
@@ -442,9 +442,9 @@ class RouteState:
         error_message = ""
 
         try:
-            inv = self.inventory.remove_item(pkmn_db.item_db.data[item_name], amount, is_purchase)
+            inv = self.inventory.remove_item(pkmn_db.item_db.get_item(item_name), amount, is_purchase)
         except Exception as e:
             error_message = str(e)
-            inv = self.inventory.remove_item(pkmn_db.item_db.data[item_name], amount, is_purchase, force=True)
+            inv = self.inventory.remove_item(pkmn_db.item_db.get_item(item_name), amount, is_purchase, force=True)
 
         return RouteState(self.solo_pkmn, self.badges, inv), error_message

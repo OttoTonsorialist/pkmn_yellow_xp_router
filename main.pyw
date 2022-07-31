@@ -35,6 +35,10 @@ class Main(object):
         self.top_controls.pack(fill=tk.X)
         self.top_controls.pack_propagate(False)
 
+        self.top_controls = tk.Frame(self.primary_window)
+        self.top_controls.pack(fill=tk.X)
+        self.top_controls.pack_propagate(False)
+
         self.top_left_controls = tk.Frame(self.top_controls)
         self.top_left_controls.grid(row=0, column=0, sticky=tk.W)
         self.run_status_label = tk.Label(self.top_left_controls, text="Run Status: Valid", background=const.VALID_COLOR, anchor=tk.W, padx=10, pady=10)
@@ -46,7 +50,7 @@ class Main(object):
 
         self.solo_selector_label = tk.Label(self.top_right_controls, text="Solo Pokemon:")
         self.solo_selector_label.grid(row=0, column=0)
-        self.solo_selector = custom_tkinter.SimpleOptionMenu(self.top_right_controls, list(pkmn_db.pkmn_db.data.keys()), callback=self.new_solo_pkmn)
+        self.solo_selector = custom_tkinter.SimpleOptionMenu(self.top_right_controls, pkmn_db.pkmn_db.get_all_names(), callback=self.new_solo_pkmn)
         self.solo_selector.config(width=20)
         self.solo_selector.grid(row=0, column=1)
         self.pkmn_filter_label = tk.Label(self.top_right_controls, text="Solo Pokemon Filter:")

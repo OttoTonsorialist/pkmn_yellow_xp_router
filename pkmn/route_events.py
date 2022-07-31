@@ -139,7 +139,7 @@ class EventDefinition:
 
     def get_trainer_obj(self):
         if self._trainer_obj is None and self.trainer_name is not None:
-            self._trainer_obj = pkmn_db.trainer_db.data.get(self.trainer_name)
+            self._trainer_obj = pkmn_db.trainer_db.get_trainer(self.trainer_name)
         return self._trainer_obj
     
     def get_wild_pkmn(self):

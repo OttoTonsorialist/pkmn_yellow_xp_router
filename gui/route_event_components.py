@@ -57,7 +57,7 @@ class TrainerFightEditor(EventEditorBase):
         self._trainers_by_class = custom_tkinter.SimpleOptionMenu(self, trainer_classes, callback=self._trainer_filter_callback)
 
         self._trainer_names_label = tk.Label(self, text="Trainer Name:")
-        self._trainer_names = custom_tkinter.SimpleOptionMenu(self, list(pkmn_db.trainer_db.data.keys()), callback=self._trainer_name_callback)
+        self._trainer_names = custom_tkinter.SimpleOptionMenu(self, pkmn_db.trainer_db.get_valid_trainers(), callback=self._trainer_name_callback)
         self._trainer_team = custom_tkinter.EnemyPkmnTeam(self)
 
         self._trainers_by_class_label.grid(row=self._cur_row, column=0)
@@ -89,7 +89,7 @@ class TrainerFightEditor(EventEditorBase):
         if self._trainer_names.get() != const.NO_TRAINERS:
             self.event_button.enable()
             self._trainer_team.grid(row=5, column=0, columnspan=2)
-            trainer = pkmn_db.trainer_db.data.get(self._trainer_names.get())
+            trainer = pkmn_db.trainer_db.get_trainer(self._trainer_names.get())
             if trainer is not None:
                 self._trainer_team.set_team(trainer.pkmn, cur_state=self.editor_params.cur_state)
             else:
@@ -255,7 +255,7 @@ class LearnMoveEditor(EventEditorBase):
     
     def _move_selected_callback(self, *args, **kwargs):
         if self.editor_params.event_type == const.TASK_LEARN_MOVE_TM:
-            item_obj = pkmn_db.item_db.data.get(self._item_selector.get())
+            item_obj = pkmn_db.item_db.get_item(self._item_selector.get())
             if item_obj is not None:
                 self._move = item_obj.move_name
             else:
@@ -345,7 +345,7 @@ class WildPkmnEditor(EventEditorBase):
         super().__init__(*args, **kwargs)
 
         self._pkmn_label = tk.Label(self, text="Wild Pokemon Type:")
-        self._pkmn_types = custom_tkinter.SimpleOptionMenu(self, list(pkmn_db.pkmn_db.data.keys()))
+        self._pkmn_types = custom_tkinter.SimpleOptionMenu(self, pkmn_db.pkmn_db.get_all_names())
         self._pkmn_label.grid(row=self._cur_row, column=0)
         self._pkmn_types.grid(row=self._cur_row, column=1)
         self._cur_row += 1
@@ -420,7 +420,7 @@ class InventoryEventEditor(EventEditorBase):
         self._cur_row += 1
 
         self._item_selector_label = tk.Label(self, text="Item:")
-        self._item_selector = custom_tkinter.SimpleOptionMenu(self, list(pkmn_db.item_db.data.keys()), callback=self._item_selector_callback)
+        self._item_selector = custom_tkinter.SimpleOptionMenu(self, pkmn_db.item_db.get_filtered_names(), callback=self._item_selector_callback)
         self._item_selector_row = self._cur_row
         self._cur_row += 1
 
@@ -521,12 +521,12 @@ class InventoryEventEditor(EventEditorBase):
             item_amt = int(self._item_amount.get())
             if self.editor_params.event_type == const.TASK_PURCHASE_ITEM:
                 # update the cost if purchasing
-                cost = pkmn_db.item_db.data[self._item_selector.get()].purchase_price
+                cost = pkmn_db.item_db.get_filtered_names(self._item_selector.get()).purchase_price
                 cost *= item_amt
                 self._item_cost_label.config(text=f"Total Cost: {cost}")
             elif self.editor_params.event_type == const.TASK_SELL_ITEM:
                 # update the cost if purchasing
-                cost = pkmn_db.item_db.data[self._item_selector.get()].sell_price
+                cost = pkmn_db.item_db.get_filtered_names(self._item_selector.get()).sell_price
                 cost *= item_amt
                 self._item_cost_label.config(text=f"Total Profit: {cost}")
 

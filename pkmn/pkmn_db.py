@@ -19,26 +19,40 @@ class MinBattlesDB:
 
 class PkmnDB:
     def __init__(self):
-        self.data = {}
+        self._data = {}
 
         with open(const.POKEMON_DB_PATH, 'r') as f:
             raw_db = json.load(f)
 
         for cur_pkmn in raw_db.values():
-            self.data[cur_pkmn[const.NAME_KEY]] = data_objects.PokemonSpecies(cur_pkmn)
+            self._data[cur_pkmn[const.NAME_KEY]] = data_objects.PokemonSpecies(cur_pkmn)
+    
+    def get_all_names(self):
+        return list(self._data.keys())
+    
+    def get_pkmn(self, name):
+        if name in self._data:
+            return self._data.get(name)
+        
+        for test_name in self.get_all_names():
+            if name.lower() == test_name.lower():
+                return self._data.get(test_name)
+        
+        return None
     
     def create_wild_pkmn(self, pkmn_name, pkmn_level):
+        raw_pkmn = self.get_pkmn(pkmn_name)
         return data_objects.EnemyPkmn(
-            pkmn_utils.instantiate_wild_pokemon(self.data[pkmn_name].to_dict(), pkmn_level),
-            self.data[pkmn_name].stats
+            pkmn_utils.instantiate_wild_pokemon(raw_pkmn.to_dict(), pkmn_level),
+            raw_pkmn.stats
         )
     
     def get_filtered_names(self, filter_val=None):
         if filter_val is None:
-            return list(self.data.keys())
+            return self.get_all_names()
         
         filter_val = filter_val.lower()
-        result = [x for x in self.data.keys() if filter_val in x]
+        result = [x for x in self._data.keys() if filter_val in x]
         if not result:
             result = [f"{const.NO_POKEMON} match filter: '{filter_val}'"]
         
@@ -47,7 +61,7 @@ class PkmnDB:
 
 class TrainerDB:
     def __init__(self, pkmn_db):
-        self.data = {}
+        self._data = {}
         self.loc_oriented_trainers = {}
         self.class_oriented_trainers = {}
 
@@ -55,15 +69,13 @@ class TrainerDB:
             raw_db = json.load(f)
 
         for raw_trainer in raw_db.values():
-            """
             # TODO: currently just blindly ignoring all unused trainers. Not sure if I ever care about that
             if raw_trainer[const.TRAINER_LOC] == const.UNUSED_TRAINER_LOC:
                 continue
-            """
 
             trainer_obj = self._create_trainer(raw_trainer, pkmn_db)
 
-            self.data[trainer_obj.name] = trainer_obj
+            self._data[trainer_obj.name] = trainer_obj
 
             if trainer_obj.location not in self.loc_oriented_trainers:
                 self.loc_oriented_trainers[trainer_obj.location] = []
@@ -76,8 +88,11 @@ class TrainerDB:
     def _create_trainer(self, trainer_dict, pkmn_db):
         return data_objects.Trainer(
             trainer_dict,
-            [data_objects.EnemyPkmn(x, pkmn_db.data[x[const.NAME_KEY]].stats) for x in trainer_dict[const.TRAINER_POKEMON]]
+            [data_objects.EnemyPkmn(x, pkmn_db.get_pkmn(x[const.NAME_KEY]).stats) for x in trainer_dict[const.TRAINER_POKEMON]]
         )
+    
+    def get_trainer(self, trainer_name):
+        return self._data.get(trainer_name)
     
     def get_all_locations(self):
         result = list(self.loc_oriented_trainers.keys())
@@ -98,7 +113,7 @@ class TrainerDB:
             defeated_trainers = []
 
         valid_trainers = []
-        for cur_trainer in self.data.values():
+        for cur_trainer in self._data.values():
             if trainer_class is not None and cur_trainer.trainer_class != trainer_class:
                 continue
             if trainer_loc is not None and cur_trainer.location != trainer_loc:
@@ -115,7 +130,7 @@ class TrainerDB:
 
 class ItemDB:
     def __init__(self):
-        self.data = {}
+        self._data = {}
         self.mart_items = {}
         self.key_items = []
         self.tms = []
@@ -126,7 +141,7 @@ class ItemDB:
 
         for cur_dict_item in raw_db.values():
             cur_base_item = data_objects.BaseItem(cur_dict_item)
-            self.data[cur_base_item.name] = cur_base_item
+            self._data[cur_base_item.name] = cur_base_item
 
             if cur_base_item.is_key_item:
                 self.key_items.append(cur_base_item.name)
@@ -140,9 +155,12 @@ class ItemDB:
                     self.mart_items[mart] = []
                 self.mart_items[mart].append(cur_base_item.name)
     
+    def get_item(self, item_name):
+        return self._data.get(item_name)
+    
     def get_filtered_names(self, item_type=const.ITEM_TYPE_ALL_ITEMS, source_mart=const.ITEM_TYPE_ALL_ITEMS):
         if item_type == const.ITEM_TYPE_ALL_ITEMS and source_mart == const.ITEM_TYPE_ALL_ITEMS:
-            return list(self.data.keys())
+            return list(self._data.keys())
         elif item_type == const.ITEM_TYPE_ALL_ITEMS:
             return self.mart_items[source_mart]
         elif source_mart == const.ITEM_TYPE_ALL_ITEMS:
