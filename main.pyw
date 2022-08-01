@@ -32,20 +32,36 @@ class Main(object):
         self.primary_window.pack(fill=tk.BOTH, expand=True)
 
         self.top_controls = tk.Frame(self.primary_window)
-        self.top_controls.pack(fill=tk.X)
-        self.top_controls.pack_propagate(False)
-
-        self.top_controls = tk.Frame(self.primary_window)
-        self.top_controls.pack(fill=tk.X)
+        self.top_controls.pack(fill=tk.BOTH)
         self.top_controls.pack_propagate(False)
 
         self.top_left_controls = tk.Frame(self.top_controls)
-        self.top_left_controls.grid(row=0, column=0, sticky=tk.W)
+        self.top_left_controls.grid(row=0, column=0, sticky=tk.NSEW)
         self.run_status_label = tk.Label(self.top_left_controls, text="Run Status: Valid", background=const.VALID_COLOR, anchor=tk.W, padx=10, pady=10)
         self.run_status_label.grid(row=0, column=0, sticky=tk.W)
 
+        self.group_controls = tk.Frame(self.top_left_controls)
+        self.group_controls.grid(row=0, column=1)
+        self.top_left_controls.columnconfigure(1, weight=1)
+        self.top_left_controls.rowconfigure(0, weight=1)
+
+        self.move_group_up_button = custom_tkinter.SimpleButton(self.group_controls, text='Move Event Up', command=self.move_group_up, width=15)
+        self.move_group_up_button.grid(row=0, column=0, padx=5, pady=1)
+        self.move_group_down_button = custom_tkinter.SimpleButton(self.group_controls, text='Move Event Down', command=self.move_group_down, width=15)
+        self.move_group_down_button.grid(row=1, column=0, padx=5, pady=1)
+        self.transfer_event_button = custom_tkinter.SimpleButton(self.group_controls, text='Transfer Event', command=self.open_transfer_event_window, width=15)
+        self.transfer_event_button.grid(row=0, column=2, padx=5, pady=1)
+
+        self.new_event_button = custom_tkinter.SimpleButton(self.group_controls, text='New Event', command=self.open_new_event_window, width=15)
+        self.new_event_button.grid(row=0, column=1, padx=5, pady=1)
+        self.delete_event_button = custom_tkinter.SimpleButton(self.group_controls, text='Delete Event', command=self.delete_group, width=15)
+        self.delete_event_button.grid(row=1, column=1, padx=5, pady=1)
+        self.rename_folder_button = custom_tkinter.SimpleButton(self.group_controls, text='Rename Folder', command=self.open_new_event_window, width=15)
+        self.rename_folder_button.grid(row=1, column=2, padx=5, pady=1)
+
         self.top_right_controls = tk.Frame(self.top_controls)
         self.top_right_controls.grid(row=0, column=1, sticky=tk.E)
+        self.top_controls.columnconfigure(0, weight=1)
         self.top_controls.columnconfigure(1, weight=1)
 
         self.solo_selector_label = tk.Label(self.top_right_controls, text="Solo Pokemon:")
@@ -137,44 +153,6 @@ class Main(object):
         self.info_panel.grid_columnconfigure(0, weight=1, uniform="test")
         self.info_panel.grid_columnconfigure(1, weight=1, uniform="test")
 
-        self.bottom_controls = tk.Frame(self.primary_window)
-        self.bottom_controls.pack(expand=False)
-
-        self.group_controls = tk.Frame(self.bottom_controls)
-        self.group_controls.pack()
-
-        self.move_group_up_button = custom_tkinter.SimpleButton(self.group_controls, text='Move Event Up', command=self.move_group_up)
-        self.move_group_up_button.grid(row=0, column=0)
-
-        self.move_group_down_button = custom_tkinter.SimpleButton(self.group_controls, text='Move Event Down', command=self.move_group_down)
-        self.move_group_down_button.grid(row=1, column=0)
-
-        self.new_event_button = custom_tkinter.SimpleButton(self.group_controls, text='New Event', command=self.open_new_event_window)
-        self.new_event_button.grid(row=0, column=1)
-
-        self.delete_event_button = custom_tkinter.SimpleButton(self.group_controls, text='Delete Event', command=self.delete_group)
-        self.delete_event_button.grid(row=1, column=1)
-
-        self.transfer_event_button = custom_tkinter.SimpleButton(self.group_controls, text='Transfer Event', command=self.open_transfer_event_window)
-        self.transfer_event_button.grid(row=0, column=2)
-
-        self.folder_controls = tk.Frame(self.bottom_controls)
-
-        self.move_folder_up_button = custom_tkinter.SimpleButton(self.folder_controls, text='Move Folder Up', command=self.move_folder_up)
-        self.move_folder_up_button.grid(row=0, column=0)
-
-        self.move_folder_down_button = custom_tkinter.SimpleButton(self.folder_controls, text='Move Folder Down', command=self.move_folder_down)
-        self.move_folder_down_button.grid(row=1, column=0)
-
-        self.rename_folder_button = custom_tkinter.SimpleButton(self.folder_controls, text='Rename Folder', command=self.open_rename_folder_window)
-        self.rename_folder_button.grid(row=0, column=2)
-
-        self.new_folder_button = custom_tkinter.SimpleButton(self.folder_controls, text='New Folder', command=self.open_new_folder_window)
-        self.new_folder_button.grid(row=0, column=1)
-
-        self.delete_folder_button = custom_tkinter.SimpleButton(self.folder_controls, text='Delete Folder', command=self.delete_folder)
-        self.delete_folder_button.grid(row=1, column=1)
-
         # keybindings
         self._root.bind('<Control-r>', self.refresh_event_list)
         self._root.bind("<<TreeviewSelect>>", self.show_event_details)
@@ -213,8 +191,6 @@ class Main(object):
         event_group = self._data.get_event_obj(self.event_list.get_selected_event_id())
         
         if event_group is None:
-            self.folder_controls.pack_forget()
-            self.group_controls.pack_forget()
             self.event_details_button.pack_forget()
             self.trainer_notes.pack_forget()
             self.enemy_team_viewer.pack_forget()
@@ -230,31 +206,39 @@ class Main(object):
             self.enemy_team_viewer.pack_forget()
 
             if isinstance(event_group, EventFolder):
-                self.folder_controls.pack()
-                self.group_controls.pack_forget()
+                self.move_group_down_button.enable()
+                self.move_group_up_button.enable()
+                self.new_event_button.enable()
+                self.transfer_event_button.disable()
+                self.rename_folder_button.enable()
                 self.event_details_button.pack_forget()
                 self.trainer_notes.pack_forget()
                 self.enemy_team_viewer.set_team(None)
                 if self.current_event_editor is not None:
                     self.current_event_editor.pack_forget()
                 if len(event_group.event_groups) == 0:
-                    self.delete_folder_button.enable()
+                    self.delete_event_button.enable()
                 else:
-                    self.delete_folder_button.disable()
+                    self.delete_event_button.disable()
                 
                 # intentionally short circuit when we find an event folder. The rest isn't important
                 return
             else:
-                self.folder_controls.pack_forget()
-                self.group_controls.pack()
                 if isinstance(event_group, EventItem):
+                    self.transfer_event_button.disable()
+                    self.rename_folder_button.disable()
                     self.move_group_down_button.disable()
                     self.move_group_up_button.disable()
                     self.delete_event_button.disable()
+                    self.new_event_button.disable()
+                    event_group = self._data.get_group_from_item(self.event_list.get_selected_event_id())
                 else:
+                    self.transfer_event_button.enable()
+                    self.rename_folder_button.disable()
                     self.move_group_down_button.enable()
                     self.move_group_up_button.enable()
                     self.delete_event_button.enable()
+                    self.new_event_button.enable()
 
             if event_group.event_definition.trainer_name is not None:
                 if self.current_event_editor is not None:
@@ -318,46 +302,37 @@ class Main(object):
         self.refresh_event_list()
 
     def move_group_up(self, event=None):
-        self._data.move_group(self.event_list.get_selected_event_id(), True)
+        event_id = self.event_list.get_selected_event_id()
+        event_obj = self._data.get_event_obj(event_id)
+
+        if isinstance(event_obj, EventFolder):
+            self._data.move_folder(event_id, True)
+        elif isinstance(event_obj, EventGroup):
+            self._data.move_group(event_id, True)
+
         self.refresh_event_list()
 
     def move_group_down(self, event=None):
-        self._data.move_group(self.event_list.get_selected_event_id(), False)
+        event_id = self.event_list.get_selected_event_id()
+        event_obj = self._data.get_event_obj(event_id)
+
+        if isinstance(event_obj, EventFolder):
+            self._data.move_folder(event_id, False)
+        elif isinstance(event_obj, EventGroup):
+            self._data.move_group(event_id, False)
+
         self.refresh_event_list()
 
     def delete_group(self, event=None):
-        self._data.remove_group(self.event_list.get_selected_event_id())
-        self.refresh_event_list()
+        event_id = self.event_list.get_selected_event_id()
+        event_obj = self._data.get_event_obj(event_id)
 
-    def move_folder_up(self, event=None):
-        self._data.move_folder(self.event_list.get_selected_event_id(), True)
-        self.refresh_event_list()
+        if isinstance(event_obj, EventFolder):
+            self._data.delete_folder(event_id)
+        elif isinstance(event_obj, EventGroup):
+            self._data.remove_group(event_id)
 
-    def move_folder_down(self, event=None):
-        self._data.move_folder(self.event_list.get_selected_event_id(), False)
         self.refresh_event_list()
-
-    def delete_folder(self, event=None):
-        self._data.delete_folder(self.event_list.get_selected_event_id())
-        self.refresh_event_list()
-    
-    def open_new_folder_window(self, event=None):
-        if self._is_active_window():
-            self.new_event_window = NewFolderWindow(
-                self,
-                list(self._data.folder_idx_lookup.keys()),
-                None,
-                self._root
-            )
-
-    def open_rename_folder_window(self, event=None):
-        if self._is_active_window():
-            self.new_event_window = NewFolderWindow(
-                self,
-                list(self._data.folder_idx_lookup.keys()),
-                self._data.get_folder_name_for_event(self.event_list.get_selected_event_id()),
-                self._root
-            )
 
     def finalize_new_folder(self, new_folder_name, prev_folder_name=None):
         if prev_folder_name is None:
@@ -386,16 +361,29 @@ class Main(object):
         self.new_event_window = None
         self.refresh_event_list()
 
-    def open_new_event_window(self, event=None):
+    def open_new_event_window(self, tk_event=None):
         if self._is_active_window():
-            event_group_id = self.event_list.get_selected_event_id()
+            event_id = self.event_list.get_selected_event_id()
+            event_obj = self._data.get_event_obj(event_id)
 
-            if event_group_id is None:
-                state = self._data.get_final_state()
+            if isinstance(event_obj, EventFolder):
+                if tk_event is not None and tk_event.widget == self.rename_folder_button:
+                    existing_folder_name = self._data.get_folder_name_for_event(self.event_list.get_selected_event_id()),
+                else:
+                    existing_folder_name = None
+                self.new_event_window = NewFolderWindow(
+                    self,
+                    list(self._data.folder_idx_lookup.keys()),
+                    existing_folder_name,
+                    self._root
+                )
             else:
-                state = self._data.get_event_obj(event_group_id).init_state
+                if event_obj is None:
+                    state = self._data.get_final_state()
+                else:
+                    state = event_obj.init_state
 
-            self.new_event_window = NewEventWindow(self, self._data.defeated_trainers, state, self._root)
+                self.new_event_window = NewEventWindow(self, self._data.defeated_trainers, state, self._root)
 
     def open_export_window(self, event=None):
         if self._is_active_window():

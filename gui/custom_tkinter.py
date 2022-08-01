@@ -165,10 +165,6 @@ class RouteList(CustomGridview):
 
                 self.move(group_list_id, folder_list_id, group_idx)
 
-                debug = False
-                if "Rare Candy, x3" == str(group_obj.event_definition):
-                    debug = True
-                    print(f"Event: {group_obj.event_definition} has items {len(group_obj.event_items)}, {group_list_id}")
                 if len(group_obj.event_items) > 1:
                     for item_idx, item_obj in enumerate(group_obj.event_items):
                         item_semantic_id = self._get_attr_helper(item_obj, self._semantic_id_field_attr)
@@ -179,8 +175,6 @@ class RouteList(CustomGridview):
                         else:
                             item_id = self.custom_upsert(item_obj, parent=group_list_id)
 
-                        if debug:
-                            print(f"Adding {item_obj.name}, {item_id} to {group_list_id}")
                         self.move(item_id, group_list_id, item_idx)
 
         # we have now updated all relevant records, created missing ones, and ordered everything correctly

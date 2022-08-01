@@ -24,6 +24,15 @@ class Router:
         self.folder_idx_lookup = {}
         self.defeated_trainers = set()
     
+    def get_group_from_item(self, event_id):
+        for cur_folder in self.event_folders:
+            for cur_group in cur_folder.event_groups:
+                for cur_item in cur_group.event_items:
+                    if cur_item.group_id == event_id:
+                        return cur_group
+        
+        return None
+
     def get_event_obj(self, event_id):
         for cur_folder in self.event_folders:
             if cur_folder.group_id == event_id:
