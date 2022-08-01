@@ -205,8 +205,8 @@
         "purchase_price": 3000,
         "marts": []
     },
-    "TM11 Bubblebeam": {
-        "name": "TM11 Bubblebeam",
+    "TM11 BubbleBeam": {
+        "name": "TM11 BubbleBeam",
         "key_item": false,
         "purchase_price": 2000,
         "marts": []

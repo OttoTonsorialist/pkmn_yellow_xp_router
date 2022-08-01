@@ -92,6 +92,7 @@ class RouteList(CustomGridview):
             text_field_attr='name',
             **kwargs
         )
+        self._semantic_id_field_attr = 'group_id'
         self.tag_configure(const.EVENT_TAG_ERRORS, background=const.ERROR_COLOR)
         self.tag_configure(const.EVENT_TAG_IMPORTANT, background=const.IMPORTANT_COLOR)
         # maps group id values to tkinter list ids
@@ -102,22 +103,24 @@ class RouteList(CustomGridview):
         if not(len(self._custom_col_data)):
             raise ValueError('CustomColumns not set, cannot custom insert')
         
-        semantic_id = self._get_attr_helper(obj, self._text_field_attr)
+        semantic_id = self._get_attr_helper(obj, self._semantic_id_field_attr)
+        text_val = self._get_attr_helper(obj, self._text_field_attr)
 
         if semantic_id in self._treeview_id_lookup:
             item_id = self._treeview_id_lookup[semantic_id]
             self.item(
                 item_id,
-                text=str(semantic_id),
+                text=str(text_val),
                 values=tuple(self._get_attr_helper(obj, x.attr) for x in self._custom_col_data),
-                tags=(obj.get_tag(),)
+                tags=(obj.get_tag(),),
+                open=force_open
             )
 
         else:
             item_id = self.insert(
                 parent,
                 tk.END,
-                text=str(semantic_id),
+                text=str(text_val),
                 values=tuple(self._get_attr_helper(obj, x.attr) for x in self._custom_col_data),
                 tags=(obj.get_tag(), ),
                 open=force_open
@@ -132,7 +135,7 @@ class RouteList(CustomGridview):
         try:
             # super ugly. extract the value of the 'group_id' column. right now this is the last column, so just hard coding the index
             return int(self.item(self.focus())['values'][-1])
-        except [ValueError, IndexError]:
+        except (ValueError, IndexError):
             return -1
 
     def refresh(self, ordered_folders):
@@ -141,7 +144,7 @@ class RouteList(CustomGridview):
         to_delete_ids = set(self._treeview_id_lookup.keys())
         
         for folder_idx, folder_obj in enumerate(ordered_folders):
-            folder_semantic_id = self._get_attr_helper(folder_obj, self._text_field_attr)
+            folder_semantic_id = self._get_attr_helper(folder_obj, self._semantic_id_field_attr)
             if folder_semantic_id in to_delete_ids:
                 folder_list_id = self._treeview_id_lookup[folder_semantic_id]
                 to_delete_ids.remove(folder_semantic_id)
@@ -152,7 +155,7 @@ class RouteList(CustomGridview):
             self.move(folder_list_id, '', folder_idx)
 
             for group_idx, group_obj in enumerate(folder_obj.event_groups):
-                group_semantic_id = self._get_attr_helper(group_obj, self._text_field_attr)
+                group_semantic_id = self._get_attr_helper(group_obj, self._semantic_id_field_attr)
                 if group_semantic_id in to_delete_ids:
                     group_list_id = self._treeview_id_lookup[group_semantic_id]
                     to_delete_ids.remove(group_semantic_id)
@@ -162,9 +165,13 @@ class RouteList(CustomGridview):
 
                 self.move(group_list_id, folder_list_id, group_idx)
 
+                debug = False
+                if "Rare Candy, x3" == str(group_obj.event_definition):
+                    debug = True
+                    print(f"Event: {group_obj.event_definition} has items {len(group_obj.event_items)}, {group_list_id}")
                 if len(group_obj.event_items) > 1:
                     for item_idx, item_obj in enumerate(group_obj.event_items):
-                        item_semantic_id = self._get_attr_helper(item_obj, self._text_field_attr)
+                        item_semantic_id = self._get_attr_helper(item_obj, self._semantic_id_field_attr)
                         if item_semantic_id in to_delete_ids:
                             item_id = self._treeview_id_lookup[item_semantic_id]
                             to_delete_ids.remove(item_semantic_id)
@@ -172,6 +179,8 @@ class RouteList(CustomGridview):
                         else:
                             item_id = self.custom_upsert(item_obj, parent=group_list_id)
 
+                        if debug:
+                            print(f"Adding {item_obj.name}, {item_id} to {group_list_id}")
                         self.move(item_id, group_list_id, item_idx)
 
         # we have now updated all relevant records, created missing ones, and ordered everything correctly

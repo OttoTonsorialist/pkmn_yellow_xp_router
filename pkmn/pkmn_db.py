@@ -156,6 +156,13 @@ class ItemDB:
                 self.mart_items[mart].append(cur_base_item.name)
     
     def get_item(self, item_name):
+        if item_name in self._data:
+            return self._data.get(item_name)
+        
+        for test_name in self._data.keys():
+            if item_name.lower() == test_name.lower():
+                return self._data.get(test_name)
+        
         return self._data.get(item_name)
     
     def get_filtered_names(self, item_type=const.ITEM_TYPE_ALL_ITEMS, source_mart=const.ITEM_TYPE_ALL_ITEMS):
