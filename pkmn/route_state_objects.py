@@ -1,64 +1,12 @@
 
 from distutils.log import error
 from shutil import move
+from typing import List
 from pkmn import data_objects
 from utils.constants import const
 from pkmn import pkmn_utils
 from pkmn import pkmn_db
 
-class BadgeList:
-    def __init__(self, boulder=False, cascade=False, thunder=False, rainbow=False, soul=False, marsh=False, volcano=False, earth=False):
-        self.boulder = boulder
-        self.cascade = cascade
-        self.thunder = thunder
-        self.rainbow = rainbow
-        self.soul = soul
-        self.marsh = marsh
-        self.volcano = volcano
-        self.earth = earth
-    
-    def award_badge(self, trainer_name):
-        reward = const.BADGE_REWARDS.get(trainer_name)
-        result = self.copy(self)
-        if reward == const.BOULDER_BADGE:
-            result.boulder = True
-        elif reward == const.CASCADE_BADGE:
-            result.cascade = True
-        elif reward == const.THUNDER_BADGE:
-            result.thunder = True
-        elif reward == const.RAINDBOW_BADGE:
-            result.rainbow = True
-        elif reward == const.SOUL_BADGE:
-            result.soul = True
-        elif reward == const.MARSH_BADGE:
-            result.marsh = True
-        elif reward == const.VOLCANO_BADGE:
-            result.volcano = True
-        elif reward == const.EARTH_BADGE:
-            result.earth = True
-        else:
-            # no need to hold on to a copy wastefully if no badge was awarded
-            return self
-        
-        return result
-    
-    @staticmethod
-    def copy(bl):
-        if not isinstance(bl, BadgeList):
-            raise ValueError(f"Can only copy BadgeList from BadgeList, not {type(bl)}")
-        return BadgeList(
-            boulder=bl.boulder,
-            cascade=bl.cascade,
-            thunder=bl.thunder,
-            rainbow=bl.rainbow,
-            soul=bl.soul,
-            marsh=bl.marsh,
-            volcano=bl.volcano,
-            earth=bl.earth
-        )
-    
-    def __repr__(self):
-        return f"Boulder: {self.boulder}, Cascade: {self.cascade}, Thunder: {self.thunder}, Rainbow: {self.rainbow}, Soul: {self.soul}, Marsh: {self.marsh}, Volcano: {self.volcano}, Earth: {self.earth}"
     
 
 class BagItem:
@@ -157,7 +105,18 @@ class SoloPokemon:
 
     Moves are not yet handled, only level/stats/statxp are handled
     """
-    def __init__(self, name, species_def, move_list=None, cur_xp=0, dvs=None, realized_stat_xp=None, unrealized_stat_xp=None, badges=None, gained_xp=0, gained_stat_xp=None):
+    def __init__(self,
+            name,
+            species_def:data_objects.PokemonSpecies,
+            move_list:list=None,
+            cur_xp:int=0,
+            dvs:data_objects.StatBlock=None,
+            realized_stat_xp:data_objects.StatBlock=None,
+            unrealized_stat_xp:data_objects.StatBlock=None,
+            badges:data_objects.BadgeList=None,
+            gained_xp:int=0,
+            gained_stat_xp:data_objects.StatBlock=None
+    ):
         self.name = name
         self.species_def = species_def
 
@@ -175,7 +134,7 @@ class SoloPokemon:
             self.cur_xp = cur_xp
 
         if badges is None:
-            badges = BadgeList()
+            badges = data_objects.BadgeList()
         
         # assume going with perfect DVs if undefined
         if dvs is None:
@@ -245,6 +204,41 @@ class SoloPokemon:
                 const.MOVES: self.move_list,
             },
             self.cur_stats
+        )
+    
+    def get_net_gain_from_stat_xp(self, badges):
+        if badges is None:
+            badges = data_objects.BadgeList()
+
+        temp = self.species_def.stats.calc_level_stats(
+            self.cur_level,
+            self.dvs,
+            data_objects.StatBlock(0, 0, 0, 0, 0, is_stat_xp=True),
+            badges
+        )
+
+        return self.cur_stats.subtract(temp)
+
+    def get_battle_stats(self, badges, stage_modifiers=None):
+        # allow badge boosting, and also normal stat boosting
+        if stage_modifiers is None:
+            stage_modifiers = data_objects.StageModifiers()
+        
+        battle_stats = self.species_def.stats.calc_battle_stats(self.cur_level, self.dvs, self.realized_stat_xp, stage_modifiers, badges)
+
+        return data_objects.EnemyPkmn(
+            {
+                const.NAME_KEY: self.name,
+                const.LEVEL: self.cur_level,
+                const.HP: battle_stats.hp,
+                const.ATK: battle_stats.attack,
+                const.DEF: battle_stats.defense,
+                const.SPD: battle_stats.speed,
+                const.SPC: battle_stats.special,
+                const.XP: -1,
+                const.MOVES: self.move_list,
+            },
+            self.species_def.stats
         )
     
     def defeat_pkmn(self, enemy_pkmn: data_objects.EnemyPkmn, badges):
@@ -366,7 +360,7 @@ class RouteState:
     # if any update fails, we record the error, and then redo it with "force=True"
     # this allows us to collect errors, while still making sure that the effects happen
 
-    def __init__(self, solo_pkmn:SoloPokemon, badges:BadgeList, inventory:Inventory):
+    def __init__(self, solo_pkmn:SoloPokemon, badges:data_objects.BadgeList, inventory:Inventory):
         self.solo_pkmn = solo_pkmn
         self.badges = badges
         self.inventory = inventory

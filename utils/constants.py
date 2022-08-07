@@ -39,6 +39,9 @@ class Constants:
         self.SPC = "spc"
         self.XP = "xp"
         self.MOVES = "moves"
+        # less common, still stats
+        self.EV = "ev"
+        self.ACC = "acc"
 
         self.TRAINER_NAME = "trainer_name"
         self.TRAINER_CLASS = "trainer_class"
@@ -210,6 +213,44 @@ class Constants:
         self.BAG_LIMIT = 20
 
         self.CONFIG_ROUTE_ONE_PATH = "route_one_path"
+
+        self.STAT_INCREASE_MOVES = {
+            "Growth": (self.SPC, 1),
+            "Swords Dance": (self.ATK, 2),
+            "Meditate": (self.ATK, 1),
+            "Agility": (self.SPD, 2),
+            "Double Team": (self.EV, 1),
+            "Harden": (self.DEF, 1),
+            "Minimize": (self.EV, 1),
+            "Withdraw": (self.DEF, 1),
+            "Barrier": (self.DEF, 2),
+            "Amnesia": (self.SPC, 2),
+            "Acid Armor": (self.DEF, 2),
+            "Sharpen": (self.ATK, 1),
+        }
+
+        # still source of badge boost, but not controlled by player
+        self.STAT_DECREASE_MOVES = {
+            "Sand Attack": (self.ACC, -1),
+            "Smokescreen": (self.ACC, -1),
+            "Kinesis": (self.ACC, -1),
+            "Flash": (self.ACC, -1),
+            "Tail Whip": (self.DEF, -1),
+            "Leer": (self.DEF, -1),
+            "Growl": (self.ATK, -1),
+            "String Shot": (self.SPD, -1),
+            "Screech": (self.DEF, -2),
+            # NOTE: all moves that have a secondary effect to drop a stat only proc 33.2% of the time
+            "Acid": (self.DEF, -1),
+            "BubbleBeam": (self.SPD, -1),
+            "Bubble": (self.SPD, -1),
+            "Constrict": (self.SPD, -1),
+            "Aurora Beam": (self.ATK, -1),
+            "Psychic": (self.SPC, -1),
+        }
+
+        self.STATE_SUMMARY_LABEL = "State Summary"
+        self.BADGE_BOOST_LABEL = "Badge Boost Calculator"
 
 
 

@@ -1,8 +1,3 @@
-from cgitb import text
-from mimetypes import init
-from posixpath import split
-from secrets import choice
-from subprocess import call
 import tkinter as tk
 from tkinter import ttk
 
@@ -391,7 +386,7 @@ class PkmnViewer(tk.Frame):
         self._move_four_value = tk.Label(self, background="white")
         self._move_four_value.grid(row=5, column=3)
 
-    def set_pkmn(self, pkmn:data_objects.EnemyPkmn, badges:route_state_objects.BadgeList=None, speed_bg_color=None):
+    def set_pkmn(self, pkmn:data_objects.EnemyPkmn, badges:data_objects.BadgeList=None, speed_bg_color=None):
         if speed_bg_color is None:
             speed_bg_color = "white"
         
@@ -443,13 +438,16 @@ class StateViewer(tk.Frame):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.pkmn = PkmnViewer(self)
-        self.pkmn.grid(row=0, column=0, padx=5, pady=5)
+        self.pkmn.grid(row=0, column=0, padx=5, pady=5, sticky=tk.S)
+        self.stat_xp = StatExpViewer(self)
+        self.stat_xp.grid(row=0, column=1, padx=5, pady=5, sticky=tk.S)
         self.inventory = InventoryViewer(self)
-        self.inventory.grid(row=0, column=1, padx=5, pady=5)
+        self.inventory.grid(row=0, column=2, padx=5, pady=5, sticky=tk.S)
     
     def set_state(self, cur_state:route_state_objects.RouteState):
         self.inventory.set_inventory(cur_state.inventory)
         self.pkmn.set_pkmn(cur_state.solo_pkmn.get_renderable_pkmn(), cur_state.badges)
+        self.stat_xp.set_state(cur_state)
 
 
 class EnemyPkmnTeam(tk.Frame):
@@ -487,3 +485,219 @@ class EnemyPkmnTeam(tk.Frame):
         
         for missing_idx in range(idx+1, 6):
             self._all_pkmn[missing_idx].grid_forget()
+
+
+class BadgeBoostViewer(tk.Frame):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+
+        self._info_frame = tk.Frame(self)
+        self._info_frame.grid(row=0, column=0)
+
+        self._move_selector_label = tk.Label(self._info_frame, text="Setup Move: ")
+        stat_modifier_moves = list(const.STAT_INCREASE_MOVES.keys())
+        stat_modifier_moves += list(const.STAT_DECREASE_MOVES.keys())
+        self._move_selector = SimpleOptionMenu(self._info_frame, stat_modifier_moves, callback=self._move_selected_callback)
+        self._move_selector_label.pack()
+        self._move_selector.pack()
+
+        self._badge_summary = tk.Label(self._info_frame)
+        self._badge_summary.pack(pady=10)
+
+        self._state:route_state_objects.RouteState = None
+
+        # 6 possible badge boosts from a single setup move, plus unmodified summary
+        NUM_SUMMARIES = 7
+        NUM_COLS = 4
+        self._frames = []
+        self._labels = []
+        self._viewers = []
+
+        for idx in range(NUM_SUMMARIES):
+            cur_frame = tk.Frame(self)
+            # add 1 because the 0th frame is the info frame
+            cur_frame.grid(row=((idx + 1) // NUM_COLS), column=((idx + 1) % NUM_COLS), padx=3, pady=3)
+
+            self._frames.append(cur_frame)
+            self._labels.append(tk.Label(cur_frame))
+            self._viewers.append(PkmnViewer(cur_frame))
+    
+    def _clear_all_summaries(self):
+        # intentionally skip base stat frame
+        for idx in range(1, len(self._frames)):
+            self._labels[idx].pack_forget()
+            self._viewers[idx].pack_forget()
+    
+    def _update_base_summary(self):
+        if self._state is None:
+            self._labels[0].pack_forget()
+            self._viewers[0].pack_forget()
+            return
+
+        self._labels[0].configure(text=f"Base: {self._state.solo_pkmn.name}")
+        self._labels[0].pack()
+
+        self._viewers[0].set_pkmn(self._state.solo_pkmn.get_renderable_pkmn(), badges=self._state.badges)
+        self._viewers[0].pack(padx=3, pady=3)
+    
+    def _move_selected_callback(self, *args, **kwargs):
+        self._update_base_summary()
+
+        move = self._move_selector.get()
+        if not move:
+            self._clear_all_summaries()
+            return
+        
+        prev_mod = data_objects.StageModifiers()
+        stage_mod = None
+        for idx in range(1, len(self._frames)):
+            stage_mod = prev_mod.after_move(move)
+            if stage_mod == prev_mod:
+                self._labels[idx].pack_forget()
+                self._viewers[idx].pack_forget()
+                continue
+
+            prev_mod = stage_mod
+
+            self._labels[idx].configure(text=f"{idx}x {move}")
+            self._labels[idx].pack()
+
+            self._viewers[idx].set_pkmn(self._state.solo_pkmn.get_battle_stats(self._state.badges, stage_mod), badges=self._state.badges)
+            self._viewers[idx].pack()
+
+    
+    def set_state(self, state:route_state_objects.RouteState):
+        self._state = state
+
+        # when state changes, update the badge list label
+        raw_badge_text = self._state.badges.to_string(verbose=False)
+        final_badge_text = raw_badge_text.split(":")[0]
+        badges = raw_badge_text.split(":")[1]
+
+        if not badges.strip():
+            final_badge_text += "\nNone"
+        else:
+            earned_badges = badges.split(',')
+            badges = ""
+            while len(earned_badges) > 0:
+                if len(earned_badges) == 1:
+                    badges += f"{earned_badges[0]}\n"
+                    del earned_badges[0]
+                else:
+                    badges += f"{earned_badges[0]}, {earned_badges[1]}\n"
+                    del earned_badges[0]
+                    del earned_badges[0]
+
+            final_badge_text += '\n' + badges.strip()
+
+        self._badge_summary.config(text=final_badge_text)
+        self._move_selected_callback()
+
+
+class StatColumn(tk.Frame):
+    def __init__(self, *args, num_rows=4, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.config(bg="white")
+
+        self._header_frame = tk.Frame(self, background="white")
+        self._header_frame.pack()
+        self._header = tk.Label(self._header_frame, background="white")
+
+        self._frames = []
+        self._labels = []
+        self._values = []
+
+        for idx in range(num_rows):
+            cur_frame = tk.Frame(self, background="white")
+            cur_frame.pack(fill=tk.X)
+            self._frames.append(cur_frame)
+
+            cur_label = tk.Label(cur_frame, anchor=tk.W, background="white")
+            cur_label.grid(row=0, column=0, sticky=tk.EW)
+            self._labels.append(cur_label)
+
+            cur_value = tk.Label(cur_frame, anchor=tk.E, background="white")
+            cur_value.grid(row=0, column=1, sticky=tk.EW)
+            self._values.append(cur_value)
+
+            cur_frame.columnconfigure(1, weight=1)
+    
+    def set_header(self, header):
+        if header is None or header == "":
+            self._header.pack_forget()
+            return
+        
+        self._header.pack()
+        self._header.config(text=header)
+    
+    def set_labels(self, label_text_iterable):
+        for idx, cur_label_text in enumerate(label_text_iterable):
+            if idx >= len(self._labels):
+                break
+            self._labels[idx].configure(text=cur_label_text)
+        
+        if len(label_text_iterable) < len(self._labels):
+            for idx in range(len(label_text_iterable), len(self._labels)):
+                self._labels[idx].configure(text="")
+    
+    def set_values(self, value_text_iterable):
+        for idx, cur_value_text in enumerate(value_text_iterable):
+            if idx >= len(self._values):
+                break
+            self._values[idx].configure(text=cur_value_text)
+        
+        if len(value_text_iterable) < len(self._values):
+            for idx in range(len(value_text_iterable), len(self._values)):
+                self._values[idx].configure(text="")
+
+
+class StatExpViewer(tk.Frame):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.config(bg="white", padx=5, pady=5, height=150, width=250)
+        stat_labels =[
+            "HP:",
+            "Attack:",
+            "Defense:",
+            "Special:",
+            "Speed:",
+        ] 
+
+        self._state = None
+        self._net_gain_column = StatColumn(self, num_rows=len(stat_labels))
+        self._net_gain_column.set_labels(stat_labels)
+        self._net_gain_column.set_header("Net Stats\nFrom StatExp")
+        self._net_gain_column.grid(row=0, column=0)
+
+        self._realized_stat_xp_column = StatColumn(self, num_rows=len(stat_labels))
+        self._realized_stat_xp_column.set_labels(stat_labels)
+        self._realized_stat_xp_column.set_header("Realized\nStatExp")
+        self._realized_stat_xp_column.grid(row=0, column=1)
+
+        self._total_stat_xp_column = StatColumn(self, num_rows=len(stat_labels))
+        self._total_stat_xp_column.set_labels(stat_labels)
+        self._total_stat_xp_column.set_header("Total\nStatExp")
+        self._total_stat_xp_column.grid(row=0, column=2)
+    
+    def _vals_from_stat_block(self, stat_block:data_objects.StatBlock):
+        # NOTE: re-ordering stats over special
+        return [stat_block.hp, stat_block.attack, stat_block.defense, stat_block.special, stat_block.speed]
+
+    def set_state(self, state:route_state_objects.RouteState):
+        self._state = state
+
+        self._net_gain_column.set_values(
+            self._vals_from_stat_block(
+                self._state.solo_pkmn.get_net_gain_from_stat_xp(self._state.badges)
+            )
+        )
+        self._realized_stat_xp_column.set_values(
+            self._vals_from_stat_block(
+                self._state.solo_pkmn.realized_stat_xp
+            )
+        )
+        self._total_stat_xp_column.set_values(
+            self._vals_from_stat_block(
+                self._state.solo_pkmn.realized_stat_xp.add(self._state.solo_pkmn.unrealized_stat_xp)
+            )
+        )

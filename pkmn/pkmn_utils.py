@@ -7,8 +7,82 @@ VIT_AMT = 2560
 VIT_CAP = 25600
 STAT_XP_CAP = 65535
 
+STAT_MIN = 1
+STAT_MAX = 999
+BASE_STAGE_INDEX = 6
+STAGE_MOFIDIERS = [
+    (25, 100),
+    (28, 100),
+    (33, 100),
+    (40, 100),
+    (50, 100),
+    (66, 100),
+    (1, 1),
+    (15, 10),
+    (2, 1),
+    (25, 10),
+    (3, 1),
+    (35, 10),
+    (4, 1),
+]
 
-def calc_stat(base_val, level, dv, stat_xp, is_hp=False, is_badge_bosted=False):
+
+def calc_battle_stat(base_val, level, dv, stat_xp, stage, is_badge_boosted=False):
+    """
+    Fully recalculates a stat that has been modified by a stage modifier. This is the
+    primary function that should be used when a pokemon's stat's stage has changed, 
+    and needs to be recalculated
+    """
+    result = calc_unboosted_stat(base_val, level, dv, stat_xp)
+
+    result = modify_stat_by_stage(result, stage)
+
+    if is_badge_boosted:
+        result = badge_boost_single_stat(result)
+    
+    return result
+
+
+def modify_stat_by_stage(raw_stat, stage):
+    """
+    Helper function for the stage modifier math
+    """
+    if stage == 0:
+        return raw_stat
+
+    try:
+        cur_stage = STAGE_MOFIDIERS[BASE_STAGE_INDEX + stage]
+    except Exception:
+        raise ValueError(f"Invalid stage modifier: {stage}")
+
+
+    return int(math.floor((raw_stat * cur_stage[0]) / cur_stage[1]))
+
+
+def get_to_hit(base_acc, ev_stage, acc_stage):
+    """
+    Returns the number (1-255) to check a random number against
+
+    NOTE: This is the "normal" case ONLY!  Assuming immunities, fly/dig invlun status, and guaranteed misses/hits
+    have already been handled already. Also does not handle special AI status failure chance
+    """
+    # base_acc is a number, 0-100, of the percent accuracy
+    result = math.floor((base_acc * 255) / 100)
+
+    # first, penalize for lowered accuracy (accuracy must have a negative stage, but it just uses the same boost table as other stats)
+    result = modify_stat_by_stage(result, acc_stage)
+
+    # reverse evasion to a penalty (evasion must have a positive stage, but it just uses the same boost table as other stats)
+    result = modify_stat_by_stage(result, -1 * ev_stage)
+
+    # clamp to valid values, just in case
+    result = min(result, 255)
+    result = max(result, 1)
+
+    return result
+
+
+def calc_unboosted_stat(base_val, level, dv, stat_xp, is_hp=False):
     temp = (base_val + dv) * 2
     temp += math.floor(math.ceil(math.sqrt(stat_xp)) / 4)
     temp = math.floor(temp * level / 100)
@@ -16,11 +90,20 @@ def calc_stat(base_val, level, dv, stat_xp, is_hp=False, is_badge_bosted=False):
     if is_hp:
         return temp + level + 10
 
-    temp += 5
-    if is_badge_bosted:
-        temp = math.floor(temp * 1.125)
+    return temp + 5
 
-    return temp
+def calc_stat(base_val, level, dv, stat_xp, is_hp=False, is_badge_bosted=False):
+    result = calc_unboosted_stat(base_val, level, dv, stat_xp, is_hp=is_hp)
+
+    if is_badge_bosted:
+        result = badge_boost_single_stat(result)
+
+    return result
+
+
+def badge_boost_single_stat(cur_stat_val):
+    # very basic function, just giving it a name so it's obvious when using the function
+    return math.floor(cur_stat_val * 1.125)
 
 
 def calc_xp_yield(base_yield, level, is_trainer_battle):

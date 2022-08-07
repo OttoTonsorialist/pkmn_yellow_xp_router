@@ -115,11 +115,18 @@ class Main(object):
         self.stat_info_label.pack()
 
         self.pre_state_frame = tk.Frame(self.right_info_panel)
-        self.pre_state_frame.pack()
-        self.state_pre_label = tk.Label(self.pre_state_frame, text="Pre-event State:")
-        self.state_pre_label.grid(column=0, row=0, padx=10, pady=10)
+        self.pre_state_frame.pack(fill=tk.X)
+        self.state_pre_label = tk.Label(self.pre_state_frame, text="Pre-event State Display Mode:")
+        self.state_pre_label.grid(column=1, row=0, padx=10, pady=10)
+        self.pre_state_selector = custom_tkinter.SimpleOptionMenu(self.pre_state_frame, [const.STATE_SUMMARY_LABEL, const.BADGE_BOOST_LABEL], callback=self._pre_state_display_mode_callback)
+        self.pre_state_selector.grid(column=2, row=0, padx=10, pady=10)
         self.state_pre_viewer = custom_tkinter.StateViewer(self.pre_state_frame)
-        self.state_pre_viewer.grid(column=0, row=1, padx=10, pady=10)
+        self.state_pre_viewer.grid(column=1, row=1, padx=10, pady=10, columnspan=2)
+        self.badge_boost_viewer = custom_tkinter.BadgeBoostViewer(self.pre_state_frame)
+        # centering contents with padded columns that expand
+        # NOTE: will have to update the index of the right-most column here if we add more columns in the future
+        self.pre_state_frame.columnconfigure(0, weight=1)
+        self.pre_state_frame.columnconfigure(3, weight=1)
 
         self.event_details_frame = tk.Frame(self.right_info_panel, highlightbackground="black", highlightthickness=2)
         self.event_details_frame.pack(anchor=tk.N, fill=tk.BOTH, expand=True, padx=10)
@@ -175,6 +182,14 @@ class Main(object):
     def _pkmn_filter_callback(self, *args, **kwargs):
         self.solo_selector.new_values(pkmn_db.pkmn_db.get_filtered_names(filter_val=self.pkmn_filter.get().strip()))
     
+    def _pre_state_display_mode_callback(self, *args, **kwargs):
+        if self.pre_state_selector.get() == const.BADGE_BOOST_LABEL:
+            self.state_pre_viewer.grid_forget()
+            self.badge_boost_viewer.grid(column=1, row=1, padx=10, pady=10, columnspan=2)
+        else:
+            self.badge_boost_viewer.grid_forget()
+            self.state_pre_viewer.grid(column=1, row=1, padx=10, pady=10, columnspan=2)
+    
     def save_route(self, *args, **kwargs):
         self._data.save(self.route_name.get())
         self.refresh_existing_routes()
@@ -196,11 +211,13 @@ class Main(object):
             self.enemy_team_viewer.pack_forget()
             self.enemy_team_viewer.set_team(None)
             self.state_pre_viewer.set_state(self._data.init_route_state)
+            self.badge_boost_viewer.set_state(self._data.init_route_state)
             self.state_post_viewer.set_state(self._data.get_final_state())
             if self.current_event_editor is not None:
                 self.current_event_editor.pack_forget()
         else:
             self.state_pre_viewer.set_state(event_group.init_state)
+            self.badge_boost_viewer.set_state(event_group.init_state)
             self.state_post_viewer.set_state(event_group.final_state)
             self.trainer_notes.pack_forget()
             self.enemy_team_viewer.pack_forget()
@@ -231,7 +248,11 @@ class Main(object):
                     self.move_group_up_button.disable()
                     self.delete_event_button.disable()
                     self.new_event_button.disable()
-                    event_group = self._data.get_group_from_item(self.event_list.get_selected_event_id())
+                    if (
+                        event_group.event_definition.learn_move is None or
+                        event_group.event_definition.learn_move.source != const.MOVE_SOURCE_LEVELUP
+                    ):
+                        event_group = self._data.get_group_from_item(self.event_list.get_selected_event_id())
                 else:
                     self.transfer_event_button.enable()
                     self.rename_folder_button.disable()

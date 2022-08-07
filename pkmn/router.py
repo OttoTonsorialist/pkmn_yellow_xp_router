@@ -92,7 +92,7 @@ class Router:
         
         self.init_route_state = route_state_objects.RouteState(
             route_state_objects.SoloPokemon(pkmn_name, pkmn_base),
-            route_state_objects.BadgeList(),
+            data_objects.BadgeList(),
             route_state_objects.Inventory()
         )
 
