@@ -373,8 +373,8 @@
         "purchase_price": 5000,
         "marts": []
     },
-    "TM39 Fire Blast": {
-        "name": "TM39 Fire Blast",
+    "TM39 Swift": {
+        "name": "TM39 Swift",
         "key_item": false,
         "purchase_price": 2000,
         "marts": []

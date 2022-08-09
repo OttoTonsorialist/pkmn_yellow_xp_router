@@ -252,8 +252,12 @@ class Main(object):
                         event_group.event_definition.learn_move is None or
                         event_group.event_definition.learn_move.source != const.MOVE_SOURCE_LEVELUP
                     ):
+                        self.event_details_button.disable()
                         event_group = self._data.get_group_from_item(self.event_list.get_selected_event_id())
+                    else:
+                        self.event_details_button.enable()
                 else:
+                    self.event_details_button.enable()
                     self.transfer_event_button.enable()
                     self.rename_folder_button.disable()
                     self.move_group_down_button.enable()
@@ -264,6 +268,7 @@ class Main(object):
             if event_group.event_definition.trainer_name is not None:
                 if self.current_event_editor is not None:
                     self.current_event_editor.pack_forget()
+                    self.current_event_editor = None
                 self.event_details_button.pack()
                 self.trainer_notes.pack()
                 self.trainer_notes.load_event(event_group.event_definition)

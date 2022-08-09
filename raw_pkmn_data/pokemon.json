@@ -1489,8 +1489,8 @@
             ]
         ]
     },
-    "Dargonair": {
-        "name": "Dargonair",
+    "Dragonair": {
+        "name": "Dragonair",
         "base_hp": 61,
         "base_atk": 84,
         "base_def": 65,
@@ -2967,8 +2967,8 @@
             ]
         ]
     },
-    "growlithe": {
-        "name": "growlithe",
+    "Growlithe": {
+        "name": "Growlithe",
         "base_hp": 55,
         "base_atk": 70,
         "base_def": 45,
@@ -3024,8 +3024,8 @@
             ]
         ]
     },
-    "gyarados": {
-        "name": "gyarados",
+    "Gyarados": {
+        "name": "Gyarados",
         "base_hp": 95,
         "base_atk": 125,
         "base_def": 79,
@@ -3087,8 +3087,8 @@
             ]
         ]
     },
-    "haunter": {
-        "name": "haunter",
+    "Haunter": {
+        "name": "Haunter",
         "base_hp": 45,
         "base_atk": 50,
         "base_def": 45,
@@ -3132,8 +3132,8 @@
             ]
         ]
     },
-    "hitmonchan": {
-        "name": "hitmonchan",
+    "Hitmonchan": {
+        "name": "Hitmonchan",
         "base_hp": 50,
         "base_atk": 105,
         "base_def": 79,
@@ -3192,8 +3192,8 @@
             ]
         ]
     },
-    "hitmonlee": {
-        "name": "hitmonlee",
+    "Hitmonlee": {
+        "name": "Hitmonlee",
         "base_hp": 50,
         "base_atk": 120,
         "base_def": 53,
@@ -3252,8 +3252,8 @@
             ]
         ]
     },
-    "horsea": {
-        "name": "horsea",
+    "Horsea": {
+        "name": "Horsea",
         "base_hp": 30,
         "base_atk": 40,
         "base_def": 70,
@@ -3308,8 +3308,8 @@
             ]
         ]
     },
-    "hypno": {
-        "name": "hypno",
+    "Hypno": {
+        "name": "Hypno",
         "base_hp": 85,
         "base_atk": 73,
         "base_def": 70,
@@ -3381,8 +3381,8 @@
             ]
         ]
     },
-    "ivysaur": {
-        "name": "ivysaur",
+    "Ivysaur": {
+        "name": "Ivysaur",
         "base_hp": 60,
         "base_atk": 62,
         "base_def": 63,
@@ -3446,8 +3446,8 @@
             ]
         ]
     },
-    "jigglypuff": {
-        "name": "jigglypuff",
+    "Jigglypuff": {
+        "name": "Jigglypuff",
         "base_hp": 115,
         "base_atk": 45,
         "base_def": 20,
@@ -3526,8 +3526,8 @@
             ]
         ]
     },
-    "jolteon": {
-        "name": "jolteon",
+    "Jolteon": {
+        "name": "Jolteon",
         "base_hp": 65,
         "base_atk": 65,
         "base_def": 60,
@@ -3599,8 +3599,8 @@
             ]
         ]
     },
-    "jynx": {
-        "name": "jynx",
+    "Jynx": {
+        "name": "Jynx",
         "base_hp": 65,
         "base_atk": 50,
         "base_def": 35,
@@ -3670,8 +3670,8 @@
             ]
         ]
     },
-    "kabuto": {
-        "name": "kabuto",
+    "Kabuto": {
+        "name": "Kabuto",
         "base_hp": 30,
         "base_atk": 80,
         "base_def": 90,
@@ -3723,8 +3723,8 @@
             ]
         ]
     },
-    "kabutops": {
-        "name": "kabutops",
+    "Kabutops": {
+        "name": "Kabutops",
         "base_hp": 60,
         "base_atk": 115,
         "base_def": 105,
@@ -3785,8 +3785,8 @@
             ]
         ]
     },
-    "kadabra": {
-        "name": "kadabra",
+    "Kadabra": {
+        "name": "Kadabra",
         "base_hp": 40,
         "base_atk": 35,
         "base_def": 30,
@@ -3855,8 +3855,8 @@
             ]
         ]
     },
-    "kakuna": {
-        "name": "kakuna",
+    "Kakuna": {
+        "name": "Kakuna",
         "base_hp": 45,
         "base_atk": 25,
         "base_def": 50,
@@ -3873,8 +3873,8 @@
         "tm_hm_learnset": [],
         "levelup_moveset": []
     },
-    "kangaskhan": {
-        "name": "kangaskhan",
+    "Kangaskhan": {
+        "name": "Kangaskhan",
         "base_hp": 105,
         "base_atk": 95,
         "base_def": 80,
@@ -3943,8 +3943,8 @@
             ]
         ]
     },
-    "kingler": {
-        "name": "kingler",
+    "Kingler": {
+        "name": "Kingler",
         "base_hp": 55,
         "base_atk": 130,
         "base_def": 115,

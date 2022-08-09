@@ -1,8 +1,40 @@
 {
-    "event_id_counter": 2401,
     "name": "Parasect",
+    "Learn Levelup Move": [
+        [
+            "Stun Spore",
+            null,
+            "LevelUp",
+            13
+        ],
+        [
+            "Leech Life",
+            null,
+            "LevelUp",
+            20
+        ],
+        [
+            "Spore",
+            3,
+            "LevelUp",
+            30
+        ],
+        [
+            "Slash",
+            null,
+            "LevelUp",
+            39
+        ],
+        [
+            "Growth",
+            null,
+            "LevelUp",
+            48
+        ]
+    ],
     "events": [
         {
+            "Event Folder Name": "Main",
             "Inventory Event": [
                 "Poke Ball",
                 1,
@@ -11,9 +43,11 @@
             ]
         },
         {
+            "Event Folder Name": "Main",
             "Fight Trainer": "BugCatcher 3"
         },
         {
+            "Event Folder Name": "Main",
             "Inventory Event": [
                 "Poke Ball",
                 1,
@@ -22,66 +56,105 @@
             ]
         },
         {
+            "Event Folder Name": "Main",
             "Fight Trainer": "Brock 1"
         },
         {
+            "Event Folder Name": "Main",
             "Fight Trainer": "BugCatcher 4"
         },
         {
+            "Event Folder Name": "Main",
             "Fight Trainer": "Youngster 1"
         },
         {
+            "Event Folder Name": "Main",
             "Fight Trainer": "Lass 2"
         },
         {
+            "Event Folder Name": "Main",
             "Fight Trainer": "BugCatcher 6"
         },
         {
+            "Event Folder Name": "Main",
+            "Inventory Event": [
+                "Rare Candy",
+                1,
+                true,
+                false
+            ]
+        },
+        {
+            "Event Folder Name": "Main",
             "Fight Trainer": "SuperNerd 2"
         },
         {
+            "Event Folder Name": "Main",
             "Fight Trainer": "Jessie & James 1"
         },
         {
+            "Event Folder Name": "Main",
             "Fight Trainer": "JrTrainerF 1"
         },
         {
+            "Event Folder Name": "Main",
             "Fight Trainer": "Misty 1"
         },
         {
+            "Event Folder Name": "Main",
+            "Inventory Event": [
+                "Rare Candy",
+                1,
+                true,
+                false
+            ]
+        },
+        {
+            "Event Folder Name": "Main",
             "Fight Trainer": "Rival1 3"
         },
         {
+            "Event Folder Name": "Main",
             "Fight Trainer": "BugCatcher 9"
         },
         {
+            "Event Folder Name": "Main",
             "Fight Trainer": "Lass 8"
         },
         {
+            "Event Folder Name": "Main",
             "Fight Trainer": "Youngster 4"
         },
         {
+            "Event Folder Name": "Main",
             "Fight Trainer": "Lass 7"
         },
         {
+            "Event Folder Name": "Main",
             "Fight Trainer": "JrTrainerM 3"
         },
         {
+            "Event Folder Name": "Main",
             "Fight Trainer": "Rocket 6"
         },
         {
+            "Event Folder Name": "Main",
             "Fight Trainer": "Hiker 2"
         },
         {
+            "Event Folder Name": "Main",
             "Fight Trainer": "Lass 9"
         },
         {
+            "Event Folder Name": "Main",
             "Fight Trainer": "JrTrainerM 2 Duplicate"
         },
         {
+            "Event Folder Name": "Main",
             "Fight Trainer": "Lass 10"
         },
         {
+            "Event Folder Name": "Main",
             "Inventory Event": [
                 "SS Anne Ticket",
                 1,
@@ -90,18 +163,23 @@
             ]
         },
         {
+            "Event Folder Name": "Main",
             "Fight Trainer": "Rocket 5"
         },
         {
+            "Event Folder Name": "Main",
             "Fight Trainer": "JrTrainerF 3"
         },
         {
+            "Event Folder Name": "Main",
             "Fight Trainer": "JrTrainerM 5"
         },
         {
+            "Event Folder Name": "Main",
             "Fight Trainer": "Rival2 1"
         },
         {
+            "Event Folder Name": "Main",
             "Inventory Event": [
                 "HM01 Cut",
                 1,
@@ -110,39 +188,51 @@
             ]
         },
         {
+            "Event Folder Name": "Main",
             "Fight Trainer": "LtSurge 1"
         },
         {
+            "Event Folder Name": "Main",
             "Fight Trainer": "JrTrainerF 5"
         },
         {
+            "Event Folder Name": "Main",
             "Fight Trainer": "BugCatcher 14"
         },
         {
+            "Event Folder Name": "Main",
             "Fight Trainer": "Pokemaniac 7"
         },
         {
+            "Event Folder Name": "Main",
             "Fight Trainer": "Pokemaniac 5"
         },
         {
+            "Event Folder Name": "Main",
             "Fight Trainer": "JrTrainerF 10"
         },
         {
+            "Event Folder Name": "Main",
             "Fight Trainer": "Hiker 9"
         },
         {
+            "Event Folder Name": "Main",
             "Fight Trainer": "JrTrainerF 18"
         },
         {
+            "Event Folder Name": "Main",
             "Fight Trainer": "Gambler 7"
         },
         {
+            "Event Folder Name": "Main",
             "Fight Trainer": "Beauty 3"
         },
         {
+            "Event Folder Name": "Main",
             "Fight Trainer": "Erika 1"
         },
         {
+            "Event Folder Name": "Main",
             "Inventory Event": [
                 "Poke Doll",
                 1,
@@ -151,6 +241,7 @@
             ]
         },
         {
+            "Event Folder Name": "Main",
             "Inventory Event": [
                 "HM02 Fly",
                 1,
@@ -159,33 +250,61 @@
             ]
         },
         {
+            "Event Folder Name": "Main",
             "Fight Trainer": "Rival2 2 Vaporeon"
         },
         {
+            "Event Folder Name": "Main",
             "Fight Trainer": "Channeler 10"
         },
         {
+            "Event Folder Name": "Main",
             "Fight Trainer": "Channeler 6"
         },
         {
+            "Event Folder Name": "Main",
             "Fight Trainer": "Channeler 9"
         },
         {
+            "Event Folder Name": "Main",
+            "Inventory Event": [
+                "Rare Candy",
+                1,
+                true,
+                false
+            ]
+        },
+        {
+            "Event Folder Name": "Main",
             "Fight Trainer": "Jessie & James 3"
         },
         {
+            "Event Folder Name": "Main",
             "Fight Trainer": "Rocket 28"
         },
         {
+            "Event Folder Name": "Main",
             "Fight Trainer": "Rival2 3 Vaporeon"
         },
         {
+            "Event Folder Name": "Main",
             "Fight Trainer": "Jessie & James 4"
         },
         {
+            "Event Folder Name": "Main",
             "Fight Trainer": "Giovanni 2"
         },
         {
+            "Event Folder Name": "Main",
+            "Inventory Event": [
+                "Rare Candy",
+                1,
+                true,
+                false
+            ]
+        },
+        {
+            "Event Folder Name": "Main",
             "Inventory Event": [
                 "Gold Teeth",
                 1,
@@ -194,6 +313,7 @@
             ]
         },
         {
+            "Event Folder Name": "Main",
             "Inventory Event": [
                 "HM03 Surf",
                 1,
@@ -202,15 +322,19 @@
             ]
         },
         {
+            "Event Folder Name": "Main",
             "Fight Trainer": "Juggler 3"
         },
         {
+            "Event Folder Name": "Main",
             "Fight Trainer": "Juggler 4"
         },
         {
+            "Event Folder Name": "Main",
             "Fight Trainer": "Koga 1"
         },
         {
+            "Event Folder Name": "Main",
             "Inventory Event": [
                 "Gold Teeth",
                 1,
@@ -219,6 +343,7 @@
             ]
         },
         {
+            "Event Folder Name": "Main",
             "Inventory Event": [
                 "HM04 Strength",
                 1,
@@ -227,9 +352,29 @@
             ]
         },
         {
+            "Event Folder Name": "Main",
+            "Inventory Event": [
+                "Rare Candy",
+                1,
+                true,
+                false
+            ]
+        },
+        {
+            "Event Folder Name": "Main",
             "Fight Trainer": "Sabrina 1"
         },
         {
+            "Event Folder Name": "Main",
+            "Inventory Event": [
+                "Rare Candy",
+                2,
+                true,
+                false
+            ]
+        },
+        {
+            "Event Folder Name": "Main",
             "Inventory Event": [
                 "Secret Key",
                 1,
@@ -238,33 +383,52 @@
             ]
         },
         {
+            "Event Folder Name": "Main",
             "Fight Trainer": "Blaine 1"
         },
         {
+            "Event Folder Name": "Main",
             "Fight Trainer": "CooltrainerM 10"
         },
         {
+            "Event Folder Name": "Main",
             "Fight Trainer": "Blackbelt 8"
         },
         {
+            "Event Folder Name": "Main",
             "Fight Trainer": "Giovanni 3"
         },
         {
+            "Event Folder Name": "Main",
             "Fight Trainer": "Rival2 4 Vaporeon"
         },
         {
+            "Event Folder Name": "Main",
+            "Inventory Event": [
+                "Rare Candy",
+                1,
+                true,
+                false
+            ]
+        },
+        {
+            "Event Folder Name": "Main",
             "Fight Trainer": "Lorelei 1"
         },
         {
+            "Event Folder Name": "Main",
             "Fight Trainer": "Bruno 1"
         },
         {
+            "Event Folder Name": "Main",
             "Fight Trainer": "Agatha 1"
         },
         {
+            "Event Folder Name": "Main",
             "Fight Trainer": "Lance 1"
         },
         {
+            "Event Folder Name": "Main",
             "Fight Trainer": "Rival3 Vaporeon"
         }
     ]
