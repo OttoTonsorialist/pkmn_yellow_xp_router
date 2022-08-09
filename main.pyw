@@ -56,7 +56,7 @@ class Main(object):
         self.new_event_button.grid(row=0, column=1, padx=5, pady=1)
         self.delete_event_button = custom_tkinter.SimpleButton(self.group_controls, text='Delete Event', command=self.delete_group, width=15)
         self.delete_event_button.grid(row=1, column=1, padx=5, pady=1)
-        self.rename_folder_button = custom_tkinter.SimpleButton(self.group_controls, text='Rename Folder', command=self.open_new_event_window, width=15)
+        self.rename_folder_button = custom_tkinter.SimpleButton(self.group_controls, text='Rename Folder', command=self.rename_folder, width=15)
         self.rename_folder_button.grid(row=1, column=2, padx=5, pady=1)
 
         self.top_right_controls = tk.Frame(self.top_controls)
@@ -223,6 +223,7 @@ class Main(object):
             self.enemy_team_viewer.pack_forget()
 
             if isinstance(event_group, EventFolder):
+                self.new_event_button.config(text="New Folder")
                 self.move_group_down_button.enable()
                 self.move_group_up_button.enable()
                 self.new_event_button.enable()
@@ -241,6 +242,7 @@ class Main(object):
                 # intentionally short circuit when we find an event folder. The rest isn't important
                 return
             else:
+                self.new_event_button.config(text="New Event")
                 if isinstance(event_group, EventItem):
                     self.transfer_event_button.disable()
                     self.rename_folder_button.disable()
@@ -387,14 +389,19 @@ class Main(object):
         self.new_event_window = None
         self.refresh_event_list()
 
-    def open_new_event_window(self, tk_event=None):
+    def rename_folder(self, *args, **kwargs):
+        existing_folder_name = self._data.get_folder_name_for_event(self.event_list.get_selected_event_id())
+        self.open_new_event_window(**{const.EVENT_FOLDER_NAME: existing_folder_name})
+
+
+    def open_new_event_window(self, *args, **kwargs):
         if self._is_active_window():
             event_id = self.event_list.get_selected_event_id()
             event_obj = self._data.get_event_obj(event_id)
 
             if isinstance(event_obj, EventFolder):
-                if tk_event is not None and tk_event.widget == self.rename_folder_button:
-                    existing_folder_name = self._data.get_folder_name_for_event(self.event_list.get_selected_event_id()),
+                if const.EVENT_FOLDER_NAME in kwargs:
+                    existing_folder_name = kwargs.get(const.EVENT_FOLDER_NAME)
                 else:
                     existing_folder_name = None
                 self.new_event_window = NewFolderWindow(
