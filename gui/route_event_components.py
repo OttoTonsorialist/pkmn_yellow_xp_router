@@ -519,14 +519,15 @@ class InventoryEventEditor(EventEditorBase):
             # first, get the amount the user wants. We always do this to make sure it's actually an int
             # even if we aren't calcing the cost here, it has to be a valid number
             item_amt = int(self._item_amount.get())
+            cur_item = pkmn_db.item_db.get_item(self._item_selector.get())
             if self.editor_params.event_type == const.TASK_PURCHASE_ITEM:
                 # update the cost if purchasing
-                cost = pkmn_db.item_db.get_filtered_names(self._item_selector.get()).purchase_price
+                cost = cur_item.purchase_price
                 cost *= item_amt
                 self._item_cost_label.config(text=f"Total Cost: {cost}")
             elif self.editor_params.event_type == const.TASK_SELL_ITEM:
                 # update the cost if purchasing
-                cost = pkmn_db.item_db.get_filtered_names(self._item_selector.get()).sell_price
+                cost = cur_item.sell_price
                 cost *= item_amt
                 self._item_cost_label.config(text=f"Total Profit: {cost}")
 
