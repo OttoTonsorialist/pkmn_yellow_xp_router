@@ -33,6 +33,8 @@ def generate_config_file(route: Router, config_path, route_path, out_path):
         "printxitems": True,
         "printrarecandies": True,
         "printstatboosters": True,
+        "showguarantees": True,
+        "includecrits": True
     }
     ro_config["files"] = {
         "routeFile": route_path,
