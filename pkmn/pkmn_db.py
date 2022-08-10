@@ -143,11 +143,14 @@ class ItemDB:
             cur_base_item = data_objects.BaseItem(cur_dict_item)
             self._data[cur_base_item.name] = cur_base_item
 
+            other_item = True
             if cur_base_item.is_key_item:
                 self.key_items.append(cur_base_item.name)
-            elif cur_base_item.name.startswith("TM") or cur_base_item.name.startswith("HM"):
+                other_item = False
+            if cur_base_item.name.startswith("TM") or cur_base_item.name.startswith("HM"):
                 self.tms.append(cur_base_item.name)
-            else:
+                other_item = False
+            if other_item:
                 self.other_items.append(cur_base_item.name)
 
             for mart in cur_base_item.marts:

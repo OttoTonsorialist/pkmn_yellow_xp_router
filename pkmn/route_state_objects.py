@@ -370,11 +370,20 @@ class RouteState:
         if source == const.MOVE_SOURCE_LEVELUP:
             inv = self.inventory
         else:
+            consume_item = True
             try:
-                inv = self.inventory.remove_item(pkmn_db.item_db.get_item(source), 1, False)
-            except Exception as e:
-                error_message = str(e)
-                inv = self.inventory.remove_item(pkmn_db.item_db.get_item(source), 1, is_sale=False, force=True)
+                consume_item = not pkmn_db.item_db.get_item(source).is_key_item
+            except:
+                pass
+
+            if consume_item:
+                try:
+                    inv = self.inventory.remove_item(pkmn_db.item_db.get_item(source), 1, False)
+                except Exception as e:
+                    error_message = str(e)
+                    inv = self.inventory.remove_item(pkmn_db.item_db.get_item(source), 1, is_sale=False, force=True)
+            else:
+                inv = self.inventory
 
         return RouteState(
             self.solo_pkmn.learn_move(move_name, dest, self.badges),
