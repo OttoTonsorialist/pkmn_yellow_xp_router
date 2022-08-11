@@ -108,7 +108,6 @@ class RouteList(CustomGridview):
                 text=str(text_val),
                 values=tuple(self._get_attr_helper(obj, x.attr) for x in self._custom_col_data),
                 tags=(obj.get_tag(),),
-                open=force_open
             )
 
         else:
