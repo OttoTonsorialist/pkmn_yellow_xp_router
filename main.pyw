@@ -1,6 +1,6 @@
 import argparse
-from multiprocessing import Event
 import subprocess
+import os
 
 import tkinter as tk
 from tkinter import filedialog
@@ -49,15 +49,19 @@ class Main(object):
         self.move_group_up_button.grid(row=0, column=0, padx=5, pady=1)
         self.move_group_down_button = custom_tkinter.SimpleButton(self.group_controls, text='Move Event Down', command=self.move_group_down, width=15)
         self.move_group_down_button.grid(row=1, column=0, padx=5, pady=1)
-        self.transfer_event_button = custom_tkinter.SimpleButton(self.group_controls, text='Transfer Event', command=self.open_transfer_event_window, width=15)
-        self.transfer_event_button.grid(row=0, column=2, padx=5, pady=1)
 
         self.new_event_button = custom_tkinter.SimpleButton(self.group_controls, text='New Event', command=self.open_new_event_window, width=15)
         self.new_event_button.grid(row=0, column=1, padx=5, pady=1)
         self.delete_event_button = custom_tkinter.SimpleButton(self.group_controls, text='Delete Event', command=self.delete_group, width=15)
         self.delete_event_button.grid(row=1, column=1, padx=5, pady=1)
+
+        self.transfer_event_button = custom_tkinter.SimpleButton(self.group_controls, text='Transfer Event', command=self.open_transfer_event_window, width=15)
+        self.transfer_event_button.grid(row=0, column=2, padx=5, pady=1)
         self.rename_folder_button = custom_tkinter.SimpleButton(self.group_controls, text='Rename Folder', command=self.rename_folder, width=15)
         self.rename_folder_button.grid(row=1, column=2, padx=5, pady=1)
+
+        self.new_folder_button = custom_tkinter.SimpleButton(self.group_controls, text='New Folder', command=self.open_new_folder_window, width=15)
+        self.new_folder_button.grid(row=0, column=3, padx=5, pady=1)
 
         self.top_right_controls = tk.Frame(self.top_controls)
         self.top_right_controls.grid(row=0, column=1, sticky=tk.E)
@@ -169,9 +173,8 @@ class Main(object):
         self.new_event_window = None
 
     def refresh_event_list(self, event=None):
-        self.event_list.refresh(self._data.event_folders)
-        any_errors = any([bool(x.child_errors) for x in self._data.event_folders])
-        if any_errors:
+        self.event_list.refresh(self._data.root_folder.children)
+        if self._data.root_folder.has_errors():
             self.run_status_label.config(text="Run Status: Invalid", bg=const.ERROR_COLOR)
         else:
             self.run_status_label.config(text="Run Status: Valid", bg=const.VALID_COLOR)
@@ -200,7 +203,15 @@ class Main(object):
         self.load_route()
 
     def refresh_existing_routes(self, *args, **kwargs):
-        self.previous_route_names.new_values(self._data.refresh_existing_routes(), default_val=self.route_name.get())
+        loaded_routes = []
+        if os.path.exists(const.SAVED_ROUTES_DIR):
+            for fragment in os.listdir(const.SAVED_ROUTES_DIR):
+                name, ext = os.path.splitext(fragment)
+                if ext != ".json":
+                    continue
+                loaded_routes.append(name)
+        
+        self.previous_route_names.new_values(loaded_routes, default_val=self.route_name.get())
     
     def show_event_details(self, *args, **kwargs):
         event_group = self._data.get_event_obj(self.event_list.get_selected_event_id())
@@ -223,18 +234,15 @@ class Main(object):
             self.enemy_team_viewer.pack_forget()
 
             if isinstance(event_group, EventFolder):
-                self.new_event_button.config(text="New Folder")
                 self.move_group_down_button.enable()
                 self.move_group_up_button.enable()
-                self.new_event_button.enable()
-                self.transfer_event_button.disable()
                 self.rename_folder_button.enable()
                 self.event_details_button.pack_forget()
                 self.trainer_notes.pack_forget()
                 self.enemy_team_viewer.set_team(None)
                 if self.current_event_editor is not None:
                     self.current_event_editor.pack_forget()
-                if len(event_group.event_groups) == 0:
+                if len(event_group.children) == 0:
                     self.delete_event_button.enable()
                 else:
                     self.delete_event_button.disable()
@@ -242,14 +250,11 @@ class Main(object):
                 # intentionally short circuit when we find an event folder. The rest isn't important
                 return
             else:
-                self.new_event_button.config(text="New Event")
                 if isinstance(event_group, EventItem):
-                    self.transfer_event_button.disable()
                     self.rename_folder_button.disable()
                     self.move_group_down_button.disable()
                     self.move_group_up_button.disable()
                     self.delete_event_button.disable()
-                    self.new_event_button.disable()
                     if (
                         event_group.event_definition.learn_move is None or
                         event_group.event_definition.learn_move.source != const.MOVE_SOURCE_LEVELUP
@@ -260,12 +265,10 @@ class Main(object):
                         self.event_details_button.enable()
                 else:
                     self.event_details_button.enable()
-                    self.transfer_event_button.enable()
                     self.rename_folder_button.disable()
                     self.move_group_down_button.enable()
                     self.move_group_up_button.enable()
                     self.delete_event_button.enable()
-                    self.new_event_button.enable()
 
             if event_group.event_definition.trainer_name is not None:
                 if self.current_event_editor is not None:
@@ -300,7 +303,7 @@ class Main(object):
         if self.current_event_editor is None:
             cur_event = self._data.get_event_obj(self.event_list.get_selected_event_id())
             if isinstance(cur_event, EventGroup) and cur_event.event_definition.trainer_name is not None:
-                self._data.replace_group(
+                self._data.replace_event_group(
                     self.event_list.get_selected_event_id(),
                     EventDefinition(
                         trainer_name=cur_event.event_definition.trainer_name,
@@ -311,7 +314,7 @@ class Main(object):
                 raise ValueError(f"Cannot update existing event when no event is being edited!")
         
         else:
-            self._data.replace_group(self.event_list.get_selected_event_id(), self.current_event_editor.get_event())
+            self._data.replace_event_group(self.event_list.get_selected_event_id(), self.current_event_editor.get_event())
 
         self.refresh_event_list()
         self.show_event_details()
@@ -326,47 +329,26 @@ class Main(object):
         self.refresh_event_list()
 
     def reset_to_min_battles(self, *args, **kwargs):
-        self._data.load_min_battle(self.min_battles_selector.get())
+        self._data.load(self.min_battles_selector.get(), min_battles=True)
         self.refresh_event_list()
 
     def move_group_up(self, event=None):
-        event_id = self.event_list.get_selected_event_id()
-        event_obj = self._data.get_event_obj(event_id)
-
-        if isinstance(event_obj, EventFolder):
-            self._data.move_folder(event_id, True)
-        elif isinstance(event_obj, EventGroup):
-            self._data.move_group(event_id, True)
-
+        self._data.move_event_object(self.event_list.get_selected_event_id(), True)
         self.refresh_event_list()
 
     def move_group_down(self, event=None):
-        event_id = self.event_list.get_selected_event_id()
-        event_obj = self._data.get_event_obj(event_id)
-
-        if isinstance(event_obj, EventFolder):
-            self._data.move_folder(event_id, False)
-        elif isinstance(event_obj, EventGroup):
-            self._data.move_group(event_id, False)
-
+        self._data.move_event_object(self.event_list.get_selected_event_id(), False)
         self.refresh_event_list()
 
     def delete_group(self, event=None):
-        event_id = self.event_list.get_selected_event_id()
-        event_obj = self._data.get_event_obj(event_id)
-
-        if isinstance(event_obj, EventFolder):
-            self._data.delete_folder(event_id)
-        elif isinstance(event_obj, EventGroup):
-            self._data.remove_group(event_id)
-
+        self._data.remove_event_object(self.event_list.get_selected_event_id())
         self.refresh_event_list()
 
     def finalize_new_folder(self, new_folder_name, prev_folder_name=None):
         if prev_folder_name is None:
-            self._data.add_folder(new_folder_name)
+            self._data.add_event_object(new_folder_name=new_folder_name, insert_before=self.event_list.get_selected_event_id())
         else:
-            self._data.rename_folder(prev_folder_name, new_folder_name)
+            self._data.rename_event_folder(prev_folder_name, new_folder_name)
 
         self.new_event_window.destroy()
         self.new_event_window = None
@@ -378,23 +360,46 @@ class Main(object):
             self.new_event_window = TransferEventWindow(
                 self,
                 event_group_id,
-                list(self._data.folder_idx_lookup.keys()),
-                self._data.get_folder_name_for_event(event_group_id),
+                list(self._data.folder_lookup.keys()),
+                self._data.get_event_obj(event_group_id).parent.name,
                 self._root
             )
     
     def transfer_event(self, event_group_id, new_folder_name):
-        self._data.transfer_group(event_group_id, new_folder_name)
+        self._data.transfer_event_object(event_group_id, new_folder_name)
         self.new_event_window.destroy()
         self.new_event_window = None
         self.refresh_event_list()
 
     def rename_folder(self, *args, **kwargs):
-        existing_folder_name = self._data.get_folder_name_for_event(self.event_list.get_selected_event_id())
-        self.open_new_event_window(**{const.EVENT_FOLDER_NAME: existing_folder_name})
-
+        self.open_new_folder_window(**{const.EVENT_FOLDER_NAME: self._data.get_event_obj(self.event_list.get_selected_event_id()).name})
 
     def open_new_event_window(self, *args, **kwargs):
+        if self._is_active_window():
+            event_id = self.event_list.get_selected_event_id()
+            event_obj = self._data.get_event_obj(event_id)
+
+            if event_obj is None:
+                state = self._data.get_final_state()
+            else:
+                state = event_obj.init_state
+
+            self.new_event_window = NewEventWindow(self, self._data.defeated_trainers, state, self._root)
+
+    def open_new_folder_window(self, *args, **kwargs):
+        if self._is_active_window():
+            if const.EVENT_FOLDER_NAME in kwargs:
+                existing_folder_name = kwargs.get(const.EVENT_FOLDER_NAME)
+            else:
+                existing_folder_name = None
+            self.new_event_window = NewFolderWindow(
+                self,
+                list(self._data.folder_lookup.keys()),
+                existing_folder_name,
+                self._root
+            )
+
+    def combined_open_new_event_window(self, *args, **kwargs):
         if self._is_active_window():
             event_id = self.event_list.get_selected_event_id()
             event_obj = self._data.get_event_obj(event_id)
@@ -406,7 +411,7 @@ class Main(object):
                     existing_folder_name = None
                 self.new_event_window = NewFolderWindow(
                     self,
-                    list(self._data.folder_idx_lookup.keys()),
+                    list(self._data.folder_lookup.keys()),
                     existing_folder_name,
                     self._root
                 )
@@ -428,7 +433,7 @@ class Main(object):
             self.new_event_window = None
     
     def new_event(self, event_def):
-        self._data.add_event(event_def, insert_before=self.event_list.get_selected_event_id())
+        self._data.add_event_object(event_def=event_def, insert_before=self.event_list.get_selected_event_id())
         self.new_event_window.destroy()
         self.new_event_window = None
         self.refresh_event_list()

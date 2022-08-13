@@ -114,8 +114,8 @@ class LearnMoveEventDefinition:
     
     def __str__(self):
         if self.destination is None:
-            return f"Ignoring move {self.move_to_learn}, from {self.source}"
-        return f"Learning move {self.move_to_learn} in slot #: {self.destination + 1}, from {self.source}"
+            return f"Ignoring {self.move_to_learn}, from {self.source}"
+        return f"Learning {self.move_to_learn} in slot #: {self.destination + 1}, from {self.source}"
 
 
 class EventDefinition:
@@ -221,8 +221,8 @@ class EventDefinition:
         return self.get_label()
 
     
-    def serialize(self, folder_name):
-        result = {const.EVENT_FOLDER_NAME: folder_name}
+    def serialize(self):
+        result = {}
         if self.notes:
             result[const.TASK_NOTES_ONLY] = self.notes
 
@@ -265,11 +265,12 @@ class EventItem:
     """
     This class effectively functions as the conversion layer between EventDefinitions and the RouteState object.
     """
-    def __init__(self, event_definition:EventDefinition, to_defeat_idx=None, cur_state=None):
+    def __init__(self, parent, event_definition:EventDefinition, to_defeat_idx=None, cur_state=None):
         global event_id_counter
         self.group_id = event_id_counter
         event_id_counter += 1
 
+        self.parent = parent
         self.name = event_definition.get_item_label()
         self.to_defeat_idx = to_defeat_idx
         self.event_definition = event_definition
@@ -369,15 +370,16 @@ class EventItem:
 
 
 class EventGroup:
-    def __init__(self, event_definition:EventDefinition):
+    def __init__(self, parent, event_definition:EventDefinition):
         global event_id_counter
         self.group_id = event_id_counter
         event_id_counter += 1
 
+        self.parent = parent
         self.name = None
+        self.init_state = None
         self.final_state = None
         self.event_items = []
-        self.init_state = None
         self.event_definition = event_definition
         self.pkmn_after_levelups = []
         self.error_messages = []
@@ -398,16 +400,18 @@ class EventGroup:
             trainer_obj = self.event_definition.get_trainer_obj()
             pkmn_counter = {}
             for pkmn_idx, trainer_pkmn in enumerate(trainer_obj.pkmn):
-                self.event_items.append(EventItem(self.event_definition, to_defeat_idx=pkmn_idx, cur_state=cur_state))
+                self.event_items.append(EventItem(self, self.event_definition, to_defeat_idx=pkmn_idx, cur_state=cur_state))
                 pkmn_counter[trainer_pkmn.name] = pkmn_counter.get(trainer_pkmn.name, 0) + 1
                 
                 next_state = self.event_items[-1].final_state
+                if next_state is None or cur_state is None:
+                    breakpoint()
                 # when a level up occurs
                 if next_state.solo_pkmn.cur_level != cur_state.solo_pkmn.cur_level:
                     # learn moves, if needed
                     for learn_move in self.level_up_learn_event_defs:
                         if learn_move.level == next_state.solo_pkmn.cur_level:
-                            self.event_items.append(EventItem(EventDefinition(learn_move=learn_move), cur_state=next_state))
+                            self.event_items.append(EventItem(self, EventDefinition(learn_move=learn_move), cur_state=next_state))
                             next_state = self.event_items[-1].final_state
                     # keep track of pkmn coming out
                     if pkmn_idx + 1 < len(trainer_obj.pkmn):
@@ -421,30 +425,30 @@ class EventGroup:
         elif self.event_definition.wild_pkmn_info is not None:
             # assumption: can only have at most one level up per event group of non-trainer battle types
             # This allows us to simplify the level up move learn checks
-            self.event_items.append(EventItem(self.event_definition, to_defeat_idx=0, cur_state=cur_state))
+            self.event_items.append(EventItem(self, self.event_definition, to_defeat_idx=0, cur_state=cur_state))
             if self.level_up_learn_event_defs:
-                self.event_items.append(EventItem(EventDefinition(learn_move=self.level_up_learn_event_defs[0]), cur_state=self.event_items[0].final_state))
+                self.event_items.append(EventItem(self, EventDefinition(learn_move=self.level_up_learn_event_defs[0]), cur_state=self.event_items[0].final_state))
         elif self.event_definition.rare_candy is not None:
             for _ in range(self.event_definition.rare_candy.amount):
-                self.event_items.append(EventItem(self.event_definition, cur_state=cur_state))
+                self.event_items.append(EventItem(self, self.event_definition, cur_state=cur_state))
                 # TODO: duplicated logic for handling level up moves. How can this be unified?
                 next_state = self.event_items[-1].final_state
                 if next_state.solo_pkmn.cur_level != cur_state.solo_pkmn.cur_level:
                     for learn_move in self.level_up_learn_event_defs:
                         if learn_move.level == next_state.solo_pkmn.cur_level:
-                            self.event_items.append(EventItem(EventDefinition(learn_move=learn_move), cur_state=next_state))
+                            self.event_items.append(EventItem(self, EventDefinition(learn_move=learn_move), cur_state=next_state))
                             next_state = self.event_items[-1].final_state
                 cur_state = next_state
         elif self.event_definition.vitamin is not None:
             for _ in range(self.event_definition.vitamin.amount):
-                self.event_items.append(EventItem(self.event_definition, cur_state=cur_state))
+                self.event_items.append(EventItem(self, self.event_definition, cur_state=cur_state))
                 cur_state = self.event_items[-1].final_state
         else:
             # assumption: can only have at most one level up per event group of non-trainer battle types
             # This allows us to simplify the level up move learn checks
-            self.event_items.append(EventItem(self.event_definition, cur_state=cur_state))
+            self.event_items.append(EventItem(self, self.event_definition, cur_state=cur_state))
             if self.level_up_learn_event_defs:
-                self.event_items.append(EventItem(EventDefinition(learn_move=self.level_up_learn_event_defs[0]), cur_state=self.event_items[0].final_state))
+                self.event_items.append(EventItem(self, EventDefinition(learn_move=self.level_up_learn_event_defs[0]), cur_state=self.event_items[0].final_state))
             
         if len(self.event_items) == 0:
             raise ValueError(f"Something went wrong generating event group: {self.event_definition}")
@@ -478,8 +482,8 @@ class EventGroup:
     def total_xp(self):
         return self.final_state.solo_pkmn.cur_xp
 
-    def serialize(self, folder_name=None):
-        return self.event_definition.serialize(folder_name)
+    def serialize(self):
+        return self.event_definition.serialize()
     
     def has_errors(self):
         return len(self.error_messages) != 0
@@ -495,47 +499,73 @@ class EventGroup:
             return const.EVENT_TAG_IMPORTANT
         
         return None
+    
+    def __repr__(self):
+        return f"EventGroup: {self.event_definition}"
 
 
 class EventFolder:
-    def __init__(self, name):
+    def __init__(self, parent, name):
         global event_id_counter
         self.group_id = event_id_counter
         event_id_counter += 1
 
+        self.parent = parent
         self.name = name
         self.init_state = None
         self.final_state = None
         self.child_errors = False
-        self.event_groups = []
+        self.children = []
     
-    def add_event_group(self, group:EventGroup, force_recalculation=False):
-        self.event_groups.append(group)
+    def add_child(self, child_obj, force_recalculation=False):
+        self.children.append(child_obj)
+        child_obj.parent = self
 
         if force_recalculation:
             self.apply(self.init_state)
     
-    def remove_event_group(self, group_id, force_recalculation=False):
-        result = None
-        for idx in range(len(self.event_groups)):
-            if self.event_groups[idx].contains_id(group_id):
-                result = self.event_groups[idx]
-                del self.event_groups[idx]
-                break
+    def insert_child_before(self, child_obj, before_obj=None):
+        if before_obj is None:
+            self.add_child(child_obj=child_obj)
         
-        if result is None:
-            raise ValueError(f"EventFolder {self.name} does not have group_id {group_id}")
+        else:
+            try:
+                insert_idx = self.children.index(before_obj)
+                self.children.insert(insert_idx, child_obj)
+                child_obj.parent = self
+            except Exception as e:
+                raise ValueError(f"Could not find object to insert before: {before_obj}")
+
+    def move_child(self, child_obj, move_up_flag):
+        try:
+            idx = self.children.index(child_obj)
+        except Exception as e:
+            raise ValueError(f"In folder {self.name}, could not find object: {child_obj}")
+
+        if move_up_flag:
+            insert_idx = max(idx - 1, 0)
+        else:
+            insert_idx = min(idx + 1, len(self.children) - 1)
+        
+        self.children.remove(child_obj)
+        self.children.insert(insert_idx, child_obj)
+    
+    def remove_child(self, child_obj, force_recalculation=False):
+        try:
+            self.children.remove(child_obj)
+            # technically unnecessary, but just to be safe, unlink it as well
+            child_obj.parent = None
+        except Exception as e:
+            raise ValueError(f"EventFolder {self.name} does not have child object: {child_obj}")
 
         if force_recalculation:
             self.apply(self.init_state)
-        
-        return result
 
     def apply(self, cur_state):
         self.init_state = cur_state
         self.child_errors = False
 
-        for cur_group in self.event_groups:
+        for cur_group in self.children:
             cur_group.apply(cur_state)
             cur_state = cur_group.final_state
             if cur_group.has_errors():
@@ -554,26 +584,24 @@ class EventFolder:
 
     def pkmn_level(self):
         return ""
-        return self.final_state.solo_pkmn.cur_level
     
     def xp_to_next_level(self):
         return ""
-        return self.final_state.solo_pkmn.xp_to_next_level
 
     def percent_xp_to_next_level(self):
         return ""
-        return self.final_state.solo_pkmn.percent_xp_to_next_level
 
     def xp_gain(self):
         return ""
-        return self.final_state.solo_pkmn.cur_xp - self.init_state.solo_pkmn.cur_xp
 
     def total_xp(self):
         return ""
-        return self.final_state.solo_pkmn.cur_xp
 
     def serialize(self):
-        return [x.serialize(self.name) for x in self.event_groups]
+        return {
+            const.EVENT_FOLDER_NAME: self.name,
+            const.EVENTS: [x.serialize() for x in self.children]
+        }
     
     def has_errors(self):
         return self.child_errors
@@ -583,3 +611,6 @@ class EventFolder:
             return const.EVENT_TAG_ERRORS
         
         return None
+    
+    def __repr__(self):
+        return f"EventFolder: {self.name}"

@@ -132,44 +132,11 @@ class RouteList(CustomGridview):
         except (ValueError, IndexError):
             return -1
 
-    def refresh(self, ordered_folders):
+    def refresh(self, all_events):
         # begin keeping track of the stuff we already know we're displaying
         # so we can eventually delete stuff that has been removed
         to_delete_ids = set(self._treeview_id_lookup.keys())
-        
-        for folder_idx, folder_obj in enumerate(ordered_folders):
-            folder_semantic_id = self._get_attr_helper(folder_obj, self._semantic_id_field_attr)
-            if folder_semantic_id in to_delete_ids:
-                folder_list_id = self._treeview_id_lookup[folder_semantic_id]
-                to_delete_ids.remove(folder_semantic_id)
-                self.custom_upsert(folder_obj, force_open=True)
-            else:
-                folder_list_id = self.custom_upsert(folder_obj, force_open=True)
-
-            self.move(folder_list_id, '', folder_idx)
-
-            for group_idx, group_obj in enumerate(folder_obj.event_groups):
-                group_semantic_id = self._get_attr_helper(group_obj, self._semantic_id_field_attr)
-                if group_semantic_id in to_delete_ids:
-                    group_list_id = self._treeview_id_lookup[group_semantic_id]
-                    to_delete_ids.remove(group_semantic_id)
-                    self.custom_upsert(group_obj)
-                else:
-                    group_list_id = self.custom_upsert(group_obj)
-
-                self.move(group_list_id, folder_list_id, group_idx)
-
-                if len(group_obj.event_items) > 1:
-                    for item_idx, item_obj in enumerate(group_obj.event_items):
-                        item_semantic_id = self._get_attr_helper(item_obj, self._semantic_id_field_attr)
-                        if item_semantic_id in to_delete_ids:
-                            item_id = self._treeview_id_lookup[item_semantic_id]
-                            to_delete_ids.remove(item_semantic_id)
-                            self.custom_upsert(item_obj, parent=group_list_id)
-                        else:
-                            item_id = self.custom_upsert(item_obj, parent=group_list_id)
-
-                        self.move(item_id, group_list_id, item_idx)
+        self._refresh_recursively("", all_events, to_delete_ids)
 
         # we have now updated all relevant records, created missing ones, and ordered everything correctly
         # just need to remove any potentially deleted records
@@ -182,6 +149,37 @@ class RouteList(CustomGridview):
                 # No actual problem though, just remove from the lookup and continue
                 pass
             del self._treeview_id_lookup[cur_del_id]
+    
+    def _refresh_recursively(self, parent_id, event_list, to_delete_ids:set):
+        for event_idx, event_obj in enumerate(event_list):
+            semantic_id = self._get_attr_helper(event_obj, self._semantic_id_field_attr)
+
+            default_expand = isinstance(event_obj, route_events.EventFolder)
+
+            if semantic_id in to_delete_ids:
+                to_delete_ids.remove(semantic_id)
+                cur_event_id = self._treeview_id_lookup[semantic_id]
+                self.custom_upsert(event_obj, parent=parent_id, force_open=default_expand)
+            else:
+                cur_event_id = self.custom_upsert(event_obj, parent=parent_id, force_open=default_expand)
+
+            self.move(cur_event_id, parent_id, event_idx)
+
+            if isinstance(event_obj, route_events.EventFolder):
+                self._refresh_recursively(cur_event_id, event_obj.children, to_delete_ids)
+
+            elif isinstance(event_obj, route_events.EventGroup):
+                if len(event_obj.event_items) > 1:
+                    for item_idx, item_obj in enumerate(event_obj.event_items):
+                        item_semantic_id = self._get_attr_helper(item_obj, self._semantic_id_field_attr)
+                        if item_semantic_id in to_delete_ids:
+                            item_id = self._treeview_id_lookup[item_semantic_id]
+                            to_delete_ids.remove(item_semantic_id)
+                            self.custom_upsert(item_obj, parent=cur_event_id)
+                        else:
+                            item_id = self.custom_upsert(item_obj, parent=cur_event_id)
+
+                        self.move(item_id, cur_event_id, item_idx)
 
 
 class SimpleOptionMenu(tk.OptionMenu):

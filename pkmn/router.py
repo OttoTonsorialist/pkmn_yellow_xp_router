@@ -1,7 +1,6 @@
 import os
+import time
 import json
-from tokenize import group
-from typing import Tuple
 
 from utils.constants import const
 from pkmn import data_objects
@@ -14,75 +13,26 @@ from pkmn import route_state_objects
 class Router:
     def __init__(self):
         self.init_route_state = None
-        self.event_folders = []
-        self.folder_idx_lookup = {}
+        self.root_folder = route_events.EventFolder(None, const.ROOT_FOLDER_NAME)
+        self.folder_lookup = {const.ROOT_FOLDER_NAME: self.root_folder}
+        self.event_lookup = {}
+
         self.level_up_move_defs = {}
         self.defeated_trainers = set()
     
     def _reset_events(self):
-        self.event_folders = []
-        self.folder_idx_lookup = {}
+        self.root_folder = route_events.EventFolder(None, const.ROOT_FOLDER_NAME)
+        self.folder_lookup = {const.ROOT_FOLDER_NAME: self.root_folder}
+        self.event_lookup = {}
+
         self.defeated_trainers = set()
     
-    def get_group_from_item(self, event_id):
-        for cur_folder in self.event_folders:
-            for cur_group in cur_folder.event_groups:
-                for cur_item in cur_group.event_items:
-                    if cur_item.group_id == event_id:
-                        return cur_group
-        
-        return None
-
     def get_event_obj(self, event_id):
-        for cur_folder in self.event_folders:
-            if cur_folder.group_id == event_id:
-                return cur_folder
-            for cur_group in cur_folder.event_groups:
-                if cur_group.group_id == event_id:
-                    return cur_group
-                for cur_item in cur_group.event_items:
-                    if cur_item.group_id == event_id:
-                        return cur_item
-        
-        return None
+        return self.event_lookup.get(event_id)
 
-    def get_folder_name_for_event(self, event_id):
-        for cur_folder in self.event_folders:
-            if cur_folder.group_id == event_id:
-                return cur_folder.name
-            for cur_group in cur_folder.event_groups:
-                if cur_group.group_id == event_id:
-                    return cur_folder.name
-                for cur_item in cur_group.event_items:
-                    if cur_item.group_id == event_id:
-                        return cur_folder.name
-        
-        return None
-        
-    def _get_event_folder_info(self, event_group_id) -> Tuple[route_events.EventFolder, int]:
-        for fdx, cur_folder in enumerate(self.event_folders):
-            if cur_folder.group_id == event_group_id:
-                return cur_folder, fdx
-        
-        return None, None
-
-    def _get_event_group_info(self, event_group_id) -> Tuple[route_events.EventGroup, int, int]:
-        for fdx, cur_folder in enumerate(self.event_folders):
-            for idx, cur_event in enumerate(cur_folder.event_groups):
-                if cur_event.group_id == event_group_id:
-                    return cur_event, fdx, idx
-        
-        return None, None, None
-    
-    def get_post_event_state(self, group_id):
-        group_event = self._get_event_group_info(group_id)[0]
-        if group_event is None:
-            return None
-        return group_event.final_state
-    
     def get_final_state(self):
-        if len(self.event_folders):
-            return self.event_folders[-1].final_state
+        if len(self.root_folder.children):
+            return self.root_folder.final_state
         return self.init_route_state
     
     def set_solo_pkmn(self, pkmn_name, level_up_moves=None):
@@ -102,6 +52,7 @@ class Router:
                 for x in pkmn_base.levelup_moves
             }
         else:
+            # TODO: should double check loaded moves against expected moves from DB, and complain if something doesn't match
             self.level_up_move_defs = {x.level: x for x in level_up_moves}
 
         self._recalc()
@@ -110,16 +61,23 @@ class Router:
         # dumb, but it's ultimately easier to just forcibly recalc the entire list
         # instead of worrying about only starting from the exact right place
         # TODO: only recalc what's necessary, based on a passed-in index
-        cur_state = self.init_route_state
-        for cur_folder in self.event_folders:
-            cur_folder.child_errors = False
-            cur_folder.init_state = cur_state
-            for cur_group in cur_folder.event_groups:
-                self._calc_single_event(cur_group, cur_state)
-                if cur_group.error_messages:
-                    cur_folder.child_errors = True
-                cur_state = cur_group.final_state
-            cur_folder.final_state = cur_state
+
+        # TODO: wrapper for recursive function currently does nothing, may want to remove later
+        self._recursive_recalc(self.root_folder, self.init_route_state)
+
+    def _recursive_recalc(self, obj, cur_state):
+        obj.init_state = cur_state
+
+        if isinstance(obj, route_events.EventGroup):
+            self._calc_single_event(obj, cur_state)
+        else:
+            obj.child_errors = False
+            for inner_obj in obj.children:
+                self._recursive_recalc(inner_obj, cur_state)
+                cur_state = inner_obj.final_state
+                if inner_obj.has_errors():
+                    obj.child_errors = True
+            obj.final_state = cur_state
 
     def _calc_single_event(self, event_group, prev_state):
         # kind of ugly, we're going to double-calculate some events this way
@@ -139,151 +97,114 @@ class Router:
         if to_learn:
             event_group.apply(prev_state, level_up_learn_event_defs=to_learn)
     
-    def refresh_existing_routes(self):
-        result = []
-        if os.path.exists(const.SAVED_ROUTES_DIR):
-            for fragment in os.listdir(const.SAVED_ROUTES_DIR):
-                name, ext = os.path.splitext(fragment)
-                if ext != ".json":
-                    continue
-                result.append(name)
-        
-        return result
-    
-    def add_event(self, event_def, insert_before=None, folder_name=None):
+    def add_event_object(self, event_def=None, new_folder_name=None, insert_before=None, dest_folder_name=const.ROOT_FOLDER_NAME, recalc=True):
         if not self.init_route_state:
             raise ValueError("Cannot add an event when solo pokmn is not yet selected")
-        if event_def.trainer_name:
-            self.defeated_trainers.add(event_def.trainer_name)
-        if folder_name is None and event_def.original_folder_name is not None:
-            folder_name = event_def.original_folder_name
-
-        new_event = route_events.EventGroup(event_def)
-
-        if insert_before is None:
-            if folder_name is None:
-                raise ValueError("No group or folder defined to figure out where to add event")
-            cur_folder = self.event_folders[self.folder_idx_lookup[folder_name]]
-            self._calc_single_event(new_event, cur_folder.final_state)
-            cur_folder.event_groups.append(new_event)
-            if new_event.error_messages:
-                cur_folder.child_errors = True
-            cur_folder.final_state = new_event.final_state
+        if event_def is None and new_folder_name is None:
+            raise ValueError("Must define either folder name or event definition")
+        elif event_def is not None and new_folder_name is not None:
+            raise ValueError("Cannot define both folder name and event definition")
+        
+        if insert_before is not None:
+            parent_obj = self.get_event_obj(insert_before).parent
         else:
-            _, folder_idx, group_idx = self._get_event_group_info(insert_before)
-            self.event_folders[folder_idx].event_groups.insert(group_idx, new_event)
+            try:
+                parent_obj = self.folder_lookup[dest_folder_name]
+            except Exception as e:
+                raise ValueError(f"Cannot find folder with name: {dest_folder_name}")
+
+        if event_def is not None:
+            if event_def.trainer_name:
+                self.defeated_trainers.add(event_def.trainer_name)
+            new_obj = route_events.EventGroup(parent_obj, event_def)
+
+        elif new_folder_name is not None:
+            new_obj = route_events.EventFolder(parent_obj, new_folder_name)
+            self.folder_lookup[new_folder_name] = new_obj
+        
+        self.event_lookup[new_obj.group_id] = new_obj
+        parent_obj.insert_child_before(new_obj, before_obj=self.get_event_obj(insert_before))
+        if recalc:
             self._recalc()
     
-    def remove_group(self, group_id):
-        group_obj, folder_idx, group_idx = self._get_event_group_info(group_id)
-        if group_obj.event_definition.trainer_name is not None:
-            self.defeated_trainers.remove(group_obj.event_definition.trainer_name)
-        del self.event_folders[folder_idx].event_groups[group_idx]
+    def remove_event_object(self, event_id):
+        cur_event = self.event_lookup.get(event_id)
+        if cur_event is None:
+            raise ValueError(f"Cannot remove event for unknown id: {event_id}")
+        
+        if isinstance(cur_event, route_events.EventFolder) and len(cur_event.children) != 0:
+            raise ValueError(f"Cannot remove non-empty folder: {cur_event.name}")
+        elif isinstance(cur_event, route_events.EventItem):
+            raise ValueError(f"Cannot remove EventItem objects: {cur_event.name}")
+        
+        if isinstance(cur_event, route_events.EventGroup) and cur_event.event_definition.trainer_name is not None:
+            self.defeated_trainers.remove(cur_event.event_definition.trainer_name)
+        
+        cur_event.parent.remove_child(cur_event)
+        del self.event_lookup[cur_event.group_id]
+
+        # once we've successfully removed the event, forget the lookup if it was a folder
+        if isinstance(cur_event, route_events.EventFolder):
+            del self.folder_lookup[cur_event.name]
+        
         self._recalc()
 
-    def replace_group(self, group_id, new_event_def):
-        group_obj, folder_idx, group_idx = self._get_event_group_info(group_id)
+    def move_event_object(self, event_id, move_up_flag):
+        # NOTE: can only move within a folder. To change folders, need to call a separate function
+        try:
+            obj_to_move = self.get_event_obj(event_id)
+            obj_to_move.parent.move_child(obj_to_move, move_up_flag)
+            self._recalc()
+        except Exception as e:
+            raise ValueError(f"Failed to find event object with id: {event_id}")
+    
+    def transfer_event_object(self, event_id, dest_folder_name):
+        cur_event = self.event_lookup.get(event_id)
+        if cur_event is None:
+            raise ValueError(f"Cannot find group for id: {event_id}")
+        
+        dest_folder = self.folder_lookup.get(dest_folder_name)
+        if dest_folder is None:
+            raise ValueError(f"Cannot find destination folder named: {dest_folder_name}")
+        
+        cur_event.parent.remove_child(cur_event)
+        dest_folder.insert_child_before(cur_event, before_obj=None)
+        self._recalc()
+    
+    def replace_event_group(self, event_group_id, new_event_def:route_events.EventDefinition):
+        event_group_obj = self.event_lookup.get(event_group_id)
+        if event_group_obj is None:
+            raise ValueError(f"Cannot find any event with id: {event_group_id}")
 
-        if group_obj is None:
-            # TODO: kinda gross, we allow updating some items (just levelup learn moves)
-            # TODO: so we need this one extra processing hook here to handle when the "group"
-            # TODO: being replaced is actually an item, not a group
-            item_obj = self.get_event_obj(group_id)
-            if item_obj is None:
-                raise ValueError(f"Cannot find any event with id: {group_id}")
-
-            if isinstance(item_obj, route_events.EventFolder):
-                raise ValueError(f"Cannot update EventFolder")
-            
-            if item_obj.event_definition.get_event_type() != const.TASK_LEARN_MOVE_LEVELUP:
+        if isinstance(event_group_obj, route_events.EventFolder):
+            raise ValueError(f"Cannot update EventFolder")
+        
+        # TODO: kinda gross, we allow updating some items (just levelup learn moves)
+        # TODO: so we need this one extra processing hook here to handle when the "group"
+        # TODO: being replaced is actually an item, not a group
+        if isinstance(event_group_obj, route_events.EventItem):
+            if event_group_obj.event_definition.get_event_type() != const.TASK_LEARN_MOVE_LEVELUP:
                 raise ValueError(f"Can only update event items for level up moves, currentlty")
             
-            # just replace the lookup definition, and then recalculate everything
+            # just replace the lookup definition
             self.level_up_move_defs[new_event_def.learn_move.level] = new_event_def.learn_move
-            self._recalc()
         else:
-            if group_obj.event_definition.trainer_name is not None:
-                self.defeated_trainers.remove(group_obj.event_definition.trainer_name)
+            if event_group_obj.event_definition.trainer_name is not None:
+                self.defeated_trainers.remove(event_group_obj.event_definition.trainer_name)
             
-            self.event_folders[folder_idx].event_groups[group_idx].event_definition = new_event_def
-            self._recalc()
+            if new_event_def.trainer_name is not None:
+                self.defeated_trainers.add(new_event_def.trainer_name)
+            
+            event_group_obj.event_definition = new_event_def
 
-    def move_group(self, group_id, move_up):
-        # NOTE: can only move within a folder. To change folders, need to call a separate function
-        group_obj, folder_idx, group_idx = self._get_event_group_info(group_id)
-        if group_obj is None:
-            raise ValueError(f"No group found with group_id: {group_id}")
-
-        if move_up:
-            insert_idx = max(group_idx - 1, 0)
-        else:
-            insert_idx = min(group_idx + 1, len(self.event_folders[folder_idx].event_groups) - 1)
-        
-        self.event_folders[folder_idx].event_groups.remove(group_obj)
-        self.event_folders[folder_idx].event_groups.insert(insert_idx, group_obj)
         self._recalc()
 
-    def transfer_group(self, group_id, dest_folder_name):
-        cur_group, cur_folder_idx, cur_group_idx = self._get_event_group_info(group_id)
-        if cur_group is None:
-            raise ValueError(f"Cannot find group for id: {group_id}")
-        
-        dest_folder_idx = self.folder_idx_lookup.get(dest_folder_name)
-        if dest_folder_idx is None:
-            raise ValueError(f"Cannot find folder named: {dest_folder_name}")
-        
-        self.event_folders[cur_folder_idx].event_groups.remove(cur_group)
-        self.event_folders[dest_folder_idx].event_groups.append(cur_group)
-        self._recalc()
+    def rename_event_folder(self, cur_name, new_name):
+        folder_obj = self.folder_lookup[cur_name]
+        folder_obj.name = new_name
+        del self.folder_lookup[cur_name]
+        self.folder_lookup[new_name] = folder_obj
     
-    def _reindex_folders(self):
-        self.folder_idx_lookup = {x.name: idx for idx, x in enumerate(self.event_folders)}
-
-    def add_folder(self, folder_name, insert_before=None):
-        new_folder = route_events.EventFolder(folder_name)
-        if insert_before is None:
-            self.event_folders.append(new_folder)
-        else:
-            _, folder_idx = self._get_event_folder_info(insert_before)
-            self.event_folders.insert(folder_idx, new_folder)
-
-        self._reindex_folders()
-        self._recalc()
-
-    def rename_folder(self, cur_name, new_name):
-        self.event_folders[self.folder_idx_lookup[cur_name]].name = new_name
-        self.folder_idx_lookup[new_name] = self.folder_idx_lookup[cur_name]
-        del self.folder_idx_lookup[cur_name]
-
-    def move_folder(self, group_id, move_up):
-        # NOTE: can only move within a folder. To change folders, need to call a separate function
-        folder_obj, folder_idx = self._get_event_folder_info(group_id)
-        if folder_obj is None:
-            raise ValueError(f"No folder found with group_id: {group_id}")
-
-        if move_up:
-            insert_idx = max(folder_idx - 1, 0)
-        else:
-            insert_idx = min(folder_idx + 1, len(self.event_folders) - 1)
-        
-        self.event_folders.remove(folder_obj)
-        self.event_folders.insert(insert_idx, folder_obj)
-        self._reindex_folders()
-        self._recalc()
-    
-    def delete_folder(self, group_id):
-        folder_obj, folder_idx = self._get_event_folder_info(group_id)
-        if folder_obj is None:
-            raise ValueError(f"No folder found with group_id: {group_id}")
-        
-        if len(folder_obj.event_groups) != 0:
-            raise ValueError(f"Refusing to delete non-empty folder: {folder_obj.name}")
-        
-        del self.event_folders[folder_idx]
-        del self.folder_idx_lookup[folder_obj.name]
-        # should never be necessary since the folder is empty, but recalc just for safety
-        self._recalc()
-
     def save(self, name):
         if not os.path.exists(const.SAVED_ROUTES_DIR):
             os.mkdir(const.SAVED_ROUTES_DIR)
@@ -291,48 +212,62 @@ class Router:
         final_path = os.path.join(const.SAVED_ROUTES_DIR, f"{name}.json")
         io_utils.backup_file_if_exists(final_path)
 
-        flat_event_list = []
-        for cur_folder in self.event_folders:
-            flat_event_list.extend(cur_folder.serialize())
-
         with open(final_path, 'w') as f:
             json.dump({
                 const.NAME_KEY: self.init_route_state.solo_pkmn.name,
                 const.TASK_LEARN_MOVE_LEVELUP: [x.serialize() for x in self.level_up_move_defs.values()],
-                const.EVENTS: flat_event_list
+                const.EVENTS: [self.root_folder.serialize()]
             }, f, indent=4)
     
-    def load_min_battle(self, name):
-        final_path = os.path.join(const.MIN_BATTLES_DIR, f"{name}.json")
-
-        with open(final_path, 'r') as f:
-            result = json.load(f)
-        
-        # kinda weird, but just reset to same mon to trigger cleanup in helper function
-        self._reset_events()
-        self.set_solo_pkmn(self.init_route_state.solo_pkmn.name)
-        for cur_event in result[const.EVENTS]:
-            temp = route_events.EventDefinition.deserialize(cur_event)
-            if temp.original_folder_name not in self.folder_idx_lookup:
-                self.add_folder(temp.original_folder_name)
-            self.add_event(temp)
-    
-    def load(self, name):
-        final_path = os.path.join(const.SAVED_ROUTES_DIR, f"{name}.json")
-
-        with open(final_path, 'r') as f:
-            result = json.load(f)
-        
-        raw_level_up_moves = result.get(const.TASK_LEARN_MOVE_LEVELUP)
-        if raw_level_up_moves is not None:
-            level_up_moves = [route_events.LearnMoveEventDefinition.deserialize(x) for x in raw_level_up_moves]
+    def load(self, name, min_battles=False):
+        if min_battles:
+            final_path = os.path.join(const.MIN_BATTLES_DIR, f"{name}.json")
         else:
-            level_up_moves = None
+            final_path = os.path.join(const.SAVED_ROUTES_DIR, f"{name}.json")
+
+        with open(final_path, 'r') as f:
+            result = json.load(f)
         
         self._reset_events()
-        self.set_solo_pkmn(result[const.NAME_KEY], level_up_moves=level_up_moves)
-        for cur_event in result[const.EVENTS]:
-            temp = route_events.EventDefinition.deserialize(cur_event)
-            if temp.original_folder_name not in self.folder_idx_lookup:
-                self.add_folder(temp.original_folder_name)
-            self.add_event(temp)
+
+        if min_battles:
+            self.set_solo_pkmn(self.init_route_state.solo_pkmn.name)
+        else:
+            raw_level_up_moves = result.get(const.TASK_LEARN_MOVE_LEVELUP)
+            if raw_level_up_moves is not None:
+                level_up_moves = [route_events.LearnMoveEventDefinition.deserialize(x) for x in raw_level_up_moves]
+            else:
+                level_up_moves = None
+            self.set_solo_pkmn(result[const.NAME_KEY], level_up_moves=level_up_moves)
+        
+        load_start = time.time()
+        if len(result[const.EVENTS]) > 0:
+            # check contents of first event to check for legacy loading
+            if result[const.EVENTS][0][const.EVENT_FOLDER_NAME] == const.ROOT_FOLDER_NAME:
+                # standard loading
+                self._load_events_recursive(self.root_folder, result[const.EVENTS][0])
+            else:
+                # legacy loading
+                for cur_event in result[const.EVENTS]:
+                    temp = route_events.EventDefinition.deserialize(cur_event)
+                    if temp.original_folder_name not in self.folder_lookup:
+                        self.add_event_object(new_folder_name=temp.original_folder_name, dest_folder_name=const.ROOT_FOLDER_NAME)
+                    self.add_event_object(event_def=temp, dest_folder_name=temp.original_folder_name)
+
+        self._recalc()
+        print(f"Load time: {time.time() - load_start}")
+        
+    
+    def _load_events_recursive(self, parent_folder:route_events.EventFolder, json_obj):
+        for event_json in json_obj[const.EVENTS]:
+            if const.EVENT_FOLDER_NAME in event_json:
+                self.add_event_object(new_folder_name=event_json[const.EVENT_FOLDER_NAME], dest_folder_name=parent_folder.name, recalc=False)
+                inner_parent = self.folder_lookup[event_json[const.EVENT_FOLDER_NAME]]
+                self._load_events_recursive(inner_parent, event_json)
+            else:
+                self.add_event_object(
+                    event_def=route_events.EventDefinition.deserialize(event_json),
+                    dest_folder_name=parent_folder.name,
+                    recalc=False
+                )
+                

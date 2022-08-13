@@ -68,7 +68,7 @@ def generate_route_file(route: Router, route_path):
     result = []
 
     for cur_folder in route.event_folders:
-        for cur_group in cur_folder.event_groups:
+        for cur_group in cur_folder.children:
             cur_event:EventDefinition = cur_group.event_definition
             if cur_event.trainer_name:
                 result.append(f"// {cur_event.trainer_name}")

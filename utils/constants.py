@@ -252,6 +252,8 @@ class Constants:
         self.STATE_SUMMARY_LABEL = "State Summary"
         self.BADGE_BOOST_LABEL = "Badge Boost Calculator"
 
+        self.ROOT_FOLDER_NAME = "ROOT"
+
 
 
 const = Constants()
