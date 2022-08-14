@@ -316,14 +316,16 @@ class SimpleButton(tk.Button):
         self["state"] = "disabled"
 
 
-def fixed_map(option, style):
-    # Fix for setting text colour for Tkinter 8.6.9
-    # From: https://core.tcl.tk/tk/info/509cafafae
-    #
-    # Returns the style map for 'option' with any styles starting with
-    # ('!disabled', '!selected', ...) filtered out.
+class Popup(tk.Toplevel):
+    def __init__(self, main_window, *args, **kwargs):
+        tk.Toplevel.__init__(self, main_window, *args, **kwargs)
+        self._main_window = main_window
+        # TODO: if we want the little flash thingy, try this instead of disabling: https://stackoverflow.com/a/28541762
+        self._main_window.attributes('-disabled', True)
 
-    # style.map() returns an empty list for missing options, so this
-    # should be future-safe.
-    return [elm for elm in style.map('Treeview', query_opt=option) if
-      elm[:2] != ('!disabled', '!selected')]
+        self.focus_set()
+        self.protocol("WM_DELETE_WINDOW", self.close)
+
+    def close(self, event=None):
+        self._main_window.attributes('-disabled', False)
+        self.destroy()

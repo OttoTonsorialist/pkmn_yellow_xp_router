@@ -15,20 +15,31 @@ import pkmn.router as router
 from utils import route_one_utils
 
 
-class Main(object):
-    def __init__(self, root):
+class Main(tk.Tk):
+    def __init__(self):
+        super().__init__()
         self._data = router.Router()
 
-        self._root = root
-        self._root.minsize(2000, 1200)
-        self._root.title("Pokemon Yellow XP Router")
+        self.minsize(2000, 1200)
+        self.title("Pokemon Yellow XP Router")
 
         # fix tkinter bug
         style = ttk.Style()
         style.map("Treeview", foreground=fixed_map("foreground", style), background=fixed_map("background", style))
 
+        # menu bar
+        self.top_menu_bar = tk.Menu(self)
+        self.config(menu=self.top_menu_bar)
+
+        self.file_menu = tk.Menu(self.top_menu_bar, tearoff=0)
+        self.file_menu.add_command(label="New Route")
+        self.file_menu.add_command(label="Load Route")
+        self.file_menu.add_command(label="Save Route")
+
+        self.top_menu_bar.add_cascade(label="File", menu=self.file_menu)
+
         # main container for everything to sit in... might be unnecessary?
-        self.primary_window = tk.Frame(self._root)
+        self.primary_window = tk.Frame(self)
         self.primary_window.pack(fill=tk.BOTH, expand=True)
 
         self.top_controls = tk.Frame(self.primary_window)
@@ -165,9 +176,9 @@ class Main(object):
         self.info_panel.grid_columnconfigure(1, weight=1, uniform="test")
 
         # keybindings
-        self._root.bind('<Control-r>', self.event_list.refresh)
-        self._root.bind("<<TreeviewSelect>>", self.show_event_details)
-        self._root.bind(const.ROUTE_LIST_REFRESH_EVENT, self.update_run_status)
+        self.bind('<Control-r>', self.event_list.refresh)
+        self.bind("<<TreeviewSelect>>", self.show_event_details)
+        self.bind(const.ROUTE_LIST_REFRESH_EVENT, self.update_run_status)
 
         self.refresh_existing_routes()
         self.event_list.refresh()
@@ -180,7 +191,7 @@ class Main(object):
             self.run_status_label.config(text="Run Status: Valid", bg=const.VALID_COLOR)
     
     def run(self):
-        self._root.mainloop()
+        self.mainloop()
 
     def _pkmn_filter_callback(self, *args, **kwargs):
         self.solo_selector.new_values(pkmn_db.pkmn_db.get_filtered_names(filter_val=self.pkmn_filter.get().strip()))
@@ -355,7 +366,7 @@ class Main(object):
         else:
             self._data.rename_event_folder(prev_folder_name, new_folder_name)
 
-        self.new_event_window.destroy()
+        self.new_event_window.close()
         self.new_event_window = None
         self.event_list.refresh()
 
@@ -367,12 +378,11 @@ class Main(object):
                 event_group_id,
                 list(self._data.folder_lookup.keys()),
                 self._data.get_event_obj(event_group_id).parent.name,
-                self._root
             )
     
     def transfer_event(self, event_group_id, new_folder_name):
         self._data.transfer_event_object(event_group_id, new_folder_name)
-        self.new_event_window.destroy()
+        self.new_event_window.close()
         self.new_event_window = None
         self.event_list.refresh()
 
@@ -389,7 +399,7 @@ class Main(object):
             else:
                 state = event_obj.init_state
 
-            self.new_event_window = NewEventWindow(self, self._data.defeated_trainers, state, self._root)
+            self.new_event_window = NewEventWindow(self, self._data.defeated_trainers, state)
 
     def open_new_folder_window(self, *args, **kwargs):
         if self._is_active_window():
@@ -401,7 +411,6 @@ class Main(object):
                 self,
                 list(self._data.folder_lookup.keys()),
                 existing_folder_name,
-                self._root
             )
 
     def combined_open_new_event_window(self, *args, **kwargs):
@@ -418,7 +427,6 @@ class Main(object):
                     self,
                     list(self._data.folder_lookup.keys()),
                     existing_folder_name,
-                    self._root
                 )
             else:
                 if event_obj is None:
@@ -426,20 +434,20 @@ class Main(object):
                 else:
                     state = event_obj.init_state
 
-                self.new_event_window = NewEventWindow(self, self._data.defeated_trainers, state, self._root)
+                self.new_event_window = NewEventWindow(self, self._data.defeated_trainers, state)
 
     def open_export_window(self, event=None):
         if self._is_active_window():
-            self.new_event_window = RouteOneWindow(self, self.route_name.get(), self._root)
+            self.new_event_window = RouteOneWindow(self, self.route_name.get())
 
     def cancel_new_event(self, event=None):
         if self.new_event_window is not None:
-            self.new_event_window.destroy()
+            self.new_event_window.close()
             self.new_event_window = None
     
     def new_event(self, event_def):
         self._data.add_event_object(event_def=event_def, insert_before=self.event_list.get_selected_event_id())
-        self.new_event_window.destroy()
+        self.new_event_window.close()
         self.new_event_window = None
         self.event_list.refresh()
     
@@ -450,13 +458,12 @@ class Main(object):
         return True
 
 
-class NewFolderWindow(tk.Toplevel):
+class NewFolderWindow(custom_tkinter.Popup):
     def __init__(self, main_window: Main, cur_folder_names, prev_folder_name, *args, **kwargs):
-        super().__init__(*args, **kwargs)
+        super().__init__(main_window, *args, **kwargs)
         if main_window is None:
             raise ValueError('Must set main_window when creating NewFolderWindow')
         
-        self._main_window = main_window
         self._cur_folder_names = cur_folder_names
         self._prev_folder_name = prev_folder_name
 
@@ -490,13 +497,12 @@ class NewFolderWindow(tk.Toplevel):
         self._main_window.finalize_new_folder(self._folder_name.get(), prev_folder_name=self._prev_folder_name)
 
 
-class TransferEventWindow(tk.Toplevel):
+class TransferEventWindow(custom_tkinter.Popup):
     def __init__(self, main_window: Main, cur_event_id, cur_folder_names, prev_folder_name, *args, **kwargs):
-        super().__init__(*args, **kwargs)
+        super().__init__(main_window, *args, **kwargs)
         if main_window is None:
             raise ValueError('Must set main_window when creating TransferEventWindow')
         
-        self._main_window = main_window
         self._cur_event_id = cur_event_id
         self._cur_folder_names = cur_folder_names
         self._prev_folder_name = prev_folder_name
@@ -518,14 +524,11 @@ class TransferEventWindow(tk.Toplevel):
         self._main_window.transfer_event(self._cur_event_id, self._folder_name.get())
 
 
-class NewEventWindow(tk.Toplevel):
+class NewEventWindow(custom_tkinter.Popup):
     def __init__(self, main_window: Main, cur_defeated_trainers, cur_state, *args, **kwargs):
-        super().__init__(*args, **kwargs, width=700, height=600)
-        if main_window is None:
-            raise ValueError('Must set main_window when creating RoutingWindow')
+        super().__init__(main_window, *args, **kwargs, width=700, height=600)
 
         self.title("Create New Event")
-        self._main_window = main_window
         self._cur_defeated_trainers = cur_defeated_trainers
         self._cur_state = cur_state
 
@@ -582,13 +585,10 @@ class NewEventWindow(tk.Toplevel):
         self._main_window.new_event(self._cur_editor.get_event())
 
 
-class RouteOneWindow(tk.Toplevel):
+class RouteOneWindow(custom_tkinter.Popup):
     def __init__(self, main_window: Main, cur_route_name, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        if main_window is None:
-            raise ValueError('Must set main_window when creating TransferEventWindow')
+        super().__init__(main_window, *args, **kwargs)
         
-        self._main_window = main_window
         self._cur_route_name = cur_route_name
 
         # do the damn thing, zhu li
@@ -665,4 +665,4 @@ if __name__ == '__main__':
     if args.debug:
         const.DEBUG_MODE = True
 
-    Main(tk.Tk()).run()
+    Main().run()
