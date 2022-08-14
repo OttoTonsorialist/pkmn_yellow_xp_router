@@ -54,7 +54,7 @@ class PkmnDB:
         filter_val = filter_val.lower()
         result = [x for x in self._data.keys() if filter_val in x.lower()]
         if not result:
-            result = [f"{const.NO_POKEMON} match filter: '{filter_val}'"]
+            result = [f"No Match: '{filter_val}'"]
         
         return result
 

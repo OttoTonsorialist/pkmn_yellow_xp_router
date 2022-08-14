@@ -1,6 +1,7 @@
 import tkinter as tk
 
 from gui import custom_tkinter
+from gui.pkmn_components import EnemyPkmnTeam
 from utils.constants import const
 import pkmn.pkmn_db as pkmn_db
 from pkmn.route_events import EventDefinition, InventoryEventDefinition, LearnMoveEventDefinition, RareCandyEventDefinition, VitaminEventDefinition, WildPkmnEventDefinition
@@ -58,7 +59,7 @@ class TrainerFightEditor(EventEditorBase):
 
         self._trainer_names_label = tk.Label(self, text="Trainer Name:")
         self._trainer_names = custom_tkinter.SimpleOptionMenu(self, pkmn_db.trainer_db.get_valid_trainers(), callback=self._trainer_name_callback)
-        self._trainer_team = custom_tkinter.EnemyPkmnTeam(self)
+        self._trainer_team = EnemyPkmnTeam(self)
 
         self._trainers_by_class_label.grid(row=self._cur_row, column=0)
         self._trainers_by_class.grid(row=self._cur_row, column=1)

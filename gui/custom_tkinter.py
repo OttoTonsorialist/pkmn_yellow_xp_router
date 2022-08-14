@@ -316,6 +316,29 @@ class SimpleButton(tk.Button):
         self["state"] = "disabled"
 
 
+class AutoClearingLabel(tk.Label):
+    def __init__(self, *args, clear_timeout=3000, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.clear_timeout = clear_timeout
+        self.latest_clear_id = 0
+    
+    def set_message(self, value):
+        self.config(text=value)
+        self.latest_clear_id += 1
+        self.after(self.clear_timeout, self._clear_id_curry(self.latest_clear_id))
+    
+    def _clear_id_curry(self, id_to_clear):
+        def inner(*args, **kwargs):
+            self._clear(id_to_clear)
+        return inner
+
+    def _clear(self, id_to_clear):
+        if id_to_clear != self.latest_clear_id:
+            return
+
+        self.config(text="")
+
+
 class Popup(tk.Toplevel):
     def __init__(self, main_window, *args, **kwargs):
         tk.Toplevel.__init__(self, main_window, *args, **kwargs)

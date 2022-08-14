@@ -223,6 +223,14 @@ class Router:
                 const.EVENTS: [self.root_folder.serialize()]
             }, f, indent=4)
     
+    def new_route(self, solo_mon, min_battles_name=None):
+        self.set_solo_pkmn(solo_mon)
+
+        if min_battles_name is None:
+            self._reset_events()
+        else:
+            self.load(min_battles_name, min_battles=True)
+    
     def load(self, name, min_battles=False):
         if min_battles:
             final_path = os.path.join(const.MIN_BATTLES_DIR, f"{name}.json")

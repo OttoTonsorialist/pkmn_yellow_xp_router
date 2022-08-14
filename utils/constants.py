@@ -257,6 +257,8 @@ class Constants:
         self.ROOT_FOLDER_NAME = "ROOT"
         self.ROUTE_LIST_REFRESH_EVENT = "<<RouteListRefresh>>"
 
+        self.EMPTY_ROUTE_NAME = "Empty Route"
+
 
 
 const = Constants()

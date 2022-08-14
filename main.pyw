@@ -1,4 +1,5 @@
 import argparse
+from ast import Delete
 import subprocess
 import os
 
@@ -32,98 +33,87 @@ class Main(tk.Tk):
         self.config(menu=self.top_menu_bar)
 
         self.file_menu = tk.Menu(self.top_menu_bar, tearoff=0)
-        self.file_menu.add_command(label="New Route")
-        self.file_menu.add_command(label="Load Route")
-        self.file_menu.add_command(label="Save Route")
+        self.file_menu.add_command(label="New Route       (Ctrl+N)", command=self.open_new_route_window)
+        self.file_menu.add_command(label="Load Route      (Ctrl+O)", command=self.open_load_route_window)
+        self.file_menu.add_command(label="Save Route       (Ctrl+S)", command=self.save_route)
+
+        self.export_menu = tk.Menu(self.top_menu_bar, tearoff=0)
+        self.export_menu.add_command(label="Export           (Ctrl+E)", command=self.open_export_window)
+        self.export_menu.add_command(label="Quick Run    (Ctrl+R)", command=self.just_export_and_run)
 
         self.top_menu_bar.add_cascade(label="File", menu=self.file_menu)
+        self.top_menu_bar.add_cascade(label="RouteOne", menu=self.export_menu)
 
         # main container for everything to sit in... might be unnecessary?
         self.primary_window = tk.Frame(self)
         self.primary_window.pack(fill=tk.BOTH, expand=True)
 
-        self.top_controls = tk.Frame(self.primary_window)
-        self.top_controls.pack(fill=tk.BOTH)
-        self.top_controls.pack_propagate(False)
+        # create top row, which goes across the whole screen
+        self.top_row = tk.Frame(self.primary_window)
+        self.top_row.pack(fill=tk.X)
+        self.top_row.pack_propagate(False)
 
-        self.top_left_controls = tk.Frame(self.top_controls)
-        self.top_left_controls.grid(row=0, column=0, sticky=tk.NSEW)
-        self.run_status_label = tk.Label(self.top_left_controls, text="Run Status: Valid", background=const.VALID_COLOR, anchor=tk.W, padx=10, pady=10)
+        self.run_status_label = tk.Label(self.top_row, text="Run Status: Valid", background=const.VALID_COLOR, anchor=tk.W, padx=10, pady=10)
         self.run_status_label.grid(row=0, column=0, sticky=tk.W)
 
-        self.group_controls = tk.Frame(self.top_left_controls)
-        self.group_controls.grid(row=0, column=1)
-        self.top_left_controls.columnconfigure(1, weight=1)
-        self.top_left_controls.rowconfigure(0, weight=1)
+        self.route_name_label = tk.Label(self.top_row, text="Route Name: ")
+        self.route_name_label.grid(row=0, column=1)
 
-        self.move_group_up_button = custom_tkinter.SimpleButton(self.group_controls, text='Move Event Up', command=self.move_group_up, width=15)
-        self.move_group_up_button.grid(row=0, column=0, padx=5, pady=1)
-        self.move_group_down_button = custom_tkinter.SimpleButton(self.group_controls, text='Move Event Down', command=self.move_group_down, width=15)
-        self.move_group_down_button.grid(row=1, column=0, padx=5, pady=1)
-
-        self.new_event_button = custom_tkinter.SimpleButton(self.group_controls, text='New Event', command=self.open_new_event_window, width=15)
-        self.new_event_button.grid(row=0, column=1, padx=5, pady=1)
-        self.delete_event_button = custom_tkinter.SimpleButton(self.group_controls, text='Delete Event', command=self.delete_group, width=15)
-        self.delete_event_button.grid(row=1, column=1, padx=5, pady=1)
-
-        self.transfer_event_button = custom_tkinter.SimpleButton(self.group_controls, text='Transfer Event', command=self.open_transfer_event_window, width=15)
-        self.transfer_event_button.grid(row=0, column=2, padx=5, pady=1)
-        self.rename_folder_button = custom_tkinter.SimpleButton(self.group_controls, text='Rename Folder', command=self.rename_folder, width=15)
-        self.rename_folder_button.grid(row=1, column=2, padx=5, pady=1)
-
-        self.new_folder_button = custom_tkinter.SimpleButton(self.group_controls, text='New Folder', command=self.open_new_folder_window, width=15)
-        self.new_folder_button.grid(row=0, column=3, padx=5, pady=1)
-
-        self.top_right_controls = tk.Frame(self.top_controls)
-        self.top_right_controls.grid(row=0, column=1, sticky=tk.E)
-        self.top_controls.columnconfigure(0, weight=1)
-        self.top_controls.columnconfigure(1, weight=1)
-
-        self.solo_selector_label = tk.Label(self.top_right_controls, text="Solo Pokemon:")
-        self.solo_selector_label.grid(row=0, column=0)
-        self.solo_selector = custom_tkinter.SimpleOptionMenu(self.top_right_controls, pkmn_db.pkmn_db.get_all_names(), callback=self.new_solo_pkmn)
-        self.solo_selector.config(width=20)
-        self.solo_selector.grid(row=0, column=1)
-        self.pkmn_filter_label = tk.Label(self.top_right_controls, text="Solo Pokemon Filter:")
-        self.pkmn_filter_label.grid(row=0, column=2)
-        self.pkmn_filter = custom_tkinter.SimpleEntry(self.top_right_controls, callback=self._pkmn_filter_callback)
-        self.pkmn_filter.config(width=30)
-        self.pkmn_filter.grid(row=0, column=3)
-
-        self.min_battles_selector_label = tk.Label(self.top_right_controls, text="Reset to Minimum Battles:")
-        self.min_battles_selector_label.grid(row=0, column=4)
-        self.min_battles_selector = custom_tkinter.SimpleOptionMenu(self.top_right_controls, pkmn_db.min_battles_db.data, callback=self.reset_to_min_battles)
-        self.min_battles_selector.grid(row=0, column=5)
-        self.route_export_button = tk.Button(self.top_right_controls, text="Export to RouteOne", command=self.open_export_window)
-        self.route_export_button.grid(row=1, column=0)
-        self.route_save_button = tk.Button(self.top_right_controls, text="Save Route", command=self.save_route)
-        self.route_save_button.grid(row=1, column=1)
-        self.route_name_label = tk.Label(self.top_right_controls, text="Route Name")
-        self.route_name_label.grid(row=1, column=2)
-        self.route_name = tk.Entry(self.top_right_controls)
-        self.route_name.grid(row=1, column=3)
+        self.route_name = tk.Entry(self.top_row)
+        self.route_name.grid(row=0, column=2)
         self.route_name.config(width=30)
-        self.previous_route_label = tk.Label(self.top_right_controls, text="Previous Routes")
-        self.previous_route_label.grid(row=1, column=4)
-        self.previous_route_names = custom_tkinter.SimpleOptionMenu(self.top_right_controls, ["N/A"], callback=self.update_route_name)
-        self.previous_route_names.grid(row=1, column=5)
-        self.previous_route_names.config(width=25)
 
+        self.message_label = custom_tkinter.AutoClearingLabel(self.top_row, width=100, justify=tk.LEFT, anchor=tk.W)
+        self.message_label.grid(row=0, column=3, sticky=tk.E)
+
+        # create container for split columns
         self.info_panel = tk.Frame(self.primary_window)
         self.info_panel.pack(expand=True, fill=tk.BOTH)
 
+        # left panel for controls and event list
         self.left_info_panel = tk.Frame(self.info_panel)
         self.left_info_panel.grid(row=0, column=0, sticky="nsew")
 
-        # create the main thingy
+        self.group_controls = tk.Frame(self.left_info_panel)
+        self.group_controls.pack(fill=tk.X, anchor=tk.CENTER)
+
+        self.padding_left = tk.Frame(self.group_controls)
+        self.padding_left.grid(row=0, column=0)
+        
+        self.move_group_up_button = custom_tkinter.SimpleButton(self.group_controls, text='Move Event Up', command=self.move_group_up, width=15)
+        self.move_group_up_button.grid(row=0, column=1, padx=5, pady=1)
+        self.move_group_down_button = custom_tkinter.SimpleButton(self.group_controls, text='Move Event Down', command=self.move_group_down, width=15)
+        self.move_group_down_button.grid(row=1, column=1, padx=5, pady=1)
+
+        self.new_event_button = custom_tkinter.SimpleButton(self.group_controls, text='New Event', command=self.open_new_event_window, width=15)
+        self.new_event_button.grid(row=0, column=2, padx=5, pady=1)
+        self.delete_event_button = custom_tkinter.SimpleButton(self.group_controls, text='Delete Event', command=self.delete_group, width=15)
+        self.delete_event_button.grid(row=1, column=2, padx=5, pady=1)
+
+        self.transfer_event_button = custom_tkinter.SimpleButton(self.group_controls, text='Transfer Event', command=self.open_transfer_event_window, width=15)
+        self.transfer_event_button.grid(row=0, column=3, padx=5, pady=1)
+        self.rename_folder_button = custom_tkinter.SimpleButton(self.group_controls, text='Rename Folder', command=self.rename_folder, width=15)
+        self.rename_folder_button.grid(row=1, column=3, padx=5, pady=1)
+
+        self.new_folder_button = custom_tkinter.SimpleButton(self.group_controls, text='New Folder', command=self.open_new_folder_window, width=15)
+        self.new_folder_button.grid(row=0, column=4, padx=5, pady=1)
+
+        self.padding_right = tk.Frame(self.group_controls)
+        self.padding_right.grid(row=0, column=10)
+
+        self.group_controls.columnconfigure(0, weight=1)
+        self.group_controls.columnconfigure(10, weight=1)
+
         self.event_list = pkmn_components.RouteList(self._data, self.left_info_panel)
         self.event_list.pack(padx=10, pady=10, fill=tk.BOTH, expand=True, side="left")
         self.scroll_bar = tk.Scrollbar(self.left_info_panel, orient="vertical", command=self.event_list.yview)
         self.scroll_bar.pack(side="right", fill=tk.BOTH)
         self.event_list.configure(yscrollcommand=self.scroll_bar.set)
 
-        self.right_info_panel = tk.Frame(self.info_panel)
+        # right panel for event details
+        self.right_info_panel = tk.Frame(self.info_panel, width=850)
         self.right_info_panel.grid(row=0, column=1, sticky="nsew")
+        self.right_info_panel.pack_propagate(0)
 
         self.stat_info_label = tk.Label(self.right_info_panel, text="Stats with * are calculated with a badge boost")
         self.stat_info_label.config(bg="white")
@@ -173,14 +163,17 @@ class Main(tk.Tk):
         self.info_panel.grid_rowconfigure(0, weight=1)
         # these uniform values don't have to be a specific value, they just have to match
         self.info_panel.grid_columnconfigure(0, weight=1, uniform="test")
-        self.info_panel.grid_columnconfigure(1, weight=1, uniform="test")
+        #self.info_panel.grid_columnconfigure(1, weight=1, uniform="test")
 
         # keybindings
-        self.bind('<Control-r>', self.event_list.refresh)
+        self.bind('<Control-n>', self.open_new_route_window)
+        self.bind('<Control-o>', self.open_load_route_window)
+        self.bind('<Control-s>', self.save_route)
+        self.bind('<Control-e>', self.open_export_window)
+        self.bind('<Control-r>', self.just_export_and_run)
         self.bind("<<TreeviewSelect>>", self.show_event_details)
         self.bind(const.ROUTE_LIST_REFRESH_EVENT, self.update_run_status)
 
-        self.refresh_existing_routes()
         self.event_list.refresh()
         self.new_event_window = None
 
@@ -193,9 +186,6 @@ class Main(tk.Tk):
     def run(self):
         self.mainloop()
 
-    def _pkmn_filter_callback(self, *args, **kwargs):
-        self.solo_selector.new_values(pkmn_db.pkmn_db.get_filtered_names(filter_val=self.pkmn_filter.get().strip()))
-    
     def _pre_state_display_mode_callback(self, *args, **kwargs):
         if self.pre_state_selector.get() == const.BADGE_BOOST_LABEL:
             self.state_pre_viewer.grid_forget()
@@ -205,25 +195,10 @@ class Main(tk.Tk):
             self.state_pre_viewer.grid(column=1, row=1, padx=10, pady=10, columnspan=2)
     
     def save_route(self, *args, **kwargs):
-        self._data.save(self.route_name.get())
-        self.refresh_existing_routes()
+        route_name = self.route_name.get()
+        self._data.save(route_name)
+        self.message_label.set_message(f"Successfully saved route: {route_name}")
     
-    def update_route_name(self, *args, **kwargs):
-        self.route_name.delete(0, tk.END)
-        self.route_name.insert(0, self.previous_route_names.get())
-        self.load_route()
-
-    def refresh_existing_routes(self, *args, **kwargs):
-        loaded_routes = []
-        if os.path.exists(const.SAVED_ROUTES_DIR):
-            for fragment in os.listdir(const.SAVED_ROUTES_DIR):
-                name, ext = os.path.splitext(fragment)
-                if ext != ".json":
-                    continue
-                loaded_routes.append(name)
-        
-        self.previous_route_names.new_values(loaded_routes, default_val=self.route_name.get())
-
     def _show_event_details_none(self):
         self.event_details_button.pack_forget()
         self.trainer_notes.pack_forget()
@@ -335,18 +310,32 @@ class Main(tk.Tk):
         self.event_list.refresh()
         self.show_event_details()
     
-    def load_route(self, *args, **kwargs):
-        if self.route_name.get():
-            self._data.load(self.route_name.get())
-            self.event_list.refresh()
-
-    def new_solo_pkmn(self, *args, **kwargs):
-        self._data.set_solo_pkmn(self.solo_selector.get())
+    def open_new_route_window(self, *args, **kwargs):
+        if self._is_active_window():
+            self.new_event_window = NewRouteWindow(self)
+    
+    def create_new_route(self, solo_mon, min_battles_name):
+        if min_battles_name == const.EMPTY_ROUTE_NAME:
+            min_battles_name = None
+        
+        self.new_event_window.close()
+        self.new_event_window = None
+        self._data.new_route(solo_mon, min_battles_name)
         self.event_list.refresh()
+        self.show_event_details()
+    
+    def open_load_route_window(self, *args, **kwargs):
+        if self._is_active_window():
+            self.new_event_window = LoadRouteWindow(self)
 
-    def reset_to_min_battles(self, *args, **kwargs):
-        self._data.load(self.min_battles_selector.get(), min_battles=True)
+    def load_route(self, route_to_load):
+        self.new_event_window.close()
+        self.new_event_window = None
+        self._data.load(route_to_load)
+        self.route_name.delete(0, tk.END)
+        self.route_name.insert(0, route_to_load)
         self.event_list.refresh()
+        self.show_event_details()
 
     def move_group_up(self, event=None):
         self._data.move_event_object(self.event_list.get_selected_event_id(), True)
@@ -435,6 +424,23 @@ class Main(tk.Tk):
                     state = event_obj.init_state
 
                 self.new_event_window = NewEventWindow(self, self._data.defeated_trainers, state)
+    
+    def just_export_and_run(self, *args, **kwargs):
+        try:
+            if self._data.init_route_state is None:
+                self.message_label.set_message(f"Cannot export when no route is loaded")
+
+            jar_path = config.get_route_one_path()
+            if not jar_path:
+                config_path, _, _ = route_one_utils.export_to_route_one(self._data, self.route_name.get())
+                self.message_label.set_message(f"Could not run RouteOne, jar path not set. Exported RouteOne files: {config_path}")
+            else:
+                config_path, _, out_path = route_one_utils.export_to_route_one(self._data, self.route_name.get())
+                result = route_one_utils.run_route_one(jar_path, config_path)
+                if not result:
+                    self.message_label.set_message(f"Ran RouteOne successfully. Result file: {out_path}")
+        except Exception as e:
+            self.message_label.set_message(f"Exception attempting to export and run: {type(e)}: {e}")
 
     def open_export_window(self, event=None):
         if self._is_active_window():
@@ -458,6 +464,88 @@ class Main(tk.Tk):
         return True
 
 
+class NewRouteWindow(custom_tkinter.Popup):
+    def __init__(self, main_window: Main, *args, **kwargs):
+        super().__init__(main_window, *args, **kwargs, width=400)
+
+        self.controls_frame = tk.Frame(self)
+        self.controls_frame.pack()
+        self.padx = 5
+        self.pady = 5
+
+        self.solo_selector_label = tk.Label(self.controls_frame, text="Solo Pokemon:")
+        self.solo_selector_label.grid(row=0, column=0, padx=self.padx, pady=self.pady)
+        self.solo_selector = custom_tkinter.SimpleOptionMenu(self.controls_frame, pkmn_db.pkmn_db.get_all_names())
+        self.solo_selector.config(width=20)
+        self.solo_selector.grid(row=0, column=1, padx=self.padx, pady=self.pady)
+        self.pkmn_filter_label = tk.Label(self.controls_frame, text="Solo Pokemon Filter:")
+        self.pkmn_filter_label.grid(row=1, column=0, padx=self.padx, pady=self.pady)
+        self.pkmn_filter = custom_tkinter.SimpleEntry(self.controls_frame, callback=self._pkmn_filter_callback)
+        self.pkmn_filter.config(width=30)
+        self.pkmn_filter.grid(row=1, column=1, padx=self.padx, pady=self.pady)
+
+        self.min_battles_selector_label = tk.Label(self.controls_frame, text="Base Min-Battles Route:")
+        self.min_battles_selector_label.grid(row=2, column=0, padx=self.padx, pady=self.pady)
+        self.min_battles_selector = custom_tkinter.SimpleOptionMenu(self.controls_frame, [const.EMPTY_ROUTE_NAME] + pkmn_db.min_battles_db.data)
+        self.min_battles_selector.grid(row=2, column=1, padx=self.padx, pady=self.pady)
+
+        self.warning_label = tk.Label(self.controls_frame, text="WARNING: Any unsaved changes in your current route\nwill be lost when creating a new route!", justify=tk.CENTER, anchor=tk.CENTER)
+        self.warning_label.grid(row=3, column=0, columnspan=2, sticky=tk.EW, padx=self.padx, pady=self.pady)
+
+        self.create_button = custom_tkinter.SimpleButton(self.controls_frame, text="Create Route", command=self.create)
+        self.create_button.grid(row=5, column=0, padx=self.padx, pady=self.pady)
+        self.cancel_button = custom_tkinter.SimpleButton(self.controls_frame, text="Cancel", command=self._main_window.cancel_new_event)
+        self.cancel_button.grid(row=5, column=1, padx=self.padx, pady=self.pady)
+
+        self.bind('<Escape>', self._main_window.cancel_new_event)
+
+    def _pkmn_filter_callback(self, *args, **kwargs):
+        self.solo_selector.new_values(pkmn_db.pkmn_db.get_filtered_names(filter_val=self.pkmn_filter.get().strip()))
+    
+    def create(self, *args, **kwargs):
+        self._main_window.create_new_route(self.solo_selector.get(), self.min_battles_selector.get())
+
+
+class LoadRouteWindow(custom_tkinter.Popup):
+    def __init__(self, main_window: Main, *args, **kwargs):
+        super().__init__(main_window, *args, **kwargs)
+
+        self.controls_frame = tk.Frame(self)
+        self.controls_frame.pack()
+        self.padx = 5
+        self.pady = 5
+
+        self.previous_route_label = tk.Label(self.controls_frame, text="Existing Routes:")
+        self.previous_route_label.grid(row=0, column=0, padx=self.padx, pady=self.pady)
+        self.previous_route_names = custom_tkinter.SimpleOptionMenu(self.controls_frame, self.get_existing_routes())
+        self.previous_route_names.grid(row=0, column=1, padx=self.padx, pady=self.pady)
+        self.previous_route_names.config(width=25)
+
+        self.warning_label = tk.Label(self.controls_frame, text="WARNING: Any unsaved changes in your current route\nwill be lost when loading an existing route!")
+        self.warning_label.grid(row=1, column=0, columnspan=2, padx=self.padx, pady=self.pady)
+
+        self.create_button = custom_tkinter.SimpleButton(self.controls_frame, text="Load Route", command=self.load)
+        self.create_button.grid(row=2, column=0, padx=self.padx, pady=self.pady)
+        self.cancel_button = custom_tkinter.SimpleButton(self.controls_frame, text="Cancel", command=self._main_window.cancel_new_event)
+        self.cancel_button.grid(row=2, column=1, padx=self.padx, pady=self.pady)
+
+        self.bind('<Escape>', self._main_window.cancel_new_event)
+
+    def get_existing_routes(self):
+        loaded_routes = []
+        if os.path.exists(const.SAVED_ROUTES_DIR):
+            for fragment in os.listdir(const.SAVED_ROUTES_DIR):
+                name, ext = os.path.splitext(fragment)
+                if ext != ".json":
+                    continue
+                loaded_routes.append(name)
+
+        return loaded_routes
+    
+    def load(self, *args, **kwargs):
+        self._main_window.load_route(self.previous_route_names.get())
+
+
 class NewFolderWindow(custom_tkinter.Popup):
     def __init__(self, main_window: Main, cur_folder_names, prev_folder_name, *args, **kwargs):
         super().__init__(main_window, *args, **kwargs)
@@ -475,6 +563,8 @@ class NewFolderWindow(custom_tkinter.Popup):
         self._cancel_button = custom_tkinter.SimpleButton(self, text="Cancel", command=self._main_window.cancel_new_event)
         self._add_button.grid(row=1, column=0)
         self._cancel_button.grid(row=1, column=1)
+
+        self.bind('<Escape>', self._main_window.cancel_new_event)
 
         if prev_folder_name is None:
             self.title("Create New Folder")
@@ -519,6 +609,8 @@ class TransferEventWindow(custom_tkinter.Popup):
         self._cancel_button = custom_tkinter.SimpleButton(self, text="Cancel", command=self._main_window.cancel_new_event)
         self._add_button.grid(row=2, column=0, padx=10, pady=10)
         self._cancel_button.grid(row=2, column=1, padx=10, pady=10)
+
+        self.bind('<Escape>', self._main_window.cancel_new_event)
     
     def transfer(self, *args, **kwargs):
         self._main_window.transfer_event(self._cur_event_id, self._folder_name.get())
@@ -591,14 +683,18 @@ class RouteOneWindow(custom_tkinter.Popup):
         
         self._cur_route_name = cur_route_name
 
-        # do the damn thing, zhu li
-        self._final_config_path, self._final_route_path, self._final_output_path = \
-            route_one_utils.export_to_route_one(self._main_window._data, self._cur_route_name)
+        if self._main_window._data.init_route_state is None:
+            self._final_config_path = self._final_route_path = self._final_output_path = "Not Generated"
+            route_one_results_init = "Cannot export when no route is loaded"
+        else:
+            self._final_config_path, self._final_route_path, self._final_output_path = \
+                route_one_utils.export_to_route_one(self._main_window._data, self._cur_route_name)
+            route_one_results_init = ""
 
-        self._config_file_label = tk.Label(self, text=f"Config generated: {self._final_config_path}")
+        self._config_file_label = tk.Label(self, text=f"Config path: {self._final_config_path}")
         self._config_file_label.grid(row=0, column=0, columnspan=2, padx=10, pady=10)
 
-        self._route_file_label = tk.Label(self, text=f"Route generated: {self._final_route_path}")
+        self._route_file_label = tk.Label(self, text=f"Route path: {self._final_route_path}")
         self._route_file_label.grid(row=1, column=0, columnspan=2, padx=10, pady=10)
 
         self._route_jar_label = tk.Label(self, text=f"RouteOne jar Path: {config.get_route_one_path()}")
@@ -609,14 +705,24 @@ class RouteOneWindow(custom_tkinter.Popup):
         self._run_route_one_button = custom_tkinter.SimpleButton(self, text=f"Run RouteOne", command=self.run_route_one)
         self._run_route_one_button.grid(row=3, column=1, padx=10, pady=10)
 
-        self._route_one_results_label = tk.Label(self, text=f"")
-        self._route_one_results_label.grid(row=4, column=0, padx=10, pady=10)
+        # TODO: gross, ugly, wtv
+        if self._main_window._data.init_route_state is None:
+            self._run_route_one_button.disable()
+
+        self._route_one_results_label = tk.Label(self, text=route_one_results_init, justify=tk.CENTER)
+        self._route_one_results_label.grid(row=4, column=0, padx=10, pady=10, columnspan=2)
 
         self._close_button = custom_tkinter.SimpleButton(self, text="Close", command=self._main_window.cancel_new_event)
         self._close_button.grid(row=5, column=0, columnspan=2, padx=10, pady=10)
 
+        self.bind('<Escape>', self._main_window.cancel_new_event)
+
     def set_jar_path(self, *args, **kwargs):
-        jar_path = filedialog.askopenfile().name
+        file_result = filedialog.askopenfile()
+        if file_result is None:
+            self.lift()
+            return
+        jar_path = file_result.name
         self._route_jar_label.config(text=f"RouteOne jar Path: {jar_path}")
         config.set_route_one_path(jar_path)
         self.lift()
@@ -626,21 +732,14 @@ class RouteOneWindow(custom_tkinter.Popup):
             self._route_one_results_label.config(text="No RouteOne jar path set, cannot run...")
             return
         
-        try:
-            result = subprocess.run(
-                ["java", "-jar", config.get_route_one_path(), self._final_config_path],
-                stdout=subprocess.PIPE,
-                stderr=subprocess.STDOUT,
-                text=True
-            )
+        result = route_one_utils.run_route_one(config.get_route_one_path(), self._final_config_path)
+        if not result:
+            self._route_one_results_label.config(text=f"RouteOne finished: {self._final_output_path}\nDouble check top of output file for errors")
+        else:
+            self._route_one_results_label.config(text=f"Error encountered running RouteOne: {result}")
 
-            if result.returncode == 0:
-                self._route_one_results_label.config(text=f"RouteOne finished: {self._final_output_path}\nDouble check top of output file for errors")
-            else:
-                self._route_one_results_label.config(text=f"Error encountered: {result.stdout}")
-        except Exception as e:
-            self._route_one_results_label.config(text=f"Exception encountered: {type(e)}: {e}")
         self.lift()
+
 
 def fixed_map(option, style):
     # Fix for setting text colour for Tkinter 8.6.9
