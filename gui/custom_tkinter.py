@@ -19,14 +19,14 @@ class CheckboxTreeview(ttk.Treeview):
 
     ALL_STATES = (CHECKED_TAG, UNCHECKED_TAG, TRISTATE_TAG)
 
-    def __init__(self, root=None, checkbox_callback=None, checkbox_item_callback=None, **kw):
-        ttk.Treeview.__init__(self, root, **kw)
+    def __init__(self, root=None, checkbox_callback=None, checkbox_item_callback=None, **kwargs):
+        super().__init__(root, **kwargs)
 
         # checkboxes are implemented with pictures
         self.im_checked = ImageTk.PhotoImage(Image.open(IM_CHECKED), master=self)
         self.im_unchecked = ImageTk.PhotoImage(Image.open(IM_UNCHECKED), master=self)
         self.im_tristate = ImageTk.PhotoImage(Image.open(IM_TRISTATE), master=self)
-        self.tag_configure(self.UNCHECKED_TAG, image=self.im_unchecked)
+        self.tag_configure(self.UNCHECKED_TAG, image=self.im_unchecked, background="#E6E6E6", foreground="gray40")
         self.tag_configure(self.TRISTATE_TAG, image=self.im_tristate)
         self.tag_configure(self.CHECKED_TAG, image=self.im_checked)
 
@@ -63,7 +63,9 @@ class CheckboxTreeview(ttk.Treeview):
             new_tags.append(state)
             if self.checkbox_item_callback is not None:
                 self.checkbox_item_callback(item, state)
+
         self.item(item, tags=tuple(new_tags))
+
         if bubble_up:
             self.update_parent(item, bubble_up=bubble_up)
         if bubble_down:

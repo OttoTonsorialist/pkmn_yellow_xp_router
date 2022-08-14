@@ -119,7 +119,7 @@ class LearnMoveEventDefinition:
 
 
 class EventDefinition:
-    def __init__(self, original_folder_name=None, rare_candy=None, vitamin=None, trainer_name=None, wild_pkmn_info=None, item_event_def=None, learn_move=None, notes=""):
+    def __init__(self, original_folder_name=None, enabled=True, rare_candy=None, vitamin=None, trainer_name=None, wild_pkmn_info=None, item_event_def=None, learn_move=None, notes=""):
         # ugly hack, but basically we heavily flatten the event structure when serializing
         # so when we deserialize, each event definition is "where" we know which folder it belongs to
         # store it on this object, for reference when deserializing
@@ -127,6 +127,7 @@ class EventDefinition:
         self.original_folder_name = original_folder_name
 
         # the actual data associated with the EventDefinition
+        self.enabled = enabled
         self.rare_candy = rare_candy
         self.vitamin = vitamin
         self.trainer_name = trainer_name
@@ -222,7 +223,7 @@ class EventDefinition:
 
     
     def serialize(self):
-        result = {}
+        result = {const.ENABLED_KEY: self.enabled}
         if self.notes:
             result[const.TASK_NOTES_ONLY] = self.notes
 
@@ -248,6 +249,7 @@ class EventDefinition:
             folder_name = const.DEFAULT_FOLDER_NAME
         result = EventDefinition(
             original_folder_name=folder_name,
+            enabled=raw_val.get(const.ENABLED_KEY, True),
             notes=raw_val.get(const.TASK_NOTES_ONLY, ""),
             rare_candy=RareCandyEventDefinition.deserialize(raw_val.get(const.TASK_RARE_CANDY)),
             vitamin=VitaminEventDefinition.deserialize(raw_val.get(const.TASK_VITAMIN)),
@@ -288,6 +290,7 @@ class EventItem:
     
     def apply(self, cur_state: route_state_objects.RouteState):
         self.init_state = cur_state
+        self.enabled = self.event_definition.enabled
         if not self.enabled:
             self.final_state = cur_state
             self.error_message = ""
@@ -411,6 +414,7 @@ class EventGroup:
         self.init_state = cur_state
         self.pkmn_after_levelups = []
         self.event_items = []
+        self.enabled = self.event_definition.enabled
 
         if not self.enabled:
             self.final_state = cur_state
@@ -527,6 +531,9 @@ class EventGroup:
     
     def is_enabled(self):
         return self.enabled
+
+    def set_enabled_status(self, is_enabled):
+        self.enabled = self.event_definition.enabled = is_enabled
 
     def is_major_fight(self):
         return self.event_definition.trainer_name in const.MAJOR_FIGHTS
@@ -650,6 +657,9 @@ class EventFolder:
 
     def is_enabled(self):
         return self.enabled
+
+    def set_enabled_status(self, is_enabled):
+        self.enabled = is_enabled
     
     def has_errors(self):
         return self.child_errors

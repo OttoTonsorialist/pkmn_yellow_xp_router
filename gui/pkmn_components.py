@@ -33,11 +33,10 @@ class RouteList(custom_tkinter.CustomGridview):
 
         self.tag_configure(const.EVENT_TAG_ERRORS, background=const.ERROR_COLOR)
         self.tag_configure(const.EVENT_TAG_IMPORTANT, background=const.IMPORTANT_COLOR)
-        # maps group id values to tkinter list ids
 
     def general_checkbox_callback_fn(self):
         self._route_list._recalc()
-        self.refresh(self._route_list.root_folder.children)
+        self.refresh()
         self.event_generate(const.ROUTE_LIST_REFRESH_EVENT)
     
     def checkbox_item_callback_fn(self, item_id, new_state):
@@ -45,14 +44,7 @@ class RouteList(custom_tkinter.CustomGridview):
             return
 
         raw_obj = self._route_list.get_event_obj(self._get_route_id_from_item_id(item_id))
-
-        is_enabled = (new_state == self.CHECKED_TAG)
-        raw_obj.enabled = is_enabled
-        if isinstance(raw_obj, route_events.EventGroup):
-            for event_item in raw_obj.event_items:
-                if event_item.event_definition.get_event_type() == const.TASK_LEARN_MOVE_LEVELUP:
-                    continue
-                event_item.enabled = is_enabled
+        raw_obj.set_enabled_status(new_state == self.CHECKED_TAG)
     
     def _get_route_id_from_item_id(self, iid):
         try:
@@ -83,6 +75,7 @@ class RouteList(custom_tkinter.CustomGridview):
             del self._treeview_id_lookup[cur_del_id]
     
     def _refresh_recursively(self, parent_id, event_list, to_delete_ids:set):
+        last_event_item_id = None
         for event_idx, event_obj in enumerate(event_list):
             semantic_id = self._get_attr_helper(event_obj, self._semantic_id_attr)
 
@@ -102,6 +95,7 @@ class RouteList(custom_tkinter.CustomGridview):
                 self._refresh_recursively(cur_event_id, event_obj.children, to_delete_ids)
 
             elif isinstance(event_obj, route_events.EventGroup):
+                last_event_item_id = cur_event_id
                 if len(event_obj.event_items) > 1:
                     for item_idx, item_obj in enumerate(event_obj.event_items):
                         item_semantic_id = self._get_attr_helper(item_obj, self._semantic_id_attr)
@@ -113,6 +107,13 @@ class RouteList(custom_tkinter.CustomGridview):
                             item_id = self.custom_upsert(item_obj, parent=cur_event_id)
 
                         self.move(item_id, cur_event_id, item_idx)
+        
+        if last_event_item_id:
+            # Folders can be in the tristate checkbox state, based on the states of its children
+            # So whenever we're done populating a folder's children, recalculate its checkbox state
+            # (only if it has any children)
+            # TODO: this has some potential weirdness if you have a folder that contains only folders... fix later
+            self.update_parent(last_event_item_id)
 
 
 class InventoryViewer(tk.Frame):

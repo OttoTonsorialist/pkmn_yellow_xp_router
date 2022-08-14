@@ -189,6 +189,7 @@ class Constants:
         self.NO_ITEM = "No Valid Items"
         self.UNUSED_TRAINER_LOC = "Unused"
         self.EVENTS = "events"
+        self.ENABLED_KEY = "Enabled"
 
         self.IS_KEY_ITEM = "key_item"
         self.PURCHASE_PRICE = "purchase_price"

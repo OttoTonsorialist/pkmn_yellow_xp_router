@@ -296,7 +296,6 @@ class Main(object):
     
     def show_event_details(self, *args, **kwargs):
         event_group = self._data.get_event_obj(self.event_list.get_selected_event_id())
-        print(f"event id: {self.event_list.get_selected_event_id()}, group is: {event_group}")
         
         if event_group is None:
             self._show_event_details_none()
