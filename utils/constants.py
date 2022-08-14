@@ -9,6 +9,7 @@ class Constants:
         self.CONFIG_PATH = os.path.join(self.SOURCE_ROOT_PATH, "config.json")
         self.ROUTE_ONE_OUTPUT_PATH = os.path.join(self.SOURCE_ROOT_PATH, "route_one_output")
         self.POKEMON_RAW_DATA = os.path.join(self.SOURCE_ROOT_PATH, "raw_pkmn_data")
+        self.ASSETS_PATH = os.path.join(self.SOURCE_ROOT_PATH, "assets")
 
         self.POKEMON_DB_PATH = os.path.join(self.POKEMON_RAW_DATA, "pokemon.json")
         self.ITEM_DB_PATH = os.path.join(self.POKEMON_RAW_DATA, "items.json")
@@ -253,6 +254,7 @@ class Constants:
         self.BADGE_BOOST_LABEL = "Badge Boost Calculator"
 
         self.ROOT_FOLDER_NAME = "ROOT"
+        self.ROUTE_LIST_REFRESH_EVENT = "<<RouteListRefresh>>"
 
 
 

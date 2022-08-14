@@ -16,6 +16,7 @@ class Router:
         self.root_folder = route_events.EventFolder(None, const.ROOT_FOLDER_NAME)
         self.folder_lookup = {const.ROOT_FOLDER_NAME: self.root_folder}
         self.event_lookup = {}
+        self.event_item_lookup = {}
 
         self.level_up_move_defs = {}
         self.defeated_trainers = set()
@@ -24,11 +25,12 @@ class Router:
         self.root_folder = route_events.EventFolder(None, const.ROOT_FOLDER_NAME)
         self.folder_lookup = {const.ROOT_FOLDER_NAME: self.root_folder}
         self.event_lookup = {}
+        self.event_item_lookup = {}
 
         self.defeated_trainers = set()
     
     def get_event_obj(self, event_id):
-        return self.event_lookup.get(event_id)
+        return self.event_lookup.get(event_id, self.event_item_lookup.get(event_id))
 
     def get_final_state(self):
         if len(self.root_folder.children):
@@ -58,10 +60,9 @@ class Router:
         self._recalc()
     
     def _recalc(self):
-        # dumb, but it's ultimately easier to just forcibly recalc the entire list
-        # instead of worrying about only starting from the exact right place
-        # TODO: only recalc what's necessary, based on a passed-in index
+        self.event_item_lookup = {}
 
+        # TODO: only recalc what's necessary, based on a passed-in index
         # TODO: wrapper for recursive function currently does nothing, may want to remove later
         self._recursive_recalc(self.root_folder, self.init_route_state)
 
@@ -96,6 +97,9 @@ class Router:
         
         if to_learn:
             event_group.apply(prev_state, level_up_learn_event_defs=to_learn)
+        
+        for cur_item in event_group.event_items:
+            self.event_item_lookup[cur_item.group_id] = cur_item
     
     def add_event_object(self, event_def=None, new_folder_name=None, insert_before=None, dest_folder_name=const.ROOT_FOLDER_NAME, recalc=True):
         if not self.init_route_state:
@@ -172,7 +176,7 @@ class Router:
         self._recalc()
     
     def replace_event_group(self, event_group_id, new_event_def:route_events.EventDefinition):
-        event_group_obj = self.event_lookup.get(event_group_id)
+        event_group_obj = self.get_event_obj(event_group_id)
         if event_group_obj is None:
             raise ValueError(f"Cannot find any event with id: {event_group_id}")
 

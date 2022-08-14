@@ -270,6 +270,7 @@ class EventItem:
         self.group_id = event_id_counter
         event_id_counter += 1
 
+        self.enabled = True
         self.parent = parent
         self.name = event_definition.get_item_label()
         self.to_defeat_idx = to_defeat_idx
@@ -287,6 +288,12 @@ class EventItem:
     
     def apply(self, cur_state: route_state_objects.RouteState):
         self.init_state = cur_state
+        if not self.enabled:
+            self.final_state = cur_state
+            self.error_message = ""
+            self.name = f"Disabled: {self.event_definition.get_label()}"
+            return
+
         if self.to_defeat_idx is not None:
             enemy_team = self.event_definition.get_pokemon_list()
             if len(enemy_team) <= self.to_defeat_idx:
@@ -342,31 +349,44 @@ class EventItem:
         return ""
 
     def pkmn_level(self):
+        if not self.enabled:
+            return ""
         return self.final_state.solo_pkmn.cur_level
     
     def xp_to_next_level(self):
+        if not self.enabled:
+            return ""
         return self.final_state.solo_pkmn.xp_to_next_level
 
     def percent_xp_to_next_level(self):
+        if not self.enabled:
+            return ""
         return self.final_state.solo_pkmn.percent_xp_to_next_level
 
     def xp_gain(self):
+        if not self.enabled:
+            return ""
         return self.final_state.solo_pkmn.cur_xp - self.init_state.solo_pkmn.cur_xp
 
     def total_xp(self):
+        if not self.enabled:
+            return ""
         return self.final_state.solo_pkmn.cur_xp
 
     def has_errors(self):
         return len(self.error_message) != 0
+
+    def is_enabled(self):
+        return self.enabled
     
     def is_major_fight(self):
         return False
     
-    def get_tag(self):
+    def get_tags(self):
         if self.has_errors():
-            return const.EVENT_TAG_ERRORS
+            return [const.EVENT_TAG_ERRORS]
 
-        return None
+        return []
 
 
 class EventGroup:
@@ -376,6 +396,7 @@ class EventGroup:
         event_id_counter += 1
 
         self.parent = parent
+        self.enabled = True
         self.name = None
         self.init_state = None
         self.final_state = None
@@ -390,6 +411,12 @@ class EventGroup:
         self.init_state = cur_state
         self.pkmn_after_levelups = []
         self.event_items = []
+
+        if not self.enabled:
+            self.final_state = cur_state
+            self.error_messages = []
+            self.name = f"Disabled: {self.event_definition.get_label()}"
+            return
 
         if level_up_learn_event_defs is None:
             self.level_up_learn_event_defs = []
@@ -468,18 +495,28 @@ class EventGroup:
         return ",".join(self.pkmn_after_levelups)
 
     def pkmn_level(self):
+        if not self.enabled:
+            return ""
         return self.final_state.solo_pkmn.cur_level
     
     def xp_to_next_level(self):
+        if not self.enabled:
+            return ""
         return self.final_state.solo_pkmn.xp_to_next_level
 
     def percent_xp_to_next_level(self):
+        if not self.enabled:
+            return ""
         return self.final_state.solo_pkmn.percent_xp_to_next_level
 
     def xp_gain(self):
+        if not self.enabled:
+            return ""
         return self.final_state.solo_pkmn.cur_xp - self.init_state.solo_pkmn.cur_xp
 
     def total_xp(self):
+        if not self.enabled:
+            return ""
         return self.final_state.solo_pkmn.cur_xp
 
     def serialize(self):
@@ -488,17 +525,20 @@ class EventGroup:
     def has_errors(self):
         return len(self.error_messages) != 0
     
+    def is_enabled(self):
+        return self.enabled
+
     def is_major_fight(self):
         return self.event_definition.trainer_name in const.MAJOR_FIGHTS
     
-    def get_tag(self):
+    def get_tags(self):
         if self.has_errors():
-            return const.EVENT_TAG_ERRORS
+            return [const.EVENT_TAG_ERRORS]
 
         if self.is_major_fight():
-            return const.EVENT_TAG_IMPORTANT
+            return [const.EVENT_TAG_IMPORTANT]
         
-        return None
+        return []
     
     def __repr__(self):
         return f"EventGroup: {self.event_definition}"
@@ -512,6 +552,7 @@ class EventFolder:
 
         self.parent = parent
         self.name = name
+        self.enabled = True
         self.init_state = None
         self.final_state = None
         self.child_errors = False
@@ -565,6 +606,10 @@ class EventFolder:
         self.init_state = cur_state
         self.child_errors = False
 
+        if not self.enabled:
+            self.final_state = cur_state
+            return
+
         for cur_group in self.children:
             cur_group.apply(cur_state)
             cur_state = cur_group.final_state
@@ -602,15 +647,18 @@ class EventFolder:
             const.EVENT_FOLDER_NAME: self.name,
             const.EVENTS: [x.serialize() for x in self.children]
         }
+
+    def is_enabled(self):
+        return self.enabled
     
     def has_errors(self):
         return self.child_errors
     
-    def get_tag(self):
+    def get_tags(self):
         if self.has_errors():
-            return const.EVENT_TAG_ERRORS
+            return [const.EVENT_TAG_ERRORS]
         
-        return None
+        return []
     
     def __repr__(self):
         return f"EventFolder: {self.name}"

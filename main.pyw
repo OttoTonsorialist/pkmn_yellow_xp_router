@@ -6,7 +6,7 @@ import tkinter as tk
 from tkinter import filedialog
 from tkinter import ANCHOR, ttk
 
-from gui import custom_tkinter, route_event_components
+from gui import custom_tkinter, route_event_components, pkmn_components
 from pkmn.route_events import EventDefinition, EventFolder, EventGroup, EventItem, InventoryEventDefinition, WildPkmnEventDefinition
 from utils.constants import const
 from utils.config_manager import config
@@ -105,7 +105,7 @@ class Main(object):
         self.left_info_panel.grid(row=0, column=0, sticky="nsew")
 
         # create the main thingy
-        self.event_list = custom_tkinter.RouteList(self.left_info_panel)
+        self.event_list = pkmn_components.RouteList(self._data, self.left_info_panel)
         self.event_list.pack(padx=10, pady=10, fill=tk.BOTH, expand=True, side="left")
         self.scroll_bar = tk.Scrollbar(self.left_info_panel, orient="vertical", command=self.event_list.yview)
         self.scroll_bar.pack(side="right", fill=tk.BOTH)
@@ -124,9 +124,9 @@ class Main(object):
         self.state_pre_label.grid(column=1, row=0, padx=10, pady=10)
         self.pre_state_selector = custom_tkinter.SimpleOptionMenu(self.pre_state_frame, [const.STATE_SUMMARY_LABEL, const.BADGE_BOOST_LABEL], callback=self._pre_state_display_mode_callback)
         self.pre_state_selector.grid(column=2, row=0, padx=10, pady=10)
-        self.state_pre_viewer = custom_tkinter.StateViewer(self.pre_state_frame)
+        self.state_pre_viewer = pkmn_components.StateViewer(self.pre_state_frame)
         self.state_pre_viewer.grid(column=1, row=1, padx=10, pady=10, columnspan=2)
-        self.badge_boost_viewer = custom_tkinter.BadgeBoostViewer(self.pre_state_frame)
+        self.badge_boost_viewer = pkmn_components.BadgeBoostViewer(self.pre_state_frame)
         # centering contents with padded columns that expand
         # NOTE: will have to update the index of the right-most column here if we add more columns in the future
         self.pre_state_frame.columnconfigure(0, weight=1)
@@ -149,14 +149,14 @@ class Main(object):
             )
         )
         self.trainer_notes.pack()
-        self.enemy_team_viewer = custom_tkinter.EnemyPkmnTeam(self.event_details_frame)
+        self.enemy_team_viewer = pkmn_components.EnemyPkmnTeam(self.event_details_frame)
         self.enemy_team_viewer.pack()
 
         self.post_state_frame = tk.Frame(self.right_info_panel)
         self.post_state_frame.pack()
         self.state_post_label = tk.Label(self.post_state_frame, text="Post-event State:")
         self.state_post_label.grid(column=1, row=0, padx=10, pady=10)
-        self.state_post_viewer = custom_tkinter.StateViewer(self.post_state_frame)
+        self.state_post_viewer = pkmn_components.StateViewer(self.post_state_frame)
         self.state_post_viewer.grid(column=1, row=1, padx=10, pady=10)
 
         self.info_panel.grid_rowconfigure(0, weight=1)
@@ -165,15 +165,15 @@ class Main(object):
         self.info_panel.grid_columnconfigure(1, weight=1, uniform="test")
 
         # keybindings
-        self._root.bind('<Control-r>', self.refresh_event_list)
+        self._root.bind('<Control-r>', self.event_list.refresh)
         self._root.bind("<<TreeviewSelect>>", self.show_event_details)
+        self._root.bind(const.ROUTE_LIST_REFRESH_EVENT, self.update_run_status)
 
         self.refresh_existing_routes()
-        self.refresh_event_list()
+        self.event_list.refresh()
         self.new_event_window = None
 
-    def refresh_event_list(self, event=None):
-        self.event_list.refresh(self._data.root_folder.children)
+    def update_run_status(self, *args, **kwargs):
         if self._data.root_folder.has_errors():
             self.run_status_label.config(text="Run Status: Invalid", bg=const.ERROR_COLOR)
         else:
@@ -212,92 +212,98 @@ class Main(object):
                 loaded_routes.append(name)
         
         self.previous_route_names.new_values(loaded_routes, default_val=self.route_name.get())
+
+    def _show_event_details_none(self):
+        self.event_details_button.pack_forget()
+        self.trainer_notes.pack_forget()
+        self.enemy_team_viewer.pack_forget()
+        self.enemy_team_viewer.set_team(None)
+        self.state_pre_viewer.set_state(self._data.init_route_state)
+        self.badge_boost_viewer.set_state(self._data.init_route_state)
+        self.state_post_viewer.set_state(self._data.get_final_state())
+        if self.current_event_editor is not None:
+            self.current_event_editor.pack_forget()
     
-    def show_event_details(self, *args, **kwargs):
-        event_group = self._data.get_event_obj(self.event_list.get_selected_event_id())
-        
-        if event_group is None:
-            self.event_details_button.pack_forget()
+    def _show_event_details_non_folder(self, event_obj):
+        self.state_pre_viewer.set_state(event_obj.init_state)
+        self.badge_boost_viewer.set_state(event_obj.init_state)
+        self.state_post_viewer.set_state(event_obj.final_state)
+        self.rename_folder_button.disable()
+        self.event_details_button.pack()
+        if self.current_event_editor is not None:
+            self.current_event_editor.pack_forget()
+            self.current_event_editor = None
+
+        if isinstance(event_obj, EventItem):
+            self.move_group_down_button.disable()
+            self.move_group_up_button.disable()
+            self.delete_event_button.disable()
+            if (
+                event_obj.event_definition.learn_move is None or
+                event_obj.event_definition.learn_move.source != const.MOVE_SOURCE_LEVELUP
+            ):
+                self.event_details_button.disable()
+                event_obj = event_obj.parent
+            else:
+                self.event_details_button.enable()
+        else:
+            self.event_details_button.enable()
+            self.move_group_down_button.enable()
+            self.move_group_up_button.enable()
+            self.delete_event_button.enable()
+
+        if event_obj.event_definition.trainer_name is not None:
+            self.trainer_notes.pack()
+            self.trainer_notes.load_event(event_obj.event_definition)
+            self.enemy_team_viewer.pack()
+            self.enemy_team_viewer.set_team(event_obj.event_definition.get_trainer_obj().pkmn, cur_state=event_obj.init_state)
+        else:
             self.trainer_notes.pack_forget()
             self.enemy_team_viewer.pack_forget()
             self.enemy_team_viewer.set_team(None)
-            self.state_pre_viewer.set_state(self._data.init_route_state)
-            self.badge_boost_viewer.set_state(self._data.init_route_state)
-            self.state_post_viewer.set_state(self._data.get_final_state())
-            if self.current_event_editor is not None:
-                self.current_event_editor.pack_forget()
-        else:
-            self.state_pre_viewer.set_state(event_group.init_state)
-            self.badge_boost_viewer.set_state(event_group.init_state)
-            self.state_post_viewer.set_state(event_group.final_state)
-            self.trainer_notes.pack_forget()
-            self.enemy_team_viewer.pack_forget()
 
-            if isinstance(event_group, EventFolder):
-                self.move_group_down_button.enable()
-                self.move_group_up_button.enable()
-                self.rename_folder_button.enable()
-                self.event_details_button.pack_forget()
-                self.trainer_notes.pack_forget()
-                self.enemy_team_viewer.set_team(None)
-                if self.current_event_editor is not None:
-                    self.current_event_editor.pack_forget()
-                if len(event_group.children) == 0:
-                    self.delete_event_button.enable()
-                else:
-                    self.delete_event_button.disable()
-                
-                # intentionally short circuit when we find an event folder. The rest isn't important
-                return
-            else:
-                if isinstance(event_group, EventItem):
-                    self.rename_folder_button.disable()
-                    self.move_group_down_button.disable()
-                    self.move_group_up_button.disable()
-                    self.delete_event_button.disable()
-                    if (
-                        event_group.event_definition.learn_move is None or
-                        event_group.event_definition.learn_move.source != const.MOVE_SOURCE_LEVELUP
-                    ):
-                        self.event_details_button.disable()
-                        event_group = self._data.get_group_from_item(self.event_list.get_selected_event_id())
-                    else:
-                        self.event_details_button.enable()
-                else:
-                    self.event_details_button.enable()
-                    self.rename_folder_button.disable()
-                    self.move_group_down_button.enable()
-                    self.move_group_up_button.enable()
-                    self.delete_event_button.enable()
-
-            if event_group.event_definition.trainer_name is not None:
-                if self.current_event_editor is not None:
-                    self.current_event_editor.pack_forget()
-                    self.current_event_editor = None
-                self.event_details_button.pack()
-                self.trainer_notes.pack()
-                self.trainer_notes.load_event(event_group.event_definition)
-                self.enemy_team_viewer.pack()
-                self.enemy_team_viewer.set_team(event_group.event_definition.get_trainer_obj().pkmn, cur_state=event_group.init_state)
-            else:
-                self.trainer_notes.pack_forget()
-                self.enemy_team_viewer.set_team(None)
-                if self.current_event_editor is not None:
-                    self.current_event_editor.pack_forget()
-
-                self.event_details_button.pack_forget()
-                # TODO: fix this gross ugly hack
-                if isinstance(event_group, EventGroup) or event_group.event_definition.get_event_type() == const.TASK_LEARN_MOVE_LEVELUP:
-                    self.event_details_button.pack()
-                    self.current_event_editor = self.event_editor_lookup.get_editor(
-                        route_event_components.EditorParams(
-                            event_group.event_definition.get_event_type(),
-                            self._data.defeated_trainers,
-                            event_group.init_state,
-                        )
+            # TODO: fix this gross ugly hack
+            if isinstance(event_obj, EventGroup) or event_obj.event_definition.get_event_type() == const.TASK_LEARN_MOVE_LEVELUP:
+                self.current_event_editor = self.event_editor_lookup.get_editor(
+                    route_event_components.EditorParams(
+                        event_obj.event_definition.get_event_type(),
+                        self._data.defeated_trainers,
+                        event_obj.init_state,
                     )
-                    self.current_event_editor.load_event(event_group.event_definition)
-                    self.current_event_editor.pack()
+                )
+                self.current_event_editor.load_event(event_obj.event_definition)
+                self.current_event_editor.pack()
+    
+    def _show_event_details_folder(self, event_folder_obj:EventFolder):
+        self.state_pre_viewer.set_state(event_folder_obj.init_state)
+        self.badge_boost_viewer.set_state(event_folder_obj.init_state)
+        self.state_post_viewer.set_state(event_folder_obj.final_state)
+        self.trainer_notes.pack_forget()
+        self.enemy_team_viewer.pack_forget()
+
+        self.move_group_down_button.enable()
+        self.move_group_up_button.enable()
+        self.rename_folder_button.enable()
+        self.event_details_button.pack_forget()
+        self.trainer_notes.pack_forget()
+        self.enemy_team_viewer.set_team(None)
+        if self.current_event_editor is not None:
+            self.current_event_editor.pack_forget()
+        if len(event_folder_obj.children) == 0:
+            self.delete_event_button.enable()
+        else:
+            self.delete_event_button.disable()
+    
+    def show_event_details(self, *args, **kwargs):
+        event_group = self._data.get_event_obj(self.event_list.get_selected_event_id())
+        print(f"event id: {self.event_list.get_selected_event_id()}, group is: {event_group}")
+        
+        if event_group is None:
+            self._show_event_details_none()
+        elif isinstance(event_group, EventFolder):
+            self._show_event_details_folder(event_group)
+        else:
+            self._show_event_details_non_folder(event_group)
 
     def update_existing_event(self, *args, **kwargs):
         if self.current_event_editor is None:
@@ -316,33 +322,33 @@ class Main(object):
         else:
             self._data.replace_event_group(self.event_list.get_selected_event_id(), self.current_event_editor.get_event())
 
-        self.refresh_event_list()
+        self.event_list.refresh()
         self.show_event_details()
     
     def load_route(self, *args, **kwargs):
         if self.route_name.get():
             self._data.load(self.route_name.get())
-            self.refresh_event_list()
+            self.event_list.refresh()
 
     def new_solo_pkmn(self, *args, **kwargs):
         self._data.set_solo_pkmn(self.solo_selector.get())
-        self.refresh_event_list()
+        self.event_list.refresh()
 
     def reset_to_min_battles(self, *args, **kwargs):
         self._data.load(self.min_battles_selector.get(), min_battles=True)
-        self.refresh_event_list()
+        self.event_list.refresh()
 
     def move_group_up(self, event=None):
         self._data.move_event_object(self.event_list.get_selected_event_id(), True)
-        self.refresh_event_list()
+        self.event_list.refresh()
 
     def move_group_down(self, event=None):
         self._data.move_event_object(self.event_list.get_selected_event_id(), False)
-        self.refresh_event_list()
+        self.event_list.refresh()
 
     def delete_group(self, event=None):
         self._data.remove_event_object(self.event_list.get_selected_event_id())
-        self.refresh_event_list()
+        self.event_list.refresh()
 
     def finalize_new_folder(self, new_folder_name, prev_folder_name=None):
         if prev_folder_name is None:
@@ -352,7 +358,7 @@ class Main(object):
 
         self.new_event_window.destroy()
         self.new_event_window = None
-        self.refresh_event_list()
+        self.event_list.refresh()
 
     def open_transfer_event_window(self, event=None):
         if self._is_active_window():
@@ -369,7 +375,7 @@ class Main(object):
         self._data.transfer_event_object(event_group_id, new_folder_name)
         self.new_event_window.destroy()
         self.new_event_window = None
-        self.refresh_event_list()
+        self.event_list.refresh()
 
     def rename_folder(self, *args, **kwargs):
         self.open_new_folder_window(**{const.EVENT_FOLDER_NAME: self._data.get_event_obj(self.event_list.get_selected_event_id()).name})
@@ -436,7 +442,7 @@ class Main(object):
         self._data.add_event_object(event_def=event_def, insert_before=self.event_list.get_selected_event_id())
         self.new_event_window.destroy()
         self.new_event_window = None
-        self.refresh_event_list()
+        self.event_list.refresh()
     
     def _is_active_window(self):
         # returns true if the current window is active (i.e. no sub-windows exist)
@@ -527,7 +533,7 @@ class NewEventWindow(tk.Toplevel):
         self._top_pane = tk.Frame(self)
         self._top_pane.grid(row=0, column=0, columnspan=2, sticky=tk.NSEW)
 
-        self._state_viewer = custom_tkinter.StateViewer(self._top_pane)
+        self._state_viewer = pkmn_components.StateViewer(self._top_pane)
         self._state_viewer.grid(row=0, column=0)
         self._state_viewer.set_state(cur_state)
 
