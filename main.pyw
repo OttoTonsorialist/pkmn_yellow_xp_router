@@ -42,6 +42,7 @@ class Main(tk.Tk):
         self.event_menu.add_command(label="Move Event Up           (Ctrl+K)", command=self.move_group_up)
         self.event_menu.add_command(label="Move Event Down      (Ctrl+J)", command=self.move_group_down)
         self.event_menu.add_command(label="Transfer Event             (Ctrl+T)", command=self.open_transfer_event_window)
+        self.event_menu.add_command(label="Delete Event             (Ctrl+D)", command=self.delete_group)
 
         self.export_menu = tk.Menu(self.top_menu_bar, tearoff=0)
         self.export_menu.add_command(label="Export           (Ctrl+E)", command=self.open_export_window)
@@ -182,6 +183,8 @@ class Main(tk.Tk):
         self.bind('<Control-j>', self.move_group_down)
         self.bind('<Control-k>', self.move_group_up)
         self.bind('<Control-t>', self.open_transfer_event_window)
+        self.bind('<Control-d>', self.delete_group)
+        self.bind('<Delete>', self.delete_group)
         self.bind("<<TreeviewSelect>>", self.show_event_details)
         self.bind(const.ROUTE_LIST_REFRESH_EVENT, self.update_run_status)
 
