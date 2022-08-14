@@ -37,11 +37,18 @@ class Main(tk.Tk):
         self.file_menu.add_command(label="Load Route      (Ctrl+O)", command=self.open_load_route_window)
         self.file_menu.add_command(label="Save Route       (Ctrl+S)", command=self.save_route)
 
+        self.event_menu = tk.Menu(self.top_menu_bar, tearoff=0)
+        self.event_menu.add_command(label="New Event                   (Ctrl+Q)", command=self.open_new_event_window)
+        self.event_menu.add_command(label="Move Event Up           (Ctrl+K)", command=self.move_group_up)
+        self.event_menu.add_command(label="Move Event Down      (Ctrl+J)", command=self.move_group_down)
+        self.event_menu.add_command(label="Transfer Event             (Ctrl+T)", command=self.open_transfer_event_window)
+
         self.export_menu = tk.Menu(self.top_menu_bar, tearoff=0)
         self.export_menu.add_command(label="Export           (Ctrl+E)", command=self.open_export_window)
         self.export_menu.add_command(label="Quick Run    (Ctrl+R)", command=self.just_export_and_run)
 
         self.top_menu_bar.add_cascade(label="File", menu=self.file_menu)
+        self.top_menu_bar.add_cascade(label="Events", menu=self.event_menu)
         self.top_menu_bar.add_cascade(label="RouteOne", menu=self.export_menu)
 
         # main container for everything to sit in... might be unnecessary?
@@ -171,6 +178,10 @@ class Main(tk.Tk):
         self.bind('<Control-s>', self.save_route)
         self.bind('<Control-e>', self.open_export_window)
         self.bind('<Control-r>', self.just_export_and_run)
+        self.bind('<Control-q>', self.open_new_event_window)
+        self.bind('<Control-j>', self.move_group_down)
+        self.bind('<Control-k>', self.move_group_up)
+        self.bind('<Control-t>', self.open_transfer_event_window)
         self.bind("<<TreeviewSelect>>", self.show_event_details)
         self.bind(const.ROUTE_LIST_REFRESH_EVENT, self.update_run_status)
 
@@ -338,14 +349,23 @@ class Main(tk.Tk):
         self.show_event_details()
 
     def move_group_up(self, event=None):
+        cur_event_id = self.event_list.get_selected_event_id()
+        if cur_event_id == -1:
+            return
         self._data.move_event_object(self.event_list.get_selected_event_id(), True)
         self.event_list.refresh()
 
     def move_group_down(self, event=None):
+        cur_event_id = self.event_list.get_selected_event_id()
+        if cur_event_id == -1:
+            return
         self._data.move_event_object(self.event_list.get_selected_event_id(), False)
         self.event_list.refresh()
 
     def delete_group(self, event=None):
+        cur_event_id = self.event_list.get_selected_event_id()
+        if cur_event_id == -1:
+            return
         self._data.remove_event_object(self.event_list.get_selected_event_id())
         self.event_list.refresh()
 
@@ -362,6 +382,8 @@ class Main(tk.Tk):
     def open_transfer_event_window(self, event=None):
         if self._is_active_window():
             event_group_id = self.event_list.get_selected_event_id()
+            if event_group_id == -1:
+                return
             self.new_event_window = TransferEventWindow(
                 self,
                 event_group_id,
@@ -384,10 +406,9 @@ class Main(tk.Tk):
             event_obj = self._data.get_event_obj(event_id)
 
             if event_obj is None:
-                state = self._data.get_final_state()
-            else:
-                state = event_obj.init_state
+                return
 
+            state = event_obj.init_state
             self.new_event_window = NewEventWindow(self, self._data.defeated_trainers, state)
 
     def open_new_folder_window(self, *args, **kwargs):
