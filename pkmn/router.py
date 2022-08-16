@@ -171,6 +171,9 @@ class Router:
         if dest_folder is None:
             raise ValueError(f"Cannot find destination folder named: {dest_folder_name}")
         
+        if dest_folder == cur_event:
+            raise ValueError(f"Cannot transfer a folder into itself")
+        
         cur_event.parent.remove_child(cur_event)
         dest_folder.insert_child_before(cur_event, before_obj=None)
         self._recalc()

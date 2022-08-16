@@ -387,11 +387,20 @@ class Main(tk.Tk):
             event_group_id = self.event_list.get_selected_event_id()
             if event_group_id == -1:
                 return
+
+            dest_folder_list = list(self._data.folder_lookup.keys())
+            cur_event_folder = self._data.get_event_obj(event_group_id).parent.name
+            dest_folder_list.remove(cur_event_folder)
+
+            event_obj = self._data.get_event_obj(event_group_id)
+            if isinstance(event_obj, EventFolder):
+                dest_folder_list.remove(event_obj.name)
+
             self.new_event_window = TransferEventWindow(
                 self,
                 event_group_id,
-                list(self._data.folder_lookup.keys()),
-                self._data.get_event_obj(event_group_id).parent.name,
+                dest_folder_list,
+                cur_event_folder
             )
     
     def transfer_event(self, event_group_id, new_folder_name):
@@ -625,7 +634,7 @@ class TransferEventWindow(custom_tkinter.Popup):
         self._prev_folder_label.grid(row=0, column=0, columnspan=2, padx=10, pady=10)
 
         self._new_folder_label = tk.Label(self, text=f"New folder:")
-        self._folder_name = custom_tkinter.SimpleOptionMenu(self, option_list=[x for x in self._cur_folder_names if x != prev_folder_name])
+        self._folder_name = custom_tkinter.SimpleOptionMenu(self, option_list=self._cur_folder_names)
         self._new_folder_label.grid(row=1, column=0, padx=10, pady=10)
         self._folder_name.grid(row=1, column=1, padx=10, pady=10)
 
