@@ -34,19 +34,19 @@ class Main(tk.Tk):
 
         self.file_menu = tk.Menu(self.top_menu_bar, tearoff=0)
         self.file_menu.add_command(label="New Route       (Ctrl+N)", command=self.open_new_route_window)
-        self.file_menu.add_command(label="Load Route      (Ctrl+O)", command=self.open_load_route_window)
+        self.file_menu.add_command(label="Load Route      (Ctrl+L)", command=self.open_load_route_window)
         self.file_menu.add_command(label="Save Route       (Ctrl+S)", command=self.save_route)
 
         self.event_menu = tk.Menu(self.top_menu_bar, tearoff=0)
-        self.event_menu.add_command(label="New Event                   (Ctrl+Q)", command=self.open_new_event_window)
-        self.event_menu.add_command(label="Move Event Up           (Ctrl+K)", command=self.move_group_up)
-        self.event_menu.add_command(label="Move Event Down      (Ctrl+J)", command=self.move_group_down)
-        self.event_menu.add_command(label="Transfer Event             (Ctrl+T)", command=self.open_transfer_event_window)
-        self.event_menu.add_command(label="Delete Event             (Ctrl+D)", command=self.delete_group)
+        self.event_menu.add_command(label="New Event                   (Ctrl+F)", command=self.open_new_event_window)
+        self.event_menu.add_command(label="Move Event Up           (Ctrl+E)", command=self.move_group_up)
+        self.event_menu.add_command(label="Move Event Down      (Ctrl+D)", command=self.move_group_down)
+        self.event_menu.add_command(label="Transfer Event             (Ctrl+R)", command=self.open_transfer_event_window)
+        self.event_menu.add_command(label="Delete Event             (Ctrl+B)", command=self.delete_group)
 
         self.export_menu = tk.Menu(self.top_menu_bar, tearoff=0)
-        self.export_menu.add_command(label="Export           (Ctrl+E)", command=self.open_export_window)
-        self.export_menu.add_command(label="Quick Run    (Ctrl+R)", command=self.just_export_and_run)
+        self.export_menu.add_command(label="Export           (Ctrl+Shift+E)", command=self.open_export_window)
+        self.export_menu.add_command(label="Quick Run    (Ctrl+Shift+R)", command=self.just_export_and_run)
 
         self.top_menu_bar.add_cascade(label="File", menu=self.file_menu)
         self.top_menu_bar.add_cascade(label="Events", menu=self.event_menu)
@@ -173,18 +173,21 @@ class Main(tk.Tk):
         self.info_panel.grid_columnconfigure(0, weight=1, uniform="test")
         #self.info_panel.grid_columnconfigure(1, weight=1, uniform="test")
 
-        # keybindings
+        # main route actions
         self.bind('<Control-n>', self.open_new_route_window)
-        self.bind('<Control-o>', self.open_load_route_window)
+        self.bind('<Control-l>', self.open_load_route_window)
         self.bind('<Control-s>', self.save_route)
-        self.bind('<Control-e>', self.open_export_window)
-        self.bind('<Control-r>', self.just_export_and_run)
-        self.bind('<Control-q>', self.open_new_event_window)
-        self.bind('<Control-j>', self.move_group_down)
-        self.bind('<Control-k>', self.move_group_up)
-        self.bind('<Control-t>', self.open_transfer_event_window)
-        self.bind('<Control-d>', self.delete_group)
+        # event actions
+        self.bind('<Control-f>', self.open_new_event_window)
+        self.bind('<Control-d>', self.move_group_down)
+        self.bind('<Control-e>', self.move_group_up)
+        self.bind('<Control-r>', self.open_transfer_event_window)
+        self.bind('<Control-b>', self.delete_group)
         self.bind('<Delete>', self.delete_group)
+        # route One integrations
+        self.bind('<Control-E>', self.open_export_window)
+        self.bind('<Control-R>', self.just_export_and_run)
+        # detail update function
         self.bind("<<TreeviewSelect>>", self.show_event_details)
         self.bind(const.ROUTE_LIST_REFRESH_EVENT, self.update_run_status)
 
@@ -530,6 +533,7 @@ class NewRouteWindow(custom_tkinter.Popup):
         self.cancel_button = custom_tkinter.SimpleButton(self.controls_frame, text="Cancel", command=self._main_window.cancel_new_event)
         self.cancel_button.grid(row=5, column=1, padx=self.padx, pady=self.pady)
 
+        self.bind('<Return>', self.create)
         self.bind('<Escape>', self._main_window.cancel_new_event)
 
     def _pkmn_filter_callback(self, *args, **kwargs):
@@ -554,26 +558,38 @@ class LoadRouteWindow(custom_tkinter.Popup):
         self.previous_route_names.grid(row=0, column=1, padx=self.padx, pady=self.pady)
         self.previous_route_names.config(width=25)
 
+        self.filter_label = tk.Label(self.controls_frame, text="Filter:")
+        self.filter = custom_tkinter.SimpleEntry(self.controls_frame, callback=self._filter_callback)
+        self.filter_label.grid(row=1, column=0)
+        self.filter.grid(row=1, column=1)
+
         self.warning_label = tk.Label(self.controls_frame, text="WARNING: Any unsaved changes in your current route\nwill be lost when loading an existing route!")
-        self.warning_label.grid(row=1, column=0, columnspan=2, padx=self.padx, pady=self.pady)
+        self.warning_label.grid(row=2, column=0, columnspan=2, padx=self.padx, pady=self.pady)
 
         self.create_button = custom_tkinter.SimpleButton(self.controls_frame, text="Load Route", command=self.load)
-        self.create_button.grid(row=2, column=0, padx=self.padx, pady=self.pady)
+        self.create_button.grid(row=3, column=0, padx=self.padx, pady=self.pady)
         self.cancel_button = custom_tkinter.SimpleButton(self.controls_frame, text="Cancel", command=self._main_window.cancel_new_event)
-        self.cancel_button.grid(row=2, column=1, padx=self.padx, pady=self.pady)
+        self.cancel_button.grid(row=3, column=1, padx=self.padx, pady=self.pady)
 
+        self.bind('<Return>', self.load)
         self.bind('<Escape>', self._main_window.cancel_new_event)
 
-    def get_existing_routes(self):
+    def get_existing_routes(self, filter_text=""):
         loaded_routes = []
+        filter_text = filter_text.lower()
         if os.path.exists(const.SAVED_ROUTES_DIR):
             for fragment in os.listdir(const.SAVED_ROUTES_DIR):
                 name, ext = os.path.splitext(fragment)
+                if filter_text not in name.lower():
+                    continue
                 if ext != ".json":
                     continue
                 loaded_routes.append(name)
 
         return loaded_routes
+
+    def _filter_callback(self, *args, **kwargs):
+        self.previous_route_names.new_values(self.get_existing_routes(filter_text=self.filter.get()))
     
     def load(self, *args, **kwargs):
         self._main_window.load_route(self.previous_route_names.get())
@@ -597,6 +613,7 @@ class NewFolderWindow(custom_tkinter.Popup):
         self._add_button.grid(row=1, column=0)
         self._cancel_button.grid(row=1, column=1)
 
+        self.bind('<Return>', self.create)
         self.bind('<Escape>', self._main_window.cancel_new_event)
 
         if prev_folder_name is None:
@@ -617,7 +634,13 @@ class NewFolderWindow(custom_tkinter.Popup):
             self._add_button.enable()
     
     def create(self, *args, **kwargs):
-        self._main_window.finalize_new_folder(self._folder_name.get(), prev_folder_name=self._prev_folder_name)
+        cur_name = self._folder_name.get()
+        if not cur_name:
+            return
+        elif cur_name in self._cur_folder_names:
+            return
+
+        self._main_window.finalize_new_folder(cur_name, prev_folder_name=self._prev_folder_name)
 
 
 class TransferEventWindow(custom_tkinter.Popup):
@@ -634,16 +657,30 @@ class TransferEventWindow(custom_tkinter.Popup):
         self._prev_folder_label.grid(row=0, column=0, columnspan=2, padx=10, pady=10)
 
         self._new_folder_label = tk.Label(self, text=f"New folder:")
-        self._folder_name = custom_tkinter.SimpleOptionMenu(self, option_list=self._cur_folder_names)
+        self._folder_name = custom_tkinter.SimpleOptionMenu(self, option_list=self.get_possible_folders())
         self._new_folder_label.grid(row=1, column=0, padx=10, pady=10)
         self._folder_name.grid(row=1, column=1, padx=10, pady=10)
 
+        self.filter_label = tk.Label(self, text="Filter:")
+        self.filter = custom_tkinter.SimpleEntry(self, callback=self._filter_callback)
+        self.filter_label.grid(row=2, column=0, padx=10, pady=10)
+        self.filter.grid(row=2, column=1, padx=10, pady=10)
+
         self._add_button = custom_tkinter.SimpleButton(self, command=self.transfer, text="Update Folder")
         self._cancel_button = custom_tkinter.SimpleButton(self, text="Cancel", command=self._main_window.cancel_new_event)
-        self._add_button.grid(row=2, column=0, padx=10, pady=10)
-        self._cancel_button.grid(row=2, column=1, padx=10, pady=10)
+        self._add_button.grid(row=3, column=0, padx=10, pady=10)
+        self._cancel_button.grid(row=3, column=1, padx=10, pady=10)
 
+        self.bind('<Return>', self.transfer)
         self.bind('<Escape>', self._main_window.cancel_new_event)
+    
+    def get_possible_folders(self, filter_text=""):
+        filter_text = filter_text.lower()
+        result = [x for x in self._cur_folder_names if filter_text in x.lower()]
+        return result
+
+    def _filter_callback(self, *args, **kwargs):
+        self._folder_name.new_values(self.get_possible_folders(filter_text=self.filter.get()))
     
     def transfer(self, *args, **kwargs):
         self._main_window.transfer_event(self._cur_event_id, self._folder_name.get())
@@ -685,7 +722,7 @@ class NewEventWindow(custom_tkinter.Popup):
         self._event_editor_lookup = route_event_components.EventEditorFactory(self._input_frame, self._create_new_event_button)
         self._cur_editor = None
 
-        self.bind('<Control-Return>', self._new_event)
+        self.bind('<Return>', self._new_event)
         self.bind('<Escape>', self._main_window.cancel_new_event)
         self._event_type.focus_set()
         self._event_type_callback()
