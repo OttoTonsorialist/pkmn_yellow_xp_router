@@ -37,7 +37,6 @@ class RouteList(custom_tkinter.CustomGridview):
     def general_checkbox_callback_fn(self):
         self._route_list._recalc()
         self.refresh()
-        self.event_generate(const.ROUTE_LIST_REFRESH_EVENT)
     
     def checkbox_item_callback_fn(self, item_id, new_state):
         if new_state == self.TRISTATE_TAG:
@@ -73,6 +72,8 @@ class RouteList(custom_tkinter.CustomGridview):
                 # No actual problem though, just remove from the lookup and continue
                 pass
             del self._treeview_id_lookup[cur_del_id]
+
+        self.event_generate(const.ROUTE_LIST_REFRESH_EVENT)
     
     def _refresh_recursively(self, parent_id, event_list, to_delete_ids:set):
         last_event_item_id = None

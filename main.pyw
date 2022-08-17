@@ -1,13 +1,11 @@
 import argparse
-from ast import Delete
-import subprocess
 import os
 
 import tkinter as tk
 from tkinter import filedialog
 from tkinter import ANCHOR, ttk
 
-from gui import custom_tkinter, route_event_components, pkmn_components
+from gui import custom_tkinter, route_event_components, pkmn_components, quick_add_components
 from pkmn.route_events import EventDefinition, EventFolder, EventGroup, EventItem, InventoryEventDefinition, WildPkmnEventDefinition
 from utils.constants import const
 from utils.config_manager import config
@@ -82,6 +80,24 @@ class Main(tk.Tk):
         self.left_info_panel = tk.Frame(self.info_panel)
         self.left_info_panel.grid(row=0, column=0, sticky="nsew")
 
+        self.top_left_controls = tk.Frame(self.left_info_panel)
+        self.top_left_controls.pack(fill=tk.X, anchor=tk.CENTER)
+
+        self.trainer_add = quick_add_components.QuickTrainerComponent(
+            self.top_left_controls,
+            trainer_add_callback=self.quick_add_event,
+            trainer_select_callback=None,
+            router=self._data,
+            add_wild_pkmn_callback=None
+        )
+        self.trainer_add.grid(row=0, column=0, sticky=tk.NSEW, padx=5, pady=5)
+
+        self.item_add = quick_add_components.QuickItemAdd(
+            self.top_left_controls,
+            event_creation_callback=self.quick_add_event
+        )
+        self.item_add.grid(row=0, column=1, sticky=tk.NSEW, padx=5, pady=5)
+
         self.group_controls = tk.Frame(self.left_info_panel)
         self.group_controls.pack(fill=tk.X, anchor=tk.CENTER)
 
@@ -91,25 +107,24 @@ class Main(tk.Tk):
         self.move_group_up_button = custom_tkinter.SimpleButton(self.group_controls, text='Move Event Up', command=self.move_group_up, width=15)
         self.move_group_up_button.grid(row=0, column=1, padx=5, pady=1)
         self.move_group_down_button = custom_tkinter.SimpleButton(self.group_controls, text='Move Event Down', command=self.move_group_down, width=15)
-        self.move_group_down_button.grid(row=1, column=1, padx=5, pady=1)
-
-        self.new_event_button = custom_tkinter.SimpleButton(self.group_controls, text='New Event', command=self.open_new_event_window, width=15)
-        self.new_event_button.grid(row=0, column=2, padx=5, pady=1)
-        self.delete_event_button = custom_tkinter.SimpleButton(self.group_controls, text='Delete Event', command=self.delete_group, width=15)
-        self.delete_event_button.grid(row=1, column=2, padx=5, pady=1)
-
+        self.move_group_down_button.grid(row=0, column=2, padx=5, pady=1)
         self.transfer_event_button = custom_tkinter.SimpleButton(self.group_controls, text='Transfer Event', command=self.open_transfer_event_window, width=15)
         self.transfer_event_button.grid(row=0, column=3, padx=5, pady=1)
-        self.rename_folder_button = custom_tkinter.SimpleButton(self.group_controls, text='Rename Folder', command=self.rename_folder, width=15)
-        self.rename_folder_button.grid(row=1, column=3, padx=5, pady=1)
+
+        self.delete_event_button = custom_tkinter.SimpleButton(self.group_controls, text='Delete Event', command=self.delete_group, width=15)
+        self.delete_event_button.grid(row=0, column=5, padx=5, pady=1)
 
         self.new_folder_button = custom_tkinter.SimpleButton(self.group_controls, text='New Folder', command=self.open_new_folder_window, width=15)
-        self.new_folder_button.grid(row=0, column=4, padx=5, pady=1)
+        self.new_folder_button.grid(row=0, column=7, padx=5, pady=1)
+        self.rename_folder_button = custom_tkinter.SimpleButton(self.group_controls, text='Rename Folder', command=self.rename_folder, width=15)
+        self.rename_folder_button.grid(row=0, column=8, padx=5, pady=1)
 
         self.padding_right = tk.Frame(self.group_controls)
         self.padding_right.grid(row=0, column=10)
 
         self.group_controls.columnconfigure(0, weight=1)
+        self.group_controls.columnconfigure(4, weight=1)
+        self.group_controls.columnconfigure(6, weight=1)
         self.group_controls.columnconfigure(10, weight=1)
 
         self.event_list = pkmn_components.RouteList(self._data, self.left_info_panel)
@@ -195,6 +210,7 @@ class Main(tk.Tk):
         self.new_event_window = None
 
     def update_run_status(self, *args, **kwargs):
+        print("bwuh")
         if self._data.root_folder.has_errors():
             self.run_status_label.config(text="Run Status: Invalid", bg=const.ERROR_COLOR)
         else:
@@ -302,10 +318,14 @@ class Main(tk.Tk):
         
         if event_group is None:
             self._show_event_details_none()
+            self.item_add.cur_state = None
         elif isinstance(event_group, EventFolder):
             self._show_event_details_folder(event_group)
+            self.item_add.cur_state = event_group.init_state
         else:
             self._show_event_details_non_folder(event_group)
+            self.item_add.cur_state = event_group.init_state
+        
 
     def update_existing_event(self, *args, **kwargs):
         if self.current_event_editor is None:
@@ -326,6 +346,14 @@ class Main(tk.Tk):
 
         self.event_list.refresh()
         self.show_event_details()
+    
+    def quick_add_event(self, new_event):
+        self._data.add_event_object(
+            event_def=new_event,
+            insert_before=self.event_list.get_selected_event_id()
+        )
+        self.trainer_add.trainer_filter_callback()
+        self.event_list.refresh()
     
     def open_new_route_window(self, *args, **kwargs):
         if self._is_active_window():
