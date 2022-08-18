@@ -13,6 +13,7 @@ class EditorParams:
         self.cur_defeated_trainers = cur_defeated_trainers
         self.cur_state = cur_state
 
+
 class EventEditorBase(tk.Frame):
     def __init__(self, parent, event_button, editor_params: EditorParams, *args, **kwargs):
         super().__init__(parent, *args, **kwargs)
@@ -21,12 +22,30 @@ class EventEditorBase(tk.Frame):
         self.editor_params = editor_params
 
         self._cur_row = 0
+    
+    def configure(self, editor_params):
+        self.editor_params = editor_params
+        self.event_button.enable()
+    
+    def load_event(self, event_def:EventDefinition):
+        pass
+
+    def get_event(self) -> EventDefinition:
+        return None
+
+
+class NotesEditor(EventEditorBase):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+
         self._notes_label = tk.Label(self, text="Notes:")
-        self._notes_label.grid(row=self._cur_row, column=0, columnspan=2)
+        self._notes_label.grid(row=self._cur_row, column=0, sticky=tk.W, padx=5, pady=5)
         self._cur_row += 1
-        self._notes = tk.Text(self, height=2)
-        self._notes.grid(row=self._cur_row, column=0, columnspan=2, sticky=tk.EW, padx=15, pady=5)
+        self._notes = tk.Text(self, height=8)
+        self._notes.grid(row=self._cur_row, column=0, sticky=tk.EW, padx=5, pady=5)
         self._cur_row += 1
+
+        self.columnconfigure(0, weight=1)
     
     def configure(self, editor_params):
         self.editor_params = editor_params
@@ -34,7 +53,8 @@ class EventEditorBase(tk.Frame):
     
     def load_event(self, event_def:EventDefinition):
         self._notes.delete(1.0, tk.END)
-        self._notes.insert(1.0, event_def.notes)
+        if event_def is not None:
+            self._notes.insert(1.0, event_def.notes)
 
     def get_event(self) -> EventDefinition:
         return EventDefinition(notes=self._notes.get(1.0, tk.END).strip())
@@ -130,7 +150,7 @@ class TrainerFightEditor(EventEditorBase):
         self._trainer_names.set(event_def.trainer_name)
     
     def get_event(self):
-        return EventDefinition(trainer_name=self._trainer_names.get(), notes=self._notes.get(1.0, tk.END).strip())
+        return EventDefinition(trainer_name=self._trainer_names.get())
 
 
 class VitaminEditor(EventEditorBase):
@@ -166,7 +186,7 @@ class VitaminEditor(EventEditorBase):
         self._item_amount.set(str(event_def.vitamin.amount))
 
     def get_event(self):
-        return EventDefinition(vitamin=VitaminEventDefinition(self._vitamin_types.get(), int(self._item_amount.get())), notes=self._notes.get(1.0, tk.END).strip())
+        return EventDefinition(vitamin=VitaminEventDefinition(self._vitamin_types.get(), int(self._item_amount.get())))
 
 
 class RareCandyEditor(EventEditorBase):
@@ -195,7 +215,7 @@ class RareCandyEditor(EventEditorBase):
         self._item_amount.set(str(event_def.rare_candy.amount))
 
     def get_event(self):
-        return EventDefinition(rare_candy=RareCandyEventDefinition(int(self._item_amount.get())), notes=self._notes.get(1.0, tk.END).strip())
+        return EventDefinition(rare_candy=RareCandyEventDefinition(int(self._item_amount.get())))
 
 
 class LearnMoveEditor(EventEditorBase):
@@ -338,7 +358,7 @@ class LearnMoveEditor(EventEditorBase):
         
         source = const.MOVE_SOURCE_LEVELUP if self.editor_params.event_type == const.TASK_LEARN_MOVE_LEVELUP else self._item_selector.get()
 
-        return EventDefinition(learn_move=LearnMoveEventDefinition(self._move, dest, source, level=self._level), notes=self._notes.get(1.0, tk.END).strip())
+        return EventDefinition(learn_move=LearnMoveEventDefinition(self._move, dest, source, level=self._level))
     
 
 class WildPkmnEditor(EventEditorBase):
@@ -396,8 +416,7 @@ class WildPkmnEditor(EventEditorBase):
             wild_pkmn_info=WildPkmnEventDefinition(
                 self._pkmn_types.get(),
                 int(self._pkmn_level.get().strip()),
-            ),
-            notes=self._notes.get(1.0, tk.END).strip()
+            )
         )
 
 
@@ -593,8 +612,7 @@ class InventoryEventEditor(EventEditorBase):
                     int(self._item_amount.get()),
                     True,
                     False
-                ),
-                notes=self._notes.get(1.0, tk.END).strip()
+                )
             )
 
         elif self.event_type == const.TASK_PURCHASE_ITEM:
@@ -604,8 +622,7 @@ class InventoryEventEditor(EventEditorBase):
                     int(self._item_amount.get()),
                     True,
                     True
-                ),
-                notes=self._notes.get(1.0, tk.END).strip()
+                )
             )
 
         elif self.event_type == const.TASK_USE_ITEM:
@@ -615,8 +632,7 @@ class InventoryEventEditor(EventEditorBase):
                     int(self._item_amount.get()),
                     False,
                     False
-                ),
-                notes=self._notes.get(1.0, tk.END).strip()
+                )
             )
 
         elif self.event_type == const.TASK_SELL_ITEM:
@@ -626,8 +642,7 @@ class InventoryEventEditor(EventEditorBase):
                     int(self._item_amount.get()),
                     False,
                     True
-                ),
-                notes=self._notes.get(1.0, tk.END).strip()
+                )
             )
         
         raise ValueError(f"Cannot generate inventory event for event type: {self.editor_params.event_type}")
@@ -647,7 +662,7 @@ class EventEditorFactory:
         const.TASK_SELL_ITEM: InventoryEventEditor,
         const.TASK_LEARN_MOVE_LEVELUP: LearnMoveEditor,
         const.TASK_LEARN_MOVE_TM: LearnMoveEditor,
-        const.TASK_NOTES_ONLY: EventEditorBase,
+        const.TASK_NOTES_ONLY: NotesEditor,
     }
 
     def __init__(self, tk_container, event_button):

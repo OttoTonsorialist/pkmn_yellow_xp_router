@@ -1,25 +1,24 @@
-from ctypes import alignment
 import tkinter as tk
 
 from gui import custom_tkinter
-from pkmn.route_events import EventDefinition, InventoryEventDefinition, LearnMoveEventDefinition, RareCandyEventDefinition, VitaminEventDefinition
+from pkmn.route_events import EventDefinition, InventoryEventDefinition, LearnMoveEventDefinition, RareCandyEventDefinition, VitaminEventDefinition, WildPkmnEventDefinition
 from pkmn.router import Router
 from utils.constants import const
 import pkmn.pkmn_db as pkmn_db
 
 
-class QuickTrainerComponent(tk.Frame):
-    def __init__(self, *args, router:Router=None, trainer_select_callback=None, trainer_add_callback=None, add_wild_pkmn_callback=None, **kwargs):
+class QuickTrainerAdd(tk.Frame):
+    def __init__(self, *args, router:Router=None, trainer_select_callback=None, trainer_add_callback=None, area_add_callback=None, **kwargs):
         super().__init__(*args, **kwargs, highlightbackground="black", highlightthickness=2)
 
         self.router = router
         self.trainer_select_callback = trainer_select_callback
         self.trainer_add_callback = trainer_add_callback
-        self.add_wild_pkmn_callback = add_wild_pkmn_callback
+        self.area_add_callback = area_add_callback
 
         self.padx = 5
         self.pady = 1
-        self.option_menu_width = 20
+        self.option_menu_width = 15
 
         self._dropdowns = tk.Frame(self)
         self._dropdowns.pack()
@@ -52,14 +51,19 @@ class QuickTrainerComponent(tk.Frame):
         self._buttons.pack(fill=tk.X, anchor=tk.CENTER, side=tk.BOTTOM)
         self._btn_width = 8
 
-        self._add_wild_pkmn = custom_tkinter.SimpleButton(self._buttons, text="Add Wild Pkmn", command=self.add_pkmn_cmd)
-        self._add_wild_pkmn.grid(row=0, column=0, padx=self.padx, pady=self.pady + 1, sticky=tk.W)
         self._add_trainer = custom_tkinter.SimpleButton(self._buttons, text="Add Trainer", command=self.add_trainer)
-        self._add_trainer.grid(row=0, column=1, padx=self.padx, pady=self.pady + 1, sticky=tk.E)
+        self._add_trainer.grid(row=0, column=0, padx=self.padx, pady=self.pady + 1, sticky=tk.E)
+        self._add_area = custom_tkinter.SimpleButton(self._buttons, text="Add Area", command=self.add_area)
+        self._add_area.grid(row=0, column=1, padx=self.padx, pady=self.pady + 1, sticky=tk.W)
 
     def trainer_filter_callback(self, *args, **kwargs):
         loc_filter = self._trainers_by_loc.get()
         class_filter = self._trainers_by_class.get()
+
+        if loc_filter == const.ALL_TRAINERS:
+            self._add_area.disable()
+        else:
+            self._add_area.enable()
 
         valid_trainers = pkmn_db.trainer_db.get_valid_trainers(
             trainer_class=class_filter,
@@ -72,21 +76,99 @@ class QuickTrainerComponent(tk.Frame):
         self._trainer_names.new_values(valid_trainers)
 
     def _trainer_name_callback(self, *args, **kwargs):
-        if self._trainer_names.get() != const.NO_TRAINERS:
-            self._add_trainer.enable()
-        else:
+        selected_trainer = self._trainer_names.get() 
+        if selected_trainer == const.NO_TRAINERS:
             self._add_trainer.disable()
+            return
 
+        self._add_trainer.enable()
         if self.trainer_select_callback is not None:
-            self.trainer_select_callback(pkmn_db.trainer_db.get_trainer(self._trainer_names.get()))
-    
-    def add_pkmn_cmd(self, *args, **kwargs):
-        if self.add_wild_pkmn_callback is not None:
-            self.add_wild_pkmn_callback()
+            self.trainer_select_callback(selected_trainer)
     
     def add_trainer(self, *args, **kwargs):
         if self.trainer_add_callback is not None:
             self.trainer_add_callback(EventDefinition(trainer_name=self._trainer_names.get()))
+    
+    def add_area(self, *args, **kwargs):
+        if self.area_add_callback is not None:
+            self.area_add_callback(self._trainers_by_loc.get())
+
+
+class QuickWildPkmn(tk.Frame):
+    def __init__(self, *args, router:Router=None, event_creation_callback=None, **kwargs):
+        super().__init__(*args, **kwargs, highlightbackground="black", highlightthickness=2)
+
+        self.router = router
+        self.event_creation_callback = event_creation_callback
+
+        self.padx = 5
+        self.pady = 1
+        self.option_menu_width = 15
+
+        self._dropdowns = tk.Frame(self)
+        self._dropdowns.pack()
+
+        self._cur_row = 0
+        self._pkmn_filter_label = tk.Label(self._dropdowns, text="Filter:", justify=tk.LEFT)
+        self._pkmn_filter = custom_tkinter.SimpleEntry(self._dropdowns, callback=self._pkmn_filter_callback)
+        self._pkmn_filter.configure(width=self.option_menu_width)
+        self._pkmn_filter_label.grid(row=self._cur_row, column=0, padx=self.padx, pady=self.pady, sticky=tk.W)
+        self._pkmn_filter.grid(row=self._cur_row, column=1, padx=self.padx, pady=self.pady, sticky=tk.E)
+        self._cur_row += 1
+
+        self._pkmn_types_label = tk.Label(self._dropdowns, text="Wild Pkmn:", justify=tk.LEFT)
+        self._pkmn_types = custom_tkinter.SimpleOptionMenu(self._dropdowns, pkmn_db.pkmn_db.get_all_names())
+        self._pkmn_types.configure(width=self.option_menu_width)
+        self._pkmn_types_label.grid(row=self._cur_row, column=0, padx=self.padx, pady=self.pady, sticky=tk.W)
+        self._pkmn_types.grid(row=self._cur_row, column=1, padx=self.padx, pady=self.pady, sticky=tk.E)
+        self._cur_row += 1
+
+        self._level_label = tk.Label(self._dropdowns, text="Pkmn Level:", justify=tk.LEFT)
+        self._level_val = custom_tkinter.AmountEntry(self._dropdowns, callback=self._pkmn_level_callback)
+        self._level_val.configure(width=self.option_menu_width - 5)
+        self._level_label.grid(row=self._cur_row, column=0, padx=self.padx, pady=self.pady, sticky=tk.W)
+        self._level_val.grid(row=self._cur_row, column=1, padx=self.padx, pady=self.pady, sticky=tk.E)
+        self._cur_row += 1
+
+        self._buttons = tk.Frame(self)
+        self._buttons.pack(fill=tk.X, anchor=tk.CENTER, side=tk.BOTTOM)
+        self._btn_width = 8
+
+        self._add_wild_pkmn = custom_tkinter.SimpleButton(self._buttons, text="Add Wild Pkmn", command=self.add_pkmn_cmd)
+        self._add_wild_pkmn.grid(row=0, column=0, padx=self.padx, pady=self.pady + 1, sticky=tk.W)
+
+    def _pkmn_filter_callback(self, *args, **kwargs):
+        self._pkmn_types.new_values(pkmn_db.pkmn_db.get_filtered_names(filter_val=self._pkmn_filter.get().strip()))
+
+        if self._pkmn_types.get().strip().startswith(const.NO_POKEMON):
+            self._add_wild_pkmn.disable()
+        else:
+            self._add_wild_pkmn.enable()
+
+    def _pkmn_level_callback(self, *args, **kwargs):
+        try:
+            val = int(self._level_val.get().strip())
+            if val < 2 or val > 100:
+                raise ValueError
+        except Exception:
+            self._add_wild_pkmn.disable()
+            return
+        
+        if self._pkmn_types.get().strip().startswith(const.NO_POKEMON):
+            self._add_wild_pkmn.disable()
+        else:
+            self._add_wild_pkmn.enable()
+
+    def add_pkmn_cmd(self, *args, **kwargs):
+        if self.event_creation_callback is not None:
+            self.event_creation_callback(
+                EventDefinition(
+                    wild_pkmn_info=WildPkmnEventDefinition(
+                        self._pkmn_types.get(),
+                        int(self._level_val.get().strip())
+                    )
+                )
+            )
 
 
 class QuickItemAdd(tk.Frame):

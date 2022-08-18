@@ -6,6 +6,7 @@ from tkinter import filedialog
 from tkinter import ANCHOR, ttk
 
 from gui import custom_tkinter, route_event_components, pkmn_components, quick_add_components
+from gui.event_details import EventDetails
 from pkmn.route_events import EventDefinition, EventFolder, EventGroup, EventItem, InventoryEventDefinition, WildPkmnEventDefinition
 from utils.constants import const
 from utils.config_manager import config
@@ -83,12 +84,12 @@ class Main(tk.Tk):
         self.top_left_controls = tk.Frame(self.left_info_panel)
         self.top_left_controls.pack(fill=tk.X, anchor=tk.CENTER)
 
-        self.trainer_add = quick_add_components.QuickTrainerComponent(
+        self.trainer_add = quick_add_components.QuickTrainerAdd(
             self.top_left_controls,
             trainer_add_callback=self.quick_add_event,
-            trainer_select_callback=None,
+            trainer_select_callback=self.trainer_add_preview,
+            area_add_callback=self.add_area,
             router=self._data,
-            add_wild_pkmn_callback=None
         )
         self.trainer_add.grid(row=0, column=0, sticky=tk.NSEW, padx=5, pady=5)
 
@@ -97,6 +98,12 @@ class Main(tk.Tk):
             event_creation_callback=self.quick_add_event
         )
         self.item_add.grid(row=0, column=1, sticky=tk.NSEW, padx=5, pady=5)
+
+        self.wild_pkmn_add = quick_add_components.QuickWildPkmn(
+            self.top_left_controls,
+            event_creation_callback=self.quick_add_event
+        )
+        self.wild_pkmn_add.grid(row=0, column=2, sticky=tk.NSEW, padx=5, pady=5)
 
         self.group_controls = tk.Frame(self.left_info_panel)
         self.group_controls.pack(fill=tk.X, anchor=tk.CENTER)
@@ -134,54 +141,9 @@ class Main(tk.Tk):
         self.event_list.configure(yscrollcommand=self.scroll_bar.set)
 
         # right panel for event details
-        self.right_info_panel = tk.Frame(self.info_panel, width=850)
-        self.right_info_panel.grid(row=0, column=1, sticky="nsew")
-        self.right_info_panel.pack_propagate(0)
-
-        self.stat_info_label = tk.Label(self.right_info_panel, text="Stats with * are calculated with a badge boost")
-        self.stat_info_label.config(bg="white")
-        self.stat_info_label.pack()
-
-        self.pre_state_frame = tk.Frame(self.right_info_panel)
-        self.pre_state_frame.pack(fill=tk.X)
-        self.state_pre_label = tk.Label(self.pre_state_frame, text="Pre-event State Display Mode:")
-        self.state_pre_label.grid(column=1, row=0, padx=10, pady=10)
-        self.pre_state_selector = custom_tkinter.SimpleOptionMenu(self.pre_state_frame, [const.STATE_SUMMARY_LABEL, const.BADGE_BOOST_LABEL], callback=self._pre_state_display_mode_callback)
-        self.pre_state_selector.grid(column=2, row=0, padx=10, pady=10)
-        self.state_pre_viewer = pkmn_components.StateViewer(self.pre_state_frame)
-        self.state_pre_viewer.grid(column=1, row=1, padx=10, pady=10, columnspan=2)
-        self.badge_boost_viewer = pkmn_components.BadgeBoostViewer(self.pre_state_frame)
-        # centering contents with padded columns that expand
-        # NOTE: will have to update the index of the right-most column here if we add more columns in the future
-        self.pre_state_frame.columnconfigure(0, weight=1)
-        self.pre_state_frame.columnconfigure(3, weight=1)
-
-        self.event_details_frame = tk.Frame(self.right_info_panel, highlightbackground="black", highlightthickness=2)
-        self.event_details_frame.pack(anchor=tk.N, fill=tk.BOTH, expand=True, padx=10)
-        self.event_details_button = custom_tkinter.SimpleButton(self.event_details_frame, text="Update Event", command=self.update_existing_event)
-        self.event_details_button.pack()
-        self.event_details_button.disable()
-
-        self.event_editor_lookup = route_event_components.EventEditorFactory(self.event_details_frame, self.event_details_button)
-        self.current_event_editor = None
-
-        self.trainer_notes = self.event_editor_lookup.get_editor(
-            route_event_components.EditorParams(
-                const.TASK_NOTES_ONLY,
-                self._data.defeated_trainers,
-                None
-            )
-        )
-        self.trainer_notes.pack()
-        self.enemy_team_viewer = pkmn_components.EnemyPkmnTeam(self.event_details_frame)
-        self.enemy_team_viewer.pack()
-
-        self.post_state_frame = tk.Frame(self.right_info_panel)
-        self.post_state_frame.pack()
-        self.state_post_label = tk.Label(self.post_state_frame, text="Post-event State:")
-        self.state_post_label.grid(column=1, row=0, padx=10, pady=10)
-        self.state_post_viewer = pkmn_components.StateViewer(self.post_state_frame)
-        self.state_post_viewer.grid(column=1, row=1, padx=10, pady=10)
+        self.event_details = EventDetails(self.info_panel, event_update_callback=self.update_existing_event)
+        self.event_details.grid(row=0, column=1, sticky=tk.NSEW)
+        self.event_details.pack_propagate(0)
 
         self.info_panel.grid_rowconfigure(0, weight=1)
         # these uniform values don't have to be a specific value, they just have to match
@@ -209,143 +171,74 @@ class Main(tk.Tk):
         self.event_list.refresh()
         self.new_event_window = None
 
+    def run(self):
+        self.mainloop()
+
+    def save_route(self, *args, **kwargs):
+        route_name = self.route_name.get()
+        self._data.save(route_name)
+        self.message_label.set_message(f"Successfully saved route: {route_name}")
+
     def update_run_status(self, *args, **kwargs):
-        print("bwuh")
         if self._data.root_folder.has_errors():
             self.run_status_label.config(text="Run Status: Invalid", bg=const.ERROR_COLOR)
         else:
             self.run_status_label.config(text="Run Status: Valid", bg=const.VALID_COLOR)
     
-    def run(self):
-        self.mainloop()
-
-    def _pre_state_display_mode_callback(self, *args, **kwargs):
-        if self.pre_state_selector.get() == const.BADGE_BOOST_LABEL:
-            self.state_pre_viewer.grid_forget()
-            self.badge_boost_viewer.grid(column=1, row=1, padx=10, pady=10, columnspan=2)
+    def trainer_add_preview(self, trainer_name):
+        event_group = self._data.get_event_obj(self.event_list.get_selected_event_id())
+        if event_group is None:
+            init_state = self._data.init_route_state
         else:
-            self.badge_boost_viewer.grid_forget()
-            self.state_pre_viewer.grid(column=1, row=1, padx=10, pady=10, columnspan=2)
-    
-    def save_route(self, *args, **kwargs):
-        route_name = self.route_name.get()
-        self._data.save(route_name)
-        self.message_label.set_message(f"Successfully saved route: {route_name}")
-    
-    def _show_event_details_none(self):
-        self.event_details_button.pack_forget()
-        self.trainer_notes.pack_forget()
-        self.enemy_team_viewer.pack_forget()
-        self.enemy_team_viewer.set_team(None)
-        self.state_pre_viewer.set_state(self._data.init_route_state)
-        self.badge_boost_viewer.set_state(self._data.init_route_state)
-        self.state_post_viewer.set_state(self._data.get_final_state())
-        if self.current_event_editor is not None:
-            self.current_event_editor.pack_forget()
-    
-    def _show_event_details_non_folder(self, event_obj):
-        self.state_pre_viewer.set_state(event_obj.init_state)
-        self.badge_boost_viewer.set_state(event_obj.init_state)
-        self.state_post_viewer.set_state(event_obj.final_state)
-        self.rename_folder_button.disable()
-        self.event_details_button.pack()
-        if self.current_event_editor is not None:
-            self.current_event_editor.pack_forget()
-            self.current_event_editor = None
+            init_state = event_group.init_state
 
-        if isinstance(event_obj, EventItem):
-            self.move_group_down_button.disable()
-            self.move_group_up_button.disable()
-            self.delete_event_button.disable()
-            if (
-                event_obj.event_definition.learn_move is None or
-                event_obj.event_definition.learn_move.source != const.MOVE_SOURCE_LEVELUP
-            ):
-                self.event_details_button.disable()
-                event_obj = event_obj.parent
-            else:
-                self.event_details_button.enable()
-        else:
-            self.event_details_button.enable()
-            self.move_group_down_button.enable()
-            self.move_group_up_button.enable()
-            self.delete_event_button.enable()
-
-        if event_obj.event_definition.trainer_name is not None:
-            self.trainer_notes.pack()
-            self.trainer_notes.load_event(event_obj.event_definition)
-            self.enemy_team_viewer.pack()
-            self.enemy_team_viewer.set_team(event_obj.event_definition.get_trainer_obj().pkmn, cur_state=event_obj.init_state)
-        else:
-            self.trainer_notes.pack_forget()
-            self.enemy_team_viewer.pack_forget()
-            self.enemy_team_viewer.set_team(None)
-
-            # TODO: fix this gross ugly hack
-            if isinstance(event_obj, EventGroup) or event_obj.event_definition.get_event_type() == const.TASK_LEARN_MOVE_LEVELUP:
-                self.current_event_editor = self.event_editor_lookup.get_editor(
-                    route_event_components.EditorParams(
-                        event_obj.event_definition.get_event_type(),
-                        self._data.defeated_trainers,
-                        event_obj.init_state,
-                    )
-                )
-                self.current_event_editor.load_event(event_obj.event_definition)
-                self.current_event_editor.pack()
-    
-    def _show_event_details_folder(self, event_folder_obj:EventFolder):
-        self.state_pre_viewer.set_state(event_folder_obj.init_state)
-        self.badge_boost_viewer.set_state(event_folder_obj.init_state)
-        self.state_post_viewer.set_state(event_folder_obj.final_state)
-        self.trainer_notes.pack_forget()
-        self.enemy_team_viewer.pack_forget()
-
-        self.move_group_down_button.enable()
-        self.move_group_up_button.enable()
-        self.rename_folder_button.enable()
-        self.event_details_button.pack_forget()
-        self.trainer_notes.pack_forget()
-        self.enemy_team_viewer.set_team(None)
-        if self.current_event_editor is not None:
-            self.current_event_editor.pack_forget()
-        if len(event_folder_obj.children) == 0:
-            self.delete_event_button.enable()
-        else:
-            self.delete_event_button.disable()
+        # create a fake event_def just so we can show the trainer that the user is looking at
+        # TODO: just using the init_state as the post_event state as well. Ideally would like to use None for an empty state, but that's not currently supported
+        self.event_details.show_event_details(
+            EventDefinition(trainer_name=trainer_name),
+            init_state,
+            init_state,
+            allow_updates=False
+        )
     
     def show_event_details(self, *args, **kwargs):
         event_group = self._data.get_event_obj(self.event_list.get_selected_event_id())
         
         if event_group is None:
-            self._show_event_details_none()
+            self.event_details.show_event_details(None, self._data.init_route_state, self._data.get_final_state(), allow_updates=False)
+            self.rename_folder_button.disable()
+            self.delete_event_button.disable()
             self.item_add.cur_state = None
         elif isinstance(event_group, EventFolder):
-            self._show_event_details_folder(event_group)
-            self.item_add.cur_state = event_group.init_state
-        else:
-            self._show_event_details_non_folder(event_group)
-            self.item_add.cur_state = event_group.init_state
-        
-
-    def update_existing_event(self, *args, **kwargs):
-        if self.current_event_editor is None:
-            cur_event = self._data.get_event_obj(self.event_list.get_selected_event_id())
-            if isinstance(cur_event, EventGroup) and cur_event.event_definition.trainer_name is not None:
-                self._data.replace_event_group(
-                    self.event_list.get_selected_event_id(),
-                    EventDefinition(
-                        trainer_name=cur_event.event_definition.trainer_name,
-                        notes=self.trainer_notes.get_event().notes
-                    )
-                )
+            self.event_details.show_event_details(None, event_group.init_state, event_group.final_state, allow_updates=False)
+            self.rename_folder_button.enable()
+            if len(event_group.children) == 0:
+                self.delete_event_button.enable()
             else:
-                raise ValueError(f"Cannot update existing event when no event is being edited!")
-        
+                self.delete_event_button.disable()
+            self.item_add.cur_state = event_group.init_state
         else:
-            self._data.replace_event_group(self.event_list.get_selected_event_id(), self.current_event_editor.get_event())
+            do_allow_updates = (
+                 isinstance(event_group, EventGroup) or 
+                 event_group.event_definition.get_event_type() == const.TASK_LEARN_MOVE_LEVELUP
+            )
+            self.event_details.show_event_details(event_group.event_definition, event_group.init_state, event_group.final_state, do_allow_updates)
+            self.rename_folder_button.disable()
+            self.delete_event_button.enable()
+            self.item_add.cur_state = event_group.init_state
 
+    def update_existing_event(self, new_event):
+        self._data.replace_event_group(self.event_list.get_selected_event_id(), new_event)
         self.event_list.refresh()
         self.show_event_details()
+    
+    def add_area(self, area_name):
+        self._data.add_area(
+            area_name=area_name,
+            insert_before=self.event_list.get_selected_event_id()
+        )
+        self.trainer_add.trainer_filter_callback()
+        self.event_list.refresh()
     
     def quick_add_event(self, new_event):
         self._data.add_event_object(

@@ -101,6 +101,25 @@ class Router:
         for cur_item in event_group.event_items:
             self.event_item_lookup[cur_item.group_id] = cur_item
     
+    def add_area(self, area_name, insert_before=None, dest_folder_name=const.ROOT_FOLDER_NAME):
+        trainers_to_add = pkmn_db.trainer_db.get_valid_trainers(trainer_loc=area_name, defeated_trainers=self.defeated_trainers)
+        if len(trainers_to_add) == 0:
+            return
+
+        folder_name = area_name
+        count = 1
+        while folder_name in self.folder_lookup:
+            count += 1
+            folder_name = f"{area_name} Trip:{count}"
+        
+        # once we have a valid folder name to create, go ahead and create the folder
+        self.add_event_object(new_folder_name=folder_name, insert_before=insert_before, dest_folder_name=dest_folder_name, recalc=False)
+        # then just create all the trainer events in that area
+        for cur_trainer in trainers_to_add:
+            self.add_event_object(event_def=route_events.EventDefinition(trainer_name=cur_trainer), dest_folder_name=folder_name, recalc=False)
+        
+        self._recalc()
+    
     def add_event_object(self, event_def=None, new_folder_name=None, insert_before=None, dest_folder_name=const.ROOT_FOLDER_NAME, recalc=True):
         if not self.init_route_state:
             raise ValueError("Cannot add an event when solo pokmn is not yet selected")
@@ -110,7 +129,11 @@ class Router:
             raise ValueError("Cannot define both folder name and event definition")
         
         if insert_before is not None:
-            parent_obj = self.get_event_obj(insert_before).parent
+            insert_before_obj = self.get_event_obj(insert_before)
+            if isinstance(insert_before_obj, route_events.EventItem):
+                raise ValueError("Cannot insert an object into the middle of a group")
+
+            parent_obj = insert_before_obj.parent
         else:
             try:
                 parent_obj = self.folder_lookup[dest_folder_name]
