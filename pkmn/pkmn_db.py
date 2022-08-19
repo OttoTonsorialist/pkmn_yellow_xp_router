@@ -69,11 +69,9 @@ class TrainerDB:
             raw_db = json.load(f)
 
         for raw_trainer in raw_db.values():
-            """
             # TODO: currently just blindly ignoring all unused trainers. Not sure if I ever care about that
             if raw_trainer[const.TRAINER_LOC] == const.UNUSED_TRAINER_LOC:
                 continue
-            """
 
             trainer_obj = self._create_trainer(raw_trainer, pkmn_db)
 
