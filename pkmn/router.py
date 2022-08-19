@@ -13,6 +13,7 @@ from pkmn import route_state_objects
 class Router:
     def __init__(self):
         self.init_route_state = None
+        self.pkmn_version = None
         self.root_folder = route_events.EventFolder(None, const.ROOT_FOLDER_NAME)
         self.folder_lookup = {const.ROOT_FOLDER_NAME: self.root_folder}
         self.event_lookup = {}
@@ -28,6 +29,10 @@ class Router:
         self.event_item_lookup = {}
 
         self.defeated_trainers = set()
+    
+    def _change_version(self, new_version):
+        self.pkmn_version = new_version
+        pkmn_db.change_version(self.pkmn_version)
     
     def get_event_obj(self, event_id):
         return self.event_lookup.get(event_id, self.event_item_lookup.get(event_id))
@@ -245,21 +250,23 @@ class Router:
         with open(final_path, 'w') as f:
             json.dump({
                 const.NAME_KEY: self.init_route_state.solo_pkmn.name,
+                const.PKMN_VERSION_KEY: self.pkmn_version,
                 const.TASK_LEARN_MOVE_LEVELUP: [x.serialize() for x in self.level_up_move_defs.values()],
                 const.EVENTS: [self.root_folder.serialize()]
             }, f, indent=4)
     
-    def new_route(self, solo_mon, min_battles_name=None):
+    def new_route(self, solo_mon, min_battles_name=None, pkmn_version=const.YELLOW_VERSION):
         self.set_solo_pkmn(solo_mon)
 
         if min_battles_name is None:
             self._reset_events()
+            self._change_version(pkmn_version)
         else:
-            self.load(min_battles_name, min_battles=True)
+            self.load(min_battles_name, min_battles=True, min_battles_version=pkmn_version)
     
-    def load(self, name, min_battles=False):
+    def load(self, name, min_battles=False, min_battles_version=const.YELLOW_VERSION):
         if min_battles:
-            final_path = os.path.join(const.MIN_BATTLES_DIR, f"{name}.json")
+            final_path = os.path.join(pkmn_db.get_min_battles_dir(min_battles_version), f"{name}.json")
         else:
             final_path = os.path.join(const.SAVED_ROUTES_DIR, f"{name}.json")
 
@@ -267,6 +274,7 @@ class Router:
             result = json.load(f)
         
         self._reset_events()
+        self._change_version(result.get(const.PKMN_VERSION_KEY, const.YELLOW_VERSION))
 
         if min_battles:
             self.set_solo_pkmn(self.init_route_state.solo_pkmn.name)
@@ -278,7 +286,6 @@ class Router:
                 level_up_moves = None
             self.set_solo_pkmn(result[const.NAME_KEY], level_up_moves=level_up_moves)
         
-        load_start = time.time()
         if len(result[const.EVENTS]) > 0:
             # check contents of first event to check for legacy loading
             if result[const.EVENTS][0][const.EVENT_FOLDER_NAME] == const.ROOT_FOLDER_NAME:
@@ -293,8 +300,6 @@ class Router:
                     self.add_event_object(event_def=temp, dest_folder_name=temp.original_folder_name)
 
         self._recalc()
-        print(f"Load time: {time.time() - load_start}")
-        
     
     def _load_events_recursive(self, parent_folder:route_events.EventFolder, json_obj):
         for event_json in json_obj[const.EVENTS]:

@@ -29,7 +29,7 @@ def vitamin_to_route_one(vit):
 def generate_config_file(route: Router, config_path, route_path, out_path):
     ro_config = configparser.ConfigParser()
     ro_config.optionxform=str
-    ro_config["game"] = {"game": "yellow"}
+    ro_config["game"] = {"game": route.pkmn_version.lower()}
     ro_config["util"] = {
         "printxitems": True,
         "printrarecandies": True,

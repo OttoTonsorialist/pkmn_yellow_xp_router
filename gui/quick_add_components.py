@@ -15,6 +15,7 @@ class QuickTrainerAdd(tk.Frame):
         self.trainer_select_callback = trainer_select_callback
         self.trainer_add_callback = trainer_add_callback
         self.area_add_callback = area_add_callback
+        self.force_disable = True
 
         self.padx = 5
         self.pady = 1
@@ -25,23 +26,21 @@ class QuickTrainerAdd(tk.Frame):
 
         self._cur_row = 0
         self._trainers_by_loc_label = tk.Label(self._dropdowns, text="Location:", justify=tk.LEFT)
-        trainer_locs = [const.ALL_TRAINERS] + sorted(pkmn_db.trainer_db.get_all_locations())
-        self._trainers_by_loc = custom_tkinter.SimpleOptionMenu(self._dropdowns, trainer_locs, callback=self.trainer_filter_callback)
+        self._trainers_by_loc = custom_tkinter.SimpleOptionMenu(self._dropdowns, [const.ALL_TRAINERS], callback=self.trainer_filter_callback)
         self._trainers_by_loc.configure(width=self.option_menu_width)
         self._trainers_by_loc_label.grid(row=self._cur_row, column=0, padx=self.padx, pady=self.pady, sticky=tk.W)
         self._trainers_by_loc.grid(row=self._cur_row, column=1, padx=self.padx, pady=self.pady, sticky=tk.E)
         self._cur_row += 1
 
         self._trainers_by_class_label = tk.Label(self._dropdowns, text="Trainer Class:", justify=tk.LEFT)
-        trainer_classes = [const.ALL_TRAINERS] + sorted(pkmn_db.trainer_db.get_all_classes())
-        self._trainers_by_class = custom_tkinter.SimpleOptionMenu(self._dropdowns, trainer_classes, callback=self.trainer_filter_callback)
+        self._trainers_by_class = custom_tkinter.SimpleOptionMenu(self._dropdowns, [const.ALL_TRAINERS], callback=self.trainer_filter_callback)
         self._trainers_by_class.configure(width=self.option_menu_width)
         self._trainers_by_class_label.grid(row=self._cur_row, column=0, padx=self.padx, pady=self.pady, sticky=tk.W)
         self._trainers_by_class.grid(row=self._cur_row, column=1, padx=self.padx, pady=self.pady, sticky=tk.E)
         self._cur_row += 1
 
         self._trainer_names_label = tk.Label(self._dropdowns, text="Trainer:", justify=tk.LEFT)
-        self._trainer_names = custom_tkinter.SimpleOptionMenu(self._dropdowns, pkmn_db.trainer_db.get_valid_trainers(), callback=self._trainer_name_callback)
+        self._trainer_names = custom_tkinter.SimpleOptionMenu(self._dropdowns, [const.NO_TRAINERS], callback=self._trainer_name_callback)
         self._trainer_names.configure(width=self.option_menu_width)
         self._trainer_names_label.grid(row=self._cur_row, column=0, padx=self.padx, pady=self.pady, sticky=tk.W)
         self._trainer_names.grid(row=self._cur_row, column=1, padx=self.padx, pady=self.pady, sticky=tk.E)
@@ -55,15 +54,36 @@ class QuickTrainerAdd(tk.Frame):
         self._add_trainer.grid(row=0, column=0, padx=self.padx, pady=self.pady + 1, sticky=tk.E)
         self._add_area = custom_tkinter.SimpleButton(self._buttons, text="Add Area", command=self.add_area)
         self._add_area.grid(row=0, column=1, padx=self.padx, pady=self.pady + 1, sticky=tk.W)
+        self.update_button_status()
 
-    def trainer_filter_callback(self, *args, **kwargs):
+    def update_button_status(self, allow_enable=None):
+        if allow_enable is not None:
+            self.force_disable = not allow_enable
+
+        if self.force_disable:
+            self._add_trainer.disable()
+            self._add_area.disable()
+            return
+        
         loc_filter = self._trainers_by_loc.get()
-        class_filter = self._trainers_by_class.get()
-
         if loc_filter == const.ALL_TRAINERS:
             self._add_area.disable()
         else:
             self._add_area.enable()
+
+        selected_trainer = self._trainer_names.get() 
+        if selected_trainer == const.NO_TRAINERS:
+            self._add_trainer.disable()
+        else:
+            self._add_trainer.enable()
+    
+    def update_pkmn_version(self):
+        self._trainers_by_loc.new_values([const.ALL_TRAINERS] + sorted(pkmn_db.trainer_db.get_all_locations()))
+        self._trainers_by_class.new_values([const.ALL_TRAINERS] + sorted(pkmn_db.trainer_db.get_all_classes()))
+
+    def trainer_filter_callback(self, *args, **kwargs):
+        loc_filter = self._trainers_by_loc.get()
+        class_filter = self._trainers_by_class.get()
 
         valid_trainers = pkmn_db.trainer_db.get_valid_trainers(
             trainer_class=class_filter,
@@ -74,14 +94,14 @@ class QuickTrainerAdd(tk.Frame):
             valid_trainers.append(const.NO_TRAINERS)
 
         self._trainer_names.new_values(valid_trainers)
+        self.update_button_status()
 
     def _trainer_name_callback(self, *args, **kwargs):
+        self.update_button_status()
         selected_trainer = self._trainer_names.get() 
         if selected_trainer == const.NO_TRAINERS:
-            self._add_trainer.disable()
             return
 
-        self._add_trainer.enable()
         if self.trainer_select_callback is not None:
             self.trainer_select_callback(selected_trainer)
     
@@ -100,6 +120,7 @@ class QuickWildPkmn(tk.Frame):
 
         self.router = router
         self.event_creation_callback = event_creation_callback
+        self.force_disable = True
 
         self.padx = 5
         self.pady = 1
@@ -117,7 +138,7 @@ class QuickWildPkmn(tk.Frame):
         self._cur_row += 1
 
         self._pkmn_types_label = tk.Label(self._dropdowns, text="Wild Pkmn:", justify=tk.LEFT)
-        self._pkmn_types = custom_tkinter.SimpleOptionMenu(self._dropdowns, pkmn_db.pkmn_db.get_all_names())
+        self._pkmn_types = custom_tkinter.SimpleOptionMenu(self._dropdowns, [const.NO_POKEMON])
         self._pkmn_types.configure(width=self.option_menu_width)
         self._pkmn_types_label.grid(row=self._cur_row, column=0, padx=self.padx, pady=self.pady, sticky=tk.W)
         self._pkmn_types.grid(row=self._cur_row, column=1, padx=self.padx, pady=self.pady, sticky=tk.E)
@@ -136,14 +157,27 @@ class QuickWildPkmn(tk.Frame):
 
         self._add_wild_pkmn = custom_tkinter.SimpleButton(self._buttons, text="Add Wild Pkmn", command=self.add_pkmn_cmd)
         self._add_wild_pkmn.grid(row=0, column=0, padx=self.padx, pady=self.pady + 1, sticky=tk.W)
+        self.update_button_status()
 
-    def _pkmn_filter_callback(self, *args, **kwargs):
-        self._pkmn_types.new_values(pkmn_db.pkmn_db.get_filtered_names(filter_val=self._pkmn_filter.get().strip()))
+    def update_button_status(self, allow_enable=None):
+        if allow_enable is not None:
+            self.force_disable = not allow_enable
 
+        if self.force_disable:
+            self._add_wild_pkmn.disable()
+            return
+        
         if self._pkmn_types.get().strip().startswith(const.NO_POKEMON):
             self._add_wild_pkmn.disable()
         else:
             self._add_wild_pkmn.enable()
+    
+    def update_pkmn_version(self):
+        self._pkmn_types = custom_tkinter.SimpleOptionMenu(self._dropdowns, pkmn_db.pkmn_db.get_all_names())
+
+    def _pkmn_filter_callback(self, *args, **kwargs):
+        self._pkmn_types.new_values(pkmn_db.pkmn_db.get_filtered_names(filter_val=self._pkmn_filter.get().strip()))
+        self.update_button_status()
 
     def _pkmn_level_callback(self, *args, **kwargs):
         try:
@@ -182,6 +216,7 @@ class QuickItemAdd(tk.Frame):
         self.padx = 5
         self.pady = 1
         self.option_menu_width = 20
+        self.force_disable = True
 
         self._dropdowns = tk.Frame(self)
         self._dropdowns.pack()
@@ -199,13 +234,13 @@ class QuickItemAdd(tk.Frame):
         self._cur_row += 1
 
         self._item_selector_label = tk.Label(self._dropdowns, text="Item:")
-        self._item_selector = custom_tkinter.SimpleOptionMenu(self._dropdowns, pkmn_db.item_db.get_filtered_names(), callback=self.item_selector_callback)
+        self._item_selector = custom_tkinter.SimpleOptionMenu(self._dropdowns, [const.NO_ITEM], callback=self.item_selector_callback)
         self._item_selector.configure(width=self.option_menu_width)
         self._item_selector_label.grid(row=self._cur_row, column=0, padx=self.padx, pady=self.pady, sticky=tk.W)
         self._item_selector.grid(row=self._cur_row, column=1, padx=self.padx, pady=self.pady, sticky=tk.E)
 
         self._item_mart_label = tk.Label(self._dropdowns, text="Mart:")
-        self._item_mart_selector = custom_tkinter.SimpleOptionMenu(self._dropdowns, [const.ITEM_TYPE_ALL_ITEMS] + sorted(list(pkmn_db.item_db.mart_items.keys())), callback=self.item_filter_callback)
+        self._item_mart_selector = custom_tkinter.SimpleOptionMenu(self._dropdowns, [const.ITEM_TYPE_ALL_ITEMS], callback=self.item_filter_callback)
         self._item_mart_selector.configure(width=self.option_menu_width)
         self._item_mart_label.grid(row=self._cur_row, column=2, padx=self.padx, pady=self.pady, sticky=tk.W)
         self._item_mart_selector.grid(row=self._cur_row, column=3, padx=self.padx, pady=self.pady, sticky=tk.E)
@@ -250,7 +285,49 @@ class QuickItemAdd(tk.Frame):
 
         self._buttons.columnconfigure(2, weight=1)
         self._buttons.columnconfigure(5, weight=1)
-        self.item_selector_callback()
+        self.update_button_status()
+
+    def update_button_status(self, allow_enable=None):
+        if allow_enable is not None:
+            self.force_disable = not allow_enable
+
+        if self.force_disable:
+            self._acquire_button.disable()
+            self._drop_button.disable()
+            self._use_button.disable()
+            self._tm_hm_button.disable()
+            self._buy_button.disable()
+            self._sell_button.disable()
+            return
+        
+        cur_item = pkmn_db.item_db.get_item(self._item_selector.get())
+
+        if cur_item is None:
+            self._acquire_button.disable()
+            self._drop_button.disable()
+            self._use_button.disable()
+            self._tm_hm_button.disable()
+            self._buy_button.disable()
+            self._sell_button.disable()
+        else:
+            if cur_item.move_name is None:
+                self._tm_hm_button.disable()
+            else:
+                self._tm_hm_button.enable()
+            
+            if cur_item.name in const.VITAMIN_TYPES or cur_item.name == const.RARE_CANDY:
+                self._use_button.enable()
+            else:
+                self._use_button.disable()
+
+            self._acquire_button.enable()
+            self._drop_button.enable()
+            self._buy_button.enable()
+            self._sell_button.enable()
+    
+    def update_pkmn_version(self):
+        self._item_selector.new_values(pkmn_db.item_db.get_filtered_names())
+        self._item_mart_selector.new_values([const.ITEM_TYPE_ALL_ITEMS] + sorted(list(pkmn_db.item_db.mart_items.keys())))
 
     def item_filter_callback(self, *args, **kwargs):
         item_type = self._item_type_selector.get()
@@ -292,31 +369,7 @@ class QuickItemAdd(tk.Frame):
             self._purchase_cost_amt.config(text="")
             self._sell_cost_amt.config(text="")
         
-        if cur_item is None:
-            self._acquire_button.disable()
-            self._drop_button.disable()
-            self._use_button.disable()
-            self._tm_hm_button.disable()
-            self._buy_button.disable()
-            self._sell_button.disable()
-        else:
-            if cur_item.move_name is None:
-                self._tm_hm_button.disable()
-            else:
-                self._tm_hm_button.enable()
-            
-            if cur_item.name in const.VITAMIN_TYPES or cur_item.name == const.RARE_CANDY:
-                self._use_button.enable()
-            else:
-                self._use_button.disable()
-
-            self._acquire_button.enable()
-            self._drop_button.enable()
-            self._buy_button.enable()
-            self._sell_button.enable()
-
-        
-        
+        self.update_button_status()
     
     def _acquire_item(self, *arg, **kwargs):
         self._create_event(

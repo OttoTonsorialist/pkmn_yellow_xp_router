@@ -21,7 +21,7 @@ class Main(tk.Tk):
         self._data = router.Router()
 
         self.minsize(2000, 1200)
-        self.title("Pokemon Yellow XP Router")
+        self.title("Pokemon RBY XP Router")
 
         # fix tkinter bug
         style = ttk.Style()
@@ -63,15 +63,18 @@ class Main(tk.Tk):
         self.run_status_label = tk.Label(self.top_row, text="Run Status: Valid", background=const.VALID_COLOR, anchor=tk.W, padx=10, pady=10)
         self.run_status_label.grid(row=0, column=0, sticky=tk.W)
 
+        self.route_version = tk.Label(self.top_row, text="RBY Version", anchor=tk.W, padx=10, pady=10)
+        self.route_version.grid(row=0, column=1)
+
         self.route_name_label = tk.Label(self.top_row, text="Route Name: ")
-        self.route_name_label.grid(row=0, column=1)
+        self.route_name_label.grid(row=0, column=2)
 
         self.route_name = tk.Entry(self.top_row)
-        self.route_name.grid(row=0, column=2)
+        self.route_name.grid(row=0, column=3)
         self.route_name.config(width=30)
 
         self.message_label = custom_tkinter.AutoClearingLabel(self.top_row, width=100, justify=tk.LEFT, anchor=tk.W)
-        self.message_label.grid(row=0, column=3, sticky=tk.E)
+        self.message_label.grid(row=0, column=4, sticky=tk.E)
 
         # create container for split columns
         self.info_panel = tk.Frame(self.primary_window)
@@ -185,6 +188,24 @@ class Main(tk.Tk):
         else:
             self.run_status_label.config(text="Run Status: Valid", bg=const.VALID_COLOR)
     
+    def update_run_version(self, *args, **kwargs):
+        if self._data.pkmn_version == const.YELLOW_VERSION:
+            bg_color = const.YELLOW_COLOR
+        elif self._data.pkmn_version == const.RED_VERSION:
+            bg_color = const.RED_COLOR
+        elif self._data.pkmn_version == const.BLUE_VERSION:
+            bg_color = const.BLUE_COLOR
+
+        self.route_version.config(text=f"{self._data.pkmn_version} Version", background=bg_color)
+        self.trainer_add.update_pkmn_version()
+        self.wild_pkmn_add.update_pkmn_version()
+        self.item_add.update_pkmn_version()
+
+    def update_quick_add_buttons(self, allow_enable):
+        self.trainer_add.update_button_status(allow_enable=allow_enable)
+        self.wild_pkmn_add.update_button_status(allow_enable=allow_enable)
+        self.item_add.update_button_status(allow_enable=allow_enable)
+    
     def trainer_add_preview(self, trainer_name):
         event_group = self._data.get_event_obj(self.event_list.get_selected_event_id())
         if event_group is None:
@@ -203,6 +224,7 @@ class Main(tk.Tk):
     
     def show_event_details(self, *args, **kwargs):
         event_group = self._data.get_event_obj(self.event_list.get_selected_event_id())
+        self.update_quick_add_buttons((event_group is not None) and (not isinstance(event_group, EventItem)))
         
         if event_group is None:
             self.event_details.show_event_details(None, self._data.init_route_state, self._data.get_final_state(), allow_updates=False)
@@ -252,13 +274,14 @@ class Main(tk.Tk):
         if self._is_active_window():
             self.new_event_window = NewRouteWindow(self)
     
-    def create_new_route(self, solo_mon, min_battles_name):
+    def create_new_route(self, solo_mon, min_battles_name, pkmn_version):
         if min_battles_name == const.EMPTY_ROUTE_NAME:
             min_battles_name = None
         
         self.new_event_window.close()
         self.new_event_window = None
-        self._data.new_route(solo_mon, min_battles_name)
+        self._data.new_route(solo_mon, min_battles_name, pkmn_version=pkmn_version)
+        self.update_run_version()
         self.event_list.refresh()
         self.show_event_details()
     
@@ -272,6 +295,7 @@ class Main(tk.Tk):
         self._data.load(route_to_load)
         self.route_name.delete(0, tk.END)
         self.route_name.insert(0, route_to_load)
+        self.update_run_version()
         self.event_list.refresh()
         self.show_event_details()
 
@@ -430,38 +454,53 @@ class NewRouteWindow(custom_tkinter.Popup):
         self.padx = 5
         self.pady = 5
 
+        self.pkmn_version_label = tk.Label(self.controls_frame, text="Pokemon Version:")
+        self.pkmn_version_label.grid(row=0, column=0, padx=self.padx, pady=self.pady)
+        self.pkmn_version = custom_tkinter.SimpleOptionMenu(self.controls_frame, const.VERSION_LIST, command=self._pkmn_version_callback)
+        self.pkmn_version.config(width=20)
+        self.pkmn_version.grid(row=0, column=1, padx=self.padx, pady=self.pady)
+
         self.solo_selector_label = tk.Label(self.controls_frame, text="Solo Pokemon:")
-        self.solo_selector_label.grid(row=0, column=0, padx=self.padx, pady=self.pady)
-        self.solo_selector = custom_tkinter.SimpleOptionMenu(self.controls_frame, pkmn_db.pkmn_db.get_all_names())
+        self.solo_selector_label.grid(row=1, column=0, padx=self.padx, pady=self.pady)
+        self.solo_selector = custom_tkinter.SimpleOptionMenu(self.controls_frame, [const.NO_POKEMON])
         self.solo_selector.config(width=20)
-        self.solo_selector.grid(row=0, column=1, padx=self.padx, pady=self.pady)
+        self.solo_selector.grid(row=1, column=1, padx=self.padx, pady=self.pady)
+
         self.pkmn_filter_label = tk.Label(self.controls_frame, text="Solo Pokemon Filter:")
-        self.pkmn_filter_label.grid(row=1, column=0, padx=self.padx, pady=self.pady)
+        self.pkmn_filter_label.grid(row=2, column=0, padx=self.padx, pady=self.pady)
         self.pkmn_filter = custom_tkinter.SimpleEntry(self.controls_frame, callback=self._pkmn_filter_callback)
         self.pkmn_filter.config(width=30)
-        self.pkmn_filter.grid(row=1, column=1, padx=self.padx, pady=self.pady)
+        self.pkmn_filter.grid(row=2, column=1, padx=self.padx, pady=self.pady)
 
         self.min_battles_selector_label = tk.Label(self.controls_frame, text="Base Min-Battles Route:")
-        self.min_battles_selector_label.grid(row=2, column=0, padx=self.padx, pady=self.pady)
-        self.min_battles_selector = custom_tkinter.SimpleOptionMenu(self.controls_frame, [const.EMPTY_ROUTE_NAME] + pkmn_db.min_battles_db.data)
-        self.min_battles_selector.grid(row=2, column=1, padx=self.padx, pady=self.pady)
+        self.min_battles_selector_label.grid(row=3, column=0, padx=self.padx, pady=self.pady)
+        self.min_battles_selector = custom_tkinter.SimpleOptionMenu(self.controls_frame, [const.EMPTY_ROUTE_NAME])
+        self.min_battles_selector.grid(row=3, column=1, padx=self.padx, pady=self.pady)
 
         self.warning_label = tk.Label(self.controls_frame, text="WARNING: Any unsaved changes in your current route\nwill be lost when creating a new route!", justify=tk.CENTER, anchor=tk.CENTER)
-        self.warning_label.grid(row=3, column=0, columnspan=2, sticky=tk.EW, padx=self.padx, pady=self.pady)
+        self.warning_label.grid(row=4, column=0, columnspan=2, sticky=tk.EW, padx=self.padx, pady=self.pady)
 
         self.create_button = custom_tkinter.SimpleButton(self.controls_frame, text="Create Route", command=self.create)
-        self.create_button.grid(row=5, column=0, padx=self.padx, pady=self.pady)
+        self.create_button.grid(row=10, column=0, padx=self.padx, pady=self.pady)
         self.cancel_button = custom_tkinter.SimpleButton(self.controls_frame, text="Cancel", command=self._main_window.cancel_new_event)
-        self.cancel_button.grid(row=5, column=1, padx=self.padx, pady=self.pady)
+        self.cancel_button.grid(row=10, column=1, padx=self.padx, pady=self.pady)
 
         self.bind('<Return>', self.create)
         self.bind('<Escape>', self._main_window.cancel_new_event)
+        self._pkmn_version_callback()
+
+    def _pkmn_version_callback(self, *args, **kwargs):
+        # TODO: gross! ugly! slow! fix later! reloading entire db from disk every time we change this dropdown value :/
+        pkmn_db.change_version(self.pkmn_version.get())
+        # now that we've loaded the right version, repopulate the pkmn selector just in case
+        self.solo_selector.new_values(pkmn_db.pkmn_db.get_filtered_names(filter_val=self.pkmn_filter.get().strip()))
+        self.min_battles_selector.new_values([const.EMPTY_ROUTE_NAME] + pkmn_db.min_battles_db.data)
 
     def _pkmn_filter_callback(self, *args, **kwargs):
         self.solo_selector.new_values(pkmn_db.pkmn_db.get_filtered_names(filter_val=self.pkmn_filter.get().strip()))
     
     def create(self, *args, **kwargs):
-        self._main_window.create_new_route(self.solo_selector.get(), self.min_battles_selector.get())
+        self._main_window.create_new_route(self.solo_selector.get(), self.min_battles_selector.get(), self.pkmn_version.get())
 
 
 class LoadRouteWindow(custom_tkinter.Popup):

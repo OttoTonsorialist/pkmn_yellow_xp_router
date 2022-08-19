@@ -331,6 +331,9 @@ class EnemyPkmn:
         # pkmn_db should be a dict of names->BaseStats objects
         # just grab the StatBlock from there
         self.base_stat_block = base_stat_block
+    
+    def __repr__(self):
+        return f"Lv {self.level}: {self.name}"
 
 
 class Trainer:

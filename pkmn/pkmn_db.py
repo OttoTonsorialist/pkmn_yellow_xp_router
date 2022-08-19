@@ -7,10 +7,10 @@ from pkmn import pkmn_utils
 
 
 class MinBattlesDB:
-    def __init__(self):
+    def __init__(self, path):
         self.data = []
-        if os.path.exists(const.MIN_BATTLES_DIR):
-            for fragment in os.listdir(const.MIN_BATTLES_DIR):
+        if os.path.exists(path):
+            for fragment in os.listdir(path):
                 name, ext = os.path.splitext(fragment)
                 if ext != ".json":
                     continue
@@ -18,10 +18,10 @@ class MinBattlesDB:
 
 
 class PkmnDB:
-    def __init__(self):
+    def __init__(self, path):
         self._data = {}
 
-        with open(const.POKEMON_DB_PATH, 'r') as f:
+        with open(path, 'r') as f:
             raw_db = json.load(f)
 
         for cur_pkmn in raw_db.values():
@@ -60,18 +60,20 @@ class PkmnDB:
 
 
 class TrainerDB:
-    def __init__(self, pkmn_db):
+    def __init__(self, path, pkmn_db):
         self._data = {}
         self.loc_oriented_trainers = {}
         self.class_oriented_trainers = {}
 
-        with open(const.TRAINER_DB_PATH, 'r') as f:
+        with open(path, 'r') as f:
             raw_db = json.load(f)
 
         for raw_trainer in raw_db.values():
+            """
             # TODO: currently just blindly ignoring all unused trainers. Not sure if I ever care about that
             if raw_trainer[const.TRAINER_LOC] == const.UNUSED_TRAINER_LOC:
                 continue
+            """
 
             trainer_obj = self._create_trainer(raw_trainer, pkmn_db)
 
@@ -191,7 +193,41 @@ class ItemDB:
             return [x for x in result if x in self.mart_items[source_mart]]
 
 
-pkmn_db = PkmnDB()
-trainer_db = TrainerDB(pkmn_db)
-min_battles_db = MinBattlesDB()
 item_db = ItemDB()
+pkmn_db:PkmnDB = None
+trainer_db:TrainerDB = None
+min_battles_db:MinBattlesDB = None
+cur_version = None
+
+def change_version(new_version):
+    global cur_version
+    if cur_version == new_version:
+        return
+
+    cur_version = new_version
+    global pkmn_db
+    global trainer_db
+    global min_battles_db
+
+    if cur_version == const.YELLOW_VERSION:
+        pkmn_db = PkmnDB(const.YELLOW_POKEMON_DB_PATH)
+        trainer_db = TrainerDB(const.YELLOW_TRAINER_DB_PATH, pkmn_db)
+        min_battles_db = MinBattlesDB(const.YELLOW_MIN_BATTLES_DIR)
+    elif cur_version == const.RED_VERSION or cur_version == const.BLUE_VERSION:
+        pkmn_db = PkmnDB(const.RB_POKEMON_DB_PATH)
+        trainer_db = TrainerDB(const.RB_TRAINER_DB_PATH, pkmn_db)
+        min_battles_db = MinBattlesDB(const.RB_MIN_BATTLES_DIR)
+    else:
+        raise ValueError(f"Unknown Pkmn Game version: {cur_version}")
+
+
+def get_min_battles_dir(version):
+    if version == const.YELLOW_VERSION:
+        return const.YELLOW_MIN_BATTLES_DIR
+    elif version == const.RED_VERSION or version == const.BLUE_VERSION:
+        return const.RB_MIN_BATTLES_DIR
+    else:
+        raise ValueError(f"Unknown Pkmn Game version: {cur_version}")
+    
+
+

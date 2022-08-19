@@ -11,11 +11,18 @@ class Constants:
         self.POKEMON_RAW_DATA = os.path.join(self.SOURCE_ROOT_PATH, "raw_pkmn_data")
         self.ASSETS_PATH = os.path.join(self.SOURCE_ROOT_PATH, "assets")
 
-        self.POKEMON_DB_PATH = os.path.join(self.POKEMON_RAW_DATA, "pokemon.json")
         self.ITEM_DB_PATH = os.path.join(self.POKEMON_RAW_DATA, "items.json")
-        self.TRAINER_DB_PATH = os.path.join(self.POKEMON_RAW_DATA, "trainers.json")
-        self.MIN_BATTLES_DIR = os.path.join(self.POKEMON_RAW_DATA, "min_battles")
         self.SAVED_ROUTES_DIR = os.path.join(self.SOURCE_ROOT_PATH, "saved_routes")
+
+        self.YELLOW_ASSETS_PATH = os.path.join(self.POKEMON_RAW_DATA, "yellow")
+        self.YELLOW_POKEMON_DB_PATH = os.path.join(self.YELLOW_ASSETS_PATH, "pokemon.json")
+        self.YELLOW_TRAINER_DB_PATH = os.path.join(self.YELLOW_ASSETS_PATH, "trainers.json")
+        self.YELLOW_MIN_BATTLES_DIR = os.path.join(self.YELLOW_ASSETS_PATH, "min_battles")
+
+        self.RB_ASSETS_PATH = os.path.join(self.POKEMON_RAW_DATA, "red_blue")
+        self.RB_POKEMON_DB_PATH = os.path.join(self.RB_ASSETS_PATH, "pokemon.json")
+        self.RB_TRAINER_DB_PATH = os.path.join(self.RB_ASSETS_PATH, "trainers.json")
+        self.RB_MIN_BATTLES_DIR = os.path.join(self.RB_ASSETS_PATH, "min_battles")
 
         self.NAME_KEY = "name"
         self.BASE_HP_KEY = "base_hp"
@@ -258,6 +265,21 @@ class Constants:
         self.ROUTE_LIST_REFRESH_EVENT = "<<RouteListRefresh>>"
 
         self.EMPTY_ROUTE_NAME = "Empty Route"
+
+        self.PKMN_VERSION_KEY = "Version"
+        self.RED_VERSION = "Red"
+        self.BLUE_VERSION = "Blue"
+        self.YELLOW_VERSION = "Yellow"
+        self.VERSION_LIST = [
+            self.YELLOW_VERSION,
+            self.RED_VERSION,
+            self.BLUE_VERSION,
+        ]
+
+        self.YELLOW_COLOR = "yellow"
+        self.RED_COLOR = "#ff8888"
+        self.BLUE_COLOR = "#88b4ff"
+
 
 
 
