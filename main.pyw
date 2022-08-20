@@ -195,6 +195,8 @@ class Main(tk.Tk):
             bg_color = const.RED_COLOR
         elif self._data.pkmn_version == const.BLUE_VERSION:
             bg_color = const.BLUE_COLOR
+        else:
+            bg_color = "white"
 
         self.route_version.config(text=f"{self._data.pkmn_version} Version", background=bg_color)
         self.trainer_add.update_pkmn_version()

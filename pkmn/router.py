@@ -257,10 +257,10 @@ class Router:
     
     def new_route(self, solo_mon, min_battles_name=None, pkmn_version=const.YELLOW_VERSION):
         self.set_solo_pkmn(solo_mon)
+        self._change_version(pkmn_version)
 
         if min_battles_name is None:
             self._reset_events()
-            self._change_version(pkmn_version)
         else:
             self.load(min_battles_name, min_battles=True, min_battles_version=pkmn_version)
     
@@ -274,11 +274,12 @@ class Router:
             result = json.load(f)
         
         self._reset_events()
-        self._change_version(result.get(const.PKMN_VERSION_KEY, const.YELLOW_VERSION))
 
         if min_battles:
+            # min battles means we're starting a new route, which means we're relying on another function to set version
             self.set_solo_pkmn(self.init_route_state.solo_pkmn.name)
         else:
+            self._change_version(result.get(const.PKMN_VERSION_KEY, const.YELLOW_VERSION))
             raw_level_up_moves = result.get(const.TASK_LEARN_MOVE_LEVELUP)
             if raw_level_up_moves is not None:
                 level_up_moves = [route_events.LearnMoveEventDefinition.deserialize(x) for x in raw_level_up_moves]
@@ -296,8 +297,8 @@ class Router:
                 for cur_event in result[const.EVENTS]:
                     temp = route_events.EventDefinition.deserialize(cur_event)
                     if temp.original_folder_name not in self.folder_lookup:
-                        self.add_event_object(new_folder_name=temp.original_folder_name, dest_folder_name=const.ROOT_FOLDER_NAME)
-                    self.add_event_object(event_def=temp, dest_folder_name=temp.original_folder_name)
+                        self.add_event_object(new_folder_name=temp.original_folder_name, dest_folder_name=const.ROOT_FOLDER_NAME, recalc=False)
+                    self.add_event_object(event_def=temp, dest_folder_name=temp.original_folder_name, recalc=False)
 
         self._recalc()
     

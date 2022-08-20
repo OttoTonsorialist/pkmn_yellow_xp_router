@@ -17176,9 +17176,9 @@
         "money": 2600,
         "route_one_offset": "0x3A443"
     },
-    "Rival2 Bulbasar 3": {
+    "Rival2 Bulbasaur 3": {
         "trainer_class": "Rival2",
-        "trainer_name": "Rival2 Bulbasar 3",
+        "trainer_name": "Rival2 Bulbasaur 3",
         "trainer_location": "Silph",
         "pokemon": [
             {
@@ -17459,9 +17459,9 @@
         "money": 3445,
         "route_one_offset": "0x3A467"
     },
-    "Rival2 Bulbasar 4": {
+    "Rival2 Bulbasaur 4": {
         "trainer_class": "Rival2",
-        "trainer_name": "Rival2 Bulbasar 4",
+        "trainer_name": "Rival2 Bulbasaur 4",
         "trainer_location": "Route 22",
         "pokemon": [
             {

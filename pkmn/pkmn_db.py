@@ -8,6 +8,7 @@ from pkmn import pkmn_utils
 
 class MinBattlesDB:
     def __init__(self, path):
+        self._path = path
         self.data = []
         if os.path.exists(path):
             for fragment in os.listdir(path):
@@ -19,6 +20,7 @@ class MinBattlesDB:
 
 class PkmnDB:
     def __init__(self, path):
+        self._path = path
         self._data = {}
 
         with open(path, 'r') as f:
@@ -61,6 +63,7 @@ class PkmnDB:
 
 class TrainerDB:
     def __init__(self, path, pkmn_db):
+        self._path = path
         self._data = {}
         self.loc_oriented_trainers = {}
         self.class_oriented_trainers = {}
@@ -201,7 +204,7 @@ def change_version(new_version):
     global cur_version
     if cur_version == new_version:
         return
-
+    
     cur_version = new_version
     global pkmn_db
     global trainer_db

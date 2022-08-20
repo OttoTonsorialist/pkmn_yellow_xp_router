@@ -1,5 +1,6 @@
 {
     "name": "Parasect",
+    "Version": "Red",
     "Learn Levelup Move": [
         [
             "Stun Spore",
@@ -35,7 +36,7 @@
     "events": [
         {
             "Event Folder Name": "Main",
-            "Fight Trainer": "Rival1 1"
+            "Fight Trainer": "Rival1 Bulbasaur 1"
         },
         {
             "Event Folder Name": "Main",
@@ -90,11 +91,11 @@
         },
         {
             "Event Folder Name": "Main",
-            "Fight Trainer": "SuperNerd 2"
+            "Fight Trainer": "Rocket 1"
         },
         {
             "Event Folder Name": "Main",
-            "Fight Trainer": "Jessie & James 1"
+            "Fight Trainer": "SuperNerd 2"
         },
         {
             "Event Folder Name": "Main",
@@ -115,7 +116,7 @@
         },
         {
             "Event Folder Name": "Main",
-            "Fight Trainer": "Rival1 3"
+            "Fight Trainer": "Rival1 Bulbasaur 3"
         },
         {
             "Event Folder Name": "Main",
@@ -180,7 +181,7 @@
         },
         {
             "Event Folder Name": "Main",
-            "Fight Trainer": "Rival2 1"
+            "Fight Trainer": "Rival2 Bulbasaur 1"
         },
         {
             "Event Folder Name": "Main",
@@ -255,7 +256,7 @@
         },
         {
             "Event Folder Name": "Main",
-            "Fight Trainer": "Rival2 2 Flareon"
+            "Fight Trainer": "Rival2 Bulbasaur 2"
         },
         {
             "Event Folder Name": "Main",
@@ -280,7 +281,15 @@
         },
         {
             "Event Folder Name": "Main",
-            "Fight Trainer": "Jessie & James 3"
+            "Fight Trainer": "Rocket 19"
+        },
+        {
+            "Event Folder Name": "Main",
+            "Fight Trainer": "Rocket 20"
+        },
+        {
+            "Event Folder Name": "Main",
+            "Fight Trainer": "Rocket 21"
         },
         {
             "Event Folder Name": "Main",
@@ -288,11 +297,11 @@
         },
         {
             "Event Folder Name": "Main",
-            "Fight Trainer": "Rival2 3 Flareon"
+            "Fight Trainer": "Rival2 Bulbasaur 3"
         },
         {
             "Event Folder Name": "Main",
-            "Fight Trainer": "Jessie & James 4"
+            "Fight Trainer": "Rocket 41"
         },
         {
             "Event Folder Name": "Main",
@@ -404,7 +413,7 @@
         },
         {
             "Event Folder Name": "Main",
-            "Fight Trainer": "Rival2 4 Flareon"
+            "Fight Trainer": "Rival2 Bulbasaur 4"
         },
         {
             "Event Folder Name": "Main",
@@ -433,7 +442,7 @@
         },
         {
             "Event Folder Name": "Main",
-            "Fight Trainer": "Rival3 Flareon"
+            "Fight Trainer": "Rival3 Bulbasaur"
         }
     ]
 }

@@ -141,6 +141,8 @@ class EventDefinition:
     def get_trainer_obj(self):
         if self._trainer_obj is None and self.trainer_name is not None:
             self._trainer_obj = pkmn_db.trainer_db.get_trainer(self.trainer_name)
+            if self._trainer_obj is None:
+                raise ValueError(f"Could not find trainer object for trainer named: '{self.trainer_name}', from trainer_db, loaded from: '{pkmn_db.trainer_db._path}'")
         return self._trainer_obj
     
     def get_wild_pkmn(self):
