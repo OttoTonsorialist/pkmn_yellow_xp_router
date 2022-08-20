@@ -549,7 +549,7 @@ class LoadRouteWindow(custom_tkinter.Popup):
 
         self.previous_route_label = tk.Label(self.controls_frame, text="Existing Routes:")
         self.previous_route_label.grid(row=0, column=0, padx=self.padx, pady=self.pady)
-        self.previous_route_names = custom_tkinter.SimpleOptionMenu(self.controls_frame, self.get_existing_routes())
+        self.previous_route_names = custom_tkinter.SimpleOptionMenu(self.controls_frame, self.get_existing_routes(), callback=self._select_callback)
         self.previous_route_names.grid(row=0, column=1, padx=self.padx, pady=self.pady)
         self.previous_route_names.config(width=25)
 
@@ -569,6 +569,7 @@ class LoadRouteWindow(custom_tkinter.Popup):
         self.bind('<Return>', self.load)
         self.bind('<Escape>', self._main_window.cancel_new_event)
         self.filter.focus()
+        self._select_callback()
 
     def get_existing_routes(self, filter_text=""):
         loaded_routes = []
@@ -581,13 +582,26 @@ class LoadRouteWindow(custom_tkinter.Popup):
                 if ext != ".json":
                     continue
                 loaded_routes.append(name)
+        
+        if not loaded_routes:
+            loaded_routes = [const.NO_SAVED_ROUTES]
 
         return loaded_routes
 
     def _filter_callback(self, *args, **kwargs):
         self.previous_route_names.new_values(self.get_existing_routes(filter_text=self.filter.get()))
+
+    def _select_callback(self, *args, **kwargs):
+        selected_route = self.previous_route_names.get()
+        if selected_route == const.NO_SAVED_ROUTES:
+            self.create_button.disable()
+        else:
+            self.create_button.enable()
     
     def load(self, *args, **kwargs):
+        selected_route = self.previous_route_names.get()
+        if selected_route == const.NO_SAVED_ROUTES:
+            return
         self._main_window.load_route(self.previous_route_names.get())
 
 

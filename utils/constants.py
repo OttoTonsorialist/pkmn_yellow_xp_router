@@ -322,6 +322,8 @@ class Constants:
         self.MOVE_BG_COLOR = "#d4e6f1"
         self.HEADER_BG_COLOR = "#f6ddcc"
 
+        self.NO_SAVED_ROUTES = "No Saved Routes"
+
 
 
 
