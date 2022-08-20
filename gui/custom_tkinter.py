@@ -220,7 +220,7 @@ class CustomGridview(CheckboxTreeview):
         return item_id
     
 
-class SimpleOptionMenu(tk.OptionMenu):
+class SimpleOptionMenu(ttk.Combobox):
     def __init__(self, root, option_list, callback=None, default_val=None, **kwargs):
         self._val = tk.StringVar()
         self.cur_options = option_list
@@ -232,8 +232,7 @@ class SimpleOptionMenu(tk.OptionMenu):
         if callback is not None:
             self._val.trace("w", callback)
 
-        super().__init__(root, self._val, *option_list, **kwargs)
-        self._menu = self.children["menu"]
+        super().__init__(root, textvariable=self._val, values=option_list, state="readonly", **kwargs)
     
     def enable(self):
         self.configure(state="active")
@@ -250,11 +249,7 @@ class SimpleOptionMenu(tk.OptionMenu):
     
     def new_values(self, option_list, default_val=None):
         self.cur_options = option_list
-        self._menu.delete(0, "end")
-        if not len(option_list):
-            option_list = [""]
-        for val in option_list:
-            self._menu.add_command(label=val, command=lambda v=val: self._val.set(v))
+        self.config(values=self.cur_options)
 
         if default_val is None:
             default_val = option_list[0]

@@ -173,7 +173,7 @@ class QuickWildPkmn(tk.Frame):
             self._add_wild_pkmn.enable()
     
     def update_pkmn_version(self):
-        self._pkmn_types = custom_tkinter.SimpleOptionMenu(self._dropdowns, pkmn_db.pkmn_db.get_all_names())
+        self._pkmn_types.new_values(pkmn_db.pkmn_db.get_all_names())
 
     def _pkmn_filter_callback(self, *args, **kwargs):
         self._pkmn_types.new_values(pkmn_db.pkmn_db.get_filtered_names(filter_val=self._pkmn_filter.get().strip()))
@@ -188,10 +188,7 @@ class QuickWildPkmn(tk.Frame):
             self._add_wild_pkmn.disable()
             return
         
-        if self._pkmn_types.get().strip().startswith(const.NO_POKEMON):
-            self._add_wild_pkmn.disable()
-        else:
-            self._add_wild_pkmn.enable()
+        self.update_button_status()
 
     def add_pkmn_cmd(self, *args, **kwargs):
         if self.event_creation_callback is not None:

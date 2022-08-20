@@ -490,7 +490,7 @@ class NewRouteWindow(custom_tkinter.Popup):
 
         self.pkmn_version_label = tk.Label(self.controls_frame, text="Pokemon Version:")
         self.pkmn_version_label.grid(row=0, column=0, padx=self.padx, pady=self.pady)
-        self.pkmn_version = custom_tkinter.SimpleOptionMenu(self.controls_frame, const.VERSION_LIST, command=self._pkmn_version_callback)
+        self.pkmn_version = custom_tkinter.SimpleOptionMenu(self.controls_frame, const.VERSION_LIST, callback=self._pkmn_version_callback)
         self.pkmn_version.config(width=20)
         self.pkmn_version.grid(row=0, column=1, padx=self.padx, pady=self.pady)
 
