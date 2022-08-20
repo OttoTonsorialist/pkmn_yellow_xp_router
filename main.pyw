@@ -43,12 +43,17 @@ class Main(tk.Tk):
         self.event_menu.add_command(label="Transfer Event             (Ctrl+R)", command=self.open_transfer_event_window)
         self.event_menu.add_command(label="Delete Event             (Ctrl+B)", command=self.delete_group)
 
+        self.folder_menu = tk.Menu(self.top_menu_bar, tearoff=0)
+        self.folder_menu.add_command(label="New Folder                   (Ctrl+Q)", command=self.open_new_folder_window)
+        self.folder_menu.add_command(label="Rename Cur Folder       (Ctrl+W)", command=self.rename_folder)
+
         self.export_menu = tk.Menu(self.top_menu_bar, tearoff=0)
         self.export_menu.add_command(label="Export           (Ctrl+Shift+E)", command=self.open_export_window)
         self.export_menu.add_command(label="Quick Run    (Ctrl+Shift+R)", command=self.just_export_and_run)
 
         self.top_menu_bar.add_cascade(label="File", menu=self.file_menu)
         self.top_menu_bar.add_cascade(label="Events", menu=self.event_menu)
+        self.top_menu_bar.add_cascade(label="Folders", menu=self.folder_menu)
         self.top_menu_bar.add_cascade(label="RouteOne", menu=self.export_menu)
 
         # main container for everything to sit in... might be unnecessary?
@@ -164,6 +169,9 @@ class Main(tk.Tk):
         self.bind('<Control-r>', self.open_transfer_event_window)
         self.bind('<Control-b>', self.delete_group)
         self.bind('<Delete>', self.delete_group)
+        # folder actions
+        self.bind('<Control-q>', self.open_new_folder_window)
+        self.bind('<Control-w>', self.rename_folder)
         # route One integrations
         self.bind('<Control-E>', self.open_export_window)
         self.bind('<Control-R>', self.just_export_and_run)
@@ -490,6 +498,7 @@ class NewRouteWindow(custom_tkinter.Popup):
         self.bind('<Return>', self.create)
         self.bind('<Escape>', self._main_window.cancel_new_event)
         self._pkmn_version_callback()
+        self.pkmn_filter.focus()
 
     def _pkmn_version_callback(self, *args, **kwargs):
         # TODO: gross! ugly! slow! fix later! reloading entire db from disk every time we change this dropdown value :/
@@ -535,6 +544,7 @@ class LoadRouteWindow(custom_tkinter.Popup):
 
         self.bind('<Return>', self.load)
         self.bind('<Escape>', self._main_window.cancel_new_event)
+        self.filter.focus()
 
     def get_existing_routes(self, filter_text=""):
         loaded_routes = []
@@ -568,15 +578,16 @@ class NewFolderWindow(custom_tkinter.Popup):
 
         self._label = tk.Label(self)
         self._folder_name = custom_tkinter.SimpleEntry(self, callback=self.folder_name_update)
-        self._label.grid(row=0, column=0)
-        self._folder_name.grid(row=0, column=1)
+        self._label.grid(row=0, column=0, padx=10, pady=10)
+        self._folder_name.grid(row=0, column=1, padx=10, pady=10)
         self._add_button = custom_tkinter.SimpleButton(self, command=self.create)
         self._cancel_button = custom_tkinter.SimpleButton(self, text="Cancel", command=self._main_window.cancel_new_event)
-        self._add_button.grid(row=1, column=0)
-        self._cancel_button.grid(row=1, column=1)
+        self._add_button.grid(row=1, column=0, padx=10, pady=10)
+        self._cancel_button.grid(row=1, column=1, padx=10, pady=10)
 
         self.bind('<Return>', self.create)
         self.bind('<Escape>', self._main_window.cancel_new_event)
+        self._folder_name.focus()
 
         if prev_folder_name is None:
             self.title("Create New Folder")
@@ -635,6 +646,7 @@ class TransferEventWindow(custom_tkinter.Popup):
 
         self.bind('<Return>', self.transfer)
         self.bind('<Escape>', self._main_window.cancel_new_event)
+        self.filter.focus()
     
     def get_possible_folders(self, filter_text=""):
         filter_text = filter_text.lower()
