@@ -93,6 +93,7 @@ class EventDetails(tk.Frame):
             self.enemy_team_viewer.set_team(None)
             self.trainer_notes.load_event(None)
             self.enemy_team_viewer.pack_forget()
+            self.event_details_button.disable()
         else:
             if allow_updates:
                 self.event_details_button.enable()

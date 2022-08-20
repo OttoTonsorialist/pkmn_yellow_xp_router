@@ -35,6 +35,7 @@ class Main(tk.Tk):
         self.file_menu.add_command(label="New Route       (Ctrl+N)", command=self.open_new_route_window)
         self.file_menu.add_command(label="Load Route      (Ctrl+L)", command=self.open_load_route_window)
         self.file_menu.add_command(label="Save Route       (Ctrl+S)", command=self.save_route)
+        self.file_menu.add_command(label="Export Notes       (Ctrl+Shift+W)", command=self.save_route)
 
         self.event_menu = tk.Menu(self.top_menu_bar, tearoff=0)
         self.event_menu.add_command(label="New Event                   (Ctrl+F)", command=self.open_new_event_window)
@@ -162,6 +163,7 @@ class Main(tk.Tk):
         self.bind('<Control-n>', self.open_new_route_window)
         self.bind('<Control-l>', self.open_load_route_window)
         self.bind('<Control-s>', self.save_route)
+        self.bind('<Control-W>', self.export_notes)
         # event actions
         self.bind('<Control-f>', self.open_new_event_window)
         self.bind('<Control-d>', self.move_group_down)
@@ -189,6 +191,9 @@ class Main(tk.Tk):
         route_name = self.route_name.get()
         self._data.save(route_name)
         self.message_label.set_message(f"Successfully saved route: {route_name}")
+    
+    def export_notes(self, *args, **kwargs):
+        self.message_label.set_message(f"Exported notes to: {self._data.export_notes(self.route_name.get())}")
 
     def update_run_status(self, *args, **kwargs):
         if self._data.root_folder.has_errors():

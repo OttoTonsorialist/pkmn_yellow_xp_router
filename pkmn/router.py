@@ -314,4 +314,47 @@ class Router:
                     dest_folder_name=parent_folder.name,
                     recalc=False
                 )
+    
+    def export_notes(self, name):
+        dest_path = os.path.join(const.SAVED_ROUTES_DIR, f"{name}_notes.txt")
+
+        output = []
+        self._export_recursive(self.root_folder, 0, output)
+
+        with open(dest_path, 'w') as f:
+            f.write("\n".join(output))
+        
+        return dest_path
                 
+    def _recalc(self):
+        self.event_item_lookup = {}
+
+        # TODO: only recalc what's necessary, based on a passed-in index
+        # TODO: wrapper for recursive function currently does nothing, may want to remove later
+        self._recursive_recalc(self.root_folder, self.init_route_state)
+
+    def _export_single_entry(self, obj, depth:int, output:list):
+        indent = "\t" * depth
+        if isinstance(obj, route_events.EventFolder):
+            output.append(f"{indent}Folder: {obj.name}")
+        elif isinstance(obj, route_events.EventDefinition):
+            output.append(f"{indent}{obj}")
+            if obj.notes:
+                notes_val = indent + obj.notes.replace('\n', '\n' + indent)
+                output.append(notes_val)
+        output.append(indent)
+
+    def _export_recursive(self, cur_folder:route_events.EventFolder, depth, output:list):
+        for cur_obj in cur_folder.children:
+            if not cur_obj.enabled:
+                continue
+            if isinstance(cur_obj, route_events.EventFolder):
+                self._export_single_entry(cur_obj, depth, output)
+                self._export_recursive(cur_obj, depth + 1, output)
+            else:
+                self._export_single_entry(cur_obj.event_definition, depth, output)
+
+                for cur_item in cur_obj.event_items:
+                    item_event:route_events.EventDefinition = cur_item.event_definition
+                    if item_event != cur_obj.event_definition and item_event.learn_move is not None:
+                        self._export_single_entry(item_event, depth, output)
