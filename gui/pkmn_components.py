@@ -147,129 +147,81 @@ class InventoryViewer(tk.Frame):
 
 
 class PkmnViewer(tk.Frame):
-    def __init__(self, *args, **kwargs):
+    def __init__(self, *args, stats_only=False, **kwargs):
         super().__init__(*args, **kwargs)
-        self.config(bg="white", padx=5, pady=5, height=150, width=250)
+
+        self.stats_only = stats_only
+        self.config(bg="white", padx=5, pady=5, height=150)
         self._labels = []
 
-        self._name_value = tk.Label(self, anchor=tk.W, background="white")
-        self._name_value.grid(row=0, column=0, columnspan=2, sticky=tk.W)
+        self.stat_width = 4
+        self.move_width = 12
 
-        self._level_label = tk.Label(self, text="Lv:", anchor=tk.W, background="white")
-        self._level_label.grid(row=0, column=2, sticky=tk.W)
+        self._name_value = tk.Label(self, background=const.HEADER_BG_COLOR)
+        self._name_value.grid(row=0, column=0, columnspan=2, sticky=tk.EW)
+
+        self._level_frame = tk.Frame(self, background=const.HEADER_BG_COLOR)
+        self._level_frame.grid(row=1, column=0, sticky=tk.EW)
+
+        self._level_label = tk.Label(self._level_frame, text="Lv:", anchor=tk.W, background=const.HEADER_BG_COLOR)
+        self._level_label.grid(row=1, column=0, sticky=tk.W)
         self._labels.append(self._level_label)
-        self._level_value = tk.Label(self, anchor=tk.E, background="white")
-        self._level_value.grid(row=0, column=3, sticky=tk.E)
+        self._level_value = tk.Label(self._level_frame, anchor=tk.E, background=const.HEADER_BG_COLOR)
+        self._level_value.grid(row=1, column=1, sticky=tk.E)
+        self._level_frame.columnconfigure(1, weight=1)
 
-        self._hp_label = tk.Label(self, text="HP:", anchor=tk.W, background="white")
-        self._hp_label.grid(row=1, column=0, sticky=tk.W)
-        self._labels.append(self._hp_label)
-        self._hp_value = tk.Label(self, anchor=tk.E, background="white")
-        self._hp_value.grid(row=1, column=1, sticky=tk.E)
+        self.stat_column = StatColumn(self, bg_color=const.STAT_BG_COLOR, val_width=self.stat_width, num_rows=5)
+        self.stat_column.set_labels(["HP:", "Attack:", "Defense:", "Special:", "Speed:"])
+        self.stat_column.set_header("")
+        self.stat_column.grid(row=2, column=0, sticky=tk.W)
 
-        self._xp_label = tk.Label(self, text="Exp:", anchor=tk.W, background="white")
+        self._xp_frame = tk.Frame(self, background=const.HEADER_BG_COLOR)
+        self._xp_label = tk.Label(self._xp_frame, text="Exp:", anchor=tk.W, background=const.HEADER_BG_COLOR)
         self._xp_label.grid(row=1, column=2, sticky=tk.W)
         self._labels.append(self._xp_label)
-        self._xp_value = tk.Label(self, anchor=tk.E, background="white")
+        self._xp_value = tk.Label(self._xp_frame, anchor=tk.E, background=const.HEADER_BG_COLOR)
         self._xp_value.grid(row=1, column=3, sticky=tk.E)
+        self._xp_frame.columnconfigure(1, weight=1)
 
-        self._attack_label = tk.Label(self, text="Attack:", anchor=tk.W, background="white")
-        self._attack_label.grid(row=2, column=0, sticky=tk.W)
-        self._labels.append(self._attack_label)
-        self._attack_value = tk.Label(self, anchor=tk.E, background="white")
-        self._attack_value.grid(row=2, column=1, sticky=tk.E)
+        self.move_column = StatColumn(self, bg_color=const.MOVE_BG_COLOR, val_width=self.move_width, num_rows=5)
+        self.move_column.set_labels(["Move 1:", "Move 2:", "Move 3:", "Move 4:", ""])
+        self.move_column.set_header("")
 
-        self._move_one_label = tk.Label(self, text="Move 1:", anchor=tk.W, background="white")
-        self._move_one_label.grid(row=2, column=2, sticky=tk.W)
-        self._labels.append(self._move_one_label)
-        self._move_one_value = tk.Label(self, background="white")
-        self._move_one_value.grid(row=2, column=3)
+        if not self.stats_only:
+            self._xp_frame.grid(row=1, column=1, sticky=tk.EW)
+            self.move_column.grid(row=2, column=1, sticky=tk.E)
 
-        self._defense_label = tk.Label(self, text="Defense:", anchor=tk.W, background="white")
-        self._defense_label.grid(row=3, column=0, sticky=tk.W)
-        self._labels.append(self._defense_label)
-        self._defense_value = tk.Label(self, anchor=tk.E, background="white")
-        self._defense_value.grid(row=3, column=1, sticky=tk.E)
-
-        self._move_two_label = tk.Label(self, text="Move 2:", anchor=tk.W, background="white")
-        self._move_two_label.grid(row=3, column=2, sticky=tk.W)
-        self._labels.append(self._move_two_label)
-        self._move_two_value = tk.Label(self, background="white")
-        self._move_two_value.grid(row=3, column=3)
-
-        self._special_label = tk.Label(self, text="Special:", anchor=tk.W, background="white")
-        self._special_label.grid(row=4, column=0, sticky=tk.W)
-        self._labels.append(self._special_label)
-        self._special_value = tk.Label(self, anchor=tk.E, background="white")
-        self._special_value.grid(row=4, column=1, sticky=tk.E)
-
-        self._move_three_label = tk.Label(self, text="Move 3:", anchor=tk.W, background="white")
-        self._move_three_label.grid(row=4, column=2, sticky=tk.W)
-        self._labels.append(self._move_three_label)
-        self._move_three_value = tk.Label(self, background="white")
-        self._move_three_value.grid(row=4, column=3)
-
-        self._speed_frame = tk.Frame(self, background="white")
-        self._speed_frame.grid(row=5, column=0, sticky=tk.EW, columnspan=2)
-        self._speed_label = tk.Label(self._speed_frame, text="Speed:", anchor=tk.W, background="white")
-        self._speed_label.grid(row=0, column=0, sticky=tk.EW)
-        self._labels.append(self._speed_label)
-        self._speed_value = tk.Label(self._speed_frame, anchor=tk.E, background="white")
-        self._speed_value.grid(row=0, column=1, sticky=tk.EW)
-        self._speed_frame.columnconfigure(1, weight=1)
-
-        self._move_four_label = tk.Label(self, text="Move 4:", anchor=tk.W, background="white")
-        self._move_four_label.grid(row=5, column=2, sticky=tk.W)
-        self._labels.append(self._move_four_label)
-        self._move_four_value = tk.Label(self, background="white")
-        self._move_four_value.grid(row=5, column=3)
 
     def set_pkmn(self, pkmn:data_objects.EnemyPkmn, badges:data_objects.BadgeList=None, speed_bg_color=None):
         if speed_bg_color is None:
-            speed_bg_color = "white"
+            speed_bg_color = const.STAT_BG_COLOR
         
         self._name_value.config(text=pkmn.name)
         self._level_value.config(text=str(pkmn.level))
         self._xp_value.config(text=str(pkmn.xp))
-        self._hp_value.config(text=str(pkmn.hp))
-
-        speed_val = str(pkmn.speed)
-        if badges is not None and badges.soul:
-            speed_val = "*" + speed_val
-        self._speed_value.config(text=speed_val, background=speed_bg_color)
-        self._speed_label.config(background=speed_bg_color)
 
         attack_val = str(pkmn.attack)
         if badges is not None and badges.boulder:
             attack_val = "*" + attack_val
-        self._attack_value.config(text=attack_val)
 
         defense_val = str(pkmn.defense)
         if badges is not None and badges.thunder:
             defense_val = "*" + defense_val
-        self._defense_value.config(text=defense_val)
 
         special_val = str(pkmn.special)
         if badges is not None and badges.volcano:
             special_val = "*" + special_val
-        self._special_value.config(text=special_val)
 
-        self._move_one_value.config(text=pkmn.move_list[0])
+        speed_val = str(pkmn.speed)
+        if badges is not None and badges.soul:
+            speed_val = "*" + speed_val
+        
+        self.stat_column.set_values(
+            [str(pkmn.hp), attack_val, defense_val, special_val, speed_val],
+            bg_color_iterable=[None, None, None, None, speed_bg_color]
+        )
 
-        if len(pkmn.move_list) > 1:
-            self._move_two_value.config(text=pkmn.move_list[1])
-        else:
-            self._move_two_value.config(text="")
-
-        if len(pkmn.move_list) > 2:
-            self._move_three_value.config(text=pkmn.move_list[2])
-        else:
-            self._move_three_value.config(text="")
-
-        if len(pkmn.move_list) > 3:
-            self._move_four_value.config(text=pkmn.move_list[3])
-        else:
-            self._move_four_value.config(text="")
+        self.move_column.set_values(pkmn.move_list)
 
 
 class StateViewer(tk.Frame):
@@ -358,7 +310,7 @@ class BadgeBoostViewer(tk.Frame):
 
             self._frames.append(cur_frame)
             self._labels.append(tk.Label(cur_frame))
-            self._viewers.append(PkmnViewer(cur_frame))
+            self._viewers.append(PkmnViewer(cur_frame, stats_only=True))
     
     def _clear_all_summaries(self):
         # intentionally skip base stat frame
@@ -433,28 +385,29 @@ class BadgeBoostViewer(tk.Frame):
 
 
 class StatColumn(tk.Frame):
-    def __init__(self, *args, num_rows=4, **kwargs):
+    def __init__(self, *args, num_rows=4, bg_color="white", label_width=None, val_width=None, **kwargs):
         super().__init__(*args, **kwargs)
-        self.config(bg="white")
+        self.bg_color = bg_color
+        self.config(bg=self.bg_color)
 
-        self._header_frame = tk.Frame(self, background="white")
+        self._header_frame = tk.Frame(self, background=self.bg_color)
         self._header_frame.pack()
-        self._header = tk.Label(self._header_frame, background="white")
+        self._header = tk.Label(self._header_frame, background=self.bg_color)
 
         self._frames = []
         self._labels = []
         self._values = []
 
         for idx in range(num_rows):
-            cur_frame = tk.Frame(self, background="white")
+            cur_frame = tk.Frame(self, background=self.bg_color)
             cur_frame.pack(fill=tk.X)
             self._frames.append(cur_frame)
 
-            cur_label = tk.Label(cur_frame, anchor=tk.W, background="white")
+            cur_label = tk.Label(cur_frame, anchor=tk.W, background=self.bg_color, width=label_width)
             cur_label.grid(row=0, column=0, sticky=tk.EW)
             self._labels.append(cur_label)
 
-            cur_value = tk.Label(cur_frame, anchor=tk.E, background="white")
+            cur_value = tk.Label(cur_frame, anchor=tk.E, background=self.bg_color, width=val_width)
             cur_value.grid(row=0, column=1, sticky=tk.EW)
             self._values.append(cur_value)
 
@@ -478,11 +431,19 @@ class StatColumn(tk.Frame):
             for idx in range(len(label_text_iterable), len(self._labels)):
                 self._labels[idx].configure(text="")
     
-    def set_values(self, value_text_iterable):
+    def set_values(self, value_text_iterable, bg_color_iterable=None):
+        if bg_color_iterable is None:
+            bg_color_iterable = [self.bg_color for _ in value_text_iterable]
+        
+        for idx in range(len(bg_color_iterable)):
+            if bg_color_iterable[idx] == None:
+                bg_color_iterable[idx] = self.bg_color
+
         for idx, cur_value_text in enumerate(value_text_iterable):
             if idx >= len(self._values):
                 break
-            self._values[idx].configure(text=cur_value_text)
+            self._values[idx].configure(text=cur_value_text, background=bg_color_iterable[idx])
+            self._labels[idx].configure(background=bg_color_iterable[idx])
         
         if len(value_text_iterable) < len(self._values):
             for idx in range(len(value_text_iterable), len(self._values)):
@@ -502,17 +463,17 @@ class StatExpViewer(tk.Frame):
         ] 
 
         self._state = None
-        self._net_gain_column = StatColumn(self, num_rows=len(stat_labels))
+        self._net_gain_column = StatColumn(self, num_rows=len(stat_labels), val_width=3, bg_color=const.HEADER_BG_COLOR)
         self._net_gain_column.set_labels(stat_labels)
         self._net_gain_column.set_header("Net Stats\nFrom StatExp")
         self._net_gain_column.grid(row=0, column=0)
 
-        self._realized_stat_xp_column = StatColumn(self, num_rows=len(stat_labels))
+        self._realized_stat_xp_column = StatColumn(self, num_rows=len(stat_labels), val_width=6, bg_color=const.STAT_BG_COLOR)
         self._realized_stat_xp_column.set_labels(stat_labels)
         self._realized_stat_xp_column.set_header("Realized\nStatExp")
         self._realized_stat_xp_column.grid(row=0, column=1)
 
-        self._total_stat_xp_column = StatColumn(self, num_rows=len(stat_labels))
+        self._total_stat_xp_column = StatColumn(self, num_rows=len(stat_labels), val_width=6, bg_color=const.MOVE_BG_COLOR)
         self._total_stat_xp_column.set_labels(stat_labels)
         self._total_stat_xp_column.set_header("Total\nStatExp")
         self._total_stat_xp_column.grid(row=0, column=2)

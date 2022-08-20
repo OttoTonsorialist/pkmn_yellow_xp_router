@@ -20,7 +20,7 @@ class Main(tk.Tk):
         super().__init__()
         self._data = router.Router()
 
-        self.minsize(2000, 1200)
+        self.geometry(f"2000x1200")
         self.title("Pokemon RBY XP Router")
 
         # fix tkinter bug
@@ -240,10 +240,18 @@ class Main(tk.Tk):
             self.event_details.show_event_details(None, self._data.init_route_state, self._data.get_final_state(), allow_updates=False)
             self.rename_folder_button.disable()
             self.delete_event_button.disable()
+            self.transfer_event_button.disable()
+            self.new_folder_button.disable()
+            self.move_group_down_button.disable()
+            self.move_group_up_button.disable()
             self.item_add.cur_state = None
         elif isinstance(event_group, EventFolder):
             self.event_details.show_event_details(None, event_group.init_state, event_group.final_state, allow_updates=False)
             self.rename_folder_button.enable()
+            self.transfer_event_button.enable()
+            self.new_folder_button.enable()
+            self.move_group_down_button.enable()
+            self.move_group_up_button.enable()
             if len(event_group.children) == 0:
                 self.delete_event_button.enable()
             else:
@@ -256,7 +264,18 @@ class Main(tk.Tk):
             )
             self.event_details.show_event_details(event_group.event_definition, event_group.init_state, event_group.final_state, do_allow_updates)
             self.rename_folder_button.disable()
-            self.delete_event_button.enable()
+            if isinstance(event_group, EventItem):
+                self.delete_event_button.disable()
+                self.transfer_event_button.disable()
+                self.new_folder_button.disable()
+                self.move_group_down_button.disable()
+                self.move_group_up_button.disable()
+            else:
+                self.delete_event_button.enable()
+                self.transfer_event_button.enable()
+                self.new_folder_button.enable()
+                self.move_group_down_button.enable()
+                self.move_group_up_button.enable()
             self.item_add.cur_state = event_group.init_state
 
     def update_existing_event(self, new_event):

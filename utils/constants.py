@@ -83,12 +83,6 @@ class Constants:
             "Sabrina 1",
             "Blaine 1",
             "Giovanni 3",
-            "Rival2 3 Jolteon",
-            "Rival2 3 Flareon",
-            "Rival2 3 Vaporeon",
-            "Rival2 4 Jolteon",
-            "Rival2 4 Flareon",
-            "Rival2 4 Vaporeon",
             "Agatha 1",
             "Bruno 1",
             "Lorelei 1",
@@ -96,6 +90,50 @@ class Constants:
             "Rival3 Jolteon",
             "Rival3 Flareon",
             "Rival3 Vaporeon",
+            "Rival3 Squirtle",
+            "Rival3 Bulbasaur",
+            "Rival3 Charmander",
+        ]
+
+        self.MINOR_FIGHTS = [
+            "Giovanni 1",
+            "Giovanni 2",
+            # rb yival fights
+            "Rival1 Squirtle 1",
+            "Rival1 Bulbasaur 1",
+            "Rival1 Charmander 1",
+            "Rival1 Squirtle 2",
+            "Rival1 Bulbasaur 2",
+            "Rival1 Charmander 2",
+            "Rival1 Squirtle 3",
+            "Rival1 Bulbasaur 3",
+            "Rival1 Charmander 3",
+            "Rival2 Squirtle 1",
+            "Rival2 Bulbasaur 1",
+            "Rival2 Charmander 1",
+            "Rival2 Squirtle 2",
+            "Rival2 Bulbasaur 2",
+            "Rival2 Charmander 2",
+            "Rival2 Squirtle 3",
+            "Rival2 Bulbasaur 3",
+            "Rival2 Charmander 3",
+            "Rival2 Squirtle 4",
+            "Rival2 Bulbasaur 4",
+            "Rival2 Charmander 4",
+            # yellow rival fights
+            "Rival1 1",
+            "Rival1 2",
+            "Rival1 3",
+            "Rival2 1",
+            "Rival2 2 Jolteon",
+            "Rival2 2 Flareon",
+            "Rival2 2 Vaporeon",
+            "Rival2 3 Jolteon",
+            "Rival2 3 Flareon",
+            "Rival2 3 Vaporeon",
+            "Rival2 4 Jolteon",
+            "Rival2 4 Flareon",
+            "Rival2 4 Vaporeon",
         ]
 
         self.BADGE_REWARDS = {
@@ -279,6 +317,10 @@ class Constants:
         self.YELLOW_COLOR = "yellow"
         self.RED_COLOR = "#ff8888"
         self.BLUE_COLOR = "#88b4ff"
+
+        self.STAT_BG_COLOR = "#f0f3f4"
+        self.MOVE_BG_COLOR = "#d4e6f1"
+        self.HEADER_BG_COLOR = "#f6ddcc"
 
 
 
