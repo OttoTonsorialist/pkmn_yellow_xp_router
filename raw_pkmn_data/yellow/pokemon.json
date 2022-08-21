@@ -3144,7 +3144,7 @@
         "catch_rate": 45,
         "base_xp": 140,
         "initial_moveset": [
-            "comet_punch",
+            "Comet Punch",
             "Agility"
         ],
         "growth_rate": "growth_medium_fast",
@@ -3176,7 +3176,7 @@
             ],
             [
                 38,
-                "ice_punch"
+                "Ice Punch"
             ],
             [
                 43,
@@ -3232,11 +3232,11 @@
         "levelup_moveset": [
             [
                 33,
-                "rolling_kick"
+                "Rolling Kick"
             ],
             [
                 38,
-                "jump_kick"
+                "Jump Kick"
             ],
             [
                 43,
@@ -3244,7 +3244,7 @@
             ],
             [
                 48,
-                "hi_jump_kick"
+                "Hi Jump Kick"
             ],
             [
                 53,
@@ -3654,7 +3654,7 @@
             ],
             [
                 31,
-                "ice_punch"
+                "Ice Punch"
             ],
             [
                 39,
@@ -3885,7 +3885,7 @@
         "catch_rate": 45,
         "base_xp": 175,
         "initial_moveset": [
-            "comet_punch",
+            "Comet Punch",
             "Rage"
         ],
         "growth_rate": "growth_medium_fast",
@@ -3939,7 +3939,7 @@
             ],
             [
                 46,
-                "dizzy_punch"
+                "Dizzy Punch"
             ]
         ]
     },
