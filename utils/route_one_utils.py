@@ -83,12 +83,14 @@ def _generate_recursively(result:list, root_folder:EventFolder):
         if not cur_event.enabled:
             continue
 
-        if cur_event.trainer_name:
-            result.append(f"// {cur_event.trainer_name}")
+        if cur_event.trainer_def:
+            result.append(f"// {cur_event.trainer_def.trainer_name}")
             trainer_out_line = cur_event.get_trainer_obj().route_one_offset
-            if cur_event.trainer_name in const.MAJOR_FIGHTS:
+            if cur_event.trainer_def.verbose_export:
                 trainer_out_line += " -v 2"
-            elif cur_event.trainer_name in const.MINOR_FIGHTS:
+            elif cur_event.trainer_def.trainer_name in const.MAJOR_FIGHTS:
+                trainer_out_line += " -v 2"
+            elif cur_event.trainer_def.trainer_name in const.MINOR_FIGHTS:
                 trainer_out_line += " -v 1"
             result.append(trainer_out_line)
             result.append("")

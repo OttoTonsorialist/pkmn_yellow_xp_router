@@ -1,7 +1,7 @@
 import tkinter as tk
 
 from gui import custom_tkinter
-from pkmn.route_events import EventDefinition, InventoryEventDefinition, LearnMoveEventDefinition, RareCandyEventDefinition, VitaminEventDefinition, WildPkmnEventDefinition
+from pkmn.route_events import EventDefinition, InventoryEventDefinition, LearnMoveEventDefinition, RareCandyEventDefinition, TrainerEventDefinition, VitaminEventDefinition, WildPkmnEventDefinition
 from pkmn.router import Router
 from utils.constants import const
 import pkmn.pkmn_db as pkmn_db
@@ -107,7 +107,7 @@ class QuickTrainerAdd(tk.Frame):
     
     def add_trainer(self, *args, **kwargs):
         if self.trainer_add_callback is not None:
-            self.trainer_add_callback(EventDefinition(trainer_name=self._trainer_names.get()))
+            self.trainer_add_callback(EventDefinition(trainer_def=TrainerEventDefinition(self._trainer_names.get())))
     
     def add_area(self, *args, **kwargs):
         if self.area_add_callback is not None:

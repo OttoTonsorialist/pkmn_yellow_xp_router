@@ -118,8 +118,28 @@ class LearnMoveEventDefinition:
         return f"Learning {self.move_to_learn} in slot #: {self.destination + 1}, from {self.source}"
 
 
+class TrainerEventDefinition:
+    def __init__(self, trainer_name, verbose_export=False):
+        self.trainer_name = trainer_name
+        self.verbose_export = verbose_export
+
+    def serialize(self):
+        return [self.trainer_name, self.verbose_export]
+    
+    @staticmethod
+    def deserialize(raw_val):
+        if not raw_val:
+            return None
+        if isinstance(raw_val, str):
+            return TrainerEventDefinition(raw_val)
+        return TrainerEventDefinition(raw_val[0], verbose_export=raw_val[1])
+    
+    def __str__(self):
+        return f"Trainer {self.trainer_name}"
+
+
 class EventDefinition:
-    def __init__(self, original_folder_name=None, enabled=True, rare_candy=None, vitamin=None, trainer_name=None, wild_pkmn_info=None, item_event_def=None, learn_move=None, notes=""):
+    def __init__(self, original_folder_name=None, enabled=True, rare_candy=None, vitamin=None, trainer_def=None, wild_pkmn_info=None, item_event_def=None, learn_move=None, notes=""):
         # ugly hack, but basically we heavily flatten the event structure when serializing
         # so when we deserialize, each event definition is "where" we know which folder it belongs to
         # store it on this object, for reference when deserializing
@@ -130,7 +150,7 @@ class EventDefinition:
         self.enabled = enabled
         self.rare_candy = rare_candy
         self.vitamin = vitamin
-        self.trainer_name = trainer_name
+        self.trainer_def = trainer_def
         self._trainer_obj = None
         self.wild_pkmn_info = wild_pkmn_info
         self._wild_pkmn = None
@@ -139,10 +159,10 @@ class EventDefinition:
         self.notes = notes
 
     def get_trainer_obj(self):
-        if self._trainer_obj is None and self.trainer_name is not None:
-            self._trainer_obj = pkmn_db.trainer_db.get_trainer(self.trainer_name)
+        if self._trainer_obj is None and self.trainer_def is not None:
+            self._trainer_obj = pkmn_db.trainer_db.get_trainer(self.trainer_def.trainer_name)
             if self._trainer_obj is None:
-                raise ValueError(f"Could not find trainer object for trainer named: '{self.trainer_name}', from trainer_db, loaded from: '{pkmn_db.trainer_db._path}'")
+                raise ValueError(f"Could not find trainer object for trainer named: '{self.trainer_def.trainer_name}', from trainer_db, loaded from: '{pkmn_db.trainer_db._path}'")
         return self._trainer_obj
     
     def get_wild_pkmn(self):
@@ -168,7 +188,7 @@ class EventDefinition:
             return const.TASK_VITAMIN
         elif self.wild_pkmn_info is not None:
             return const.TASK_FIGHT_WILD_PKMN
-        elif self.trainer_name is not None:
+        elif self.trainer_def is not None:
             return const.TASK_TRAINER_BATTLE
         elif self.item_event_def is not None:
             if self.item_event_def.is_acquire and self.item_event_def.with_money:
@@ -193,7 +213,7 @@ class EventDefinition:
             return f"Vitamin: {self.vitamin.vitamin} x1"
         elif self.wild_pkmn_info is not None:
             return f"Wild Pkmn: {self.wild_pkmn_info}"
-        elif self.trainer_name is not None:
+        elif self.trainer_def is not None:
             trainer = self.get_trainer_obj()
             return f"Trainer: {trainer.name} ({trainer.location})"
         elif self.item_event_def is not None:
@@ -210,7 +230,7 @@ class EventDefinition:
             return str(self.vitamin)
         elif self.wild_pkmn_info is not None:
             return f"Wild Pkmn: {self.wild_pkmn_info}"
-        elif self.trainer_name is not None:
+        elif self.trainer_def is not None:
             trainer = self.get_trainer_obj()
             return f"Trainer: {trainer.name} ({trainer.location})"
         elif self.item_event_def is not None:
@@ -233,8 +253,8 @@ class EventDefinition:
             result.update({const.TASK_RARE_CANDY: self.rare_candy.serialize()})
         elif self.vitamin is not None:
             result.update({const.TASK_VITAMIN: self.vitamin.serialize()})
-        elif self.trainer_name is not None:
-            result.update({const.TASK_TRAINER_BATTLE: self.trainer_name})
+        elif self.trainer_def is not None:
+            result.update({const.TASK_TRAINER_BATTLE: self.trainer_def.serialize()})
         elif self.wild_pkmn_info is not None:
             result.update({const.TASK_FIGHT_WILD_PKMN: self.wild_pkmn_info.serialize()})
         elif self.item_event_def is not None:
@@ -255,13 +275,13 @@ class EventDefinition:
             notes=raw_val.get(const.TASK_NOTES_ONLY, ""),
             rare_candy=RareCandyEventDefinition.deserialize(raw_val.get(const.TASK_RARE_CANDY)),
             vitamin=VitaminEventDefinition.deserialize(raw_val.get(const.TASK_VITAMIN)),
-            trainer_name=raw_val.get(const.TASK_TRAINER_BATTLE),
+            trainer_def=TrainerEventDefinition.deserialize(raw_val.get(const.TASK_TRAINER_BATTLE)),
             wild_pkmn_info=WildPkmnEventDefinition.deserialize(raw_val.get(const.TASK_FIGHT_WILD_PKMN)),
             item_event_def=InventoryEventDefinition.deserialize(raw_val.get(const.INVENTORY_EVENT_DEFINITON)),
             learn_move=LearnMoveEventDefinition.deserialize(raw_val.get(const.LEARN_MOVE_KEY)),
         )
         if result.wild_pkmn_info is not None:
-            result.trainer_name = None
+            result.trainer_def = None
         return result
 
 
@@ -306,9 +326,18 @@ class EventItem:
                 self.error_message = f"No Num {self.to_defeat_idx} pkmn from team: {self.event_definition}"
             else:
                 # you only "defeat" a trainer after defeating their final pokemon
-                trainer_name = self.event_definition.trainer_name if self.to_defeat_idx == len(enemy_team) - 1 else None
-                self.name = f"{self.event_definition.trainer_name}: {enemy_team[self.to_defeat_idx].name}"
-                self.final_state, self.error_message = cur_state.defeat_pkmn(enemy_team[self.to_defeat_idx], trainer_name=trainer_name)
+                if self.event_definition.trainer_def is not None:
+                    if self.to_defeat_idx == len(enemy_team) - 1:
+                        defeated_trainer_name = self.event_definition.trainer_def.trainer_name
+                    else:
+                        defeated_trainer_name = None
+                    render_trainer_name = self.event_definition.trainer_def.trainer_name
+                else:
+                    defeated_trainer_name = None
+                    render_trainer_name = "Wild Pkmn"
+
+                self.name = f"{render_trainer_name}: {enemy_team[self.to_defeat_idx].name}"
+                self.final_state, self.error_message = cur_state.defeat_pkmn(enemy_team[self.to_defeat_idx], trainer_name=defeated_trainer_name)
         elif self.event_definition.rare_candy is not None:
             # note: deliberatley ignoring amount here, that's handled at the group level
             # just apply one rare candy at the item level
@@ -429,7 +458,7 @@ class EventGroup:
         else:
             self.level_up_learn_event_defs = level_up_learn_event_defs
 
-        if self.event_definition.trainer_name is not None:
+        if self.event_definition.trainer_def is not None:
             trainer_obj = self.event_definition.get_trainer_obj()
             pkmn_counter = {}
             for pkmn_idx, trainer_pkmn in enumerate(trainer_obj.pkmn):
@@ -538,7 +567,9 @@ class EventGroup:
         self.enabled = self.event_definition.enabled = is_enabled
 
     def is_major_fight(self):
-        return self.event_definition.trainer_name in const.MAJOR_FIGHTS
+        if self.event_definition.trainer_def is None:
+            return False
+        return self.event_definition.trainer_def.trainer_name in const.MAJOR_FIGHTS
     
     def get_tags(self):
         if self.has_errors():

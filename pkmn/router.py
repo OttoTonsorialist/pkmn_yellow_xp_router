@@ -121,11 +121,15 @@ class Router:
         self.add_event_object(new_folder_name=folder_name, insert_before=insert_before, dest_folder_name=dest_folder_name, recalc=False)
         # then just create all the trainer events in that area
         for cur_trainer in trainers_to_add:
-            self.add_event_object(event_def=route_events.EventDefinition(trainer_name=cur_trainer), dest_folder_name=folder_name, recalc=False)
+            self.add_event_object(
+                event_def=route_events.EventDefinition(trainer_def=route_events.TrainerEventDefinition(cur_trainer)),
+                dest_folder_name=folder_name,
+                recalc=False
+            )
         
         self._recalc()
     
-    def add_event_object(self, event_def=None, new_folder_name=None, insert_before=None, dest_folder_name=const.ROOT_FOLDER_NAME, recalc=True):
+    def add_event_object(self, event_def:route_events.EventDefinition=None, new_folder_name=None, insert_before=None, dest_folder_name=const.ROOT_FOLDER_NAME, recalc=True):
         if not self.init_route_state:
             raise ValueError("Cannot add an event when solo pokmn is not yet selected")
         if event_def is None and new_folder_name is None:
@@ -146,8 +150,8 @@ class Router:
                 raise ValueError(f"Cannot find folder with name: {dest_folder_name}")
 
         if event_def is not None:
-            if event_def.trainer_name:
-                self.defeated_trainers.add(event_def.trainer_name)
+            if event_def.trainer_def:
+                self.defeated_trainers.add(event_def.trainer_def.trainer_name)
             new_obj = route_events.EventGroup(parent_obj, event_def)
 
         elif new_folder_name is not None:
@@ -169,8 +173,8 @@ class Router:
         elif isinstance(cur_event, route_events.EventItem):
             raise ValueError(f"Cannot remove EventItem objects: {cur_event.name}")
         
-        if isinstance(cur_event, route_events.EventGroup) and cur_event.event_definition.trainer_name is not None:
-            self.defeated_trainers.remove(cur_event.event_definition.trainer_name)
+        if isinstance(cur_event, route_events.EventGroup) and cur_event.event_definition.trainer_def is not None:
+            self.defeated_trainers.remove(cur_event.event_definition.trainer_def.trainer_name)
         
         cur_event.parent.remove_child(cur_event)
         del self.event_lookup[cur_event.group_id]
@@ -224,11 +228,11 @@ class Router:
             # just replace the lookup definition
             self.level_up_move_defs[new_event_def.learn_move.level] = new_event_def.learn_move
         else:
-            if event_group_obj.event_definition.trainer_name is not None:
-                self.defeated_trainers.remove(event_group_obj.event_definition.trainer_name)
+            if event_group_obj.event_definition.trainer_def is not None:
+                self.defeated_trainers.remove(event_group_obj.event_definition.trainer_def.trainer_name)
             
-            if new_event_def.trainer_name is not None:
-                self.defeated_trainers.add(new_event_def.trainer_name)
+            if new_event_def.trainer_def is not None:
+                self.defeated_trainers.add(new_event_def.trainer_def.trainer_name)
             
             event_group_obj.event_definition = new_event_def
 

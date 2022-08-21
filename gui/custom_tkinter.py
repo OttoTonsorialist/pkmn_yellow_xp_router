@@ -218,7 +218,47 @@ class CustomGridview(CheckboxTreeview):
             self._treeview_id_lookup[semantic_id] = item_id
 
         return item_id
+
+
+class CheckboxLabel(tk.Frame):
+    CHECKED_STATE = "checked"
+    UNCHECKED_STATE =" unchecked"
+
+    def __init__(self, *args, text="", init_check_state=None, toggle_command=None, **kwargs):
+        super().__init__(*args, **kwargs)
+        self._checkbox = tk.Label(self)
+        self._text_label = tk.Label(self, text=text)
+
+        self._checkbox.grid(row=0, column=0)
+        self._text_label.grid(row=0, column=1)
+
+        self.im_checked = ImageTk.PhotoImage(Image.open(IM_CHECKED), master=self)
+        self.im_unchecked = ImageTk.PhotoImage(Image.open(IM_UNCHECKED), master=self)
+
+        self.toggle_command = toggle_command
+        if init_check_state is None:
+            init_check_state = self.UNCHECKED_STATE
+        self.set_checked(init_check_state == self.CHECKED_STATE)
+
+        self.bind("<Button-1>", self.toggle_checked)
+        self._checkbox.bind("<Button-1>", self.toggle_checked)
+        self._text_label.bind("<Button-1>", self.toggle_checked)
+
+    def set_checked(self, is_checked):
+        if is_checked:
+            self._check_state = self.CHECKED_STATE
+            self._checkbox.config(image=self.im_checked)
+        else:
+            self._check_state = self.UNCHECKED_STATE
+            self._checkbox.config(image=self.im_unchecked)
+
+    def is_checked(self):
+        return self._check_state == self.CHECKED_STATE
     
+    def toggle_checked(self, *args, **kwargs):
+        self.set_checked(not self.is_checked())
+        if self.toggle_command is not None:
+            self.toggle_command(self.is_checked())
 
 class SimpleOptionMenu(ttk.Combobox):
     def __init__(self, root, option_list, callback=None, default_val=None, **kwargs):

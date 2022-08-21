@@ -144,13 +144,13 @@ class TrainerFightEditor(EventEditorBase):
         super().load_event(event_def)
         # note, by the current route, the trainer of the even we are loading is guaranteed to be "defeated"
         # So, we have to manually hide it to the list of all defeated trainers
-        self.cached_defeated_trainers = self.editor_params.cur_defeated_trainers.difference(set(event_def.trainer_name))
+        self.cached_defeated_trainers = self.editor_params.cur_defeated_trainers.difference(set(event_def.trainer_def.trainer_name))
         self._trainers_by_loc.set(const.ALL_TRAINERS)
         self._trainers_by_class.set(const.ALL_TRAINERS)
-        self._trainer_names.set(event_def.trainer_name)
+        self._trainer_names.set(event_def.trainer_def.trainer_name)
     
     def get_event(self):
-        return EventDefinition(trainer_name=self._trainer_names.get())
+        return EventDefinition(trainer_def=TrainerFightEditor(self._trainer_names.get()))
 
 
 class VitaminEditor(EventEditorBase):

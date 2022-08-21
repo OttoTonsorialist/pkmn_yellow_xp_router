@@ -2,7 +2,7 @@ import tkinter as tk
 from tkinter import ttk
 
 from gui import custom_tkinter, route_event_components, pkmn_components, quick_add_components
-from pkmn.route_events import EventDefinition, EventFolder, EventGroup, EventItem, InventoryEventDefinition, LearnMoveEventDefinition, RareCandyEventDefinition, VitaminEventDefinition
+from pkmn.route_events import EventDefinition, EventFolder, EventGroup, EventItem, InventoryEventDefinition, LearnMoveEventDefinition, RareCandyEventDefinition, TrainerEventDefinition, VitaminEventDefinition
 from pkmn.router import Router
 from utils.constants import const
 import pkmn.pkmn_db as pkmn_db
@@ -47,28 +47,34 @@ class EventDetails(tk.Frame):
         self.event_details_frame = tk.Frame(self.event_viewer_frame)
         self.event_details_frame.grid(row=0, column=0)
 
+        self.footer_frame = tk.Frame(self.event_viewer_frame)
+        self.footer_frame.grid(row=1, column=0, sticky=tk.EW)
+
         self.enemy_team_viewer = pkmn_components.EnemyPkmnTeam(self.event_details_frame)
         self.enemy_team_viewer.pack()
 
         # create this slightly out of order because we need the reference
-        self.event_details_button = custom_tkinter.SimpleButton(self.event_viewer_frame, text="Save", command=self.update_existing_event)
+        self.event_details_button = custom_tkinter.SimpleButton(self.footer_frame, text="Save", command=self.update_existing_event)
+        self.verbose_trainer_label = custom_tkinter.CheckboxLabel(self.footer_frame, text="Verbose Route1 Export", toggle_command=self.update_existing_event)
         self.event_editor_lookup = route_event_components.EventEditorFactory(self.event_details_frame, self.event_details_button)
         self.current_event_editor = None
 
-        self.stat_info_label = tk.Label(self.event_viewer_frame, text="Stats with * are calculated with a badge boost")
+        self.stat_info_label = tk.Label(self.footer_frame, text="Stats with * are calculated with a badge boost")
         self.stat_info_label.config(bg="white")
-        self.stat_info_label.grid(row=1, column=0)
+        self.stat_info_label.grid(row=1, column=0, columnspan=2)
 
-        self.trainer_notes = route_event_components.EventEditorFactory(self.event_viewer_frame, self.event_details_button).get_editor(
+        self.trainer_notes = route_event_components.EventEditorFactory(self.footer_frame, self.event_details_button).get_editor(
             route_event_components.EditorParams(const.TASK_NOTES_ONLY, None, None)
         )
-        self.trainer_notes.grid(row=2, column=0, sticky=tk.EW)
+        self.trainer_notes.grid(row=2, column=0, columnspan=2, sticky=tk.EW)
 
         self.event_details_button.grid(row=3, column=0, padx=5, pady=5, sticky=tk.W)
         self.event_details_button.disable()
 
         self.event_viewer_frame.rowconfigure(0, weight=1)
         self.event_viewer_frame.columnconfigure(0, weight=1)
+
+        self.footer_frame.columnconfigure(1, weight=1)
 
     def _pre_state_display_mode_callback(self, *args, **kwargs):
         if self.pre_state_selector.get() == const.BADGE_BOOST_LABEL:
@@ -77,6 +83,9 @@ class EventDetails(tk.Frame):
         else:
             self.badge_boost_viewer.grid_forget()
             self.state_pre_viewer.grid(column=1, row=1, padx=10, pady=10, columnspan=2)
+    
+    def toggle_trainer_verbosity(self, new_val):
+        pass
     
     def show_event_details(self, event_def:EventDefinition, init_state, final_state, allow_updates=True):
         self.state_pre_viewer.set_state(init_state)
@@ -93,6 +102,7 @@ class EventDetails(tk.Frame):
             self.enemy_team_viewer.set_team(None)
             self.trainer_notes.load_event(None)
             self.enemy_team_viewer.pack_forget()
+            self.verbose_trainer_label.grid_forget()
             self.event_details_button.disable()
         else:
             if allow_updates:
@@ -102,13 +112,16 @@ class EventDetails(tk.Frame):
 
             self.trainer_notes.load_event(event_def)
 
-            if event_def.trainer_name is not None:
-                self._cur_trainer_name = event_def.trainer_name
+            if event_def.trainer_def is not None:
+                self._cur_trainer_name = event_def.trainer_def.trainer_name
                 self.enemy_team_viewer.pack()
                 self.enemy_team_viewer.set_team(event_def.get_trainer_obj().pkmn, cur_state=init_state)
+                self.verbose_trainer_label.grid(row=3, column=1, padx=5, pady=5, sticky=tk.W)
+                self.verbose_trainer_label.set_checked(event_def.trainer_def.verbose_export)
             else:
                 self.enemy_team_viewer.pack_forget()
                 self.enemy_team_viewer.set_team(None)
+                self.verbose_trainer_label.grid_forget()
 
                 # TODO: fix this gross ugly hack
                 self.current_event_editor = self.event_editor_lookup.get_editor(
@@ -120,7 +133,7 @@ class EventDetails(tk.Frame):
     def update_existing_event(self, *args, **kwargs):
         try:
             if self.current_event_editor is None:
-                new_event = EventDefinition(trainer_name=self._cur_trainer_name)
+                new_event = EventDefinition(trainer_def=TrainerEventDefinition(self._cur_trainer_name, verbose_export=self.verbose_trainer_label.is_checked()))
             else:
                 new_event = self.current_event_editor.get_event()
             

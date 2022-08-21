@@ -7,7 +7,7 @@ from tkinter import ANCHOR, ttk
 
 from gui import custom_tkinter, route_event_components, pkmn_components, quick_add_components
 from gui.event_details import EventDetails
-from pkmn.route_events import EventDefinition, EventFolder, EventGroup, EventItem, InventoryEventDefinition, WildPkmnEventDefinition
+from pkmn.route_events import EventDefinition, EventFolder, EventGroup, EventItem, InventoryEventDefinition, TrainerEventDefinition, WildPkmnEventDefinition
 from utils.constants import const
 from utils.config_manager import config
 import pkmn.pkmn_db as pkmn_db
@@ -231,7 +231,7 @@ class Main(tk.Tk):
         # create a fake event_def just so we can show the trainer that the user is looking at
         # TODO: just using the init_state as the post_event state as well. Ideally would like to use None for an empty state, but that's not currently supported
         self.event_details.show_event_details(
-            EventDefinition(trainer_name=trainer_name),
+            EventDefinition(trainer_def=TrainerEventDefinition(trainer_name)),
             init_state,
             init_state,
             allow_updates=False
