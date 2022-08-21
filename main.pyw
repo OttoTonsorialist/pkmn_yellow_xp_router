@@ -257,10 +257,7 @@ class Main(tk.Tk):
             self.new_folder_button.enable()
             self.move_group_down_button.enable()
             self.move_group_up_button.enable()
-            if len(event_group.children) == 0:
-                self.delete_event_button.enable()
-            else:
-                self.delete_event_button.disable()
+            self.delete_event_button.enable()
             self.item_add.cur_state = event_group.init_state
         else:
             do_allow_updates = (
@@ -351,7 +348,19 @@ class Main(tk.Tk):
         cur_event_id = self.event_list.get_selected_event_id()
         if cur_event_id == -1:
             return
-        self._data.remove_event_object(self.event_list.get_selected_event_id())
+
+        event_obj = self._data.get_event_obj(cur_event_id)
+        if isinstance(event_obj, EventFolder) and len(event_obj.children) > 0:
+            if self._is_active_window():
+                self.new_event_window = DeleteFolderConfirmation(self, event_obj.name, cur_event_id)
+        else:
+            self._data.remove_event_object(self.event_list.get_selected_event_id())
+            self.event_list.refresh()
+    
+    def delete_nonempty_folder(self, event_id):
+        self._data.remove_event_object(event_id)
+        self.new_event_window.close()
+        self.new_event_window = None
         self.event_list.refresh()
 
     def finalize_new_folder(self, new_folder_name, prev_folder_name=None):
@@ -652,6 +661,30 @@ class NewFolderWindow(custom_tkinter.Popup):
             return
 
         self._main_window.finalize_new_folder(cur_name, prev_folder_name=self._prev_folder_name)
+
+
+class DeleteFolderConfirmation(custom_tkinter.Popup):
+    def __init__(self, main_window: Main, cur_folder_names, cur_event_id, *args, **kwargs):
+        super().__init__(main_window, *args, **kwargs)
+        if main_window is None:
+            raise ValueError('Must set main_window when creating DeleteFolderConfirmation')
+        
+        self._cur_folder_names = cur_folder_names
+        self._cur_event_id = cur_event_id
+
+        self._label = tk.Label(self, text=f"You are trying to delete a folder {self._cur_folder_names} that isn't empty.\nAre you sure you want to delete this?")
+        self._label.grid(row=0, column=0, columnspan=2, padx=10, pady=10)
+
+        self._confirm_button = custom_tkinter.SimpleButton(self, text="Delete", command=self.delete)
+        self._cancel_button = custom_tkinter.SimpleButton(self, text="Cancel", command=self._main_window.cancel_new_event)
+        self._confirm_button.grid(row=1, column=0, padx=10, pady=10)
+        self._cancel_button.grid(row=1, column=1, padx=10, pady=10)
+
+        self.bind('<Return>', self.delete)
+        self.bind('<Escape>', self._main_window.cancel_new_event)
+
+    def delete(self, *args, **kwargs):
+        self._main_window.delete_nonempty_folder(self._cur_event_id)
 
 
 class TransferEventWindow(custom_tkinter.Popup):

@@ -167,9 +167,6 @@ class Router:
         cur_event = self.event_lookup.get(event_id)
         if cur_event is None:
             raise ValueError(f"Cannot remove event for unknown id: {event_id}")
-        
-        if isinstance(cur_event, route_events.EventFolder) and len(cur_event.children) != 0:
-            raise ValueError(f"Cannot remove non-empty folder: {cur_event.name}")
         elif isinstance(cur_event, route_events.EventItem):
             raise ValueError(f"Cannot remove EventItem objects: {cur_event.name}")
         
