@@ -14,7 +14,6 @@ class RouteList(custom_tkinter.CustomGridview):
         super().__init__(
             *args,
             custom_col_data=[
-                #CustomGridview.CustomColumn('Event', 'name'),
                 custom_tkinter.CustomGridview.CustomColumn('LevelUpsInto', 'get_pkmn_after_levelups', width=220),
                 custom_tkinter.CustomGridview.CustomColumn('Level', 'pkmn_level', width=50),
                 custom_tkinter.CustomGridview.CustomColumn('Total Exp', 'total_xp', width=80),
@@ -52,9 +51,24 @@ class RouteList(custom_tkinter.CustomGridview):
             return int(self.item(iid)['values'][-1])
         except (ValueError, IndexError):
             return -1
+    
+    def get_all_selected_event_ids(self, allow_event_items=True):
+        temp = set(self.selection())
+        result = []
+        for cur_iid in self.selection():
+            # event items can't be manipulated at all
+            cur_route_id = self._get_route_id_from_item_id(cur_iid)
+            if not allow_event_items and isinstance(self._route_list.get_event_obj(cur_route_id), route_events.EventItem):
+                continue
 
-    def get_selected_event_id(self):
-            return self._get_route_id_from_item_id(self.focus())
+            # if any folders are selected, ignore all events that are children of that folder
+            # we basically say that you have selected the container, and thus do not need to select any of the child objects
+            if self.parent(cur_iid) in temp:
+                continue
+            
+            result.append(cur_route_id)
+
+        return result
 
     def refresh(self, *args, **kwargs):
         # begin keeping track of the stuff we already know we're displaying

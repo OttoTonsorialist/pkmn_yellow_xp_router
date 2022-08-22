@@ -65,17 +65,17 @@ class QuickTrainerAdd(tk.Frame):
             self._add_area.disable()
             return
         
-        loc_filter = self._trainers_by_loc.get()
-        if loc_filter == const.ALL_TRAINERS:
-            self._add_area.disable()
-        else:
-            self._add_area.enable()
-
         selected_trainer = self._trainer_names.get() 
         if selected_trainer == const.NO_TRAINERS:
             self._add_trainer.disable()
+            self._add_area.disable()
         else:
             self._add_trainer.enable()
+            loc_filter = self._trainers_by_loc.get()
+            if loc_filter == const.ALL_TRAINERS:
+                self._add_area.disable()
+            else:
+                self._add_area.enable()
     
     def update_pkmn_version(self):
         self._trainers_by_loc.new_values([const.ALL_TRAINERS] + sorted(pkmn_db.trainer_db.get_all_locations()))
@@ -155,8 +155,10 @@ class QuickWildPkmn(tk.Frame):
         self._buttons.pack(fill=tk.X, anchor=tk.CENTER, side=tk.BOTTOM)
         self._btn_width = 8
 
-        self._add_wild_pkmn = custom_tkinter.SimpleButton(self._buttons, text="Add Wild Pkmn", command=self.add_pkmn_cmd)
+        self._add_wild_pkmn = custom_tkinter.SimpleButton(self._buttons, text="Add Wild Pkmn", command=self.add_wild_pkmn_cmd)
         self._add_wild_pkmn.grid(row=0, column=0, padx=self.padx, pady=self.pady + 1, sticky=tk.W)
+        self._add_trainer_pkmn = custom_tkinter.SimpleButton(self._buttons, text="Add Trainer Pkmn", command=self.add_trainer_pkmn_cmd)
+        self._add_trainer_pkmn.grid(row=0, column=1, padx=self.padx, pady=self.pady + 1, sticky=tk.W)
         self.update_button_status()
 
     def update_button_status(self, allow_enable=None):
@@ -165,13 +167,16 @@ class QuickWildPkmn(tk.Frame):
 
         if self.force_disable:
             self._add_wild_pkmn.disable()
+            self._add_trainer_pkmn.disable()
             return
         
         if self._pkmn_types.get().strip().startswith(const.NO_POKEMON):
             self._add_wild_pkmn.disable()
+            self._add_trainer_pkmn.disable()
         else:
             self._add_wild_pkmn.enable()
-    
+            self._add_trainer_pkmn.enable()
+
     def update_pkmn_version(self):
         self._pkmn_types.new_values(pkmn_db.pkmn_db.get_all_names())
 
@@ -190,13 +195,25 @@ class QuickWildPkmn(tk.Frame):
         
         self.update_button_status()
 
-    def add_pkmn_cmd(self, *args, **kwargs):
+    def add_wild_pkmn_cmd(self, *args, **kwargs):
         if self.event_creation_callback is not None:
             self.event_creation_callback(
                 EventDefinition(
                     wild_pkmn_info=WildPkmnEventDefinition(
                         self._pkmn_types.get(),
                         int(self._level_val.get().strip())
+                    )
+                )
+            )
+
+    def add_trainer_pkmn_cmd(self, *args, **kwargs):
+        if self.event_creation_callback is not None:
+            self.event_creation_callback(
+                EventDefinition(
+                    wild_pkmn_info=WildPkmnEventDefinition(
+                        self._pkmn_types.get(),
+                        int(self._level_val.get().strip()),
+                        trainer_pkmn=True
                     )
                 )
             )

@@ -222,11 +222,14 @@ class Main(tk.Tk):
         self.item_add.update_button_status(allow_enable=allow_enable)
     
     def trainer_add_preview(self, trainer_name):
-        event_group = self._data.get_event_obj(self.event_list.get_selected_event_id())
-        if event_group is None:
+        all_event_ids = self.event_list.get_all_selected_event_ids()
+        if len(all_event_ids) > 1:
+            return
+
+        if len(all_event_ids) == 0:
             init_state = self._data.init_route_state
         else:
-            init_state = event_group.init_state
+            init_state = self._data.get_event_obj(all_event_ids[0]).init_state
 
         # create a fake event_def just so we can show the trainer that the user is looking at
         # TODO: just using the init_state as the post_event state as well. Ideally would like to use None for an empty state, but that's not currently supported
@@ -238,18 +241,36 @@ class Main(tk.Tk):
         )
     
     def show_event_details(self, *args, **kwargs):
-        event_group = self._data.get_event_obj(self.event_list.get_selected_event_id())
-        self.update_quick_add_buttons((event_group is not None) and (not isinstance(event_group, EventItem)))
+        all_event_ids = self.event_list.get_all_selected_event_ids()
+        # slightly weird behavior, but intentional. If only one element is selected,
+        # we want to allow that element to be an EventItem, so that we can display the details.
+        # But if multiple elements are selected, we want to ignore EventItems since they can't be bulk-edited
+        if len(all_event_ids) > 1:
+            all_event_ids = self.event_list.get_all_selected_event_ids(allow_event_items=False)
+
+        if len(all_event_ids) > 1 or len(all_event_ids) == 0:
+            event_group = None
+            # allow adding if entire route is empty
+            self.update_quick_add_buttons(len(self._data.root_folder.children) == 0)
+        else:
+            event_group = self._data.get_event_obj(all_event_ids[0])
+            self.update_quick_add_buttons((event_group is not None) and (not isinstance(event_group, EventItem)))
+
         
         if event_group is None:
             self.event_details.show_event_details(None, self._data.init_route_state, self._data.get_final_state(), allow_updates=False)
             self.rename_folder_button.disable()
-            self.delete_event_button.disable()
-            self.transfer_event_button.disable()
-            self.new_folder_button.disable()
             self.move_group_down_button.disable()
             self.move_group_up_button.disable()
             self.item_add.cur_state = None
+            if len(self._data.root_folder.children) == 0:
+                self.new_folder_button.enable()
+                self.delete_event_button.disable()
+                self.transfer_event_button.disable()
+            else:
+                self.new_folder_button.disable()
+                self.delete_event_button.enable()
+                self.transfer_event_button.enable()
         elif isinstance(event_group, EventFolder):
             self.event_details.show_event_details(None, event_group.init_state, event_group.final_state, allow_updates=False)
             self.rename_folder_button.enable()
@@ -281,23 +302,40 @@ class Main(tk.Tk):
             self.item_add.cur_state = event_group.init_state
 
     def update_existing_event(self, new_event):
-        self._data.replace_event_group(self.event_list.get_selected_event_id(), new_event)
+        all_event_ids = self.event_list.get_all_selected_event_ids()
+        if len(all_event_ids) > 1 or len(all_event_ids) == 0:
+            return
+
+        self._data.replace_event_group(all_event_ids[0], new_event)
         self.event_list.refresh()
         self.show_event_details()
     
     def add_area(self, area_name):
+        all_event_ids = self.event_list.get_all_selected_event_ids()
+        if len(all_event_ids) > 1 or len(all_event_ids) == 0:
+            return
+
         self._data.add_area(
             area_name=area_name,
-            insert_before=self.event_list.get_selected_event_id()
+            insert_before=all_event_ids[0]
         )
         self.trainer_add.trainer_filter_callback()
         self.event_list.refresh()
     
     def quick_add_event(self, new_event):
-        self._data.add_event_object(
-            event_def=new_event,
-            insert_before=self.event_list.get_selected_event_id()
-        )
+        all_event_ids = self.event_list.get_all_selected_event_ids()
+        if len(all_event_ids) > 1:
+            return
+        elif len(all_event_ids) == 0:
+            self._data.add_event_object(
+                event_def=new_event
+            )
+        else:
+            self._data.add_event_object(
+                event_def=new_event,
+                insert_before=all_event_ids[0]
+            )
+
         self.trainer_add.trainer_filter_callback()
         self.event_list.refresh()
     
@@ -331,41 +369,63 @@ class Main(tk.Tk):
         self.show_event_details()
 
     def move_group_up(self, event=None):
-        cur_event_id = self.event_list.get_selected_event_id()
-        if cur_event_id == -1:
+        all_event_ids = self.event_list.get_all_selected_event_ids()
+        if len(all_event_ids) > 1 or len(all_event_ids) == 0:
             return
-        self._data.move_event_object(self.event_list.get_selected_event_id(), True)
+
+        self._data.move_event_object(all_event_ids[0], True)
         self.event_list.refresh()
 
     def move_group_down(self, event=None):
-        cur_event_id = self.event_list.get_selected_event_id()
-        if cur_event_id == -1:
+        all_event_ids = self.event_list.get_all_selected_event_ids()
+        if len(all_event_ids) > 1 or len(all_event_ids) == 0:
             return
-        self._data.move_event_object(self.event_list.get_selected_event_id(), False)
+
+        self._data.move_event_object(all_event_ids[0], False)
         self.event_list.refresh()
 
     def delete_group(self, event=None):
-        cur_event_id = self.event_list.get_selected_event_id()
-        if cur_event_id == -1:
+        all_event_ids = self.event_list.get_all_selected_event_ids(allow_event_items=False)
+        if len(all_event_ids) == 0:
             return
-
-        event_obj = self._data.get_event_obj(cur_event_id)
-        if isinstance(event_obj, EventFolder) and len(event_obj.children) > 0:
-            if self._is_active_window():
-                self.new_event_window = DeleteFolderConfirmation(self, event_obj.name, cur_event_id)
+        
+        do_prompt = False
+        if len(all_event_ids) == 1:
+            cur_event_id = all_event_ids[0]
+            event_obj = self._data.get_event_obj(cur_event_id)
+            if isinstance(event_obj, EventFolder) and len(event_obj.children) > 0:
+                do_prompt = True
         else:
-            self._data.remove_event_object(self.event_list.get_selected_event_id())
+            do_prompt = True
+        
+        if do_prompt:
+            if self._is_active_window():
+                self.new_event_window = DeleteConfirmation(self, len(all_event_ids) == 1)
+        else:
+            # only don't prompt when deleting a single event (or empty folder)
+            self._data.remove_event_object(all_event_ids[0])
             self.event_list.refresh()
     
-    def delete_nonempty_folder(self, event_id):
-        self._data.remove_event_object(event_id)
+    def confirmed_delete(self):
+        all_event_ids = self.event_list.get_all_selected_event_ids()
+        if len(all_event_ids) == 0:
+            return
+
+        self._data.batch_remove_events(all_event_ids)
         self.new_event_window.close()
         self.new_event_window = None
         self.event_list.refresh()
 
     def finalize_new_folder(self, new_folder_name, prev_folder_name=None):
+        all_event_ids = self.event_list.get_all_selected_event_ids(allow_event_items=False)
+        if len(all_event_ids) > 1:
+            return
+
         if prev_folder_name is None:
-            self._data.add_event_object(new_folder_name=new_folder_name, insert_before=self.event_list.get_selected_event_id())
+            if len(all_event_ids) == 0:
+                self._data.add_event_object(new_folder_name=new_folder_name)
+            else:
+                self._data.add_event_object(new_folder_name=new_folder_name, insert_before=all_event_ids[0])
         else:
             self._data.rename_event_folder(prev_folder_name, new_folder_name)
 
@@ -375,39 +435,45 @@ class Main(tk.Tk):
 
     def open_transfer_event_window(self, event=None):
         if self._is_active_window():
-            event_group_id = self.event_list.get_selected_event_id()
-            if event_group_id == -1:
+            all_event_ids = self.event_list.get_all_selected_event_ids(allow_event_items=False)
+            if len(all_event_ids) == 0:
                 return
 
-            dest_folder_list = list(self._data.folder_lookup.keys())
-            cur_event_folder = self._data.get_event_obj(event_group_id).parent.name
-            dest_folder_list.remove(cur_event_folder)
-
-            event_obj = self._data.get_event_obj(event_group_id)
-            if isinstance(event_obj, EventFolder):
-                dest_folder_list.remove(event_obj.name)
-
+            invalid_folders = set()
+            for cur_event_id in all_event_ids:
+                for cur_invalid in self._data.get_invalid_folder_transfers(cur_event_id):
+                    invalid_folders.add(cur_invalid)
+            
             self.new_event_window = TransferEventWindow(
                 self,
-                event_group_id,
-                dest_folder_list,
-                cur_event_folder
+                [x for x in self._data.folder_lookup.keys() if x not in invalid_folders]
             )
     
-    def transfer_event(self, event_group_id, new_folder_name):
-        self._data.transfer_event_object(event_group_id, new_folder_name)
+    def transfer_to_folder(self, new_folder_name):
+        all_event_ids = self.event_list.get_all_selected_event_ids(allow_event_items=False)
+        if len(all_event_ids) == 0:
+            return
+
+        self._data.transfer_events(all_event_ids, new_folder_name)
         self.new_event_window.close()
         self.new_event_window = None
         self.event_list.refresh()
 
     def rename_folder(self, *args, **kwargs):
-        self.open_new_folder_window(**{const.EVENT_FOLDER_NAME: self._data.get_event_obj(self.event_list.get_selected_event_id()).name})
+        all_event_ids = self.event_list.get_all_selected_event_ids()
+        if len(all_event_ids) > 1 or len(all_event_ids) == 0:
+            return
+
+        self.open_new_folder_window(**{const.EVENT_FOLDER_NAME: self._data.get_event_obj(all_event_ids[0]).name})
 
     def open_new_event_window(self, *args, **kwargs):
         if self._is_active_window():
-            event_id = self.event_list.get_selected_event_id()
-            event_obj = self._data.get_event_obj(event_id)
+            all_event_ids = self.event_list.get_all_selected_event_ids()
+            if len(all_event_ids) > 1 or len(all_event_ids) == 0:
+                return
 
+            event_id = all_event_ids[0]
+            event_obj = self._data.get_event_obj(event_id)
             if event_obj is None:
                 return
 
@@ -416,6 +482,10 @@ class Main(tk.Tk):
 
     def open_new_folder_window(self, *args, **kwargs):
         if self._is_active_window():
+            all_event_ids = self.event_list.get_all_selected_event_ids()
+            if len(all_event_ids) > 1:
+                return
+
             if const.EVENT_FOLDER_NAME in kwargs:
                 existing_folder_name = kwargs.get(const.EVENT_FOLDER_NAME)
             else:
@@ -428,7 +498,11 @@ class Main(tk.Tk):
 
     def combined_open_new_event_window(self, *args, **kwargs):
         if self._is_active_window():
-            event_id = self.event_list.get_selected_event_id()
+            all_event_ids = self.event_list.get_all_selected_event_ids()
+            if len(all_event_ids) > 1 or len(all_event_ids) == 0:
+                return
+
+            event_id = all_event_ids[0]
             event_obj = self._data.get_event_obj(event_id)
 
             if isinstance(event_obj, EventFolder):
@@ -476,7 +550,11 @@ class Main(tk.Tk):
             self.new_event_window = None
     
     def new_event(self, event_def):
-        self._data.add_event_object(event_def=event_def, insert_before=self.event_list.get_selected_event_id())
+        all_event_ids = self.event_list.get_all_selected_event_ids()
+        if len(all_event_ids) > 1 or len(all_event_ids) == 0:
+            return
+
+        self._data.add_event_object(event_def=event_def, insert_before=all_event_ids[0])
         self.new_event_window.close()
         self.new_event_window = None
         self.event_list.refresh()
@@ -663,16 +741,18 @@ class NewFolderWindow(custom_tkinter.Popup):
         self._main_window.finalize_new_folder(cur_name, prev_folder_name=self._prev_folder_name)
 
 
-class DeleteFolderConfirmation(custom_tkinter.Popup):
-    def __init__(self, main_window: Main, cur_folder_names, cur_event_id, *args, **kwargs):
+class DeleteConfirmation(custom_tkinter.Popup):
+    def __init__(self, main_window: Main, is_nonempty_folder, *args, **kwargs):
         super().__init__(main_window, *args, **kwargs)
         if main_window is None:
-            raise ValueError('Must set main_window when creating DeleteFolderConfirmation')
+            raise ValueError('Must set main_window when creating DeleteConfirmation')
         
-        self._cur_folder_names = cur_folder_names
-        self._cur_event_id = cur_event_id
-
-        self._label = tk.Label(self, text=f"You are trying to delete a folder {self._cur_folder_names} that isn't empty.\nAre you sure you want to delete this?")
+        if is_nonempty_folder:
+            text = "You are trying to delete a non-empty folder.\nAre you sure you want to delete the folder and all child events?"
+        else:
+            text = "You are trying to delete multiple items at once.\nAre you sure you want to delete all selected items?"
+        
+        self._label = tk.Label(self, text=text)
         self._label.grid(row=0, column=0, columnspan=2, padx=10, pady=10)
 
         self._confirm_button = custom_tkinter.SimpleButton(self, text="Delete", command=self.delete)
@@ -684,21 +764,16 @@ class DeleteFolderConfirmation(custom_tkinter.Popup):
         self.bind('<Escape>', self._main_window.cancel_new_event)
 
     def delete(self, *args, **kwargs):
-        self._main_window.delete_nonempty_folder(self._cur_event_id)
+        self._main_window.confirmed_delete()
 
 
 class TransferEventWindow(custom_tkinter.Popup):
-    def __init__(self, main_window: Main, cur_event_id, cur_folder_names, prev_folder_name, *args, **kwargs):
+    def __init__(self, main_window: Main, valid_dest_folders, *args, **kwargs):
         super().__init__(main_window, *args, **kwargs)
         if main_window is None:
             raise ValueError('Must set main_window when creating TransferEventWindow')
         
-        self._cur_event_id = cur_event_id
-        self._cur_folder_names = cur_folder_names
-        self._prev_folder_name = prev_folder_name
-
-        self._prev_folder_label = tk.Label(self, text=f"Current folder: {self._prev_folder_name}")
-        self._prev_folder_label.grid(row=0, column=0, columnspan=2, padx=10, pady=10)
+        self._valid_dest_folders = valid_dest_folders
 
         self._new_folder_label = tk.Label(self, text=f"New folder:")
         self._folder_name = custom_tkinter.SimpleOptionMenu(self, option_list=self.get_possible_folders())
@@ -710,7 +785,7 @@ class TransferEventWindow(custom_tkinter.Popup):
         self.filter_label.grid(row=2, column=0, padx=10, pady=10)
         self.filter.grid(row=2, column=1, padx=10, pady=10)
 
-        self._add_button = custom_tkinter.SimpleButton(self, command=self.transfer, text="Update Folder")
+        self._add_button = custom_tkinter.SimpleButton(self, command=self.transfer, text="Transfer to Folder")
         self._cancel_button = custom_tkinter.SimpleButton(self, text="Cancel", command=self._main_window.cancel_new_event)
         self._add_button.grid(row=3, column=0, padx=10, pady=10)
         self._cancel_button.grid(row=3, column=1, padx=10, pady=10)
@@ -721,14 +796,18 @@ class TransferEventWindow(custom_tkinter.Popup):
     
     def get_possible_folders(self, filter_text=""):
         filter_text = filter_text.lower()
-        result = [x for x in self._cur_folder_names if filter_text in x.lower()]
+        result = [x for x in self._valid_dest_folders if filter_text in x.lower()]
+
+        if not result:
+            result = [const.NO_FOLDERS]
+
         return result
 
     def _filter_callback(self, *args, **kwargs):
         self._folder_name.new_values(self.get_possible_folders(filter_text=self.filter.get()))
     
     def transfer(self, *args, **kwargs):
-        self._main_window.transfer_event(self._cur_event_id, self._folder_name.get())
+        self._main_window.transfer_to_folder(self._folder_name.get())
 
 
 class NewEventWindow(custom_tkinter.Popup):

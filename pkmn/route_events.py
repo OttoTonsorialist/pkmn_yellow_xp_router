@@ -79,21 +79,26 @@ class RareCandyEventDefinition:
 
 
 class WildPkmnEventDefinition:
-    def __init__(self, name, level):
+    def __init__(self, name, level, trainer_pkmn=False):
         self.name = name
         self.level = level
+        self.trainer_pkmn = trainer_pkmn
 
     def serialize(self):
-        return [self.name, self.level]
+        return [self.name, self.level, self.trainer_pkmn]
     
     @staticmethod
     def deserialize(raw_val):
         if not raw_val:
             return None
-        return WildPkmnEventDefinition(raw_val[0], raw_val[1])
+        if len(raw_val) == 2:
+            return WildPkmnEventDefinition(raw_val[0], raw_val[1])
+        else:
+            return WildPkmnEventDefinition(raw_val[0], raw_val[1], trainer_pkmn=raw_val[2])
     
     def __str__(self):
-        return f"{self.name}, LV: {self.level}"
+        prefix = "TrainerPkmn" if self.trainer_pkmn else "WildPkmn"
+        return f"{prefix} {self.name}, LV: {self.level}"
 
 
 class LearnMoveEventDefinition:
@@ -167,7 +172,10 @@ class EventDefinition:
     
     def get_wild_pkmn(self):
         if self._wild_pkmn is None and self.wild_pkmn_info is not None:
-            self._wild_pkmn = pkmn_db.pkmn_db.create_wild_pkmn(self.wild_pkmn_info.name, self.wild_pkmn_info.level)
+            if self.wild_pkmn_info.trainer_pkmn:
+                self._wild_pkmn = pkmn_db.pkmn_db.create_trainer_pkmn(self.wild_pkmn_info.name, self.wild_pkmn_info.level)
+            else:
+                self._wild_pkmn = pkmn_db.pkmn_db.create_wild_pkmn(self.wild_pkmn_info.name, self.wild_pkmn_info.level)
         return self._wild_pkmn
     
     def get_pokemon_list(self):
@@ -229,7 +237,7 @@ class EventDefinition:
         elif self.vitamin is not None:
             return str(self.vitamin)
         elif self.wild_pkmn_info is not None:
-            return f"Wild Pkmn: {self.wild_pkmn_info}"
+            return str(self.wild_pkmn_info)
         elif self.trainer_def is not None:
             trainer = self.get_trainer_obj()
             return f"Trainer: {trainer.name} ({trainer.location})"
@@ -334,7 +342,7 @@ class EventItem:
                     render_trainer_name = self.event_definition.trainer_def.trainer_name
                 else:
                     defeated_trainer_name = None
-                    render_trainer_name = "Wild Pkmn"
+                    render_trainer_name = "TrainerPkmn" if self.event_definition.wild_pkmn_info.trainer_pkmn else "WildPkmn"
 
                 self.name = f"{render_trainer_name}: {enemy_team[self.to_defeat_idx].name}"
                 self.final_state, self.error_message = cur_state.defeat_pkmn(enemy_team[self.to_defeat_idx], trainer_name=defeated_trainer_name)

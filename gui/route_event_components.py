@@ -241,7 +241,7 @@ class LearnMoveEditor(EventEditorBase):
         self._level = const.LEVEL_ANY
 
         self._item_type_label = tk.Label(self, text="Item Type:")
-        self._item_type_selector = custom_tkinter.SimpleOptionMenu(self, [const.ITEM_TYPE_BACKPACK_ITEMS, const.ITEM_TYPE_TM], callback=self._item_filter_callback)
+        self._item_type_selector = custom_tkinter.SimpleOptionMenu(self, [const.ITEM_TYPE_ALL_ITEMS, const.ITEM_TYPE_BACKPACK_ITEMS, const.ITEM_TYPE_TM], callback=self._item_filter_callback)
         self._item_type_row = self._cur_row
         self._cur_row += 1
 
@@ -271,6 +271,9 @@ class LearnMoveEditor(EventEditorBase):
         item_filter_val = self._item_filter.get().strip().lower()
         if item_filter_val:
             new_vals = [x for x in new_vals if item_filter_val in x.lower()]
+        
+        if not new_vals:
+            new_vals = [const.NO_ITEM]
 
         self._item_selector.new_values(new_vals)
     
@@ -492,7 +495,6 @@ class InventoryEventEditor(EventEditorBase):
     def _show_use_item(self):
         self._item_type_label.grid(row=self._item_type_row, column=0)
         self._item_type_selector.grid(row=self._item_type_row, column=1)
-        self._item_type_selector.set(const.ITEM_TYPE_BACKPACK_ITEMS)
         self._item_filter_label.grid(row=self._item_filter_row, column=0)
         self._item_filter.grid(row=self._item_filter_row, column=1)
         self._item_selector_label.grid(row=self._item_selector_row, column=0)
@@ -503,7 +505,6 @@ class InventoryEventEditor(EventEditorBase):
     def _show_sell_item(self):
         self._item_type_label.grid(row=self._item_type_row, column=0)
         self._item_type_selector.grid(row=self._item_type_row, column=1)
-        self._item_type_selector.set(const.ITEM_TYPE_BACKPACK_ITEMS)
         self._item_filter_label.grid(row=self._item_filter_row, column=0)
         self._item_filter.grid(row=self._item_filter_row, column=1)
         self._item_selector_label.grid(row=self._item_selector_row, column=0)
@@ -531,6 +532,9 @@ class InventoryEventEditor(EventEditorBase):
         item_filter_val = self._item_filter.get().strip().lower()
         if item_filter_val:
             new_vals = [x for x in new_vals if item_filter_val in x.lower()]
+        
+        if not new_vals:
+            new_vals = [const.NO_ITEM]
 
         self._item_selector.new_values(new_vals)
 

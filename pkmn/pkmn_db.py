@@ -41,6 +41,13 @@ class PkmnDB:
                 return self._data.get(test_name)
         
         return None
+
+    def create_trainer_pkmn(self, pkmn_name, pkmn_level):
+        raw_pkmn = self.get_pkmn(pkmn_name)
+        return data_objects.EnemyPkmn(
+            pkmn_utils.instantiate_trainer_pokemon(raw_pkmn.to_dict(), pkmn_level),
+            raw_pkmn.stats
+        )
     
     def create_wild_pkmn(self, pkmn_name, pkmn_level):
         raw_pkmn = self.get_pkmn(pkmn_name)

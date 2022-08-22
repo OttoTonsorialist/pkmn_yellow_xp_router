@@ -323,6 +323,7 @@ class Constants:
         self.HEADER_BG_COLOR = "#f6ddcc"
 
         self.NO_SAVED_ROUTES = "No Saved Routes"
+        self.NO_FOLDERS = "No Matching Folders"
 
 
 

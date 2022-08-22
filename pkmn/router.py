@@ -163,7 +163,13 @@ class Router:
         if recalc:
             self._recalc()
     
-    def remove_event_object(self, event_id):
+    def batch_remove_events(self, event_id_list):
+        for cur_event in event_id_list:
+            self.remove_event_object(cur_event, recalc=False)
+        
+        self._recalc()
+    
+    def remove_event_object(self, event_id, recalc=True):
         cur_event = self.event_lookup.get(event_id)
         if cur_event is None:
             raise ValueError(f"Cannot remove event for unknown id: {event_id}")
@@ -180,7 +186,8 @@ class Router:
         if isinstance(cur_event, route_events.EventFolder):
             del self.folder_lookup[cur_event.name]
         
-        self._recalc()
+        if recalc:
+            self._recalc()
 
     def move_event_object(self, event_id, move_up_flag):
         # NOTE: can only move within a folder. To change folders, need to call a separate function
@@ -191,20 +198,44 @@ class Router:
         except Exception as e:
             raise ValueError(f"Failed to find event object with id: {event_id}")
     
-    def transfer_event_object(self, event_id, dest_folder_name):
-        cur_event = self.event_lookup.get(event_id)
-        if cur_event is None:
-            raise ValueError(f"Cannot find group for id: {event_id}")
-        
-        dest_folder = self.folder_lookup.get(dest_folder_name)
-        if dest_folder is None:
-            raise ValueError(f"Cannot find destination folder named: {dest_folder_name}")
-        
-        if dest_folder == cur_event:
-            raise ValueError(f"Cannot transfer a folder into itself")
-        
-        cur_event.parent.remove_child(cur_event)
-        dest_folder.insert_child_before(cur_event, before_obj=None)
+    def get_invalid_folder_transfers(self, event_id):
+        # NOTE: EventGroup objects will always have an empty result list
+        # this is intentional, EventGroups can be transferred anywhere
+        result = []
+        self._get_child_folder_names_recursive(self.event_lookup.get(event_id), result)
+        return result
+    
+    def _get_child_folder_names_recursive(self, cur_obj, result):
+        if isinstance(cur_obj, route_events.EventFolder):
+            result.append(cur_obj.name)
+            for child in cur_obj.children:
+                self._get_child_folder_names_recursive(child, result)
+    
+    def transfer_events(self, event_id_list, dest_folder_name):
+        # goofy-looking, but intentional. Do all error checking before any modification
+        # This way, if any errors occur, the route isn't left in a half-valid state
+        for cur_event_id in event_id_list:
+            cur_event = self.event_lookup.get(cur_event_id)
+            if cur_event is None:
+                raise ValueError(f"Cannot find group for id: {cur_event_id}")
+            
+            dest_folder = self.folder_lookup.get(dest_folder_name)
+            if dest_folder is None:
+                raise ValueError(f"Cannot find destination folder named: {dest_folder_name}")
+            
+            if dest_folder == cur_event:
+                raise ValueError(f"Cannot transfer a folder into itself")
+            
+            if dest_folder_name in self.get_invalid_folder_transfers(cur_event_id):
+                raise ValueError(f"Cannot transfer a folder into a child folder")
+
+        # now that we know everything is valid, actualy make the updates
+        for cur_event_id in event_id_list:
+            cur_event = self.event_lookup.get(cur_event_id)
+            dest_folder = self.folder_lookup.get(dest_folder_name)
+            cur_event.parent.remove_child(cur_event)
+            dest_folder.insert_child_before(cur_event, before_obj=None)
+
         self._recalc()
     
     def replace_event_group(self, event_group_id, new_event_def:route_events.EventDefinition):

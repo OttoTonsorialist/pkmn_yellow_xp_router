@@ -138,7 +138,7 @@ class CustomGridview(CheckboxTreeview):
         self._tags_attr = tags_attr
 
         kwargs["columns"] = len(self._custom_col_data)
-        super().__init__(*args, **kwargs, selectmode="browse")
+        super().__init__(*args, **kwargs, selectmode="extended")
 
         self._treeview_id_lookup = {}
         self._cfg_custom_columns()
