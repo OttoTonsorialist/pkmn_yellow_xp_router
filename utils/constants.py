@@ -325,6 +325,9 @@ class Constants:
         self.NO_SAVED_ROUTES = "No Saved Routes"
         self.NO_FOLDERS = "No Matching Folders"
 
+        self.TRANSFER_EXISTING_FOLDER = "Existing Folder"
+        self.TRANSFER_NEW_FOLDER = "New Folder"
+
 
 
 

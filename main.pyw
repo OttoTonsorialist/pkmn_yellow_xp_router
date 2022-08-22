@@ -446,6 +446,7 @@ class Main(tk.Tk):
             
             self.new_event_window = TransferEventWindow(
                 self,
+                list(self._data.folder_lookup.keys()),
                 [x for x in self._data.folder_lookup.keys() if x not in invalid_folders]
             )
     
@@ -768,22 +769,27 @@ class DeleteConfirmation(custom_tkinter.Popup):
 
 
 class TransferEventWindow(custom_tkinter.Popup):
-    def __init__(self, main_window: Main, valid_dest_folders, *args, **kwargs):
+    def __init__(self, main_window: Main, all_existing_folders, valid_dest_folders, *args, **kwargs):
         super().__init__(main_window, *args, **kwargs)
         if main_window is None:
             raise ValueError('Must set main_window when creating TransferEventWindow')
         
+        self._all_existing_folders = all_existing_folders
         self._valid_dest_folders = valid_dest_folders
 
+        self._transfer_type_label = tk.Label(self, text=f"Transfer to:")
+        self._transfer_type = custom_tkinter.SimpleOptionMenu(self, option_list=[const.TRANSFER_EXISTING_FOLDER, const.TRANSFER_NEW_FOLDER], callback=self._transfer_type_callback)
+        self._transfer_type_label.grid(row=0, column=0, padx=10, pady=10)
+        self._transfer_type.grid(row=0, column=1, padx=10, pady=10)
+
         self._new_folder_label = tk.Label(self, text=f"New folder:")
-        self._folder_name = custom_tkinter.SimpleOptionMenu(self, option_list=self.get_possible_folders())
-        self._new_folder_label.grid(row=1, column=0, padx=10, pady=10)
-        self._folder_name.grid(row=1, column=1, padx=10, pady=10)
+        self._new_folder_name = custom_tkinter.SimpleEntry(self, callback=self._new_folder_callback)
+
+        self._dest_folder_label = tk.Label(self, text=f"New folder:")
+        self._dest_folder_name = custom_tkinter.SimpleOptionMenu(self, option_list=self.get_possible_folders())
 
         self.filter_label = tk.Label(self, text="Filter:")
         self.filter = custom_tkinter.SimpleEntry(self, callback=self._filter_callback)
-        self.filter_label.grid(row=2, column=0, padx=10, pady=10)
-        self.filter.grid(row=2, column=1, padx=10, pady=10)
 
         self._add_button = custom_tkinter.SimpleButton(self, command=self.transfer, text="Transfer to Folder")
         self._cancel_button = custom_tkinter.SimpleButton(self, text="Cancel", command=self._main_window.cancel_new_event)
@@ -792,6 +798,7 @@ class TransferEventWindow(custom_tkinter.Popup):
 
         self.bind('<Return>', self.transfer)
         self.bind('<Escape>', self._main_window.cancel_new_event)
+        self._transfer_type_callback()
         self.filter.focus()
     
     def get_possible_folders(self, filter_text=""):
@@ -802,12 +809,47 @@ class TransferEventWindow(custom_tkinter.Popup):
             result = [const.NO_FOLDERS]
 
         return result
+    
+    def _transfer_type_callback(self, *args, **kwargs):
+        if self._transfer_type.get() == const.TRANSFER_EXISTING_FOLDER:
+            self._dest_folder_label.grid(row=1, column=0, padx=10, pady=10)
+            self._dest_folder_name.grid(row=1, column=1, padx=10, pady=10)
+            self.filter_label.grid(row=2, column=0, padx=10, pady=10)
+            self.filter.grid(row=2, column=1, padx=10, pady=10)
+            self._new_folder_label.grid_forget()
+            self._new_folder_name.grid_forget()
+            self._filter_callback()
+        else:
+            self._dest_folder_label.grid_forget()
+            self._dest_folder_name.grid_forget()
+            self.filter_label.grid_forget()
+            self.filter.grid_forget()
+            self._new_folder_label.grid(row=1, column=0, padx=10, pady=10)
+            self._new_folder_name.grid(row=1, column=1, padx=10, pady=10)
+            self._new_folder_callback()
 
     def _filter_callback(self, *args, **kwargs):
-        self._folder_name.new_values(self.get_possible_folders(filter_text=self.filter.get()))
+        dest_folder_vals = self.get_possible_folders(filter_text=self.filter.get())
+        if const.NO_FOLDERS in dest_folder_vals:
+            self._add_button.disable()
+        else:
+            self._add_button.enable()
+
+        self._dest_folder_name.new_values(dest_folder_vals)
+
+    def _new_folder_callback(self, *args, **kwargs):
+        if self._new_folder_name.get() in self._all_existing_folders:
+            self._add_button.disable()
+        else:
+            self._add_button.enable()
     
     def transfer(self, *args, **kwargs):
-        self._main_window.transfer_to_folder(self._folder_name.get())
+        if self._transfer_type.get() == const.TRANSFER_EXISTING_FOLDER:
+            if self._dest_folder_name.get() != const.NO_FOLDERS:
+                self._main_window.transfer_to_folder(self._dest_folder_name.get())
+        else:
+            if self._new_folder_name.get() not in self._all_existing_folders:
+                self._main_window.transfer_to_folder(self._new_folder_name.get().strip())
 
 
 class NewEventWindow(custom_tkinter.Popup):

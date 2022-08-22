@@ -212,6 +212,12 @@ class Router:
                 self._get_child_folder_names_recursive(child, result)
     
     def transfer_events(self, event_id_list, dest_folder_name):
+        # figure out the destination folder first.
+        # If transferring to a destination folder that does not exist, create it just before the first event
+        dest_folder = self.folder_lookup.get(dest_folder_name)
+        if dest_folder is None:
+            self.add_event_object(new_folder_name=dest_folder_name, insert_before=event_id_list[0])
+
         # goofy-looking, but intentional. Do all error checking before any modification
         # This way, if any errors occur, the route isn't left in a half-valid state
         for cur_event_id in event_id_list:
@@ -220,14 +226,8 @@ class Router:
                 raise ValueError(f"Cannot find group for id: {cur_event_id}")
             
             dest_folder = self.folder_lookup.get(dest_folder_name)
-            if dest_folder is None:
-                raise ValueError(f"Cannot find destination folder named: {dest_folder_name}")
-            
-            if dest_folder == cur_event:
-                raise ValueError(f"Cannot transfer a folder into itself")
-            
             if dest_folder_name in self.get_invalid_folder_transfers(cur_event_id):
-                raise ValueError(f"Cannot transfer a folder into a child folder")
+                raise ValueError(f"Cannot transfer a folder into itself or a child folder")
 
         # now that we know everything is valid, actualy make the updates
         for cur_event_id in event_id_list:
