@@ -145,10 +145,17 @@ class QuickWildPkmn(tk.Frame):
         self._cur_row += 1
 
         self._level_label = tk.Label(self._dropdowns, text="Pkmn Level:", justify=tk.LEFT)
-        self._level_val = custom_tkinter.AmountEntry(self._dropdowns, callback=self._pkmn_level_callback)
+        self._level_val = custom_tkinter.AmountEntry(self._dropdowns, callback=self._update_button_callback_wrapper)
         self._level_val.configure(width=self.option_menu_width - 5)
         self._level_label.grid(row=self._cur_row, column=0, padx=self.padx, pady=self.pady, sticky=tk.W)
         self._level_val.grid(row=self._cur_row, column=1, padx=self.padx, pady=self.pady, sticky=tk.E)
+        self._cur_row += 1
+
+        self._quantity_label = tk.Label(self._dropdowns, text="Quantity:", justify=tk.LEFT)
+        self._quantity_val = custom_tkinter.AmountEntry(self._dropdowns, callback=self._update_button_callback_wrapper)
+        self._quantity_val.configure(width=self.option_menu_width - 5)
+        self._quantity_label.grid(row=self._cur_row, column=0, padx=self.padx, pady=self.pady, sticky=tk.W)
+        self._quantity_val.grid(row=self._cur_row, column=1, padx=self.padx, pady=self.pady, sticky=tk.E)
         self._cur_row += 1
 
         self._buttons = tk.Frame(self)
@@ -159,6 +166,8 @@ class QuickWildPkmn(tk.Frame):
         self._add_wild_pkmn.grid(row=0, column=0, padx=self.padx, pady=self.pady + 1, sticky=tk.W)
         self._add_trainer_pkmn = custom_tkinter.SimpleButton(self._buttons, text="Add Trainer Pkmn", command=self.add_trainer_pkmn_cmd)
         self._add_trainer_pkmn.grid(row=0, column=1, padx=self.padx, pady=self.pady + 1, sticky=tk.W)
+
+        self._level_val.set(5)
         self.update_button_status()
 
     def update_button_status(self, allow_enable=None):
@@ -170,7 +179,26 @@ class QuickWildPkmn(tk.Frame):
             self._add_trainer_pkmn.disable()
             return
         
+        valid = True
+        
         if self._pkmn_types.get().strip().startswith(const.NO_POKEMON):
+            valid = False
+
+        try:
+            level = int(self._level_val.get().strip())
+            if level < 2 or level > 100:
+                raise ValueError
+        except Exception:
+            valid = False
+
+        try:
+            quantity = int(self._quantity_val.get().strip())
+            if quantity < 1:
+                raise ValueError
+        except Exception:
+            valid = False
+
+        if not valid:
             self._add_wild_pkmn.disable()
             self._add_trainer_pkmn.disable()
         else:
@@ -183,16 +211,8 @@ class QuickWildPkmn(tk.Frame):
     def _pkmn_filter_callback(self, *args, **kwargs):
         self._pkmn_types.new_values(pkmn_db.pkmn_db.get_filtered_names(filter_val=self._pkmn_filter.get().strip()))
         self.update_button_status()
-
-    def _pkmn_level_callback(self, *args, **kwargs):
-        try:
-            val = int(self._level_val.get().strip())
-            if val < 2 or val > 100:
-                raise ValueError
-        except Exception:
-            self._add_wild_pkmn.disable()
-            return
-        
+    
+    def _update_button_callback_wrapper(self, *args, **kwargs):
         self.update_button_status()
 
     def add_wild_pkmn_cmd(self, *args, **kwargs):
@@ -201,7 +221,8 @@ class QuickWildPkmn(tk.Frame):
                 EventDefinition(
                     wild_pkmn_info=WildPkmnEventDefinition(
                         self._pkmn_types.get(),
-                        int(self._level_val.get().strip())
+                        int(self._level_val.get().strip()),
+                        quantity=int(self._quantity_val.get().strip()),
                     )
                 )
             )
@@ -213,6 +234,7 @@ class QuickWildPkmn(tk.Frame):
                     wild_pkmn_info=WildPkmnEventDefinition(
                         self._pkmn_types.get(),
                         int(self._level_val.get().strip()),
+                        quantity=int(self._quantity_val.get().strip()),
                         trainer_pkmn=True
                     )
                 )

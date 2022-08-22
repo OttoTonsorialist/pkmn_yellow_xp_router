@@ -79,13 +79,14 @@ class RareCandyEventDefinition:
 
 
 class WildPkmnEventDefinition:
-    def __init__(self, name, level, trainer_pkmn=False):
+    def __init__(self, name, level, quantity=1, trainer_pkmn=False):
         self.name = name
         self.level = level
+        self.quantity = quantity
         self.trainer_pkmn = trainer_pkmn
 
     def serialize(self):
-        return [self.name, self.level, self.trainer_pkmn]
+        return [self.name, self.level, self.quantity, self.trainer_pkmn]
     
     @staticmethod
     def deserialize(raw_val):
@@ -94,7 +95,7 @@ class WildPkmnEventDefinition:
         if len(raw_val) == 2:
             return WildPkmnEventDefinition(raw_val[0], raw_val[1])
         else:
-            return WildPkmnEventDefinition(raw_val[0], raw_val[1], trainer_pkmn=raw_val[2])
+            return WildPkmnEventDefinition(raw_val[0], raw_val[1], quantity=raw_val[2], trainer_pkmn=raw_val[3])
     
     def __str__(self):
         prefix = "TrainerPkmn" if self.trainer_pkmn else "WildPkmn"
@@ -181,7 +182,9 @@ class EventDefinition:
     def get_pokemon_list(self):
         wild_pkmn = self.get_wild_pkmn()
         if wild_pkmn is not None:
-            return [wild_pkmn]
+            # NOTE: technically bad, it's just multiple references to the same object
+            # but since these objects are treated as immutable, it's not actually a problem
+            return [wild_pkmn for _ in range(self.wild_pkmn_info.quantity)]
         
         trainer = self.get_trainer_obj()
         if trainer is not None:
@@ -220,7 +223,7 @@ class EventDefinition:
         elif self.vitamin is not None:
             return f"Vitamin: {self.vitamin.vitamin} x1"
         elif self.wild_pkmn_info is not None:
-            return f"Wild Pkmn: {self.wild_pkmn_info}"
+            return str(self.wild_pkmn_info)
         elif self.trainer_def is not None:
             trainer = self.get_trainer_obj()
             return f"Trainer: {trainer.name} ({trainer.location})"
@@ -466,12 +469,12 @@ class EventGroup:
         else:
             self.level_up_learn_event_defs = level_up_learn_event_defs
 
-        if self.event_definition.trainer_def is not None:
-            trainer_obj = self.event_definition.get_trainer_obj()
+        if self.event_definition.trainer_def is not None or self.event_definition.wild_pkmn_info is not None:
             pkmn_counter = {}
-            for pkmn_idx, trainer_pkmn in enumerate(trainer_obj.pkmn):
+            pkmn_to_fight = self.event_definition.get_pokemon_list()
+            for pkmn_idx, cur_pkmn in enumerate(pkmn_to_fight):
                 self.event_items.append(EventItem(self, self.event_definition, to_defeat_idx=pkmn_idx, cur_state=cur_state))
-                pkmn_counter[trainer_pkmn.name] = pkmn_counter.get(trainer_pkmn.name, 0) + 1
+                pkmn_counter[cur_pkmn.name] = pkmn_counter.get(cur_pkmn.name, 0) + 1
                 
                 next_state = self.event_items[-1].final_state
                 if next_state is None or cur_state is None:
@@ -484,8 +487,8 @@ class EventGroup:
                             self.event_items.append(EventItem(self, EventDefinition(learn_move=learn_move), cur_state=next_state))
                             next_state = self.event_items[-1].final_state
                     # keep track of pkmn coming out
-                    if pkmn_idx + 1 < len(trainer_obj.pkmn):
-                        next_pkmn_name = trainer_obj.pkmn[pkmn_idx + 1].name
+                    if pkmn_idx + 1 < len(pkmn_to_fight):
+                        next_pkmn_name = pkmn_to_fight[pkmn_idx + 1].name
                         next_pkmn_count = pkmn_counter.get(next_pkmn_name, 0) + 1
                         self.pkmn_after_levelups.append(f"#{next_pkmn_count} {next_pkmn_name}")
                     else:

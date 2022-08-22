@@ -256,7 +256,6 @@ class Main(tk.Tk):
             event_group = self._data.get_event_obj(all_event_ids[0])
             self.update_quick_add_buttons((event_group is not None) and (not isinstance(event_group, EventItem)))
 
-        
         if event_group is None:
             self.event_details.show_event_details(None, self._data.init_route_state, self._data.get_final_state(), allow_updates=False)
             self.rename_folder_button.disable()
@@ -269,8 +268,12 @@ class Main(tk.Tk):
                 self.transfer_event_button.disable()
             else:
                 self.new_folder_button.disable()
-                self.delete_event_button.enable()
-                self.transfer_event_button.enable()
+                if len(all_event_ids) == 0:
+                    self.delete_event_button.disable()
+                    self.transfer_event_button.disable()
+                else:
+                    self.delete_event_button.enable()
+                    self.transfer_event_button.enable()
         elif isinstance(event_group, EventFolder):
             self.event_details.show_event_details(None, event_group.init_state, event_group.final_state, allow_updates=False)
             self.rename_folder_button.enable()

@@ -381,44 +381,71 @@ class WildPkmnEditor(EventEditorBase):
         self._cur_row += 1
 
         self._pkmn_level_label = tk.Label(self, text="Wild Pokemon Level:")
-        self._pkmn_level = custom_tkinter.SimpleEntry(self, callback=self._pkmn_level_callback)
+        self._pkmn_level = custom_tkinter.AmountEntry(self, callback=self._update_button_status)
         self._pkmn_level_label.grid(row=self._cur_row, column=0)
         self._pkmn_level.grid(row=self._cur_row, column=1)
         self._cur_row += 1
 
-    def _pkmn_filter_callback(self, *args, **kwargs):
-        self._pkmn_types.new_values(pkmn_db.pkmn_db.get_filtered_names(filter_val=self._pkmn_filter.get().strip()))
+        self._quantity_label = tk.Label(self, text="Num Pkmn:")
+        self._quantity = custom_tkinter.AmountEntry(self, callback=self._update_button_status)
+        self._quantity_label.grid(row=self._cur_row, column=0)
+        self._quantity.grid(row=self._cur_row, column=1)
+        self._cur_row += 1
 
-    def _pkmn_level_callback(self, *args, **kwargs):
+        self._pkmn_trainer_flag = custom_tkinter.CheckboxLabel(self, text="Is Trainer Pkmn?")
+        self._pkmn_trainer_flag.grid(row=self._cur_row, column=0, columnspan=2)
+        self._cur_row += 1
+    
+    def _update_button_status(self, *args, **kwargs):
+        valid = True
         try:
-            val = int(self._pkmn_level.get().strip())
-            if val < 2 or val > 100:
+            pkmn_level = int(self._pkmn_level.get().strip())
+            if pkmn_level < 2 or pkmn_level > 100:
                 raise ValueError
         except Exception:
-            self.event_button.disable()
-            return
-        
+            valid = False
+
         if self._pkmn_types.get().strip().startswith(const.NO_POKEMON):
-            self.event_button.disable()
-        else:
+            valid = False
+
+        try:
+            quantity = int(self._quantity.get().strip())
+            if quantity < 1:
+                raise ValueError
+        except Exception:
+            valid = False
+        
+        if valid:
             self.event_button.enable()
+        else:
+            self.event_button.disable()
+
+    def _pkmn_filter_callback(self, *args, **kwargs):
+        self._pkmn_types.new_values(pkmn_db.pkmn_db.get_filtered_names(filter_val=self._pkmn_filter.get().strip()))
+        self._update_button_status()
 
     def configure(self, editor_params):
         super().configure(editor_params)
         self._pkmn_filter.set("")
-        self._pkmn_level.set("")
+        self._pkmn_level.set("1")
+        self._quantity.set("1")
+        self._pkmn_trainer_flag.set_checked(False)
     
     def load_event(self, event_def):
         super().load_event(event_def)
         self._pkmn_filter.set("")
-        self._pkmn_level.set(event_def.wild_pkmn_info.level)
+        self._pkmn_level.set(str(event_def.wild_pkmn_info.level))
         self._pkmn_types.set(event_def.wild_pkmn_info.name)
+        self._quantity.set(str(event_def.wild_pkmn_info.quantity))
+        self._pkmn_trainer_flag.set_checked(event_def.wild_pkmn_info.trainer_pkmn)
 
     def get_event(self):
         return EventDefinition(
             wild_pkmn_info=WildPkmnEventDefinition(
                 self._pkmn_types.get(),
                 int(self._pkmn_level.get().strip()),
+                quantity=int(self._quantity.get().strip()),
+                trainer_pkmn=self._pkmn_trainer_flag.is_checked()
             )
         )
 
