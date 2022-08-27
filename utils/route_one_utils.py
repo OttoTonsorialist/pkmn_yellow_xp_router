@@ -96,7 +96,11 @@ def _generate_recursively(result:list, root_folder:EventFolder):
             result.append("")
         elif cur_event.wild_pkmn_info is not None:
             pkmn = cur_event.get_wild_pkmn()
-            result.append(f"L{pkmn.level} {pkmn_name_to_route_one(pkmn.name)}")
+            entry = f"L{pkmn.level} {pkmn_name_to_route_one(pkmn.name)}"
+            if cur_event.wild_pkmn_info.trainer_pkmn:
+                entry += " -t"
+            for _ in range(cur_event.wild_pkmn_info.quantity):
+                result.append(entry)
             result.append("")
         elif cur_event.learn_move is not None:
             _gen_learn_move_event(result, cur_event, cur_obj.init_state)
