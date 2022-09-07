@@ -129,7 +129,7 @@ class Router:
         
         self._recalc()
     
-    def add_event_object(self, event_def:route_events.EventDefinition=None, new_folder_name=None, insert_before=None, dest_folder_name=const.ROOT_FOLDER_NAME, recalc=True):
+    def add_event_object(self, event_def:route_events.EventDefinition=None, new_folder_name=None, insert_before=None, dest_folder_name=const.ROOT_FOLDER_NAME, recalc=True, folder_expanded=True):
         if not self.init_route_state:
             raise ValueError("Cannot add an event when solo pokmn is not yet selected")
         if event_def is None and new_folder_name is None:
@@ -155,7 +155,7 @@ class Router:
             new_obj = route_events.EventGroup(parent_obj, event_def)
 
         elif new_folder_name is not None:
-            new_obj = route_events.EventFolder(parent_obj, new_folder_name)
+            new_obj = route_events.EventFolder(parent_obj, new_folder_name, expanded=folder_expanded)
             self.folder_lookup[new_folder_name] = new_obj
         
         self.event_lookup[new_obj.group_id] = new_obj
@@ -337,7 +337,12 @@ class Router:
     def _load_events_recursive(self, parent_folder:route_events.EventFolder, json_obj):
         for event_json in json_obj[const.EVENTS]:
             if const.EVENT_FOLDER_NAME in event_json:
-                self.add_event_object(new_folder_name=event_json[const.EVENT_FOLDER_NAME], dest_folder_name=parent_folder.name, recalc=False)
+                self.add_event_object(
+                    new_folder_name=event_json[const.EVENT_FOLDER_NAME],
+                    dest_folder_name=parent_folder.name,
+                    recalc=False,
+                    folder_expanded=event_json.get(const.EXPANDED_KEY, True)
+                )
                 inner_parent = self.folder_lookup[event_json[const.EVENT_FOLDER_NAME]]
                 self._load_events_recursive(inner_parent, event_json)
             else:

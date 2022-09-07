@@ -187,25 +187,6 @@ class SoloPokemon:
         self.percent_xp_to_next_level = f"{int((self.xp_to_next_level / (self.cur_xp + self.xp_to_next_level - last_level_xp)) * 100)} %"
         self.cur_stats = self.species_def.stats.calc_level_stats(self.cur_level, self.dvs, self.realized_stat_xp, badges)
     
-    def get_renderable_pkmn(self):
-        # pkmn viewer only knows how to show off the EnemyPkmn type
-        # So create a view of this pokemon in that type for rendering
-        # we're going to cheat a lot here, whatever
-        return data_objects.EnemyPkmn(
-            {
-                const.NAME_KEY: self.name,
-                const.LEVEL: self.cur_level,
-                const.HP: self.cur_stats.hp,
-                const.ATK: self.cur_stats.attack,
-                const.DEF: self.cur_stats.defense,
-                const.SPD: self.cur_stats.speed,
-                const.SPC: self.cur_stats.special,
-                const.XP: -1,
-                const.MOVES: self.move_list,
-            },
-            self.cur_stats
-        )
-    
     def get_net_gain_from_stat_xp(self, badges):
         if badges is None:
             badges = data_objects.BadgeList()
@@ -219,7 +200,7 @@ class SoloPokemon:
 
         return self.cur_stats.subtract(temp)
 
-    def get_battle_stats(self, badges, stage_modifiers=None):
+    def get_pkmn_obj(self, badges, stage_modifiers=None):
         # allow badge boosting, and also normal stat boosting
         if stage_modifiers is None:
             stage_modifiers = data_objects.StageModifiers()
@@ -238,7 +219,10 @@ class SoloPokemon:
                 const.XP: -1,
                 const.MOVES: self.move_list,
             },
-            self.species_def.stats
+            self.species_def.stats,
+            self.dvs,
+            stat_xp=self.realized_stat_xp,
+            badges=badges
         )
     
     def defeat_pkmn(self, enemy_pkmn: data_objects.EnemyPkmn, badges):

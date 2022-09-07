@@ -1,7 +1,7 @@
 import tkinter as tk
 from tkinter import ttk
 
-from gui import custom_tkinter, route_event_components, pkmn_components, quick_add_components
+from gui import custom_tkinter, route_event_components, pkmn_components, quick_add_components, battle_summary
 from pkmn.route_events import EventDefinition, EventFolder, EventGroup, EventItem, InventoryEventDefinition, LearnMoveEventDefinition, RareCandyEventDefinition, TrainerEventDefinition, VitaminEventDefinition
 from pkmn.router import Router
 from utils.constants import const
@@ -10,7 +10,9 @@ import pkmn.pkmn_db as pkmn_db
 
 class EventDetails(tk.Frame):
     def __init__(self, *args, event_update_callback=None, **kwargs):
-        super().__init__(*args, **kwargs, width=900)
+        self.state_summary_width = 900
+        self.battle_summary_width = 1400
+        super().__init__(*args, **kwargs, width=self.state_summary_width)
 
         self.event_update_callback = event_update_callback
         self._cur_trainer_name = None
@@ -37,12 +39,18 @@ class EventDetails(tk.Frame):
         self.state_post_viewer = pkmn_components.StateViewer(self.post_state_frame)
         self.state_post_viewer.grid(column=1, row=1, padx=10, pady=10)
 
+        self.battle_summary_frame = battle_summary.BattleSummary(self.tabbed_states)
+        self.battle_summary_frame.pack(padx=5, pady=5)
+
         self.tabbed_states.add(self.pre_state_frame, text="Pre-event State")
+        self.pre_state_tab_index = 0
         self.tabbed_states.add(self.post_state_frame, text="Post-event State")
-        self.tabbed_states.pack(anchor=tk.N, fill=tk.X, padx=5, pady=5)
+        self.post_state_tab_index = 1
+        self.tabbed_states.add(self.battle_summary_frame, text="Battle Summary")
+        self.battle_summary_tab_index = 2
+        #self.tabbed_states.pack(anchor=tk.N, fill=tk.X, padx=5, pady=5)
 
         self.event_viewer_frame = tk.Frame(self, highlightbackground="black", highlightthickness=2)
-        self.event_viewer_frame.pack(anchor=tk.N, fill=tk.BOTH, expand=True, padx=5, pady=5)
 
         self.event_details_frame = tk.Frame(self.event_viewer_frame)
         self.event_details_frame.grid(row=0, column=0)
@@ -76,6 +84,25 @@ class EventDetails(tk.Frame):
 
         self.footer_frame.columnconfigure(1, weight=1)
 
+        self.tabbed_states.bind('<<NotebookTabChanged>>', self._tab_changed_callback)
+    
+    def _tab_changed_callback(self, *args, **kwargs):
+        selected_tab_index = self.tabbed_states.index(self.tabbed_states.select())
+
+        if selected_tab_index == self.battle_summary_tab_index:
+            self.configure(width=self.battle_summary_width)
+            self.event_viewer_frame.pack_forget()
+            self.tabbed_states.pack_forget()
+            self.tabbed_states.pack(anchor=tk.N, fill=tk.BOTH, expand=True, padx=5, pady=5)
+            self.battle_summary_frame.allow_calculations()
+        else:
+            self.configure(width=self.state_summary_width)
+            self.tabbed_states.pack_forget()
+            self.tabbed_states.pack(anchor=tk.N, fill=tk.X, padx=5, pady=5)
+            self.event_viewer_frame.pack_forget()
+            self.event_viewer_frame.pack(anchor=tk.N, fill=tk.BOTH, expand=True, padx=5, pady=5)
+            self.battle_summary_frame.pause_calculations()
+
     def _pre_state_display_mode_callback(self, *args, **kwargs):
         if self.pre_state_selector.get() == const.BADGE_BOOST_LABEL:
             self.state_pre_viewer.grid_forget()
@@ -83,9 +110,6 @@ class EventDetails(tk.Frame):
         else:
             self.badge_boost_viewer.grid_forget()
             self.state_pre_viewer.grid(column=1, row=1, padx=10, pady=10, columnspan=2)
-    
-    def toggle_trainer_verbosity(self, new_val):
-        pass
     
     def show_event_details(self, event_def:EventDefinition, init_state, final_state, allow_updates=True):
         self.state_pre_viewer.set_state(init_state)
@@ -116,16 +140,18 @@ class EventDetails(tk.Frame):
                 self._cur_trainer_name = event_def.trainer_def.trainer_name
                 self.enemy_team_viewer.pack()
                 self.enemy_team_viewer.set_team(event_def.get_trainer_obj().pkmn, cur_state=init_state)
+                self.battle_summary_frame.set_team(event_def.get_trainer_obj().pkmn, cur_state=init_state)
                 self.verbose_trainer_label.grid(row=3, column=1, padx=5, pady=5, sticky=tk.W)
                 self.verbose_trainer_label.set_checked(event_def.trainer_def.verbose_export)
             else:
                 self.enemy_team_viewer.pack_forget()
                 self.enemy_team_viewer.set_team(None)
+                self.battle_summary_frame.set_team(None)
                 self.verbose_trainer_label.grid_forget()
 
                 # TODO: fix this gross ugly hack
                 self.current_event_editor = self.event_editor_lookup.get_editor(
-                    route_event_components.EditorParams(event_def.get_event_type(), None, init_state,)
+                    route_event_components.EditorParams(event_def.get_event_type(), None, init_state)
                 )
                 self.current_event_editor.load_event(event_def)
                 self.current_event_editor.pack()

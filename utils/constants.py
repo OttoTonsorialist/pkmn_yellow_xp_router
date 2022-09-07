@@ -12,6 +12,7 @@ class Constants:
         self.ASSETS_PATH = os.path.join(self.SOURCE_ROOT_PATH, "assets")
 
         self.ITEM_DB_PATH = os.path.join(self.POKEMON_RAW_DATA, "items.json")
+        self.MOVE_DB_PATH = os.path.join(self.POKEMON_RAW_DATA, "moves.json")
         self.SAVED_ROUTES_DIR = os.path.join(self.SOURCE_ROOT_PATH, "saved_routes")
 
         self.YELLOW_ASSETS_PATH = os.path.join(self.POKEMON_RAW_DATA, "yellow")
@@ -59,6 +60,13 @@ class Constants:
         self.SPECIAL_MOVES = "special_moves"
         self.MONEY = "money"
         self.ROUTE_ONE_OFFSET = "route_one_offset"
+
+        self.MOVE_TYPE = "type"
+        self.BASE_POWER = "base_power"
+        self.MOVE_PP = "pp"
+        self.MOVE_ACCURACY = "accuracy"
+        self.MOVE_EFFECTS = "effects"
+        self.MOVE_FLAVOR = "attack_flavor"
 
         self.GROWTH_RATE_FAST = "growth_fast"
         self.GROWTH_RATE_MEDIUM_FAST = "growth_medium_fast"
@@ -235,6 +243,7 @@ class Constants:
         self.UNUSED_TRAINER_LOC = "Unused"
         self.EVENTS = "events"
         self.ENABLED_KEY = "Enabled"
+        self.EXPANDED_KEY = "Expanded"
 
         self.IS_KEY_ITEM = "key_item"
         self.PURCHASE_PRICE = "purchase_price"
@@ -301,6 +310,8 @@ class Constants:
 
         self.ROOT_FOLDER_NAME = "ROOT"
         self.ROUTE_LIST_REFRESH_EVENT = "<<RouteListRefresh>>"
+        self.BATTLE_SUMMARY_SHOWN_EVENT = "<<BattleSummaryShown>>"
+        self.BATTLE_SUMMARY_HIDDEN_EVENT = "<<BattleSummaryHidden>>"
 
         self.EMPTY_ROUTE_NAME = "Empty Route"
 
@@ -327,6 +338,156 @@ class Constants:
 
         self.TRANSFER_EXISTING_FOLDER = "Existing Folder"
         self.TRANSFER_NEW_FOLDER = "New Folder"
+
+        self.FLAVOR_HIGH_CRIT = "high_crit"
+
+        self.SPECIAL_TYPES = [
+            "water",
+            "grass",
+            "fire",
+            "ice",
+            "electric",
+            "psychic",
+            "dragon"
+        ]
+
+        self.EXPLOSION_MOVE_NAME = "Explosion"
+        self.SELFDESTRUCT_MOVE_NAME = "Selfdestruct"
+
+        self.TYPE_NORMAL = "normal"
+        self.TYPE_FIGHTING = "fighting"
+        self.TYPE_FLYING = "flying"
+        self.TYPE_POISON = "poison"
+        self.TYPE_GROUND = "ground"
+        self.TYPE_ROCK = "rock"
+        self.TYPE_BUG = "bug"
+        self.TYPE_GHOST = "ghost"
+        self.TYPE_FIRE = "fire"
+        self.TYPE_WATER = "water"
+        self.TYPE_GRASS = "grass"
+        self.TYPE_ELECTRIC = "electric"
+        self.TYPE_PSYCHIC = "psychic"
+        self.TYPE_ICE = "ice"
+        self.TYPE_DRAGON = "dragon"
+
+        self.SUPER_EFFECTIVE = "Super Effective"
+        self.NOT_VERY_EFFECTIVE = "Not Very Effective"
+        self.IMMUNE = "Immune"
+
+        self.TYPE_CHART = {
+            self.TYPE_NORMAL: {
+                self.TYPE_ROCK: self.NOT_VERY_EFFECTIVE,
+                self.TYPE_GHOST: self.IMMUNE
+            },
+            self.TYPE_FIGHTING: {
+                self.TYPE_NORMAL: self.SUPER_EFFECTIVE,
+                self.TYPE_FLYING: self.NOT_VERY_EFFECTIVE,
+                self.TYPE_POISON: self.NOT_VERY_EFFECTIVE,
+                self.TYPE_ROCK: self.SUPER_EFFECTIVE,
+                self.TYPE_BUG: self.NOT_VERY_EFFECTIVE,
+                self.TYPE_GHOST: self.IMMUNE,
+                self.TYPE_PSYCHIC: self.NOT_VERY_EFFECTIVE,
+                self.TYPE_ICE: self.SUPER_EFFECTIVE,
+            },
+            self.TYPE_FLYING: {
+                self.TYPE_FIGHTING: self.SUPER_EFFECTIVE,
+                self.TYPE_ROCK: self.NOT_VERY_EFFECTIVE,
+                self.TYPE_BUG: self.SUPER_EFFECTIVE,
+                self.TYPE_GRASS: self.SUPER_EFFECTIVE,
+                self.TYPE_ELECTRIC: self.NOT_VERY_EFFECTIVE,
+            },
+            self.TYPE_POISON: {
+                self.TYPE_POISON: self.NOT_VERY_EFFECTIVE,
+                self.TYPE_GROUND: self.NOT_VERY_EFFECTIVE,
+                self.TYPE_ROCK: self.NOT_VERY_EFFECTIVE,
+                self.TYPE_BUG: self.SUPER_EFFECTIVE,
+                self.TYPE_GHOST: self.NOT_VERY_EFFECTIVE,
+                self.TYPE_GRASS: self.SUPER_EFFECTIVE,
+            },
+            self.TYPE_GROUND: {
+                self.TYPE_FLYING: self.IMMUNE,
+                self.TYPE_POISON: self.SUPER_EFFECTIVE,
+                self.TYPE_ROCK: self.SUPER_EFFECTIVE,
+                self.TYPE_BUG: self.NOT_VERY_EFFECTIVE,
+                self.TYPE_FIRE: self.SUPER_EFFECTIVE,
+                self.TYPE_GRASS: self.NOT_VERY_EFFECTIVE,
+                self.TYPE_ELECTRIC: self.SUPER_EFFECTIVE,
+            },
+            self.TYPE_ROCK: {
+                self.TYPE_FIGHTING: self.NOT_VERY_EFFECTIVE,
+                self.TYPE_FLYING: self.SUPER_EFFECTIVE,
+                self.TYPE_GROUND: self.NOT_VERY_EFFECTIVE,
+                self.TYPE_BUG: self.SUPER_EFFECTIVE,
+                self.TYPE_FIRE: self.SUPER_EFFECTIVE,
+                self.TYPE_ICE: self.SUPER_EFFECTIVE,
+            },
+            self.TYPE_BUG: {
+                self.TYPE_FIGHTING: self.NOT_VERY_EFFECTIVE,
+                self.TYPE_FLYING: self.NOT_VERY_EFFECTIVE,
+                self.TYPE_POISON: self.SUPER_EFFECTIVE,
+                self.TYPE_GHOST: self.NOT_VERY_EFFECTIVE,
+                self.TYPE_FIRE: self.NOT_VERY_EFFECTIVE,
+                self.TYPE_GRASS: self.SUPER_EFFECTIVE,
+                self.TYPE_PSYCHIC: self.SUPER_EFFECTIVE,
+            },
+            self.TYPE_GHOST: {
+                self.TYPE_NORMAL: self.IMMUNE,
+                self.TYPE_GHOST: self.SUPER_EFFECTIVE,
+                self.TYPE_PSYCHIC: self.IMMUNE,
+            },
+            self.TYPE_FIRE: {
+                self.TYPE_ROCK: self.NOT_VERY_EFFECTIVE,
+                self.TYPE_BUG: self.SUPER_EFFECTIVE,
+                self.TYPE_FIRE: self.NOT_VERY_EFFECTIVE,
+                self.TYPE_WATER: self.NOT_VERY_EFFECTIVE,
+                self.TYPE_GRASS: self.SUPER_EFFECTIVE,
+                self.TYPE_ICE: self.SUPER_EFFECTIVE,
+                self.TYPE_DRAGON: self.NOT_VERY_EFFECTIVE,
+            },
+            self.TYPE_WATER: {
+                self.TYPE_GROUND: self.SUPER_EFFECTIVE,
+                self.TYPE_ROCK: self.SUPER_EFFECTIVE,
+                self.TYPE_FIRE: self.SUPER_EFFECTIVE,
+                self.TYPE_WATER: self.NOT_VERY_EFFECTIVE,
+                self.TYPE_GRASS: self.NOT_VERY_EFFECTIVE,
+                self.TYPE_DRAGON: self.NOT_VERY_EFFECTIVE,
+            },
+            self.TYPE_GRASS: {
+                self.TYPE_FLYING: self.NOT_VERY_EFFECTIVE,
+                self.TYPE_POISON: self.NOT_VERY_EFFECTIVE,
+                self.TYPE_GROUND: self.SUPER_EFFECTIVE,
+                self.TYPE_ROCK: self.SUPER_EFFECTIVE,
+                self.TYPE_BUG: self.NOT_VERY_EFFECTIVE,
+                self.TYPE_FIRE: self.NOT_VERY_EFFECTIVE,
+                self.TYPE_WATER: self.SUPER_EFFECTIVE,
+                self.TYPE_GRASS: self.NOT_VERY_EFFECTIVE,
+                self.TYPE_DRAGON: self.NOT_VERY_EFFECTIVE,
+            },
+            self.TYPE_ELECTRIC: {
+                self.TYPE_FLYING: self.SUPER_EFFECTIVE,
+                self.TYPE_GROUND: self.IMMUNE,
+                self.TYPE_WATER: self.SUPER_EFFECTIVE,
+                self.TYPE_GRASS: self.NOT_VERY_EFFECTIVE,
+                self.TYPE_ELECTRIC: self.NOT_VERY_EFFECTIVE,
+                self.TYPE_DRAGON: self.NOT_VERY_EFFECTIVE,
+            },
+            self.TYPE_PSYCHIC: {
+                self.TYPE_FIGHTING: self.SUPER_EFFECTIVE,
+                self.TYPE_POISON: self.SUPER_EFFECTIVE,
+                self.TYPE_PSYCHIC: self.NOT_VERY_EFFECTIVE,
+            },
+            self.TYPE_ICE: {
+                self.TYPE_FLYING: self.SUPER_EFFECTIVE,
+                self.TYPE_GROUND: self.SUPER_EFFECTIVE,
+                self.TYPE_WATER: self.NOT_VERY_EFFECTIVE,
+                self.TYPE_GRASS: self.SUPER_EFFECTIVE,
+                self.TYPE_ICE: self.NOT_VERY_EFFECTIVE,
+                self.TYPE_DRAGON: self.SUPER_EFFECTIVE,
+            },
+            self.TYPE_DRAGON: {
+                self.TYPE_DRAGON: self.SUPER_EFFECTIVE,
+            },
+        }
 
 
 

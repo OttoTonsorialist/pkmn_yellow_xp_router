@@ -130,4 +130,5 @@ dmypy.json
 
 saved_routes/
 route_one_output/
+outputs/
 config.json

@@ -26,6 +26,7 @@ class RouteList(custom_tkinter.CustomGridview):
             semantic_id_attr='group_id',
             tags_attr='get_tags',
             checkbox_attr='is_enabled',
+            req_column_width=325,
             checkbox_callback=self.general_checkbox_callback_fn,
             checkbox_item_callback=self.checkbox_item_callback_fn,
             **kwargs
@@ -34,9 +35,28 @@ class RouteList(custom_tkinter.CustomGridview):
         self.tag_configure(const.EVENT_TAG_ERRORS, background=const.ERROR_COLOR)
         self.tag_configure(const.EVENT_TAG_IMPORTANT, background=const.IMPORTANT_COLOR)
 
+        self.bind("<<TreeviewOpen>>", self._treeview_opened_callback)
+        self.bind("<<TreeviewClose>>", self._treeview_closed_callback)
+
     def general_checkbox_callback_fn(self):
         self._route_list._recalc()
         self.refresh()
+
+    def _treeview_opened_callback(self, *args, **kwargs):
+        selected = self.get_all_selected_event_ids()
+        # no easy way to figure out unless only one is sleected. Just give up otherwise
+        if len(selected) == 1:
+            cur_obj = self._route_list.get_event_obj(selected[0])
+            if isinstance(cur_obj, route_events.EventFolder):
+                cur_obj.expanded = True
+
+    def _treeview_closed_callback(self, event):
+        selected = self.get_all_selected_event_ids()
+        # no easy way to figure out unless only one is sleected. Just give up otherwise
+        if len(selected) == 1:
+            cur_obj = self._route_list.get_event_obj(selected[0])
+            if isinstance(cur_obj, route_events.EventFolder):
+                cur_obj.expanded = False
     
     def checkbox_item_callback_fn(self, item_id, new_state):
         if new_state == self.TRISTATE_TAG:
@@ -95,15 +115,20 @@ class RouteList(custom_tkinter.CustomGridview):
         for event_idx, event_obj in enumerate(event_list):
             semantic_id = self._get_attr_helper(event_obj, self._semantic_id_attr)
 
-            is_folder = isinstance(event_obj, route_events.EventFolder)
+            if isinstance(event_obj, route_events.EventFolder):
+                is_folder = True
+                force_open = event_obj.expanded
+            else:
+                is_folder = False
+                force_open = False
 
             if semantic_id in to_delete_ids:
                 to_delete_ids.remove(semantic_id)
                 cur_event_id = self._treeview_id_lookup[semantic_id]
-                self.custom_upsert(event_obj, parent=parent_id, force_open=is_folder, update_checkbox=(not is_folder))
+                self.custom_upsert(event_obj, parent=parent_id, force_open=force_open, update_checkbox=(not is_folder))
             else:
                 # when first creating the event, make sure it is defined with a checkbox
-                cur_event_id = self.custom_upsert(event_obj, parent=parent_id, force_open=is_folder, update_checkbox=True)
+                cur_event_id = self.custom_upsert(event_obj, parent=parent_id, force_open=force_open, update_checkbox=True)
 
             self.move(cur_event_id, parent_id, event_idx)
 
@@ -255,7 +280,7 @@ class StateViewer(tk.Frame):
     
     def set_state(self, cur_state:route_state_objects.RouteState):
         self.inventory.set_inventory(cur_state.inventory)
-        self.pkmn.set_pkmn(cur_state.solo_pkmn.get_renderable_pkmn(), cur_state.badges)
+        self.pkmn.set_pkmn(cur_state.solo_pkmn.get_pkmn_obj(cur_state.badges), cur_state.badges)
         self.stat_xp.set_state(cur_state)
 
 
@@ -346,7 +371,7 @@ class BadgeBoostViewer(tk.Frame):
         self._labels[0].configure(text=f"Base: {self._state.solo_pkmn.name}")
         self._labels[0].pack()
 
-        self._viewers[0].set_pkmn(self._state.solo_pkmn.get_renderable_pkmn(), badges=self._state.badges)
+        self._viewers[0].set_pkmn(self._state.solo_pkmn.get_pkmn_obj(self._state.badges), badges=self._state.badges)
         self._viewers[0].pack(padx=3, pady=3)
     
     def _move_selected_callback(self, *args, **kwargs):
@@ -371,7 +396,7 @@ class BadgeBoostViewer(tk.Frame):
             self._labels[idx].configure(text=f"{idx}x {move}")
             self._labels[idx].pack()
 
-            self._viewers[idx].set_pkmn(self._state.solo_pkmn.get_battle_stats(self._state.badges, stage_mod), badges=self._state.badges)
+            self._viewers[idx].set_pkmn(self._state.solo_pkmn.get_pkmn_obj(self._state.badges, stage_mod), badges=self._state.badges)
             self._viewers[idx].pack()
 
     

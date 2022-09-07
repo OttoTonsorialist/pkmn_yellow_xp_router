@@ -144,9 +144,11 @@ class Main(tk.Tk):
         self.group_controls.columnconfigure(10, weight=1)
 
         self.event_list = pkmn_components.RouteList(self._data, self.left_info_panel)
-        self.event_list.pack(padx=10, pady=10, fill=tk.BOTH, expand=True, side="left")
         self.scroll_bar = tk.Scrollbar(self.left_info_panel, orient="vertical", command=self.event_list.yview)
-        self.scroll_bar.pack(side="right", fill=tk.BOTH)
+
+        # intentionally pack event list after scrollbar, so they're ordered correctly
+        self.scroll_bar.pack(side="left", fill=tk.BOTH)
+        self.event_list.pack(padx=10, pady=10, fill=tk.BOTH, expand=True, side="left")
         self.event_list.configure(yscrollcommand=self.scroll_bar.set)
 
         # right panel for event details
@@ -229,7 +231,11 @@ class Main(tk.Tk):
         if len(all_event_ids) == 0:
             init_state = self._data.init_route_state
         else:
-            init_state = self._data.get_event_obj(all_event_ids[0]).init_state
+            event_obj = self._data.get_event_obj(all_event_ids[0])
+            if event_obj is None:
+                init_state = self._data.init_route_state
+            else:
+                init_state = event_obj.init_state
 
         # create a fake event_def just so we can show the trainer that the user is looking at
         # TODO: just using the init_state as the post_event state as well. Ideally would like to use None for an empty state, but that's not currently supported

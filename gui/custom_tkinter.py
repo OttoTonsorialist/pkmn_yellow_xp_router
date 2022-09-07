@@ -129,13 +129,14 @@ class CustomGridview(CheckboxTreeview):
             self.attr = attr
             self.hidden = hidden
 
-    def __init__(self, *args, custom_col_data=None, text_field_attr=None, checkbox_attr=None, semantic_id_attr=None, tags_attr=None, **kwargs):
+    def __init__(self, *args, custom_col_data=None, text_field_attr=None, checkbox_attr=None, semantic_id_attr=None, tags_attr=None, req_column_width=None, **kwargs):
         self._custom_col_data = custom_col_data
 
         self._text_field_attr = text_field_attr
         self._checkbox_attr = checkbox_attr
         self._semantic_id_attr = semantic_id_attr
         self._tags_attr = tags_attr
+        self._req_column_width = req_column_width
 
         kwargs["columns"] = len(self._custom_col_data)
         super().__init__(*args, **kwargs, selectmode="extended")
@@ -153,6 +154,10 @@ class CustomGridview(CheckboxTreeview):
         # configure treeview columns attr
         self["columns"] = tuple(x.id for x in self._custom_col_data)
         self["displaycolumns"] = tuple(x.id for x in self._custom_col_data if not x.hidden)
+
+        # special case for required column
+        if self._req_column_width is not None:
+            self.column("#0", width=self._req_column_width, stretch=tk.NO)
 
         # configure actual thingy thing
         for idx, cur_col in enumerate(self._custom_col_data):
@@ -387,3 +392,34 @@ class Popup(tk.Toplevel):
     def close(self, event=None):
         self._main_window.attributes('-disabled', False)
         self.destroy()
+
+
+class ScrollableFrame(tk.Frame):
+    """
+    NOTE: doesn't work, but leaving it here because I don't want to give up on it yet
+    might not work though, seems like tkinter doesn't like the concept very much
+
+    Make a frame scrollable with scrollbar on the right.
+    After adding or removing widgets to the scrollable frame,
+    call the update() method to refresh the scrollable area.
+    """
+
+    def __init__(self, parent, *args, **kwargs):
+        super().__init__(parent, *args, **kwargs)
+
+        self.canvas = tk.Canvas(parent)
+        self.canvas.pack(side=tk.LEFT, fill=tk.BOTH, expand=True)
+
+        self.inner_frame = tk.Frame(self.canvas)
+        self.scrollbar = tk.Scrollbar(self, orient=tk.VERTICAL, command=self.canvas.yview)
+        self.canvas.configure(yscrollcommand=self.scrollbar.set)
+
+        self.scrollbar.pack(side=tk.RIGHT, fill=tk.Y)
+        self.canvas.pack(side=tk.LEFT, fill=tk.BOTH, expand=True)
+        # TODO: is this tag important?
+        self.canvas.create_window((4,4), window=self.inner_frame, anchor=tk.NW, tags="self.inner_frame")
+
+        self.canvas.bind('<Configure>', self.on_frame_configure)
+
+    def on_frame_configure(self, event):
+        self.canvas.configure(scrollregion=self.canvas.bbox("all"))

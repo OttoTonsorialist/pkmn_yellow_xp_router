@@ -596,7 +596,7 @@ class EventGroup:
 
 
 class EventFolder:
-    def __init__(self, parent, name):
+    def __init__(self, parent, name, expanded=True):
         global event_id_counter
         self.group_id = event_id_counter
         event_id_counter += 1
@@ -604,6 +604,7 @@ class EventFolder:
         self.parent = parent
         self.name = name
         self.enabled = True
+        self.expanded = expanded
         self.init_state = None
         self.final_state = None
         self.child_errors = False
@@ -696,7 +697,8 @@ class EventFolder:
     def serialize(self):
         return {
             const.EVENT_FOLDER_NAME: self.name,
-            const.EVENTS: [x.serialize() for x in self.children]
+            const.EVENTS: [x.serialize() for x in self.children],
+            const.EXPANDED_KEY: self.expanded
         }
 
     def is_enabled(self):

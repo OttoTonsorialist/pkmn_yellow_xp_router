@@ -6,8 +6,8 @@
         "base_def": 15,
         "base_spd": 90,
         "base_spc": 105,
-        "type_1": "psychic_type",
-        "type_2": "psychic_type",
+        "type_1": "psychic",
+        "type_2": "psychic",
         "catch_rate": 200,
         "base_xp": 73,
         "initial_moveset": [
@@ -104,8 +104,8 @@
         "base_def": 45,
         "base_spd": 120,
         "base_spc": 135,
-        "type_1": "psychic_type",
-        "type_2": "psychic_type",
+        "type_1": "psychic",
+        "type_2": "psychic",
         "catch_rate": 50,
         "base_xp": 186,
         "initial_moveset": [
@@ -1675,8 +1675,8 @@
         "base_def": 45,
         "base_spd": 42,
         "base_spc": 90,
-        "type_1": "psychic_type",
-        "type_2": "psychic_type",
+        "type_1": "psychic",
+        "type_2": "psychic",
         "catch_rate": 190,
         "base_xp": 102,
         "initial_moveset": [
@@ -2041,7 +2041,7 @@
         "base_spd": 40,
         "base_spc": 60,
         "type_1": "grass",
-        "type_2": "psychic_type",
+        "type_2": "psychic",
         "catch_rate": 90,
         "base_xp": 98,
         "initial_moveset": [
@@ -2102,7 +2102,7 @@
         "base_spd": 55,
         "base_spc": 125,
         "type_1": "grass",
-        "type_2": "psychic_type",
+        "type_2": "psychic",
         "catch_rate": 45,
         "base_xp": 212,
         "initial_moveset": [
@@ -3288,8 +3288,8 @@
         "base_def": 70,
         "base_spd": 67,
         "base_spc": 115,
-        "type_1": "psychic_type",
-        "type_2": "psychic_type",
+        "type_1": "psychic",
+        "type_2": "psychic",
         "catch_rate": 75,
         "base_xp": 165,
         "initial_moveset": [
@@ -3580,7 +3580,7 @@
         "base_spd": 95,
         "base_spc": 95,
         "type_1": "ice",
-        "type_2": "psychic_type",
+        "type_2": "psychic",
         "catch_rate": 45,
         "base_xp": 137,
         "initial_moveset": [
@@ -3764,8 +3764,8 @@
         "base_def": 30,
         "base_spd": 105,
         "base_spc": 120,
-        "type_1": "psychic_type",
-        "type_2": "psychic_type",
+        "type_1": "psychic",
+        "type_2": "psychic",
         "catch_rate": 100,
         "base_xp": 145,
         "initial_moveset": [
@@ -4855,8 +4855,8 @@
         "base_def": 100,
         "base_spd": 100,
         "base_spc": 100,
-        "type_1": "psychic_type",
-        "type_2": "psychic_type",
+        "type_1": "psychic",
+        "type_2": "psychic",
         "catch_rate": 45,
         "base_xp": 64,
         "initial_moveset": [
@@ -4946,8 +4946,8 @@
         "base_def": 90,
         "base_spd": 130,
         "base_spc": 154,
-        "type_1": "psychic_type",
-        "type_2": "psychic_type",
+        "type_1": "psychic",
+        "type_2": "psychic",
         "catch_rate": 3,
         "base_xp": 220,
         "initial_moveset": [
@@ -5075,8 +5075,8 @@
         "base_def": 65,
         "base_spd": 90,
         "base_spc": 100,
-        "type_1": "psychic_type",
-        "type_2": "psychic_type",
+        "type_1": "psychic",
+        "type_2": "psychic",
         "catch_rate": 45,
         "base_xp": 136,
         "initial_moveset": [
@@ -7573,7 +7573,7 @@
         "base_spd": 30,
         "base_spc": 80,
         "type_1": "water",
-        "type_2": "psychic_type",
+        "type_2": "psychic",
         "catch_rate": 75,
         "base_xp": 164,
         "initial_moveset": [
@@ -7659,7 +7659,7 @@
         "base_spd": 15,
         "base_spc": 40,
         "type_1": "water",
-        "type_2": "psychic_type",
+        "type_2": "psychic",
         "catch_rate": 190,
         "base_xp": 99,
         "initial_moveset": [
@@ -7931,7 +7931,7 @@
         "base_spd": 115,
         "base_spc": 100,
         "type_1": "water",
-        "type_2": "psychic_type",
+        "type_2": "psychic",
         "catch_rate": 60,
         "base_xp": 207,
         "initial_moveset": [

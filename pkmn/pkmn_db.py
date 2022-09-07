@@ -46,14 +46,16 @@ class PkmnDB:
         raw_pkmn = self.get_pkmn(pkmn_name)
         return data_objects.EnemyPkmn(
             pkmn_utils.instantiate_trainer_pokemon(raw_pkmn.to_dict(), pkmn_level),
-            raw_pkmn.stats
+            raw_pkmn.stats,
+            data_objects.StatBlock(8, 9, 8, 8, 8, False)
         )
     
     def create_wild_pkmn(self, pkmn_name, pkmn_level):
         raw_pkmn = self.get_pkmn(pkmn_name)
         return data_objects.EnemyPkmn(
             pkmn_utils.instantiate_wild_pokemon(raw_pkmn.to_dict(), pkmn_level),
-            raw_pkmn.stats
+            raw_pkmn.stats,
+            data_objects.StatBlock(15, 15, 15, 15, 15, False)
         )
     
     def get_filtered_names(self, filter_val=None):
@@ -96,10 +98,17 @@ class TrainerDB:
             self.class_oriented_trainers[trainer_obj.trainer_class].append(trainer_obj.name)
     
     def _create_trainer(self, trainer_dict, pkmn_db):
-        return data_objects.Trainer(
-            trainer_dict,
-            [data_objects.EnemyPkmn(x, pkmn_db.get_pkmn(x[const.NAME_KEY]).stats) for x in trainer_dict[const.TRAINER_POKEMON]]
-        )
+        enemy_pkmn = []
+        for cur_mon in trainer_dict[const.TRAINER_POKEMON]:
+            enemy_pkmn.append(
+                data_objects.EnemyPkmn(
+                    cur_mon,
+                    pkmn_db.get_pkmn(cur_mon[const.NAME_KEY]).stats,
+                    data_objects.StatBlock(8, 9, 8, 8, 8)
+                )
+            )
+
+        return data_objects.Trainer(trainer_dict, enemy_pkmn)
     
     def get_trainer(self, trainer_name):
         return self._data.get(trainer_name)
@@ -201,7 +210,30 @@ class ItemDB:
             return [x for x in result if x in self.mart_items[source_mart]]
 
 
+class MoveDB:
+    def __init__(self):
+        self._data = {}
+
+        with open(const.MOVE_DB_PATH, 'r') as f:
+            raw_db = json.load(f)
+
+        for cur_dict_item in raw_db.values():
+            cur_move = data_objects.Move(cur_dict_item)
+            self._data[cur_move.name] = cur_move
+    
+    def get_move(self, move_name):
+        if move_name in self._data:
+            return self._data.get(move_name)
+        
+        for test_name in self._data.keys():
+            if move_name.lower() == test_name.lower():
+                return self._data.get(test_name)
+        
+        return None
+
+
 item_db = ItemDB()
+move_db = MoveDB()
 pkmn_db:PkmnDB = None
 trainer_db:TrainerDB = None
 min_battles_db:MinBattlesDB = None

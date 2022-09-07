@@ -247,9 +247,18 @@ class StatBlock:
             pkmn_utils.calc_stat(self.special, level, stat_dv.special, stat_xp.special, is_badge_bosted=badges.volcano),
         )
     
-    def calc_battle_stats(self, level, stat_dv, stat_xp, stage_modifiers:StageModifiers, badges:BadgeList):
+    def calc_battle_stats(self, level, stat_dv, stat_xp, stage_modifiers:StageModifiers, badges:BadgeList, is_crit=False):
         # TODO: this does not properly replicate any of the jank regarding para/burn/full heal/etc.
         # TODO: need to add support for those stat modifiers (both intended any glitched) in the future
+
+        if is_crit:
+            # prevent all badge-boosts and stage modifiers whenever a crit occurs
+            # by just pretending you don't have any of either
+            badges = BadgeList()
+            stage_modifiers = StageModifiers(
+                accuracy=stage_modifiers.accuracy_stage,
+                evasion=stage_modifiers.evasion_stage
+            )
 
         # create a result object, to populate
         result = StatBlock(
@@ -317,7 +326,7 @@ class PokemonSpecies:
 
 
 class EnemyPkmn:
-    def __init__(self, pkmn_dict, base_stat_block):
+    def __init__(self, pkmn_dict, base_stat_block:StatBlock, dvs:StatBlock, stat_xp:StatBlock=None, badges:BadgeList=None):
         self.name = pkmn_dict[const.NAME_KEY]
         self.level = pkmn_dict[const.LEVEL]
         self.hp = pkmn_dict[const.HP]
@@ -331,9 +340,28 @@ class EnemyPkmn:
         # pkmn_db should be a dict of names->BaseStats objects
         # just grab the StatBlock from there
         self.base_stat_block = base_stat_block
+        self.dvs = dvs
+
+        if stat_xp is None:
+            stat_xp = StatBlock(0, 0, 0, 0, 0, True)
+        self.stat_xp = stat_xp
+
+        if badges is None:
+            badges = BadgeList()
+        self.badges = badges
     
     def __repr__(self):
         return f"Lv {self.level}: {self.name}"
+
+    def get_battle_stats(self, stages:StageModifiers, is_crit:bool=False):
+        return self.base_stat_block.calc_battle_stats(
+            self.level,
+            self.dvs,
+            self.stat_xp,
+            stages,
+            self.badges,
+            is_crit
+        )
 
 
 class Trainer:
@@ -358,3 +386,13 @@ class BaseItem:
         if self.name.startswith("TM") or self.name.startswith("HM"):
             self.move_name = self.name.split(" ", 1)[1]
 
+
+class Move:
+    def __init__(self, raw_dict):
+        self.name = raw_dict[const.NAME_KEY]
+        self.accuracy = raw_dict[const.MOVE_ACCURACY]
+        self.pp = raw_dict[const.MOVE_PP]
+        self.base_power = raw_dict[const.BASE_POWER]
+        self.move_type = raw_dict[const.MOVE_TYPE]
+        self.effects = raw_dict[const.MOVE_EFFECTS]
+        self.attack_flavor = raw_dict[const.MOVE_FLAVOR]
