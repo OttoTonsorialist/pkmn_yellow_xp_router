@@ -81,6 +81,21 @@ class BadgeList:
     
     def __repr__(self):
         return self.to_string(verbose=True)
+    
+    def __eq__(self, other):
+        if not isinstance(other, BadgeList):
+            return False
+        
+        return (
+            self.boulder == other.boulder and
+            self.cascade == other.cascade and
+            self.thunder == other.thunder and
+            self.rainbow == other.rainbow and
+            self.soul == other.soul and
+            self.marsh == other.marsh and
+            self.volcano == other.volcano and
+            self.earth == other.earth
+        )
 
 
 class StageModifiers:
@@ -234,6 +249,18 @@ class StatBlock:
             is_stat_xp=self._is_stat_xp
         )
     
+    def __eq__(self, other):
+        if not isinstance(other, StatBlock):
+            return False
+        
+        return (
+            self.hp == other.hp and
+            self.attack == other.attack and
+            self.defense == other.defense and
+            self.speed == other.speed and
+            self.special == other.special
+        )
+    
     def __repr__(self):
         return f"hp: {self.hp}, atk: {self.attack}, def: {self.defense}, spd: {self.speed}, spc: {self.special}"
     
@@ -349,6 +376,26 @@ class EnemyPkmn:
         if badges is None:
             badges = BadgeList()
         self.badges = badges
+
+    def __eq__(self, other):
+        if not isinstance(other, EnemyPkmn):
+            return False
+        
+        return (
+            self.name == other.name and
+            self.level == other.level and
+            self.hp == other.hp and
+            self.attack == other.attack and
+            self.defense == other.defense and
+            self.speed == other.speed and
+            self.special == other.special and
+            self.xp == other.xp and
+            self.move_list == other.move_list and
+            self.base_stat_block == other.base_stat_block and
+            self.dvs == other.dvs and
+            self.stat_xp == other.stat_xp and
+            self.badges == other.badges
+        )
     
     def __repr__(self):
         return f"Lv {self.level}: {self.name}"

@@ -13,6 +13,14 @@ class BagItem:
     def __init__(self, base_item, num):
         self.base_item = base_item
         self.num = num
+    
+    def __eq__(self, other):
+        if not isinstance(other,BagItem):
+            return False
+        return (
+            self.base_item.name == other.base_item.name and
+            self.num == other.num
+        )
 
 
 class Inventory:
@@ -96,6 +104,22 @@ class Inventory:
             result.cur_money += (base_item.sell_price * num)
         
         return result
+    
+    def __eq__(self, other):
+        if not isinstance(other, Inventory):
+            return False
+        
+        if self.cur_money != other.cur_money:
+            return False
+
+        if len(self.cur_items) != len(other.cur_items):
+            return False
+        
+        for cur_idx in range(len(self.cur_items)):
+            if self.cur_items[cur_idx] != other.cur_items[cur_idx]:
+                return False
+        
+        return True
 
 class SoloPokemon:
     """
@@ -186,6 +210,30 @@ class SoloPokemon:
         last_level_xp = pkmn_utils.level_lookups[self.species_def.growth_rate].get_xp_for_level(self.cur_level)
         self.percent_xp_to_next_level = f"{int((self.xp_to_next_level / (self.cur_xp + self.xp_to_next_level - last_level_xp)) * 100)} %"
         self.cur_stats = self.species_def.stats.calc_level_stats(self.cur_level, self.dvs, self.realized_stat_xp, badges)
+    
+    def __eq__(self, other):
+        if not isinstance(other, SoloPokemon):
+            return False
+        
+        if (
+            self.species_def.name != other.species_def.name or
+            self.cur_level != other.cur_level or
+            self.cur_xp != other.cur_xp or
+            self.dvs != other.dvs or
+            self.realized_stat_xp != other.realized_stat_xp or
+            self.unrealized_stat_xp != other.unrealized_stat_xp or
+            self.cur_stats != other.cur_stats
+        ):
+            return False
+        
+        if len(self.move_list) != len(other.move_list):
+            return False
+        for move_idx in range(len(self.move_list)):
+            if self.move_list[move_idx] != other.move_list[move_idx]:
+                return False
+        
+        return True
+
     
     def get_net_gain_from_stat_xp(self, badges):
         if badges is None:
@@ -348,6 +396,16 @@ class RouteState:
         self.solo_pkmn = solo_pkmn
         self.badges = badges
         self.inventory = inventory
+    
+    def __eq__(self, other):
+        if not isinstance(other, RouteState):
+            return False
+        
+        return (
+            self.solo_pkmn == other.solo_pkmn and
+            self.badges == other.badges and
+            self.inventory == other.inventory
+        )
     
     def learn_move(self, move_name, dest, source):
         error_message = ""

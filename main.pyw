@@ -144,7 +144,7 @@ class Main(tk.Tk):
         self.group_controls.columnconfigure(10, weight=1)
 
         self.event_list = pkmn_components.RouteList(self._data, self.left_info_panel)
-        self.scroll_bar = tk.Scrollbar(self.left_info_panel, orient="vertical", command=self.event_list.yview)
+        self.scroll_bar = tk.Scrollbar(self.left_info_panel, orient="vertical", command=self.event_list.yview, width=30)
 
         # intentionally pack event list after scrollbar, so they're ordered correctly
         self.scroll_bar.pack(side="left", fill=tk.BOTH)

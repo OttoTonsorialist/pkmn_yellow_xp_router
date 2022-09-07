@@ -16,6 +16,7 @@ class EventDetails(tk.Frame):
 
         self.event_update_callback = event_update_callback
         self._cur_trainer_name = None
+        self._prev_selected_tab = None
 
         self.tabbed_states = ttk.Notebook(self)
 
@@ -40,7 +41,7 @@ class EventDetails(tk.Frame):
         self.state_post_viewer.grid(column=1, row=1, padx=10, pady=10)
 
         self.battle_summary_frame = battle_summary.BattleSummary(self.tabbed_states)
-        self.battle_summary_frame.pack(padx=5, pady=5)
+        self.battle_summary_frame.pack(padx=2, pady=2)
 
         self.tabbed_states.add(self.pre_state_frame, text="Pre-event State")
         self.pre_state_tab_index = 0
@@ -50,7 +51,8 @@ class EventDetails(tk.Frame):
         self.battle_summary_tab_index = 2
         #self.tabbed_states.pack(anchor=tk.N, fill=tk.X, padx=5, pady=5)
 
-        self.event_viewer_frame = tk.Frame(self, highlightbackground="black", highlightthickness=2)
+        self.event_viewer_frame = tk.Frame(self, highlightbackground="black", highlightthickness=1)
+        self.event_viewer_frame.pack(anchor=tk.N, fill=tk.BOTH, expand=True, padx=5, pady=5)
 
         self.event_details_frame = tk.Frame(self.event_viewer_frame)
         self.event_details_frame.grid(row=0, column=0)
@@ -85,22 +87,35 @@ class EventDetails(tk.Frame):
         self.footer_frame.columnconfigure(1, weight=1)
 
         self.tabbed_states.bind('<<NotebookTabChanged>>', self._tab_changed_callback)
+        self._tab_changed_callback()
     
     def _tab_changed_callback(self, *args, **kwargs):
         selected_tab_index = self.tabbed_states.index(self.tabbed_states.select())
+        prev_tab = self._prev_selected_tab
+        self._prev_selected_tab = selected_tab_index
 
         if selected_tab_index == self.battle_summary_tab_index:
+            if prev_tab == self.battle_summary_tab_index:
+                return
             self.configure(width=self.battle_summary_width)
-            self.event_viewer_frame.pack_forget()
+            #self.event_viewer_frame.pack_forget()
+            self.event_details_frame.grid_forget()
             self.tabbed_states.pack_forget()
-            self.tabbed_states.pack(anchor=tk.N, fill=tk.BOTH, expand=True, padx=5, pady=5)
+            self.tabbed_states.pack(anchor=tk.N, fill=tk.BOTH, expand=True, padx=2, pady=2)
+            self.event_viewer_frame.pack_forget()
+            self.event_viewer_frame.pack(anchor=tk.N, fill=tk.BOTH, expand=False, padx=2, pady=2)
             self.battle_summary_frame.allow_calculations()
         else:
+            if prev_tab == self.pre_state_tab_index or prev_tab == self.post_state_tab_index:
+                return
             self.configure(width=self.state_summary_width)
             self.tabbed_states.pack_forget()
-            self.tabbed_states.pack(anchor=tk.N, fill=tk.X, padx=5, pady=5)
+            self.tabbed_states.pack(anchor=tk.N, fill=tk.X, padx=2, pady=2)
             self.event_viewer_frame.pack_forget()
-            self.event_viewer_frame.pack(anchor=tk.N, fill=tk.BOTH, expand=True, padx=5, pady=5)
+            self.event_viewer_frame.pack(anchor=tk.N, fill=tk.BOTH, expand=True, padx=2, pady=2)
+            #self.event_viewer_frame.pack_forget()
+            #self.event_viewer_frame.pack(anchor=tk.N, fill=tk.BOTH, expand=True, padx=5, pady=5)
+            self.event_details_frame.grid(row=0, column=0)
             self.battle_summary_frame.pause_calculations()
 
     def _pre_state_display_mode_callback(self, *args, **kwargs):
@@ -149,17 +164,21 @@ class EventDetails(tk.Frame):
                 self.battle_summary_frame.set_team(None)
                 self.verbose_trainer_label.grid_forget()
 
-                # TODO: fix this gross ugly hack
-                self.current_event_editor = self.event_editor_lookup.get_editor(
-                    route_event_components.EditorParams(event_def.get_event_type(), None, init_state)
-                )
-                self.current_event_editor.load_event(event_def)
-                self.current_event_editor.pack()
+                if event_def.get_event_type() != const.TASK_NOTES_ONLY:
+                    # TODO: fix this gross ugly hack
+                    self.current_event_editor = self.event_editor_lookup.get_editor(
+                        route_event_components.EditorParams(event_def.get_event_type(), None, init_state)
+                    )
+                    self.current_event_editor.load_event(event_def)
+                    self.current_event_editor.pack()
 
     def update_existing_event(self, *args, **kwargs):
         try:
             if self.current_event_editor is None:
-                new_event = EventDefinition(trainer_def=TrainerEventDefinition(self._cur_trainer_name, verbose_export=self.verbose_trainer_label.is_checked()))
+                if self._cur_trainer_name is None:
+                    new_event = EventDefinition()
+                else:
+                    new_event = EventDefinition(trainer_def=TrainerEventDefinition(self._cur_trainer_name, verbose_export=self.verbose_trainer_label.is_checked()))
             else:
                 new_event = self.current_event_editor.get_event()
             
