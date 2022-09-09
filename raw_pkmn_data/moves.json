@@ -615,7 +615,7 @@
         "name": "Seismic Toss",
         "accuracy": 100,
         "pp": 20,
-        "base_power": null,
+        "base_power": 1,
         "type": "fighting",
         "effects": [],
         "attack_flavor": "level_damage"
@@ -904,7 +904,7 @@
         "name": "Night Shade",
         "accuracy": 100,
         "pp": 15,
-        "base_power": null,
+        "base_power": 1,
         "type": "ghost",
         "effects": [],
         "attack_flavor": "level_damage"

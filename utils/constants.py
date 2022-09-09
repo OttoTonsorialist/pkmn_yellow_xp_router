@@ -340,6 +340,9 @@ class Constants:
         self.TRANSFER_NEW_FOLDER = "New Folder"
 
         self.FLAVOR_HIGH_CRIT = "high_crit"
+        self.FLAVOR_FIXED_DAMAGE = "fixed_damage"
+        self.FLAVOR_LEVEL_DAMAGE = "level_damage"
+        self.FLAVOR_PSYWAVE = "psywave"
 
         self.SPECIAL_TYPES = [
             "water",

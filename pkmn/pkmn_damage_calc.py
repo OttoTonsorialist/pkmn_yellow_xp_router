@@ -125,7 +125,7 @@ def percent_rolls_kill(
         0
     )
 
-    return 100.0 * (num_kill_rolls) / math.pow(NUM_ROLLS, num_non_crits + num_crits)
+    return 100.0 * (num_kill_rolls) / math.pow(len(damage_range), num_non_crits + num_crits)
 
 def _percent_rolls_kill_recursive(
     num_non_crits:int,
@@ -155,7 +155,8 @@ def _percent_rolls_kill_recursive(
 
         if total_damage + min_damage_left >= target_hp:
             # if kill is guaranteed, add all rolls for this and future attacks
-            return cur_roll_count * math.pow(NUM_ROLLS, num_non_crits + num_crits)
+            # NOTE: use the number of rolls in the attack, so that special moves like psywave still work properly
+            return cur_roll_count * math.pow(len(damage_range), num_non_crits + num_crits)
         elif num_crits == 0 and num_non_crits == 0:
             # ran out of attacks without a kill being found, no kill rolls found
             return 0
@@ -203,43 +204,45 @@ def find_kill(damage_range:DamageRange, crit_damage_range:DamageRange, crit_chan
 
     min_possible_damage = min(damage_range.min_damage, crit_damage_range.min_damage)
     max_possible_damage = max(damage_range.max_damage, crit_damage_range.max_damage)
-
     highest_found_kill_pct = 0
-    for cur_num_attacks in range(1, attack_depth + 1):
-        if (max_possible_damage * cur_num_attacks) < target_hp:
-            continue
-        elif (min_possible_damage * cur_num_attacks) >= target_hp:
-            highest_found_kill_pct = 100
-            result.append((cur_num_attacks, 100))
-            break
 
-        # a kill is possible, but not guaranteed
-        # find the exact kill percent
-        cur_total_kill_pct = 0
-        for cur_num_crits in range(cur_num_attacks + 1):
-            # get the kill percent for this exact combination of crits + non-crits
-            kill_percent = percent_rolls_kill(
-                cur_num_attacks - cur_num_crits,
-                damage_range,
-                cur_num_crits,
-                crit_damage_range,
-                target_hp
-            )
+    # this is a quick and dirty way to ignore calculating psywave, which has vastly more possible rolls, and thus takes much longer to calculate
+    if len(damage_range) <= NUM_ROLLS:
+        for cur_num_attacks in range(1, attack_depth + 1):
+            if (max_possible_damage * cur_num_attacks) < target_hp:
+                continue
+            elif (min_possible_damage * cur_num_attacks) >= target_hp:
+                highest_found_kill_pct = 100
+                result.append((cur_num_attacks, 100))
+                break
 
-            # and multiply that kill percent by the probability of actually getting
-            # this combination of crits + non-crits
-            cur_total_kill_pct += (
-                kill_percent *
-                choose_crits(cur_num_attacks, cur_num_crits) *
-                math.pow(crit_chance, cur_num_crits) *
-                math.pow(1 - crit_chance, cur_num_attacks - cur_num_crits)
-            )
-        
-        highest_found_kill_pct = cur_total_kill_pct
-        if cur_total_kill_pct > percent_cutoff:
-            result.append((cur_num_attacks, cur_total_kill_pct))
-        if cur_total_kill_pct > 99.99:
-            break
+            # a kill is possible, but not guaranteed
+            # find the exact kill percent
+            cur_total_kill_pct = 0
+            for cur_num_crits in range(cur_num_attacks + 1):
+                # get the kill percent for this exact combination of crits + non-crits
+                kill_percent = percent_rolls_kill(
+                    cur_num_attacks - cur_num_crits,
+                    damage_range,
+                    cur_num_crits,
+                    crit_damage_range,
+                    target_hp
+                )
+
+                # and multiply that kill percent by the probability of actually getting
+                # this combination of crits + non-crits
+                cur_total_kill_pct += (
+                    kill_percent *
+                    choose_crits(cur_num_attacks, cur_num_crits) *
+                    math.pow(crit_chance, cur_num_crits) *
+                    math.pow(1 - crit_chance, cur_num_attacks - cur_num_crits)
+                )
+            
+            highest_found_kill_pct = cur_total_kill_pct
+            if cur_total_kill_pct > percent_cutoff:
+                result.append((cur_num_attacks, cur_total_kill_pct))
+            if cur_total_kill_pct > 99.99:
+                break
     
     if highest_found_kill_pct < 99:
         # if we haven't found close enough to a kill, get the guaranteed kill
@@ -259,6 +262,15 @@ def calculate_damage(
 ):
     if move.base_power is None or move.base_power == 0:
         return None
+    
+    # special move interactions
+    if move.attack_flavor == const.FLAVOR_FIXED_DAMAGE:
+        return DamageRange({move.base_power: 1})
+    elif move.attack_flavor == const.FLAVOR_LEVEL_DAMAGE:
+        return DamageRange({attacking_pkmn.level: 1})
+    elif move.attack_flavor == const.FLAVOR_PSYWAVE:
+        psywave_upper_limit = math.floor(attacking_pkmn.level * 1.5)
+        return DamageRange({x:1 for x in range(1, psywave_upper_limit)})
     
     if stage_modifiers is None:
         stage_modifiers = StageModifiers()
@@ -295,6 +307,7 @@ def calculate_damage(
         defending_stat *= 2
     
     if  move.name == const.EXPLOSION_MOVE_NAME or move.name == const.SELFDESTRUCT_MOVE_NAME:
+        print("cuttiny defense")
         defending_stat = max(math.floor(defending_stat / 2), 1)
     
     """

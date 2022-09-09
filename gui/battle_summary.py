@@ -141,7 +141,7 @@ class MonPairSummary(tk.Frame):
                         cur_best_guaranteed_kill is None or
                         self.move_list[idx].cur_guaranteed_kill < cur_best_guaranteed_kill or (
                             self.move_list[idx].cur_guaranteed_kill == cur_best_guaranteed_kill and
-                            self.move_list[idx].cur_max_roll < cur_best_damage_roll
+                            self.move_list[idx].cur_max_roll > cur_best_damage_roll
                         )
                     ):
                         cur_best_attack_idx = idx
