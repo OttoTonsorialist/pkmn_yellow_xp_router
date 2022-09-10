@@ -1,4 +1,5 @@
 import math
+from typing import Dict, Tuple
 
 from pkmn.data_objects import BadgeList, EnemyPkmn, Move, PokemonSpecies, StageModifiers, StatBlock
 from pkmn import pkmn_db
@@ -91,29 +92,13 @@ class DamageRange:
         return self.add(other)
 
 
-def choose_crits(num_attacks, num_crits):
-    # honestly just copied from RouteOne code
-    # been a while since I've done discrete math. I _think_ this is calculating # of permutations
-    # but wouldn't combinations be more appropraite here...?
-    if num_crits > num_attacks:
-        return 0
-    elif num_crits == 0 or num_crits == num_attacks:
-        return 1
-    elif num_crits == 1 or num_crits == (num_attacks - 1):
-        return num_attacks
-    
-    return (
-        choose_crits(num_attacks - 1, num_crits - 1) +
-        choose_crits(num_attacks - 1, num_crits)
-    )
-
-
 def percent_rolls_kill(
     num_non_crits:int,
     damage_range:DamageRange,
     num_crits:int,
     crit_damage_range:DamageRange,
-    target_hp:int
+    target_hp:int,
+    memoization:Dict[Tuple[int, int, int], int]
 ):
     num_kill_rolls = _percent_rolls_kill_recursive(
         num_non_crits,
@@ -121,8 +106,9 @@ def percent_rolls_kill(
         num_crits,
         crit_damage_range,
         target_hp,
-        -1,
-        0
+        1,
+        0,
+        memoization
     )
 
     return 100.0 * (num_kill_rolls) / math.pow(len(damage_range), num_non_crits + num_crits)
@@ -133,45 +119,44 @@ def _percent_rolls_kill_recursive(
     num_crits:int,
     crit_damage_range:DamageRange,
     target_hp:int,
-    cur_rolled_damage:int,
-    total_damage:int
+    num_roll_multiplier:int,
+    total_damage:int,
+    memoization:Dict[Tuple[int, int, int], int]
 ):
-    if cur_rolled_damage != -1:
-        total_damage += cur_rolled_damage
 
-        # get type of current attack, and update remaining attack counts
-        if num_crits > 0:
-            cur_roll_count = crit_damage_range.damage_vals[cur_rolled_damage]
-            num_crits -= 1
-        else:
-            cur_roll_count = damage_range.damage_vals[cur_rolled_damage]
-            num_non_crits -= 1
+    cur_key = (num_non_crits, num_crits, num_roll_multiplier, total_damage)
+    if cur_key in memoization:
+        return memoization[cur_key]
 
-        min_damage_left = num_non_crits * damage_range.min_damage
-        min_damage_left += num_crits * crit_damage_range.min_damage
+    min_damage_left = num_non_crits * damage_range.min_damage
+    min_damage_left += num_crits * crit_damage_range.min_damage
 
-        max_damage_left = num_non_crits * damage_range.max_damage
-        max_damage_left += num_crits * crit_damage_range.max_damage
+    max_damage_left = num_non_crits * damage_range.max_damage
+    max_damage_left += num_crits * crit_damage_range.max_damage
 
-        if total_damage + min_damage_left >= target_hp:
-            # if kill is guaranteed, add all rolls for this and future attacks
-            # NOTE: use the number of rolls in the attack, so that special moves like psywave still work properly
-            return cur_roll_count * math.pow(len(damage_range), num_non_crits + num_crits)
-        elif num_crits == 0 and num_non_crits == 0:
-            # ran out of attacks without a kill being found, no kill rolls found
-            return 0
-        elif total_damage + max_damage_left < target_hp:
-            # kill is impossible even with future rolls, just quit and don't bother calculating
-            return 0
-    else:
-        cur_roll_count = 1
+    if total_damage + min_damage_left >= target_hp:
+        # if kill is guaranteed, add all rolls for this and future attacks
+        # NOTE: use the number of rolls in the provided damage_range, so that special moves like psywave still work properly
+        result = num_roll_multiplier * math.pow(len(damage_range), num_non_crits + num_crits)
+        memoization[cur_key] = result
+        return result
+    elif num_crits == 0 and num_non_crits == 0:
+        # ran out of attacks without a kill being found, no kill rolls found
+        memoization[cur_key] = 0
+        return 0
+    elif total_damage + max_damage_left < target_hp:
+        # kill is impossible even with future rolls, just quit and don't bother calculating
+        memoization[cur_key] = 0
+        return 0
 
     # recursive case - a kill is still possible, but not found yet
     result = 0
     if num_crits > 0:
         next_damage_range = crit_damage_range
+        num_crits -= 1
     else:
         next_damage_range = damage_range
+        num_non_crits -= 1
     
     # find all possible kills from this point forward
     for next_damage in next_damage_range.damage_vals:
@@ -181,11 +166,14 @@ def _percent_rolls_kill_recursive(
             num_crits,
             crit_damage_range,
             target_hp,
-            next_damage,
-            total_damage
+            next_damage_range.damage_vals[next_damage],
+            total_damage + next_damage,
+            memoization
         )
     
-    return result * cur_roll_count
+    result *= num_roll_multiplier
+    memoization[cur_key] = result
+    return result
 
 
 def get_crit_rate(pkmn:EnemyPkmn, move:Move):
@@ -205,6 +193,7 @@ def find_kill(damage_range:DamageRange, crit_damage_range:DamageRange, crit_chan
     min_possible_damage = min(damage_range.min_damage, crit_damage_range.min_damage)
     max_possible_damage = max(damage_range.max_damage, crit_damage_range.max_damage)
     highest_found_kill_pct = 0
+    memoization = {}
 
     # this is a quick and dirty way to ignore calculating psywave, which has vastly more possible rolls, and thus takes much longer to calculate
     if len(damage_range) <= NUM_ROLLS:
@@ -226,14 +215,15 @@ def find_kill(damage_range:DamageRange, crit_damage_range:DamageRange, crit_chan
                     damage_range,
                     cur_num_crits,
                     crit_damage_range,
-                    target_hp
+                    target_hp,
+                    memoization
                 )
 
                 # and multiply that kill percent by the probability of actually getting
                 # this combination of crits + non-crits
                 cur_total_kill_pct += (
                     kill_percent *
-                    choose_crits(cur_num_attacks, cur_num_crits) *
+                    math.comb(cur_num_attacks, cur_num_crits) *
                     math.pow(crit_chance, cur_num_crits) *
                     math.pow(1 - crit_chance, cur_num_attacks - cur_num_crits)
                 )
