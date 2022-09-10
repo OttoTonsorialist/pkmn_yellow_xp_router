@@ -150,8 +150,8 @@ class Main(tk.Tk):
         self.scroll_bar = tk.Scrollbar(self.left_info_panel, orient="vertical", command=self.event_list.yview, width=30)
 
         # intentionally pack event list after scrollbar, so they're ordered correctly
-        self.scroll_bar.pack(side="left", fill=tk.BOTH)
-        self.event_list.pack(padx=10, pady=10, fill=tk.BOTH, expand=True, side="left")
+        self.scroll_bar.pack(side="right", fill=tk.BOTH)
+        self.event_list.pack(padx=10, pady=10, fill=tk.BOTH, expand=True, side="right")
         self.event_list.configure(yscrollcommand=self.scroll_bar.set)
 
         # right panel for event details
