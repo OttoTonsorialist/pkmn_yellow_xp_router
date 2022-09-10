@@ -182,6 +182,8 @@ class MonPairSummary(tk.Frame):
         cur_best_guaranteed_kill = None
         cur_best_damage_roll = None
 
+        # NOTE: intentionally not capturing struggle damage calcs here
+        # Mostly because we don't really ever want to use struggle if we can avoid it
         for idx in range(len(self.first_mon.move_list)):
             if not self.first_mon.move_list[idx]:
                 break
@@ -199,8 +201,6 @@ class MonPairSummary(tk.Frame):
                     cur_best_damage_roll = self.move_list[idx].cur_max_roll
 
         for idx in range(len(self.first_mon.move_list)):
-            if not self.first_mon.move_list[idx]:
-                break
             if idx == cur_best_attack_idx:
                 self.move_list[idx].flag_as_best_move()
             else:
