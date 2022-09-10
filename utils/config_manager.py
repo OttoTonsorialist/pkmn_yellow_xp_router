@@ -28,8 +28,9 @@ class Config:
         return self._route_one_path
     
     def set_window_geometry(self, new_geometry):
-        self._window_geometry = new_geometry
-        self._save()
+        if new_geometry != self._window_geometry:
+            self._window_geometry = new_geometry
+            self._save()
 
     def get_window_geometry(self):
         return self._window_geometry

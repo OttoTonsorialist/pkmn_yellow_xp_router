@@ -184,7 +184,7 @@ class Main(tk.Tk):
         self.bind('<Control-R>', self.just_export_and_run)
         # detail update function
         self.bind("<Configure>", self._save_geometry)
-        self.bind("<<TreeviewSelect>>", self.show_event_details)
+        self.bind("<<TreeviewSelect>>", self._handle_new_selection)
         self.bind(const.ROUTE_LIST_REFRESH_EVENT, self.update_run_status)
 
         self.event_list.refresh()
@@ -253,7 +253,7 @@ class Main(tk.Tk):
             allow_updates=False
         )
     
-    def show_event_details(self, *args, **kwargs):
+    def _handle_new_selection(self, *args, **kwargs):
         all_event_ids = self.event_list.get_all_selected_event_ids()
         # slightly weird behavior, but intentional. If only one element is selected,
         # we want to allow that element to be an EventItem, so that we can display the details.
@@ -272,8 +272,6 @@ class Main(tk.Tk):
         if event_group is None:
             self.event_details.show_event_details(None, self._data.init_route_state, self._data.get_final_state(), allow_updates=False)
             self.rename_folder_button.disable()
-            self.move_group_down_button.disable()
-            self.move_group_up_button.disable()
             self.item_add.cur_state = None
             if len(self._data.root_folder.children) == 0:
                 self.new_folder_button.enable()
@@ -284,9 +282,13 @@ class Main(tk.Tk):
                 if len(all_event_ids) == 0:
                     self.delete_event_button.disable()
                     self.transfer_event_button.disable()
+                    self.move_group_down_button.disable()
+                    self.move_group_up_button.disable()
                 else:
                     self.delete_event_button.enable()
                     self.transfer_event_button.enable()
+                    self.move_group_down_button.enable()
+                    self.move_group_up_button.enable()
         elif isinstance(event_group, EventFolder):
             self.event_details.show_event_details(event_group.event_definition, event_group.init_state, event_group.final_state)
             self.rename_folder_button.enable()
@@ -327,7 +329,7 @@ class Main(tk.Tk):
 
         self._data.replace_event_group(all_event_ids[0], new_event)
         self.event_list.refresh()
-        self.show_event_details()
+        self._handle_new_selection()
     
     def add_area(self, area_name):
         all_event_ids = self.event_list.get_all_selected_event_ids()
@@ -371,7 +373,7 @@ class Main(tk.Tk):
         self._data.new_route(solo_mon, min_battles_name, pkmn_version=pkmn_version)
         self.update_run_version()
         self.event_list.refresh()
-        self.show_event_details()
+        self._handle_new_selection()
     
     def open_load_route_window(self, *args, **kwargs):
         if self._is_active_window():
@@ -385,22 +387,19 @@ class Main(tk.Tk):
         self.route_name.insert(0, route_to_load)
         self.update_run_version()
         self.event_list.refresh()
-        self.show_event_details()
+        self._handle_new_selection()
 
     def move_group_up(self, event=None):
-        all_event_ids = self.event_list.get_all_selected_event_ids()
-        if len(all_event_ids) > 1 or len(all_event_ids) == 0:
-            return
+        for cur_event in self.event_list.get_all_selected_event_ids(allow_event_items=False):
+            self._data.move_event_object(cur_event, True)
 
-        self._data.move_event_object(all_event_ids[0], True)
         self.event_list.refresh()
 
     def move_group_down(self, event=None):
-        all_event_ids = self.event_list.get_all_selected_event_ids()
-        if len(all_event_ids) > 1 or len(all_event_ids) == 0:
-            return
+        # NOTE: have to reverse the list since we move items one at a time
+        for cur_event in reversed(self.event_list.get_all_selected_event_ids(allow_event_items=False)):
+            self._data.move_event_object(cur_event, False)
 
-        self._data.move_event_object(all_event_ids[0], False)
         self.event_list.refresh()
 
     def delete_group(self, event=None):
