@@ -269,6 +269,7 @@ class Constants:
         self.BAG_LIMIT = 20
 
         self.CONFIG_ROUTE_ONE_PATH = "route_one_path"
+        self.CONFIG_WINDOW_GEOMETRY = "tkinter_window_geometry"
 
         self.STAT_INCREASE_MOVES = {
             "Growth": (self.SPC, 1),

@@ -20,7 +20,10 @@ class Main(tk.Tk):
         super().__init__()
         self._data = router.Router()
 
-        self.geometry(f"2000x1200")
+        geometry = config.get_window_geometry()
+        if not geometry:
+            geometry = "2000x1200"
+        self.geometry(geometry)
         self.title("Pokemon RBY XP Router")
 
         # fix tkinter bug
@@ -180,6 +183,7 @@ class Main(tk.Tk):
         self.bind('<Control-E>', self.open_export_window)
         self.bind('<Control-R>', self.just_export_and_run)
         # detail update function
+        self.bind("<Configure>", self._save_geometry)
         self.bind("<<TreeviewSelect>>", self.show_event_details)
         self.bind(const.ROUTE_LIST_REFRESH_EVENT, self.update_run_status)
 
@@ -188,6 +192,9 @@ class Main(tk.Tk):
 
     def run(self):
         self.mainloop()
+    
+    def _save_geometry(self, *args, **kwargs):
+        config.set_window_geometry(self.geometry())
 
     def save_route(self, *args, **kwargs):
         route_name = self.route_name.get()
