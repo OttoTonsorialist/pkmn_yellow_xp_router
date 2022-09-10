@@ -355,6 +355,7 @@ class Constants:
             "dragon"
         ]
 
+        self.STRUGGLE_MOVE_NAME = "Struggle"
         self.MIMIC_MOVE_NAME = "Mimic"
         self.EXPLOSION_MOVE_NAME = "Explosion"
         self.SELFDESTRUCT_MOVE_NAME = "Selfdestruct"

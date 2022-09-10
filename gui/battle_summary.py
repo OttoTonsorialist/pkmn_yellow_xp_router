@@ -215,6 +215,7 @@ class MonPairSummary(tk.Frame):
         self.right_mon_label.configure(text=f"{self.second_mon} attacking {self.first_mon} ({self.first_mon.hp} HP)")
 
         # update all the moves for the first attacking the second
+        struggle_set = False
         idx = -1
         for idx in range(4):
             # first mon attacking second
@@ -225,6 +226,10 @@ class MonPairSummary(tk.Frame):
             if cur_move:
                 self.move_list[idx].calc_damages(cur_move, self.first_mon, self.second_mon, self.mimic_options)
                 self.move_list[idx].grid(row=1, column=idx, sticky=tk.NSEW)
+            elif not struggle_set:
+                self.move_list[idx].calc_damages(const.STRUGGLE_MOVE_NAME, self.first_mon, self.second_mon, self.mimic_options)
+                self.move_list[idx].grid(row=1, column=idx, sticky=tk.NSEW)
+                struggle_set = True
             else:
                 self.move_list[idx].grid_forget()
             
