@@ -307,7 +307,6 @@ def calculate_damage(
         defending_stat *= 2
     
     if  move.name == const.EXPLOSION_MOVE_NAME or move.name == const.SELFDESTRUCT_MOVE_NAME:
-        print("cuttiny defense")
         defending_stat = max(math.floor(defending_stat / 2), 1)
     
     """

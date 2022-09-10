@@ -98,7 +98,6 @@ class EventDetails(tk.Frame):
             if prev_tab == self.battle_summary_tab_index:
                 return
             self.configure(width=self.battle_summary_width)
-            #self.event_viewer_frame.pack_forget()
             self.event_details_frame.grid_forget()
             self.tabbed_states.pack_forget()
             self.tabbed_states.pack(anchor=tk.N, fill=tk.BOTH, expand=True, padx=2, pady=2)
@@ -113,8 +112,6 @@ class EventDetails(tk.Frame):
             self.tabbed_states.pack(anchor=tk.N, fill=tk.X, padx=2, pady=2)
             self.event_viewer_frame.pack_forget()
             self.event_viewer_frame.pack(anchor=tk.N, fill=tk.BOTH, expand=True, padx=2, pady=2)
-            #self.event_viewer_frame.pack_forget()
-            #self.event_viewer_frame.pack(anchor=tk.N, fill=tk.BOTH, expand=True, padx=5, pady=5)
             self.event_details_frame.grid(row=0, column=0)
             self.battle_summary_frame.pause_calculations()
 
@@ -126,7 +123,7 @@ class EventDetails(tk.Frame):
             self.badge_boost_viewer.grid_forget()
             self.state_pre_viewer.grid(column=1, row=1, padx=10, pady=10, columnspan=2)
     
-    def show_event_details(self, event_def:EventDefinition, init_state, final_state, allow_updates=True):
+    def show_event_details(self, event_def:EventDefinition, init_state, final_state, allow_updates=True, event_group:EventGroup=None):
         self.state_pre_viewer.set_state(init_state)
         self.badge_boost_viewer.set_state(init_state)
 
@@ -155,7 +152,7 @@ class EventDetails(tk.Frame):
                 self._cur_trainer_name = event_def.trainer_def.trainer_name
                 self.enemy_team_viewer.pack()
                 self.enemy_team_viewer.set_team(event_def.get_trainer_obj().pkmn, cur_state=init_state)
-                self.battle_summary_frame.set_team(event_def.get_trainer_obj().pkmn, cur_state=init_state)
+                self.battle_summary_frame.set_team(event_def.get_trainer_obj().pkmn, cur_state=init_state, event_group=event_group)
                 self.verbose_trainer_label.grid(row=3, column=1, padx=5, pady=5, sticky=tk.W)
                 self.verbose_trainer_label.set_checked(event_def.trainer_def.verbose_export)
             else:

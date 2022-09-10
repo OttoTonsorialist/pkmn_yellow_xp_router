@@ -1,4 +1,5 @@
 
+from typing import List
 from utils.constants import const
 from pkmn import data_objects
 from pkmn import route_state_objects
@@ -445,7 +446,7 @@ class EventGroup:
         self.name = None
         self.init_state = None
         self.final_state = None
-        self.event_items = []
+        self.event_items:List[EventItem] = []
         self.event_definition = event_definition
         self.pkmn_after_levelups = []
         self.error_messages = []

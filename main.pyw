@@ -294,7 +294,10 @@ class Main(tk.Tk):
                  isinstance(event_group, EventGroup) or 
                  event_group.event_definition.get_event_type() == const.TASK_LEARN_MOVE_LEVELUP
             )
-            self.event_details.show_event_details(event_group.event_definition, event_group.init_state, event_group.final_state, do_allow_updates)
+            trainer_event_group = event_group
+            if isinstance(trainer_event_group, EventItem):
+                trainer_event_group = trainer_event_group.parent
+            self.event_details.show_event_details(event_group.event_definition, event_group.init_state, event_group.final_state, do_allow_updates, event_group=trainer_event_group)
             self.rename_folder_button.disable()
             if isinstance(event_group, EventItem):
                 self.delete_event_button.disable()
