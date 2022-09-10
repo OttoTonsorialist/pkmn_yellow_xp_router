@@ -1,443 +1,602 @@
 {
-    "name": "Parasect",
-    "Learn Levelup Move": [
-        [
-            "Stun Spore",
-            null,
-            "LevelUp",
-            13
-        ],
-        [
-            "Leech Life",
-            null,
-            "LevelUp",
-            20
-        ],
-        [
-            "Spore",
-            3,
-            "LevelUp",
-            30
-        ],
-        [
-            "Slash",
-            null,
-            "LevelUp",
-            39
-        ],
-        [
-            "Growth",
-            null,
-            "LevelUp",
-            48
-        ]
-    ],
+    "name": "Abra",
+    "Version": "Yellow",
+    "Learn Levelup Move": [],
     "events": [
         {
-            "Event Folder Name": "Main",
-            "Fight Trainer": "Rival1 1"
-        },
-        {
-            "Event Folder Name": "Main",
-            "Fight Trainer": "Rival1 2"
-        },
-        {
-            "Event Folder Name": "Main",
-            "Inventory Event": [
-                "Poke Ball",
-                1,
-                true,
-                true
-            ]
-        },
-        {
-            "Event Folder Name": "Main",
-            "Fight Trainer": "BugCatcher 3"
-        },
-        {
-            "Event Folder Name": "Main",
-            "Inventory Event": [
-                "Poke Ball",
-                1,
-                false,
-                false
-            ]
-        },
-        {
-            "Event Folder Name": "Main",
-            "Fight Trainer": "Brock 1"
-        },
-        {
-            "Event Folder Name": "Main",
-            "Fight Trainer": "BugCatcher 4"
-        },
-        {
-            "Event Folder Name": "Main",
-            "Fight Trainer": "Youngster 1"
-        },
-        {
-            "Event Folder Name": "Main",
-            "Fight Trainer": "Lass 2"
-        },
-        {
-            "Event Folder Name": "Main",
-            "Fight Trainer": "BugCatcher 6"
-        },
-        {
-            "Event Folder Name": "Main",
-            "Inventory Event": [
-                "Rare Candy",
-                1,
-                true,
-                false
-            ]
-        },
-        {
-            "Event Folder Name": "Main",
-            "Fight Trainer": "SuperNerd 2"
-        },
-        {
-            "Event Folder Name": "Main",
-            "Fight Trainer": "Jessie & James 1"
-        },
-        {
-            "Event Folder Name": "Main",
-            "Fight Trainer": "JrTrainerF 1"
-        },
-        {
-            "Event Folder Name": "Main",
-            "Fight Trainer": "Misty 1"
-        },
-        {
-            "Event Folder Name": "Main",
-            "Inventory Event": [
-                "Rare Candy",
-                1,
-                true,
-                false
-            ]
-        },
-        {
-            "Event Folder Name": "Main",
-            "Fight Trainer": "Rival1 3"
-        },
-        {
-            "Event Folder Name": "Main",
-            "Fight Trainer": "BugCatcher 9"
-        },
-        {
-            "Event Folder Name": "Main",
-            "Fight Trainer": "Lass 8"
-        },
-        {
-            "Event Folder Name": "Main",
-            "Fight Trainer": "Youngster 4"
-        },
-        {
-            "Event Folder Name": "Main",
-            "Fight Trainer": "Lass 7"
-        },
-        {
-            "Event Folder Name": "Main",
-            "Fight Trainer": "JrTrainerM 3"
-        },
-        {
-            "Event Folder Name": "Main",
-            "Fight Trainer": "Rocket 6"
-        },
-        {
-            "Event Folder Name": "Main",
-            "Fight Trainer": "Hiker 2"
-        },
-        {
-            "Event Folder Name": "Main",
-            "Fight Trainer": "Lass 9"
-        },
-        {
-            "Event Folder Name": "Main",
-            "Fight Trainer": "JrTrainerM 2 Duplicate"
-        },
-        {
-            "Event Folder Name": "Main",
-            "Fight Trainer": "Lass 10"
-        },
-        {
-            "Event Folder Name": "Main",
-            "Inventory Event": [
-                "SS Anne Ticket",
-                1,
-                true,
-                false
-            ]
-        },
-        {
-            "Event Folder Name": "Main",
-            "Fight Trainer": "Rocket 5"
-        },
-        {
-            "Event Folder Name": "Main",
-            "Fight Trainer": "JrTrainerF 3"
-        },
-        {
-            "Event Folder Name": "Main",
-            "Fight Trainer": "JrTrainerM 5"
-        },
-        {
-            "Event Folder Name": "Main",
-            "Fight Trainer": "Rival2 1"
-        },
-        {
-            "Event Folder Name": "Main",
-            "Inventory Event": [
-                "HM01 Cut",
-                1,
-                true,
-                false
-            ]
-        },
-        {
-            "Event Folder Name": "Main",
-            "Fight Trainer": "LtSurge 1"
-        },
-        {
-            "Event Folder Name": "Main",
-            "Fight Trainer": "JrTrainerF 5"
-        },
-        {
-            "Event Folder Name": "Main",
-            "Fight Trainer": "BugCatcher 14"
-        },
-        {
-            "Event Folder Name": "Main",
-            "Fight Trainer": "Pokemaniac 7"
-        },
-        {
-            "Event Folder Name": "Main",
-            "Fight Trainer": "Pokemaniac 5"
-        },
-        {
-            "Event Folder Name": "Main",
-            "Fight Trainer": "JrTrainerF 10"
-        },
-        {
-            "Event Folder Name": "Main",
-            "Fight Trainer": "Hiker 9"
-        },
-        {
-            "Event Folder Name": "Main",
-            "Fight Trainer": "JrTrainerF 18"
-        },
-        {
-            "Event Folder Name": "Main",
-            "Fight Trainer": "Gambler 7"
-        },
-        {
-            "Event Folder Name": "Main",
-            "Fight Trainer": "Beauty 3"
-        },
-        {
-            "Event Folder Name": "Main",
-            "Fight Trainer": "Erika 1"
-        },
-        {
-            "Event Folder Name": "Main",
-            "Inventory Event": [
-                "Poke Doll",
-                1,
-                true,
-                true
-            ]
-        },
-        {
-            "Event Folder Name": "Main",
-            "Inventory Event": [
-                "HM02 Fly",
-                1,
-                true,
-                false
-            ]
-        },
-        {
-            "Event Folder Name": "Main",
-            "Fight Trainer": "Rival2 2 Jolteon"
-        },
-        {
-            "Event Folder Name": "Main",
-            "Fight Trainer": "Channeler 10"
-        },
-        {
-            "Event Folder Name": "Main",
-            "Fight Trainer": "Channeler 6"
-        },
-        {
-            "Event Folder Name": "Main",
-            "Fight Trainer": "Channeler 9"
-        },
-        {
-            "Event Folder Name": "Main",
-            "Inventory Event": [
-                "Rare Candy",
-                1,
-                true,
-                false
-            ]
-        },
-        {
-            "Event Folder Name": "Main",
-            "Fight Trainer": "Jessie & James 3"
-        },
-        {
-            "Event Folder Name": "Main",
-            "Fight Trainer": "Rocket 28"
-        },
-        {
-            "Event Folder Name": "Main",
-            "Fight Trainer": "Rival2 3 Jolteon"
-        },
-        {
-            "Event Folder Name": "Main",
-            "Fight Trainer": "Jessie & James 4"
-        },
-        {
-            "Event Folder Name": "Main",
-            "Fight Trainer": "Giovanni 2"
-        },
-        {
-            "Event Folder Name": "Main",
-            "Inventory Event": [
-                "Rare Candy",
-                1,
-                true,
-                false
-            ]
-        },
-        {
-            "Event Folder Name": "Main",
-            "Inventory Event": [
-                "Gold Teeth",
-                1,
-                true,
-                false
-            ]
-        },
-        {
-            "Event Folder Name": "Main",
-            "Inventory Event": [
-                "HM03 Surf",
-                1,
-                true,
-                false
-            ]
-        },
-        {
-            "Event Folder Name": "Main",
-            "Fight Trainer": "Juggler 3"
-        },
-        {
-            "Event Folder Name": "Main",
-            "Fight Trainer": "Juggler 4"
-        },
-        {
-            "Event Folder Name": "Main",
-            "Fight Trainer": "Koga 1"
-        },
-        {
-            "Event Folder Name": "Main",
-            "Inventory Event": [
-                "Gold Teeth",
-                1,
-                false,
-                false
-            ]
-        },
-        {
-            "Event Folder Name": "Main",
-            "Inventory Event": [
-                "HM04 Strength",
-                1,
-                true,
-                false
-            ]
-        },
-        {
-            "Event Folder Name": "Main",
-            "Inventory Event": [
-                "Rare Candy",
-                1,
-                true,
-                false
-            ]
-        },
-        {
-            "Event Folder Name": "Main",
-            "Fight Trainer": "Sabrina 1"
-        },
-        {
-            "Event Folder Name": "Main",
-            "Inventory Event": [
-                "Rare Candy",
-                2,
-                true,
-                false
-            ]
-        },
-        {
-            "Event Folder Name": "Main",
-            "Inventory Event": [
-                "Secret Key",
-                1,
-                true,
-                false
-            ]
-        },
-        {
-            "Event Folder Name": "Main",
-            "Fight Trainer": "Blaine 1"
-        },
-        {
-            "Event Folder Name": "Main",
-            "Fight Trainer": "CooltrainerM 10"
-        },
-        {
-            "Event Folder Name": "Main",
-            "Fight Trainer": "Blackbelt 8"
-        },
-        {
-            "Event Folder Name": "Main",
-            "Fight Trainer": "Giovanni 3"
-        },
-        {
-            "Event Folder Name": "Main",
-            "Fight Trainer": "Rival2 4 Jolteon"
-        },
-        {
-            "Event Folder Name": "Main",
-            "Inventory Event": [
-                "Rare Candy",
-                1,
-                true,
-                false
-            ]
-        },
-        {
-            "Event Folder Name": "Main",
-            "Fight Trainer": "Lorelei 1"
-        },
-        {
-            "Event Folder Name": "Main",
-            "Fight Trainer": "Bruno 1"
-        },
-        {
-            "Event Folder Name": "Main",
-            "Fight Trainer": "Agatha 1"
-        },
-        {
-            "Event Folder Name": "Main",
-            "Fight Trainer": "Lance 1"
-        },
-        {
-            "Event Folder Name": "Main",
-            "Fight Trainer": "Rival3 Jolteon"
+            "Event Folder Name": "ROOT",
+            "events": [
+				{
+					"Enabled": true,
+					"Fight Trainer": [
+						"Rival1 1",
+						false
+					]
+				},
+				{
+					"Enabled": true,
+					"Fight Trainer": [
+						"Rival1 2",
+						false
+					]
+				},
+				{
+					"Enabled": true,
+					"Inventory Event": [
+						"Poke Ball",
+						1,
+						true,
+						true
+					]
+				},
+				{
+					"Enabled": true,
+					"Fight Trainer": [
+						"BugCatcher 3",
+						false
+					]
+				},
+				{
+					"Enabled": true,
+					"Inventory Event": [
+						"Poke Ball",
+						1,
+						false,
+						false
+					]
+				},
+				{
+					"Enabled": true,
+					"Fight Trainer": [
+						"Brock 1",
+						false
+					]
+				},
+				{
+					"Enabled": true,
+					"Fight Trainer": [
+						"BugCatcher 4",
+						false
+					]
+				},
+				{
+					"Enabled": true,
+					"Fight Trainer": [
+						"Youngster 1",
+						false
+					]
+				},
+				{
+					"Enabled": true,
+					"Fight Trainer": [
+						"Lass 2",
+						false
+					]
+				},
+				{
+					"Enabled": true,
+					"Fight Trainer": [
+						"BugCatcher 6",
+						false
+					]
+				},
+				{
+					"Enabled": true,
+					"Inventory Event": [
+						"Rare Candy",
+						1,
+						true,
+						false
+					]
+				},
+				{
+					"Enabled": true,
+					"Fight Trainer": [
+						"SuperNerd 2",
+						false
+					]
+				},
+				{
+					"Enabled": true,
+					"Fight Trainer": [
+						"Jessie & James 1",
+						false
+					]
+				},
+				{
+					"Enabled": true,
+					"Fight Trainer": [
+						"JrTrainerF 1",
+						false
+					]
+				},
+				{
+					"Enabled": true,
+					"Fight Trainer": [
+						"Misty 1",
+						false
+					]
+				},
+				{
+					"Enabled": true,
+					"Inventory Event": [
+						"Rare Candy",
+						1,
+						true,
+						false
+					]
+				},
+				{
+					"Enabled": true,
+					"Fight Trainer": [
+						"Rival1 3",
+						false
+					]
+				},
+				{
+					"Enabled": true,
+					"Fight Trainer": [
+						"BugCatcher 9",
+						false
+					]
+				},
+				{
+					"Enabled": true,
+					"Fight Trainer": [
+						"Lass 8",
+						false
+					]
+				},
+				{
+					"Enabled": true,
+					"Fight Trainer": [
+						"Youngster 4",
+						false
+					]
+				},
+				{
+					"Enabled": true,
+					"Fight Trainer": [
+						"Lass 7",
+						false
+					]
+				},
+				{
+					"Enabled": true,
+					"Fight Trainer": [
+						"JrTrainerM 3",
+						false
+					]
+				},
+				{
+					"Enabled": true,
+					"Fight Trainer": [
+						"Rocket 6",
+						false
+					]
+				},
+				{
+					"Enabled": true,
+					"Fight Trainer": [
+						"Hiker 2",
+						false
+					]
+				},
+				{
+					"Enabled": true,
+					"Fight Trainer": [
+						"Lass 9",
+						false
+					]
+				},
+				{
+					"Enabled": true,
+					"Fight Trainer": [
+						"JrTrainerM 2 Duplicate",
+						false
+					]
+				},
+				{
+					"Enabled": true,
+					"Fight Trainer": [
+						"Lass 10",
+						false
+					]
+				},
+				{
+					"Enabled": true,
+					"Inventory Event": [
+						"SS Anne Ticket",
+						1,
+						true,
+						false
+					]
+				},
+				{
+					"Enabled": true,
+					"Fight Trainer": [
+						"Rocket 5",
+						false
+					]
+				},
+				{
+					"Enabled": true,
+					"Fight Trainer": [
+						"JrTrainerF 3",
+						false
+					]
+				},
+				{
+					"Enabled": true,
+					"Fight Trainer": [
+						"JrTrainerM 5",
+						false
+					]
+				},
+				{
+					"Enabled": true,
+					"Fight Trainer": [
+						"Rival2 1",
+						false
+					]
+				},
+				{
+					"Enabled": true,
+					"Inventory Event": [
+						"HM01 Cut",
+						1,
+						true,
+						false
+					]
+				},
+				{
+					"Enabled": true,
+					"Fight Trainer": [
+						"LtSurge 1",
+						false
+					]
+				},
+				{
+					"Enabled": true,
+					"Fight Trainer": [
+						"JrTrainerF 5",
+						false
+					]
+				},
+				{
+					"Enabled": true,
+					"Fight Trainer": [
+						"BugCatcher 14",
+						false
+					]
+				},
+				{
+					"Enabled": true,
+					"Fight Trainer": [
+						"Pokemaniac 7",
+						false
+					]
+				},
+				{
+					"Enabled": true,
+					"Fight Trainer": [
+						"Pokemaniac 5",
+						false
+					]
+				},
+				{
+					"Enabled": true,
+					"Fight Trainer": [
+						"JrTrainerF 10",
+						false
+					]
+				},
+				{
+					"Enabled": true,
+					"Fight Trainer": [
+						"Hiker 9",
+						false
+					]
+				},
+				{
+					"Enabled": true,
+					"Fight Trainer": [
+						"JrTrainerF 18",
+						false
+					]
+				},
+				{
+					"Enabled": true,
+					"Fight Trainer": [
+						"Gambler 7",
+						false
+					]
+				},
+				{
+					"Enabled": true,
+					"Fight Trainer": [
+						"Beauty 3",
+						false
+					]
+				},
+				{
+					"Enabled": true,
+					"Fight Trainer": [
+						"Erika 1",
+						false
+					]
+				},
+				{
+					"Enabled": true,
+					"Inventory Event": [
+						"Poke Doll",
+						1,
+						true,
+						true
+					]
+				},
+				{
+					"Enabled": true,
+					"Inventory Event": [
+						"HM02 Fly",
+						1,
+						true,
+						false
+					]
+				},
+				{
+					"Enabled": true,
+					"Fight Trainer": [
+						"Rival2 2 Jolteon",
+						false
+					]
+				},
+				{
+					"Enabled": true,
+					"Fight Trainer": [
+						"Channeler 10",
+						false
+					]
+				},
+				{
+					"Enabled": true,
+					"Fight Trainer": [
+						"Channeler 6",
+						false
+					]
+				},
+				{
+					"Enabled": true,
+					"Fight Trainer": [
+						"Channeler 9",
+						false
+					]
+				},
+				{
+					"Enabled": true,
+					"Inventory Event": [
+						"Rare Candy",
+						1,
+						true,
+						false
+					]
+				},
+				{
+					"Enabled": true,
+					"Fight Trainer": [
+						"Jessie & James 3",
+						false
+					]
+				},
+				{
+					"Enabled": true,
+					"Fight Trainer": [
+						"Rocket 28",
+						false
+					]
+				},
+				{
+					"Enabled": true,
+					"Fight Trainer": [
+						"Rival2 3 Jolteon",
+						false
+					]
+				},
+				{
+					"Enabled": true,
+					"Fight Trainer": [
+						"Jessie & James 4",
+						false
+					]
+				},
+				{
+					"Enabled": true,
+					"Fight Trainer": [
+						"Giovanni 2",
+						false
+					]
+				},
+				{
+					"Enabled": true,
+					"Inventory Event": [
+						"Rare Candy",
+						1,
+						true,
+						false
+					]
+				},
+				{
+					"Enabled": true,
+					"Inventory Event": [
+						"Gold Teeth",
+						1,
+						true,
+						false
+					]
+				},
+				{
+					"Enabled": true,
+					"Inventory Event": [
+						"HM03 Surf",
+						1,
+						true,
+						false
+					]
+				},
+				{
+					"Enabled": true,
+					"Fight Trainer": [
+						"Juggler 3",
+						false
+					]
+				},
+				{
+					"Enabled": true,
+					"Fight Trainer": [
+						"Juggler 4",
+						false
+					]
+				},
+				{
+					"Enabled": true,
+					"Fight Trainer": [
+						"Koga 1",
+						false
+					]
+				},
+				{
+					"Enabled": true,
+					"Inventory Event": [
+						"Gold Teeth",
+						1,
+						false,
+						false
+					]
+				},
+				{
+					"Enabled": true,
+					"Inventory Event": [
+						"HM04 Strength",
+						1,
+						true,
+						false
+					]
+				},
+				{
+					"Enabled": true,
+					"Inventory Event": [
+						"Rare Candy",
+						1,
+						true,
+						false
+					]
+				},
+				{
+					"Enabled": true,
+					"Fight Trainer": [
+						"Sabrina 1",
+						false
+					]
+				},
+				{
+					"Enabled": true,
+					"Inventory Event": [
+						"Rare Candy",
+						2,
+						true,
+						false
+					]
+				},
+				{
+					"Enabled": true,
+					"Inventory Event": [
+						"Secret Key",
+						1,
+						true,
+						false
+					]
+				},
+				{
+					"Enabled": true,
+					"Fight Trainer": [
+						"Blaine 1",
+						false
+					]
+				},
+				{
+					"Enabled": true,
+					"Fight Trainer": [
+						"CooltrainerM 10",
+						false
+					]
+				},
+				{
+					"Enabled": true,
+					"Fight Trainer": [
+						"Blackbelt 8",
+						false
+					]
+				},
+				{
+					"Enabled": true,
+					"Fight Trainer": [
+						"Giovanni 3",
+						false
+					]
+				},
+				{
+					"Enabled": true,
+					"Fight Trainer": [
+						"Rival2 4 Jolteon",
+						false
+					]
+				},
+				{
+					"Enabled": true,
+					"Inventory Event": [
+						"Rare Candy",
+						1,
+						true,
+						false
+					]
+				},
+				{
+					"Enabled": true,
+					"Fight Trainer": [
+						"Lorelei 1",
+						false
+					]
+				},
+				{
+					"Enabled": true,
+					"Fight Trainer": [
+						"Bruno 1",
+						false
+					]
+				},
+				{
+					"Enabled": true,
+					"Fight Trainer": [
+						"Agatha 1",
+						false
+					]
+				},
+				{
+					"Enabled": true,
+					"Fight Trainer": [
+						"Lance 1",
+						false
+					]
+				},
+				{
+					"Enabled": true,
+					"Fight Trainer": [
+						"Rival3 Jolteon",
+						false
+					]
+				}
+            ],
+            "Expanded": true
         }
     ]
 }
