@@ -134,8 +134,6 @@ class Router:
             raise ValueError("Cannot add an event when solo pokmn is not yet selected")
         if event_def is None and new_folder_name is None:
             raise ValueError("Must define either folder name or event definition")
-        elif event_def is not None and new_folder_name is not None:
-            raise ValueError("Cannot define both folder name and event definition")
         
         if insert_before is not None:
             insert_before_obj = self.get_event_obj(insert_before)
@@ -149,14 +147,14 @@ class Router:
             except Exception as e:
                 raise ValueError(f"Cannot find folder with name: {dest_folder_name}")
 
-        if event_def is not None:
+        if new_folder_name is not None:
+            new_obj = route_events.EventFolder(parent_obj, new_folder_name, expanded=folder_expanded, event_definition=event_def)
+            self.folder_lookup[new_folder_name] = new_obj
+
+        elif event_def is not None:
             if event_def.trainer_def:
                 self.defeated_trainers.add(event_def.trainer_def.trainer_name)
             new_obj = route_events.EventGroup(parent_obj, event_def)
-
-        elif new_folder_name is not None:
-            new_obj = route_events.EventFolder(parent_obj, new_folder_name, expanded=folder_expanded)
-            self.folder_lookup[new_folder_name] = new_obj
         
         self.event_lookup[new_obj.group_id] = new_obj
         parent_obj.insert_child_before(new_obj, before_obj=self.get_event_obj(insert_before))
@@ -244,17 +242,20 @@ class Router:
             raise ValueError(f"Cannot find any event with id: {event_group_id}")
 
         if isinstance(event_group_obj, route_events.EventFolder):
-            raise ValueError(f"Cannot update EventFolder")
-        
-        # TODO: kinda gross, we allow updating some items (just levelup learn moves)
-        # TODO: so we need this one extra processing hook here to handle when the "group"
-        # TODO: being replaced is actually an item, not a group
-        if isinstance(event_group_obj, route_events.EventItem):
+            if new_event_def.get_event_type() != const.TASK_NOTES_ONLY:
+                raise ValueError(f"Can only assign notes to EventFolders")
+            event_group_obj.event_definition = new_event_def
+
+        elif isinstance(event_group_obj, route_events.EventItem):
+            # TODO: kinda gross, we allow updating some items (just levelup learn moves)
+            # TODO: so we need this one extra processing hook here to handle when the "group"
+            # TODO: being replaced is actually an item, not a group
             if event_group_obj.event_definition.get_event_type() != const.TASK_LEARN_MOVE_LEVELUP:
                 raise ValueError(f"Can only update event items for level up moves, currentlty")
             
             # just replace the lookup definition
             self.level_up_move_defs[new_event_def.learn_move.level] = new_event_def.learn_move
+
         else:
             if event_group_obj.event_definition.trainer_def is not None:
                 self.defeated_trainers.remove(event_group_obj.event_definition.trainer_def.trainer_name)
@@ -320,17 +321,7 @@ class Router:
             self.set_solo_pkmn(result[const.NAME_KEY], level_up_moves=level_up_moves)
         
         if len(result[const.EVENTS]) > 0:
-            # check contents of first event to check for legacy loading
-            if result[const.EVENTS][0][const.EVENT_FOLDER_NAME] == const.ROOT_FOLDER_NAME:
-                # standard loading
-                self._load_events_recursive(self.root_folder, result[const.EVENTS][0])
-            else:
-                # legacy loading
-                for cur_event in result[const.EVENTS]:
-                    temp = route_events.EventDefinition.deserialize(cur_event)
-                    if temp.original_folder_name not in self.folder_lookup:
-                        self.add_event_object(new_folder_name=temp.original_folder_name, dest_folder_name=const.ROOT_FOLDER_NAME, recalc=False)
-                    self.add_event_object(event_def=temp, dest_folder_name=temp.original_folder_name, recalc=False)
+            self._load_events_recursive(self.root_folder, result[const.EVENTS][0])
 
         self._recalc()
     
@@ -338,6 +329,7 @@ class Router:
         for event_json in json_obj[const.EVENTS]:
             if const.EVENT_FOLDER_NAME in event_json:
                 self.add_event_object(
+                    event_def=route_events.EventDefinition.deserialize(event_json),
                     new_folder_name=event_json[const.EVENT_FOLDER_NAME],
                     dest_folder_name=parent_folder.name,
                     recalc=False,
@@ -374,8 +366,14 @@ class Router:
         indent = "\t" * depth
         if isinstance(obj, route_events.EventFolder):
             output.append(f"{indent}Folder: {obj.name}")
+            if obj.event_definition.notes:
+                notes_val = indent + obj.event_definition.notes.replace('\n', '\n' + indent)
+                output.append(notes_val)
         elif isinstance(obj, route_events.EventDefinition):
-            output.append(f"{indent}{obj}")
+            if obj.get_event_type() == const.TASK_NOTES_ONLY:
+                output.append(f"{indent}Notes:")
+            else:
+                output.append(f"{indent}{obj}")
             if obj.notes:
                 notes_val = indent + obj.notes.replace('\n', '\n' + indent)
                 output.append(notes_val)

@@ -146,14 +146,7 @@ class TrainerEventDefinition:
 
 
 class EventDefinition:
-    def __init__(self, original_folder_name=None, enabled=True, rare_candy=None, vitamin=None, trainer_def=None, wild_pkmn_info=None, item_event_def=None, learn_move=None, notes=""):
-        # ugly hack, but basically we heavily flatten the event structure when serializing
-        # so when we deserialize, each event definition is "where" we know which folder it belongs to
-        # store it on this object, for reference when deserializing
-        # IT SHOULD NEVER BE USED AFTER FULL DESERIALIZATION, AND CAN BE IGNORED ENTIRELY DURING NORMAL PROCESSING
-        self.original_folder_name = original_folder_name
-
-        # the actual data associated with the EventDefinition
+    def __init__(self, enabled=True, rare_candy=None, vitamin=None, trainer_def=None, wild_pkmn_info=None, item_event_def=None, learn_move=None, notes=""):
         self.enabled = enabled
         self.rare_candy = rare_candy
         self.vitamin = vitamin
@@ -278,11 +271,7 @@ class EventDefinition:
 
     @staticmethod
     def deserialize(raw_val):
-        folder_name = raw_val.get(const.EVENT_FOLDER_NAME, const.DEFAULT_FOLDER_NAME)
-        if folder_name is None:
-            folder_name = const.DEFAULT_FOLDER_NAME
         result = EventDefinition(
-            original_folder_name=folder_name,
             enabled=raw_val.get(const.ENABLED_KEY, True),
             notes=raw_val.get(const.TASK_NOTES_ONLY, ""),
             rare_candy=RareCandyEventDefinition.deserialize(raw_val.get(const.TASK_RARE_CANDY)),
@@ -597,7 +586,7 @@ class EventGroup:
 
 
 class EventFolder:
-    def __init__(self, parent, name, expanded=True):
+    def __init__(self, parent, name, event_definition=None, expanded=True):
         global event_id_counter
         self.group_id = event_id_counter
         event_id_counter += 1
@@ -606,6 +595,9 @@ class EventFolder:
         self.name = name
         self.enabled = True
         self.expanded = expanded
+        if event_definition is None:
+            event_definition = EventDefinition(notes="")
+        self.event_definition = event_definition
         self.init_state = None
         self.final_state = None
         self.child_errors = False
@@ -698,6 +690,7 @@ class EventFolder:
     def serialize(self):
         return {
             const.EVENT_FOLDER_NAME: self.name,
+            const.TASK_NOTES_ONLY: self.event_definition.notes,
             const.EVENTS: [x.serialize() for x in self.children],
             const.EXPANDED_KEY: self.expanded
         }

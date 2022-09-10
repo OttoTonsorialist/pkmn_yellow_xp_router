@@ -35,7 +35,7 @@ class Main(tk.Tk):
         self.file_menu.add_command(label="New Route       (Ctrl+N)", command=self.open_new_route_window)
         self.file_menu.add_command(label="Load Route      (Ctrl+L)", command=self.open_load_route_window)
         self.file_menu.add_command(label="Save Route       (Ctrl+S)", command=self.save_route)
-        self.file_menu.add_command(label="Export Notes       (Ctrl+Shift+W)", command=self.save_route)
+        self.file_menu.add_command(label="Export Notes       (Ctrl+Shift+W)", command=self.export_notes)
 
         self.event_menu = tk.Menu(self.top_menu_bar, tearoff=0)
         self.event_menu.add_command(label="New Event                   (Ctrl+F)", command=self.open_new_event_window)
@@ -281,7 +281,7 @@ class Main(tk.Tk):
                     self.delete_event_button.enable()
                     self.transfer_event_button.enable()
         elif isinstance(event_group, EventFolder):
-            self.event_details.show_event_details(None, event_group.init_state, event_group.final_state, allow_updates=False)
+            self.event_details.show_event_details(event_group.event_definition, event_group.init_state, event_group.final_state)
             self.rename_folder_button.enable()
             self.transfer_event_button.enable()
             self.new_folder_button.enable()
