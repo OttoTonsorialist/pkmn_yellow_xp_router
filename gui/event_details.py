@@ -57,34 +57,34 @@ class EventDetails(tk.Frame):
         self.event_details_frame = tk.Frame(self.event_viewer_frame)
         self.event_details_frame.grid(row=0, column=0)
 
-        self.footer_frame = tk.Frame(self.event_viewer_frame)
-        self.footer_frame.grid(row=1, column=0, sticky=tk.EW)
-
         self.enemy_team_viewer = pkmn_components.EnemyPkmnTeam(self.event_details_frame)
         self.enemy_team_viewer.pack()
-
-        # create this slightly out of order because we need the reference
-        self.event_details_button = custom_tkinter.SimpleButton(self.footer_frame, text="Save", command=self.update_existing_event)
-        self.verbose_trainer_label = custom_tkinter.CheckboxLabel(self.footer_frame, text="Verbose Route1 Export", toggle_command=self.update_existing_event)
-        self.event_editor_lookup = route_event_components.EventEditorFactory(self.event_details_frame, self.event_details_button)
-        self.current_event_editor = None
-
-        self.stat_info_label = tk.Label(self.footer_frame, text="Stats with * are calculated with a badge boost")
-        self.stat_info_label.config(bg="white")
-        self.stat_info_label.grid(row=1, column=0, columnspan=2)
-
-        self.trainer_notes = route_event_components.EventEditorFactory(self.footer_frame, self.event_details_button).get_editor(
-            route_event_components.EditorParams(const.TASK_NOTES_ONLY, None, None)
-        )
-        self.trainer_notes.grid(row=2, column=0, columnspan=2, sticky=tk.EW)
-
-        self.event_details_button.grid(row=3, column=0, padx=5, pady=5, sticky=tk.W)
-        self.event_details_button.disable()
 
         self.event_viewer_frame.rowconfigure(0, weight=1)
         self.event_viewer_frame.columnconfigure(0, weight=1)
 
-        self.footer_frame.columnconfigure(1, weight=1)
+        self.footer_frame = tk.Frame(self.event_viewer_frame)
+        self.footer_frame.grid(row=1, column=0, sticky=tk.EW)
+
+        self.footer_button_frame = tk.Frame(self.footer_frame)
+
+        # create this slightly out of order because we need the reference
+        self.event_details_button = custom_tkinter.SimpleButton(self.footer_button_frame, text="Save", command=self.update_existing_event)
+        self.event_editor_lookup = route_event_components.EventEditorFactory(self.event_details_frame, self.event_details_button)
+        self.current_event_editor = None
+
+        self.trainer_notes = route_event_components.EventEditorFactory(self.footer_frame, self.event_details_button).get_editor(
+            route_event_components.EditorParams(const.TASK_NOTES_ONLY, None, None)
+        )
+        self.trainer_notes.grid(row=0, column=0, sticky=tk.EW)
+
+        self.footer_button_frame.grid(row=1, column=0, sticky=tk.EW)
+
+        self.verbose_trainer_label = custom_tkinter.CheckboxLabel(self.footer_button_frame, text="Verbose Route1 Export", toggle_command=self.update_existing_event)
+        self.event_details_button.grid(row=0, column=0, padx=5, pady=5, sticky=tk.W)
+        self.event_details_button.disable()
+
+        self.footer_frame.columnconfigure(0, weight=1)
 
         self.tabbed_states.bind('<<NotebookTabChanged>>', self._tab_changed_callback)
         self._tab_changed_callback()
@@ -153,7 +153,7 @@ class EventDetails(tk.Frame):
                 self.enemy_team_viewer.pack()
                 self.enemy_team_viewer.set_team(event_def.get_trainer_obj().pkmn, cur_state=init_state)
                 self.battle_summary_frame.set_team(event_def.get_trainer_obj().pkmn, cur_state=init_state, event_group=event_group)
-                self.verbose_trainer_label.grid(row=3, column=1, padx=5, pady=5, sticky=tk.W)
+                self.verbose_trainer_label.grid(row=0, column=1, padx=5, pady=5, sticky=tk.W)
                 self.verbose_trainer_label.set_checked(event_def.trainer_def.verbose_export)
             else:
                 self.enemy_team_viewer.pack_forget()

@@ -40,12 +40,18 @@ class NotesEditor(EventEditorBase):
 
         self._notes_label = tk.Label(self, text="Notes:")
         self._notes_label.grid(row=self._cur_row, column=0, sticky=tk.W, padx=5, pady=5)
-        self._cur_row += 1
-        self._notes = tk.Text(self, height=8)
-        self._notes.grid(row=self._cur_row, column=0, sticky=tk.EW, padx=5, pady=5)
+        self._stat_label = tk.Label(self, text="Stats with * are calculated with a badge boost", background="white")
+        self._stat_label.grid(row=self._cur_row, column=1, sticky=tk.W, padx=5, pady=5)
+        self._padding_label = tk.Label(self, text="")
+        self._padding_label.grid(row=self._cur_row, column=2, sticky=tk.W, padx=5, pady=5)
         self._cur_row += 1
 
-        self.columnconfigure(0, weight=1)
+        self._notes = tk.Text(self, height=8)
+        self._notes.grid(row=self._cur_row, column=0, columnspan=3, sticky=tk.EW, padx=5, pady=5)
+        self._cur_row += 1
+
+        self.columnconfigure(0, weight=1, uniform="padding")
+        self.columnconfigure(2, weight=1, uniform="padding")
     
     def configure(self, editor_params):
         self.editor_params = editor_params

@@ -245,7 +245,8 @@ def calculate_damage(
     attacking_pkmn:EnemyPkmn,
     move:Move,
     defending_pkmn:EnemyPkmn,
-    stage_modifiers:StageModifiers=None,
+    attacking_stage_modifiers:StageModifiers=None,
+    defending_stage_modifiers:StageModifiers=None,
     is_crit:bool=False,
     defender_has_light_screen:bool=False,
     defender_has_reflect:bool=False
@@ -262,11 +263,13 @@ def calculate_damage(
         psywave_upper_limit = math.floor(attacking_pkmn.level * 1.5)
         return DamageRange({x:1 for x in range(1, psywave_upper_limit)})
     
-    if stage_modifiers is None:
-        stage_modifiers = StageModifiers()
+    if attacking_stage_modifiers is None:
+        attacking_stage_modifiers = StageModifiers()
+    if defending_stage_modifiers is None:
+        defending_stage_modifiers = StageModifiers()
 
-    attacking_battle_stats = attacking_pkmn.get_battle_stats(stage_modifiers, is_crit=is_crit)
-    defending_battle_stats = defending_pkmn.get_battle_stats(stage_modifiers, is_crit=is_crit)
+    attacking_battle_stats = attacking_pkmn.get_battle_stats(attacking_stage_modifiers, is_crit=is_crit)
+    defending_battle_stats = defending_pkmn.get_battle_stats(defending_stage_modifiers, is_crit=is_crit)
 
     attacking_species = pkmn_db.pkmn_db.get_pkmn(attacking_pkmn.name)
     defending_species = pkmn_db.pkmn_db.get_pkmn(defending_pkmn.name)

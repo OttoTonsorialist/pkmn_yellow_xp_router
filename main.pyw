@@ -183,7 +183,7 @@ class Main(tk.Tk):
         self.bind('<Control-E>', self.open_export_window)
         self.bind('<Control-R>', self.just_export_and_run)
         # detail update function
-        self.bind("<Configure>", self._save_geometry)
+        self.protocol("WM_DELETE_WINDOW", self._on_close)
         self.bind("<<TreeviewSelect>>", self._handle_new_selection)
         self.bind(const.ROUTE_LIST_REFRESH_EVENT, self.update_run_status)
 
@@ -193,8 +193,10 @@ class Main(tk.Tk):
     def run(self):
         self.mainloop()
     
-    def _save_geometry(self, *args, **kwargs):
+    def _on_close(self, *args, **kwargs):
+        # just need to save window geometry before closing
         config.set_window_geometry(self.geometry())
+        self.destroy()
 
     def save_route(self, *args, **kwargs):
         route_name = self.route_name.get()

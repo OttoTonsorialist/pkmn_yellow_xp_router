@@ -398,6 +398,11 @@ class EnemyPkmn:
         )
     
     def __repr__(self):
+        return self.to_string()
+
+    def to_string(self, verbose=False):
+        if verbose:
+            return f"Lv {self.level}: {self.name} ({self.hp}, {self.attack}, {self.defense}, {self.speed}, {self.special}), ({self.move_list})"
         return f"Lv {self.level}: {self.name}"
 
     def get_battle_stats(self, stages:StageModifiers, is_crit:bool=False):

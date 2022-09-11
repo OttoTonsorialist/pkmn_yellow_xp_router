@@ -21,6 +21,12 @@ class BattleSummary(tk.Frame):
         # these are matched lists, with the solo mon being updated for each enemy pkmn, in case of level-ups
         self._enemy_pkmn:List[data_objects.EnemyPkmn] = None
         self._solo_pkmn:List[data_objects.EnemyPkmn] = None
+        self._source_state:route_state_objects.RouteState = None
+        self._source_event_group:route_events.EventGroup = None
+        self._stage_modifiers:data_objects.StageModifiers = data_objects.StageModifiers()
+
+        self.setup_moves = SetupMovesSummary(self, callback=self._setup_move_callback)
+        self.setup_moves.grid(row=0, column=0, sticky=tk.EW)
 
         self._mon_pairs:List[MonPairSummary] = []
 
@@ -30,6 +36,10 @@ class BattleSummary(tk.Frame):
         self.error_message = tk.Label(self, text="Select a battle to see damage calculations")
         self.should_calculate = False
         self.set_team(None)
+    
+    def _setup_move_callback(self, new_modifiers):
+        self._stage_modifiers = new_modifiers
+        self.set_team(self._enemy_pkmn, cur_state=self._source_state, event_group=self._source_event_group)
     
     def _mimic_callback(self, mimiced_move_name):
         for cur_pair in self._mon_pairs:
@@ -42,20 +52,19 @@ class BattleSummary(tk.Frame):
         self.should_calculate = True
 
         if recalc:
-            self.set_team(self._enemy_pkmn, prev_solo_pkmn=self._solo_pkmn, recalc_only=True)
+            self.set_team(self._enemy_pkmn, cur_state=self._source_state, event_group=self._source_event_group, recalc_only=True)
 
     def pause_calculations(self):
         self.should_calculate = False
         # wipe out the rendering when not calculating
         # but only recalc, so we still remember what the current state and enemy pkmn are
-        self.set_team(None, cur_state=None, recalc_only=True)
+        #self.set_team(None, recalc_only=True)
     
     def set_team(
         self,
         enemy_pkmn:List[data_objects.EnemyPkmn],
         cur_state:route_state_objects.RouteState=None,
         event_group:route_events.EventGroup=None,
-        prev_solo_pkmn:List[data_objects.EnemyPkmn]=None,
         recalc_only:bool=False
     ):
         # use the passed information to figure out the exact solo mon objects to use
@@ -72,7 +81,12 @@ class BattleSummary(tk.Frame):
                             cur_item_idx += 1
                             continue
                         if cur_item_pkmn_list[cur_event_item.to_defeat_idx].name == cur_pkmn.name:
-                            new_solo_pkmn.append(cur_event_item.init_state.solo_pkmn.get_pkmn_obj(cur_event_item.init_state.badges))
+                            new_solo_pkmn.append(
+                                cur_event_item.init_state.solo_pkmn.get_pkmn_obj(cur_event_item.init_state.badges, stage_modifiers=self._stage_modifiers)
+                            )
+
+                            with_mods = cur_event_item.init_state.solo_pkmn.get_pkmn_obj(cur_event_item.init_state.badges, stage_modifiers=self._stage_modifiers)
+                            without_mods = cur_event_item.init_state.solo_pkmn.get_pkmn_obj(cur_event_item.init_state.badges)
                             break
                         cur_item_idx += 1
                     except Exception as e:
@@ -80,10 +94,8 @@ class BattleSummary(tk.Frame):
                         raise e
         elif cur_state is not None:
             for cur_pkmn in enemy_pkmn:
-                new_solo_pkmn.append(cur_state.solo_pkmn.get_pkmn_obj(cur_state.badges))
+                new_solo_pkmn.append(cur_state.solo_pkmn.get_pkmn_obj(cur_state.badges, stage_modifiers=self._stage_modifiers))
                 cur_state, _ = cur_state.defeat_pkmn(cur_pkmn)
-        elif prev_solo_pkmn is not None:
-            new_solo_pkmn = prev_solo_pkmn
 
         if enemy_pkmn is not None and len(enemy_pkmn) != len(new_solo_pkmn):
             raise ValueError(f"Failed to properly extract solo mon information. Mismatching mon lengths: {len(enemy_pkmn)} vs {len(new_solo_pkmn)}")
@@ -101,6 +113,8 @@ class BattleSummary(tk.Frame):
         if not recalc_only:
             # when recalcing, don't store what's being used, just render it
             self._enemy_pkmn = enemy_pkmn
+            self._source_event_group = event_group
+            self._source_state = cur_state
             self._solo_pkmn = new_solo_pkmn
         
         if enemy_pkmn is None or not self.should_calculate:
@@ -114,9 +128,10 @@ class BattleSummary(tk.Frame):
             mimic_options.extend(cur_pkmn.move_list)
 
         idx = -1
+        enemy_stages = data_objects.StageModifiers()
         for idx, cur_pkmn in enumerate(enemy_pkmn):
-            self._mon_pairs[idx].set_mons(new_solo_pkmn[idx], cur_pkmn, mimic_options)
-            self._mon_pairs[idx].grid(row=idx, column=0, sticky=tk.EW)
+            self._mon_pairs[idx].set_mons(new_solo_pkmn[idx], cur_pkmn, self._stage_modifiers, enemy_stages, mimic_options)
+            self._mon_pairs[idx].grid(row=idx + 1, column=0, sticky=tk.EW)
         
         for missing_idx in range(idx+1, 6):
             self._mon_pairs[missing_idx].grid_forget()
@@ -126,14 +141,69 @@ class BattleSummary(tk.Frame):
             self._mon_pairs[0].manual_mimic_trigger()
 
 
+class SetupMovesSummary(tk.Frame):
+    def __init__(self, *args, font_size=None, callback=None, **kwargs):
+        super().__init__(*args, **kwargs)
+
+        self._callback = callback
+        self._move_list = []
+
+        self.reset_button = custom_tkinter.SimpleButton(self, text="Reset Setup Moves", command=self._reset)
+        self.reset_button.grid(row=0, column=0, padx=2)
+
+        self.setup_label = tk.Label(self, text="Move to Add:")
+        self.setup_label.grid(row=0, column=1, padx=2)
+
+        stat_modifier_moves = list(const.STAT_INCREASE_MOVES.keys())
+        stat_modifier_moves += list(const.STAT_DECREASE_MOVES.keys())
+        self.setup_moves = custom_tkinter.SimpleOptionMenu(self, stat_modifier_moves)
+        self.setup_moves.grid(row=0, column=2, padx=2)
+
+        self.add_button = custom_tkinter.SimpleButton(self, text="Add Setup Move", command=self._add_setup_move)
+        self.add_button.grid(row=0, column=3, padx=2)
+
+        self.extra_label = tk.Label(self, text="Current Setup Moves:")
+        self.extra_label.grid(row=0, column=4, padx=2)
+
+        self.move_list_label = tk.Label(self)
+        self.move_list_label.grid(row=0, column=5, padx=2)
+    
+    def _reset(self, *args, **kwargs):
+        self._move_list = []
+        self._move_list_updated()
+    
+    def _add_setup_move(self, *args, **kwargs):
+        self._move_list.append(self.setup_moves.get())
+        self._move_list_updated()
+    
+    def get_stage_modifiers(self):
+        result = data_objects.StageModifiers()
+
+        for cur_move in self._move_list:
+            result = result.after_move(cur_move)
+        
+        return result
+    
+    def _move_list_updated(self):
+        to_display = ", ".join(self._move_list)
+        if not to_display:
+            to_display = "None"
+
+        self.move_list_label.configure(text=to_display)
+        if self._callback is not None:
+            self._callback(self.get_stage_modifiers())
+
+
 class MonPairSummary(tk.Frame):
     def __init__(self, *args, font_size=None, mimic_callback=None, **kwargs):
         super().__init__(*args, **kwargs, highlightbackground="black", highlightthickness=1)
 
         self.mimic_callback = mimic_callback
 
-        self.first_mon = None
-        self.second_mon = None
+        self.first_mon:data_objects.EnemyPkmn = None
+        self.second_mon:data_objects.EnemyPkmn = None
+        self.first_stages:data_objects.StageModifiers = None
+        self.second_stages:data_objects.StageModifiers = None
         self.mimic_options = None
 
         self.left_mon_label = tk.Label(self, text="", background=const.HEADER_BG_COLOR)
@@ -206,9 +276,11 @@ class MonPairSummary(tk.Frame):
             else:
                 self.move_list[idx].unflag_as_best_move()
     
-    def set_mons(self, first_mon, second_mon, mimic_options):
+    def set_mons(self, first_mon, second_mon, first_stages, second_stages, mimic_options):
         self.first_mon = first_mon
         self.second_mon = second_mon
+        self.first_stages = first_stages
+        self.second_stages = second_stages
         self.mimic_options = mimic_options
 
         self.left_mon_label.configure(text=f"{self.first_mon} attacking {self.second_mon} ({self.second_mon.hp} HP)")
@@ -224,10 +296,10 @@ class MonPairSummary(tk.Frame):
                 cur_move = self.first_mon.move_list[idx]
             
             if cur_move:
-                self.move_list[idx].calc_damages(cur_move, self.first_mon, self.second_mon, self.mimic_options)
+                self.move_list[idx].calc_damages(cur_move, self.first_mon, self.second_mon, self.first_stages, self.second_stages, self.mimic_options)
                 self.move_list[idx].grid(row=1, column=idx, sticky=tk.NSEW)
             elif not struggle_set:
-                self.move_list[idx].calc_damages(const.STRUGGLE_MOVE_NAME, self.first_mon, self.second_mon, self.mimic_options)
+                self.move_list[idx].calc_damages(const.STRUGGLE_MOVE_NAME, self.first_mon, self.second_mon, self.first_stages, self.second_stages, self.mimic_options)
                 self.move_list[idx].grid(row=1, column=idx, sticky=tk.NSEW)
                 struggle_set = True
             else:
@@ -239,7 +311,7 @@ class MonPairSummary(tk.Frame):
                 cur_move = self.second_mon.move_list[idx]
 
             if cur_move:
-                self.move_list[idx + 4].calc_damages(cur_move, self.second_mon, self.first_mon, self.mimic_options)
+                self.move_list[idx + 4].calc_damages(cur_move, self.second_mon, self.first_mon, self.second_stages, self.first_stages, self.mimic_options)
                 self.move_list[idx + 4].grid(row=1, column=(5 + idx), sticky=tk.NSEW)
             else:
                 self.move_list[idx + 4].grid_forget()
@@ -257,8 +329,10 @@ class DamageSummary(tk.Frame):
         self.attacking_mon = None
         self.defending_mon = None
         self.move_name = None
-        self._outer_mimic_callback = mimic_callback
+        self.attacking_stage_modifiers = None
+        self.defending_stage_modifiers = None
         self._propagate_mimic_update = True
+        self._outer_mimic_callback = mimic_callback
 
         self.config(padx=2, pady=2)
         self.columnconfigure(0, weight=1)
@@ -326,12 +400,16 @@ class DamageSummary(tk.Frame):
         move_name,
         attacking_mon:data_objects.EnemyPkmn,
         defending_mon:data_objects.EnemyPkmn,
-        mimic_options:List
+        attacking_stage_modifiers:data_objects.StageModifiers,
+        defending_stage_modifiers:data_objects.StageModifiers,
+        mimic_options:List,
     ):
 
         self.attacking_mon = attacking_mon
         self.defending_mon = defending_mon
         self.move_name = move_name
+        self.attacking_stage_modifiers = attacking_stage_modifiers
+        self.defending_stage_modifiers = defending_stage_modifiers
 
         move = pkmn_db.move_db.get_move(move_name)
         if move is None:
@@ -352,8 +430,21 @@ class DamageSummary(tk.Frame):
             self._calc_damages_from_move(move)
 
     def _calc_damages_from_move(self, move:data_objects.Move):
-        single_attack = pkmn_damage_calc.calculate_damage(self.attacking_mon, move, self.defending_mon)
-        crit_attack = pkmn_damage_calc.calculate_damage(self.attacking_mon, move, self.defending_mon, is_crit=True)
+        single_attack = pkmn_damage_calc.calculate_damage(
+            self.attacking_mon,
+            move,
+            self.defending_mon,
+            attacking_stage_modifiers=self.attacking_stage_modifiers,
+            defending_stage_modifiers=self.defending_stage_modifiers,
+        )
+        crit_attack = pkmn_damage_calc.calculate_damage(
+            self.attacking_mon,
+            move,
+            self.defending_mon,
+            attacking_stage_modifiers=self.attacking_stage_modifiers,
+            defending_stage_modifiers=self.defending_stage_modifiers,
+            is_crit=True
+        )
 
         if single_attack is None:
             self.cur_guaranteed_kill = None
