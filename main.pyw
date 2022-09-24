@@ -666,22 +666,33 @@ class LoadRouteWindow(custom_tkinter.Popup):
         self.filter_label.grid(row=1, column=0)
         self.filter.grid(row=1, column=1)
 
+        self.allow_oudated = tk.IntVar()
+        self.allow_oudated.trace("w", self._filter_callback)
+        self.outdated_label = tk.Label(self.controls_frame, text="Show Outdated Routes?")
+        self.outdated_checkbox = tk.Checkbutton(self.controls_frame, variable=self.allow_oudated, onvalue=1, offvalue=0)
+        self.outdated_label.grid(row=2, column=0)
+        self.outdated_checkbox.grid(row=2, column=1)
+
+        self.outdated_info_label = tk.Label(self.controls_frame, text="Outdated Routes are older versions of your route.\nEvery save makes a backup that is persisted, and can be reloaded if needed.\nThese are hidden by default because they can quickly pile up")
+        self.outdated_info_label.grid(row=3, column=0, columnspan=2, padx=self.padx, pady=self.pady)
+
         self.warning_label = tk.Label(self.controls_frame, text="WARNING: Any unsaved changes in your current route\nwill be lost when loading an existing route!")
-        self.warning_label.grid(row=2, column=0, columnspan=2, padx=self.padx, pady=self.pady)
+        self.warning_label.grid(row=4, column=0, columnspan=2, padx=self.padx, pady=self.pady)
 
         self.create_button = custom_tkinter.SimpleButton(self.controls_frame, text="Load Route", command=self.load)
-        self.create_button.grid(row=3, column=0, padx=self.padx, pady=self.pady)
+        self.create_button.grid(row=10, column=0, padx=self.padx, pady=self.pady)
         self.cancel_button = custom_tkinter.SimpleButton(self.controls_frame, text="Cancel", command=self._main_window.cancel_new_event)
-        self.cancel_button.grid(row=3, column=1, padx=self.padx, pady=self.pady)
+        self.cancel_button.grid(row=10, column=1, padx=self.padx, pady=self.pady)
 
         self.bind('<Return>', self.load)
         self.bind('<Escape>', self._main_window.cancel_new_event)
         self.filter.focus()
         self._select_callback()
 
-    def get_existing_routes(self, filter_text=""):
+    def get_existing_routes(self, filter_text="", load_backups=False):
         loaded_routes = []
         filter_text = filter_text.lower()
+
         if os.path.exists(const.SAVED_ROUTES_DIR):
             for fragment in os.listdir(const.SAVED_ROUTES_DIR):
                 name, ext = os.path.splitext(fragment)
@@ -691,13 +702,28 @@ class LoadRouteWindow(custom_tkinter.Popup):
                     continue
                 loaded_routes.append(name)
         
+        if load_backups:
+            if os.path.exists(const.OUTDATED_ROUTES_DIR):
+                for fragment in os.listdir(const.OUTDATED_ROUTES_DIR):
+                    name, ext = os.path.splitext(fragment)
+                    if filter_text not in name.lower():
+                        continue
+                    if ext != ".json":
+                        continue
+                    loaded_routes.append(name)
+        
         if not loaded_routes:
             loaded_routes = [const.NO_SAVED_ROUTES]
 
-        return loaded_routes
+        return sorted(loaded_routes, key=str.casefold)
 
     def _filter_callback(self, *args, **kwargs):
-        self.previous_route_names.new_values(self.get_existing_routes(filter_text=self.filter.get()))
+        self.previous_route_names.new_values(
+            self.get_existing_routes(
+                filter_text=self.filter.get(),
+                load_backups=bool(self.allow_oudated.get())
+            )
+        )
 
     def _select_callback(self, *args, **kwargs):
         selected_route = self.previous_route_names.get()

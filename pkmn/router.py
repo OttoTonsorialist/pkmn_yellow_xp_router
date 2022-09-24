@@ -302,6 +302,8 @@ class Router:
             final_path = os.path.join(pkmn_db.get_min_battles_dir(min_battles_version), f"{name}.json")
         else:
             final_path = os.path.join(const.SAVED_ROUTES_DIR, f"{name}.json")
+            if not os.path.exists(final_path):
+                final_path = os.path.join(const.OUTDATED_ROUTES_DIR, f"{name}.json")
 
         with open(final_path, 'r') as f:
             result = json.load(f)

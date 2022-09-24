@@ -129,6 +129,7 @@ dmypy.json
 .pyre/
 
 saved_routes/
+outdated_routes/
 route_one_output/
 outputs/
 config.json

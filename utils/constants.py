@@ -14,6 +14,7 @@ class Constants:
         self.ITEM_DB_PATH = os.path.join(self.POKEMON_RAW_DATA, "items.json")
         self.MOVE_DB_PATH = os.path.join(self.POKEMON_RAW_DATA, "moves.json")
         self.SAVED_ROUTES_DIR = os.path.join(self.SOURCE_ROOT_PATH, "saved_routes")
+        self.OUTDATED_ROUTES_DIR = os.path.join(self.SOURCE_ROOT_PATH, "outdated_routes")
 
         self.YELLOW_ASSETS_PATH = os.path.join(self.POKEMON_RAW_DATA, "yellow")
         self.YELLOW_POKEMON_DB_PATH = os.path.join(self.YELLOW_ASSETS_PATH, "pokemon.json")

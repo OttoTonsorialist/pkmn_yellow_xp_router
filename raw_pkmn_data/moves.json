@@ -507,7 +507,7 @@
         "name": "Surf",
         "accuracy": 100,
         "pp": 15,
-        "base_power": 90,
+        "base_power": 95,
         "type": "water",
         "effects": [],
         "attack_flavor": null
