@@ -126,12 +126,15 @@ class LearnMoveEventDefinition:
 
 
 class TrainerEventDefinition:
-    def __init__(self, trainer_name, verbose_export=False):
+    def __init__(self, trainer_name, verbose_export=False, setup_moves=None):
         self.trainer_name = trainer_name
         self.verbose_export = verbose_export
+        if setup_moves is None:
+            setup_moves = []
+        self.setup_moves = setup_moves
 
     def serialize(self):
-        return [self.trainer_name, self.verbose_export]
+        return [self.trainer_name, self.verbose_export, self.setup_moves]
     
     @staticmethod
     def deserialize(raw_val):
@@ -139,7 +142,13 @@ class TrainerEventDefinition:
             return None
         if isinstance(raw_val, str):
             return TrainerEventDefinition(raw_val)
-        return TrainerEventDefinition(raw_val[0], verbose_export=raw_val[1])
+        
+        trainer_name = raw_val[0]
+        verbose_export = raw_val[1]
+        setup_moves = None
+        if len(raw_val) > 2:
+            setup_moves = raw_val[2]
+        return TrainerEventDefinition(trainer_name, verbose_export=verbose_export, setup_moves=setup_moves)
     
     def __str__(self):
         return f"Trainer {self.trainer_name}"

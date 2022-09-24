@@ -38,9 +38,8 @@ class BattleSummary(tk.Frame):
         self.should_calculate = False
         self.set_team(None)
     
-    def _setup_move_callback(self, new_modifiers):
-        self._stage_modifiers = new_modifiers
-        self.set_team(self._enemy_pkmn, cur_state=self._source_state, event_group=self._source_event_group)
+    def _setup_move_callback(self):
+        self.set_team(self._enemy_pkmn, cur_state=self._source_state, event_group=self._source_event_group, new_setup_moves=True)
     
     def _mimic_callback(self, mimiced_move_name):
         for cur_pair in self._mon_pairs:
@@ -54,18 +53,22 @@ class BattleSummary(tk.Frame):
 
         if recalc:
             self.set_team(self._enemy_pkmn, cur_state=self._source_state, event_group=self._source_event_group, recalc_only=True)
+    
+    def get_setup_moves(self):
+        return self.setup_moves._move_list.copy()
 
     def pause_calculations(self):
         self.should_calculate = False
         # wipe out the rendering when not calculating
         # but only recalc, so we still remember what the current state and enemy pkmn are
-        #self.set_team(None, recalc_only=True)
+        self.set_team(None, recalc_only=True)
     
     def set_team(
         self,
         enemy_pkmn:List[data_objects.EnemyPkmn],
         cur_state:route_state_objects.RouteState=None,
         event_group:route_events.EventGroup=None,
+        new_setup_moves:bool=False,
         recalc_only:bool=False
     ):
         # use the passed information to figure out the exact solo mon objects to use
@@ -73,6 +76,9 @@ class BattleSummary(tk.Frame):
 
         if event_group is not None and len(event_group.event_items) > 0:
             cur_item_idx = 0
+            if not new_setup_moves:
+                self.setup_moves.set_move_list(event_group.event_definition.trainer_def.setup_moves.copy())
+            self._stage_modifiers = self.setup_moves.get_stage_modifiers()
             for cur_pkmn in enemy_pkmn:
                 while cur_item_idx < len(event_group.event_items):
                     try:
@@ -94,6 +100,9 @@ class BattleSummary(tk.Frame):
                         print(f"Failed to extra solo mon info from event group: ({type(e)}) {e}")
                         raise e
         elif cur_state is not None:
+            if not new_setup_moves:
+                self.setup_moves.set_move_list([])
+            self._stage_modifiers = self.setup_moves.get_stage_modifiers()
             for cur_pkmn in enemy_pkmn:
                 new_solo_pkmn.append(cur_state.solo_pkmn.get_pkmn_obj(cur_state.badges, stage_modifiers=self._stage_modifiers))
                 cur_state, _ = cur_state.defeat_pkmn(cur_pkmn)
@@ -177,6 +186,10 @@ class SetupMovesSummary(tk.Frame):
         self._move_list.append(self.setup_moves.get())
         self._move_list_updated()
     
+    def set_move_list(self, new_moves, trigger_update=False):
+        self._move_list = new_moves
+        self._move_list_updated(trigger_update=trigger_update)
+    
     def get_stage_modifiers(self):
         result = data_objects.StageModifiers()
 
@@ -185,14 +198,14 @@ class SetupMovesSummary(tk.Frame):
         
         return result
     
-    def _move_list_updated(self):
+    def _move_list_updated(self, trigger_update=True):
         to_display = ", ".join(self._move_list)
         if not to_display:
             to_display = "None"
 
         self.move_list_label.configure(text=to_display)
-        if self._callback is not None:
-            self._callback(self.get_stage_modifiers())
+        if self._callback is not None and trigger_update:
+            self._callback()
 
 
 class MonPairSummary(tk.Frame):

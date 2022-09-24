@@ -175,7 +175,13 @@ class EventDetails(tk.Frame):
                 if self._cur_trainer_name is None:
                     new_event = EventDefinition()
                 else:
-                    new_event = EventDefinition(trainer_def=TrainerEventDefinition(self._cur_trainer_name, verbose_export=self.verbose_trainer_label.is_checked()))
+                    new_event = EventDefinition(
+                        trainer_def=TrainerEventDefinition(
+                            self._cur_trainer_name,
+                            verbose_export=self.verbose_trainer_label.is_checked(),
+                            setup_moves=self.battle_summary_frame.get_setup_moves()
+                        )
+                    )
             else:
                 new_event = self.current_event_editor.get_event()
             
