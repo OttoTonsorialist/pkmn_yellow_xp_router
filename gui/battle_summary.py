@@ -81,8 +81,8 @@ class BattleSummary(tk.Frame):
 
         if event_group is not None and len(event_group.event_items) > 0:
             cur_item_idx = 0
-            self._mimic_selection = event_group.event_definition.trainer_def.mimic_selection
             if not new_setup_moves:
+                self._mimic_selection = event_group.event_definition.trainer_def.mimic_selection
                 self.setup_moves.set_move_list(event_group.event_definition.trainer_def.setup_moves.copy())
             self._stage_modifiers = self.setup_moves.get_stage_modifiers()
             for cur_pkmn in enemy_pkmn:
@@ -106,8 +106,8 @@ class BattleSummary(tk.Frame):
                         print(f"Failed to extra solo mon info from event group: ({type(e)}) {e}")
                         raise e
         elif cur_state is not None:
-            self._mimic_selection = ""
             if not new_setup_moves:
+                self._mimic_selection = ""
                 self.setup_moves.set_move_list([])
             self._stage_modifiers = self.setup_moves.get_stage_modifiers()
             for cur_pkmn in enemy_pkmn:
