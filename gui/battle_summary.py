@@ -1,4 +1,5 @@
 import tkinter as tk
+import tkinter.font
 import datetime
 from typing import List
 
@@ -206,15 +207,38 @@ class MonPairSummary(tk.Frame):
         self.second_stages:data_objects.StageModifiers = None
         self.mimic_options = None
 
-        self.left_mon_label = tk.Label(self, text="", background=const.HEADER_BG_COLOR)
-        self.left_mon_label.grid(row=0, column=0, columnspan=4, sticky=tk.EW, padx=2, pady=2)
+        bold_font = tkinter.font.nametofont("TkDefaultFont").copy()
+        bold_font.configure(weight="bold")
+
+        self.left_mon_label_frame = tk.Frame(self, background=const.HEADER_BG_COLOR)
+        self.left_mon_label_frame.grid(row=0, column=0, columnspan=4, sticky=tk.EW, padx=2, pady=2)
+
+        self.left_attacking_mon = tk.Label(self.left_mon_label_frame, text="", background=const.HEADER_BG_COLOR)
+        self.left_attacking_mon.grid(row=0, column=1)
+        self.left_verb = tk.Label(self.left_mon_label_frame, text="", background=const.HEADER_BG_COLOR, font=bold_font)
+        self.left_verb.grid(row=0, column=2)
+        self.left_defending_mon = tk.Label(self.left_mon_label_frame, text="", background=const.HEADER_BG_COLOR)
+        self.left_defending_mon.grid(row=0, column=3)
+
+        self.left_mon_label_frame.columnconfigure(0, weight=1, uniform="left_col_group")
+        self.left_mon_label_frame.columnconfigure(4, weight=1, uniform="left_col_group")
 
         self.divider = tk.Frame(self, background=const.IMPORTANT_COLOR, width=4)
         self.divider.grid(row=0, column=4, rowspan=2, sticky=tk.NS)
         self.divider.grid_propagate(0)
 
-        self.right_mon_label = tk.Label(self, text="", background=const.HEADER_BG_COLOR)
-        self.right_mon_label.grid(row=0, column=5, columnspan=4, sticky=tk.EW, padx=2, pady=2)
+        self.right_mon_label_frame = tk.Frame(self, background=const.HEADER_BG_COLOR)
+        self.right_mon_label_frame.grid(row=0, column=5, columnspan=4, sticky=tk.EW, padx=2, pady=2)
+
+        self.right_attacking_mon = tk.Label(self.right_mon_label_frame, text="", background=const.HEADER_BG_COLOR)
+        self.right_attacking_mon.grid(row=0, column=1)
+        self.right_verb = tk.Label(self.right_mon_label_frame, text="", background=const.HEADER_BG_COLOR, font=bold_font)
+        self.right_verb.grid(row=0, column=2)
+        self.right_defending_mon = tk.Label(self.right_mon_label_frame, text="", background=const.HEADER_BG_COLOR)
+        self.right_defending_mon.grid(row=0, column=3)
+
+        self.right_mon_label_frame.columnconfigure(0, weight=1, uniform="right_col_group")
+        self.right_mon_label_frame.columnconfigure(4, weight=1, uniform="right_col_group")
 
         self.columnconfigure(0, weight=1, uniform="label_group")
         self.columnconfigure(1, weight=1, uniform="label_group")
@@ -276,15 +300,40 @@ class MonPairSummary(tk.Frame):
             else:
                 self.move_list[idx].unflag_as_best_move()
     
-    def set_mons(self, first_mon, second_mon, first_stages, second_stages, mimic_options):
+    def set_mons(
+        self,
+        first_mon:data_objects.EnemyPkmn,
+        second_mon:data_objects.EnemyPkmn,
+        first_stages:data_objects.StageModifiers,
+        second_stages:data_objects.StageModifiers,
+        mimic_options
+    ):
         self.first_mon = first_mon
         self.second_mon = second_mon
         self.first_stages = first_stages
         self.second_stages = second_stages
         self.mimic_options = mimic_options
 
-        self.left_mon_label.configure(text=f"{self.first_mon} attacking {self.second_mon} ({self.second_mon.hp} HP)")
-        self.right_mon_label.configure(text=f"{self.second_mon} attacking {self.first_mon} ({self.first_mon.hp} HP)")
+        first_mon_speed = self.first_mon.get_battle_stats(first_stages).speed
+        second_mon_speed = self.second_mon.get_battle_stats(second_stages).speed
+
+        if first_mon_speed > second_mon_speed:
+            first_mon_verb = "outspeeds"
+            second_mon_verb = "underspeeds"
+        elif second_mon_speed > first_mon_speed:
+            second_mon_verb = "outspeeds"
+            first_mon_verb = "underspeeds"
+        else:
+            second_mon_verb = "speed-ties"
+            first_mon_verb = "speed-ties"
+
+        self.left_attacking_mon.configure(text=f"{self.first_mon}")
+        self.left_verb.configure(text=f"{first_mon_verb}")
+        self.left_defending_mon.configure(text=f"{self.second_mon} ({self.second_mon.hp} HP)")
+
+        self.right_attacking_mon.configure(text=f"{self.second_mon}")
+        self.right_verb.configure(text=f"{second_mon_verb}")
+        self.right_defending_mon.configure(text=f"{self.first_mon} ({self.first_mon.hp} HP)")
 
         # update all the moves for the first attacking the second
         struggle_set = False
