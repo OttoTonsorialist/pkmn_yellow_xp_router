@@ -730,12 +730,12 @@ class LoadRouteWindow(custom_tkinter.Popup):
 
         self.allow_oudated = tk.BooleanVar()
         self.allow_oudated.trace("w", self._filter_callback)
-        self.outdated_label = tk.Label(self.controls_frame, text="Show Outdated Routes?")
+        self.outdated_label = tk.Label(self.controls_frame, text="Show Backup Routes?")
         self.outdated_checkbox = tk.Checkbutton(self.controls_frame, variable=self.allow_oudated, onvalue=True, offvalue=False)
         self.outdated_label.grid(row=2, column=0)
         self.outdated_checkbox.grid(row=2, column=1)
 
-        self.outdated_info_label = tk.Label(self.controls_frame, text="Outdated Routes are older versions of your route.\nEvery save makes a backup that is persisted, and can be reloaded if needed.\nThese are hidden by default because they can quickly pile up")
+        self.outdated_info_label = tk.Label(self.controls_frame, text="Backup Routes are older versions of your route.\nEvery save makes a backup that is persisted, and can be reloaded if needed.\nThese are hidden by default because they can quickly pile up")
         self.outdated_info_label.grid(row=3, column=0, columnspan=2, padx=self.padx, pady=self.pady)
 
         self.warning_label = tk.Label(self.controls_frame, text="WARNING: Any unsaved changes in your current route\nwill be lost when loading an existing route!")
