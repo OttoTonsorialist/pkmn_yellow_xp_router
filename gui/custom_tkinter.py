@@ -317,12 +317,18 @@ class SimpleEntry(tk.Entry):
 
 
 class AmountEntry(tk.Frame):
-    def __init__(self, *args, callback=None, **kwargs):
+    def __init__(self, *args, callback=None, max_val=None, min_val=None, init_val=None, **kwargs):
         super().__init__(*args, **kwargs)
 
+        self.max_val = max_val
+        self.min_val = min_val
+
+        if init_val is None:
+            init_val = "1"
+        
         self._down_button = tk.Button(self, text="v", command=self._lower_amt)
         self._down_button.grid(row=0, column=0)
-        self._amount = SimpleEntry(self, initial_value="1", callback=callback)
+        self._amount = SimpleEntry(self, initial_value=init_val, callback=callback)
         self._amount.grid(row=0, column=1)
         self._up_button = tk.Button(self, text="^", command=self._raise_amt)
         self._up_button.grid(row=0, column=2)
@@ -330,6 +336,8 @@ class AmountEntry(tk.Frame):
     def _lower_amt(self, *args, **kwargs):
         try:
             val = int(self._amount.get().strip())
+            if self.min_val is not None:
+                val = max(val, self.min_val)
             self._amount.set(str(val - 1))
         except Exception:
             pass
@@ -337,6 +345,8 @@ class AmountEntry(tk.Frame):
     def _raise_amt(self, *args, **kwargs):
         try:
             val = int(self._amount.get().strip())
+            if self.max_val is not None:
+                val = min(val, self.max_val)
             self._amount.set(str(val + 1))
         except Exception:
             pass
@@ -345,6 +355,14 @@ class AmountEntry(tk.Frame):
         return self._amount.get()
     
     def set(self, value):
+        try:
+            value = int(value)
+            if self.min_val is not None:
+                value = max(value, self.min_val)
+            if self.max_val is not None:
+                value = min(value, self.max_val)
+        except Exception:
+            pass
         self._amount.set(value)
 
 

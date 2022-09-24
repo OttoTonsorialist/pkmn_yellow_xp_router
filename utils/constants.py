@@ -40,6 +40,7 @@ class Constants:
         self.LEARNED_MOVESET_KEY = "levelup_moveset"
         self.GROWTH_RATE_KEY = "growth_rate"
         self.TM_HM_LEARNSET_KEY = "tm_hm_learnset"
+        self.DVS_KEY = "dv"
 
         self.LEVEL = "level"
         self.HP = "hp"

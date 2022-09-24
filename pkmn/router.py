@@ -42,13 +42,24 @@ class Router:
             return self.root_folder.final_state
         return self.init_route_state
     
-    def set_solo_pkmn(self, pkmn_name, level_up_moves=None):
+    def set_solo_pkmn(self, pkmn_name, level_up_moves=None, custom_dvs=None):
         pkmn_base = pkmn_db.pkmn_db.get_pkmn(pkmn_name)
         if pkmn_base is None:
             raise ValueError(f"Could not find base stats for Pokemon: {pkmn_name}")
         
+        if custom_dvs is not None:
+            # when setting custom DVs, should expect a dict of all values
+            # Convert that to a StatBlock here when appropriate
+            custom_dvs = data_objects.StatBlock(
+                custom_dvs[const.HP],
+                custom_dvs[const.ATK],
+                custom_dvs[const.DEF],
+                custom_dvs[const.SPD],
+                custom_dvs[const.SPC]
+            )
+        
         self.init_route_state = route_state_objects.RouteState(
-            route_state_objects.SoloPokemon(pkmn_name, pkmn_base),
+            route_state_objects.SoloPokemon(pkmn_name, pkmn_base, dvs=custom_dvs),
             data_objects.BadgeList(),
             route_state_objects.Inventory()
         )
@@ -283,13 +294,14 @@ class Router:
         with open(final_path, 'w') as f:
             json.dump({
                 const.NAME_KEY: self.init_route_state.solo_pkmn.name,
+                const.DVS_KEY: self.init_route_state.solo_pkmn.dvs.serialize(),
                 const.PKMN_VERSION_KEY: self.pkmn_version,
                 const.TASK_LEARN_MOVE_LEVELUP: [x.serialize() for x in self.level_up_move_defs.values()],
                 const.EVENTS: [self.root_folder.serialize()]
             }, f, indent=4)
     
-    def new_route(self, solo_mon, min_battles_name=None, pkmn_version=const.YELLOW_VERSION):
-        self.set_solo_pkmn(solo_mon)
+    def new_route(self, solo_mon, min_battles_name=None, pkmn_version=const.YELLOW_VERSION, custom_dvs=None):
+        self.set_solo_pkmn(solo_mon, custom_dvs=custom_dvs)
         self._change_version(pkmn_version)
 
         if min_battles_name is None:
@@ -310,17 +322,15 @@ class Router:
         
         self._reset_events()
 
-        if min_battles:
-            # min battles means we're starting a new route, which means we're relying on another function to set version
-            self.set_solo_pkmn(self.init_route_state.solo_pkmn.name)
-        else:
+        if not min_battles:
             self._change_version(result.get(const.PKMN_VERSION_KEY, const.YELLOW_VERSION))
             raw_level_up_moves = result.get(const.TASK_LEARN_MOVE_LEVELUP)
             if raw_level_up_moves is not None:
                 level_up_moves = [route_events.LearnMoveEventDefinition.deserialize(x) for x in raw_level_up_moves]
             else:
                 level_up_moves = None
-            self.set_solo_pkmn(result[const.NAME_KEY], level_up_moves=level_up_moves)
+            
+            self.set_solo_pkmn(result[const.NAME_KEY], level_up_moves=level_up_moves, custom_dvs=result.get(const.DVS_KEY))
         
         if len(result[const.EVENTS]) > 0:
             self._load_events_recursive(self.root_folder, result[const.EVENTS][0])

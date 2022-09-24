@@ -249,6 +249,25 @@ class StatBlock:
             is_stat_xp=self._is_stat_xp
         )
     
+    def serialize(self):
+        return {
+            const.HP: self.hp,
+            const.ATK: self.attack,
+            const.DEF: self.defense,
+            const.SPD: self.speed,
+            const.SPC: self.special,
+        }
+    
+    @staticmethod
+    def deserialize(raw_dict):
+        return StatBlock(
+            raw_dict[const.HP],
+            raw_dict[const.ATK],
+            raw_dict[const.DEF],
+            raw_dict[const.SPD],
+            raw_dict[const.SPC],
+        )
+    
     def __eq__(self, other):
         if not isinstance(other, StatBlock):
             return False

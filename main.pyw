@@ -366,13 +366,13 @@ class Main(tk.Tk):
         if self._is_active_window():
             self.new_event_window = NewRouteWindow(self)
     
-    def create_new_route(self, solo_mon, min_battles_name, pkmn_version):
+    def create_new_route(self, solo_mon, min_battles_name, pkmn_version, custom_dvs=None):
         if min_battles_name == const.EMPTY_ROUTE_NAME:
             min_battles_name = None
         
         self.new_event_window.close()
         self.new_event_window = None
-        self._data.new_route(solo_mon, min_battles_name, pkmn_version=pkmn_version)
+        self._data.new_route(solo_mon, min_battles_name, pkmn_version=pkmn_version, custom_dvs=custom_dvs)
         self.update_run_version()
         self.event_list.refresh()
         self._handle_new_selection()
@@ -619,13 +619,49 @@ class NewRouteWindow(custom_tkinter.Popup):
         self.min_battles_selector = custom_tkinter.SimpleOptionMenu(self.controls_frame, [const.EMPTY_ROUTE_NAME])
         self.min_battles_selector.grid(row=3, column=1, padx=self.padx, pady=self.pady)
 
+        self.max_dvs_flag = tk.BooleanVar()
+        self.max_dvs_flag.set(True)
+        self.max_dvs_flag.trace("w", self._custom_dvs_callback)
+        self.custom_dvs_label = tk.Label(self.controls_frame, text="Max DVs?")
+        self.custom_dvs_checkbox = tk.Checkbutton(self.controls_frame, variable=self.max_dvs_flag, onvalue=True, offvalue=False)
+        self.custom_dvs_label.grid(row=4, column=0)
+        self.custom_dvs_checkbox.grid(row=4, column=1)
+
+        self.custom_dvs_frame = tk.Frame(self.controls_frame)
+
+        self.custom_dvs_hp_label = tk.Label(self.custom_dvs_frame, text="HP DV:")
+        self.custom_dvs_hp_label.grid(row=0, column=0, padx=self.padx, pady=self.pady)
+        self.custom_dvs_hp = custom_tkinter.AmountEntry(self.custom_dvs_frame, min_val=0, max_val=15, init_val=15)
+        self.custom_dvs_hp.grid(row=0, column=1, padx=self.padx, pady=self.pady)
+
+        self.custom_dvs_atk_label = tk.Label(self.custom_dvs_frame, text="Attack DV:")
+        self.custom_dvs_atk_label.grid(row=1, column=0, padx=self.padx, pady=self.pady)
+        self.custom_dvs_atk = custom_tkinter.AmountEntry(self.custom_dvs_frame, min_val=0, max_val=15, init_val=15)
+        self.custom_dvs_atk.grid(row=1, column=1, padx=self.padx, pady=self.pady)
+
+        self.custom_dvs_def_label = tk.Label(self.custom_dvs_frame, text="Defense DV:")
+        self.custom_dvs_def_label.grid(row=2, column=0, padx=self.padx, pady=self.pady)
+        self.custom_dvs_def = custom_tkinter.AmountEntry(self.custom_dvs_frame, min_val=0, max_val=15, init_val=15)
+        self.custom_dvs_def.grid(row=2, column=1, padx=self.padx, pady=self.pady)
+
+        self.custom_dvs_spd_label = tk.Label(self.custom_dvs_frame, text="Speed DV:")
+        self.custom_dvs_spd_label.grid(row=3, column=0, padx=self.padx, pady=self.pady)
+        self.custom_dvs_spd = custom_tkinter.AmountEntry(self.custom_dvs_frame, min_val=0, max_val=15, init_val=15)
+        self.custom_dvs_spd.grid(row=3, column=1, padx=self.padx, pady=self.pady)
+
+        self.custom_dvs_spc_label = tk.Label(self.custom_dvs_frame, text="Special DV:")
+        self.custom_dvs_spc_label.grid(row=4, column=0, padx=self.padx, pady=self.pady)
+        self.custom_dvs_spc = custom_tkinter.AmountEntry(self.custom_dvs_frame, min_val=0, max_val=15, init_val=15)
+        self.custom_dvs_spc.grid(row=4, column=1, padx=self.padx, pady=self.pady)
+
+
         self.warning_label = tk.Label(self.controls_frame, text="WARNING: Any unsaved changes in your current route\nwill be lost when creating a new route!", justify=tk.CENTER, anchor=tk.CENTER)
-        self.warning_label.grid(row=4, column=0, columnspan=2, sticky=tk.EW, padx=self.padx, pady=self.pady)
+        self.warning_label.grid(row=29, column=0, columnspan=2, sticky=tk.EW, padx=self.padx, pady=self.pady)
 
         self.create_button = custom_tkinter.SimpleButton(self.controls_frame, text="Create Route", command=self.create)
-        self.create_button.grid(row=10, column=0, padx=self.padx, pady=self.pady)
+        self.create_button.grid(row=30, column=0, padx=self.padx, pady=self.pady)
         self.cancel_button = custom_tkinter.SimpleButton(self.controls_frame, text="Cancel", command=self._main_window.cancel_new_event)
-        self.cancel_button.grid(row=10, column=1, padx=self.padx, pady=self.pady)
+        self.cancel_button.grid(row=30, column=1, padx=self.padx, pady=self.pady)
 
         self.bind('<Return>', self.create)
         self.bind('<Escape>', self._main_window.cancel_new_event)
@@ -642,8 +678,34 @@ class NewRouteWindow(custom_tkinter.Popup):
     def _pkmn_filter_callback(self, *args, **kwargs):
         self.solo_selector.new_values(pkmn_db.pkmn_db.get_filtered_names(filter_val=self.pkmn_filter.get().strip()))
     
+    def _custom_dvs_callback(self, *args, **kwargs):
+        print("boop")
+        if not self.max_dvs_flag.get():
+            print("ollo")
+            self.custom_dvs_frame.grid(row=5, column=0, columnspan=2)
+        else:
+            print("goodbye")
+            self.custom_dvs_frame.grid_forget()
+    
+    def _get_custom_dvs(self, *args, **kwargs):
+        if self.max_dvs_flag.get():
+            return None
+        
+        return {
+            const.HP: int(self.custom_dvs_hp.get()),
+            const.ATK: int(self.custom_dvs_atk.get()),
+            const.DEF: int(self.custom_dvs_def.get()),
+            const.SPD: int(self.custom_dvs_spd.get()),
+            const.SPC: int(self.custom_dvs_spc.get()),
+        }
+    
     def create(self, *args, **kwargs):
-        self._main_window.create_new_route(self.solo_selector.get(), self.min_battles_selector.get(), self.pkmn_version.get())
+        self._main_window.create_new_route(
+            self.solo_selector.get(),
+            self.min_battles_selector.get(),
+            self.pkmn_version.get(),
+            self._get_custom_dvs()
+        )
 
 
 class LoadRouteWindow(custom_tkinter.Popup):
@@ -666,10 +728,10 @@ class LoadRouteWindow(custom_tkinter.Popup):
         self.filter_label.grid(row=1, column=0)
         self.filter.grid(row=1, column=1)
 
-        self.allow_oudated = tk.IntVar()
+        self.allow_oudated = tk.BooleanVar()
         self.allow_oudated.trace("w", self._filter_callback)
         self.outdated_label = tk.Label(self.controls_frame, text="Show Outdated Routes?")
-        self.outdated_checkbox = tk.Checkbutton(self.controls_frame, variable=self.allow_oudated, onvalue=1, offvalue=0)
+        self.outdated_checkbox = tk.Checkbutton(self.controls_frame, variable=self.allow_oudated, onvalue=True, offvalue=False)
         self.outdated_label.grid(row=2, column=0)
         self.outdated_checkbox.grid(row=2, column=1)
 
@@ -721,7 +783,7 @@ class LoadRouteWindow(custom_tkinter.Popup):
         self.previous_route_names.new_values(
             self.get_existing_routes(
                 filter_text=self.filter.get(),
-                load_backups=bool(self.allow_oudated.get())
+                load_backups=self.allow_oudated.get()
             )
         )
 
