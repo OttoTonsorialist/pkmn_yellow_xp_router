@@ -25,6 +25,7 @@ class BattleSummary(tk.Frame):
         self._source_state:route_state_objects.RouteState = None
         self._source_event_group:route_events.EventGroup = None
         self._stage_modifiers:data_objects.StageModifiers = data_objects.StageModifiers()
+        self._mimic_selection = ""
 
         self.setup_moves = SetupMovesSummary(self, callback=self._setup_move_callback)
         self.setup_moves.grid(row=0, column=0, sticky=tk.EW)
@@ -42,6 +43,7 @@ class BattleSummary(tk.Frame):
         self.set_team(self._enemy_pkmn, cur_state=self._source_state, event_group=self._source_event_group, new_setup_moves=True)
     
     def _mimic_callback(self, mimiced_move_name):
+        self._mimic_selection = mimiced_move_name
         for cur_pair in self._mon_pairs:
             cur_pair.recalc_mimic(mimiced_move_name)
     
@@ -53,9 +55,12 @@ class BattleSummary(tk.Frame):
 
         if recalc:
             self.set_team(self._enemy_pkmn, cur_state=self._source_state, event_group=self._source_event_group, recalc_only=True)
-    
+
     def get_setup_moves(self):
         return self.setup_moves._move_list.copy()
+
+    def get_mimic_selection(self):
+        return self._mimic_selection
 
     def pause_calculations(self):
         self.should_calculate = False
@@ -76,6 +81,7 @@ class BattleSummary(tk.Frame):
 
         if event_group is not None and len(event_group.event_items) > 0:
             cur_item_idx = 0
+            self._mimic_selection = event_group.event_definition.trainer_def.mimic_selection
             if not new_setup_moves:
                 self.setup_moves.set_move_list(event_group.event_definition.trainer_def.setup_moves.copy())
             self._stage_modifiers = self.setup_moves.get_stage_modifiers()
@@ -100,6 +106,7 @@ class BattleSummary(tk.Frame):
                         print(f"Failed to extra solo mon info from event group: ({type(e)}) {e}")
                         raise e
         elif cur_state is not None:
+            self._mimic_selection = ""
             if not new_setup_moves:
                 self.setup_moves.set_move_list([])
             self._stage_modifiers = self.setup_moves.get_stage_modifiers()
@@ -133,7 +140,7 @@ class BattleSummary(tk.Frame):
         else:
             self.error_message.grid_forget()
 
-        mimic_options = []
+        mimic_options = [""]
         for cur_pkmn in enemy_pkmn:
             mimic_options.extend(cur_pkmn.move_list)
 
@@ -146,9 +153,8 @@ class BattleSummary(tk.Frame):
         for missing_idx in range(idx+1, 6):
             self._mon_pairs[missing_idx].grid_forget()
         
-        # manually trigger mimic callback once, so the initial values get calced
         if len(enemy_pkmn) >= 1:
-            self._mon_pairs[0].manual_mimic_trigger()
+            self._mimic_callback(self._mimic_selection)
 
 
 class SetupMovesSummary(tk.Frame):
@@ -441,18 +447,16 @@ class DamageSummary(tk.Frame):
         self.num_to_kill.configure(background=const.STAT_BG_COLOR)
     
     def _mimic_callback(self, *args, **kwargs):
-        if self._propagate_mimic_update:
-            mimiced_move = pkmn_db.move_db.get_move(self.mimic_dropdown.get())
-            if mimiced_move is None:
-                raise ValueError(f"Unknown move from mimic dropdown: {self.mimic_dropdown.get()}")
-
-            if self._outer_mimic_callback is not None:
-                self._outer_mimic_callback(mimiced_move.name)
+        if self._propagate_mimic_update and self._outer_mimic_callback is not None:
+            self._outer_mimic_callback(self.mimic_dropdown.get())
 
     def new_mimic_move_selected(self, move_name):
         try:
             self._propagate_mimic_update = False
             self.mimic_dropdown.set(move_name)
+            # kinda hacky, but whenever mimic isn't set, just use Leer to fake a non-damaging move
+            if not move_name:
+                move_name = "Leer"
             self._calc_damages_from_move(pkmn_db.move_db.get_move(move_name))
         finally:
             self._propagate_mimic_update = True

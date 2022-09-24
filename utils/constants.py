@@ -62,6 +62,9 @@ class Constants:
         self.SPECIAL_MOVES = "special_moves"
         self.MONEY = "money"
         self.ROUTE_ONE_OFFSET = "route_one_offset"
+        self.VERBOSE_KEY = "verbose"
+        self.SETUP_MOVES_KEY = "setup_moves"
+        self.MIMIC_SELECTION = "mimic_selection"
 
         self.MOVE_TYPE = "type"
         self.BASE_POWER = "base_power"

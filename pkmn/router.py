@@ -388,6 +388,8 @@ class Router:
                 output.append(f"{indent}{obj}")
                 if obj.get_event_type() == const.TASK_TRAINER_BATTLE and obj.trainer_def.setup_moves:
                     output.append(f"{indent}Setup Moves: {obj.trainer_def.setup_moves}")
+                if obj.get_event_type() == const.TASK_TRAINER_BATTLE and obj.trainer_def.mimic_selection:
+                    output.append(f"{indent}Mimic: {obj.trainer_def.mimic_selection}")
             if obj.notes:
                 notes_val = indent + obj.notes.replace('\n', '\n' + indent)
                 output.append(notes_val)
