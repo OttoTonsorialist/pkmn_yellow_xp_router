@@ -2,7 +2,7 @@
 from typing import List
 from utils.constants import const
 from pkmn import data_objects
-from pkmn import route_state_objects
+from routing import route_state_objects
 from pkmn import pkmn_db
 
 event_id_counter = 0

@@ -6,8 +6,8 @@ from utils.constants import const
 from pkmn import data_objects
 from pkmn import pkmn_db
 from utils import io_utils
-from pkmn import route_events
-from pkmn import route_state_objects
+from routing import route_events
+from routing import route_state_objects
 
 
 class Router:

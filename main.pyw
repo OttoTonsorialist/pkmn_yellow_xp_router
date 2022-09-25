@@ -7,11 +7,11 @@ from tkinter import ANCHOR, ttk
 
 from gui import custom_tkinter, route_event_components, pkmn_components, quick_add_components
 from gui.event_details import EventDetails
-from pkmn.route_events import EventDefinition, EventFolder, EventGroup, EventItem, InventoryEventDefinition, TrainerEventDefinition, WildPkmnEventDefinition
 from utils.constants import const
 from utils.config_manager import config
 import pkmn.pkmn_db as pkmn_db
-import pkmn.router as router
+from routing.route_events import EventDefinition, EventFolder, EventGroup, EventItem, InventoryEventDefinition, TrainerEventDefinition, WildPkmnEventDefinition
+import routing.router as router
 from utils import route_one_utils
 
 

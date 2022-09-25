@@ -3,8 +3,8 @@ import configparser
 import subprocess
 
 import pkmn.pkmn_db as pkmn_db
-from pkmn.router import Router
-from pkmn.route_events import EventDefinition, EventFolder, EventGroup, EventItem, InventoryEventDefinition, WildPkmnEventDefinition
+from routing.router import Router
+from routing.route_events import EventDefinition, EventFolder, EventGroup, EventItem, InventoryEventDefinition, WildPkmnEventDefinition
 from utils.constants import const
 
 

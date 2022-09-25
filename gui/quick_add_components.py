@@ -1,8 +1,8 @@
 import tkinter as tk
 
 from gui import custom_tkinter
-from pkmn.route_events import EventDefinition, InventoryEventDefinition, LearnMoveEventDefinition, RareCandyEventDefinition, TrainerEventDefinition, VitaminEventDefinition, WildPkmnEventDefinition
-from pkmn.router import Router
+from routing.route_events import EventDefinition, InventoryEventDefinition, LearnMoveEventDefinition, RareCandyEventDefinition, TrainerEventDefinition, VitaminEventDefinition, WildPkmnEventDefinition
+from routing.router import Router
 from utils.constants import const
 import pkmn.pkmn_db as pkmn_db
 

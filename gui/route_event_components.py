@@ -4,7 +4,7 @@ from gui import custom_tkinter
 from gui.pkmn_components import EnemyPkmnTeam
 from utils.constants import const
 import pkmn.pkmn_db as pkmn_db
-from pkmn.route_events import EventDefinition, InventoryEventDefinition, LearnMoveEventDefinition, RareCandyEventDefinition, VitaminEventDefinition, WildPkmnEventDefinition
+from routing.route_events import EventDefinition, InventoryEventDefinition, LearnMoveEventDefinition, RareCandyEventDefinition, VitaminEventDefinition, WildPkmnEventDefinition
 
 
 class EditorParams:

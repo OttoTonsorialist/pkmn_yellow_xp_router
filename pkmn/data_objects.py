@@ -375,18 +375,18 @@ class EnemyPkmn:
     def __init__(self, pkmn_dict, base_stat_block:StatBlock, dvs:StatBlock, stat_xp:StatBlock=None, badges:BadgeList=None):
         self.name = pkmn_dict[const.NAME_KEY]
         self.level = pkmn_dict[const.LEVEL]
-        self.hp = pkmn_dict[const.HP]
-        self.attack = pkmn_dict[const.ATK]
-        self.defense = pkmn_dict[const.DEF]
-        self.speed = pkmn_dict[const.SPD]
-        self.special = pkmn_dict[const.SPC]
         self.xp = pkmn_dict[const.XP]
         self.move_list = copy.copy(pkmn_dict[const.MOVES])
 
-        # pkmn_db should be a dict of names->BaseStats objects
-        # just grab the StatBlock from there
-        self.base_stat_block = base_stat_block
         self.dvs = dvs
+        self.base_stat_block = base_stat_block
+        self.cur_stats = StatBlock(
+            pkmn_dict[const.HP],
+            pkmn_dict[const.ATK],
+            pkmn_dict[const.DEF],
+            pkmn_dict[const.SPD],
+            pkmn_dict[const.SPC]
+        )
 
         if stat_xp is None:
             stat_xp = StatBlock(0, 0, 0, 0, 0, True)
@@ -403,11 +403,7 @@ class EnemyPkmn:
         return (
             self.name == other.name and
             self.level == other.level and
-            self.hp == other.hp and
-            self.attack == other.attack and
-            self.defense == other.defense and
-            self.speed == other.speed and
-            self.special == other.special and
+            self.cur_stats == other.cur_stats and
             self.xp == other.xp and
             self.move_list == other.move_list and
             self.base_stat_block == other.base_stat_block and
@@ -421,7 +417,7 @@ class EnemyPkmn:
 
     def to_string(self, verbose=False):
         if verbose:
-            return f"Lv {self.level}: {self.name} ({self.hp}, {self.attack}, {self.defense}, {self.speed}, {self.special}), ({self.move_list})"
+            return f"Lv {self.level}: {self.name} ({self.cur_stats.hp}, {self.cur_stats.attack}, {self.cur_stats.defense}, {self.cur_stats.speed}, {self.cur_stats.special}), ({self.move_list})"
         return f"Lv {self.level}: {self.name}"
 
     def get_battle_stats(self, stages:StageModifiers, is_crit:bool=False):

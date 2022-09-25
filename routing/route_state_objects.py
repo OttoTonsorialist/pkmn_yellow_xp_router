@@ -273,7 +273,7 @@ class SoloPokemon:
             badges=badges
         )
     
-    def defeat_pkmn(self, enemy_pkmn: data_objects.EnemyPkmn, badges):
+    def defeat_pkmn(self, enemy_pkmn: data_objects.EnemyPkmn, badges:data_objects.BadgeList):
         # enemy_pkmn is an EnemyPkmn type
         return SoloPokemon(
             self.name,
@@ -464,7 +464,7 @@ class RouteState:
             inv
         ), error_message
 
-    def defeat_pkmn(self, enemy_pkmn, trainer_name=None):
+    def defeat_pkmn(self, enemy_pkmn:data_objects.EnemyPkmn, trainer_name=None):
         new_badges = self.badges.award_badge(trainer_name)
         return RouteState(
             self.solo_pkmn.defeat_pkmn(enemy_pkmn, new_badges),

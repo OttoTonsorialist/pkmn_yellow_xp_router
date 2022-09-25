@@ -5,9 +5,9 @@ from typing import List
 
 from gui import custom_tkinter
 import pkmn.data_objects as data_objects
-from pkmn import route_state_objects
-from pkmn import route_events
-from pkmn.router import Router
+from routing import route_state_objects
+from routing import route_events
+from routing.router import Router
 from utils.constants import const
 from pkmn import pkmn_damage_calc
 from pkmn import pkmn_db
@@ -348,11 +348,11 @@ class MonPairSummary(tk.Frame):
 
         self.left_attacking_mon.configure(text=f"{self.first_mon}")
         self.left_verb.configure(text=f"{first_mon_verb}")
-        self.left_defending_mon.configure(text=f"{self.second_mon} ({self.second_mon.hp} HP)")
+        self.left_defending_mon.configure(text=f"{self.second_mon} ({self.second_mon.cur_stats.hp} HP)")
 
         self.right_attacking_mon.configure(text=f"{self.second_mon}")
         self.right_verb.configure(text=f"{second_mon_verb}")
-        self.right_defending_mon.configure(text=f"{self.first_mon} ({self.first_mon.hp} HP)")
+        self.right_defending_mon.configure(text=f"{self.first_mon} ({self.first_mon.cur_stats.hp} HP)")
 
         # update all the moves for the first attacking the second
         struggle_set = False
@@ -523,20 +523,20 @@ class DamageSummary(tk.Frame):
             self.num_to_kill.configure(text="", background=const.STAT_BG_COLOR)
         else:
             self.damage_range.configure(text=f"{single_attack.min_damage} - {single_attack.max_damage}")
-            pct_min_damage = f"{single_attack.min_damage / self.defending_mon.hp * 100:.2f}%"
-            pct_max_damage = f"{single_attack.max_damage / self.defending_mon.hp * 100:.2f}%"
+            pct_min_damage = f"{single_attack.min_damage / self.defending_mon.cur_stats.hp * 100:.2f}%"
+            pct_max_damage = f"{single_attack.max_damage / self.defending_mon.cur_stats.hp * 100:.2f}%"
             self.pct_damage_range.configure(text=f"{pct_min_damage} - {pct_max_damage}")
 
             self.crit_damage_range.configure(text=f"{crit_attack.min_damage} - {crit_attack.max_damage}")
-            crit_pct_min_damage = f"{crit_attack.min_damage / self.defending_mon.hp * 100:.2f}%"
-            crit_pct_max_damage = f"{crit_attack.max_damage / self.defending_mon.hp * 100:.2f}%"
+            crit_pct_min_damage = f"{crit_attack.min_damage / self.defending_mon.cur_stats.hp * 100:.2f}%"
+            crit_pct_max_damage = f"{crit_attack.max_damage / self.defending_mon.cur_stats.hp * 100:.2f}%"
             self.crit_pct_damage_range.configure(text=f"{crit_pct_min_damage} - {crit_pct_max_damage}")
 
             kill_ranges = pkmn_damage_calc.find_kill(
                 single_attack,
                 crit_attack,
                 pkmn_damage_calc.get_crit_rate(self.attacking_mon, move),
-                self.defending_mon.hp
+                self.defending_mon.cur_stats.hp
             )
 
             def format_message(kill_info):

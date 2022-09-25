@@ -1,11 +1,12 @@
 import tkinter as tk
 import tkinter.font
+from typing import List
 
 from gui import custom_tkinter
 import pkmn.data_objects as data_objects
-from pkmn import route_state_objects
-from pkmn import route_events
-from pkmn.router import Router
+from routing import route_state_objects
+from routing import route_events
+from routing.router import Router
 from utils.constants import const
 
 class RouteList(custom_tkinter.CustomGridview):
@@ -244,24 +245,24 @@ class PkmnViewer(tk.Frame):
         self._level_value.config(text=str(pkmn.level))
         self._xp_value.config(text=str(pkmn.xp))
 
-        attack_val = str(pkmn.attack)
+        attack_val = str(pkmn.cur_stats.attack)
         if badges is not None and badges.boulder:
             attack_val = "*" + attack_val
 
-        defense_val = str(pkmn.defense)
+        defense_val = str(pkmn.cur_stats.defense)
         if badges is not None and badges.thunder:
             defense_val = "*" + defense_val
 
-        special_val = str(pkmn.special)
+        special_val = str(pkmn.cur_stats.special)
         if badges is not None and badges.volcano:
             special_val = "*" + special_val
 
-        speed_val = str(pkmn.speed)
+        speed_val = str(pkmn.cur_stats.speed)
         if badges is not None and badges.soul:
             speed_val = "*" + speed_val
         
         self.stat_column.set_values(
-            [str(pkmn.hp), attack_val, defense_val, special_val, speed_val],
+            [str(pkmn.cur_stats.hp), attack_val, defense_val, special_val, speed_val],
             bg_color_iterable=[None, None, None, None, speed_bg_color]
         )
 
@@ -288,7 +289,7 @@ class EnemyPkmnTeam(tk.Frame):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
-        self._all_pkmn = []
+        self._all_pkmn:List[PkmnViewer] = []
 
         self._all_pkmn.append(PkmnViewer(self))
         self._all_pkmn.append(PkmnViewer(self))
@@ -297,16 +298,16 @@ class EnemyPkmnTeam(tk.Frame):
         self._all_pkmn.append(PkmnViewer(self))
         self._all_pkmn.append(PkmnViewer(self))
 
-    def set_team(self, enemy_pkmn, cur_state:route_state_objects.RouteState=None):
+    def set_team(self, enemy_pkmn:List[data_objects.EnemyPkmn], cur_state:route_state_objects.RouteState=None):
         if enemy_pkmn is None:
             enemy_pkmn = []
 
         idx = -1
         for idx, cur_pkmn in enumerate(enemy_pkmn):
             if cur_state is not None:
-                if cur_state.solo_pkmn.cur_stats.speed > cur_pkmn.speed:
+                if cur_state.solo_pkmn.cur_stats.speed > cur_pkmn.cur_stats.speed:
                     bg_color = const.SPEED_WIN_COLOR
-                elif cur_state.solo_pkmn.cur_stats.speed == cur_pkmn.speed:
+                elif cur_state.solo_pkmn.cur_stats.speed == cur_pkmn.cur_stats.speed:
                     bg_color = const.SPEED_TIE_COLOR
                 else:
                     bg_color = const.SPEED_LOSS_COLOR
