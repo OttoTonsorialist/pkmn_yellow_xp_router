@@ -281,6 +281,7 @@ class MonPairSummary(tk.Frame):
             if cur_move.move_name == const.MIMIC_MOVE_NAME:
                 cur_move.new_mimic_move_selected(mimiced_move_name)
                 self._update_best_move()
+                self._update_best_move(is_enemy=True)
                 return
     
     def manual_mimic_trigger(self):
@@ -288,36 +289,46 @@ class MonPairSummary(tk.Frame):
             if cur_move.move_name == const.MIMIC_MOVE_NAME:
                 cur_move._mimic_callback()
                 self._update_best_move()
+                self._update_best_move(is_enemy=True)
                 return
     
-    def _update_best_move(self):
+    def _update_best_move(self, is_enemy=False):
         cur_best_attack_idx = None
         cur_best_guaranteed_kill = None
         cur_best_damage_roll = None
 
+        if is_enemy:
+            mon_move_list = self.second_mon.move_list
+            move_list_offset = 4
+        else:
+            mon_move_list = self.first_mon.move_list
+            move_list_offset = 0
+
         # NOTE: intentionally not capturing struggle damage calcs here
         # Mostly because we don't really ever want to use struggle if we can avoid it
-        for idx in range(len(self.first_mon.move_list)):
-            if not self.first_mon.move_list[idx]:
+        for idx in range(len(mon_move_list)):
+            if not mon_move_list[idx]:
                 break
 
-            if self.move_list[idx].cur_guaranteed_kill is not None:
+            damage_summary_obj = self.move_list[idx + move_list_offset]
+
+            if damage_summary_obj.cur_guaranteed_kill is not None:
                 if (
                     cur_best_guaranteed_kill is None or
-                    self.move_list[idx].cur_guaranteed_kill < cur_best_guaranteed_kill or (
-                        self.move_list[idx].cur_guaranteed_kill == cur_best_guaranteed_kill and
-                        self.move_list[idx].cur_max_roll > cur_best_damage_roll
+                    damage_summary_obj.cur_guaranteed_kill < cur_best_guaranteed_kill or (
+                        damage_summary_obj.cur_guaranteed_kill == cur_best_guaranteed_kill and
+                        damage_summary_obj.cur_max_roll > cur_best_damage_roll
                     )
                 ):
                     cur_best_attack_idx = idx
-                    cur_best_guaranteed_kill = self.move_list[idx].cur_guaranteed_kill
-                    cur_best_damage_roll = self.move_list[idx].cur_max_roll
+                    cur_best_guaranteed_kill = damage_summary_obj.cur_guaranteed_kill
+                    cur_best_damage_roll = damage_summary_obj.cur_max_roll
 
-        for idx in range(len(self.first_mon.move_list)):
+        for idx in range(len(mon_move_list)):
             if idx == cur_best_attack_idx:
-                self.move_list[idx].flag_as_best_move()
+                self.move_list[idx + move_list_offset].flag_as_best_move(is_enemy=is_enemy)
             else:
-                self.move_list[idx].unflag_as_best_move()
+                self.move_list[idx + move_list_offset].unflag_as_best_move()
     
     def set_mons(
         self,
@@ -385,6 +396,7 @@ class MonPairSummary(tk.Frame):
                 self.move_list[idx + 4].grid_forget()
         
         self._update_best_move()
+        self._update_best_move(is_enemy=True)
 
 
 class DamageSummary(tk.Frame):
@@ -438,9 +450,14 @@ class DamageSummary(tk.Frame):
         self.num_to_kill = tk.Label(self.kill_frame, justify=tk.LEFT, background=const.STAT_BG_COLOR)
         self.num_to_kill.grid(row=0, column=0, sticky=tk.NSEW)
     
-    def flag_as_best_move(self):
-        self.kill_frame.configure(background=const.SPEED_WIN_COLOR)
-        self.num_to_kill.configure(background=const.SPEED_WIN_COLOR)
+    def flag_as_best_move(self, is_enemy=False):
+        if is_enemy:
+            color = const.SPEED_LOSS_COLOR
+        else:
+            color = const.SPEED_WIN_COLOR
+
+        self.kill_frame.configure(background=color)
+        self.num_to_kill.configure(background=color)
 
     def unflag_as_best_move(self):
         self.kill_frame.configure(background=const.STAT_BG_COLOR)
