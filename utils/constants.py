@@ -30,7 +30,9 @@ class Constants:
         self.BASE_HP_KEY = "base_hp"
         self.BASE_ATK_KEY = "base_atk"
         self.BASE_DEF_KEY = "base_def"
+        self.BASE_SPA_KEY = "base_spa"
         self.BASE_SPD_KEY = "base_spd"
+        self.BASE_SPE_KEY = "base_spe"
         self.BASE_SPC_KEY = "base_spc"
         self.FIRST_TYPE_KEY = "type_1"
         self.SECOND_TYPE_KEY = "type_2"
@@ -46,7 +48,10 @@ class Constants:
         self.HP = "hp"
         self.ATK = "atk"
         self.DEF = "def"
+        self.SPA = "spa"
         self.SPD = "spd"
+        self.SPE = "spe"
+        # unified special, for gen 1 only
         self.SPC = "spc"
         self.XP = "xp"
         self.MOVES = "moves"
@@ -280,7 +285,7 @@ class Constants:
             "Growth": (self.SPC, 1),
             "Swords Dance": (self.ATK, 2),
             "Meditate": (self.ATK, 1),
-            "Agility": (self.SPD, 2),
+            "Agility": (self.SPE, 2),
             "Double Team": (self.EV, 1),
             "Harden": (self.DEF, 1),
             "Minimize": (self.EV, 1),
@@ -300,13 +305,12 @@ class Constants:
             "Tail Whip": (self.DEF, -1),
             "Leer": (self.DEF, -1),
             "Growl": (self.ATK, -1),
-            "String Shot": (self.SPD, -1),
+            "String Shot": (self.SPE, -1),
             "Screech": (self.DEF, -2),
-            # NOTE: all moves that have a secondary effect to drop a stat only proc 33.2% of the time
             "Acid": (self.DEF, -1),
-            "BubbleBeam": (self.SPD, -1),
-            "Bubble": (self.SPD, -1),
-            "Constrict": (self.SPD, -1),
+            "BubbleBeam": (self.SPE, -1),
+            "Bubble": (self.SPE, -1),
+            "Constrict": (self.SPE, -1),
             "Aurora Beam": (self.ATK, -1),
             "Psychic": (self.SPC, -1),
         }

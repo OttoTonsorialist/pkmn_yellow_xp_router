@@ -4,13 +4,12 @@ import datetime
 from typing import List
 
 from gui import custom_tkinter
-import pkmn.data_objects as data_objects
+import pkmn.universal_data_objects as data_objects
 from routing import route_state_objects
 from routing import route_events
 from routing.router import Router
 from utils.constants import const
-from pkmn import pkmn_damage_calc
-from pkmn import pkmn_db
+import pkmn
 
 
 class BattleSummary(tk.Frame):
@@ -457,7 +456,7 @@ class DamageSummary(tk.Frame):
             # kinda hacky, but whenever mimic isn't set, just use Leer to fake a non-damaging move
             if not move_name:
                 move_name = "Leer"
-            self._calc_damages_from_move(pkmn_db.move_db.get_move(move_name))
+            self._calc_damages_from_move(pkmn.current_gen_info().move_db().get_move(move_name))
         finally:
             self._propagate_mimic_update = True
 
@@ -477,7 +476,7 @@ class DamageSummary(tk.Frame):
         self.attacking_stage_modifiers = attacking_stage_modifiers
         self.defending_stage_modifiers = defending_stage_modifiers
 
-        move = pkmn_db.move_db.get_move(move_name)
+        move = pkmn.current_gen_info().move_db().get_move(move_name)
         if move is None:
             raise ValueError(f"Unknown move: {move_name}")
         self.move_name_label.configure(text=move_name)
@@ -496,14 +495,14 @@ class DamageSummary(tk.Frame):
             self._calc_damages_from_move(move)
 
     def _calc_damages_from_move(self, move:data_objects.Move):
-        single_attack = pkmn_damage_calc.calculate_damage(
+        single_attack = pkmn.current_gen_info().calculate_damage(
             self.attacking_mon,
             move,
             self.defending_mon,
             attacking_stage_modifiers=self.attacking_stage_modifiers,
             defending_stage_modifiers=self.defending_stage_modifiers,
         )
-        crit_attack = pkmn_damage_calc.calculate_damage(
+        crit_attack = pkmn.current_gen_info().calculate_damage(
             self.attacking_mon,
             move,
             self.defending_mon,
@@ -532,10 +531,10 @@ class DamageSummary(tk.Frame):
             crit_pct_max_damage = f"{crit_attack.max_damage / self.defending_mon.cur_stats.hp * 100:.2f}%"
             self.crit_pct_damage_range.configure(text=f"{crit_pct_min_damage} - {crit_pct_max_damage}")
 
-            kill_ranges = pkmn_damage_calc.find_kill(
+            kill_ranges = pkmn.current_gen_info().find_kill(
                 single_attack,
                 crit_attack,
-                pkmn_damage_calc.get_crit_rate(self.attacking_mon, move),
+                pkmn.current_gen_info().get_crit_rate(self.attacking_mon, move),
                 self.defending_mon.cur_stats.hp
             )
 

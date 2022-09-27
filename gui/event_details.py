@@ -3,9 +3,7 @@ from tkinter import ttk
 
 from gui import custom_tkinter, route_event_components, pkmn_components, quick_add_components, battle_summary
 from routing.route_events import EventDefinition, EventFolder, EventGroup, EventItem, InventoryEventDefinition, LearnMoveEventDefinition, RareCandyEventDefinition, TrainerEventDefinition, VitaminEventDefinition
-from routing.router import Router
 from utils.constants import const
-import pkmn.pkmn_db as pkmn_db
 
 
 class EventDetails(tk.Frame):

@@ -16,6 +16,9 @@ class MinBattlesDB:
                 if ext != ".json":
                     continue
                 self.data.append(name)
+    
+    def get_dir(self):
+        return self._path
 
 
 class PkmnDB:
@@ -259,15 +262,4 @@ def change_version(new_version):
         min_battles_db = MinBattlesDB(const.RB_MIN_BATTLES_DIR)
     else:
         raise ValueError(f"Unknown Pkmn Game version: {cur_version}")
-
-
-def get_min_battles_dir(version):
-    if version == const.YELLOW_VERSION:
-        return const.YELLOW_MIN_BATTLES_DIR
-    elif version == const.RED_VERSION or version == const.BLUE_VERSION:
-        return const.RB_MIN_BATTLES_DIR
-    else:
-        raise ValueError(f"Unknown Pkmn Game version: {cur_version}")
-    
-
 

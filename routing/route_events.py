@@ -1,9 +1,8 @@
 
 from typing import List
 from utils.constants import const
-from pkmn import data_objects
 from routing import route_state_objects
-from pkmn import pkmn_db
+import pkmn
 
 event_id_counter = 0
 
@@ -183,17 +182,17 @@ class EventDefinition:
 
     def get_trainer_obj(self):
         if self._trainer_obj is None and self.trainer_def is not None:
-            self._trainer_obj = pkmn_db.trainer_db.get_trainer(self.trainer_def.trainer_name)
+            self._trainer_obj = pkmn.current_gen_info().trainer_db().get_trainer(self.trainer_def.trainer_name)
             if self._trainer_obj is None:
-                raise ValueError(f"Could not find trainer object for trainer named: '{self.trainer_def.trainer_name}', from trainer_db, loaded from: '{pkmn_db.trainer_db._path}'")
+                raise ValueError(f"Could not find trainer object for trainer named: '{self.trainer_def.trainer_name}', from trainer_db, loaded from: '{pkmn.current_gen_info().trainer_db()._path}'")
         return self._trainer_obj
     
     def get_wild_pkmn(self):
         if self._wild_pkmn is None and self.wild_pkmn_info is not None:
             if self.wild_pkmn_info.trainer_pkmn:
-                self._wild_pkmn = pkmn_db.pkmn_db.create_trainer_pkmn(self.wild_pkmn_info.name, self.wild_pkmn_info.level)
+                self._wild_pkmn = pkmn.current_gen_info().pkmn_db().create_trainer_pkmn(self.wild_pkmn_info.name, self.wild_pkmn_info.level)
             else:
-                self._wild_pkmn = pkmn_db.pkmn_db.create_wild_pkmn(self.wild_pkmn_info.name, self.wild_pkmn_info.level)
+                self._wild_pkmn = pkmn.current_gen_info().pkmn_db().create_wild_pkmn(self.wild_pkmn_info.name, self.wild_pkmn_info.level)
         return self._wild_pkmn
     
     def get_pokemon_list(self):

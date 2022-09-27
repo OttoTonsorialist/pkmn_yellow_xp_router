@@ -2,7 +2,7 @@ import math
 from typing import Dict, Tuple
 
 from pkmn.data_objects import BadgeList, EnemyPkmn, Move, PokemonSpecies, StageModifiers, StatBlock
-from pkmn import pkmn_db
+import pkmn
 from utils.constants import const
 
 MIN_RANGE = 217
@@ -177,7 +177,7 @@ def _percent_rolls_kill_recursive(
 
 
 def get_crit_rate(pkmn:EnemyPkmn, move:Move):
-    crit_numerator = int(pkmn.base_stat_block.speed / 2)
+    crit_numerator = int(pkmn.base_stats.speed / 2)
     if move.attack_flavor == const.FLAVOR_HIGH_CRIT:
         crit_numerator *= 8
     
@@ -271,8 +271,8 @@ def calculate_damage(
     attacking_battle_stats = attacking_pkmn.get_battle_stats(attacking_stage_modifiers, is_crit=is_crit)
     defending_battle_stats = defending_pkmn.get_battle_stats(defending_stage_modifiers, is_crit=is_crit)
 
-    attacking_species = pkmn_db.pkmn_db.get_pkmn(attacking_pkmn.name)
-    defending_species = pkmn_db.pkmn_db.get_pkmn(defending_pkmn.name)
+    attacking_species = pkmn.current_gen_info().pkmn_db().get_pkmn(attacking_pkmn.name)
+    defending_species = pkmn.current_gen_info().pkmn_db().get_pkmn(defending_pkmn.name)
     first_type_effectiveness = const.TYPE_CHART.get(move.move_type).get(defending_species.first_type)
     second_type_effectiveness = None
     if defending_species.first_type != defending_species.second_type:

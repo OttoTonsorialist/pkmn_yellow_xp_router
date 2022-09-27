@@ -1,103 +1,17 @@
 import copy
+from typing import Tuple
 
 from utils.constants import const
 import pkmn.pkmn_utils as pkmn_utils
 
 
 class BadgeList:
-    def __init__(self, boulder=False, cascade=False, thunder=False, rainbow=False, soul=False, marsh=False, volcano=False, earth=False):
-        self.boulder = boulder
-        self.cascade = cascade
-        self.thunder = thunder
-        self.rainbow = rainbow
-        self.soul = soul
-        self.marsh = marsh
-        self.volcano = volcano
-        self.earth = earth
-    
     def award_badge(self, trainer_name):
-        reward = const.BADGE_REWARDS.get(trainer_name)
-        result = self.copy(self)
-        if reward == const.BOULDER_BADGE:
-            result.boulder = True
-        elif reward == const.CASCADE_BADGE:
-            result.cascade = True
-        elif reward == const.THUNDER_BADGE:
-            result.thunder = True
-        elif reward == const.RAINDBOW_BADGE:
-            result.rainbow = True
-        elif reward == const.SOUL_BADGE:
-            result.soul = True
-        elif reward == const.MARSH_BADGE:
-            result.marsh = True
-        elif reward == const.VOLCANO_BADGE:
-            result.volcano = True
-        elif reward == const.EARTH_BADGE:
-            result.earth = True
-        else:
-            # no need to hold on to a copy wastefully if no badge was awarded
-            return self
-        
-        return result
+        raise NotImplementedError()
     
-    @staticmethod
-    def copy(bl):
-        if not isinstance(bl, BadgeList):
-            raise ValueError(f"Can only copy BadgeList from BadgeList, not {type(bl)}")
-        return BadgeList(
-            boulder=bl.boulder,
-            cascade=bl.cascade,
-            thunder=bl.thunder,
-            rainbow=bl.rainbow,
-            soul=bl.soul,
-            marsh=bl.marsh,
-            volcano=bl.volcano,
-            earth=bl.earth
-        )
+    def to_string(self, verbose=False) -> str:
+        raise NotImplementedError()
     
-    def to_string(self, verbose=False):
-        if not verbose:
-            result = []
-            if self.boulder:
-                result.append("Boulder")
-            if self.cascade:
-                result.append("Cascade")
-            if self.thunder:
-                result.append("Thunder")
-            if self.rainbow:
-                result.append("Rainbow")
-            if self.soul:
-                result.append("Soul")
-            if self.marsh:
-                result.append("Marsh")
-            if self.volcano:
-                result.append("Volcano")
-            if self.earth:
-                result.append("Earth")
-
-            return "Badges: " + ", ".join(result)
-        else:
-            return f"Boulder: {self.boulder}, Cascade: {self.cascade}, Thunder: {self.thunder}, Rainbow: {self.rainbow}, Soul: {self.soul}, Marsh: {self.marsh}, Volcano: {self.volcano}, Earth: {self.earth}"
-    
-    def __repr__(self):
-        return self.to_string(verbose=True)
-    
-    def __eq__(self, other):
-        if not isinstance(other, BadgeList):
-            return False
-        
-        return (
-            self.boulder == other.boulder and
-            self.cascade == other.cascade and
-            self.thunder == other.thunder and
-            self.rainbow == other.rainbow and
-            self.soul == other.soul and
-            self.marsh == other.marsh and
-            self.volcano == other.volcano and
-            self.earth == other.earth
-        )
-
-
 class StageModifiers:
     def __init__(self,
         attack=0, defense=0, speed=0, special=0, accuracy=0, evasion=0,
@@ -136,12 +50,11 @@ class StageModifiers:
 
         return result
     
+    def _get_stat_mod(self, move_name) -> Tuple[str, int]:
+        raise NotImplementedError()
+    
     def after_move(self, move_name):
-        # NOTE: assumes move always successfully modifies the stat in question
-        stat_mod = const.STAT_INCREASE_MOVES.get(move_name)
-        if stat_mod is None:
-            stat_mod = const.STAT_DECREASE_MOVES.get(move_name)
-        
+        stat_mod = self._get_stat_mod(move_name)
         if stat_mod is None:
             return self
         
@@ -209,7 +122,7 @@ class StageModifiers:
 
 
 class StatBlock:
-    def __init__(self, hp, attack, defense, speed, special, is_stat_xp=False):
+    def __init__(self, hp, attack, defense, special_attack, special_defense, speed, is_stat_xp=False):
         self._is_stat_xp = is_stat_xp
 
         if not is_stat_xp:
@@ -217,13 +130,15 @@ class StatBlock:
             self.attack = attack
             self.defense = defense
             self.speed = speed
-            self.special = special
+            self.special_attack = special_attack
+            self.special_defense = special_defense
         else:
             self.hp = min(hp, pkmn_utils.STAT_XP_CAP)
             self.attack = min(attack, pkmn_utils.STAT_XP_CAP)
             self.defense = min(defense, pkmn_utils.STAT_XP_CAP)
             self.speed = min(speed, pkmn_utils.STAT_XP_CAP)
-            self.special = min(special, pkmn_utils.STAT_XP_CAP)
+            self.special_attack = min(special_attack, pkmn_utils.STAT_XP_CAP)
+            self.special_defense = min(special_defense, pkmn_utils.STAT_XP_CAP)
     
     def add(self, other):
         if not isinstance(other, StatBlock):
@@ -233,7 +148,8 @@ class StatBlock:
             self.attack + other.attack,
             self.defense + other.defense,
             self.speed + other.speed,
-            self.special + other.special,
+            self.special_attack + other.special_attack,
+            self.special_defense + other.special_defense,
             is_stat_xp=self._is_stat_xp
         )
     
@@ -245,7 +161,8 @@ class StatBlock:
             self.attack - other.attack,
             self.defense - other.defense,
             self.speed - other.speed,
-            self.special - other.special,
+            self.special_attack - other.special_attack,
+            self.special_defense - other.special_defense,
             is_stat_xp=self._is_stat_xp
         )
     
@@ -255,7 +172,8 @@ class StatBlock:
             const.ATK: self.attack,
             const.DEF: self.defense,
             const.SPE: self.speed,
-            const.SPC: self.special,
+            const.SPA: self.special_attack,
+            const.SPD: self.special_defense,
         }
     
     @staticmethod
@@ -264,8 +182,9 @@ class StatBlock:
             raw_dict[const.HP],
             raw_dict[const.ATK],
             raw_dict[const.DEF],
+            raw_dict[const.SPA],
+            raw_dict[const.SPD],
             raw_dict[const.SPE],
-            raw_dict[const.SPC],
         )
     
     def __eq__(self, other):
@@ -277,64 +196,18 @@ class StatBlock:
             self.attack == other.attack and
             self.defense == other.defense and
             self.speed == other.speed and
-            self.special == other.special
+            self.special_attack == other.special_attack and 
+            self.special_defense == other.special_defense
         )
     
     def __repr__(self):
-        return f"hp: {self.hp}, atk: {self.attack}, def: {self.defense}, spd: {self.speed}, spc: {self.special}"
+        return f"hp: {self.hp}, atk: {self.attack}, def: {self.defense}, spa: {self.special_attack}, spd: {self.special_defense}, spe: {self.speed}"
     
     def calc_level_stats(self, level, stat_dv, stat_xp, badges:BadgeList):
-        # assume self is base stats, level is target level, stat_xp is StatBlock of stat_xp vals, badges is a BadgeList
-        return StatBlock(
-            pkmn_utils.calc_stat(self.hp, level, stat_dv.hp, stat_xp.hp, is_hp=True),
-            pkmn_utils.calc_stat(self.attack, level, stat_dv.attack, stat_xp.attack, is_badge_bosted=badges.boulder),
-            pkmn_utils.calc_stat(self.defense, level, stat_dv.defense, stat_xp.defense, is_badge_bosted=badges.thunder),
-            pkmn_utils.calc_stat(self.speed, level, stat_dv.speed, stat_xp.speed, is_badge_bosted=badges.soul),
-            pkmn_utils.calc_stat(self.special, level, stat_dv.special, stat_xp.special, is_badge_bosted=badges.volcano),
-        )
+        raise NotImplementedError()
     
     def calc_battle_stats(self, level, stat_dv, stat_xp, stage_modifiers:StageModifiers, badges:BadgeList, is_crit=False):
-        # TODO: this does not properly replicate any of the jank regarding para/burn/full heal/etc.
-        # TODO: need to add support for those stat modifiers (both intended any glitched) in the future
-
-        if is_crit:
-            # prevent all badge-boosts and stage modifiers whenever a crit occurs
-            # by just pretending you don't have any of either
-            badges = BadgeList()
-            stage_modifiers = StageModifiers(
-                accuracy=stage_modifiers.accuracy_stage,
-                evasion=stage_modifiers.evasion_stage
-            )
-
-        # create a result object, to populate
-        result = StatBlock(
-            pkmn_utils.calc_stat(self.hp, level, stat_dv.hp, stat_xp.hp, is_hp=True),
-            0, 0, 0, 0
-        )
-
-        # note, important to apply stage modifier *first*, then any badge boosts
-        # Badge boost counts are properly reset upon stage modification, so any listed are from other stats being boosted after the stage modifier
-        result.attack = pkmn_utils.calc_battle_stat(self.attack, level, stat_dv.attack, stat_xp.attack, stage_modifiers.attack_stage, is_badge_boosted=badges.boulder)
-        if badges.boulder and stage_modifiers.attack_badge_boosts != 0:
-            for _ in range(stage_modifiers.attack_badge_boosts):
-                result.attack = pkmn_utils.badge_boost_single_stat(result.attack)
-
-        result.defense = pkmn_utils.calc_battle_stat(self.defense, level, stat_dv.defense, stat_xp.defense, stage_modifiers.defense_stage, is_badge_boosted=badges.thunder)
-        if badges.thunder and stage_modifiers.defense_badge_boosts != 0:
-            for _ in range(stage_modifiers.defense_badge_boosts):
-                result.defense = pkmn_utils.badge_boost_single_stat(result.defense)
-
-        result.speed = pkmn_utils.calc_battle_stat(self.speed, level, stat_dv.speed, stat_xp.speed, stage_modifiers.speed_stage, is_badge_boosted=badges.soul)
-        if badges.soul and stage_modifiers.speed_badge_boosts != 0:
-            for _ in range(stage_modifiers.speed_badge_boosts):
-                result.speed = pkmn_utils.badge_boost_single_stat(result.speed)
-
-        result.special = pkmn_utils.calc_battle_stat(self.special, level, stat_dv.special, stat_xp.special, stage_modifiers.special_stage, is_badge_boosted=badges.volcano)
-        if badges.volcano and stage_modifiers.special_badge_boosts != 0:
-            for _ in range(stage_modifiers.special_badge_boosts):
-                result.special = pkmn_utils.badge_boost_single_stat(result.special)
-
-        return result
+        raise NotImplementedError()
 
 
 class PokemonSpecies:
@@ -349,7 +222,7 @@ class PokemonSpecies:
             raw_dict[const.BASE_HP_KEY],
             raw_dict[const.BASE_ATK_KEY],
             raw_dict[const.BASE_DEF_KEY],
-            raw_dict[const.BASE_SPD_KEY],
+            raw_dict[const.BASE_SPE_KEY],
             raw_dict[const.BASE_SPC_KEY],
         )
 
@@ -363,8 +236,9 @@ class PokemonSpecies:
             const.BASE_HP_KEY: self.stats.hp,
             const.BASE_ATK_KEY: self.stats.attack,
             const.BASE_DEF_KEY: self.stats.defense,
-            const.BASE_SPD_KEY: self.stats.speed,
-            const.BASE_SPC_KEY: self.stats.special,
+            const.BASE_SPE_KEY: self.stats.speed,
+            const.BASE_SPA_KEY: self.stats.special_attack,
+            const.BASE_SPD_KEY: self.stats.special_defense,
             const.BASE_XP_KEY: self.base_xp,
             const.INITIAL_MOVESET_KEY: self.initial_moves,
             const.LEARNED_MOVESET_KEY: self.levelup_moves,

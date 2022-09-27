@@ -9,10 +9,10 @@ from gui import custom_tkinter, route_event_components, pkmn_components, quick_a
 from gui.event_details import EventDetails
 from utils.constants import const
 from utils.config_manager import config
-import pkmn.pkmn_db as pkmn_db
+from utils import route_one_utils
+import pkmn
 from routing.route_events import EventDefinition, EventFolder, EventGroup, EventItem, InventoryEventDefinition, TrainerEventDefinition, WildPkmnEventDefinition
 import routing.router as router
-from utils import route_one_utils
 
 
 class Main(tk.Tk):
@@ -670,21 +670,18 @@ class NewRouteWindow(custom_tkinter.Popup):
 
     def _pkmn_version_callback(self, *args, **kwargs):
         # TODO: gross! ugly! slow! fix later! reloading entire db from disk every time we change this dropdown value :/
-        pkmn_db.change_version(self.pkmn_version.get())
+        pkmn.change_version(self.pkmn_version.get())
         # now that we've loaded the right version, repopulate the pkmn selector just in case
-        self.solo_selector.new_values(pkmn_db.pkmn_db.get_filtered_names(filter_val=self.pkmn_filter.get().strip()))
-        self.min_battles_selector.new_values([const.EMPTY_ROUTE_NAME] + pkmn_db.min_battles_db.data)
+        self.solo_selector.new_values(pkmn.current_gen_info().pkmn_db().get_filtered_names(filter_val=self.pkmn_filter.get().strip()))
+        self.min_battles_selector.new_values([const.EMPTY_ROUTE_NAME] + pkmn.current_gen_info().min_battles_db().data)
 
     def _pkmn_filter_callback(self, *args, **kwargs):
-        self.solo_selector.new_values(pkmn_db.pkmn_db.get_filtered_names(filter_val=self.pkmn_filter.get().strip()))
+        self.solo_selector.new_values(pkmn.current_gen_info().pkmn_db().get_filtered_names(filter_val=self.pkmn_filter.get().strip()))
     
     def _custom_dvs_callback(self, *args, **kwargs):
-        print("boop")
         if not self.max_dvs_flag.get():
-            print("ollo")
             self.custom_dvs_frame.grid(row=5, column=0, columnspan=2)
         else:
-            print("goodbye")
             self.custom_dvs_frame.grid_forget()
     
     def _get_custom_dvs(self, *args, **kwargs):
@@ -695,7 +692,7 @@ class NewRouteWindow(custom_tkinter.Popup):
             const.HP: int(self.custom_dvs_hp.get()),
             const.ATK: int(self.custom_dvs_atk.get()),
             const.DEF: int(self.custom_dvs_def.get()),
-            const.SPD: int(self.custom_dvs_spd.get()),
+            const.SPE: int(self.custom_dvs_spd.get()),
             const.SPC: int(self.custom_dvs_spc.get()),
         }
     

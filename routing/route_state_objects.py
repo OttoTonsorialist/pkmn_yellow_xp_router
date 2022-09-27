@@ -1,11 +1,10 @@
 
-from distutils.log import error
-from shutil import move
 from typing import List
 from pkmn import data_objects
 from utils.constants import const
 from pkmn import pkmn_utils
-from pkmn import pkmn_db
+from pkmn import universal_utils
+import pkmn
 
     
 
@@ -52,7 +51,7 @@ class Inventory:
         if fight_reward is not None:
             # it's ok to fail to add a fight reward to your bag
             try:
-                result = result.add_item(pkmn_db.item_db.get_item(fight_reward), 1)
+                result = result.add_item(pkmn.current_gen_info().item_db().get_item(fight_reward), 1)
             except Exception:
                 pass
         return result
@@ -153,7 +152,7 @@ class SoloPokemon:
 
         if cur_xp == 0:
             # if no initial XP is defined, assume creating a new level 5 pkmn
-            self.cur_xp = pkmn_utils.level_lookups[self.species_def.growth_rate].get_xp_for_level(5)
+            self.cur_xp = universal_utils.level_lookups[self.species_def.growth_rate].get_xp_for_level(5)
         else:
             self.cur_xp = cur_xp
 
@@ -166,7 +165,7 @@ class SoloPokemon:
         else:
             self.dvs = dvs
 
-        level_info = pkmn_utils.level_lookups[self.species_def.growth_rate].get_level_info(self.cur_xp)
+        level_info = universal_utils.level_lookups[self.species_def.growth_rate].get_level_info(self.cur_xp)
         self.cur_level = level_info[0]
         self.xp_to_next_level = level_info[1]
 
@@ -197,7 +196,7 @@ class SoloPokemon:
             self.realized_stat_xp = self.realized_stat_xp.add(self.unrealized_stat_xp).add(gained_stat_xp)
             self.unrealized_stat_xp = data_objects.StatBlock(0, 0, 0, 0, 0, is_stat_xp=True)
 
-            level_info = pkmn_utils.level_lookups[self.species_def.growth_rate].get_level_info(self.cur_xp)
+            level_info = universal_utils.level_lookups[self.species_def.growth_rate].get_level_info(self.cur_xp)
             self.cur_level = level_info[0]
             self.xp_to_next_level = level_info[1]
             if const.DEBUG_MODE:
@@ -207,7 +206,7 @@ class SoloPokemon:
             print(f"Realized StatXP {self.realized_stat_xp}")
             print(f"Unrealized StatXP {self.unrealized_stat_xp}")
 
-        last_level_xp = pkmn_utils.level_lookups[self.species_def.growth_rate].get_xp_for_level(self.cur_level)
+        last_level_xp = universal_utils.level_lookups[self.species_def.growth_rate].get_xp_for_level(self.cur_level)
         self.percent_xp_to_next_level = f"{int((self.xp_to_next_level / (self.cur_xp + self.xp_to_next_level - last_level_xp)) * 100)} %"
         self.cur_stats = self.species_def.stats.calc_level_stats(self.cur_level, self.dvs, self.realized_stat_xp, badges)
     
@@ -262,7 +261,7 @@ class SoloPokemon:
                 const.HP: battle_stats.hp,
                 const.ATK: battle_stats.attack,
                 const.DEF: battle_stats.defense,
-                const.SPD: battle_stats.speed,
+                const.SPE: battle_stats.speed,
                 const.SPC: battle_stats.special,
                 const.XP: -1,
                 const.MOVES: self.move_list,
@@ -285,7 +284,7 @@ class SoloPokemon:
             unrealized_stat_xp=self.unrealized_stat_xp,
             badges=badges,
             gained_xp=enemy_pkmn.xp,
-            gained_stat_xp=enemy_pkmn.base_stat_block
+            gained_stat_xp=enemy_pkmn.base_stats
         )
     
     def rare_candy(self, badges):
@@ -414,16 +413,16 @@ class RouteState:
         else:
             consume_item = True
             try:
-                consume_item = not pkmn_db.item_db.get_item(source).is_key_item
+                consume_item = not pkmn.current_gen_info().item_db().get_item(source).is_key_item
             except:
                 pass
 
             if consume_item:
                 try:
-                    inv = self.inventory.remove_item(pkmn_db.item_db.get_item(source), 1, False)
+                    inv = self.inventory.remove_item(pkmn.current_gen_info().item_db().get_item(source), 1, False)
                 except Exception as e:
                     error_message = str(e)
-                    inv = self.inventory.remove_item(pkmn_db.item_db.get_item(source), 1, is_sale=False, force=True)
+                    inv = self.inventory.remove_item(pkmn.current_gen_info().item_db().get_item(source), 1, is_sale=False, force=True)
             else:
                 inv = self.inventory
 
@@ -442,10 +441,10 @@ class RouteState:
             new_mon = self.solo_pkmn.take_vitamin(vitamin_name, self.badges, force=True)
 
         try:
-            inv = self.inventory.remove_item(pkmn_db.item_db.get_item(vitamin_name), 1, False)
+            inv = self.inventory.remove_item(pkmn.current_gen_info().item_db().get_item(vitamin_name), 1, False)
         except Exception as e:
             error_message.append(str(e))
-            inv = self.inventory.remove_item(pkmn_db.item_db.get_item(vitamin_name), 1, False, force=True)
+            inv = self.inventory.remove_item(pkmn.current_gen_info().item_db().get_item(vitamin_name), 1, False, force=True)
 
         return RouteState(new_mon, self.badges, inv), ', '.join(error_message)
 
@@ -453,10 +452,10 @@ class RouteState:
         error_message = ""
 
         try:
-            inv = self.inventory.remove_item(pkmn_db.item_db.get_item(const.RARE_CANDY), 1, False)
+            inv = self.inventory.remove_item(pkmn.current_gen_info().item_db().get_item(const.RARE_CANDY), 1, False)
         except Exception as e:
             error_message = str(e)
-            inv = self.inventory.remove_item(pkmn_db.item_db.get_item(const.RARE_CANDY), 1, False, force=True)
+            inv = self.inventory.remove_item(pkmn.current_gen_info().item_db().get_item(const.RARE_CANDY), 1, False, force=True)
 
         return RouteState(
             self.solo_pkmn.rare_candy(self.badges),
@@ -469,17 +468,17 @@ class RouteState:
         return RouteState(
             self.solo_pkmn.defeat_pkmn(enemy_pkmn, new_badges),
             new_badges,
-            self.inventory.defeat_trainer(pkmn_db.trainer_db.get_trainer(trainer_name))
+            self.inventory.defeat_trainer(pkmn.current_gen_info().trainer_db().get_trainer(trainer_name))
         ), ""
     
     def add_item(self, item_name, amount, is_purchase):
         error_message = ""
 
         try:
-            inv = self.inventory.add_item(pkmn_db.item_db.get_item(item_name), amount, is_purchase)
+            inv = self.inventory.add_item(pkmn.current_gen_info().item_db().get_item(item_name), amount, is_purchase)
         except Exception as e:
             error_message = str(e)
-            inv = self.inventory.add_item(pkmn_db.item_db.get_item(item_name), amount, is_purchase, force=True)
+            inv = self.inventory.add_item(pkmn.current_gen_info().item_db().get_item(item_name), amount, is_purchase, force=True)
 
         return RouteState(self.solo_pkmn, self.badges, inv), error_message
 
@@ -487,9 +486,9 @@ class RouteState:
         error_message = ""
 
         try:
-            inv = self.inventory.remove_item(pkmn_db.item_db.get_item(item_name), amount, is_purchase)
+            inv = self.inventory.remove_item(pkmn.current_gen_info().item_db().get_item(item_name), amount, is_purchase)
         except Exception as e:
             error_message = str(e)
-            inv = self.inventory.remove_item(pkmn_db.item_db.get_item(item_name), amount, is_purchase, force=True)
+            inv = self.inventory.remove_item(pkmn.current_gen_info().item_db().get_item(item_name), amount, is_purchase, force=True)
 
         return RouteState(self.solo_pkmn, self.badges, inv), error_message

@@ -4,7 +4,7 @@ import json
 
 from utils.constants import const
 from pkmn import data_objects
-from pkmn import pkmn_db
+import pkmn
 from utils import io_utils
 from routing import route_events
 from routing import route_state_objects
@@ -32,7 +32,7 @@ class Router:
     
     def _change_version(self, new_version):
         self.pkmn_version = new_version
-        pkmn_db.change_version(self.pkmn_version)
+        pkmn.change_version(self.pkmn_version)
     
     def get_event_obj(self, event_id):
         return self.event_lookup.get(event_id, self.event_item_lookup.get(event_id))
@@ -43,7 +43,7 @@ class Router:
         return self.init_route_state
     
     def set_solo_pkmn(self, pkmn_name, level_up_moves=None, custom_dvs=None):
-        pkmn_base = pkmn_db.pkmn_db.get_pkmn(pkmn_name)
+        pkmn_base = pkmn.current_gen_info().pkmn_db().get_pkmn(pkmn_name)
         if pkmn_base is None:
             raise ValueError(f"Could not find base stats for Pokemon: {pkmn_name}")
         
@@ -54,7 +54,7 @@ class Router:
                 custom_dvs[const.HP],
                 custom_dvs[const.ATK],
                 custom_dvs[const.DEF],
-                custom_dvs[const.SPD],
+                custom_dvs[const.SPE],
                 custom_dvs[const.SPC]
             )
         
@@ -118,7 +118,7 @@ class Router:
             self.event_item_lookup[cur_item.group_id] = cur_item
     
     def add_area(self, area_name, insert_before=None, dest_folder_name=const.ROOT_FOLDER_NAME):
-        trainers_to_add = pkmn_db.trainer_db.get_valid_trainers(trainer_loc=area_name, defeated_trainers=self.defeated_trainers)
+        trainers_to_add = pkmn.current_gen_info().trainer_db().get_valid_trainers(trainer_loc=area_name, defeated_trainers=self.defeated_trainers)
         if len(trainers_to_add) == 0:
             return
 
@@ -311,7 +311,7 @@ class Router:
     
     def load(self, name, min_battles=False, min_battles_version=const.YELLOW_VERSION):
         if min_battles:
-            final_path = os.path.join(pkmn_db.get_min_battles_dir(min_battles_version), f"{name}.json")
+            final_path = os.path.join(pkmn.current_gen_info().min_battles_db().get_dir(min_battles_version), f"{name}.json")
         else:
             final_path = os.path.join(const.SAVED_ROUTES_DIR, f"{name}.json")
             if not os.path.exists(final_path):
