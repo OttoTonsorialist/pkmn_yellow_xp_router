@@ -1,6 +1,5 @@
 import tkinter as tk
 import tkinter.font
-import datetime
 from typing import List
 
 from gui import custom_tkinter
@@ -11,6 +10,7 @@ from pkmn.router import Router
 from utils.constants import const
 from pkmn import pkmn_damage_calc
 from pkmn import pkmn_db
+from utils.config_manager import config
 
 
 class BattleSummary(tk.Frame):
@@ -229,31 +229,31 @@ class MonPairSummary(tk.Frame):
         bold_font = tkinter.font.nametofont("TkDefaultFont").copy()
         bold_font.configure(weight="bold")
 
-        self.left_mon_label_frame = tk.Frame(self, background=const.HEADER_BG_COLOR)
+        self.left_mon_label_frame = tk.Frame(self, background=config.get_header_color())
         self.left_mon_label_frame.grid(row=0, column=0, columnspan=4, sticky=tk.EW, padx=2, pady=2)
 
-        self.left_attacking_mon = tk.Label(self.left_mon_label_frame, text="", background=const.HEADER_BG_COLOR)
+        self.left_attacking_mon = tk.Label(self.left_mon_label_frame, text="", background=config.get_header_color())
         self.left_attacking_mon.grid(row=0, column=1)
-        self.left_verb = tk.Label(self.left_mon_label_frame, text="", background=const.HEADER_BG_COLOR, font=bold_font)
+        self.left_verb = tk.Label(self.left_mon_label_frame, text="", background=config.get_header_color(), font=bold_font)
         self.left_verb.grid(row=0, column=2)
-        self.left_defending_mon = tk.Label(self.left_mon_label_frame, text="", background=const.HEADER_BG_COLOR)
+        self.left_defending_mon = tk.Label(self.left_mon_label_frame, text="", background=config.get_header_color())
         self.left_defending_mon.grid(row=0, column=3)
 
         self.left_mon_label_frame.columnconfigure(0, weight=1, uniform="left_col_group")
         self.left_mon_label_frame.columnconfigure(4, weight=1, uniform="left_col_group")
 
-        self.divider = tk.Frame(self, background=const.IMPORTANT_COLOR, width=4)
+        self.divider = tk.Frame(self, background=config.get_divider_color(), width=4)
         self.divider.grid(row=0, column=4, rowspan=2, sticky=tk.NS)
         self.divider.grid_propagate(0)
 
-        self.right_mon_label_frame = tk.Frame(self, background=const.HEADER_BG_COLOR)
+        self.right_mon_label_frame = tk.Frame(self, background=config.get_header_color())
         self.right_mon_label_frame.grid(row=0, column=5, columnspan=4, sticky=tk.EW, padx=2, pady=2)
 
-        self.right_attacking_mon = tk.Label(self.right_mon_label_frame, text="", background=const.HEADER_BG_COLOR)
+        self.right_attacking_mon = tk.Label(self.right_mon_label_frame, text="", background=config.get_header_color())
         self.right_attacking_mon.grid(row=0, column=1)
-        self.right_verb = tk.Label(self.right_mon_label_frame, text="", background=const.HEADER_BG_COLOR, font=bold_font)
+        self.right_verb = tk.Label(self.right_mon_label_frame, text="", background=config.get_header_color(), font=bold_font)
         self.right_verb.grid(row=0, column=2)
-        self.right_defending_mon = tk.Label(self.right_mon_label_frame, text="", background=const.HEADER_BG_COLOR)
+        self.right_defending_mon = tk.Label(self.right_mon_label_frame, text="", background=config.get_header_color())
         self.right_defending_mon.grid(row=0, column=3)
 
         self.right_mon_label_frame.columnconfigure(0, weight=1, uniform="right_col_group")
@@ -419,15 +419,15 @@ class DamageSummary(tk.Frame):
 
         self.row_idx = 0
 
-        self.header = tk.Frame(self, background=const.MOVE_BG_COLOR)
+        self.header = tk.Frame(self, background=config.get_primary_color())
         self.header.grid(row=self.row_idx, column=0, sticky=tk.NSEW)
         self.header.columnconfigure(0, weight=1)
         self.row_idx += 1
 
-        self.move_name_label = tk.Label(self.header, background=const.MOVE_BG_COLOR)
+        self.move_name_label = tk.Label(self.header, background=config.get_primary_color())
         self.mimic_dropdown = custom_tkinter.SimpleOptionMenu(self.header, [""], callback=self._mimic_callback, width=15)
 
-        temp_bg_color = "white"
+        temp_bg_color = config.get_contrast_color()
         self.range_frame = tk.Frame(self, background=temp_bg_color)
         self.range_frame.grid(row=self.row_idx, column=0, sticky=tk.NSEW)
         self.range_frame.columnconfigure(0, weight=1)
@@ -442,26 +442,26 @@ class DamageSummary(tk.Frame):
         self.crit_pct_damage_range = tk.Label(self.range_frame, background=temp_bg_color)
         self.crit_pct_damage_range.grid(row=1, column=1, sticky=tk.E)
 
-        self.kill_frame = tk.Frame(self, background=const.STAT_BG_COLOR)
+        self.kill_frame = tk.Frame(self, background=config.get_secondary_color())
         self.kill_frame.grid(row=self.row_idx, column=0, sticky=tk.NSEW)
         self.rowconfigure(self.row_idx, weight=1)
         self.row_idx += 1
 
-        self.num_to_kill = tk.Label(self.kill_frame, justify=tk.LEFT, background=const.STAT_BG_COLOR)
+        self.num_to_kill = tk.Label(self.kill_frame, justify=tk.LEFT, background=config.get_secondary_color())
         self.num_to_kill.grid(row=0, column=0, sticky=tk.NSEW)
     
     def flag_as_best_move(self, is_enemy=False):
         if is_enemy:
-            color = const.SPEED_LOSS_COLOR
+            color = config.get_failure_color()
         else:
-            color = const.SPEED_WIN_COLOR
+            color = config.get_success_color()
 
         self.kill_frame.configure(background=color)
         self.num_to_kill.configure(background=color)
 
     def unflag_as_best_move(self):
-        self.kill_frame.configure(background=const.STAT_BG_COLOR)
-        self.num_to_kill.configure(background=const.STAT_BG_COLOR)
+        self.kill_frame.configure(background=config.get_secondary_color())
+        self.num_to_kill.configure(background=config.get_secondary_color())
     
     def _mimic_callback(self, *args, **kwargs):
         if self._propagate_mimic_update and self._outer_mimic_callback is not None:
@@ -536,8 +536,8 @@ class DamageSummary(tk.Frame):
             self.pct_damage_range.configure(text="")
             self.crit_damage_range.configure(text="")
             self.crit_pct_damage_range.configure(text="")
-            self.kill_frame.configure(background=const.STAT_BG_COLOR)
-            self.num_to_kill.configure(text="", background=const.STAT_BG_COLOR)
+            self.kill_frame.configure(background=config.get_secondary_color())
+            self.num_to_kill.configure(text="", background=config.get_secondary_color())
         else:
             self.damage_range.configure(text=f"{single_attack.min_damage} - {single_attack.max_damage}")
             pct_min_damage = f"{single_attack.min_damage / self.defending_mon.hp * 100:.2f}%"
@@ -571,5 +571,5 @@ class DamageSummary(tk.Frame):
 
             kill_ranges = [format_message(x) for x in kill_ranges]
 
-            self.kill_frame.configure(background=const.STAT_BG_COLOR)
-            self.num_to_kill.configure(text="\n".join(kill_ranges), background=const.STAT_BG_COLOR)
+            self.kill_frame.configure(background=config.get_secondary_color())
+            self.num_to_kill.configure(text="\n".join(kill_ranges), background=config.get_secondary_color())
