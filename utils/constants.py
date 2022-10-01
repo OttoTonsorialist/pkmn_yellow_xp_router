@@ -273,6 +273,8 @@ class Constants:
         self.CONTRAST_COLOR_KEY = "contrast_color"
         self.BACKGROUND_COLOR_KEY = "background_color"
 
+        self.CUSTOM_FONT_NAME_KEY = "custom_font_name"
+
         # not configurable, just for import events in route list
         self.IMPORTANT_COLOR = "#b3b6b7"
         # not configurable, just for the top-right indicator

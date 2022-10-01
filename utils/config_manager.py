@@ -12,6 +12,7 @@ class Config:
     DEFAULT_SECONDARY = "#f0f3f4"
     DEFAULT_CONTRAST = "white"
     DEFAULT_BACKGROUND = "#f0f0f0"
+    DEFAULT_FONT_NAME = "Segoe UI"
     def __init__(self):
         try:
             with open(const.CONFIG_PATH, 'r') as f:
@@ -31,6 +32,8 @@ class Config:
         self._secondary_color = raw.get(const.SECONDARY_COLOR_KEY, self.DEFAULT_SECONDARY)
         self._contrast_color = raw.get(const.CONTRAST_COLOR_KEY, self.DEFAULT_CONTRAST)
         self._background_color = raw.get(const.BACKGROUND_COLOR_KEY, self.DEFAULT_BACKGROUND)
+
+        self._custom_font_name = raw.get(const.CUSTOM_FONT_NAME_KEY, self.DEFAULT_FONT_NAME)
     
     def _save(self):
         with open(const.CONFIG_PATH, 'w') as f:
@@ -46,7 +49,8 @@ class Config:
                 const.SECONDARY_COLOR_KEY: self._secondary_color,
                 const.CONTRAST_COLOR_KEY: self._contrast_color,
                 const.BACKGROUND_COLOR_KEY: self._background_color,
-            }, f)
+                const.CUSTOM_FONT_NAME_KEY: self._custom_font_name,
+            }, f, indent=4)
     
     def set_route_one_path(self, new_path):
         self._route_one_path = new_path
@@ -137,5 +141,12 @@ class Config:
         self._contrast_color = self.DEFAULT_CONTRAST
         self._background_color = self.DEFAULT_BACKGROUND
         self._save()
+    
+    def set_custom_font_name(self, new_name):
+        self._custom_font_name = new_name
+        self._save()
+    
+    def get_custom_font_name(self):
+        return self._custom_font_name
 
 config = Config()
