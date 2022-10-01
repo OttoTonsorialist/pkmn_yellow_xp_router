@@ -3,6 +3,15 @@ import json
 from utils.constants import const
 
 class Config:
+    DEFAULT_SUCCESS = "#abebc6"
+    DEFAULT_WARNING = "#f9e79f"
+    DEFAULT_FAILURE = "#f5b7b1"
+    DEFAULT_DIVIDER = "#b3b6b7"
+    DEFAULT_HEADER = "#f6ddcc"
+    DEFAULT_PRIMARY = "#d4e6f1"
+    DEFAULT_SECONDARY = "#f0f3f4"
+    DEFAULT_CONTRAST = "white"
+    DEFAULT_BACKGROUND = "#f0f0f0"
     def __init__(self):
         try:
             with open(const.CONFIG_PATH, 'r') as f:
@@ -13,21 +22,30 @@ class Config:
         self._route_one_path = raw.get(const.CONFIG_ROUTE_ONE_PATH, "")
         self._window_geometry = raw.get(const.CONFIG_WINDOW_GEOMETRY, "")
 
-        self._success_color = raw.get(const.SUCCESS_COLOR_KEY, "#abebc6")
-        self._warning_color = raw.get(const.WARNING_COLOR_KEY, "#f9e79f")
-        self._failure_color = raw.get(const.FAILURE_COLOR_KEY, "#f5b7b1")
-        self._divider_color = raw.get(const.DIVIDER_COLOR_KEY, "#b3b6b7")
-        self._header_color = raw.get(const.HEADER_COLOR_KEY, "#f6ddcc")
-        self._primary_color = raw.get(const.PRIMARY_COLOR_KEY, "#f6ddcc")
-        self._secondary_color = raw.get(const.SECONDARY_COLOR_KEY, "#f6ddcc")
-        self._contrast_color = raw.get(const.CONTRAST_COLOR_KEY, "white")
-        self._background_color = raw.get(const.BACKGROUND_COLOR_KEY, "#f0f0f0")
+        self._success_color = raw.get(const.SUCCESS_COLOR_KEY, self.DEFAULT_SUCCESS)
+        self._warning_color = raw.get(const.WARNING_COLOR_KEY, self.DEFAULT_WARNING)
+        self._failure_color = raw.get(const.FAILURE_COLOR_KEY, self.DEFAULT_FAILURE)
+        self._divider_color = raw.get(const.DIVIDER_COLOR_KEY, self.DEFAULT_DIVIDER)
+        self._header_color = raw.get(const.HEADER_COLOR_KEY, self.DEFAULT_HEADER)
+        self._primary_color = raw.get(const.PRIMARY_COLOR_KEY, self.DEFAULT_PRIMARY)
+        self._secondary_color = raw.get(const.SECONDARY_COLOR_KEY, self.DEFAULT_SECONDARY)
+        self._contrast_color = raw.get(const.CONTRAST_COLOR_KEY, self.DEFAULT_CONTRAST)
+        self._background_color = raw.get(const.BACKGROUND_COLOR_KEY, self.DEFAULT_BACKGROUND)
     
     def _save(self):
         with open(const.CONFIG_PATH, 'w') as f:
             json.dump({
                 const.CONFIG_ROUTE_ONE_PATH: self._route_one_path,
                 const.CONFIG_WINDOW_GEOMETRY: self._window_geometry,
+                const.SUCCESS_COLOR_KEY: self._success_color,
+                const.WARNING_COLOR_KEY: self._warning_color,
+                const.FAILURE_COLOR_KEY: self._failure_color,
+                const.DIVIDER_COLOR_KEY: self._divider_color,
+                const.HEADER_COLOR_KEY: self._header_color,
+                const.PRIMARY_COLOR_KEY: self._primary_color,
+                const.SECONDARY_COLOR_KEY: self._secondary_color,
+                const.CONTRAST_COLOR_KEY: self._contrast_color,
+                const.BACKGROUND_COLOR_KEY: self._background_color,
             }, f)
     
     def set_route_one_path(self, new_path):
@@ -78,7 +96,7 @@ class Config:
         self._save()
     
     def set_background_color(self, new_color):
-        self._contrast_color = new_color
+        self._background_color = new_color
         self._save()
 
     def get_success_color(self):
@@ -107,5 +125,17 @@ class Config:
 
     def get_background_color(self):
         return self._background_color
+    
+    def reset_all_colors(self):
+        self._success_color = self.DEFAULT_SUCCESS
+        self._warning_color = self.DEFAULT_WARNING
+        self._failure_color = self.DEFAULT_FAILURE
+        self._divider_color = self.DEFAULT_DIVIDER
+        self._header_color = self.DEFAULT_HEADER
+        self._primary_color = self.DEFAULT_PRIMARY
+        self._secondary_color = self.DEFAULT_SECONDARY
+        self._contrast_color = self.DEFAULT_CONTRAST
+        self._background_color = self.DEFAULT_BACKGROUND
+        self._save()
 
 config = Config()

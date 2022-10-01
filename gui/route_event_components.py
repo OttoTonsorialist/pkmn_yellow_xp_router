@@ -3,6 +3,7 @@ import tkinter as tk
 from gui import custom_tkinter
 from gui.pkmn_components import EnemyPkmnTeam
 from utils.constants import const
+from utils.config_manager import config
 import pkmn.pkmn_db as pkmn_db
 from pkmn.route_events import EventDefinition, InventoryEventDefinition, LearnMoveEventDefinition, RareCandyEventDefinition, VitaminEventDefinition, WildPkmnEventDefinition
 
@@ -16,7 +17,7 @@ class EditorParams:
 
 class EventEditorBase(tk.Frame):
     def __init__(self, parent, event_button, editor_params: EditorParams, *args, **kwargs):
-        super().__init__(parent, *args, **kwargs)
+        super().__init__(parent, *args, **kwargs, bg=config.get_background_color())
         self.event_button = event_button
         self.event_button.disable()
         self.editor_params = editor_params
@@ -38,11 +39,11 @@ class NotesEditor(EventEditorBase):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
-        self._notes_label = tk.Label(self, text="Notes:")
+        self._notes_label = tk.Label(self, text="Notes:", bg=config.get_background_color())
         self._notes_label.grid(row=self._cur_row, column=0, sticky=tk.W, padx=5, pady=5)
-        self._stat_label = tk.Label(self, text="Stats with * are calculated with a badge boost", background="white")
+        self._stat_label = tk.Label(self, text="Stats with * are calculated with a badge boost", background=config.get_contrast_color())
         self._stat_label.grid(row=self._cur_row, column=1, sticky=tk.W, padx=5, pady=5)
-        self._padding_label = tk.Label(self, text="")
+        self._padding_label = tk.Label(self, text="", bg=config.get_background_color())
         self._padding_label.grid(row=self._cur_row, column=2, sticky=tk.W, padx=5, pady=5)
         self._cur_row += 1
 
@@ -72,18 +73,18 @@ class TrainerFightEditor(EventEditorBase):
 
         self.cached_defeated_trainers = self.editor_params.cur_defeated_trainers
 
-        self._trainers_by_loc_label = tk.Label(self, text="Trainer Location Filter:")
+        self._trainers_by_loc_label = tk.Label(self, text="Trainer Location Filter:", bg=config.get_background_color())
         trainer_locs = [const.ALL_TRAINERS] + sorted(pkmn_db.trainer_db.get_all_locations())
         self._trainers_by_loc = custom_tkinter.SimpleOptionMenu(self, trainer_locs, callback=self._trainer_filter_callback)
         self._trainers_by_loc_label.grid(row=self._cur_row, column=0)
         self._trainers_by_loc.grid(row=self._cur_row, column=1)
         self._cur_row += 1
 
-        self._trainers_by_class_label = tk.Label(self, text="Trainer Class Filter:")
+        self._trainers_by_class_label = tk.Label(self, text="Trainer Class Filter:", bg=config.get_background_color())
         trainer_classes = [const.ALL_TRAINERS] + sorted(pkmn_db.trainer_db.get_all_classes())
         self._trainers_by_class = custom_tkinter.SimpleOptionMenu(self, trainer_classes, callback=self._trainer_filter_callback)
 
-        self._trainer_names_label = tk.Label(self, text="Trainer Name:")
+        self._trainer_names_label = tk.Label(self, text="Trainer Name:", bg=config.get_background_color())
         self._trainer_names = custom_tkinter.SimpleOptionMenu(self, pkmn_db.trainer_db.get_valid_trainers(), callback=self._trainer_name_callback)
         self._trainer_team = EnemyPkmnTeam(self)
 
@@ -163,14 +164,14 @@ class VitaminEditor(EventEditorBase):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
-        self._vitamin_label = tk.Label(self, text="Vitamin Type:")
+        self._vitamin_label = tk.Label(self, text="Vitamin Type:", bg=config.get_background_color())
         self._vitamin_types = custom_tkinter.SimpleOptionMenu(self, const.VITAMIN_TYPES)
         self._vitamin_label.grid(row=self._cur_row, column=0)
         self._vitamin_types.grid(row=self._cur_row, column=1)
         self._cur_row += 1
 
-        self._item_amount_label = tk.Label(self, text="Num Vitamins:")
-        self._item_amount = custom_tkinter.AmountEntry(self, callback=self._amount_update)
+        self._item_amount_label = tk.Label(self, text="Num Vitamins:", bg=config.get_background_color())
+        self._item_amount = custom_tkinter.AmountEntry(self, callback=self._amount_update, bg=config.get_background_color())
         self._item_amount_label.grid(row=self._cur_row, column=0)
         self._item_amount.grid(row=self._cur_row, column=1)
         self._cur_row += 1
@@ -199,8 +200,8 @@ class RareCandyEditor(EventEditorBase):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.event_button.enable()
-        self._item_amount_label = tk.Label(self, text="Num Rare Candies:")
-        self._item_amount = custom_tkinter.AmountEntry(self, callback=self._amount_update)
+        self._item_amount_label = tk.Label(self, text="Num Rare Candies:", bg=config.get_background_color())
+        self._item_amount = custom_tkinter.AmountEntry(self, callback=self._amount_update, bg=config.get_background_color())
         self._item_amount_label.grid(row=self._cur_row, column=0)
         self._item_amount.grid(row=self._cur_row, column=1)
         self._cur_row += 1
@@ -228,15 +229,15 @@ class LearnMoveEditor(EventEditorBase):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
-        self._source_label = tk.Label(self)
+        self._source_label = tk.Label(self, bg=config.get_background_color())
         self._source_label.grid(row=self._cur_row, column=0, columnspan=2)
         self._cur_row += 1
 
-        self._move_name_label = tk.Label(self)
+        self._move_name_label = tk.Label(self, bg=config.get_background_color())
         self._move_name_label.grid(row=self._cur_row, column=0, columnspan=2)
         self._cur_row += 1
 
-        self._destination_label = tk.Label(self, text="Move Destination:")
+        self._destination_label = tk.Label(self, text="Move Destination:", bg=config.get_background_color())
         self._destination = custom_tkinter.SimpleOptionMenu(self, [None])
         self._destination_label.grid(row=self._cur_row, column=0)
         self._destination.grid(row=self._cur_row, column=1)
@@ -246,17 +247,17 @@ class LearnMoveEditor(EventEditorBase):
         self._move = None
         self._level = const.LEVEL_ANY
 
-        self._item_type_label = tk.Label(self, text="Item Type:")
+        self._item_type_label = tk.Label(self, text="Item Type:", bg=config.get_background_color())
         self._item_type_selector = custom_tkinter.SimpleOptionMenu(self, [const.ITEM_TYPE_ALL_ITEMS, const.ITEM_TYPE_BACKPACK_ITEMS, const.ITEM_TYPE_TM], callback=self._item_filter_callback)
         self._item_type_row = self._cur_row
         self._cur_row += 1
 
-        self._item_filter_label = tk.Label(self, text="Item Name Filter:")
+        self._item_filter_label = tk.Label(self, text="Item Name Filter:", bg=config.get_background_color())
         self._item_filter = custom_tkinter.SimpleEntry(self, callback=self._item_filter_callback)
         self._item_filter_row = self._cur_row
         self._cur_row += 1
 
-        self._item_selector_label = tk.Label(self, text="Move:")
+        self._item_selector_label = tk.Label(self, text="Move:", bg=config.get_background_color())
         self._item_selector = custom_tkinter.SimpleOptionMenu(self, [None], callback=self._move_selected_callback)
         self._item_selector_row = self._cur_row
         self._cur_row += 1
@@ -374,31 +375,31 @@ class WildPkmnEditor(EventEditorBase):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
-        self._pkmn_label = tk.Label(self, text="Wild Pokemon Type:")
+        self._pkmn_label = tk.Label(self, text="Wild Pokemon Type:", bg=config.get_background_color())
         self._pkmn_types = custom_tkinter.SimpleOptionMenu(self, pkmn_db.pkmn_db.get_all_names())
         self._pkmn_label.grid(row=self._cur_row, column=0)
         self._pkmn_types.grid(row=self._cur_row, column=1)
         self._cur_row += 1
 
-        self._pkmn_filter_label = tk.Label(self, text="Wild Pokemon Type Filter:")
+        self._pkmn_filter_label = tk.Label(self, text="Wild Pokemon Type Filter:", bg=config.get_background_color())
         self._pkmn_filter = custom_tkinter.SimpleEntry(self, callback=self._pkmn_filter_callback)
         self._pkmn_filter_label.grid(row=self._cur_row, column=0)
         self._pkmn_filter.grid(row=self._cur_row, column=1)
         self._cur_row += 1
 
-        self._pkmn_level_label = tk.Label(self, text="Wild Pokemon Level:")
-        self._pkmn_level = custom_tkinter.AmountEntry(self, callback=self._update_button_status)
+        self._pkmn_level_label = tk.Label(self, text="Wild Pokemon Level:", bg=config.get_background_color())
+        self._pkmn_level = custom_tkinter.AmountEntry(self, callback=self._update_button_status, bg=config.get_background_color())
         self._pkmn_level_label.grid(row=self._cur_row, column=0)
         self._pkmn_level.grid(row=self._cur_row, column=1)
         self._cur_row += 1
 
-        self._quantity_label = tk.Label(self, text="Num Pkmn:")
-        self._quantity = custom_tkinter.AmountEntry(self, callback=self._update_button_status)
+        self._quantity_label = tk.Label(self, text="Num Pkmn:", bg=config.get_background_color())
+        self._quantity = custom_tkinter.AmountEntry(self, callback=self._update_button_status, bg=config.get_background_color())
         self._quantity_label.grid(row=self._cur_row, column=0)
         self._quantity.grid(row=self._cur_row, column=1)
         self._cur_row += 1
 
-        self._pkmn_trainer_flag = custom_tkinter.CheckboxLabel(self, text="Is Trainer Pkmn?")
+        self._pkmn_trainer_flag = custom_tkinter.CheckboxLabel(self, text="Is Trainer Pkmn?", bg=config.get_background_color())
         self._pkmn_trainer_flag.grid(row=self._cur_row, column=0, columnspan=2)
         self._cur_row += 1
     
@@ -460,32 +461,32 @@ class InventoryEventEditor(EventEditorBase):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
-        self._item_type_label = tk.Label(self, text="Item Type:")
+        self._item_type_label = tk.Label(self, text="Item Type:", bg=config.get_background_color())
         self._item_type_selector = custom_tkinter.SimpleOptionMenu(self, const.ITEM_TYPES, callback=self._item_filter_callback)
         self._item_type_row = self._cur_row
         self._cur_row += 1
 
-        self._item_mart_label = tk.Label(self, text="Mart:")
+        self._item_mart_label = tk.Label(self, text="Mart:", bg=config.get_background_color())
         self._item_mart_selector = custom_tkinter.SimpleOptionMenu(self, [const.ITEM_TYPE_ALL_ITEMS] + sorted(list(pkmn_db.item_db.mart_items.keys())), callback=self._item_filter_callback)
         self._item_mart_row = self._cur_row
         self._cur_row += 1
 
-        self._item_filter_label = tk.Label(self, text="Item Name Filter:")
+        self._item_filter_label = tk.Label(self, text="Item Name Filter:", bg=config.get_background_color())
         self._item_filter = custom_tkinter.SimpleEntry(self, callback=self._item_filter_callback)
         self._item_filter_row = self._cur_row
         self._cur_row += 1
 
-        self._item_selector_label = tk.Label(self, text="Item:")
+        self._item_selector_label = tk.Label(self, text="Item:", bg=config.get_background_color())
         self._item_selector = custom_tkinter.SimpleOptionMenu(self, pkmn_db.item_db.get_filtered_names(), callback=self._item_selector_callback)
         self._item_selector_row = self._cur_row
         self._cur_row += 1
 
-        self._item_amount_label = tk.Label(self, text="Num Items:")
-        self._item_amount = custom_tkinter.AmountEntry(self, callback=self._item_selector_callback)
+        self._item_amount_label = tk.Label(self, text="Num Items:", bg=config.get_background_color())
+        self._item_amount = custom_tkinter.AmountEntry(self, callback=self._item_selector_callback, bg=config.get_background_color())
         self._item_amount_row = self._cur_row
         self._cur_row += 1
 
-        self._item_cost_label = tk.Label(self, text="Total Cost:")
+        self._item_cost_label = tk.Label(self, text="Total Cost:", bg=config.get_background_color())
         self._item_cost_row = self._cur_row
         self._cur_row += 1
 

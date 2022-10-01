@@ -163,7 +163,7 @@ class InventoryViewer(tk.Frame):
         super().__init__(*args, **kwargs)
         self.config(bg=config.get_contrast_color(), padx=10, pady=10, height=150, width=250)
 
-        self._money_label = tk.Label(self, text="Current Money: ")
+        self._money_label = tk.Label(self, text="Current Money: ", bg=config.get_header_color())
         self._money_label.grid(row=0, column=0, columnspan=2)
 
         self._all_items = []
@@ -288,6 +288,7 @@ class StateViewer(tk.Frame):
 class EnemyPkmnTeam(tk.Frame):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
+        self.configure(bg=config.get_background_color())
 
         self._all_pkmn = []
 
@@ -324,19 +325,19 @@ class EnemyPkmnTeam(tk.Frame):
 
 class BadgeBoostViewer(tk.Frame):
     def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
+        super().__init__(*args, bg=config.get_background_color(), **kwargs)
 
-        self._info_frame = tk.Frame(self)
+        self._info_frame = tk.Frame(self, bg=config.get_background_color())
         self._info_frame.grid(row=0, column=0)
 
-        self._move_selector_label = tk.Label(self._info_frame, text="Setup Move: ")
+        self._move_selector_label = tk.Label(self._info_frame, text="Setup Move: ", bg=config.get_background_color())
         stat_modifier_moves = list(const.STAT_INCREASE_MOVES.keys())
         stat_modifier_moves += list(const.STAT_DECREASE_MOVES.keys())
         self._move_selector = custom_tkinter.SimpleOptionMenu(self._info_frame, stat_modifier_moves, callback=self._move_selected_callback)
         self._move_selector_label.pack()
         self._move_selector.pack()
 
-        self._badge_summary = tk.Label(self._info_frame)
+        self._badge_summary = tk.Label(self._info_frame, bg=config.get_background_color())
         self._badge_summary.pack(pady=10)
 
         self._state:route_state_objects.RouteState = None
@@ -349,12 +350,12 @@ class BadgeBoostViewer(tk.Frame):
         self._viewers = []
 
         for idx in range(NUM_SUMMARIES):
-            cur_frame = tk.Frame(self)
+            cur_frame = tk.Frame(self, bg=config.get_background_color())
             # add 1 because the 0th frame is the info frame
             cur_frame.grid(row=((idx + 1) // NUM_COLS), column=((idx + 1) % NUM_COLS), padx=3, pady=3)
 
             self._frames.append(cur_frame)
-            self._labels.append(tk.Label(cur_frame))
+            self._labels.append(tk.Label(cur_frame, bg=config.get_background_color()))
             self._viewers.append(PkmnViewer(cur_frame, stats_only=True))
     
     def _clear_all_summaries(self):
@@ -504,7 +505,7 @@ class StatColumn(tk.Frame):
 class StatExpViewer(tk.Frame):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.config(bg="white", padx=5, pady=5, height=150, width=250)
+        self.config(bg=config.get_contrast_color(), padx=5, pady=5, height=150, width=250)
         stat_labels =[
             "HP:",
             "Attack:",

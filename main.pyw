@@ -1,9 +1,10 @@
 import argparse
+from concurrent.futures.process import _system_limits_checked
 import os
 
 import tkinter as tk
 from tkinter import filedialog
-from tkinter import ANCHOR, ttk, colorchooser
+from tkinter import ANCHOR, ttk
 
 from gui import custom_tkinter, route_event_components, pkmn_components, quick_add_components
 from gui.event_details import EventDetails
@@ -30,6 +31,22 @@ class Main(tk.Tk):
         style = ttk.Style()
         style.map("Treeview", foreground=fixed_map("foreground", style), background=fixed_map("background", style))
 
+        style.layout("TNotebook", [])
+        # magic, found here: https://stackoverflow.com/a/29572789
+        style.element_create('Plain.Notebook.tab', "from", 'default')
+        style.layout("TNotebook.Tab",
+            [('Plain.Notebook.tab', {'children':
+                [('Notebook.padding', {'side': 'top', 'children':
+                    [('Notebook.focus', {'side': 'top', 'children':
+                        [('Notebook.label', {'side': 'top', 'sticky': ''})],
+                    'sticky': 'nswe'})],
+                'sticky': 'nswe'})],
+            'sticky': 'nswe'})])
+
+        style.configure("TNotebook", background=config.get_background_color())
+        style.configure("TNotebook.Tab", background=config.get_secondary_color(), borderwidth=1, bordercolor="black")
+        style.map("TNotebook.Tab", background=[("selected", config.get_primary_color())])
+
         # menu bar
         self.top_menu_bar = tk.Menu(self)
         self.config(menu=self.top_menu_bar)
@@ -39,6 +56,7 @@ class Main(tk.Tk):
         self.file_menu.add_command(label="Load Route      (Ctrl+L)", command=self.open_load_route_window)
         self.file_menu.add_command(label="Save Route       (Ctrl+S)", command=self.save_route)
         self.file_menu.add_command(label="Export Notes       (Ctrl+Shift+W)", command=self.export_notes)
+        self.file_menu.add_command(label="Config Colors       (Ctrl+Shift+D)", command=self.open_config_window)
 
         self.event_menu = tk.Menu(self.top_menu_bar, tearoff=0)
         self.event_menu.add_command(label="New Event                   (Ctrl+F)", command=self.open_new_event_window)
@@ -68,7 +86,6 @@ class Main(tk.Tk):
         self.top_row = tk.Frame(self.primary_window)
         self.top_row.pack(fill=tk.X)
         self.top_row.pack_propagate(False)
-        self.top_row.configure(background="#abebc6")
 
         self.run_status_label = tk.Label(self.top_row, text="Run Status: Valid", background=const.VALID_COLOR, anchor=tk.W, padx=10, pady=10)
         self.run_status_label.grid(row=0, column=0, sticky=tk.W)
@@ -183,6 +200,8 @@ class Main(tk.Tk):
         # route One integrations
         self.bind('<Control-E>', self.open_export_window)
         self.bind('<Control-R>', self.just_export_and_run)
+        # config integrations
+        self.bind('<Control-D>', self.open_config_window)
         # detail update function
         self.protocol("WM_DELETE_WINDOW", self._on_close)
         self.bind("<<TreeviewSelect>>", self._handle_new_selection)
@@ -362,6 +381,10 @@ class Main(tk.Tk):
 
         self.trainer_add.trainer_filter_callback()
         self.event_list.refresh()
+    
+    def open_config_window(self, *args, **kwargs):
+        if self._is_active_window():
+            self.new_event_window = ConfigWindow(self)
     
     def open_new_route_window(self, *args, **kwargs):
         if self._is_active_window():
@@ -1090,94 +1113,58 @@ class ConfigWindow(custom_tkinter.Popup):
     def __init__(self, main_window: Main, *args, **kwargs):
         super().__init__(main_window, *args, **kwargs)
         
-        self._success_color_label = tk.Label(self, text="Success Color:")
-        self._success_color_label.grid(row=0, column=0, padx=10, pady=10)
+        self._color_frame = tk.Frame(self)
+        self._color_frame.grid(row=0, column=0)
+
+        self._reset_colors_button = tk.Button(self._color_frame, text="Reset all colors", command=self._reset_all_colors)
+        self._reset_colors_button.grid(row=0, column=0, padx=5, pady=3, sticky=tk.EW)
+
+        self._success_color = custom_tkinter.ConfigColorUpdater(self._color_frame, label_text="Success Color:", setter=config.set_success_color, getter=config.get_success_color, callback=self.lift)
+        self._success_color.grid(row=1, column=0, sticky=tk.EW)
+
+        self._warning_color = custom_tkinter.ConfigColorUpdater(self._color_frame, label_text="Warning Color:", setter=config.set_warning_color, getter=config.get_warning_color, callback=self.lift)
+        self._warning_color.grid(row=2, column=0, sticky=tk.EW)
+
+        self._failure_color = custom_tkinter.ConfigColorUpdater(self._color_frame, label_text="Failure Color:", setter=config.set_failure_color, getter=config.get_failure_color, callback=self.lift)
+        self._failure_color.grid(row=3, column=0, sticky=tk.EW)
+
+        self._divider_color = custom_tkinter.ConfigColorUpdater(self._color_frame, label_text="Divider Color:", setter=config.set_divider_color, getter=config.get_divider_color, callback=self.lift)
+        self._divider_color.grid(row=4, column=0, sticky=tk.EW)
         
-        self._success_color_button = tk.Button(self, text="Change Color", command=self.change_color)
-        self._success_color_button.grid(row=0, column=1, padx=10, pady=10)
+        self._header_color = custom_tkinter.ConfigColorUpdater(self._color_frame, label_text="Header Color:", setter=config.set_header_color, getter=config.get_header_color, callback=self.lift)
+        self._header_color.grid(row=5, column=0, sticky=tk.EW)
         
-        self._success_color_preview = tk.Frame(self, text="Change Color", command=self.change_color)
-        self._success_color_button.grid(row=0, column=2, padx=10, pady=10)
-        self._success_color_preview
+        self._primary_color = custom_tkinter.ConfigColorUpdater(self._color_frame, label_text="Primary Color:", setter=config.set_primary_color, getter=config.get_primary_color, callback=self.lift)
+        self._primary_color.grid(row=6, column=0, sticky=tk.EW)
+        
+        self._secondary_color = custom_tkinter.ConfigColorUpdater(self._color_frame, label_text="Secondary Color:", setter=config.set_secondary_color, getter=config.get_secondary_color, callback=self.lift)
+        self._secondary_color.grid(row=7, column=0, sticky=tk.EW)
+        
+        self._contrast_color = custom_tkinter.ConfigColorUpdater(self._color_frame, label_text="Contrast Color:", setter=config.set_contrast_color, getter=config.get_contrast_color, callback=self.lift)
+        self._contrast_color.grid(row=8, column=0, sticky=tk.EW)
+        
+        self._background_color = custom_tkinter.ConfigColorUpdater(self._color_frame, label_text="Background Color:", setter=config.set_background_color, getter=config.get_background_color, callback=self.lift)
+        self._background_color.grid(row=9, column=0, sticky=tk.EW)
 
-        self._route_file_label = tk.Label(self, text=f"Route path: {self._final_route_path}")
-        self._route_file_label.grid(row=1, column=0, columnspan=2, padx=10, pady=10)
-
-        self._route_jar_label = tk.Label(self, text=f"RouteOne jar Path: {config.get_route_one_path()}")
-        self._route_jar_label.grid(row=2, column=0, columnspan=2, padx=10, pady=10)
-
-        self._set_jar_button = custom_tkinter.SimpleButton(self, text=f"Set R1 jar path", command=self.set_jar_path)
-        self._set_jar_button.grid(row=3, column=0, padx=10, pady=10)
-        self._run_route_one_button = custom_tkinter.SimpleButton(self, text=f"Run RouteOne", command=self.run_route_one)
-        self._run_route_one_button.grid(row=3, column=1, padx=10, pady=10)
-
-        # TODO: gross, ugly, wtv
-        if self._main_window._data.init_route_state is None:
-            self._run_route_one_button.disable()
-
-        self._route_one_results_label = tk.Label(self, text=route_one_results_init, justify=tk.CENTER)
-        self._route_one_results_label.grid(row=4, column=0, padx=10, pady=10, columnspan=2)
+        self._restart_label = tk.Label(self._color_frame, text="After changing colors, you must restart the program\nbefore color changes will take effect")
+        self._restart_label.grid(row=15, column=0, padx=5, pady=5, sticky=tk.EW)
 
         self._close_button = custom_tkinter.SimpleButton(self, text="Close", command=self._main_window.cancel_new_event)
-        self._close_button.grid(row=5, column=0, columnspan=2, padx=10, pady=10)
+        self._close_button.grid(row=15, column=0, padx=5, pady=2)
 
         self.bind('<Escape>', self._main_window.cancel_new_event)
-
-    def _color_picker_helper(self, orig_color):
-        result = colorchooser.askcolor(color=orig_color)
-        if result is None:
-            return orig_color
-        return result[1]
     
-    def change_success_color(self, *args, **kwargs):
-        config.set_success_color(self._color_picker_helper(config.get_success_color()))
-    
-    def change_warning_color(self, *args, **kwargs):
-        config.set_warning_color(self._color_picker_helper(config.get_warning_color()))
-    
-    def change_failure_color(self, *args, **kwargs):
-        config.set_failure_color(self._color_picker_helper(config.get_failure_color()))
-    
-    def change_divider_color(self, *args, **kwargs):
-        config.set_divider_color(self._color_picker_helper(config.get_divider_color()))
-    
-    def change_header_color(self, *args, **kwargs):
-        config.set_header_color(self._color_picker_helper(config.get_header_color()))
-    
-    def change_primary_color(self, *args, **kwargs):
-        config.set_primary_color(self._color_picker_helper(config.get_primary_color()))
-    
-    def change_secondary_color(self, *args, **kwargs):
-        config.set_secondary_color(self._color_picker_helper(config.get_secondary_color()))
-    
-    def change_contract_color(self, *args, **kwargs):
-        config.set_contrast_color(self._color_picker_helper(config.get_contrast_color()))
-    
-    def change_background_color(self, *args, **kwargs):
-        config.set_background_color(self._color_picker_helper(config.get_background_color()))
-
-    def set_jar_path(self, *args, **kwargs):
-        file_result = filedialog.askopenfile()
-        if file_result is None:
-            self.lift()
-            return
-        jar_path = file_result.name
-        self._route_jar_label.config(text=f"RouteOne jar Path: {jar_path}")
-        config.set_route_one_path(jar_path)
-        self.lift()
-
-    def run_route_one(self, *args, **kwargs):
-        if not config.get_route_one_path():
-            self._route_one_results_label.config(text="No RouteOne jar path set, cannot run...")
-            return
-        
-        result = route_one_utils.run_route_one(config.get_route_one_path(), self._final_config_path)
-        if not result:
-            self._route_one_results_label.config(text=f"RouteOne finished: {self._final_output_path}\nDouble check top of output file for errors")
-        else:
-            self._route_one_results_label.config(text=f"Error encountered running RouteOne: {result}")
-
-        self.lift()
+    def _reset_all_colors(self, *args, **kwargs):
+        config.reset_all_colors()
+        self._success_color.refresh_color()
+        self._warning_color.refresh_color()
+        self._failure_color.refresh_color()
+        self._divider_color.refresh_color()
+        self._header_color.refresh_color()
+        self._primary_color.refresh_color()
+        self._secondary_color.refresh_color()
+        self._contrast_color.refresh_color()
+        self._background_color.refresh_color()
 
 
 def fixed_map(option, style):

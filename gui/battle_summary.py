@@ -159,15 +159,15 @@ class BattleSummary(tk.Frame):
 
 class SetupMovesSummary(tk.Frame):
     def __init__(self, *args, font_size=None, callback=None, **kwargs):
-        super().__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs, bg=config.get_background_color())
 
         self._callback = callback
         self._move_list = []
 
-        self.reset_button = custom_tkinter.SimpleButton(self, text="Reset Setup Moves", command=self._reset)
+        self.reset_button = custom_tkinter.SimpleButton(self, text="Reset Setup Moves", command=self._reset, bg=config.get_contrast_color())
         self.reset_button.grid(row=0, column=0, padx=2)
 
-        self.setup_label = tk.Label(self, text="Move to Add:")
+        self.setup_label = tk.Label(self, text="Move to Add:", bg=config.get_background_color())
         self.setup_label.grid(row=0, column=1, padx=2)
 
         stat_modifier_moves = list(const.STAT_INCREASE_MOVES.keys())
@@ -175,13 +175,13 @@ class SetupMovesSummary(tk.Frame):
         self.setup_moves = custom_tkinter.SimpleOptionMenu(self, stat_modifier_moves)
         self.setup_moves.grid(row=0, column=2, padx=2)
 
-        self.add_button = custom_tkinter.SimpleButton(self, text="Add Setup Move", command=self._add_setup_move)
+        self.add_button = custom_tkinter.SimpleButton(self, text="Add Setup Move", command=self._add_setup_move, bg=config.get_contrast_color())
         self.add_button.grid(row=0, column=3, padx=2)
 
-        self.extra_label = tk.Label(self, text="Current Setup Moves:")
+        self.extra_label = tk.Label(self, text="Current Setup Moves:", bg=config.get_background_color())
         self.extra_label.grid(row=0, column=4, padx=2)
 
-        self.move_list_label = tk.Label(self)
+        self.move_list_label = tk.Label(self, bg=config.get_background_color())
         self.move_list_label.grid(row=0, column=5, padx=2)
     
     def _reset(self, *args, **kwargs):
@@ -216,7 +216,7 @@ class SetupMovesSummary(tk.Frame):
 
 class MonPairSummary(tk.Frame):
     def __init__(self, *args, font_size=None, mimic_callback=None, **kwargs):
-        super().__init__(*args, **kwargs, highlightbackground="black", highlightthickness=1)
+        super().__init__(*args, **kwargs, highlightbackground="black", highlightthickness=1, bg=config.get_background_color())
 
         self.mimic_callback = mimic_callback
 
@@ -401,7 +401,7 @@ class MonPairSummary(tk.Frame):
 
 class DamageSummary(tk.Frame):
     def __init__(self, *args, font_size=None, mimic_callback=None, **kwargs):
-        super().__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs, bg=config.get_background_color())
 
         self.cur_guaranteed_kill = None
         self.cur_max_roll = None

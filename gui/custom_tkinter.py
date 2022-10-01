@@ -1,10 +1,11 @@
 import os
 
 import tkinter as tk
-from tkinter import ttk
+from tkinter import ttk, colorchooser
 from PIL import Image, ImageTk
 
 from utils.constants import const
+from utils.config_manager import config
 
 # These three checkbox icons were isolated from Checkbox States.svg (https://commons.wikimedia.org/wiki/File:Checkbox_States.svg?uselang=en)
 IM_CHECKED = os.path.join(const.ASSETS_PATH, "checked.png")
@@ -231,8 +232,11 @@ class CheckboxLabel(tk.Frame):
 
     def __init__(self, *args, text="", init_check_state=None, toggle_command=None, **kwargs):
         super().__init__(*args, **kwargs)
-        self._checkbox = tk.Label(self)
-        self._text_label = tk.Label(self, text=text)
+        bg = None
+        if 'bg' in kwargs:
+            bg = kwargs['bg']
+        self._checkbox = tk.Label(self, bg=bg)
+        self._text_label = tk.Label(self, text=text, bg=bg)
 
         self._checkbox.grid(row=0, column=0)
         self._text_label.grid(row=0, column=1)
@@ -441,3 +445,39 @@ class ScrollableFrame(tk.Frame):
 
     def on_frame_configure(self, event):
         self.canvas.configure(scrollregion=self.canvas.bbox("all"))
+
+
+class ConfigColorUpdater(tk.Frame):
+    def __init__(self, *args, label_text=None, getter=None, setter=None, callback=None, **kwargs):
+        super().__init__(*args, **kwargs)
+
+        self.getter = getter
+        self.setter = setter
+        self.callback = callback
+
+        self.columnconfigure(0, weight=1, uniform="group")
+        self.columnconfigure(1, weight=1, uniform="group")
+
+        self._label = tk.Label(self, text=label_text)
+        self._label.grid(row=0, column=0, padx=10, pady=2, sticky=tk.W)
+
+        self._inner_frame = tk.Frame(self)
+        self._inner_frame.grid(row=0, column=1, sticky=tk.EW)
+
+        self._button = tk.Button(self._inner_frame, text="Change Color", command=self.change_success_color)
+        self._button.grid(row=0, column=1, padx=5, pady=2, sticky=tk.E)
+        self._preview = tk.Frame(self._inner_frame, bg=self.getter(), width=20, height=20, highlightbackground="black", highlightthickness=2)
+        self._preview.grid(row=0, column=2, padx=5, pady=2, sticky=tk.E)
+        self._preview.grid_propagate(0)
+    
+    def change_success_color(self, *args, **kwargs):
+        result = colorchooser.askcolor(color=self.getter())
+        if result is not None:
+            self.setter(result[1])
+            self._preview.configure(bg=self.getter())
+        
+        if self.callback is not None:
+            self.callback()
+    
+    def refresh_color(self, *args, **kwargs):
+        self._preview.configure(bg=self.getter())
