@@ -472,7 +472,7 @@ class ConfigColorUpdater(tk.Frame):
     
     def change_success_color(self, *args, **kwargs):
         result = colorchooser.askcolor(color=self.getter())
-        if result is not None:
+        if result is not None and result[1] is not None:
             self.setter(result[1])
             self._preview.configure(bg=self.getter())
         

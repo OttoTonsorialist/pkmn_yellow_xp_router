@@ -45,12 +45,17 @@ class EventDetails(tk.Frame):
         self.battle_summary_frame = battle_summary.BattleSummary(self.tabbed_states, bg=config.get_background_color())
         self.battle_summary_frame.pack(padx=2, pady=2)
 
+        self.simple_battle_summary_frame = battle_summary.BattleSummary(self.tabbed_states, bg=config.get_background_color(), simple_mode=True)
+        self.simple_battle_summary_frame.pack(padx=2, pady=2, expand=True, fill=tk.Y)
+
         self.tabbed_states.add(self.pre_state_frame, text="Pre-event State")
         self.pre_state_tab_index = 0
         self.tabbed_states.add(self.post_state_frame, text="Post-event State")
         self.post_state_tab_index = 1
         self.tabbed_states.add(self.battle_summary_frame, text="Battle Summary")
         self.battle_summary_tab_index = 2
+        self.tabbed_states.add(self.simple_battle_summary_frame, text="Simple Battle Summary")
+        self.simple_battle_summary_tab_index = 3
         self.tabbed_states.pack(expand=True, fill=tk.BOTH)
 
         self.event_viewer_frame = tk.Frame(self, highlightbackground="black", highlightthickness=1, bg=config.get_background_color())
@@ -96,16 +101,24 @@ class EventDetails(tk.Frame):
         prev_tab = self._prev_selected_tab
         self._prev_selected_tab = selected_tab_index
 
-        if selected_tab_index == self.battle_summary_tab_index:
-            if prev_tab == self.battle_summary_tab_index:
+        if selected_tab_index == self.battle_summary_tab_index or selected_tab_index == self.simple_battle_summary_tab_index:
+            if prev_tab == selected_tab_index:
                 return
-            self.configure(width=self.battle_summary_width)
+
+            if selected_tab_index ==  self.battle_summary_tab_index:
+                self.configure(width=self.battle_summary_width)
+                self.battle_summary_frame.allow_calculations()
+                self.simple_battle_summary_frame.pause_calculations()
+            else:
+                self.configure(width=self.state_summary_width)
+                self.battle_summary_frame.pause_calculations()
+                self.simple_battle_summary_frame.allow_calculations()
             self.event_details_frame.grid_forget()
+            self.event_viewer_frame.pack_forget()
             self.notebook_holder.pack_forget()
             self.notebook_holder.pack(anchor=tk.N, fill=tk.BOTH, expand=True, padx=2, pady=2)
-            self.event_viewer_frame.pack_forget()
             self.event_viewer_frame.pack(anchor=tk.N, fill=tk.BOTH, expand=False, padx=2, pady=2)
-            self.battle_summary_frame.allow_calculations()
+
         else:
             if prev_tab == self.pre_state_tab_index or prev_tab == self.post_state_tab_index:
                 return
@@ -116,6 +129,7 @@ class EventDetails(tk.Frame):
             self.event_viewer_frame.pack(anchor=tk.N, fill=tk.BOTH, expand=True, padx=2, pady=2)
             self.event_details_frame.grid(row=0, column=0)
             self.battle_summary_frame.pause_calculations()
+            self.simple_battle_summary_frame.pause_calculations()
 
     def _pre_state_display_mode_callback(self, *args, **kwargs):
         if self.pre_state_selector.get() == const.BADGE_BOOST_LABEL:
@@ -155,12 +169,14 @@ class EventDetails(tk.Frame):
                 self.enemy_team_viewer.pack()
                 self.enemy_team_viewer.set_team(event_def.get_trainer_obj().pkmn, cur_state=init_state)
                 self.battle_summary_frame.set_team(event_def.get_trainer_obj().pkmn, cur_state=init_state, event_group=event_group)
+                self.simple_battle_summary_frame.set_team(event_def.get_trainer_obj().pkmn, cur_state=init_state, event_group=event_group)
                 self.verbose_trainer_label.grid(row=0, column=1, padx=5, pady=5, sticky=tk.W)
                 self.verbose_trainer_label.set_checked(event_def.trainer_def.verbose_export)
             else:
                 self.enemy_team_viewer.pack_forget()
                 self.enemy_team_viewer.set_team(None)
                 self.battle_summary_frame.set_team(None)
+                self.simple_battle_summary_frame.set_team(None)
                 self.verbose_trainer_label.grid_forget()
 
                 if event_def.get_event_type() != const.TASK_NOTES_ONLY:

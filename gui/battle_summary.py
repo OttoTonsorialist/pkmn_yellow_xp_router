@@ -14,10 +14,11 @@ from utils.config_manager import config
 
 
 class BattleSummary(tk.Frame):
-    def __init__(self, *args, font_size=None, **kwargs):
+    def __init__(self, *args, font_size=None, simple_mode=False, **kwargs):
         super().__init__(*args, **kwargs)
 
         self.columnconfigure(0, weight=1)
+        self.simple_mode = simple_mode
 
         # these are matched lists, with the solo mon being updated for each enemy pkmn, in case of level-ups
         self._enemy_pkmn:List[data_objects.EnemyPkmn] = None
@@ -28,12 +29,16 @@ class BattleSummary(tk.Frame):
         self._mimic_selection = ""
 
         self.setup_moves = SetupMovesSummary(self, callback=self._setup_move_callback)
-        self.setup_moves.grid(row=0, column=0, sticky=tk.EW)
+        if not self.simple_mode:
+            self.setup_moves.grid(row=0, column=0, sticky=tk.EW)
 
         self._mon_pairs:List[MonPairSummary] = []
 
         for idx in range(6):
-            self._mon_pairs.append(MonPairSummary(self, mimic_callback=self._mimic_callback))
+            if self.simple_mode:
+                self._mon_pairs.append(SimpleMonPairSummary(self, mimic_callback=self._mimic_callback))
+            else:
+                self._mon_pairs.append(MonPairSummary(self, mimic_callback=self._mimic_callback))
         
         self.error_message = tk.Label(self, text="Select a battle to see damage calculations")
         self.should_calculate = False
@@ -148,7 +153,10 @@ class BattleSummary(tk.Frame):
         enemy_stages = data_objects.StageModifiers()
         for idx, cur_pkmn in enumerate(enemy_pkmn):
             self._mon_pairs[idx].set_mons(new_solo_pkmn[idx], cur_pkmn, self._stage_modifiers, enemy_stages, mimic_options)
-            self._mon_pairs[idx].grid(row=idx + 1, column=0, sticky=tk.EW)
+            if self.simple_mode:
+                self._mon_pairs[idx].grid(row=idx + 1, column=0)
+            else:
+                self._mon_pairs[idx].grid(row=idx + 1, column=0, sticky=tk.EW)
         
         for missing_idx in range(idx+1, 6):
             self._mon_pairs[missing_idx].grid_forget()
@@ -394,6 +402,154 @@ class MonPairSummary(tk.Frame):
                 self.move_list[idx + 4].grid(row=1, column=(5 + idx), sticky=tk.NSEW)
             else:
                 self.move_list[idx + 4].grid_forget()
+        
+        self._update_best_move()
+        self._update_best_move(is_enemy=True)
+
+
+class SimpleMonPairSummary(tk.Frame):
+    def __init__(self, *args, font_size=None, mimic_callback=None, **kwargs):
+        super().__init__(*args, **kwargs, highlightbackground="black", highlightthickness=1, bg=config.get_background_color())
+
+        self.mimic_callback = mimic_callback
+
+        self.first_mon:data_objects.EnemyPkmn = None
+        self.second_mon:data_objects.EnemyPkmn = None
+        self.first_stages:data_objects.StageModifiers = None
+        self.second_stages:data_objects.StageModifiers = None
+        self.mimic_options = None
+
+        bold_font = tkinter.font.nametofont("TkDefaultFont").copy()
+        bold_font.configure(weight="bold")
+
+        self.left_mon_label_frame = tk.Frame(self, background=config.get_header_color())
+        self.left_mon_label_frame.grid(row=0, column=1, padx=2, pady=2, sticky=tk.EW)
+
+        self.left_attacking_mon = tk.Label(self.left_mon_label_frame, text="", background=config.get_header_color())
+        self.left_attacking_mon.grid(row=0, column=1)
+
+        self.left_mon_label_frame.columnconfigure(0, weight=1, uniform="left_col_group")
+        self.left_mon_label_frame.columnconfigure(2, weight=1, uniform="left_col_group")
+
+        self.divider = tk.Frame(self, background=config.get_divider_color(), width=4)
+        self.divider.grid(row=0, column=2, rowspan=2, sticky=tk.NS)
+        self.divider.grid_propagate(0)
+
+        self.right_mon_label_frame = tk.Frame(self, background=config.get_header_color())
+        self.right_mon_label_frame.grid(row=0, column=3, padx=2, pady=2, sticky=tk.EW)
+
+        self.right_attacking_mon = tk.Label(self.right_mon_label_frame, text="", background=config.get_header_color())
+        self.right_attacking_mon.grid(row=0, column=1)
+
+        self.right_mon_label_frame.columnconfigure(0, weight=1, uniform="right_col_group")
+        self.right_mon_label_frame.columnconfigure(2, weight=1, uniform="right_col_group")
+
+        self.columnconfigure(0, weight=1, uniform="label_group")
+        self.columnconfigure(1, minsize=170)
+        self.columnconfigure(3, minsize=170)
+        self.columnconfigure(4, weight=1, uniform="label_group")
+
+        self.move_list:List[DamageSummary] = []
+        for _ in range(8):
+            self.move_list.append(DamageSummary(self, mimic_callback=self.mimic_callback, width=170))
+    
+    def recalc_mimic(self, mimiced_move_name):
+        for cur_move in self.move_list:
+            if cur_move.move_name == const.MIMIC_MOVE_NAME:
+                cur_move.new_mimic_move_selected(mimiced_move_name)
+                self._update_best_move()
+                self._update_best_move(is_enemy=True)
+                return
+    
+    def manual_mimic_trigger(self):
+        for cur_move in self.move_list:
+            if cur_move.move_name == const.MIMIC_MOVE_NAME:
+                cur_move._mimic_callback()
+                self._update_best_move()
+                self._update_best_move(is_enemy=True)
+                return
+    
+    def _update_best_move(self, is_enemy=False):
+        cur_best_attack_idx = None
+        cur_best_guaranteed_kill = None
+        cur_best_damage_roll = None
+
+        if is_enemy:
+            mon_move_list = self.second_mon.move_list
+            move_list_offset = 4
+            grid_column_idx = 3
+        else:
+            mon_move_list = self.first_mon.move_list
+            move_list_offset = 0
+            grid_column_idx = 1
+
+        # NOTE: intentionally not capturing struggle damage calcs here
+        # Mostly because we don't really ever want to use struggle if we can avoid it
+        for idx in range(len(mon_move_list)):
+            if not mon_move_list[idx]:
+                break
+
+            damage_summary_obj = self.move_list[idx + move_list_offset]
+
+            if damage_summary_obj.cur_guaranteed_kill is not None:
+                if (
+                    cur_best_guaranteed_kill is None or
+                    damage_summary_obj.cur_guaranteed_kill < cur_best_guaranteed_kill or (
+                        damage_summary_obj.cur_guaranteed_kill == cur_best_guaranteed_kill and
+                        damage_summary_obj.cur_max_roll > cur_best_damage_roll
+                    )
+                ):
+                    cur_best_attack_idx = idx
+                    cur_best_guaranteed_kill = damage_summary_obj.cur_guaranteed_kill
+                    cur_best_damage_roll = damage_summary_obj.cur_max_roll
+
+        if cur_best_attack_idx == None:
+            cur_best_attack_idx = 0
+        for idx in range(4):
+            if idx == cur_best_attack_idx:
+                self.move_list[idx + move_list_offset].grid(row=1, column=grid_column_idx, sticky=tk.NSEW)
+            else:
+                self.move_list[idx + move_list_offset].grid_forget()
+    
+    def set_mons(
+        self,
+        first_mon:data_objects.EnemyPkmn,
+        second_mon:data_objects.EnemyPkmn,
+        first_stages:data_objects.StageModifiers,
+        second_stages:data_objects.StageModifiers,
+        mimic_options
+    ):
+        self.first_mon = first_mon
+        self.second_mon = second_mon
+        self.first_stages = first_stages
+        self.second_stages = second_stages
+        self.mimic_options = mimic_options
+
+        self.left_attacking_mon.configure(text=f"{self.first_mon}")
+        self.right_attacking_mon.configure(text=f"{self.second_mon}")
+
+        # update all the moves for the first attacking the second
+        struggle_set = False
+        idx = -1
+        for idx in range(4):
+            # first mon attacking second
+            cur_move = None
+            if idx < len(self.first_mon.move_list):
+                cur_move = self.first_mon.move_list[idx]
+            
+            if cur_move:
+                self.move_list[idx].calc_damages(cur_move, self.first_mon, self.second_mon, self.first_stages, self.second_stages, self.mimic_options)
+            elif not struggle_set:
+                self.move_list[idx].calc_damages(const.STRUGGLE_MOVE_NAME, self.first_mon, self.second_mon, self.first_stages, self.second_stages, self.mimic_options)
+                struggle_set = True
+            
+            # second mon attacking first
+            cur_move = None
+            if idx < len(self.second_mon.move_list):
+                cur_move = self.second_mon.move_list[idx]
+
+            if cur_move:
+                self.move_list[idx + 4].calc_damages(cur_move, self.second_mon, self.first_mon, self.second_stages, self.first_stages, self.mimic_options)
         
         self._update_best_move()
         self._update_best_move(is_enemy=True)
