@@ -3,7 +3,7 @@ import os
 
 import tkinter as tk
 from tkinter import filedialog
-from tkinter import ANCHOR, ttk
+from tkinter import ttk, font
 
 from gui import custom_tkinter, route_event_components, pkmn_components, quick_add_components
 from gui.event_details import EventDetails
@@ -30,6 +30,24 @@ class Main(tk.Tk):
         style = ttk.Style()
         style.map("Treeview", foreground=fixed_map("foreground", style), background=fixed_map("background", style))
 
+        style.layout("TNotebook", [])
+        # magic, found here: https://stackoverflow.com/a/29572789
+        style.element_create('Plain.Notebook.tab', "from", 'default')
+        style.layout("TNotebook.Tab",
+            [('Plain.Notebook.tab', {'children':
+                [('Notebook.padding', {'side': 'top', 'children':
+                    [('Notebook.focus', {'side': 'top', 'children':
+                        [('Notebook.label', {'side': 'top', 'sticky': ''})],
+                    'sticky': 'nswe'})],
+                'sticky': 'nswe'})],
+            'sticky': 'nswe'})])
+
+        style.configure("TNotebook", background=config.get_background_color())
+        style.configure("TNotebook.Tab", background=config.get_secondary_color(), borderwidth=1, bordercolor="black")
+        style.map("TNotebook.Tab", background=[("selected", config.get_primary_color())])
+
+        self.load_custom_font()
+
         # menu bar
         self.top_menu_bar = tk.Menu(self)
         self.config(menu=self.top_menu_bar)
@@ -39,6 +57,7 @@ class Main(tk.Tk):
         self.file_menu.add_command(label="Load Route      (Ctrl+L)", command=self.open_load_route_window)
         self.file_menu.add_command(label="Save Route       (Ctrl+S)", command=self.save_route)
         self.file_menu.add_command(label="Export Notes       (Ctrl+Shift+W)", command=self.export_notes)
+        self.file_menu.add_command(label="Config Colors       (Ctrl+Shift+D)", command=self.open_config_window)
 
         self.event_menu = tk.Menu(self.top_menu_bar, tearoff=0)
         self.event_menu.add_command(label="New Event                   (Ctrl+F)", command=self.open_new_event_window)
@@ -182,6 +201,8 @@ class Main(tk.Tk):
         # route One integrations
         self.bind('<Control-E>', self.open_export_window)
         self.bind('<Control-R>', self.just_export_and_run)
+        # config integrations
+        self.bind('<Control-D>', self.open_config_window)
         # detail update function
         self.protocol("WM_DELETE_WINDOW", self._on_close)
         self.bind("<<TreeviewSelect>>", self._handle_new_selection)
@@ -205,6 +226,14 @@ class Main(tk.Tk):
     
     def export_notes(self, *args, **kwargs):
         self.message_label.set_message(f"Exported notes to: {self._data.export_notes(self.route_name.get())}")
+
+    def load_custom_font(self):
+        if config.get_custom_font_name() in font.families():
+            defaultFont = font.nametofont("TkDefaultFont")
+            defaultFont.configure(family=config.get_custom_font_name())
+        else:
+            defaultFont = font.nametofont("TkDefaultFont")
+            defaultFont.configure(family=config.DEFAULT_FONT_NAME)
 
     def update_run_status(self, *args, **kwargs):
         if self._data.root_folder.has_errors():
@@ -361,6 +390,10 @@ class Main(tk.Tk):
 
         self.trainer_add.trainer_filter_callback()
         self.event_list.refresh()
+    
+    def open_config_window(self, *args, **kwargs):
+        if self._is_active_window():
+            self.new_event_window = ConfigWindow(self)
     
     def open_new_route_window(self, *args, **kwargs):
         if self._is_active_window():
@@ -1080,6 +1113,91 @@ class RouteOneWindow(custom_tkinter.Popup):
             self._route_one_results_label.config(text=f"Error encountered running RouteOne: {result}")
 
         self.lift()
+
+
+class ConfigWindow(custom_tkinter.Popup):
+    def __init__(self, main_window: Main, *args, **kwargs):
+        super().__init__(main_window, *args, **kwargs)
+        
+        self._font_frame = tk.Frame(self)
+        self._font_frame.grid(row=0, column=0)
+        self._font_frame.columnconfigure(1, weight=1)
+
+        self._font_name_label = tk.Label(self._font_frame, text="Font Name:")
+        self._font_name_label.grid(row=3, column=0, padx=3, pady=3, sticky=tk.EW)
+
+        self._font_name = custom_tkinter.SimpleOptionMenu(self._font_frame, sorted(font.families()))
+        self._font_name.grid(row=3, column=1, padx=5, pady=3, sticky=tk.EW)
+        custom_font_name = config.get_custom_font_name()
+        if custom_font_name not in font.families():
+            custom_font_name = config.DEFAULT_FONT_NAME
+        self._font_name.set(custom_font_name)
+
+        self._font_name_button = tk.Button(self._font_frame, text="Set Font Name", command=self.set_font_name)
+        self._font_name_button.grid(row=4, column=0, columnspan=2, padx=3, pady=3)
+
+        self._font_warning = tk.Label(self._font_frame, text=f"If your custom font is not present in the list\nMake sure that it is installed on your system\nAnd then restart the program")
+        self._font_warning.grid(row=5, column=0, columnspan=2, padx=5, pady=3, sticky=tk.EW)
+
+        self._color_frame = tk.Frame(self)
+        self._color_frame.grid(row=2, column=0, pady=20)
+
+        self._color_header = tk.Label(self._color_frame, text="Color Config:")
+        self._color_header.grid(row=0, column=0, padx=5, pady=3, sticky=tk.EW)
+
+        self._reset_colors_button = tk.Button(self._color_frame, text="Reset all colors", command=self._reset_all_colors)
+        self._reset_colors_button.grid(row=1, column=0, padx=5, pady=3, sticky=tk.EW)
+
+        self._success_color = custom_tkinter.ConfigColorUpdater(self._color_frame, label_text="Success Color:", setter=config.set_success_color, getter=config.get_success_color, callback=self.lift)
+        self._success_color.grid(row=2, column=0, sticky=tk.EW)
+
+        self._warning_color = custom_tkinter.ConfigColorUpdater(self._color_frame, label_text="Warning Color:", setter=config.set_warning_color, getter=config.get_warning_color, callback=self.lift)
+        self._warning_color.grid(row=3, column=0, sticky=tk.EW)
+
+        self._failure_color = custom_tkinter.ConfigColorUpdater(self._color_frame, label_text="Failure Color:", setter=config.set_failure_color, getter=config.get_failure_color, callback=self.lift)
+        self._failure_color.grid(row=4, column=0, sticky=tk.EW)
+
+        self._divider_color = custom_tkinter.ConfigColorUpdater(self._color_frame, label_text="Divider Color:", setter=config.set_divider_color, getter=config.get_divider_color, callback=self.lift)
+        self._divider_color.grid(row=5, column=0, sticky=tk.EW)
+        
+        self._header_color = custom_tkinter.ConfigColorUpdater(self._color_frame, label_text="Header Color:", setter=config.set_header_color, getter=config.get_header_color, callback=self.lift)
+        self._header_color.grid(row=6, column=0, sticky=tk.EW)
+        
+        self._primary_color = custom_tkinter.ConfigColorUpdater(self._color_frame, label_text="Primary Color:", setter=config.set_primary_color, getter=config.get_primary_color, callback=self.lift)
+        self._primary_color.grid(row=7, column=0, sticky=tk.EW)
+        
+        self._secondary_color = custom_tkinter.ConfigColorUpdater(self._color_frame, label_text="Secondary Color:", setter=config.set_secondary_color, getter=config.get_secondary_color, callback=self.lift)
+        self._secondary_color.grid(row=8, column=0, sticky=tk.EW)
+        
+        self._contrast_color = custom_tkinter.ConfigColorUpdater(self._color_frame, label_text="Contrast Color:", setter=config.set_contrast_color, getter=config.get_contrast_color, callback=self.lift)
+        self._contrast_color.grid(row=9, column=0, sticky=tk.EW)
+        
+        self._background_color = custom_tkinter.ConfigColorUpdater(self._color_frame, label_text="Background Color:", setter=config.set_background_color, getter=config.get_background_color, callback=self.lift)
+        self._background_color.grid(row=10, column=0, sticky=tk.EW)
+
+        self._restart_label = tk.Label(self._color_frame, text="After changing colors, you must restart the program\nbefore color changes will take effect")
+        self._restart_label.grid(row=15, column=0, padx=5, pady=5, sticky=tk.EW)
+
+        self._close_button = custom_tkinter.SimpleButton(self, text="Close", command=self._main_window.cancel_new_event)
+        self._close_button.grid(row=15, column=0, padx=5, pady=2)
+
+        self.bind('<Escape>', self._main_window.cancel_new_event)
+    
+    def _reset_all_colors(self, *args, **kwargs):
+        config.reset_all_colors()
+        self._success_color.refresh_color()
+        self._warning_color.refresh_color()
+        self._failure_color.refresh_color()
+        self._divider_color.refresh_color()
+        self._header_color.refresh_color()
+        self._primary_color.refresh_color()
+        self._secondary_color.refresh_color()
+        self._contrast_color.refresh_color()
+        self._background_color.refresh_color()
+
+    def set_font_name(self, *args, **kwargs):
+        config.set_custom_font_name(self._font_name.get())
+        self._main_window.load_custom_font()
 
 
 def fixed_map(option, style):

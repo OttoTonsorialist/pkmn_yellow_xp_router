@@ -268,13 +268,27 @@ class Constants:
         self.MOVE_SOURCE_LEVELUP = "LevelUp"
         self.LEVEL_ANY = "AnyLevel"
 
-        self.SPEED_WIN_COLOR = "#abebc6"
-        self.SPEED_TIE_COLOR = "#f9e79f"
-        self.SPEED_LOSS_COLOR = "#f5b7b1"
+        self.SUCCESS_COLOR_KEY = "success_color"
+        self.WARNING_COLOR_KEY = "warning_color"
+        self.FAILURE_COLOR_KEY = "failure_color"
+        self.DIVIDER_COLOR_KEY = "divider_color"
+        self.HEADER_COLOR_KEY = "header_color"
+        self.PRIMARY_COLOR_KEY = "primary_color"
+        self.SECONDARY_COLOR_KEY = "secondary_color"
+        self.CONTRAST_COLOR_KEY = "contrast_color"
+        self.BACKGROUND_COLOR_KEY = "background_color"
 
+        self.CUSTOM_FONT_NAME_KEY = "custom_font_name"
+
+        # not configurable, just for import events in route list
+        self.IMPORTANT_COLOR = "#b3b6b7"
+        # not configurable, just for the top-right indicator
         self.VALID_COLOR = "#abebc6"
         self.ERROR_COLOR = "#f9e79f"
-        self.IMPORTANT_COLOR = "#b3b6b7"
+        # not configurable, just for the version indicator
+        self.YELLOW_COLOR = "yellow"
+        self.RED_COLOR = "#ff8888"
+        self.BLUE_COLOR = "#88b4ff"
 
         self.BAG_LIMIT = 20
 
@@ -334,14 +348,6 @@ class Constants:
             self.RED_VERSION,
             self.BLUE_VERSION,
         ]
-
-        self.YELLOW_COLOR = "yellow"
-        self.RED_COLOR = "#ff8888"
-        self.BLUE_COLOR = "#88b4ff"
-
-        self.STAT_BG_COLOR = "#f0f3f4"
-        self.MOVE_BG_COLOR = "#d4e6f1"
-        self.HEADER_BG_COLOR = "#f6ddcc"
 
         self.NO_SAVED_ROUTES = "No Saved Routes"
         self.NO_FOLDERS = "No Matching Folders"
