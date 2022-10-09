@@ -3,7 +3,7 @@ import tkinter.font
 from typing import List
 
 from gui import custom_tkinter
-import pkmn.universal_data_objects as data_objects
+from pkmn import damage_calc, universal_data_objects
 from routing import route_state_objects
 from routing import route_events
 from routing.router import Router
@@ -20,11 +20,11 @@ class BattleSummary(tk.Frame):
         self.simple_mode = simple_mode
 
         # these are matched lists, with the solo mon being updated for each enemy pkmn, in case of level-ups
-        self._enemy_pkmn:List[data_objects.EnemyPkmn] = None
-        self._solo_pkmn:List[data_objects.EnemyPkmn] = None
+        self._enemy_pkmn:List[universal_data_objects.EnemyPkmn] = None
+        self._solo_pkmn:List[universal_data_objects.EnemyPkmn] = None
         self._source_state:route_state_objects.RouteState = None
         self._source_event_group:route_events.EventGroup = None
-        self._stage_modifiers:data_objects.StageModifiers = data_objects.StageModifiers()
+        self._stage_modifiers:universal_data_objects.StageModifiers = universal_data_objects.StageModifiers()
         self._mimic_selection = ""
 
         self.setup_moves = SetupMovesSummary(self, callback=self._setup_move_callback)
@@ -74,7 +74,7 @@ class BattleSummary(tk.Frame):
     
     def set_team(
         self,
-        enemy_pkmn:List[data_objects.EnemyPkmn],
+        enemy_pkmn:List[universal_data_objects.EnemyPkmn],
         cur_state:route_state_objects.RouteState=None,
         event_group:route_events.EventGroup=None,
         new_setup_moves:bool=False,
@@ -149,7 +149,7 @@ class BattleSummary(tk.Frame):
             mimic_options.extend(cur_pkmn.move_list)
 
         idx = -1
-        enemy_stages = data_objects.StageModifiers()
+        enemy_stages = universal_data_objects.StageModifiers()
         for idx, cur_pkmn in enumerate(enemy_pkmn):
             self._mon_pairs[idx].set_mons(new_solo_pkmn[idx], cur_pkmn, self._stage_modifiers, enemy_stages, mimic_options)
             if self.simple_mode:
@@ -204,10 +204,10 @@ class SetupMovesSummary(tk.Frame):
         self._move_list_updated(trigger_update=trigger_update)
     
     def get_stage_modifiers(self):
-        result = data_objects.StageModifiers()
+        result = universal_data_objects.StageModifiers()
 
         for cur_move in self._move_list:
-            result = result.after_move(cur_move)
+            result = result.apply_stat_mod(pkmn.current_gen_info().move_db().get_stat_mod(cur_move))
         
         return result
     
@@ -227,10 +227,10 @@ class MonPairSummary(tk.Frame):
 
         self.mimic_callback = mimic_callback
 
-        self.first_mon:data_objects.EnemyPkmn = None
-        self.second_mon:data_objects.EnemyPkmn = None
-        self.first_stages:data_objects.StageModifiers = None
-        self.second_stages:data_objects.StageModifiers = None
+        self.first_mon:universal_data_objects.EnemyPkmn = None
+        self.second_mon:universal_data_objects.EnemyPkmn = None
+        self.first_stages:universal_data_objects.StageModifiers = None
+        self.second_stages:universal_data_objects.StageModifiers = None
         self.mimic_options = None
 
         bold_font = tkinter.font.nametofont("TkDefaultFont").copy()
@@ -339,10 +339,10 @@ class MonPairSummary(tk.Frame):
     
     def set_mons(
         self,
-        first_mon:data_objects.EnemyPkmn,
-        second_mon:data_objects.EnemyPkmn,
-        first_stages:data_objects.StageModifiers,
-        second_stages:data_objects.StageModifiers,
+        first_mon:universal_data_objects.EnemyPkmn,
+        second_mon:universal_data_objects.EnemyPkmn,
+        first_stages:universal_data_objects.StageModifiers,
+        second_stages:universal_data_objects.StageModifiers,
         mimic_options
     ):
         self.first_mon = first_mon
@@ -412,10 +412,10 @@ class SimpleMonPairSummary(tk.Frame):
 
         self.mimic_callback = mimic_callback
 
-        self.first_mon:data_objects.EnemyPkmn = None
-        self.second_mon:data_objects.EnemyPkmn = None
-        self.first_stages:data_objects.StageModifiers = None
-        self.second_stages:data_objects.StageModifiers = None
+        self.first_mon:universal_data_objects.EnemyPkmn = None
+        self.second_mon:universal_data_objects.EnemyPkmn = None
+        self.first_stages:universal_data_objects.StageModifiers = None
+        self.second_stages:universal_data_objects.StageModifiers = None
         self.mimic_options = None
 
         bold_font = tkinter.font.nametofont("TkDefaultFont").copy()
@@ -512,10 +512,10 @@ class SimpleMonPairSummary(tk.Frame):
     
     def set_mons(
         self,
-        first_mon:data_objects.EnemyPkmn,
-        second_mon:data_objects.EnemyPkmn,
-        first_stages:data_objects.StageModifiers,
-        second_stages:data_objects.StageModifiers,
+        first_mon:universal_data_objects.EnemyPkmn,
+        second_mon:universal_data_objects.EnemyPkmn,
+        first_stages:universal_data_objects.StageModifiers,
+        second_stages:universal_data_objects.StageModifiers,
         mimic_options
     ):
         self.first_mon = first_mon
@@ -636,10 +636,10 @@ class DamageSummary(tk.Frame):
     def calc_damages(
         self,
         move_name,
-        attacking_mon:data_objects.EnemyPkmn,
-        defending_mon:data_objects.EnemyPkmn,
-        attacking_stage_modifiers:data_objects.StageModifiers,
-        defending_stage_modifiers:data_objects.StageModifiers,
+        attacking_mon:universal_data_objects.EnemyPkmn,
+        defending_mon:universal_data_objects.EnemyPkmn,
+        attacking_stage_modifiers:universal_data_objects.StageModifiers,
+        defending_stage_modifiers:universal_data_objects.StageModifiers,
         mimic_options:List,
     ):
 
@@ -667,7 +667,7 @@ class DamageSummary(tk.Frame):
             self.mimic_dropdown.grid_forget()
             self._calc_damages_from_move(move)
 
-    def _calc_damages_from_move(self, move:data_objects.Move):
+    def _calc_damages_from_move(self, move:universal_data_objects.Move):
         single_attack = pkmn.current_gen_info().calculate_damage(
             self.attacking_mon,
             move,
@@ -704,7 +704,7 @@ class DamageSummary(tk.Frame):
             crit_pct_max_damage = f"{crit_attack.max_damage / self.defending_mon.cur_stats.hp * 100:.2f}%"
             self.crit_pct_damage_range.configure(text=f"{crit_pct_min_damage} - {crit_pct_max_damage}")
 
-            kill_ranges = pkmn.current_gen_info().find_kill(
+            kill_ranges = damage_calc.find_kill(
                 single_attack,
                 crit_attack,
                 pkmn.current_gen_info().get_crit_rate(self.attacking_mon, move),

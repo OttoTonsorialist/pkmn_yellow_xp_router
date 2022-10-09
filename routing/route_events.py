@@ -190,9 +190,9 @@ class EventDefinition:
     def get_wild_pkmn(self):
         if self._wild_pkmn is None and self.wild_pkmn_info is not None:
             if self.wild_pkmn_info.trainer_pkmn:
-                self._wild_pkmn = pkmn.current_gen_info().pkmn_db().create_trainer_pkmn(self.wild_pkmn_info.name, self.wild_pkmn_info.level)
+                self._wild_pkmn = pkmn.current_gen_info().create_trainer_pkmn(self.wild_pkmn_info.name, self.wild_pkmn_info.level)
             else:
-                self._wild_pkmn = pkmn.current_gen_info().pkmn_db().create_wild_pkmn(self.wild_pkmn_info.name, self.wild_pkmn_info.level)
+                self._wild_pkmn = pkmn.current_gen_info().create_wild_pkmn(self.wild_pkmn_info.name, self.wild_pkmn_info.level)
         return self._wild_pkmn
     
     def get_pokemon_list(self):

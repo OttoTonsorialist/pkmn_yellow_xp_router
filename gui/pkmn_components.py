@@ -3,7 +3,8 @@ import tkinter.font
 from typing import List
 
 from gui import custom_tkinter
-import pkmn.data_objects as data_objects
+import pkmn
+from pkmn import universal_data_objects
 from routing import route_state_objects
 from routing import route_events
 from routing.router import Router
@@ -238,7 +239,7 @@ class PkmnViewer(tk.Frame):
             self.move_column.grid(row=2, column=1, sticky=tk.E)
 
 
-    def set_pkmn(self, pkmn:data_objects.EnemyPkmn, badges:data_objects.BadgeList=None, speed_bg_color=None):
+    def set_pkmn(self, pkmn:universal_data_objects.EnemyPkmn, badges:universal_data_objects.BadgeList=None, speed_bg_color=None):
         if speed_bg_color is None:
             speed_bg_color = config.get_secondary_color()
         
@@ -247,19 +248,19 @@ class PkmnViewer(tk.Frame):
         self._xp_value.config(text=str(pkmn.xp))
 
         attack_val = str(pkmn.cur_stats.attack)
-        if badges is not None and badges.boulder:
+        if badges is not None and badges.is_attack_boosted():
             attack_val = "*" + attack_val
 
         defense_val = str(pkmn.cur_stats.defense)
-        if badges is not None and badges.thunder:
+        if badges is not None and badges.is_defense_boosted():
             defense_val = "*" + defense_val
 
-        special_val = str(pkmn.cur_stats.special)
-        if badges is not None and badges.volcano:
+        special_val = str(pkmn.cur_stats.special_attack)
+        if badges is not None and badges.is_special_attack_boosted():
             special_val = "*" + special_val
 
         speed_val = str(pkmn.cur_stats.speed)
-        if badges is not None and badges.soul:
+        if badges is not None and badges.is_speed_boosted():
             speed_val = "*" + speed_val
         
         self.stat_column.set_values(
@@ -300,7 +301,7 @@ class EnemyPkmnTeam(tk.Frame):
         self._all_pkmn.append(PkmnViewer(self))
         self._all_pkmn.append(PkmnViewer(self))
 
-    def set_team(self, enemy_pkmn:List[data_objects.EnemyPkmn], cur_state:route_state_objects.RouteState=None):
+    def set_team(self, enemy_pkmn:List[universal_data_objects.EnemyPkmn], cur_state:route_state_objects.RouteState=None):
         if enemy_pkmn is None:
             enemy_pkmn = []
 
@@ -385,10 +386,10 @@ class BadgeBoostViewer(tk.Frame):
             self._clear_all_summaries()
             return
         
-        prev_mod = data_objects.StageModifiers()
+        prev_mod = universal_data_objects.StageModifiers()
         stage_mod = None
         for idx in range(1, len(self._frames)):
-            stage_mod = prev_mod.after_move(move)
+            stage_mod = prev_mod.apply_stat_mod(pkmn.current_gen_info().move_db().get_stat_mod(move))
             if stage_mod == prev_mod:
                 self._labels[idx].pack_forget()
                 self._viewers[idx].pack_forget()
@@ -531,9 +532,9 @@ class StatExpViewer(tk.Frame):
         self._total_stat_xp_column.set_header("Total\nStatExp")
         self._total_stat_xp_column.grid(row=0, column=2)
     
-    def _vals_from_stat_block(self, stat_block:data_objects.StatBlock):
+    def _vals_from_stat_block(self, stat_block:universal_data_objects.StatBlock):
         # NOTE: re-ordering stats over special
-        return [stat_block.hp, stat_block.attack, stat_block.defense, stat_block.special, stat_block.speed]
+        return [stat_block.hp, stat_block.attack, stat_block.defense, stat_block.special_attack, stat_block.speed]
 
     def set_state(self, state:route_state_objects.RouteState):
         self._state = state

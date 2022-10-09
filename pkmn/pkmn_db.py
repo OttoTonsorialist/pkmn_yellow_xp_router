@@ -1,9 +1,8 @@
-import json
 import os
+from typing import Dict, List, Tuple
 
 from utils.constants import const
-import pkmn.data_objects as data_objects
-from pkmn import pkmn_utils
+from pkmn import universal_data_objects
 
 
 class MinBattlesDB:
@@ -22,20 +21,13 @@ class MinBattlesDB:
 
 
 class PkmnDB:
-    def __init__(self, path):
-        self._path = path
-        self._data = {}
-
-        with open(path, 'r') as f:
-            raw_db = json.load(f)
-
-        for cur_pkmn in raw_db.values():
-            self._data[cur_pkmn[const.NAME_KEY]] = data_objects.PokemonSpecies(cur_pkmn)
+    def __init__(self, data:Dict[str, universal_data_objects.PokemonSpecies]):
+        self._data = data
     
-    def get_all_names(self):
+    def get_all_names(self) -> List[str]:
         return list(self._data.keys())
     
-    def get_pkmn(self, name):
+    def get_pkmn(self, name:str) -> universal_data_objects.PokemonSpecies:
         if name in self._data:
             return self._data.get(name)
         
@@ -44,24 +36,8 @@ class PkmnDB:
                 return self._data.get(test_name)
         
         return None
-
-    def create_trainer_pkmn(self, pkmn_name, pkmn_level):
-        raw_pkmn = self.get_pkmn(pkmn_name)
-        return data_objects.EnemyPkmn(
-            pkmn_utils.instantiate_trainer_pokemon(raw_pkmn.to_dict(), pkmn_level),
-            raw_pkmn.stats,
-            data_objects.StatBlock(8, 9, 8, 8, 8, False)
-        )
     
-    def create_wild_pkmn(self, pkmn_name, pkmn_level):
-        raw_pkmn = self.get_pkmn(pkmn_name)
-        return data_objects.EnemyPkmn(
-            pkmn_utils.instantiate_wild_pokemon(raw_pkmn.to_dict(), pkmn_level),
-            raw_pkmn.stats,
-            data_objects.StatBlock(15, 15, 15, 15, 15, False)
-        )
-    
-    def get_filtered_names(self, filter_val=None):
+    def get_filtered_names(self, filter_val=None) -> List[str]:
         if filter_val is None:
             return self.get_all_names()
         
@@ -74,24 +50,12 @@ class PkmnDB:
 
 
 class TrainerDB:
-    def __init__(self, path, pkmn_db):
-        self._path = path
-        self._data = {}
-        self.loc_oriented_trainers = {}
-        self.class_oriented_trainers = {}
+    def __init__(self, data:Dict[str, universal_data_objects.Trainer]):
+        self._data = data
+        self.loc_oriented_trainers:Dict[str, List[str]] = {}
+        self.class_oriented_trainers:Dict[str, List[str]] = {}
 
-        with open(path, 'r') as f:
-            raw_db = json.load(f)
-
-        for raw_trainer in raw_db.values():
-            # TODO: currently just blindly ignoring all unused trainers. Not sure if I ever care about that
-            if raw_trainer[const.TRAINER_LOC] == const.UNUSED_TRAINER_LOC:
-                continue
-
-            trainer_obj = self._create_trainer(raw_trainer, pkmn_db)
-
-            self._data[trainer_obj.name] = trainer_obj
-
+        for trainer_obj in self._data.values():
             if trainer_obj.location not in self.loc_oriented_trainers:
                 self.loc_oriented_trainers[trainer_obj.location] = []
             self.loc_oriented_trainers[trainer_obj.location].append(trainer_obj.name)
@@ -100,28 +64,11 @@ class TrainerDB:
                 self.class_oriented_trainers[trainer_obj.trainer_class] = []
             self.class_oriented_trainers[trainer_obj.trainer_class].append(trainer_obj.name)
     
-    def _create_trainer(self, trainer_dict, pkmn_db):
-        enemy_pkmn = []
-        for cur_mon in trainer_dict[const.TRAINER_POKEMON]:
-            enemy_pkmn.append(
-                data_objects.EnemyPkmn(
-                    cur_mon,
-                    pkmn_db.get_pkmn(cur_mon[const.NAME_KEY]).stats,
-                    data_objects.StatBlock(8, 9, 8, 8, 8)
-                )
-            )
-
-        return data_objects.Trainer(trainer_dict, enemy_pkmn)
-    
     def get_trainer(self, trainer_name):
         return self._data.get(trainer_name)
     
     def get_all_locations(self):
-        result = list(self.loc_oriented_trainers.keys())
-        if const.UNUSED_TRAINER_LOC in result:
-            result.remove(const.UNUSED_TRAINER_LOC)
-
-        return result
+        return list(self.loc_oriented_trainers.keys())
     
     def get_all_classes(self):
         return list(self.class_oriented_trainers.keys())
@@ -138,9 +85,7 @@ class TrainerDB:
         for cur_trainer in self._data.values():
             if trainer_class is not None and cur_trainer.trainer_class != trainer_class:
                 continue
-            if trainer_loc is not None and cur_trainer.location != trainer_loc:
-                continue
-            elif trainer_loc == const.UNUSED_TRAINER_LOC:
+            elif trainer_loc is not None and cur_trainer.location != trainer_loc:
                 continue
             elif cur_trainer.name in defeated_trainers:
                 continue
@@ -151,20 +96,14 @@ class TrainerDB:
 
 
 class ItemDB:
-    def __init__(self):
-        self._data = {}
+    def __init__(self, data:Dict[str, universal_data_objects.BaseItem]):
+        self._data = data
         self.mart_items = {}
         self.key_items = []
         self.tms = []
         self.other_items = []
 
-        with open(const.ITEM_DB_PATH, 'r') as f:
-            raw_db = json.load(f)
-
-        for cur_dict_item in raw_db.values():
-            cur_base_item = data_objects.BaseItem(cur_dict_item)
-            self._data[cur_base_item.name] = cur_base_item
-
+        for cur_base_item in self._data.values():
             other_item = True
             if cur_base_item.is_key_item:
                 self.key_items.append(cur_base_item.name)
@@ -214,15 +153,9 @@ class ItemDB:
 
 
 class MoveDB:
-    def __init__(self):
-        self._data = {}
-
-        with open(const.MOVE_DB_PATH, 'r') as f:
-            raw_db = json.load(f)
-
-        for cur_dict_item in raw_db.values():
-            cur_move = data_objects.Move(cur_dict_item)
-            self._data[cur_move.name] = cur_move
+    def __init__(self, data:Dict[str, universal_data_objects.Move], stat_mod_moves:Dict[str, List[Tuple[str, int]]]):
+        self._data = data
+        self.stat_mod_moves = stat_mod_moves
     
     def get_move(self, move_name):
         if move_name in self._data:
@@ -233,33 +166,7 @@ class MoveDB:
                 return self._data.get(test_name)
         
         return None
-
-
-item_db = ItemDB()
-move_db = MoveDB()
-pkmn_db:PkmnDB = None
-trainer_db:TrainerDB = None
-min_battles_db:MinBattlesDB = None
-cur_version = None
-
-def change_version(new_version):
-    global cur_version
-    if cur_version == new_version:
-        return
     
-    cur_version = new_version
-    global pkmn_db
-    global trainer_db
-    global min_battles_db
-
-    if cur_version == const.YELLOW_VERSION:
-        pkmn_db = PkmnDB(const.YELLOW_POKEMON_DB_PATH)
-        trainer_db = TrainerDB(const.YELLOW_TRAINER_DB_PATH, pkmn_db)
-        min_battles_db = MinBattlesDB(const.YELLOW_MIN_BATTLES_DIR)
-    elif cur_version == const.RED_VERSION or cur_version == const.BLUE_VERSION:
-        pkmn_db = PkmnDB(const.RB_POKEMON_DB_PATH)
-        trainer_db = TrainerDB(const.RB_TRAINER_DB_PATH, pkmn_db)
-        min_battles_db = MinBattlesDB(const.RB_MIN_BATTLES_DIR)
-    else:
-        raise ValueError(f"Unknown Pkmn Game version: {cur_version}")
+    def get_stat_mod(self, move_name) -> List[Tuple[str, int]]:
+        return self.stat_mod_moves.get(move_name, [])
 

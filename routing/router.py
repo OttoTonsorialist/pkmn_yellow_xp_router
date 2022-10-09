@@ -1,9 +1,8 @@
 import os
-import time
 import json
 
 from utils.constants import const
-from pkmn import data_objects
+from pkmn import universal_data_objects
 import pkmn
 from utils import io_utils
 from routing import route_events
@@ -50,17 +49,21 @@ class Router:
         if custom_dvs is not None:
             # when setting custom DVs, should expect a dict of all values
             # Convert that to a StatBlock here when appropriate
-            custom_dvs = data_objects.StatBlock(
+            custom_dvs = pkmn.current_gen_info().make_stat_block(
                 custom_dvs[const.HP],
                 custom_dvs[const.ATK],
                 custom_dvs[const.DEF],
-                custom_dvs[const.SPE],
-                custom_dvs[const.SPC]
+                custom_dvs[const.SPC],
+                custom_dvs[const.SPC],
+                custom_dvs[const.SPD]
             )
+        else:
+            custom_dvs = pkmn.current_gen_info().make_stat_block(15, 15, 15, 15, 15, 15)
         
+        new_badge_list = pkmn.current_gen_info().make_badge_list()
         self.init_route_state = route_state_objects.RouteState(
-            route_state_objects.SoloPokemon(pkmn_name, pkmn_base, dvs=custom_dvs),
-            data_objects.BadgeList(),
+            route_state_objects.SoloPokemon(pkmn_name, pkmn_base, custom_dvs, new_badge_list),
+            new_badge_list,
             route_state_objects.Inventory()
         )
 
@@ -307,11 +310,11 @@ class Router:
         if min_battles_name is None:
             self._reset_events()
         else:
-            self.load(min_battles_name, min_battles=True, min_battles_version=pkmn_version)
+            self.load(min_battles_name, min_battles=True)
     
-    def load(self, name, min_battles=False, min_battles_version=const.YELLOW_VERSION):
+    def load(self, name, min_battles=False):
         if min_battles:
-            final_path = os.path.join(pkmn.current_gen_info().min_battles_db().get_dir(min_battles_version), f"{name}.json")
+            final_path = os.path.join(pkmn.current_gen_info().min_battles_db().get_dir(), f"{name}.json")
         else:
             final_path = os.path.join(const.SAVED_ROUTES_DIR, f"{name}.json")
             if not os.path.exists(final_path):

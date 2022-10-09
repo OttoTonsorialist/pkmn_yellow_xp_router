@@ -1,5 +1,7 @@
 import math
 import copy
+from pkmn.gen_1.data_objects import GenOneStatBlock
+from pkmn.universal_data_objects import EnemyPkmn, PokemonSpecies
 
 from utils.constants import const
 from pkmn import universal_utils
@@ -134,30 +136,44 @@ def get_move_list(initial_moves, learned_moves, target_level, special_moves=None
     return result
     
 
-def instantiate_trainer_pokemon(pkmn_data, target_level, special_moves=None):
-    return {
-        const.NAME_KEY: pkmn_data[const.NAME_KEY],
-        const.LEVEL: target_level,
-        const.HP: calc_stat(pkmn_data[const.BASE_HP_KEY], target_level, 8, 0, is_hp=True),
-        const.ATK: calc_stat(pkmn_data[const.BASE_ATK_KEY], target_level, 9, 0),
-        const.DEF: calc_stat(pkmn_data[const.BASE_DEF_KEY], target_level, 8, 0),
-        const.SPE: calc_stat(pkmn_data[const.BASE_SPE_KEY], target_level, 8, 0),
-        const.SPC: calc_stat(pkmn_data[const.BASE_SPC_KEY], target_level, 8, 0),
-        const.XP: universal_utils.calc_xp_yield(pkmn_data[const.BASE_XP_KEY], target_level, True),
-        const.MOVES: get_move_list(pkmn_data[const.INITIAL_MOVESET_KEY], pkmn_data[const.LEARNED_MOVESET_KEY], target_level, special_moves=special_moves),
-    }
+def instantiate_trainer_pokemon(pkmn_data:PokemonSpecies, target_level, special_moves=None) -> EnemyPkmn:
+    return EnemyPkmn(
+        pkmn_data.name,
+        target_level,
+        universal_utils.calc_xp_yield(pkmn_data.base_xp, target_level, True),
+        get_move_list(pkmn_data.initial_moves, pkmn_data.levelup_moves, target_level, special_moves=special_moves),
+        GenOneStatBlock(
+            calc_stat(pkmn_data.stats.hp, target_level, 8, 0, is_hp=True),
+            calc_stat(pkmn_data.stats.attack, target_level, 9, 0),
+            calc_stat(pkmn_data.stats.defense, target_level, 8, 0),
+            calc_stat(pkmn_data.stats.special_attack, target_level, 8, 0),
+            calc_stat(pkmn_data.stats.special_defense, target_level, 8, 0),
+            calc_stat(pkmn_data.stats.speed, target_level, 8, 0),
+        ),
+        pkmn_data.stats,
+        GenOneStatBlock(8, 9, 8, 8, 8, 8),
+        GenOneStatBlock(0, 0, 0, 0, 0, 0),
+        None
+    )
 
 
-def instantiate_wild_pokemon(pkmn_data, target_level):
+def instantiate_wild_pokemon(pkmn_data:PokemonSpecies, target_level) -> EnemyPkmn:
     # NOTE: wild pokemon have random DVs. just setting to max to get highest possible stats for now
-    return {
-        const.NAME_KEY: pkmn_data[const.NAME_KEY],
-        const.LEVEL: target_level,
-        const.HP: calc_stat(pkmn_data[const.BASE_HP_KEY], target_level, 15, 0, is_hp=True),
-        const.ATK: calc_stat(pkmn_data[const.BASE_ATK_KEY], target_level, 15, 0),
-        const.DEF: calc_stat(pkmn_data[const.BASE_DEF_KEY], target_level, 15, 0),
-        const.SPE: calc_stat(pkmn_data[const.BASE_SPE_KEY], target_level, 15, 0),
-        const.SPC: calc_stat(pkmn_data[const.BASE_SPC_KEY], target_level, 15, 0),
-        const.XP: universal_utils.calc_xp_yield(pkmn_data[const.BASE_XP_KEY], target_level, False),
-        const.MOVES: get_move_list(pkmn_data[const.INITIAL_MOVESET_KEY], pkmn_data[const.LEARNED_MOVESET_KEY], target_level),
-    }
+    return EnemyPkmn(
+        pkmn_data.name,
+        target_level,
+        universal_utils.calc_xp_yield(pkmn_data.base_xp, target_level, False),
+        get_move_list(pkmn_data.initial_moves, pkmn_data.levelup_moves, target_level),
+        GenOneStatBlock(
+            calc_stat(pkmn_data.stats.hp, target_level, 15, 0, is_hp=True),
+            calc_stat(pkmn_data.stats.attack, target_level, 15, 0),
+            calc_stat(pkmn_data.stats.defense, target_level, 15, 0),
+            calc_stat(pkmn_data.stats.special_attack, target_level, 15, 0),
+            calc_stat(pkmn_data.stats.special_defense, target_level, 15, 0),
+            calc_stat(pkmn_data.stats.speed, target_level, 15, 0),
+        ),
+        pkmn_data.stats,
+        GenOneStatBlock(15, 15, 15, 15, 15, 15),
+        GenOneStatBlock(0, 0, 0, 0, 0, 0),
+        None
+    )

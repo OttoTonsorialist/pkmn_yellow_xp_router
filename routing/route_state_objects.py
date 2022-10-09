@@ -1,9 +1,9 @@
 
 from typing import List
-from pkmn import data_objects
 from utils.constants import const
-from pkmn import pkmn_utils
+from pkmn.gen_1 import pkmn_utils
 from pkmn import universal_utils
+from pkmn import universal_data_objects
 import pkmn
 
     
@@ -56,7 +56,7 @@ class Inventory:
                 pass
         return result
     
-    def add_item(self, base_item:data_objects.BaseItem, num, is_purchase=False, force=False):
+    def add_item(self, base_item:universal_data_objects.BaseItem, num, is_purchase=False, force=False):
         result = self._copy()
         if is_purchase:
             total_cost = num * base_item.purchase_price
@@ -80,10 +80,15 @@ class Inventory:
         
         return result
     
-    def remove_item(self, base_item:data_objects.BaseItem, num, is_sale=False, force=False):
+    def remove_item(self, base_item:universal_data_objects.BaseItem, num, is_sale=False, force=False):
         if base_item.name not in self._item_lookup:
             if force:
-                return self
+                if is_sale:
+                    result = self._copy()
+                    result.cur_money += (base_item.sell_price * num)
+                    return result
+                else:
+                    return self
             raise ValueError(f"Cannot sell/use item that you do not have: {base_item.name}")
 
         if base_item.is_key_item and is_sale and not force:
@@ -125,23 +130,23 @@ class SoloPokemon:
     This is not considered a mutable object!!!
     Represents a snapshot of a pokemon at a single moment in time
     All methods to apply changes will return a new object
-
-    Moves are not yet handled, only level/stats/statxp are handled
     """
     def __init__(self,
             name,
-            species_def:data_objects.PokemonSpecies,
+            species_def:universal_data_objects.PokemonSpecies,
+            dvs:universal_data_objects.StatBlock,
+            badges:universal_data_objects.BadgeList,
             move_list:list=None,
             cur_xp:int=0,
-            dvs:data_objects.StatBlock=None,
-            realized_stat_xp:data_objects.StatBlock=None,
-            unrealized_stat_xp:data_objects.StatBlock=None,
-            badges:data_objects.BadgeList=None,
+            realized_stat_xp:universal_data_objects.StatBlock=None,
+            unrealized_stat_xp:universal_data_objects.StatBlock=None,
             gained_xp:int=0,
-            gained_stat_xp:data_objects.StatBlock=None
+            gained_stat_xp:universal_data_objects.StatBlock=None
     ):
         self.name = name
         self.species_def = species_def
+        self.dvs = dvs
+        self.badges = badges
 
         if move_list is None:
             self.move_list = [x for x in species_def.initial_moves]
@@ -157,28 +162,22 @@ class SoloPokemon:
             self.cur_xp = cur_xp
 
         if badges is None:
-            badges = data_objects.BadgeList()
-        
-        # assume going with perfect DVs if undefined
-        if dvs is None:
-            self.dvs = data_objects.StatBlock(15, 15, 15, 15, 15)
-        else:
-            self.dvs = dvs
+            badges = universal_data_objects.BadgeList()
 
         level_info = universal_utils.level_lookups[self.species_def.growth_rate].get_level_info(self.cur_xp)
         self.cur_level = level_info[0]
         self.xp_to_next_level = level_info[1]
 
         if realized_stat_xp is None:
-            realized_stat_xp = data_objects.StatBlock(0, 0, 0, 0, 0, is_stat_xp=True)
+            realized_stat_xp = pkmn.current_gen_info().make_stat_block(0, 0, 0, 0, 0, 0, is_stat_xp=True)
         self.realized_stat_xp = realized_stat_xp
 
         if unrealized_stat_xp is None:
-            unrealized_stat_xp = data_objects.StatBlock(0, 0, 0, 0, 0, is_stat_xp=True)
+            unrealized_stat_xp = pkmn.current_gen_info().make_stat_block(0, 0, 0, 0, 0, 0, is_stat_xp=True)
         self.unrealized_stat_xp = unrealized_stat_xp
 
         if gained_stat_xp is None:
-            gained_stat_xp = data_objects.StatBlock(0, 0, 0, 0, 0, is_stat_xp=True)
+            gained_stat_xp = pkmn.current_gen_info().make_stat_block(0, 0, 0, 0, 0, 0, is_stat_xp=True)
         
         if const.DEBUG_MODE:
             print(f"Gaining {gained_xp}, was at {self.cur_xp}, now at {self.cur_xp + gained_xp}. Before gain, needed {self.xp_to_next_level} TNL")
@@ -194,7 +193,7 @@ class SoloPokemon:
             # gained xp DID cause a level up
             # realize ALL stat XP into new stats, reset unrealized stat XP, and then update level metadata
             self.realized_stat_xp = self.realized_stat_xp.add(self.unrealized_stat_xp).add(gained_stat_xp)
-            self.unrealized_stat_xp = data_objects.StatBlock(0, 0, 0, 0, 0, is_stat_xp=True)
+            self.unrealized_stat_xp = pkmn.current_gen_info().make_stat_block(0, 0, 0, 0, 0, 0, is_stat_xp=True)
 
             level_info = universal_utils.level_lookups[self.species_def.growth_rate].get_level_info(self.cur_xp)
             self.cur_level = level_info[0]
@@ -236,12 +235,12 @@ class SoloPokemon:
     
     def get_net_gain_from_stat_xp(self, badges):
         if badges is None:
-            badges = data_objects.BadgeList()
+            badges = universal_data_objects.BadgeList()
 
         temp = self.species_def.stats.calc_level_stats(
             self.cur_level,
             self.dvs,
-            data_objects.StatBlock(0, 0, 0, 0, 0, is_stat_xp=True),
+            pkmn.current_gen_info().make_stat_block(0, 0, 0, 0, 0, 0, is_stat_xp=True),
             badges
         )
 
@@ -250,53 +249,47 @@ class SoloPokemon:
     def get_pkmn_obj(self, badges, stage_modifiers=None):
         # allow badge boosting, and also normal stat boosting
         if stage_modifiers is None:
-            stage_modifiers = data_objects.StageModifiers()
+            stage_modifiers = universal_data_objects.StageModifiers()
         
         battle_stats = self.species_def.stats.calc_battle_stats(self.cur_level, self.dvs, self.realized_stat_xp, stage_modifiers, badges)
 
-        return data_objects.EnemyPkmn(
-            {
-                const.NAME_KEY: self.name,
-                const.LEVEL: self.cur_level,
-                const.HP: battle_stats.hp,
-                const.ATK: battle_stats.attack,
-                const.DEF: battle_stats.defense,
-                const.SPE: battle_stats.speed,
-                const.SPC: battle_stats.special,
-                const.XP: -1,
-                const.MOVES: self.move_list,
-            },
+        return universal_data_objects.EnemyPkmn(
+            self.name,
+            self.cur_level,
+            -1,
+            self.move_list,
+            battle_stats,
             self.species_def.stats,
             self.dvs,
             stat_xp=self.realized_stat_xp,
             badges=badges
         )
     
-    def defeat_pkmn(self, enemy_pkmn: data_objects.EnemyPkmn, badges:data_objects.BadgeList):
+    def defeat_pkmn(self, enemy_pkmn: universal_data_objects.EnemyPkmn, badges:universal_data_objects.BadgeList):
         # enemy_pkmn is an EnemyPkmn type
         return SoloPokemon(
             self.name,
             self.species_def,
+            self.dvs,
+            badges,
             move_list=self.move_list,
             cur_xp=self.cur_xp,
-            dvs=self.dvs,
             realized_stat_xp=self.realized_stat_xp,
             unrealized_stat_xp=self.unrealized_stat_xp,
-            badges=badges,
             gained_xp=enemy_pkmn.xp,
             gained_stat_xp=enemy_pkmn.base_stats
         )
     
-    def rare_candy(self, badges):
+    def rare_candy(self, badges:universal_data_objects.BadgeList):
         return SoloPokemon(
             self.name,
             self.species_def,
+            self.dvs,
+            badges,
             move_list=self.move_list,
             cur_xp=self.cur_xp,
-            dvs=self.dvs,
             realized_stat_xp=self.realized_stat_xp,
             unrealized_stat_xp=self.unrealized_stat_xp,
-            badges=badges,
             gained_xp=self.xp_to_next_level,
         )
     
@@ -334,12 +327,12 @@ class SoloPokemon:
         return SoloPokemon(
             self.name,
             self.species_def,
+            self.dvs,
+            badges,
             move_list=new_movelist,
             cur_xp=self.cur_xp,
-            dvs=self.dvs,
             realized_stat_xp=self.realized_stat_xp,
             unrealized_stat_xp=self.unrealized_stat_xp,
-            badges=badges,
         )
     
     def take_vitamin(self, vit_name, badges, force=False):
@@ -353,34 +346,34 @@ class SoloPokemon:
         if vit_name == const.HP_UP:
             if cur_stat_xp_total.hp >= pkmn_utils.VIT_CAP and not force:
                 raise ValueError(f"Ineffective Vitamin: {vit_name} (Already above vitamin cap)")
-            new_unrealized_stat_xp = self.unrealized_stat_xp.add(data_objects.StatBlock(pkmn_utils.VIT_AMT, 0, 0, 0, 0, is_stat_xp=True))
+            new_unrealized_stat_xp = self.unrealized_stat_xp.add(pkmn.current_gen_info().make_stat_block(pkmn_utils.VIT_AMT, 0, 0, 0, 0, 0, is_stat_xp=True))
         elif vit_name == const.PROTEIN:
             if cur_stat_xp_total.attack >= pkmn_utils.VIT_CAP and not force:
                 raise ValueError(f"Ineffective Vitamin: {vit_name} (Already above vitamin cap)")
-            new_unrealized_stat_xp = self.unrealized_stat_xp.add(data_objects.StatBlock(0, pkmn_utils.VIT_AMT, 0, 0, 0, is_stat_xp=True))
+            new_unrealized_stat_xp = self.unrealized_stat_xp.add(pkmn.current_gen_info().make_stat_block(0, pkmn_utils.VIT_AMT, 0, 0, 0, 0, is_stat_xp=True))
         elif vit_name == const.IRON:
             if cur_stat_xp_total.defense >= pkmn_utils.VIT_CAP and not force:
                 raise ValueError(f"Ineffective Vitamin: {vit_name} (Already above vitamin cap)")
-            new_unrealized_stat_xp = self.unrealized_stat_xp.add(data_objects.StatBlock(0, 0, pkmn_utils.VIT_AMT, 0, 0, is_stat_xp=True))
-        elif vit_name == const.CARBOS:
-            if cur_stat_xp_total.speed >= pkmn_utils.VIT_CAP and not force:
-                raise ValueError(f"Ineffective Vitamin: {vit_name} (Already above vitamin cap)")
-            new_unrealized_stat_xp = self.unrealized_stat_xp.add(data_objects.StatBlock(0, 0, 0, pkmn_utils.VIT_AMT, 0, is_stat_xp=True))
+            new_unrealized_stat_xp = self.unrealized_stat_xp.add(pkmn.current_gen_info().make_stat_block(0, 0, pkmn_utils.VIT_AMT, 0, 0, 0, is_stat_xp=True))
         elif vit_name == const.CALCIUM:
             if cur_stat_xp_total.special >= pkmn_utils.VIT_CAP and not force:
                 raise ValueError(f"Ineffective Vitamin: {vit_name} (Already above vitamin cap)")
-            new_unrealized_stat_xp = self.unrealized_stat_xp.add(data_objects.StatBlock(0, 0, 0, 0, pkmn_utils.VIT_AMT, is_stat_xp=True))
+            new_unrealized_stat_xp = self.unrealized_stat_xp.add(pkmn.current_gen_info().make_stat_block(0, 0, 0, 0, pkmn_utils.VIT_AMT, pkmn_utils.VIT_AMT, 0, is_stat_xp=True))
+        elif vit_name == const.CARBOS:
+            if cur_stat_xp_total.speed >= pkmn_utils.VIT_CAP and not force:
+                raise ValueError(f"Ineffective Vitamin: {vit_name} (Already above vitamin cap)")
+            new_unrealized_stat_xp = self.unrealized_stat_xp.add(pkmn.current_gen_info().make_stat_block(0, 0, 0, 0, 0, pkmn_utils.VIT_AMT, is_stat_xp=True))
         else:
             raise ValueError(f"Unknown vitamin: {vit_name}")
 
         return SoloPokemon(
             self.name,
             self.species_def,
+            self.dvs,
+            badges,
             move_list=self.move_list,
             cur_xp=self.cur_xp,
-            dvs=self.dvs,
             realized_stat_xp=self.realized_stat_xp.add(new_unrealized_stat_xp),
-            badges=badges,
         )
 
 
@@ -391,7 +384,7 @@ class RouteState:
     # if any update fails, we record the error, and then redo it with "force=True"
     # this allows us to collect errors, while still making sure that the effects happen
 
-    def __init__(self, solo_pkmn:SoloPokemon, badges:data_objects.BadgeList, inventory:Inventory):
+    def __init__(self, solo_pkmn:SoloPokemon, badges:universal_data_objects.BadgeList, inventory:Inventory):
         self.solo_pkmn = solo_pkmn
         self.badges = badges
         self.inventory = inventory
@@ -463,7 +456,7 @@ class RouteState:
             inv
         ), error_message
 
-    def defeat_pkmn(self, enemy_pkmn:data_objects.EnemyPkmn, trainer_name=None):
+    def defeat_pkmn(self, enemy_pkmn:universal_data_objects.EnemyPkmn, trainer_name=None):
         new_badges = self.badges.award_badge(trainer_name)
         return RouteState(
             self.solo_pkmn.defeat_pkmn(enemy_pkmn, new_badges),
