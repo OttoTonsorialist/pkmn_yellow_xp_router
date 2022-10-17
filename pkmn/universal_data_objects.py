@@ -181,9 +181,9 @@ class StatBlock:
             self.hp + other.hp,
             self.attack + other.attack,
             self.defense + other.defense,
-            self.speed + other.speed,
             self.special_attack + other.special_attack,
             self.special_defense + other.special_defense,
+            self.speed + other.speed,
             is_stat_xp=self._is_stat_xp
         )
     
@@ -194,9 +194,9 @@ class StatBlock:
             self.hp - other.hp,
             self.attack - other.attack,
             self.defense - other.defense,
-            self.speed - other.speed,
             self.special_attack - other.special_attack,
             self.special_defense - other.special_defense,
+            self.speed - other.speed,
             is_stat_xp=self._is_stat_xp
         )
     
