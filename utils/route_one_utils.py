@@ -5,6 +5,7 @@ import subprocess
 from routing.router import Router
 from routing.route_events import EventDefinition, EventFolder, EventGroup, EventItem, InventoryEventDefinition, WildPkmnEventDefinition
 from utils.constants import const
+import pkmn
 
 
 def pkmn_name_to_route_one(name):
@@ -48,7 +49,7 @@ def generate_config_file(route: Router, config_path, route_path, out_path):
         "atkIV": solo_pkmn.dvs.attack,
         "defIV": solo_pkmn.dvs.defense,
         "spdIV": solo_pkmn.dvs.speed,
-        "spcIV": solo_pkmn.dvs.special,
+        "spcIV": solo_pkmn.dvs.special_attack,
     }
 
     with open(config_path, 'w') as f:
@@ -87,15 +88,15 @@ def _generate_recursively(result:list, root_folder:EventFolder):
             trainer_out_line = cur_event.get_trainer_obj().route_one_offset
             if cur_event.trainer_def.verbose_export:
                 trainer_out_line += " -v 2"
-            elif cur_event.trainer_def.trainer_name in const.MAJOR_FIGHTS:
+            elif pkmn.current_gen_info().is_major_fight(cur_event.trainer_def.trainer_name):
                 trainer_out_line += " -v 2"
-            elif cur_event.trainer_def.trainer_name in const.MINOR_FIGHTS:
+            elif pkmn.current_gen_info().is_minor_fight(cur_event.trainer_def.trainer_name):
                 trainer_out_line += " -v 1"
             result.append(trainer_out_line)
             result.append("")
         elif cur_event.wild_pkmn_info is not None:
-            pkmn = cur_event.get_wild_pkmn()
-            entry = f"L{pkmn.level} {pkmn_name_to_route_one(pkmn.name)}"
+            wild_pkmn = cur_event.get_wild_pkmn()
+            entry = f"L{wild_pkmn.level} {pkmn_name_to_route_one(wild_pkmn.name)}"
             if cur_event.wild_pkmn_info.trainer_pkmn:
                 entry += " -t"
             for _ in range(cur_event.wild_pkmn_info.quantity):

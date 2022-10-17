@@ -177,9 +177,7 @@ class SetupMovesSummary(tk.Frame):
         self.setup_label = tk.Label(self, text="Move to Add:", bg=config.get_background_color())
         self.setup_label.grid(row=0, column=1, padx=2)
 
-        stat_modifier_moves = list(const.STAT_INCREASE_MOVES.keys())
-        stat_modifier_moves += list(const.STAT_DECREASE_MOVES.keys())
-        self.setup_moves = custom_tkinter.SimpleOptionMenu(self, stat_modifier_moves)
+        self.setup_moves = custom_tkinter.SimpleOptionMenu(self, ["N/A"])
         self.setup_moves.grid(row=0, column=2, padx=2)
 
         self.add_button = custom_tkinter.SimpleButton(self, text="Add Setup Move", command=self._add_setup_move, bg=config.get_contrast_color())
@@ -201,6 +199,7 @@ class SetupMovesSummary(tk.Frame):
     
     def set_move_list(self, new_moves, trigger_update=False):
         self._move_list = new_moves
+        self.setup_moves.new_values(pkmn.current_gen_info().get_stat_modifer_moves())
         self._move_list_updated(trigger_update=trigger_update)
     
     def get_stage_modifiers(self):
@@ -444,8 +443,8 @@ class SimpleMonPairSummary(tk.Frame):
         self.right_mon_label_frame.columnconfigure(2, weight=1, uniform="right_col_group")
 
         self.columnconfigure(0, weight=1, uniform="label_group")
-        self.columnconfigure(1, minsize=170)
-        self.columnconfigure(3, minsize=170)
+        self.columnconfigure(1, minsize=200)
+        self.columnconfigure(3, minsize=200)
         self.columnconfigure(4, weight=1, uniform="label_group")
 
         self.move_list:List[DamageSummary] = []

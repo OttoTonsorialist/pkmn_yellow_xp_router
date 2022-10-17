@@ -184,7 +184,7 @@ class EventDefinition:
         if self._trainer_obj is None and self.trainer_def is not None:
             self._trainer_obj = pkmn.current_gen_info().trainer_db().get_trainer(self.trainer_def.trainer_name)
             if self._trainer_obj is None:
-                raise ValueError(f"Could not find trainer object for trainer named: '{self.trainer_def.trainer_name}', from trainer_db, loaded from: '{pkmn.current_gen_info().trainer_db()._path}'")
+                raise ValueError(f"Could not find trainer object for trainer named: '{self.trainer_def.trainer_name}', from trainer_db for version: {pkmn.current_gen_info().version_name()}")
         return self._trainer_obj
     
     def get_wild_pkmn(self):
@@ -592,7 +592,9 @@ class EventGroup:
     def is_major_fight(self):
         if self.event_definition.trainer_def is None:
             return False
-        return self.event_definition.trainer_def.trainer_name in const.MAJOR_FIGHTS
+        if pkmn.current_gen_info() is None:
+            return False
+        return pkmn.current_gen_info().is_major_fight(self.event_definition.trainer_def.trainer_name)
     
     def get_tags(self):
         if self.has_errors():

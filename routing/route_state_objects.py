@@ -6,7 +6,6 @@ from pkmn import universal_utils
 from pkmn import universal_data_objects
 import pkmn
 
-    
 
 class BagItem:
     def __init__(self, base_item, num):
@@ -23,7 +22,7 @@ class BagItem:
 
 
 class Inventory:
-    def __init__(self, cur_money=None, cur_items=None):
+    def __init__(self, cur_money=None, cur_items=None, bag_limit=None):
         if cur_money is None:
             cur_money = 3000
         self.cur_money = cur_money
@@ -31,6 +30,7 @@ class Inventory:
         if cur_items is None:
             cur_items = []
         self.cur_items = [BagItem(x.base_item, x.num) for x in cur_items]
+        self._bag_limit = bag_limit
         self._item_lookup = dict()
         self._reindex_lookup()
     
@@ -38,16 +38,16 @@ class Inventory:
         self._item_lookup = {x.base_item.name: idx for idx, x in enumerate(self.cur_items)}
     
     def _copy(self):
-        return Inventory(self.cur_money, self.cur_items)
+        return Inventory(cur_money=self.cur_money, cur_items=self.cur_items, bag_limit=self._bag_limit)
     
-    def defeat_trainer(self, trainer_obj):
+    def defeat_trainer(self, trainer_obj:universal_data_objects.Trainer):
         if trainer_obj is None:
             return self
         
         result = self._copy()
         result.cur_money += trainer_obj.money
 
-        fight_reward = const.FIGHT_REWARDS.get(trainer_obj.name)
+        fight_reward = pkmn.current_gen_info().get_fight_reward(trainer_obj.name)
         if fight_reward is not None:
             # it's ok to fail to add a fight reward to your bag
             try:
@@ -70,11 +70,14 @@ class Inventory:
                 raise ValueError(f"Cannot have multiple of the same key item: {base_item.name}")
 
             result.cur_items[result._item_lookup[base_item.name]].num += num
-        elif len(result.cur_items) >= const.BAG_LIMIT and not force:
-            raise ValueError(f"Cannot add more than {const.BAG_LIMIT} items to bag")
-        elif len(result.cur_items) < const.BAG_LIMIT:
+        elif self._bag_limit is not None and len(result.cur_items) >= self._bag_limit and not force:
+            raise ValueError(f"Cannot add more than {self._bag_limit} items to bag")
+        elif self._bag_limit is not None and len(result.cur_items) < self._bag_limit:
             # looks kind of weird, but when we're forcing, we don't want to error
             # but we still don't have room in the bag. So we just have to ignore that item...
+            result._item_lookup[base_item.name] = len(result.cur_items)
+            result.cur_items.append(BagItem(base_item, num))
+        elif self._bag_limit is None:
             result._item_lookup[base_item.name] = len(result.cur_items)
             result.cur_items.append(BagItem(base_item, num))
         
@@ -148,13 +151,6 @@ class SoloPokemon:
         self.dvs = dvs
         self.badges = badges
 
-        if move_list is None:
-            self.move_list = [x for x in species_def.initial_moves]
-            while len(self.move_list) < 4:
-                self.move_list.append("")
-        else:
-            self.move_list = move_list
-
         if cur_xp == 0:
             # if no initial XP is defined, assume creating a new level 5 pkmn
             self.cur_xp = universal_utils.level_lookups[self.species_def.growth_rate].get_xp_for_level(5)
@@ -167,6 +163,19 @@ class SoloPokemon:
         level_info = universal_utils.level_lookups[self.species_def.growth_rate].get_level_info(self.cur_xp)
         self.cur_level = level_info[0]
         self.xp_to_next_level = level_info[1]
+
+        if move_list is None:
+            self.move_list = [x for x in species_def.initial_moves]
+            for try_learn_move in species_def.levelup_moves:
+                if try_learn_move[0] <= self.cur_level and try_learn_move[1] not in self.move_list:
+                    self.move_list.append(try_learn_move[1])
+                if len(self.move_list) > 4:
+                    self.move_list = self.move_list[-4:]
+
+            while len(self.move_list) < 4:
+                self.move_list.append("")
+        else:
+            self.move_list = move_list
 
         if realized_stat_xp is None:
             realized_stat_xp = pkmn.current_gen_info().make_stat_block(0, 0, 0, 0, 0, 0, is_stat_xp=True)

@@ -46,6 +46,11 @@ class QuickTrainerAdd(tk.Frame):
         self._trainer_names.grid(row=self._cur_row, column=1, padx=self.padx, pady=self.pady, sticky=tk.E)
         self._cur_row += 1
 
+        self._rematches_label = custom_tkinter.CheckboxLabel(self._dropdowns, text="Show Rematches:", flip=True, toggle_command=self.trainer_filter_callback)
+        self._rematches_label.configure(width=self.option_menu_width)
+        self._rematches_label.grid(row=self._cur_row, column=0, columnspan=2, padx=self.padx, pady=self.pady, sticky=tk.EW)
+        self._cur_row += 1
+
         self._buttons = tk.Frame(self)
         self._buttons.pack(fill=tk.X, anchor=tk.CENTER, side=tk.BOTTOM)
         self._btn_width = 8
@@ -88,7 +93,8 @@ class QuickTrainerAdd(tk.Frame):
         valid_trainers = pkmn.current_gen_info().trainer_db().get_valid_trainers(
             trainer_class=class_filter,
             trainer_loc=loc_filter,
-            defeated_trainers=self.router.defeated_trainers
+            defeated_trainers=self.router.defeated_trainers,
+            show_rematches=self._rematches_label.is_checked()
         )
         if not valid_trainers:
             valid_trainers.append(const.NO_TRAINERS)

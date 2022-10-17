@@ -230,7 +230,7 @@ class CheckboxLabel(tk.Frame):
     CHECKED_STATE = "checked"
     UNCHECKED_STATE =" unchecked"
 
-    def __init__(self, *args, text="", init_check_state=None, toggle_command=None, **kwargs):
+    def __init__(self, *args, text="", init_check_state=None, toggle_command=None, flip=False, **kwargs):
         super().__init__(*args, **kwargs)
         bg = None
         if 'bg' in kwargs:
@@ -238,8 +238,14 @@ class CheckboxLabel(tk.Frame):
         self._checkbox = tk.Label(self, bg=bg)
         self._text_label = tk.Label(self, text=text, bg=bg)
 
-        self._checkbox.grid(row=0, column=0)
-        self._text_label.grid(row=0, column=1)
+        if flip:
+            self.columnconfigure(0, weight=1)
+            self._checkbox.grid(row=0, column=1)
+            self._text_label.grid(row=0, column=0, sticky=tk.W)
+        else:
+            self.columnconfigure(1, weight=1)
+            self._checkbox.grid(row=0, column=0)
+            self._text_label.grid(row=0, column=1)
 
         self.im_checked = ImageTk.PhotoImage(Image.open(IM_CHECKED), master=self)
         self.im_unchecked = ImageTk.PhotoImage(Image.open(IM_UNCHECKED), master=self)

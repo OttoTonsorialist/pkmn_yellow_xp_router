@@ -323,6 +323,7 @@ class Trainer:
         money:int,
         route_one_offset:str,
         pkmn:List[str],
+        rematch:bool=False
     ):
         self.trainer_class = trainer_class
         self.name = name
@@ -330,6 +331,7 @@ class Trainer:
         self.money = money
         self.route_one_offset = route_one_offset
         self.pkmn = pkmn
+        self.rematch = rematch
     
 
 class BaseItem:
@@ -358,7 +360,7 @@ class Move:
         base_power:int,
         move_type:str,
         effects,
-        attack_flavor:str
+        attack_flavor:List[str]
     ):
         self.name = name
         self.accuracy = accuracy

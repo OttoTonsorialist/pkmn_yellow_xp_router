@@ -64,7 +64,7 @@ class Router:
         self.init_route_state = route_state_objects.RouteState(
             route_state_objects.SoloPokemon(pkmn_name, pkmn_base, custom_dvs, new_badge_list),
             new_badge_list,
-            route_state_objects.Inventory()
+            pkmn.current_gen_info().make_inventory()
         )
 
         if level_up_moves is None:

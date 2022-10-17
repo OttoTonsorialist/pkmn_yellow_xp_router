@@ -1,0 +1,2883 @@
+{
+    "Pound": {
+        "name": "Pound",
+        "accuracy": 100,
+        "pp": 35,
+        "base_power": 40,
+        "type": "normal",
+        "attack_flavor": [],
+        "effects": []
+    },
+    "Karate Chop": {
+        "name": "Karate Chop",
+        "accuracy": 100,
+        "pp": 25,
+        "base_power": 50,
+        "type": "fighting",
+        "attack_flavor": ["high_crit"],
+        "effects": []
+    },
+    "DoubleSlap": {
+        "name": "DoubleSlap",
+        "accuracy": 85,
+        "pp": 10,
+        "base_power": 15,
+        "type": "normal",
+        "attack_flavor": ["multi_hit"],
+        "effects": []
+    },
+    "Comet Punch": {
+        "name": "Comet Punch",
+        "accuracy": 85,
+        "pp": 15,
+        "base_power": 18,
+        "type": "normal",
+        "attack_flavor": ["multi_hit"],
+        "effects": []
+    },
+    "Mega Punch": {
+        "name": "Mega Punch",
+        "accuracy": 85,
+        "pp": 20,
+        "base_power": 80,
+        "type": "normal",
+        "attack_flavor": [],
+        "effects": []
+    },
+    "Pay Day": {
+        "name": "Pay Day",
+        "accuracy": 100,
+        "pp": 20,
+        "base_power": 40,
+        "type": "normal",
+        "attack_flavor": ["scatter_coins"],
+        "effects": []
+    },
+    "Fire Punch": {
+        "name": "Fire Punch",
+        "accuracy": 100,
+        "pp": 15,
+        "base_power": 75,
+        "type": "fire",
+        "attack_flavor": [],
+        "effects": [
+            {
+                "chance": 10,
+                "status": "Burn"
+            }
+        ]
+    },
+    "Ice Punch": {
+        "name": "Ice Punch",
+        "accuracy": 100,
+        "pp": 15,
+        "base_power": 75,
+        "type": "ice",
+        "attack_flavor": [],
+        "effects": [
+            {
+                "chance": 10,
+                "status": "Freeze"
+            }
+        ]
+    },
+    "ThunderPunch": {
+        "name": "ThunderPunch",
+        "accuracy": 100,
+        "pp": 15,
+        "base_power": 75,
+        "type": "electric",
+        "attack_flavor": [],
+        "effects": [
+            {
+                "chance": 10,
+                "status": "Paralysis"
+            }
+        ]
+    },
+    "Scratch": {
+        "name": "Scratch",
+        "accuracy": 100,
+        "pp": 35,
+        "base_power": 40,
+        "type": "normal",
+        "attack_flavor": [],
+        "effects": []
+    },
+    "Vicegrip": {
+        "name": "Vicegrip",
+        "accuracy": 100,
+        "pp": 30,
+        "base_power": 55,
+        "type": "normal",
+        "attack_flavor": [],
+        "effects": []
+    },
+    "Guillotine": {
+        "name": "Guillotine",
+        "accuracy": 30,
+        "pp": 5,
+        "base_power": 0,
+        "type": "normal",
+        "attack_flavor": ["one_hit_ko"],
+        "effects": []
+    },
+    "Razor Wind": {
+        "name": "Razor Wind",
+        "accuracy": 75,
+        "pp": 10,
+        "base_power": 80,
+        "type": "normal",
+        "attack_flavor": ["two_turn", "high_crit"],
+        "effects": []
+    },
+    "Swords Dance": {
+        "name": "Swords Dance",
+        "accuracy": 100,
+        "pp": 30,
+        "base_power": 0,
+        "type": "normal",
+        "attack_flavor": [],
+        "effects": [
+            {
+                "chance": 100,
+                "modifier": 2,
+                "stat": "atk",
+                "target": "self"
+            }
+        ]
+    },
+    "Cut": {
+        "name": "Cut",
+        "accuracy": 95,
+        "pp": 30,
+        "base_power": 50,
+        "type": "normal",
+        "attack_flavor": [],
+        "effects": []
+    },
+    "Gust": {
+        "name": "Gust",
+        "accuracy": 100,
+        "pp": 35,
+        "base_power": 40,
+        "type": "flying",
+        "attack_flavor": ["bonus_fly_damage"],
+        "effects": []
+    },
+    "Wing Attack": {
+        "name": "Wing Attack",
+        "accuracy": 100,
+        "pp": 35,
+        "base_power": 60,
+        "type": "flying",
+        "attack_flavor": [],
+        "effects": []
+    },
+    "Whirlwind": {
+        "name": "Whirlwind",
+        "accuracy": 100,
+        "pp": 20,
+        "base_power": 0,
+        "type": "normal",
+        "attack_flavor": ["force_switch"],
+        "effects": []
+    },
+    "Fly": {
+        "name": "Fly",
+        "accuracy": 95,
+        "pp": 15,
+        "base_power": 70,
+        "type": "flying",
+        "attack_flavor": ["two_turn_semi_invulrnerable"],
+        "effects": []
+    },
+    "Bind": {
+        "name": "Bind",
+        "accuracy": 75,
+        "pp": 20,
+        "base_power": 15,
+        "type": "normal",
+        "attack_flavor": ["trap"],
+        "effects": []
+    },
+    "Slam": {
+        "name": "Slam",
+        "accuracy": 75,
+        "pp": 20,
+        "base_power": 80,
+        "type": "normal",
+        "attack_flavor": [],
+        "effects": []
+    },
+    "Vine Whip": {
+        "name": "Vine Whip",
+        "accuracy": 100,
+        "pp": 10,
+        "base_power": 35,
+        "type": "grass",
+        "attack_flavor": [],
+        "effects": []
+    },
+    "Stomp": {
+        "name": "Stomp",
+        "accuracy": 100,
+        "pp": 20,
+        "base_power": 65,
+        "type": "normal",
+        "attack_flavor": ["bonus_minimize_damage"],
+        "effects": [
+            {
+                "chance": 30,
+                "flinch": true
+            }
+        ]
+    },
+    "Double Kick": {
+        "name": "Double Kick",
+        "accuracy": 100,
+        "pp": 30,
+        "base_power": 30,
+        "type": "fighting",
+        "attack_flavor": ["two_hit"],
+        "effects": []
+    },
+    "Mega Kick": {
+        "name": "Mega Kick",
+        "accuracy": 75,
+        "pp": 5,
+        "base_power": 120,
+        "type": "normal",
+        "attack_flavor": [],
+        "effects": []
+    },
+    "Jump Kick": {
+        "name": "Jump Kick",
+        "accuracy": 95,
+        "pp": 25,
+        "base_power": 70,
+        "type": "fighting",
+        "attack_flavor": ["miss_recoil_damage"],
+        "effects": []
+    },
+    "Rolling Kick": {
+        "name": "Rolling Kick",
+        "accuracy": 85,
+        "pp": 15,
+        "base_power": 60,
+        "type": "fighting",
+        "attack_flavor": [],
+        "effects": [
+            {
+                "chance": 30,
+                "flinch": true
+            }
+        ]
+    },
+    "Sand-Attack": {
+        "name": "Sand-Attack",
+        "accuracy": 100,
+        "pp": 15,
+        "base_power": 0,
+        "type": "ground",
+        "attack_flavor": [],
+        "effects": [
+            {
+                "chance": 100,
+                "modifier": -1,
+                "stat": "acc",
+                "target": "enemy"
+            }
+        ]
+    },
+    "Headbutt": {
+        "name": "Headbutt",
+        "accuracy": 100,
+        "pp": 15,
+        "base_power": 70,
+        "type": "normal",
+        "attack_flavor": [],
+        "effects": [
+            {
+                "chance": 30,
+                "flinch": true
+            }
+        ]
+    },
+    "Horn Attack": {
+        "name": "Horn Attack",
+        "accuracy": 100,
+        "pp": 25,
+        "base_power": 65,
+        "type": "normal",
+        "attack_flavor": [],
+        "effects": []
+    },
+    "Fury Attack": {
+        "name": "Fury Attack",
+        "accuracy": 85,
+        "pp": 20,
+        "base_power": 15,
+        "type": "normal",
+        "attack_flavor": ["multi_hit"],
+        "effects": []
+    },
+    "Horn Drill": {
+        "name": "Horn Drill",
+        "accuracy": 30,
+        "pp": 5,
+        "base_power": 1,
+        "type": "normal",
+        "attack_flavor": ["one_hit_ko"],
+        "effects": []
+    },
+    "Tackle": {
+        "name": "Tackle",
+        "accuracy": 95,
+        "pp": 35,
+        "base_power": 35,
+        "type": "normal",
+        "attack_flavor": [],
+        "effects": []
+    },
+    "Body Slam": {
+        "name": "Body Slam",
+        "accuracy": 100,
+        "pp": 15,
+        "base_power": 85,
+        "type": "normal",
+        "attack_flavor": [],
+        "effects": [
+            {
+                "chance": 30,
+                "status": "Paralysis"
+            }
+        ]
+    },
+    "Wrap": {
+        "name": "Wrap",
+        "accuracy": 85,
+        "pp": 20,
+        "base_power": 15,
+        "type": "normal",
+        "attack_flavor": ["trap"],
+        "effects": []
+    },
+    "Take Down": {
+        "name": "Take Down",
+        "accuracy": 85,
+        "pp": 20,
+        "base_power": 90,
+        "type": "normal",
+        "attack_flavor": ["quarter_recoil"],
+        "effects": []
+    },
+    "Thrash": {
+        "name": "Thrash",
+        "accuracy": 100,
+        "pp": 20,
+        "base_power": 90,
+        "type": "normal",
+        "attack_flavor": ["rampage"],
+        "effects": []
+    },
+    "Double Edge": {
+        "name": "Double Edge",
+        "accuracy": 100,
+        "pp": 15,
+        "base_power": 120,
+        "type": "normal",
+        "attack_flavor": ["quarter_recoil"],
+        "effects": []
+    },
+    "Tail Whip": {
+        "name": "Tail Whip",
+        "accuracy": 100,
+        "pp": 30,
+        "base_power": 0,
+        "type": "normal",
+        "attack_flavor": [],
+        "effects": [
+            {
+                "chance": 100,
+                "modifier": -1,
+                "stat": "def",
+                "target": "enemy"
+            }
+        ]
+    },
+    "Poison Sting": {
+        "name": "Poison Sting",
+        "accuracy": 100,
+        "pp": 35,
+        "base_power": 15,
+        "type": "poison",
+        "attack_flavor": [],
+        "effects": [
+            {
+                "chance": 30,
+                "status": "Poison"
+            }
+        ]
+    },
+    "Twineedle": {
+        "name": "Twineedle",
+        "accuracy": 100,
+        "pp": 20,
+        "base_power": 25,
+        "type": "bug",
+        "attack_flavor": ["two_hit"],
+        "effects": [
+            {
+                "chance": 20,
+                "status": "Poison"
+            }
+        ]
+    },
+    "Pin Missile": {
+        "name": "Pin Missile",
+        "accuracy": 85,
+        "pp": 20,
+        "base_power": 14,
+        "type": "bug",
+        "attack_flavor": ["multi_hit"],
+        "effects": []
+    },
+    "Leer": {
+        "name": "Leer",
+        "accuracy": 100,
+        "pp": 30,
+        "base_power": 0,
+        "type": "normal",
+        "attack_flavor": [],
+        "effects": [
+            {
+                "chance": 100,
+                "modifier": -1,
+                "stat": "def",
+                "target": "enemy"
+            }
+        ]
+    },
+    "Bite": {
+        "name": "Bite",
+        "accuracy": 100,
+        "pp": 25,
+        "base_power": 60,
+        "type": "dark",
+        "attack_flavor": [],
+        "effects": [
+            {
+                "chance": 30,
+                "flinch": true
+            }
+        ]
+    },
+    "Growl": {
+        "name": "Growl",
+        "accuracy": 100,
+        "pp": 40,
+        "base_power": 0,
+        "type": "normal",
+        "attack_flavor": [],
+        "effects": [
+            {
+                "chance": 100,
+                "modifier": -1,
+                "stat": "atk",
+                "target": "enemy"
+            }
+        ]
+    },
+    "Roar": {
+        "name": "Roar",
+        "accuracy": 100,
+        "pp": 20,
+        "base_power": 0,
+        "type": "normal",
+        "attack_flavor": ["force_switch"],
+        "effects": []
+    },
+    "Sing": {
+        "name": "Sing",
+        "accuracy": 55,
+        "pp": 15,
+        "base_power": 0,
+        "type": "normal",
+        "attack_flavor": [],
+        "effects": [
+            {
+                "chance": 100,
+                "status": "Sleep"
+            }
+        ]
+    },
+    "Supersonic": {
+        "name": "Supersonic",
+        "accuracy": 55,
+        "pp": 20,
+        "base_power": 0,
+        "type": "normal",
+        "attack_flavor": [],
+        "effects": [
+            {
+                "chance": 100,
+                "status": "Confusion"
+            }
+        ]
+    },
+    "SonicBoom": {
+        "name": "SonicBoom",
+        "accuracy": 90,
+        "pp": 20,
+        "base_power": 20,
+        "type": "normal",
+        "attack_flavor": ["fixed_damage"],
+        "effects": []
+    },
+    "Disable": {
+        "name": "Disable",
+        "accuracy": 55,
+        "pp": 20,
+        "base_power": 0,
+        "type": "normal",
+        "attack_flavor": [],
+        "effects": [
+            {
+                "chance": 100,
+                "disable": true
+            }
+        ]
+    },
+    "Acid": {
+        "name": "Acid",
+        "accuracy": 100,
+        "pp": 30,
+        "base_power": 40,
+        "type": "poison",
+        "attack_flavor": [],
+        "effects": [
+            {
+                "chance": 10,
+                "modifier": -1,
+                "stat": "def",
+                "target": "enemy"
+            }
+        ]
+    },
+    "Ember": {
+        "name": "Ember",
+        "accuracy": 100,
+        "pp": 25,
+        "base_power": 40,
+        "type": "fire",
+        "attack_flavor": [],
+        "effects": [
+            {
+                "chance": 10,
+                "status": "Burn"
+            }
+        ]
+    },
+    "Flamethrower": {
+        "name": "Flamethrower",
+        "accuracy": 100,
+        "pp": 15,
+        "base_power": 95,
+        "type": "fire",
+        "attack_flavor": [],
+        "effects": [
+            {
+                "chance": 10,
+                "status": "Burn"
+            }
+        ]
+    },
+    "Mist": {
+        "name": "Mist",
+        "accuracy": 100,
+        "pp": 30,
+        "base_power": 0,
+        "type": "ice",
+        "attack_flavor": ["stat_protection"],
+        "effects": []
+    },
+    "Water Gun": {
+        "name": "Water Gun",
+        "accuracy": 100,
+        "pp": 25,
+        "base_power": 40,
+        "type": "water",
+        "attack_flavor": [],
+        "effects": []
+    },
+    "Hydro Pump": {
+        "name": "Hydro Pump",
+        "accuracy": 80,
+        "pp": 5,
+        "base_power": 120,
+        "type": "water",
+        "attack_flavor": [],
+        "effects": []
+    },
+    "Surf": {
+        "name": "Surf",
+        "accuracy": 100,
+        "pp": 15,
+        "base_power": 95,
+        "type": "water",
+        "attack_flavor": [],
+        "effects": []
+    },
+    "Ice Beam": {
+        "name": "Ice Beam",
+        "accuracy": 100,
+        "pp": 10,
+        "base_power": 95,
+        "type": "ice",
+        "attack_flavor": [],
+        "effects": [
+            {
+                "chance": 10,
+                "status": "Freeze"
+            }
+        ]
+    },
+    "Blizzard": {
+        "name": "Blizzard",
+        "accuracy": 70,
+        "pp": 5,
+        "base_power": 120,
+        "type": "ice",
+        "attack_flavor": [],
+        "effects": [
+            {
+                "chance": 10,
+                "status": "Freeze"
+            }
+        ]
+    },
+    "Psybeam": {
+        "name": "Psybeam",
+        "accuracy": 100,
+        "pp": 20,
+        "base_power": 65,
+        "type": "psychic",
+        "attack_flavor": [],
+        "effects": [
+            {
+                "chance": 10,
+                "status": "Confusion"
+            }
+        ]
+    },
+    "BubbleBeam": {
+        "name": "BubbleBeam",
+        "accuracy": 100,
+        "pp": 20,
+        "base_power": 65,
+        "type": "water",
+        "attack_flavor": [],
+        "effects": [
+            {
+                "chance": 10,
+                "modifier": -1,
+                "stat": "spe",
+                "target": "enemy"
+            }
+        ]
+    },
+    "Aurora Beam": {
+        "name": "Aurora Beam",
+        "accuracy": 100,
+        "pp": 20,
+        "base_power": 65,
+        "type": "ice",
+        "attack_flavor": [],
+        "effects": [
+            {
+                "chance": 10,
+                "modifier": -1,
+                "stat": "atk",
+                "target": "enemy"
+            }
+        ]
+    },
+    "Hyper Beam": {
+        "name": "Hyper Beam",
+        "accuracy": 90,
+        "pp": 5,
+        "base_power": 150,
+        "type": "normal",
+        "attack_flavor": ["recharge"],
+        "effects": []
+    },
+    "Peck": {
+        "name": "Peck",
+        "accuracy": 100,
+        "pp": 35,
+        "base_power": 35,
+        "type": "flying",
+        "attack_flavor": [],
+        "effects": []
+    },
+    "Drill Peck": {
+        "name": "Drill Peck",
+        "accuracy": 100,
+        "pp": 20,
+        "base_power": 80,
+        "type": "flying",
+        "attack_flavor": [],
+        "effects": []
+    },
+    "Submission": {
+        "name": "Submission",
+        "accuracy": 80,
+        "pp": 25,
+        "base_power": 80,
+        "type": "fighting",
+        "attack_flavor": ["quarter_recoil"],
+        "effects": []
+    },
+    "Low Kick": {
+        "name": "Low Kick",
+        "accuracy": 90,
+        "pp": 20,
+        "base_power": 50,
+        "type": "fighting",
+        "attack_flavor": [],
+        "effects": [
+            {
+                "chance": 30,
+                "flinch": true
+            }
+        ]
+    },
+    "Counter": {
+        "name": "Counter",
+        "accuracy": 100,
+        "pp": 20,
+        "base_power": 0,
+        "type": "fighting",
+        "attack_flavor": ["counter"],
+        "effects": []
+    },
+    "Seismic Toss": {
+        "name": "Seismic Toss",
+        "accuracy": 100,
+        "pp": 20,
+        "base_power": 1,
+        "type": "fighting",
+        "attack_flavor": ["level_damage"],
+        "effects": []
+    },
+    "Strength": {
+        "name": "Strength",
+        "accuracy": 100,
+        "pp": 15,
+        "base_power": 80,
+        "type": "normal",
+        "attack_flavor": [],
+        "effects": []
+    },
+    "Absorb": {
+        "name": "Absorb",
+        "accuracy": 100,
+        "pp": 20,
+        "base_power": 20,
+        "type": "grass",
+        "attack_flavor": ["drain_hp"],
+        "effects": []
+    },
+    "Mega Drain": {
+        "name": "Mega Drain",
+        "accuracy": 100,
+        "pp": 10,
+        "base_power": 40,
+        "type": "grass",
+        "attack_flavor": ["drain_hp"],
+        "effects": []
+    },
+    "Leech Seed": {
+        "name": "Leech Seed",
+        "accuracy": 90,
+        "pp": 10,
+        "base_power": 0,
+        "type": "grass",
+        "attack_flavor": [],
+        "effects": [
+            {
+                "chance": 100,
+                "status": "Leech Seed"
+            }
+        ]
+    },
+    "Growth": {
+        "name": "Growth",
+        "accuracy": 100,
+        "pp": 40,
+        "base_power": 0,
+        "type": "normal",
+        "attack_flavor": [],
+        "effects": [
+            {
+                "chance": 100,
+                "modifier": 1,
+                "stat": "spa",
+                "target": "self"
+            }
+        ]
+    },
+    "Razor Leaf": {
+        "name": "Razor Leaf",
+        "accuracy": 95,
+        "pp": 25,
+        "base_power": 55,
+        "type": "grass",
+        "attack_flavor": ["high_crit"],
+        "effects": []
+    },
+    "SolarBeam": {
+        "name": "SolarBeam",
+        "accuracy": 100,
+        "pp": 10,
+        "base_power": 120,
+        "type": "grass",
+        "attack_flavor": ["two_turn"],
+        "effects": []
+    },
+    "PoisonPowder": {
+        "name": "PoisonPowder",
+        "accuracy": 75,
+        "pp": 35,
+        "base_power": 0,
+        "type": "poison",
+        "attack_flavor": [],
+        "effects": [
+            {
+                "chance": 100,
+                "status": "Poison"
+            }
+        ]
+    },
+    "Stun Spore": {
+        "name": "Stun Spore",
+        "accuracy": 75,
+        "pp": 30,
+        "base_power": 0,
+        "type": "grass",
+        "attack_flavor": [],
+        "effects": [
+            {
+                "chance": 100,
+                "status": "Paralysis"
+            }
+        ]
+    },
+    "Sleep Powder": {
+        "name": "Sleep Powder",
+        "accuracy": 75,
+        "pp": 15,
+        "base_power": 0,
+        "type": "grass",
+        "attack_flavor": [],
+        "effects": [
+            {
+                "chance": 100,
+                "status": "Sleep"
+            }
+        ]
+    },
+    "Petal Dance": {
+        "name": "Petal Dance",
+        "accuracy": 100,
+        "pp": 20,
+        "base_power": 70,
+        "type": "grass",
+        "attack_flavor": ["rampage"],
+        "effects": []
+    },
+    "String Shot": {
+        "name": "String Shot",
+        "accuracy": 95,
+        "pp": 40,
+        "base_power": 0,
+        "type": "bug",
+        "attack_flavor": [],
+        "effects": [
+            {
+                "chance": 100,
+                "modifier": -1,
+                "stat": "spe",
+                "target": "enemy"
+            }
+        ]
+    },
+    "Dragon Rage": {
+        "name": "Dragon Rage",
+        "accuracy": 100,
+        "pp": 10,
+        "base_power": 40,
+        "type": "dragon",
+        "attack_flavor": ["fixed_damage"],
+        "effects": []
+    },
+    "Fire Spin": {
+        "name": "Fire Spin",
+        "accuracy": 70,
+        "pp": 15,
+        "base_power": 15,
+        "type": "fire",
+        "attack_flavor": ["trap"],
+        "effects": []
+    },
+    "ThunderShock": {
+        "name": "ThunderShock",
+        "accuracy": 100,
+        "pp": 30,
+        "base_power": 40,
+        "type": "electric",
+        "attack_flavor": [],
+        "effects": [
+            {
+                "chance": 10,
+                "status": "Paralysis"
+            }
+        ]
+    },
+    "Thunderbolt": {
+        "name": "Thunderbolt",
+        "accuracy": 100,
+        "pp": 15,
+        "base_power": 95,
+        "type": "electric",
+        "attack_flavor": [],
+        "effects": [
+            {
+                "chance": 10,
+                "status": "Paralysis"
+            }
+        ]
+    },
+    "Thunder Wave": {
+        "name": "Thunder Wave",
+        "accuracy": 100,
+        "pp": 20,
+        "base_power": 0,
+        "type": "electric",
+        "attack_flavor": [],
+        "effects": [
+            {
+                "chance": 100,
+                "status": "Paralysis"
+            }
+        ]
+    },
+    "Thunder": {
+        "name": "Thunder",
+        "accuracy": 70,
+        "pp": 10,
+        "base_power": 120,
+        "type": "electric",
+        "attack_flavor": ["hits_fly"],
+        "effects": [
+            {
+                "chance": 30,
+                "status": "Paralysis"
+            }
+        ]
+    },
+    "Rock Throw": {
+        "name": "Rock Throw",
+        "accuracy": 90,
+        "pp": 15,
+        "base_power": 50,
+        "type": "rock",
+        "attack_flavor": [],
+        "effects": []
+    },
+    "Earthquake": {
+        "name": "Earthquake",
+        "accuracy": 100,
+        "pp": 10,
+        "base_power": 100,
+        "type": "ground",
+        "attack_flavor": ["bonus_dig_damage"],
+        "effects": []
+    },
+    "Fissure": {
+        "name": "Fissure",
+        "accuracy": 30,
+        "pp": 5,
+        "base_power": 1,
+        "type": "ground",
+        "attack_flavor": ["one_hit_ko"],
+        "effects": []
+    },
+    "Dig": {
+        "name": "Dig",
+        "accuracy": 100,
+        "pp": 10,
+        "base_power": 60,
+        "type": "ground",
+        "attack_flavor": ["two_turn_semi_invlunerable"],
+        "effects": []
+    },
+    "Toxic": {
+        "name": "Toxic",
+        "accuracy": 85,
+        "pp": 10,
+        "base_power": 0,
+        "type": "poison",
+        "attack_flavor": [],
+        "effects": [
+            {
+                "chance": 100,
+                "status": "Toxic"
+            }
+        ]
+    },
+    "Confusion": {
+        "name": "Confusion",
+        "accuracy": 100,
+        "pp": 25,
+        "base_power": 50,
+        "type": "psychic",
+        "attack_flavor": [],
+        "effects": [
+            {
+                "chance": 10,
+                "status": "Confusion"
+            }
+        ]
+    },
+    "Psychic": {
+        "name": "Psychic",
+        "accuracy": 100,
+        "pp": 10,
+        "base_power": 90,
+        "type": "psychic",
+        "attack_flavor": [],
+        "effects": [
+            {
+                "chance": 10,
+                "modifier": -1,
+                "stat": "spd",
+                "target": "enemy"
+            }
+        ]
+    },
+    "Hypnosis": {
+        "name": "Hypnosis",
+        "accuracy": 60,
+        "pp": 20,
+        "base_power": 0,
+        "type": "psychic",
+        "attack_flavor": [],
+        "effects": [
+            {
+                "chance": 100,
+                "status": "Sleep"
+            }
+        ]
+    },
+    "Meditate": {
+        "name": "Meditate",
+        "accuracy": 100,
+        "pp": 40,
+        "base_power": 0,
+        "type": "psychic",
+        "attack_flavor": [],
+        "effects": [
+            {
+                "chance": 100,
+                "modifier": 1,
+                "stat": "atk",
+                "target": "self"
+            }
+        ]
+    },
+    "Agility": {
+        "name": "Agility",
+        "accuracy": 100,
+        "pp": 30,
+        "base_power": 0,
+        "type": "psychic",
+        "attack_flavor": [],
+        "effects": [
+            {
+                "chance": 100,
+                "modifier": 2,
+                "stat": "spe",
+                "target": "self"
+            }
+        ]
+    },
+    "Quick Attack": {
+        "name": "Quick Attack",
+        "accuracy": 100,
+        "pp": 30,
+        "base_power": 40,
+        "type": "normal",
+        "attack_flavor": ["increased_priority"],
+        "effects": []
+    },
+    "Rage": {
+        "name": "Rage",
+        "accuracy": 100,
+        "pp": 20,
+        "base_power": 20,
+        "type": "normal",
+        "attack_flavor": ["rage"],
+        "effects": []
+    },
+    "Teleport": {
+        "name": "Teleport",
+        "accuracy": 100,
+        "pp": 20,
+        "base_power": 0,
+        "type": "psychic",
+        "attack_flavor": ["end_wild_battle"],
+        "effects": []
+    },
+    "Night Shade": {
+        "name": "Night Shade",
+        "accuracy": 100,
+        "pp": 15,
+        "base_power": 1,
+        "type": "ghos",
+        "attack_flavor": ["level_damage"],
+        "effects": []
+    },
+    "Mimic": {
+        "name": "Mimic",
+        "accuracy": 100,
+        "pp": 10,
+        "base_power": 0,
+        "type": "normal",
+        "attack_flavor": ["mimic"],
+        "effects": []
+    },
+    "Screech": {
+        "name": "Screech",
+        "accuracy": 85,
+        "pp": 40,
+        "base_power": 0,
+        "type": "normal",
+        "attack_flavor": [],
+        "effects": [
+            {
+                "chance": 100,
+                "modifier": -2,
+                "stat": "def",
+                "target": "enemy"
+            }
+        ]
+    },
+    "Double Team": {
+        "name": "Double Team",
+        "accuracy": 100,
+        "pp": 15,
+        "base_power": 0,
+        "type": "normal",
+        "attack_flavor": [],
+        "effects": [
+            {
+                "chance": 100,
+                "modifier": 1,
+                "stat": "ev",
+                "target": "self"
+            }
+        ]
+    },
+    "Recover": {
+        "name": "Recover",
+        "accuracy": 100,
+        "pp": 20,
+        "base_power": 0,
+        "type": "normal",
+        "attack_flavor": ["recover"],
+        "effects": []
+    },
+    "Harden": {
+        "name": "Harden",
+        "accuracy": 100,
+        "pp": 30,
+        "base_power": 0,
+        "type": "normal",
+        "attack_flavor": [],
+        "effects": [
+            {
+                "chance": 100,
+                "modifier": 1,
+                "stat": "def",
+                "target": "self"
+            }
+        ]
+    },
+    "Minimize": {
+        "name": "Minimize",
+        "accuracy": 100,
+        "pp": 20,
+        "base_power": 0,
+        "type": "normal",
+        "attack_flavor": [],
+        "effects": [
+            {
+                "chance": 100,
+                "modifier": 1,
+                "stat": "ev",
+                "target": "self"
+            }
+        ]
+    },
+    "SmokeScreen": {
+        "name": "SmokeScreen",
+        "accuracy": 100,
+        "pp": 20,
+        "base_power": 0,
+        "type": "normal",
+        "attack_flavor": [],
+        "effects": [
+            {
+                "chance": 100,
+                "modifier": -1,
+                "stat": "acc",
+                "target": "enemy"
+            }
+        ]
+    },
+    "Confuse Ray": {
+        "name": "Confuse Ray",
+        "accuracy": 100,
+        "pp": 10,
+        "base_power": 0,
+        "type": "ghos",
+        "attack_flavor": [],
+        "effects": [
+            {
+                "chance": 100,
+                "status": "Confusion"
+            }
+        ]
+    },
+    "Withdraw": {
+        "name": "Withdraw",
+        "accuracy": 100,
+        "pp": 40,
+        "base_power": 0,
+        "type": "water",
+        "attack_flavor": [],
+        "effects": [
+            {
+                "chance": 100,
+                "modifier": 1,
+                "stat": "def",
+                "target": "self"
+            }
+        ]
+    },
+    "Defense Curl": {
+        "name": "Defense Curl",
+        "accuracy": 100,
+        "pp": 40,
+        "base_power": 0,
+        "type": "normal",
+        "attack_flavor": [],
+        "effects": [
+            {
+                "chance": 100,
+                "modifier": 1,
+                "stat": "def",
+                "target": "self"
+            }
+        ]
+    },
+    "Barrier": {
+        "name": "Barrier",
+        "accuracy": 100,
+        "pp": 30,
+        "base_power": 0,
+        "type": "psychic",
+        "attack_flavor": [],
+        "effects": [
+            {
+                "chance": 100,
+                "modifier": 2,
+                "stat": "def",
+                "target": "self"
+            }
+        ]
+    },
+    "Light Screen": {
+        "name": "Light Screen",
+        "accuracy": 100,
+        "pp": 30,
+        "base_power": 0,
+        "type": "psychic",
+        "attack_flavor": [],
+        "effects": [
+            {
+                "chance": 100,
+                "status": "Light Screen"
+            }
+        ]
+    },
+    "Haze": {
+        "name": "Haze",
+        "accuracy": 100,
+        "pp": 30,
+        "base_power": 0,
+        "type": "ice",
+        "attack_flavor": ["haze"],
+        "effects": []
+    },
+    "Reflect": {
+        "name": "Reflect",
+        "accuracy": 100,
+        "pp": 20,
+        "base_power": 0,
+        "type": "psychic",
+        "attack_flavor": [],
+        "effects": [
+            {
+                "chance": 100,
+                "status": "Reflect"
+            }
+        ]
+    },
+    "Focus Energy": {
+        "name": "Focus Energy",
+        "accuracy": 100,
+        "pp": 30,
+        "base_power": 0,
+        "type": "normal",
+        "attack_flavor": ["focus_energy"],
+        "effects": []
+    },
+    "Bide": {
+        "name": "Bide",
+        "accuracy": 100,
+        "pp": 10,
+        "base_power": 0,
+        "type": "normal",
+        "attack_flavor": ["bide"],
+        "effects": []
+    },
+    "Metronome": {
+        "name": "Metronome",
+        "accuracy": 100,
+        "pp": 10,
+        "base_power": 0,
+        "type": "normal",
+        "attack_flavor": ["metronome"],
+        "effects": []
+    },
+    "Mirror Move": {
+        "name": "Mirror Move",
+        "accuracy": 100,
+        "pp": 20,
+        "base_power": 0,
+        "type": "flying",
+        "attack_flavor": ["mirror_move"],
+        "effects": []
+    },
+    "Selfdestruct": {
+        "name": "Selfdestruct",
+        "accuracy": 100,
+        "pp": 5,
+        "base_power": 200,
+        "type": "normal",
+        "attack_flavor": ["self_destruct_explosion"],
+        "effects": []
+    },
+    "Egg Bomb": {
+        "name": "Egg Bomb",
+        "accuracy": 75,
+        "pp": 10,
+        "base_power": 100,
+        "type": "normal",
+        "attack_flavor": [],
+        "effects": []
+    },
+    "Lick": {
+        "name": "Lick",
+        "accuracy": 100,
+        "pp": 30,
+        "base_power": 20,
+        "type": "ghos",
+        "attack_flavor": [],
+        "effects": [
+            {
+                "chance": 30,
+                "status": "Paralysis"
+            }
+        ]
+    },
+    "Smog": {
+        "name": "Smog",
+        "accuracy": 70,
+        "pp": 20,
+        "base_power": 20,
+        "type": "poison",
+        "attack_flavor": [],
+        "effects": [
+            {
+                "chance": 40,
+                "status": "Poison"
+            }
+        ]
+    },
+    "Sludge": {
+        "name": "Sludge",
+        "accuracy": 100,
+        "pp": 20,
+        "base_power": 65,
+        "type": "poison",
+        "attack_flavor": [],
+        "effects": [
+            {
+                "chance": 30,
+                "status": "Poison"
+            }
+        ]
+    },
+    "Bone Club": {
+        "name": "Bone Club",
+        "accuracy": 85,
+        "pp": 20,
+        "base_power": 65,
+        "type": "ground",
+        "attack_flavor": [],
+        "effects": [
+            {
+                "chance": 10,
+                "flinch": true
+            }
+        ]
+    },
+    "Fire Blast": {
+        "name": "Fire Blast",
+        "accuracy": 85,
+        "pp": 5,
+        "base_power": 120,
+        "type": "fire",
+        "attack_flavor": [],
+        "effects": [
+            {
+                "chance": 10,
+                "status": "Burn"
+            }
+        ]
+    },
+    "Waterfall": {
+        "name": "Waterfall",
+        "accuracy": 100,
+        "pp": 15,
+        "base_power": 80,
+        "type": "water",
+        "attack_flavor": [],
+        "effects": []
+    },
+    "Clamp": {
+        "name": "Clamp",
+        "accuracy": 75,
+        "pp": 10,
+        "base_power": 35,
+        "type": "water",
+        "attack_flavor": ["trap"],
+        "effects": []
+    },
+    "Swift": {
+        "name": "Swift",
+        "accuracy": null,
+        "pp": 20,
+        "base_power": 60,
+        "type": "normal",
+        "attack_flavor": [],
+        "effects": []
+    },
+    "Skull Bash": {
+        "name": "Skull Bash",
+        "accuracy": 100,
+        "pp": 15,
+        "base_power": 100,
+        "type": "normal",
+        "attack_flavor": ["two_turn"],
+        "effects": [
+            {
+                "chance": 100,
+                "modifier": 1,
+                "stat": "def",
+                "target": "self"
+            }
+        ]
+    },
+    "Spike Cannon": {
+        "name": "Spike Cannon",
+        "accuracy": 100,
+        "pp": 15,
+        "base_power": 20,
+        "type": "normal",
+        "attack_flavor": ["multi_hit"],
+        "effects": []
+    },
+    "Constrict": {
+        "name": "Constrict",
+        "accuracy": 100,
+        "pp": 35,
+        "base_power": 10,
+        "type": "normal",
+        "attack_flavor": [],
+        "effects": [
+            {
+                "chance": 10,
+                "modifier": -1,
+                "stat": "spe",
+                "target": "enemy"
+            }
+        ]
+    },
+    "Amnesia": {
+        "name": "Amnesia",
+        "accuracy": 100,
+        "pp": 20,
+        "base_power": 0,
+        "type": "psychic",
+        "attack_flavor": [],
+        "effects": [
+            {
+                "chance": 100,
+                "modifier": 2,
+                "stat": "spd",
+                "target": "self"
+            }
+        ]
+    },
+    "Kinesis": {
+        "name": "Kinesis",
+        "accuracy": 80,
+        "pp": 15,
+        "base_power": 0,
+        "type": "psychic",
+        "attack_flavor": [],
+        "effects": [
+            {
+                "chance": 100,
+                "modifier": -1,
+                "stat": "acc",
+                "target": "enemy"
+            }
+        ]
+    },
+    "Softboiled": {
+        "name": "Softboiled",
+        "accuracy": 100,
+        "pp": 10,
+        "base_power": 0,
+        "type": "normal",
+        "attack_flavor": ["recover"],
+        "effects": []
+    },
+    "Hi Jump Kick": {
+        "name": "Hi Jump Kick",
+        "accuracy": 90,
+        "pp": 20,
+        "base_power": 85,
+        "type": "fighting",
+        "attack_flavor": ["miss_recoil_damage"],
+        "effects": []
+    },
+    "Glare": {
+        "name": "Glare",
+        "accuracy": 75,
+        "pp": 30,
+        "base_power": 0,
+        "type": "normal",
+        "attack_flavor": [],
+        "effects": [
+            {
+                "chance": 100,
+                "status": "Paralysis"
+            }
+        ]
+    },
+    "Dream Eater": {
+        "name": "Dream Eater",
+        "accuracy": 100,
+        "pp": 15,
+        "base_power": 100,
+        "type": "psychic",
+        "attack_flavor": ["dream_eater", "drain_hp"],
+        "effects": []
+    },
+    "Poison Gas": {
+        "name": "Poison Gas",
+        "accuracy": 55,
+        "pp": 40,
+        "base_power": 0,
+        "type": "poison",
+        "attack_flavor": [],
+        "effects": [
+            {
+                "chance": 100,
+                "status": "Poison"
+            }
+        ]
+    },
+    "Barrage": {
+        "name": "Barrage",
+        "accuracy": 85,
+        "pp": 20,
+        "base_power": 15,
+        "type": "normal",
+        "attack_flavor": ["multi_hit"],
+        "effects": []
+    },
+    "Leech Life": {
+        "name": "Leech Life",
+        "accuracy": 100,
+        "pp": 15,
+        "base_power": 20,
+        "type": "bug",
+        "attack_flavor": ["drain_hp"],
+        "effects": []
+    },
+    "Lovely Kiss": {
+        "name": "Lovely Kiss",
+        "accuracy": 75,
+        "pp": 10,
+        "base_power": 0,
+        "type": "normal",
+        "attack_flavor": [],
+        "effects": [
+            {
+                "chance": 100,
+                "status": "Sleep"
+            }
+        ]
+    },
+    "Sky Attack": {
+        "name": "Sky Attack",
+        "accuracy": 90,
+        "pp": 5,
+        "base_power": 140,
+        "type": "flying",
+        "attack_flavor": ["two_turn"],
+        "effects": []
+    },
+    "Transform": {
+        "name": "Transform",
+        "accuracy": 100,
+        "pp": 10,
+        "base_power": 0,
+        "type": "normal",
+        "attack_flavor": ["transform"],
+        "effects": []
+    },
+    "Bubble": {
+        "name": "Bubble",
+        "accuracy": 100,
+        "pp": 30,
+        "base_power": 20,
+        "type": "water",
+        "attack_flavor": [],
+        "effects": [
+            {
+                "chance": 10,
+                "modifier": -1,
+                "stat": "spe",
+                "target": "enemy"
+            }
+        ]
+    },
+    "Dizzy Punch": {
+        "name": "Dizzy Punch",
+        "accuracy": 100,
+        "pp": 10,
+        "base_power": 70,
+        "type": "normal",
+        "attack_flavor": [],
+        "effects": [
+            {
+                "chance": 20,
+                "status": "Confusion"
+            }
+        ]
+    },
+    "Spore": {
+        "name": "Spore",
+        "accuracy": 100,
+        "pp": 15,
+        "base_power": 0,
+        "type": "grass",
+        "attack_flavor": [],
+        "effects": [
+            {
+                "chance": 100,
+                "status": "Sleep"
+            }
+        ]
+    },
+    "Flash": {
+        "name": "Flash",
+        "accuracy": 70,
+        "pp": 20,
+        "base_power": 0,
+        "type": "normal",
+        "attack_flavor": [],
+        "effects": [
+            {
+                "chance": 100,
+                "modifier": -1,
+                "stat": "acc",
+                "target": "enemy"
+            }
+        ]
+    },
+    "Psywave": {
+        "name": "Psywave",
+        "accuracy": 80,
+        "pp": 15,
+        "base_power": 1,
+        "type": "psychic",
+        "attack_flavor": ["psywave"],
+        "effects": []
+    },
+    "Splash": {
+        "name": "Splash",
+        "accuracy": 100,
+        "pp": 40,
+        "base_power": 0,
+        "type": "normal",
+        "attack_flavor": [],
+        "effects": []
+    },
+    "Acid Armor": {
+        "name": "Acid Armor",
+        "accuracy": 100,
+        "pp": 40,
+        "base_power": 0,
+        "type": "poison",
+        "attack_flavor": [],
+        "effects": [
+            {
+                "chance": 100,
+                "modifier": 2,
+                "stat": "def",
+                "target": "self"
+            }
+        ]
+    },
+    "Crabhammer": {
+        "name": "Crabhammer",
+        "accuracy": 85,
+        "pp": 10,
+        "base_power": 90,
+        "type": "water",
+        "attack_flavor": ["high_crit"],
+        "effects": []
+    },
+    "Explosion": {
+        "name": "Explosion",
+        "accuracy": 100,
+        "pp": 5,
+        "base_power": 250,
+        "type": "normal",
+        "attack_flavor": ["self_destruct_explosion"],
+        "effects": []
+    },
+    "Fury Swipes": {
+        "name": "Fury Swipes",
+        "accuracy": 80,
+        "pp": 15,
+        "base_power": 18,
+        "type": "normal",
+        "attack_flavor": ["multi_hit"],
+        "effects": []
+    },
+    "Bonemerang": {
+        "name": "Bonemerang",
+        "accuracy": 90,
+        "pp": 10,
+        "base_power": 50,
+        "type": "ground",
+        "attack_flavor": ["two_hit"],
+        "effects": []
+    },
+    "Rest": {
+        "name": "Rest",
+        "accuracy": 100,
+        "pp": 10,
+        "base_power": 0,
+        "type": "psychic",
+        "attack_flavor": ["rest"],
+        "effects": []
+    },
+    "Rock Slide": {
+        "name": "Rock Slide",
+        "accuracy": 90,
+        "pp": 10,
+        "base_power": 75,
+        "type": "rock",
+        "attack_flavor": [],
+        "effects": [
+            {
+                "chance": 30,
+                "flinch": true
+            }
+        ]
+    },
+    "Hyper Fang": {
+        "name": "Hyper Fang",
+        "accuracy": 90,
+        "pp": 15,
+        "base_power": 80,
+        "type": "normal",
+        "attack_flavor": [],
+        "effects": [
+            {
+                "chance": 10,
+                "flinch": true
+            }
+        ]
+    },
+    "Sharpen": {
+        "name": "Sharpen",
+        "accuracy": 100,
+        "pp": 30,
+        "base_power": 0,
+        "type": "normal",
+        "attack_flavor": [],
+        "effects": [
+            {
+                "chance": 100,
+                "modifier": 1,
+                "stat": "atk",
+                "target": "self"
+            }
+        ]
+    },
+    "Conversion": {
+        "name": "Conversion",
+        "accuracy": 100,
+        "pp": 30,
+        "base_power": 0,
+        "type": "normal",
+        "attack_flavor": ["conversion"],
+        "effects": []
+    },
+    "Tri Attack": {
+        "name": "Tri Attack",
+        "accuracy": 100,
+        "pp": 10,
+        "base_power": 80,
+        "type": "normal",
+        "attack_flavor": ["tri_attack"],
+        "effects": [
+            {
+                "chance": 6.3,
+                "status": "Freeze",
+                "Note": "technically, 20% of causing a status effect, which is one of these 3. Just using approximate rounding for the chances for now"
+            },
+            {
+                "chance": 6.3,
+                "status": "Paralysis"
+            },
+            {
+                "chance": 6.3,
+                "status": "Burn"
+            }
+        ]
+    },
+    "Super Fang": {
+        "name": "Super Fang",
+        "accuracy": 90,
+        "pp": 10,
+        "base_power": 1,
+        "type": "normal",
+        "attack_flavor": ["super_fang"],
+        "effects": []
+    },
+    "Slash": {
+        "name": "Slash",
+        "accuracy": 100,
+        "pp": 20,
+        "base_power": 70,
+        "type": "normal",
+        "attack_flavor": ["high_crit"],
+        "effects": []
+    },
+    "Substitute": {
+        "name": "Substitute",
+        "accuracy": 100,
+        "pp": 10,
+        "base_power": 0,
+        "type": "normal",
+        "attack_flavor": ["substitute"],
+        "effects": []
+    },
+    "Struggle": {
+        "name": "Struggle",
+        "accuracy": 100,
+        "pp": 1,
+        "base_power": 50,
+        "type": "none",
+        "attack_flavor": ["quarter_recoil"],
+        "effects": []
+    },
+    "Sketch": {
+        "name": "Sketch",
+        "accuracy": 100,
+        "pp": 1,
+        "base_power": 0,
+        "type": "normal",
+        "attack_flavor": ["sketch"],
+        "effects": []
+    },
+    "Triple Kick": {
+        "name": "Triple Kick",
+        "accuracy": 90,
+        "pp": 10,
+        "base_power": 10,
+        "type": "fighting",
+        "attack_flavor": ["triple_kick"],
+        "effects": []
+    },
+    "Thief": {
+        "name": "Thief",
+        "accuracy": 100,
+        "pp": 10,
+        "base_power": 40,
+        "type": "dark",
+        "attack_flavor": ["thief"],
+        "effects": []
+    },
+    "Spider Web": {
+        "name": "Spider Web",
+        "accuracy": 100,
+        "pp": 10,
+        "base_power": 0,
+        "type": "bug",
+        "attack_flavor": ["mean_look"],
+        "effects": []
+    },
+    "Mind Reader": {
+        "name": "Mind Reader",
+        "accuracy": 100,
+        "pp": 5,
+        "base_power": 0,
+        "type": "normal",
+        "attack_flavor": ["lock_on"],
+        "effects": []
+    },
+    "Nightmare": {
+        "name": "Nightmare",
+        "accuracy": 100,
+        "pp": 15,
+        "base_power": 0,
+        "type": "ghos",
+        "attack_flavor": ["nightmare"],
+        "effects": []
+    },
+    "Flame Wheel": {
+        "name": "Flame Wheel",
+        "accuracy": 100,
+        "pp": 25,
+        "base_power": 60,
+        "type": "fire",
+        "attack_flavor": ["self_thaw"],
+        "effects": []
+    },
+    "Snore": {
+        "name": "Snore",
+        "accuracy": 100,
+        "pp": 15,
+        "base_power": 40,
+        "type": "normal",
+        "attack_flavor": ["snore"],
+        "effects": []
+    },
+    "Curse": {
+        "name": "Curse",
+        "accuracy": 100,
+        "pp": 10,
+        "base_power": 0,
+        "type": "ghos",
+        "attack_flavor": ["curse"],
+        "effects": [
+            {
+                "chance": 100,
+                "modifier": 1,
+                "stat": "atk",
+                "target": "self"
+            },
+            {
+                "chance": 100,
+                "modifier": 1,
+                "stat": "def",
+                "target": "self"
+            },
+            {
+                "chance": 100,
+                "modifier": -1,
+                "stat": "spe",
+                "target": "self"
+            }
+        ]
+    },
+    "Flail": {
+        "name": "Flail",
+        "accuracy": 100,
+        "pp": 15,
+        "base_power": 1,
+        "type": "normal",
+        "attack_flavor": ["reversal"],
+        "effects": []
+    },
+    "Conversion 2": {
+        "name": "Conversion 2",
+        "accuracy": 100,
+        "pp": 30,
+        "base_power": 0,
+        "type": "normal",
+        "attack_flavor": ["conversion_2"],
+        "effects": []
+    },
+    "Aeroblast": {
+        "name": "Aeroblast",
+        "accuracy": 95,
+        "pp": 5,
+        "base_power": 100,
+        "type": "flying",
+        "attack_flavor": [],
+        "effects": []
+    },
+    "Cotton Spore": {
+        "name": "Cotton Spore",
+        "accuracy": 85,
+        "pp": 40,
+        "base_power": 0,
+        "type": "grass",
+        "attack_flavor": [],
+        "effects": [
+            {
+                "chance": 100,
+                "modifier": -2,
+                "stat": "spe",
+                "target": "enemy"
+            }
+        ]
+    },
+    "Reversal": {
+        "name": "Reversal",
+        "accuracy": 100,
+        "pp": 15,
+        "base_power": 1,
+        "type": "fighting",
+        "attack_flavor": ["reversal"],
+        "effects": []
+    },
+    "Spite": {
+        "name": "Spite",
+        "accuracy": 100,
+        "pp": 10,
+        "base_power": 0,
+        "type": "ghos",
+        "attack_flavor": ["spite"],
+        "effects": []
+    },
+    "Powder Snow": {
+        "name": "Powder Snow",
+        "accuracy": 100,
+        "pp": 25,
+        "base_power": 40,
+        "type": "ice",
+        "attack_flavor": [],
+        "effects": [
+            {
+                "chance": 10,
+                "status": "Freeze"
+            }
+        ]
+    },
+    "Protect": {
+        "name": "Protect",
+        "accuracy": 100,
+        "pp": 10,
+        "base_power": 0,
+        "type": "normal",
+        "attack_flavor": ["protect"],
+        "effects": []
+    },
+    "Mach Punch": {
+        "name": "Mach Punch",
+        "accuracy": 100,
+        "pp": 30,
+        "base_power": 40,
+        "type": "fighting",
+        "attack_flavor": ["increased_priority"],
+        "effects": []
+    },
+    "Scary Face": {
+        "name": "Scary Face",
+        "accuracy": 90,
+        "pp": 10,
+        "base_power": 0,
+        "type": "normal",
+        "attack_flavor": [],
+        "effects": [
+            {
+                "chance": 100,
+                "modifier": -2,
+                "stat": "spe",
+                "target": "enemy"
+            }
+        ]
+    },
+    "Faint Attack": {
+        "name": "Faint Attack",
+        "accuracy": null,
+        "pp": 20,
+        "base_power": 60,
+        "type": "dark",
+        "attack_flavor": [],
+        "effects": []
+    },
+    "Sweet Kiss": {
+        "name": "Sweet Kiss",
+        "accuracy": 75,
+        "pp": 10,
+        "base_power": 0,
+        "type": "normal",
+        "attack_flavor": [],
+        "effects": [
+            {
+                "chance": 100,
+                "status": "Confusion"
+            }
+        ]
+    },
+    "Belly Drum": {
+        "name": "Belly Drum",
+        "accuracy": 100,
+        "pp": 10,
+        "base_power": 0,
+        "type": "normal",
+        "attack_flavor": ["belly_drum"],
+        "effects": [
+            {
+                "chance": 100,
+                "modifier": 13,
+                "stat": "atk",
+                "target": "self"
+            }
+        ]
+    },
+    "Sludge Bomb": {
+        "name": "Sludge Bomb",
+        "accuracy": 100,
+        "pp": 10,
+        "base_power": 90,
+        "type": "poison",
+        "attack_flavor": [],
+        "effects": [
+            {
+                "chance": 30,
+                "status": "Poison"
+            }
+        ]
+    },
+    "Mud Slap": {
+        "name": "Mud Slap",
+        "accuracy": 100,
+        "pp": 10,
+        "base_power": 20,
+        "type": "ground",
+        "attack_flavor": [],
+        "effects": [
+            {
+                "chance": 100,
+                "modifier": -1,
+                "stat": "acc",
+                "target": "enemy"
+            }
+        ]
+    },
+    "Octazooka": {
+        "name": "Octazooka",
+        "accuracy": 85,
+        "pp": 10,
+        "base_power": 65,
+        "type": "water",
+        "attack_flavor": [],
+        "effects": [
+            {
+                "chance": 50,
+                "modifier": -1,
+                "stat": "acc",
+                "target": "enemy"
+            }
+        ]
+    },
+    "Spikes": {
+        "name": "Spikes",
+        "accuracy": 100,
+        "pp": 20,
+        "base_power": 0,
+        "type": "ground",
+        "attack_flavor": [],
+        "effects": [
+            {
+                "chance": 30,
+                "status": "Spikes"
+            }
+        ]
+    },
+    "Zap Cannon": {
+        "name": "Zap Cannon",
+        "accuracy": 50,
+        "pp": 5,
+        "base_power": 100,
+        "type": "electric",
+        "attack_flavor": [],
+        "effects": [
+            {
+                "chance": 100,
+                "status": "Paralysis"
+            }
+        ]
+    },
+    "Foresight": {
+        "name": "Foresight",
+        "accuracy": 100,
+        "pp": 40,
+        "base_power": 0,
+        "type": "normal",
+        "attack_flavor": ["foresight"],
+        "effects": []
+    },
+    "Destiny Bond": {
+        "name": "Destiny Bond",
+        "accuracy": 100,
+        "pp": 5,
+        "base_power": 0,
+        "type": "ghos",
+        "attack_flavor": ["destiny_bond"],
+        "effects": []
+    },
+    "Perish Song": {
+        "name": "Perish Song",
+        "accuracy": 100,
+        "pp": 5,
+        "base_power": 0,
+        "type": "normal",
+        "attack_flavor": ["perish_song"],
+        "effects": []
+    },
+    "Icy Wind": {
+        "name": "Icy Wind",
+        "accuracy": 95,
+        "pp": 15,
+        "base_power": 55,
+        "type": "ice",
+        "attack_flavor": [],
+        "effects": [
+            {
+                "chance": 100,
+                "modifier": -1,
+                "stat": "spe",
+                "target": "enemy"
+            }
+        ]
+    },
+    "Detect": {
+        "name": "Detect",
+        "accuracy": 100,
+        "pp": 5,
+        "base_power": 0,
+        "type": "fighting",
+        "attack_flavor": ["protect"],
+        "effects": []
+    },
+    "Bone Rush": {
+        "name": "Bone Rush",
+        "accuracy": 80,
+        "pp": 10,
+        "base_power": 25,
+        "type": "ground",
+        "attack_flavor": ["multi_hit"],
+        "effects": []
+    },
+    "Lock-On": {
+        "name": "Lock-On",
+        "accuracy": 100,
+        "pp": 5,
+        "base_power": 0,
+        "type": "normal",
+        "attack_flavor": ["lock_on"],
+        "effects": []
+    },
+    "Outrage": {
+        "name": "Outrage",
+        "accuracy": 100,
+        "pp": 15,
+        "base_power": 90,
+        "type": "dragon",
+        "attack_flavor": ["rampage"],
+        "effects": []
+    },
+    "Sandstorm": {
+        "name": "Sandstorm",
+        "accuracy": 100,
+        "pp": 10,
+        "base_power": 0,
+        "type": "rock",
+        "attack_flavor": ["sandstorm"],
+        "effects": []
+    },
+    "Giga Drain": {
+        "name": "Giga Drain",
+        "accuracy": 100,
+        "pp": 5,
+        "base_power": 60,
+        "type": "grass",
+        "attack_flavor": ["drain_hp"],
+        "effects": []
+    },
+    "Endure": {
+        "name": "Endure",
+        "accuracy": 100,
+        "pp": 10,
+        "base_power": 0,
+        "type": "normal",
+        "attack_flavor": ["endure"],
+        "effects": []
+    },
+    "Charm": {
+        "name": "Charm",
+        "accuracy": 100,
+        "pp": 20,
+        "base_power": 0,
+        "type": "normal",
+        "attack_flavor": [],
+        "effects": [
+            {
+                "chance": 100,
+                "modifier": -2,
+                "stat": "atk",
+                "target": "enemy"
+            }
+        ]
+    },
+    "Rollout": {
+        "name": "Rollout",
+        "accuracy": 90,
+        "pp": 20,
+        "base_power": 30,
+        "type": "rock",
+        "attack_flavor": ["rollout"],
+        "effects": []
+    },
+    "False Swipe": {
+        "name": "False Swipe",
+        "accuracy": 100,
+        "pp": 40,
+        "base_power": 40,
+        "type": "normal",
+        "attack_flavor": ["false_swipe"],
+        "effects": []
+    },
+    "Swagger": {
+        "name": "Swagger",
+        "accuracy": 90,
+        "pp": 15,
+        "base_power": 0,
+        "type": "normal",
+        "attack_flavor": [],
+        "effects": [
+            {
+                "chance": 100,
+                "modifier": 2,
+                "stat": "atk",
+                "target": "enemy"
+            },
+            {
+                "chance": 100,
+                "status": "Confuse"
+            }
+        ]
+    },
+    "Milk Drink": {
+        "name": "Milk Drink",
+        "accuracy": 100,
+        "pp": 10,
+        "base_power": 0,
+        "type": "normal",
+        "attack_flavor": ["recover"],
+        "effects": []
+    },
+    "Spark": {
+        "name": "Spark",
+        "accuracy": 100,
+        "pp": 20,
+        "base_power": 65,
+        "type": "electric",
+        "attack_flavor": [],
+        "effects": [
+            {
+                "chance": 30,
+                "status": "Paralysis"
+            }
+        ]
+    },
+    "Fury Cutter": {
+        "name": "Fury Cutter",
+        "accuracy": 95,
+        "pp": 20,
+        "base_power": 10,
+        "type": "bug",
+        "attack_flavor": ["fury_cutter"],
+        "effects": []
+    },
+    "Steel Wing": {
+        "name": "Steel Wing",
+        "accuracy": 90,
+        "pp": 25,
+        "base_power": 70,
+        "type": "steel",
+        "attack_flavor": [],
+        "effects": [
+            {
+                "chance": 10,
+                "modifier": 1,
+                "stat": "def",
+                "target": "self"
+            }
+        ]
+    },
+    "Mean Look": {
+        "name": "Mean Look",
+        "accuracy": 100,
+        "pp": 5,
+        "base_power": 0,
+        "type": "normal",
+        "attack_flavor": ["mean_look"],
+        "effects": []
+    },
+    "Attract": {
+        "name": "Attract",
+        "accuracy": 100,
+        "pp": 15,
+        "base_power": 0,
+        "type": "normal",
+        "attack_flavor": ["attract"],
+        "effects": []
+    },
+    "Sleep Talk": {
+        "name": "Sleep Talk",
+        "accuracy": 100,
+        "pp": 10,
+        "base_power": 0,
+        "type": "normal",
+        "attack_flavor": ["sleep_talk"],
+        "effects": []
+    },
+    "Heal Bell": {
+        "name": "Heal Bell",
+        "accuracy": 100,
+        "pp": 5,
+        "base_power": 0,
+        "type": "normal",
+        "attack_flavor": ["heal_bell"],
+        "effects": []
+    },
+    "Return": {
+        "name": "Return",
+        "accuracy": 100,
+        "pp": 20,
+        "base_power": 1,
+        "type": "normal",
+        "attack_flavor": ["return"],
+        "effects": []
+    },
+    "Present": {
+        "name": "Present",
+        "accuracy": 90,
+        "pp": 15,
+        "base_power": 1,
+        "type": "normal",
+        "attack_flavor": ["present"],
+        "effects": []
+    },
+    "Frustration": {
+        "name": "Frustration",
+        "accuracy": 100,
+        "pp": 20,
+        "base_power": 1,
+        "type": "normal",
+        "attack_flavor": ["frustration"],
+        "effects": []
+    },
+    "Safeguard": {
+        "name": "Safeguard",
+        "accuracy": 100,
+        "pp": 25,
+        "base_power": 0,
+        "type": "normal",
+        "attack_flavor": ["safeguard"],
+        "effects": []
+    },
+    "Pain Split": {
+        "name": "Pain Split",
+        "accuracy": 100,
+        "pp": 20,
+        "base_power": 0,
+        "type": "normal",
+        "attack_flavor": ["pain_split"],
+        "effects": []
+    },
+    "Sacred Fire": {
+        "name": "Sacred Fire",
+        "accuracy": 95,
+        "pp": 5,
+        "base_power": 100,
+        "type": "fire",
+        "attack_flavor": ["self_thaw"],
+        "effects": [
+            {
+                "chance": 50,
+                "status": "Burn"
+            }
+        ]
+    },
+    "Magnitude": {
+        "name": "Magnitude",
+        "accuracy": 100,
+        "pp": 30,
+        "base_power": 1,
+        "type": "ground",
+        "attack_flavor": ["magnitude"],
+        "effects": []
+    },
+    "DynamicPunch": {
+        "name": "DynamicPunch",
+        "accuracy": 50,
+        "pp": 5,
+        "base_power": 100,
+        "type": "fighting",
+        "attack_flavor": [],
+        "effects": [
+            {
+                "chance": 100,
+                "status": "Confusion"
+            }
+        ]
+    },
+    "Megahorn": {
+        "name": "Megahorn",
+        "accuracy": 85,
+        "pp": 10,
+        "base_power": 120,
+        "type": "bug",
+        "attack_flavor": [],
+        "effects": []
+    },
+    "DragonBreath": {
+        "name": "DragonBreath",
+        "accuracy": 100,
+        "pp": 20,
+        "base_power": 60,
+        "type": "dragon",
+        "attack_flavor": [],
+        "effects": [
+            {
+                "chance": 30,
+                "status": "Paralysis"
+            }
+        ]
+    },
+    "Baton Pass": {
+        "name": "Baton Pass",
+        "accuracy": 100,
+        "pp": 40,
+        "base_power": 0,
+        "type": "normal",
+        "attack_flavor": ["baton_pass"],
+        "effects": []
+    },
+    "Encore": {
+        "name": "Encore",
+        "accuracy": 100,
+        "pp": 5,
+        "base_power": 0,
+        "type": "normal",
+        "attack_flavor": ["encore"],
+        "effects": []
+    },
+    "Pursuit": {
+        "name": "Pursuit",
+        "accuracy": 100,
+        "pp": 20,
+        "base_power": 40,
+        "type": "dark",
+        "attack_flavor": ["pursuit"],
+        "effects": []
+    },
+    "Rapid Spin": {
+        "name": "Rapid Spin",
+        "accuracy": 100,
+        "pp": 40,
+        "base_power": 20,
+        "type": "normal",
+        "attack_flavor": ["rapid_spin"],
+        "effects": []
+    },
+    "Sweet Scent": {
+        "name": "Sweet Scent",
+        "accuracy": 100,
+        "pp": 20,
+        "base_power": 0,
+        "type": "normal",
+        "attack_flavor": [],
+        "effects": [
+            {
+                "chance": 100,
+                "modifier": -1,
+                "stat": "ev",
+                "target": "enemy"
+            }
+        ]
+    },
+    "Iron Tail": {
+        "name": "Iron Tail",
+        "accuracy": 75,
+        "pp": 15,
+        "base_power": 100,
+        "type": "steel",
+        "attack_flavor": [],
+        "effects": [
+            {
+                "chance": 30,
+                "modifier": -1,
+                "stat": "def",
+                "target": "enemy"
+            }
+        ]
+    },
+    "Metal Claw": {
+        "name": "Metal Claw",
+        "accuracy": 95,
+        "pp": 35,
+        "base_power": 50,
+        "type": "steel",
+        "attack_flavor": [],
+        "effects": [
+            {
+                "chance": 10,
+                "modifier": 1,
+                "stat": "atk",
+                "target": "self"
+            }
+        ]
+    },
+    "Vital Throw": {
+        "name": "Vital Throw",
+        "accuracy": null,
+        "pp": 10,
+        "base_power": 70,
+        "type": "fighting",
+        "attack_flavor": ["reduced_priority"],
+        "effects": []
+    },
+    "Morning Sun": {
+        "name": "Morning Sun",
+        "accuracy": 100,
+        "pp": 5,
+        "base_power": 0,
+        "type": "normal",
+        "attack_flavor": ["morning_weather_heal"],
+        "effects": []
+    },
+    "Synthesis": {
+        "name": "Synthesis",
+        "accuracy": 100,
+        "pp": 5,
+        "base_power": 0,
+        "type": "grass",
+        "attack_flavor": ["day_weather_heal"],
+        "effects": []
+    },
+    "Moonlight": {
+        "name": "Moonlight",
+        "accuracy": 100,
+        "pp": 5,
+        "base_power": 0,
+        "type": "normal",
+        "attack_flavor": ["night_weather_heal"],
+        "effects": []
+    },
+    "Hidden Power": {
+        "name": "Hidden Power",
+        "accuracy": 100,
+        "pp": 15,
+        "base_power": 0,
+        "type": "normal",
+        "attack_flavor": ["hidden_power"],
+        "effects": []
+    },
+    "Cross Chop": {
+        "name": "Cross Chop",
+        "accuracy": 80,
+        "pp": 5,
+        "base_power": 100,
+        "type": "fighting",
+        "attack_flavor": ["high_crit"],
+        "effects": []
+    },
+    "Twister": {
+        "name": "Twister",
+        "accuracy": 100,
+        "pp": 20,
+        "base_power": 40,
+        "type": "dragon",
+        "attack_flavor": ["bonus_fly_damage"],
+        "effects": []
+    },
+    "Rain Dance": {
+        "name": "Rain Dance",
+        "accuracy": 90,
+        "pp": 5,
+        "base_power": 0,
+        "type": "water",
+        "attack_flavor": ["rain_dance"],
+        "effects": []
+    },
+    "Sunny Day": {
+        "name": "Sunny Day",
+        "accuracy": 90,
+        "pp": 5,
+        "base_power": 0,
+        "type": "fire",
+        "attack_flavor": ["sunny_day"],
+        "effects": []
+    },
+    "Crunch": {
+        "name": "Crunch",
+        "accuracy": 100,
+        "pp": 15,
+        "base_power": 80,
+        "type": "dark",
+        "attack_flavor": [],
+        "effects": [
+            {
+                "chance": 20,
+                "modifier": -1,
+                "stat": "spd",
+                "target": "enemy"
+            }
+        ]
+    },
+    "Mirror Coat": {
+        "name": "Mirror Coat",
+        "accuracy": 100,
+        "pp": 20,
+        "base_power": 1,
+        "type": "psychic",
+        "attack_flavor": ["mirror_coat"],
+        "effects": []
+    },
+    "Psych Up": {
+        "name": "Psych Up",
+        "accuracy": 100,
+        "pp": 10,
+        "base_power": 0,
+        "type": "normal",
+        "attack_flavor": ["psych_up"],
+        "effects": []
+    },
+    "ExtremeSpeed": {
+        "name": "ExtremeSpeed",
+        "accuracy": 100,
+        "pp": 5,
+        "base_power": 80,
+        "type": "normal",
+        "attack_flavor": ["increased_priority"],
+        "effects": []
+    },
+    "AncientPower": {
+        "name": "AncientPower",
+        "accuracy": 100,
+        "pp": 5,
+        "base_power": 60,
+        "type": "rock",
+        "attack_flavor": [
+            {
+                "chance": 20,
+                "modifier": 1,
+                "stat": "omni",
+                "target": "self"
+            }
+        ],
+        "effects": []
+    },
+    "Shadow Ball": {
+        "name": "Shadow Ball",
+        "accuracy": 100,
+        "pp": 15,
+        "base_power": 80,
+        "type": "ghos",
+        "attack_flavor": [],
+        "effects": [
+            {
+                "chance": 20,
+                "modifier": -1,
+                "stat": "spd",
+                "target": "enemy"
+            }
+        ]
+    },
+    "Future Sight": {
+        "name": "Future Sight",
+        "accuracy": 90,
+        "pp": 15,
+        "base_power": 80,
+        "type": "psychic",
+        "attack_flavor": ["future_sight"],
+        "effects": []
+    },
+    "Rock Smash": {
+        "name": "Rock Smash",
+        "accuracy": 100,
+        "pp": 15,
+        "base_power": 20,
+        "type": "fighting",
+        "attack_flavor": [],
+        "effects": [
+            {
+                "chance": 50,
+                "modifier": -1,
+                "stat": "def",
+                "target": "enemy"
+            }
+        ]
+    },
+    "Whirlpool": {
+        "name": "Whirlpool",
+        "accuracy": 70,
+        "pp": 15,
+        "base_power": 15,
+        "type": "water",
+        "attack_flavor": ["trap"],
+        "effects": []
+    },
+    "Beat Up": {
+        "name": "Beat Up",
+        "accuracy": 100,
+        "pp": 10,
+        "base_power": 10,
+        "type": "dark",
+        "attack_flavor": ["beat_up"],
+        "effects": []
+    }
+}

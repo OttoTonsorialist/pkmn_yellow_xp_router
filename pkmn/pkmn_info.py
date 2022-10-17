@@ -3,9 +3,16 @@ from typing import Dict, Tuple, List
 from pkmn import universal_data_objects
 from pkmn.damage_calc import DamageRange
 from pkmn.pkmn_db import ItemDB, MinBattlesDB, MoveDB, PkmnDB, TrainerDB
+from routing import route_state_objects
 
 
 class CurrentGen:
+    def version_name(self) -> str:
+        raise NotImplementedError()
+    
+    def get_generation(self) -> int:
+        raise NotImplementedError()
+        
     def pkmn_db(self) -> PkmnDB:
         raise NotImplementedError()
 
@@ -59,3 +66,18 @@ class CurrentGen:
     def make_badge_list(self) -> universal_data_objects.BadgeList:
         raise NotImplementedError()
     
+    def make_inventory(self) -> route_state_objects.Inventory:
+        raise NotImplementedError()
+    
+    def get_stat_modifer_moves(self) -> List[str]:
+        raise NotImplementedError()
+    
+    def get_fight_reward(self, trainer_name) -> str:
+        raise NotImplementedError()
+
+    def is_minor_fight(self, trainer_name) -> str:
+        raise NotImplementedError()
+
+    def is_major_fight(self, trainer_name) -> str:
+        raise NotImplementedError()
+

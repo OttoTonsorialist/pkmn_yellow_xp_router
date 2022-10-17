@@ -1,6 +1,7 @@
 from __future__ import annotations
 from utils.constants import const
 import pkmn.gen_1.pkmn_utils as pkmn_utils
+from pkmn.gen_1.gen_one_constants import gen_one_const
 from pkmn import universal_data_objects
 
 
@@ -16,23 +17,23 @@ class GenOneBadgeList(universal_data_objects.BadgeList):
         self.earth = earth
     
     def award_badge(self, trainer_name) -> GenOneBadgeList:
-        reward = const.BADGE_REWARDS.get(trainer_name)
+        reward = gen_one_const.BADGE_REWARDS.get(trainer_name)
         result = self.copy()
-        if reward == const.BOULDER_BADGE:
+        if reward == gen_one_const.BOULDER_BADGE:
             result.boulder = True
-        elif reward == const.CASCADE_BADGE:
+        elif reward == gen_one_const.CASCADE_BADGE:
             result.cascade = True
-        elif reward == const.THUNDER_BADGE:
+        elif reward == gen_one_const.THUNDER_BADGE:
             result.thunder = True
-        elif reward == const.RAINDBOW_BADGE:
+        elif reward == gen_one_const.RAINDBOW_BADGE:
             result.rainbow = True
-        elif reward == const.SOUL_BADGE:
+        elif reward == gen_one_const.SOUL_BADGE:
             result.soul = True
-        elif reward == const.MARSH_BADGE:
+        elif reward == gen_one_const.MARSH_BADGE:
             result.marsh = True
-        elif reward == const.VOLCANO_BADGE:
+        elif reward == gen_one_const.VOLCANO_BADGE:
             result.volcano = True
-        elif reward == const.EARTH_BADGE:
+        elif reward == gen_one_const.EARTH_BADGE:
             result.earth = True
         else:
             # no need to hold on to a copy wastefully if no badge was awarded

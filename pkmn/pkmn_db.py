@@ -73,7 +73,7 @@ class TrainerDB:
     def get_all_classes(self):
         return list(self.class_oriented_trainers.keys())
     
-    def get_valid_trainers(self, trainer_class=None, trainer_loc=None, defeated_trainers=None):
+    def get_valid_trainers(self, trainer_class=None, trainer_loc=None, defeated_trainers=None, show_rematches=True):
         if trainer_class == const.ALL_TRAINERS:
             trainer_class = None
         if trainer_loc == const.ALL_TRAINERS:
@@ -88,6 +88,8 @@ class TrainerDB:
             elif trainer_loc is not None and cur_trainer.location != trainer_loc:
                 continue
             elif cur_trainer.name in defeated_trainers:
+                continue
+            elif not show_rematches and cur_trainer.rematch:
                 continue
 
             valid_trainers.append(cur_trainer.name)

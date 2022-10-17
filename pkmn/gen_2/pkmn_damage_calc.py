@@ -3,7 +3,7 @@ import math
 from pkmn import universal_data_objects, damage_calc
 import pkmn
 from utils.constants import const
-from pkmn.gen_1.gen_one_constants import gen_one_const
+from pkmn.gen_2.gen_two_constants import gen_two_const
 
 MIN_RANGE = 217
 MAX_RANGE = 255
@@ -12,7 +12,7 @@ NUM_ROLLS = MAX_RANGE - MIN_RANGE + 1
 
 def get_crit_rate(pkmn:universal_data_objects.EnemyPkmn, move:universal_data_objects.Move):
     crit_numerator = int(pkmn.base_stats.speed / 2)
-    if const.FLAVOR_HIGH_CRIT in move.attack_flavor:
+    if move.attack_flavor == const.FLAVOR_HIGH_CRIT:
         crit_numerator *= 8
     
     crit_numerator = min(int(crit_numerator), 255)
@@ -34,11 +34,11 @@ def calculate_damage(
         return None
     
     # special move interactions
-    if const.FLAVOR_FIXED_DAMAGE in move.attack_flavor:
+    if move.attack_flavor == const.FLAVOR_FIXED_DAMAGE:
         return damage_calc.DamageRange({move.base_power: 1})
-    elif const.FLAVOR_LEVEL_DAMAGE in move.attack_flavor:
+    elif move.attack_flavor == const.FLAVOR_LEVEL_DAMAGE:
         return damage_calc.DamageRange({attacking_pkmn.level: 1})
-    elif const.FLAVOR_PSYWAVE in move.attack_flavor:
+    elif move.attack_flavor == const.FLAVOR_PSYWAVE:
         psywave_upper_limit = math.floor(attacking_pkmn.level * 1.5)
         return damage_calc.DamageRange({x:1 for x in range(1, psywave_upper_limit)})
     
@@ -52,15 +52,15 @@ def calculate_damage(
 
     attacking_species = pkmn.current_gen_info().pkmn_db().get_pkmn(attacking_pkmn.name)
     defending_species = pkmn.current_gen_info().pkmn_db().get_pkmn(defending_pkmn.name)
-    first_type_effectiveness = gen_one_const.TYPE_CHART.get(move.move_type).get(defending_species.first_type)
+    first_type_effectiveness = gen_two_const.TYPE_CHART.get(move.move_type).get(defending_species.first_type)
     second_type_effectiveness = None
     if defending_species.first_type != defending_species.second_type:
-        second_type_effectiveness = gen_one_const.TYPE_CHART.get(move.move_type).get(defending_species.second_type)
+        second_type_effectiveness = gen_two_const.TYPE_CHART.get(move.move_type).get(defending_species.second_type)
     
     if first_type_effectiveness == const.IMMUNE or second_type_effectiveness == const.IMMUNE:
         return None
     
-    if move.move_type in gen_one_const.SPECIAL_TYPES:
+    if move.move_type in gen_two_const.SPECIAL_TYPES:
         attacking_stat = attacking_battle_stats.special_attack
         defending_stat = defending_battle_stats.special_defense
         if defender_has_light_screen and not is_crit:
