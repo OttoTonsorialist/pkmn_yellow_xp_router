@@ -1990,7 +1990,7 @@
             ],
             [
                 42,
-                "Thunder Punch"
+                "ThunderPunch"
             ],
             [
                 49,
@@ -2016,7 +2016,7 @@
         "initial_moveset": [
             "Tackle",
             "Screech",
-            "Sonic Boom"
+            "SonicBoom"
         ],
         "growth_rate": "growth_medium_fast",
         "tm_hm_learnset": [
@@ -2043,7 +2043,7 @@
         "levelup_moveset": [
             [
                 17,
-                "Sonic Boom"
+                "SonicBoom"
             ],
             [
                 22,
@@ -2963,7 +2963,7 @@
             ],
             [
                 55,
-                "acid_armorc"
+                "Acid Armor"
             ]
         ]
     },
@@ -3180,7 +3180,7 @@
             ],
             [
                 43,
-                "Thunder Punch"
+                "ThunderPunch"
             ],
             [
                 48,
@@ -3612,7 +3612,7 @@
         "base_xp": 137,
         "initial_moveset": [
             "Pound",
-            "lovely_kiss"
+            "Lovely Kiss"
         ],
         "growth_rate": "growth_medium_fast",
         "tm_hm_learnset": [
@@ -4578,7 +4578,7 @@
         "levelup_moveset": [
             [
                 21,
-                "Sonic Boom"
+                "SonicBoom"
             ],
             [
                 25,
@@ -4615,7 +4615,7 @@
         "base_xp": 161,
         "initial_moveset": [
             "Tackle",
-            "Sonic Boom",
+            "SonicBoom",
             "Thundershock"
         ],
         "growth_rate": "growth_medium_fast",
@@ -4641,7 +4641,7 @@
         "levelup_moveset": [
             [
                 21,
-                "Sonic Boom"
+                "SonicBoom"
             ],
             [
                 25,
@@ -8822,7 +8822,7 @@
         "levelup_moveset": [
             [
                 17,
-                "Sonic Boom"
+                "SonicBoom"
             ],
             [
                 22,

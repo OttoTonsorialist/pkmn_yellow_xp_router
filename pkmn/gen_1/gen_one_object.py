@@ -29,6 +29,10 @@ class GenOne(CurrentGen):
 
         self._min_battles_db = MinBattlesDB(min_battles_path)
 
+        self._pkmn_db.validate_moves(self._move_db)
+        self._trainer_db.validate_trainers(self._pkmn_db, self._move_db)
+        self._item_db.validate_tms_hms(self._move_db)
+
     def version_name(self) -> str:
         return self._version_name
     

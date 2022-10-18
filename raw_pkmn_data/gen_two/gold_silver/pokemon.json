@@ -39,7 +39,7 @@
             "Ice Punch",
             "Swagger",
             "Sleep Talk",
-            "Thunderpunch",
+            "ThunderPunch",
             "Dream Eater",
             "Rest",
             "Attract",
@@ -194,7 +194,7 @@
             "Sleep Talk",
             "Swift",
             "Defense Curl",
-            "Thunderpunch",
+            "ThunderPunch",
             "Dream Eater",
             "Detect",
             "Rest",
@@ -294,7 +294,7 @@
             "Ice Punch",
             "Swagger",
             "Sleep Talk",
-            "Thunderpunch",
+            "ThunderPunch",
             "Dream Eater",
             "Rest",
             "Attract",
@@ -389,7 +389,7 @@
             "Sleep Talk",
             "Swift",
             "Defense Curl",
-            "Thunderpunch",
+            "ThunderPunch",
             "Rest",
             "Attract",
             "Fire Punch",
@@ -428,7 +428,7 @@
             ],
             [
                 30,
-                "Thunderpunch"
+                "ThunderPunch"
             ],
             [
                 42,
@@ -2395,7 +2395,7 @@
             "Sleep Talk",
             "Fire Blast",
             "Defense Curl",
-            "Thunderpunch",
+            "ThunderPunch",
             "Dream Eater",
             "Detect",
             "Rest",
@@ -2474,7 +2474,7 @@
             "Sleep Talk",
             "Fire Blast",
             "Defense Curl",
-            "Thunderpunch",
+            "ThunderPunch",
             "Dream Eater",
             "Detect",
             "Rest",
@@ -2991,7 +2991,7 @@
             "Sleep Talk",
             "Sandstorm",
             "Fire Blast",
-            "Thunderpunch",
+            "ThunderPunch",
             "Detect",
             "Rest",
             "Attract",
@@ -3796,7 +3796,7 @@
             "Sandstorm",
             "Fire Blast",
             "Swift",
-            "Thunderpunch",
+            "ThunderPunch",
             "Detect",
             "Rest",
             "Attract",
@@ -4003,7 +4003,7 @@
             "Ice Punch",
             "Swagger",
             "Sleep Talk",
-            "Thunderpunch",
+            "ThunderPunch",
             "Dream Eater",
             "Rest",
             "Attract",
@@ -4446,7 +4446,7 @@
             "Swagger",
             "Sleep Talk",
             "Swift",
-            "Thunderpunch",
+            "ThunderPunch",
             "Detect",
             "Rest",
             "Attract",
@@ -4467,11 +4467,11 @@
             ],
             [
                 1,
-                "Thunderpunch"
+                "ThunderPunch"
             ],
             [
                 9,
-                "Thunderpunch"
+                "ThunderPunch"
             ],
             [
                 17,
@@ -4549,7 +4549,7 @@
             ],
             [
                 1,
-                "Sonicboom"
+                "SonicBoom"
             ],
             [
                 1,
@@ -4561,7 +4561,7 @@
             ],
             [
                 17,
-                "Sonicboom"
+                "SonicBoom"
             ],
             [
                 23,
@@ -4630,7 +4630,7 @@
             "Swagger",
             "Sleep Talk",
             "Swift",
-            "Thunderpunch",
+            "ThunderPunch",
             "Detect",
             "Rest",
             "Attract",
@@ -4650,7 +4650,7 @@
             ],
             [
                 9,
-                "Thunderpunch"
+                "ThunderPunch"
             ],
             [
                 17,
@@ -5351,7 +5351,7 @@
             "Sleep Talk",
             "Swift",
             "Defense Curl",
-            "Thunderpunch",
+            "ThunderPunch",
             "Rest",
             "Attract",
             "Fire Punch",
@@ -5619,7 +5619,7 @@
             "Sleep Talk",
             "Swift",
             "Defense Curl",
-            "Thunderpunch",
+            "ThunderPunch",
             "Detect",
             "Rest",
             "Attract",
@@ -5805,7 +5805,7 @@
             "Ice Punch",
             "Swagger",
             "Sleep Talk",
-            "Thunderpunch",
+            "ThunderPunch",
             "Dream Eater",
             "Rest",
             "Attract",
@@ -6642,7 +6642,7 @@
             "Sleep Talk",
             "Sludge Bomb",
             "Defense Curl",
-            "Thunderpunch",
+            "ThunderPunch",
             "Detect",
             "Rest",
             "Attract",
@@ -6827,7 +6827,7 @@
             "Sleep Talk",
             "Sludge Bomb",
             "Fire Blast",
-            "Thunderpunch",
+            "ThunderPunch",
             "Rest",
             "Attract",
             "Thief",
@@ -7267,7 +7267,7 @@
             "Swagger",
             "Sleep Talk",
             "Swift",
-            "Thunderpunch",
+            "ThunderPunch",
             "Detect",
             "Rest",
             "Attract",
@@ -7291,7 +7291,7 @@
             ],
             [
                 26,
-                "Thunderpunch"
+                "ThunderPunch"
             ],
             [
                 26,
@@ -8090,7 +8090,7 @@
             "Ice Punch",
             "Swagger",
             "Sleep Talk",
-            "Thunderpunch",
+            "ThunderPunch",
             "Dream Eater",
             "Rest",
             "Attract",
@@ -8379,7 +8379,7 @@
             "Sleep Talk",
             "Fire Blast",
             "Defense Curl",
-            "Thunderpunch",
+            "ThunderPunch",
             "Dream Eater",
             "Detect",
             "Rest",
@@ -8938,7 +8938,7 @@
             "Ice Punch",
             "Swagger",
             "Sleep Talk",
-            "Thunderpunch",
+            "ThunderPunch",
             "Dream Eater",
             "Rest",
             "Attract",
@@ -9074,7 +9074,7 @@
             "Sleep Talk",
             "Sandstorm",
             "Fire Blast",
-            "Thunderpunch",
+            "ThunderPunch",
             "Rest",
             "Attract",
             "Fire Punch",
@@ -9810,7 +9810,7 @@
             "Swagger",
             "Sleep Talk",
             "Swift",
-            "Thunderpunch",
+            "ThunderPunch",
             "Rest",
             "Attract",
             "Thief",
@@ -9906,7 +9906,7 @@
             "Swagger",
             "Sleep Talk",
             "Swift",
-            "Thunderpunch",
+            "ThunderPunch",
             "Rest",
             "Attract",
             "Thief",
@@ -10011,7 +10011,7 @@
             "Sandstorm",
             "Fire Blast",
             "Defense Curl",
-            "Thunderpunch",
+            "ThunderPunch",
             "Dream Eater",
             "Rest",
             "Attract",
@@ -10211,7 +10211,7 @@
             "Swagger",
             "Sleep Talk",
             "Fire Blast",
-            "Thunderpunch",
+            "ThunderPunch",
             "Detect",
             "Rest",
             "Attract",
@@ -10308,7 +10308,7 @@
             "Swagger",
             "Sleep Talk",
             "Fire Blast",
-            "Thunderpunch",
+            "ThunderPunch",
             "Detect",
             "Rest",
             "Attract",
@@ -10405,7 +10405,7 @@
             "Swagger",
             "Sleep Talk",
             "Fire Blast",
-            "Thunderpunch",
+            "ThunderPunch",
             "Detect",
             "Rest",
             "Attract",
@@ -10501,7 +10501,7 @@
             "Swagger",
             "Sleep Talk",
             "Fire Blast",
-            "Thunderpunch",
+            "ThunderPunch",
             "Detect",
             "Rest",
             "Attract",
@@ -10719,7 +10719,7 @@
             "Swagger",
             "Sleep Talk",
             "Fire Blast",
-            "Thunderpunch",
+            "ThunderPunch",
             "Detect",
             "Rest",
             "Attract",
@@ -10835,7 +10835,7 @@
             ],
             [
                 16,
-                "Sonicboom"
+                "SonicBoom"
             ],
             [
                 21,
@@ -10916,7 +10916,7 @@
             ],
             [
                 1,
-                "Sonicboom"
+                "SonicBoom"
             ],
             [
                 6,
@@ -10928,7 +10928,7 @@
             ],
             [
                 16,
-                "Sonicboom"
+                "SonicBoom"
             ],
             [
                 21,
@@ -10996,7 +10996,7 @@
             "Sleep Talk",
             "Swift",
             "Defense Curl",
-            "Thunderpunch",
+            "ThunderPunch",
             "Detect",
             "Rest",
             "Attract",
@@ -11361,7 +11361,7 @@
             "Sleep Talk",
             "Sandstorm",
             "Fire Blast",
-            "Thunderpunch",
+            "ThunderPunch",
             "Detect",
             "Rest",
             "Attract",
@@ -11716,7 +11716,7 @@
             "Fire Blast",
             "Swift",
             "Defense Curl",
-            "Thunderpunch",
+            "ThunderPunch",
             "Dream Eater",
             "Detect",
             "Rest",
@@ -11813,7 +11813,7 @@
             "Sleep Talk",
             "Fire Blast",
             "Swift",
-            "Thunderpunch",
+            "ThunderPunch",
             "Dream Eater",
             "Detect",
             "Rest",
@@ -11922,7 +11922,7 @@
             "Sleep Talk",
             "Sandstorm",
             "Defense Curl",
-            "Thunderpunch",
+            "ThunderPunch",
             "Rest",
             "Attract",
             "Fire Punch",
@@ -12187,7 +12187,7 @@
             "Ice Punch",
             "Swagger",
             "Sleep Talk",
-            "Thunderpunch",
+            "ThunderPunch",
             "Dream Eater",
             "Rest",
             "Attract",
@@ -12290,7 +12290,7 @@
             "Sleep Talk",
             "Sludge Bomb",
             "Fire Blast",
-            "Thunderpunch",
+            "ThunderPunch",
             "Rest",
             "Attract",
             "Thief",
@@ -12555,7 +12555,7 @@
             "Sandstorm",
             "Fire Blast",
             "Defense Curl",
-            "Thunderpunch",
+            "ThunderPunch",
             "Detect",
             "Rest",
             "Attract",
@@ -12639,7 +12639,7 @@
             "Sandstorm",
             "Fire Blast",
             "Defense Curl",
-            "Thunderpunch",
+            "ThunderPunch",
             "Detect",
             "Rest",
             "Attract",
@@ -14343,7 +14343,7 @@
             "Sleep Talk",
             "Swift",
             "Defense Curl",
-            "Thunderpunch",
+            "ThunderPunch",
             "Detect",
             "Rest",
             "Attract",
@@ -15319,7 +15319,7 @@
             "Sleep Talk",
             "Swift",
             "Defense Curl",
-            "Thunderpunch",
+            "ThunderPunch",
             "Detect",
             "Rest",
             "Attract",
@@ -15884,7 +15884,7 @@
             "Sleep Talk",
             "Swift",
             "Defense Curl",
-            "Thunderpunch",
+            "ThunderPunch",
             "Detect",
             "Rest",
             "Attract",
@@ -16410,7 +16410,7 @@
             "Sleep Talk",
             "Sandstorm",
             "Fire Blast",
-            "Thunderpunch",
+            "ThunderPunch",
             "Rest",
             "Attract",
             "Fire Punch",
@@ -17233,7 +17233,7 @@
             "Sleep Talk",
             "Swift",
             "Defense Curl",
-            "Thunderpunch",
+            "ThunderPunch",
             "Detect",
             "Rest",
             "Attract",
@@ -18327,7 +18327,7 @@
             "Sandstorm",
             "Fire Blast",
             "Defense Curl",
-            "Thunderpunch",
+            "ThunderPunch",
             "Rest",
             "Attract",
             "Fire Punch",
@@ -18426,7 +18426,7 @@
             "Sleep Talk",
             "Sludge Bomb",
             "Defense Curl",
-            "Thunderpunch",
+            "ThunderPunch",
             "Detect",
             "Rest",
             "Attract",
@@ -18656,7 +18656,7 @@
         "egg_moves": [
             "Psybeam",
             "Disable",
-            "Sonicboom",
+            "SonicBoom",
             "Baton Pass",
             "Pursuit"
         ]
@@ -19156,7 +19156,7 @@
             "Sleep Talk",
             "Sandstorm",
             "Defense Curl",
-            "Thunderpunch",
+            "ThunderPunch",
             "Rest",
             "Attract",
             "Thief",
@@ -19744,7 +19744,7 @@
             "Sleep Talk",
             "Swift",
             "Defense Curl",
-            "Thunderpunch",
+            "ThunderPunch",
             "Rest",
             "Attract",
             "Thief",
@@ -20298,7 +20298,7 @@
             "Fire Blast",
             "Swift",
             "Defense Curl",
-            "Thunderpunch",
+            "ThunderPunch",
             "Detect",
             "Rest",
             "Attract",
@@ -20685,7 +20685,7 @@
             "Sleep Talk",
             "Swift",
             "Defense Curl",
-            "Thunderpunch",
+            "ThunderPunch",
             "Rest",
             "Attract",
             "Thief",
@@ -21318,7 +21318,7 @@
             ],
             [
                 17,
-                "Sonicboom"
+                "SonicBoom"
             ],
             [
                 23,
@@ -21803,7 +21803,7 @@
             "Sleep Talk",
             "Fire Blast",
             "Defense Curl",
-            "Thunderpunch",
+            "ThunderPunch",
             "Dream Eater",
             "Detect",
             "Rest",
@@ -22112,7 +22112,7 @@
             ],
             [
                 19,
-                "Sonicboom"
+                "SonicBoom"
             ],
             [
                 25,

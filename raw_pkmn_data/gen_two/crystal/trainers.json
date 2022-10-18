@@ -346,7 +346,7 @@
                 "moves": [
                     "Thunderbolt",
                     "Supersonic",
-                    "Sonicboom",
+                    "SonicBoom",
                     "Thunder Wave"
                 ]
             },
@@ -364,7 +364,7 @@
                 "moves": [
                     "Thunderbolt",
                     "Supersonic",
-                    "Sonicboom",
+                    "SonicBoom",
                     "Thunder Wave"
                 ]
             },
@@ -527,7 +527,7 @@
         ],
         "money": 4000
     },
-    "Rival1 RIVAL1_1_CHIKORITA": {
+    "Rival1 1 Chikorita": {
         "dv": {
             "atk": 13,
             "def": 13,
@@ -537,7 +537,7 @@
         },
         "trainer_class": "Rival1",
         "trainer_location": "CherrygroveCity",
-        "trainer_name": "Rival1 RIVAL1_1_CHIKORITA",
+        "trainer_name": "Rival1 1 Chikorita",
         "pokemon": [
             {
                 "name": "Chikorita",
@@ -558,7 +558,7 @@
         ],
         "money": 300
     },
-    "Rival1 RIVAL1_1_CYNDAQUIL": {
+    "Rival1 1 Cyndaquil": {
         "dv": {
             "atk": 13,
             "def": 13,
@@ -568,7 +568,7 @@
         },
         "trainer_class": "Rival1",
         "trainer_location": "CherrygroveCity",
-        "trainer_name": "Rival1 RIVAL1_1_CYNDAQUIL",
+        "trainer_name": "Rival1 1 Cyndaquil",
         "pokemon": [
             {
                 "name": "Cyndaquil",
@@ -589,7 +589,7 @@
         ],
         "money": 300
     },
-    "Rival1 RIVAL1_1_TOTODILE": {
+    "Rival1 1 Totodile": {
         "dv": {
             "atk": 13,
             "def": 13,
@@ -599,7 +599,7 @@
         },
         "trainer_class": "Rival1",
         "trainer_location": "CherrygroveCity",
-        "trainer_name": "Rival1 RIVAL1_1_TOTODILE",
+        "trainer_name": "Rival1 1 Totodile",
         "pokemon": [
             {
                 "name": "Totodile",
@@ -620,7 +620,7 @@
         ],
         "money": 300
     },
-    "Rival1 RIVAL1_2_CHIKORITA": {
+    "Rival1 2 Chikorita": {
         "dv": {
             "atk": 13,
             "def": 13,
@@ -630,7 +630,7 @@
         },
         "trainer_class": "Rival1",
         "trainer_location": "AzaleaTown",
-        "trainer_name": "Rival1 RIVAL1_2_CHIKORITA",
+        "trainer_name": "Rival1 2 Chikorita",
         "pokemon": [
             {
                 "name": "Gastly",
@@ -687,7 +687,7 @@
         ],
         "money": 960
     },
-    "Rival1 RIVAL1_2_CYNDAQUIL": {
+    "Rival1 2 Cyndaquil": {
         "dv": {
             "atk": 13,
             "def": 13,
@@ -697,7 +697,7 @@
         },
         "trainer_class": "Rival1",
         "trainer_location": "AzaleaTown",
-        "trainer_name": "Rival1 RIVAL1_2_CYNDAQUIL",
+        "trainer_name": "Rival1 2 Cyndaquil",
         "pokemon": [
             {
                 "name": "Gastly",
@@ -754,7 +754,7 @@
         ],
         "money": 960
     },
-    "Rival1 RIVAL1_2_TOTODILE": {
+    "Rival1 2 Totodile": {
         "dv": {
             "atk": 13,
             "def": 13,
@@ -764,7 +764,7 @@
         },
         "trainer_class": "Rival1",
         "trainer_location": "AzaleaTown",
-        "trainer_name": "Rival1 RIVAL1_2_TOTODILE",
+        "trainer_name": "Rival1 2 Totodile",
         "pokemon": [
             {
                 "name": "Gastly",
@@ -821,7 +821,7 @@
         ],
         "money": 960
     },
-    "Rival1 RIVAL1_3_CHIKORITA": {
+    "Rival1 3 Chikorita": {
         "dv": {
             "atk": 13,
             "def": 13,
@@ -831,7 +831,7 @@
         },
         "trainer_class": "Rival1",
         "trainer_location": "BurnedTower",
-        "trainer_name": "Rival1 RIVAL1_3_CHIKORITA",
+        "trainer_name": "Rival1 3 Chikorita",
         "pokemon": [
             {
                 "name": "Haunter",
@@ -866,7 +866,7 @@
                     "Tackle",
                     "Thundershock",
                     "Supersonic",
-                    "Sonicboom"
+                    "SonicBoom"
                 ]
             },
             {
@@ -908,7 +908,7 @@
         ],
         "money": 1320
     },
-    "Rival1 RIVAL1_3_CYNDAQUIL": {
+    "Rival1 3 Cyndaquil": {
         "dv": {
             "atk": 13,
             "def": 13,
@@ -918,7 +918,7 @@
         },
         "trainer_class": "Rival1",
         "trainer_location": "BurnedTower",
-        "trainer_name": "Rival1 RIVAL1_3_CYNDAQUIL",
+        "trainer_name": "Rival1 3 Cyndaquil",
         "pokemon": [
             {
                 "name": "Haunter",
@@ -953,7 +953,7 @@
                     "Tackle",
                     "Thundershock",
                     "Supersonic",
-                    "Sonicboom"
+                    "SonicBoom"
                 ]
             },
             {
@@ -995,7 +995,7 @@
         ],
         "money": 1320
     },
-    "Rival1 RIVAL1_3_TOTODILE": {
+    "Rival1 3 Totodile": {
         "dv": {
             "atk": 13,
             "def": 13,
@@ -1005,7 +1005,7 @@
         },
         "trainer_class": "Rival1",
         "trainer_location": "BurnedTower",
-        "trainer_name": "Rival1 RIVAL1_3_TOTODILE",
+        "trainer_name": "Rival1 3 Totodile",
         "pokemon": [
             {
                 "name": "Haunter",
@@ -1040,7 +1040,7 @@
                     "Tackle",
                     "Thundershock",
                     "Supersonic",
-                    "Sonicboom"
+                    "SonicBoom"
                 ]
             },
             {
@@ -1082,7 +1082,7 @@
         ],
         "money": 1320
     },
-    "Rival1 RIVAL1_4_CHIKORITA": {
+    "Rival1 4 Chikorita": {
         "dv": {
             "atk": 13,
             "def": 13,
@@ -1092,7 +1092,7 @@
         },
         "trainer_class": "Rival1",
         "trainer_location": "GoldenrodUnderground",
-        "trainer_name": "Rival1 RIVAL1_4_CHIKORITA",
+        "trainer_name": "Rival1 4 Chikorita",
         "pokemon": [
             {
                 "name": "Golbat",
@@ -1126,7 +1126,7 @@
                 "moves": [
                     "Tackle",
                     "Thundershock",
-                    "Sonicboom",
+                    "SonicBoom",
                     "Thunder Wave"
                 ]
             },
@@ -1187,7 +1187,7 @@
         ],
         "money": 1920
     },
-    "Rival1 RIVAL1_4_CYNDAQUIL": {
+    "Rival1 4 Cyndaquil": {
         "dv": {
             "atk": 13,
             "def": 13,
@@ -1197,7 +1197,7 @@
         },
         "trainer_class": "Rival1",
         "trainer_location": "GoldenrodUnderground",
-        "trainer_name": "Rival1 RIVAL1_4_CYNDAQUIL",
+        "trainer_name": "Rival1 4 Cyndaquil",
         "pokemon": [
             {
                 "name": "Golbat",
@@ -1231,7 +1231,7 @@
                 "moves": [
                     "Tackle",
                     "Thundershock",
-                    "Sonicboom",
+                    "SonicBoom",
                     "Thunder Wave"
                 ]
             },
@@ -1292,7 +1292,7 @@
         ],
         "money": 1920
     },
-    "Rival1 RIVAL1_4_TOTODILE": {
+    "Rival1 4 Totodile": {
         "dv": {
             "atk": 13,
             "def": 13,
@@ -1302,7 +1302,7 @@
         },
         "trainer_class": "Rival1",
         "trainer_location": "GoldenrodUnderground",
-        "trainer_name": "Rival1 RIVAL1_4_TOTODILE",
+        "trainer_name": "Rival1 4 Totodile",
         "pokemon": [
             {
                 "name": "Golbat",
@@ -1336,7 +1336,7 @@
                 "moves": [
                     "Tackle",
                     "Thundershock",
-                    "Sonicboom",
+                    "SonicBoom",
                     "Thunder Wave"
                 ]
             },
@@ -1397,7 +1397,7 @@
         ],
         "money": 1920
     },
-    "Rival1 RIVAL1_5_CHIKORITA": {
+    "Rival1 5 Chikorita": {
         "dv": {
             "atk": 13,
             "def": 13,
@@ -1407,7 +1407,7 @@
         },
         "trainer_class": "Rival1",
         "trainer_location": "VictoryRoad",
-        "trainer_name": "Rival1 RIVAL1_5_CHIKORITA",
+        "trainer_name": "Rival1 5 Chikorita",
         "pokemon": [
             {
                 "name": "Sneasel",
@@ -1458,7 +1458,7 @@
                 "held_item": null,
                 "moves": [
                     "Thundershock",
-                    "Sonicboom",
+                    "SonicBoom",
                     "Thunder Wave",
                     "Swift"
                 ]
@@ -1520,7 +1520,7 @@
         ],
         "money": 2280
     },
-    "Rival1 RIVAL1_5_CYNDAQUIL": {
+    "Rival1 5 Cyndaquil": {
         "dv": {
             "atk": 13,
             "def": 13,
@@ -1530,7 +1530,7 @@
         },
         "trainer_class": "Rival1",
         "trainer_location": "VictoryRoad",
-        "trainer_name": "Rival1 RIVAL1_5_CYNDAQUIL",
+        "trainer_name": "Rival1 5 Cyndaquil",
         "pokemon": [
             {
                 "name": "Sneasel",
@@ -1581,7 +1581,7 @@
                 "held_item": null,
                 "moves": [
                     "Thundershock",
-                    "Sonicboom",
+                    "SonicBoom",
                     "Thunder Wave",
                     "Swift"
                 ]
@@ -1643,7 +1643,7 @@
         ],
         "money": 2280
     },
-    "Rival1 RIVAL1_5_TOTODILE": {
+    "Rival1 5 Totodile": {
         "dv": {
             "atk": 13,
             "def": 13,
@@ -1653,7 +1653,7 @@
         },
         "trainer_class": "Rival1",
         "trainer_location": "VictoryRoad",
-        "trainer_name": "Rival1 RIVAL1_5_TOTODILE",
+        "trainer_name": "Rival1 5 Totodile",
         "pokemon": [
             {
                 "name": "Sneasel",
@@ -1704,7 +1704,7 @@
                 "held_item": null,
                 "moves": [
                     "Thundershock",
-                    "Sonicboom",
+                    "SonicBoom",
                     "Thunder Wave",
                     "Swift"
                 ]
@@ -2135,7 +2135,7 @@
                 "xp": 1260,
                 "held_item": null,
                 "moves": [
-                    "Thunderpunch",
+                    "ThunderPunch",
                     "Ice Punch",
                     "Fire Punch",
                     "Mach Punch"
@@ -2802,7 +2802,7 @@
                 "held_item": null,
                 "moves": [
                     "Quick Attack",
-                    "Thunderpunch",
+                    "ThunderPunch",
                     "Light Screen",
                     "Thunder"
                 ]
@@ -2918,7 +2918,7 @@
                     "Tackle",
                     "Thundershock",
                     "Supersonic",
-                    "Sonicboom"
+                    "SonicBoom"
                 ]
             },
             {
@@ -2936,7 +2936,7 @@
                     "Tackle",
                     "Thundershock",
                     "Supersonic",
-                    "Sonicboom"
+                    "SonicBoom"
                 ]
             },
             {
@@ -2954,7 +2954,7 @@
                     "Tackle",
                     "Thundershock",
                     "Supersonic",
-                    "Sonicboom"
+                    "SonicBoom"
                 ]
             }
         ],
@@ -2985,7 +2985,7 @@
                 "held_item": null,
                 "moves": [
                     "Supersonic",
-                    "Sonicboom",
+                    "SonicBoom",
                     "Thunder Wave",
                     "Lock On"
                 ]
@@ -3003,7 +3003,7 @@
                 "held_item": null,
                 "moves": [
                     "Supersonic",
-                    "Sonicboom",
+                    "SonicBoom",
                     "Thunder Wave",
                     "Lock On"
                 ]
@@ -3021,7 +3021,7 @@
                 "held_item": null,
                 "moves": [
                     "Supersonic",
-                    "Sonicboom",
+                    "SonicBoom",
                     "Thunder Wave",
                     "Lock On"
                 ]
@@ -3808,7 +3808,7 @@
                 "moves": [
                     "Tackle",
                     "Screech",
-                    "Sonicboom",
+                    "SonicBoom",
                     "Selfdestruct"
                 ]
             },
@@ -3825,7 +3825,7 @@
                 "held_item": null,
                 "moves": [
                     "Supersonic",
-                    "Sonicboom",
+                    "SonicBoom",
                     "Thunder Wave",
                     "Lock On"
                 ]
@@ -3843,7 +3843,7 @@
                 "held_item": null,
                 "moves": [
                     "Screech",
-                    "Sonicboom",
+                    "SonicBoom",
                     "Selfdestruct",
                     "Rollout"
                 ]
@@ -3861,7 +3861,7 @@
                 "held_item": null,
                 "moves": [
                     "Supersonic",
-                    "Sonicboom",
+                    "SonicBoom",
                     "Thunder Wave",
                     "Lock On"
                 ]
@@ -4014,7 +4014,7 @@
                 "held_item": null,
                 "moves": [
                     "Leer",
-                    "Thunderpunch",
+                    "ThunderPunch",
                     "Light Screen",
                     "Swift"
                 ]
@@ -4434,7 +4434,7 @@
                 "moves": [
                     "Tackle",
                     "Screech",
-                    "Sonicboom"
+                    "SonicBoom"
                 ]
             }
         ],
@@ -4483,7 +4483,7 @@
                 "held_item": null,
                 "moves": [
                     "Screech",
-                    "Sonicboom",
+                    "SonicBoom",
                     "Selfdestruct",
                     "Rollout"
                 ]
@@ -4621,7 +4621,7 @@
                 "moves": [
                     "Quick Attack",
                     "Double Team",
-                    "Sonicboom",
+                    "SonicBoom",
                     "Detect"
                 ]
             }
@@ -4673,7 +4673,7 @@
                     "Tackle",
                     "Thundershock",
                     "Supersonic",
-                    "Sonicboom"
+                    "SonicBoom"
                 ]
             }
         ],
@@ -4722,7 +4722,7 @@
                 "held_item": null,
                 "moves": [
                     "Supersonic",
-                    "Sonicboom",
+                    "SonicBoom",
                     "Thunder Wave",
                     "Lock On"
                 ]
@@ -4791,7 +4791,7 @@
                 "held_item": null,
                 "moves": [
                     "Screech",
-                    "Sonicboom",
+                    "SonicBoom",
                     "Selfdestruct",
                     "Rollout"
                 ]
@@ -4824,7 +4824,7 @@
                 "held_item": null,
                 "moves": [
                     "Screech",
-                    "Sonicboom",
+                    "SonicBoom",
                     "Rollout",
                     "Light Screen"
                 ]
@@ -4948,7 +4948,7 @@
                 "moves": [
                     "Quick Attack",
                     "Double Team",
-                    "Sonicboom",
+                    "SonicBoom",
                     "Detect"
                 ]
             }
@@ -5017,7 +5017,7 @@
                 "moves": [
                     "Quick Attack",
                     "Double Team",
-                    "Sonicboom",
+                    "SonicBoom",
                     "Supersonic"
                 ]
             },
@@ -5085,7 +5085,7 @@
                 "held_item": null,
                 "moves": [
                     "Supersonic",
-                    "Sonicboom",
+                    "SonicBoom",
                     "Thunder Wave",
                     "Lock On"
                 ]
@@ -6960,7 +6960,7 @@
                 "held_item": null,
                 "moves": [
                     "Tackle",
-                    "Thunderpunch",
+                    "ThunderPunch",
                     "Thunder Wave",
                     "Cotton Spore"
                 ]
@@ -6993,7 +6993,7 @@
                 "held_item": null,
                 "moves": [
                     "Swift",
-                    "Thunderpunch",
+                    "ThunderPunch",
                     "Thunder Wave",
                     "Cotton Spore"
                 ]
@@ -7595,7 +7595,7 @@
                 "xp": 901,
                 "held_item": null,
                 "moves": [
-                    "Thunderpunch",
+                    "ThunderPunch",
                     "Light Screen",
                     "Swift",
                     "Screech"
@@ -8975,7 +8975,7 @@
                 "xp": 1125,
                 "held_item": null,
                 "moves": [
-                    "Sonicboom",
+                    "SonicBoom",
                     "Selfdestruct",
                     "Rollout",
                     "Light Screen"
@@ -18264,7 +18264,7 @@
                     "Tackle",
                     "Thundershock",
                     "Supersonic",
-                    "Sonicboom"
+                    "SonicBoom"
                 ]
             },
             {
@@ -18282,7 +18282,7 @@
                     "Tackle",
                     "Thundershock",
                     "Supersonic",
-                    "Sonicboom"
+                    "SonicBoom"
                 ]
             },
             {
@@ -18300,7 +18300,7 @@
                     "Tackle",
                     "Thundershock",
                     "Supersonic",
-                    "Sonicboom"
+                    "SonicBoom"
                 ]
             }
         ],
@@ -18462,7 +18462,7 @@
                 "held_item": null,
                 "moves": [
                     "Supersonic",
-                    "Sonicboom",
+                    "SonicBoom",
                     "Thunder Wave",
                     "Lock On"
                 ]
@@ -18480,7 +18480,7 @@
                 "held_item": null,
                 "moves": [
                     "Supersonic",
-                    "Sonicboom",
+                    "SonicBoom",
                     "Thunder Wave",
                     "Lock On"
                 ]
@@ -18498,7 +18498,7 @@
                 "held_item": null,
                 "moves": [
                     "Supersonic",
-                    "Sonicboom",
+                    "SonicBoom",
                     "Thunder Wave",
                     "Lock On"
                 ]
@@ -18564,7 +18564,7 @@
                 "held_item": null,
                 "moves": [
                     "Supersonic",
-                    "Sonicboom",
+                    "SonicBoom",
                     "Thunder Wave",
                     "Lock On"
                 ]
@@ -18599,7 +18599,7 @@
                 "held_item": null,
                 "moves": [
                     "Supersonic",
-                    "Sonicboom",
+                    "SonicBoom",
                     "Thunder Wave",
                     "Lock On"
                 ]
@@ -18711,7 +18711,7 @@
                 "held_item": null,
                 "moves": [
                     "Supersonic",
-                    "Sonicboom",
+                    "SonicBoom",
                     "Thunder Wave",
                     "Lock On"
                 ]
@@ -18729,7 +18729,7 @@
                 "held_item": null,
                 "moves": [
                     "Supersonic",
-                    "Sonicboom",
+                    "SonicBoom",
                     "Thunder Wave",
                     "Lock On"
                 ]
@@ -18747,7 +18747,7 @@
                 "held_item": null,
                 "moves": [
                     "Supersonic",
-                    "Sonicboom",
+                    "SonicBoom",
                     "Thunder Wave",
                     "Lock On"
                 ]
@@ -18854,7 +18854,7 @@
         ],
         "money": 608
     },
-    "Rival2 RIVAL2_1_CHIKORITA": {
+    "Rival2 1 Chikorita": {
         "dv": {
             "atk": 9,
             "def": 8,
@@ -18864,7 +18864,7 @@
         },
         "trainer_class": "Rival2",
         "trainer_location": "MountMoon",
-        "trainer_name": "Rival2 RIVAL2_1_CHIKORITA",
+        "trainer_name": "Rival2 1 Chikorita",
         "pokemon": [
             {
                 "name": "Sneasel",
@@ -18915,7 +18915,7 @@
                 "held_item": null,
                 "moves": [
                     "Thundershock",
-                    "Sonicboom",
+                    "SonicBoom",
                     "Thunder Wave",
                     "Swift"
                 ]
@@ -18977,7 +18977,7 @@
         ],
         "money": 4500
     },
-    "Rival2 RIVAL2_1_CYNDAQUIL": {
+    "Rival2 1 Cyndaquil": {
         "dv": {
             "atk": 9,
             "def": 8,
@@ -18987,7 +18987,7 @@
         },
         "trainer_class": "Rival2",
         "trainer_location": "MountMoon",
-        "trainer_name": "Rival2 RIVAL2_1_CYNDAQUIL",
+        "trainer_name": "Rival2 1 Cyndaquil",
         "pokemon": [
             {
                 "name": "Sneasel",
@@ -19038,7 +19038,7 @@
                 "held_item": null,
                 "moves": [
                     "Thundershock",
-                    "Sonicboom",
+                    "SonicBoom",
                     "Thunder Wave",
                     "Swift"
                 ]
@@ -19100,7 +19100,7 @@
         ],
         "money": 4500
     },
-    "Rival2 RIVAL2_1_TOTODILE": {
+    "Rival2 1 Totodile": {
         "dv": {
             "atk": 9,
             "def": 8,
@@ -19110,7 +19110,7 @@
         },
         "trainer_class": "Rival2",
         "trainer_location": "MountMoon",
-        "trainer_name": "Rival2 RIVAL2_1_TOTODILE",
+        "trainer_name": "Rival2 1 Totodile",
         "pokemon": [
             {
                 "name": "Sneasel",
@@ -19161,7 +19161,7 @@
                 "held_item": null,
                 "moves": [
                     "Thundershock",
-                    "Sonicboom",
+                    "SonicBoom",
                     "Thunder Wave",
                     "Swift"
                 ]
@@ -19223,7 +19223,7 @@
         ],
         "money": 4500
     },
-    "Rival2 RIVAL2_2_CHIKORITA": {
+    "Rival2 2 Chikorita": {
         "dv": {
             "atk": 9,
             "def": 8,
@@ -19232,8 +19232,8 @@
             "hp": 8
         },
         "trainer_class": "Rival2",
-        "trainer_location": "IndigoPlateau",
-        "trainer_name": "Rival2 RIVAL2_2_CHIKORITA",
+        "trainer_location": "Indigo Plateau",
+        "trainer_name": "Rival2 2 Chikorita",
         "pokemon": [
             {
                 "name": "Sneasel",
@@ -19284,7 +19284,7 @@
                 "held_item": null,
                 "moves": [
                     "Thunder",
-                    "Sonicboom",
+                    "SonicBoom",
                     "Thunder Wave",
                     "Swift"
                 ]
@@ -19346,7 +19346,7 @@
         ],
         "money": 5000
     },
-    "Rival2 RIVAL2_2_CYNDAQUIL": {
+    "Rival2 2 Cyndaquil": {
         "dv": {
             "atk": 9,
             "def": 8,
@@ -19355,8 +19355,8 @@
             "hp": 8
         },
         "trainer_class": "Rival2",
-        "trainer_location": "IndigoPlateau",
-        "trainer_name": "Rival2 RIVAL2_2_CYNDAQUIL",
+        "trainer_location": "Indigo Plateau",
+        "trainer_name": "Rival2 2 Cyndaquil",
         "pokemon": [
             {
                 "name": "Sneasel",
@@ -19407,7 +19407,7 @@
                 "held_item": null,
                 "moves": [
                     "Thunder",
-                    "Sonicboom",
+                    "SonicBoom",
                     "Thunder Wave",
                     "Swift"
                 ]
@@ -19469,7 +19469,7 @@
         ],
         "money": 5000
     },
-    "Rival2 RIVAL2_2_TOTODILE": {
+    "Rival2 2 Totodile": {
         "dv": {
             "atk": 9,
             "def": 8,
@@ -19478,8 +19478,8 @@
             "hp": 8
         },
         "trainer_class": "Rival2",
-        "trainer_location": "IndigoPlateau",
-        "trainer_name": "Rival2 RIVAL2_2_TOTODILE",
+        "trainer_location": "Indigo Plateau",
+        "trainer_name": "Rival2 2 Totodile",
         "pokemon": [
             {
                 "name": "Sneasel",
@@ -19530,7 +19530,7 @@
                 "held_item": null,
                 "moves": [
                     "Thunder",
-                    "Sonicboom",
+                    "SonicBoom",
                     "Thunder Wave",
                     "Swift"
                 ]
@@ -19617,7 +19617,7 @@
                 "held_item": null,
                 "moves": [
                     "Leer",
-                    "Thunderpunch",
+                    "ThunderPunch",
                     "Light Screen",
                     "Swift"
                 ]
@@ -19650,7 +19650,7 @@
                 "held_item": null,
                 "moves": [
                     "Supersonic",
-                    "Sonicboom",
+                    "SonicBoom",
                     "Thunder Wave",
                     "Lock On"
                 ]
@@ -19667,7 +19667,7 @@
                 "xp": 727,
                 "held_item": null,
                 "moves": [
-                    "Sonicboom",
+                    "SonicBoom",
                     "Selfdestruct",
                     "Rollout",
                     "Light Screen"
@@ -19686,7 +19686,7 @@
                 "held_item": null,
                 "moves": [
                     "Supersonic",
-                    "Sonicboom",
+                    "SonicBoom",
                     "Thunder Wave",
                     "Lock On"
                 ]
@@ -19704,7 +19704,7 @@
                 "held_item": null,
                 "moves": [
                     "Supersonic",
-                    "Sonicboom",
+                    "SonicBoom",
                     "Thunder Wave",
                     "Lock On"
                 ]
@@ -21606,7 +21606,7 @@
                 "xp": 1609,
                 "held_item": null,
                 "moves": [
-                    "Thunderpunch",
+                    "ThunderPunch",
                     "Fire Punch",
                     "Sunny Day",
                     "Confuse Ray"
@@ -22429,7 +22429,7 @@
                 "held_item": null,
                 "moves": [
                     "Screech",
-                    "Sonicboom",
+                    "SonicBoom",
                     "Selfdestruct",
                     "Rollout"
                 ]
@@ -22447,7 +22447,7 @@
                 "held_item": null,
                 "moves": [
                     "Screech",
-                    "Sonicboom",
+                    "SonicBoom",
                     "Selfdestruct",
                     "Rollout"
                 ]
@@ -22465,7 +22465,7 @@
                 "held_item": null,
                 "moves": [
                     "Screech",
-                    "Sonicboom",
+                    "SonicBoom",
                     "Selfdestruct",
                     "Rollout"
                 ]
@@ -22483,7 +22483,7 @@
                 "held_item": null,
                 "moves": [
                     "Screech",
-                    "Sonicboom",
+                    "SonicBoom",
                     "Selfdestruct",
                     "Rollout"
                 ]
@@ -22564,7 +22564,7 @@
                 "moves": [
                     "Tackle",
                     "Screech",
-                    "Sonicboom"
+                    "SonicBoom"
                 ]
             }
         ],
@@ -22596,7 +22596,7 @@
                 "moves": [
                     "Tackle",
                     "Screech",
-                    "Sonicboom"
+                    "SonicBoom"
                 ]
             },
             {
@@ -22613,7 +22613,7 @@
                 "moves": [
                     "Tackle",
                     "Screech",
-                    "Sonicboom"
+                    "SonicBoom"
                 ]
             },
             {
@@ -22630,7 +22630,7 @@
                 "moves": [
                     "Tackle",
                     "Screech",
-                    "Sonicboom",
+                    "SonicBoom",
                     "Selfdestruct"
                 ]
             },
@@ -22647,7 +22647,7 @@
                 "held_item": null,
                 "moves": [
                     "Screech",
-                    "Sonicboom",
+                    "SonicBoom",
                     "Selfdestruct",
                     "Rollout"
                 ]
@@ -22681,7 +22681,7 @@
                 "moves": [
                     "Tackle",
                     "Screech",
-                    "Sonicboom"
+                    "SonicBoom"
                 ]
             },
             {
@@ -22698,7 +22698,7 @@
                 "moves": [
                     "Tackle",
                     "Screech",
-                    "Sonicboom"
+                    "SonicBoom"
                 ]
             },
             {
@@ -22715,7 +22715,7 @@
                 "moves": [
                     "Tackle",
                     "Screech",
-                    "Sonicboom",
+                    "SonicBoom",
                     "Selfdestruct"
                 ]
             },
@@ -22732,7 +22732,7 @@
                 "held_item": null,
                 "moves": [
                     "Screech",
-                    "Sonicboom",
+                    "SonicBoom",
                     "Selfdestruct",
                     "Rollout"
                 ]
@@ -22904,7 +22904,7 @@
                 "moves": [
                     "Headbutt",
                     "Swagger",
-                    "Thunderpunch",
+                    "ThunderPunch",
                     "Vital Throw"
                 ]
             },
@@ -22972,7 +22972,7 @@
                 "held_item": null,
                 "moves": [
                     "Comet Punch",
-                    "Thunderpunch",
+                    "ThunderPunch",
                     "Ice Punch",
                     "Fire Punch"
                 ]
@@ -23073,7 +23073,7 @@
                 "xp": 1020,
                 "held_item": null,
                 "moves": [
-                    "Thunderpunch",
+                    "ThunderPunch",
                     "Ice Punch",
                     "Fire Punch",
                     "Mach Punch"
@@ -30076,7 +30076,7 @@
                 "held_item": null,
                 "moves": [
                     "Screech",
-                    "Sonicboom",
+                    "SonicBoom",
                     "Thunder",
                     "Rollout"
                 ]

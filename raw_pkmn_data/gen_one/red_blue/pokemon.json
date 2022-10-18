@@ -1960,7 +1960,7 @@
             ],
             [
                 42,
-                "Thunderpunch"
+                "ThunderPunch"
             ],
             [
                 49,
@@ -1986,7 +1986,7 @@
         "initial_moveset": [
             "Tackle",
             "Screech",
-            "Sonicboom"
+            "SonicBoom"
         ],
         "growth_rate": "growth_medium_fast",
         "tm_hm_learnset": [
@@ -2013,7 +2013,7 @@
         "levelup_moveset": [
             [
                 17,
-                "Sonicboom"
+                "SonicBoom"
             ],
             [
                 22,
@@ -3153,7 +3153,7 @@
             ],
             [
                 43,
-                "Thunderpunch"
+                "ThunderPunch"
             ],
             [
                 48,
@@ -4551,7 +4551,7 @@
         "levelup_moveset": [
             [
                 21,
-                "Sonicboom"
+                "SonicBoom"
             ],
             [
                 25,
@@ -4588,7 +4588,7 @@
         "base_xp": 161,
         "initial_moveset": [
             "Tackle",
-            "Sonicboom",
+            "SonicBoom",
             "Thundershock"
         ],
         "growth_rate": "growth_medium_fast",
@@ -4614,7 +4614,7 @@
         "levelup_moveset": [
             [
                 21,
-                "Sonicboom"
+                "SonicBoom"
             ],
             [
                 25,
@@ -8716,7 +8716,7 @@
         "levelup_moveset": [
             [
                 17,
-                "Sonicboom"
+                "SonicBoom"
             ],
             [
                 22,

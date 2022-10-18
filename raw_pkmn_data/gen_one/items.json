@@ -199,8 +199,8 @@
         "purchase_price": 3000,
         "marts": ["Celadon 2F TMs"]
     },
-    "TM10 Double-Edge": {
-        "name": "TM10 Double-Edge",
+    "TM10 Double Edge": {
+        "name": "TM10 Double Edge",
         "key_item": false,
         "purchase_price": 3000,
         "marts": []

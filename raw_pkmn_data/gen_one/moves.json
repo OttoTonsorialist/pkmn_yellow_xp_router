@@ -71,8 +71,8 @@
         "effects": [{"percent": 10, "status": "Freeze"}],
         "attack_flavor": null
     },
-    "Thunder Punch": {
-        "name": "Thunder Punch",
+    "ThunderPunch": {
+        "name": "ThunderPunch",
         "accuracy": 100,
         "pp": 15,
         "base_power": 75,
@@ -89,8 +89,8 @@
         "effects": [],
         "attack_flavor": null
     },
-    "Vice Grip": {
-        "name": "Vice Grip",
+    "Vicegrip": {
+        "name": "Vicegrip",
         "accuracy": 100,
         "pp": 30,
         "base_power": 55,
@@ -431,8 +431,8 @@
         "effects": [{"chance": 100, "status": "Confusion"}],
         "attack_flavor": null
     },
-    "Sonic Boom": {
-        "name": "Sonic Boom",
+    "SonicBoom": {
+        "name": "SonicBoom",
         "accuracy": 90,
         "pp": 20,
         "base_power": 20,

@@ -1,3 +1,4 @@
+from __future__ import annotations
 import os
 from typing import Dict, List, Tuple
 
@@ -23,6 +24,16 @@ class MinBattlesDB:
 class PkmnDB:
     def __init__(self, data:Dict[str, universal_data_objects.PokemonSpecies]):
         self._data = data
+    
+    def validate_moves(self, move_db:MoveDB):
+        for cur_mon in self._data.values():
+            for move in cur_mon.initial_moves + cur_mon.tmhm_moves:
+                if move_db.get_move(move) == None:
+                    print(f"Found invalid move {move} for mon {cur_mon.name}")
+
+            for [_, move] in cur_mon.levelup_moves:
+                if move_db.get_move(move) == None:
+                    print(f"Found invalid move {move} for mon {cur_mon.name}")
     
     def get_all_names(self) -> List[str]:
         return list(self._data.keys())
@@ -63,6 +74,16 @@ class TrainerDB:
             if trainer_obj.trainer_class not in self.class_oriented_trainers:
                 self.class_oriented_trainers[trainer_obj.trainer_class] = []
             self.class_oriented_trainers[trainer_obj.trainer_class].append(trainer_obj.name)
+    
+    def validate_trainers(self, pkmn_db:PkmnDB, move_db:MoveDB):
+        for cur_trainer in self._data.values():
+            for cur_mon in cur_trainer.pkmn:
+                if pkmn_db.get_pkmn(cur_mon.name) is None:
+                    print(f"Invalid mon found: {cur_mon.name} from trainer {cur_trainer.name}")
+                
+                for cur_move in cur_mon.move_list:
+                    if move_db.get_move(cur_move) is None:
+                        print(f"Invalid move found: {cur_move} on mon {cur_mon.name} from trainer {cur_trainer.name}")
     
     def get_trainer(self, trainer_name):
         return self._data.get(trainer_name)
@@ -120,6 +141,11 @@ class ItemDB:
                 if mart not in self.mart_items:
                     self.mart_items[mart] = []
                 self.mart_items[mart].append(cur_base_item.name)
+    
+    def validate_tms_hms(self, move_db:MoveDB):
+        for cur_item_name in self.tms:
+            if move_db.get_move(self.get_item(cur_item_name).move_name) is None:
+                print(f"Found invalid move from TM/HM: {cur_item_name}")
     
     def get_item(self, item_name):
         if item_name in self._data:

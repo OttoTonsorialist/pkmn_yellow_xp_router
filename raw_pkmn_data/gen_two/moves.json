@@ -274,8 +274,8 @@
             }
         ]
     },
-    "Sand-Attack": {
-        "name": "Sand-Attack",
+    "Sand Attack": {
+        "name": "Sand Attack",
         "accuracy": 100,
         "pp": 15,
         "base_power": 0,
@@ -2035,8 +2035,8 @@
         "attack_flavor": ["reversal"],
         "effects": []
     },
-    "Conversion 2": {
-        "name": "Conversion 2",
+    "Conversion2": {
+        "name": "Conversion2",
         "accuracy": 100,
         "pp": 30,
         "base_power": 0,
@@ -2309,8 +2309,8 @@
         "attack_flavor": ["multi_hit"],
         "effects": []
     },
-    "Lock-On": {
-        "name": "Lock-On",
+    "Lock On": {
+        "name": "Lock On",
         "accuracy": 100,
         "pp": 5,
         "base_power": 0,
