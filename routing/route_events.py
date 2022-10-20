@@ -36,6 +36,23 @@ class InventoryEventDefinition:
         return f"{action} {self.item_name} x{self.item_amount}"
 
 
+class HoldItemEventDefinition:
+    def __init__(self, item_name):
+        self.item_name = item_name
+
+    def serialize(self):
+        return [self.item_name]
+
+    @staticmethod
+    def deserialize(raw_val):
+        if not raw_val:
+            return None
+        return HoldItemEventDefinition(raw_val[0])
+    
+    def __str__(self):
+        return f"Hold {self.item_name}"
+
+
 class VitaminEventDefinition:
     def __init__(self, vitamin, amount):
         self.vitamin = vitamin
@@ -168,7 +185,7 @@ class TrainerEventDefinition:
 
 
 class EventDefinition:
-    def __init__(self, enabled=True, rare_candy=None, vitamin=None, trainer_def=None, wild_pkmn_info=None, item_event_def=None, learn_move=None, notes=""):
+    def __init__(self, enabled=True, rare_candy=None, vitamin=None, trainer_def=None, wild_pkmn_info=None, item_event_def=None, learn_move=None, hold_item=None, notes=""):
         self.enabled = enabled
         self.rare_candy = rare_candy
         self.vitamin = vitamin
@@ -178,6 +195,7 @@ class EventDefinition:
         self._wild_pkmn = None
         self.item_event_def = item_event_def
         self.learn_move = learn_move
+        self.hold_item = hold_item
         self.notes = notes
 
     def get_trainer_obj(self):
@@ -230,6 +248,8 @@ class EventDefinition:
             if self.learn_move.source == const.MOVE_SOURCE_LEVELUP:
                 return const.TASK_LEARN_MOVE_LEVELUP
             return const.TASK_LEARN_MOVE_TM
+        elif self.hold_item is not None:
+            return const.TASK_HOLD_ITEM
         
         return const.TASK_NOTES_ONLY
 
@@ -247,6 +267,8 @@ class EventDefinition:
             return str(self.item_event_def)
         elif self.learn_move is not None:
             return str(self.learn_move)
+        elif self.hold_item is not None:
+            return str(self.hold_item)
         
         return f"Notes: {self.notes}"
     
@@ -264,6 +286,8 @@ class EventDefinition:
             return str(self.item_event_def)
         elif self.learn_move is not None:
             return str(self.learn_move)
+        elif self.hold_item is not None:
+            return str(self.hold_item)
         
         return f"Notes: {self.notes}"
     
@@ -288,6 +312,8 @@ class EventDefinition:
             result.update({const.INVENTORY_EVENT_DEFINITON: self.item_event_def.serialize()})
         elif self.learn_move is not None:
             result.update({const.LEARN_MOVE_KEY: self.learn_move.serialize()})
+        elif self.hold_item is not None:
+            result.update({const.TASK_HOLD_ITEM: self.hold_item.serialize()})
         
         return result    
 
@@ -302,6 +328,7 @@ class EventDefinition:
             wild_pkmn_info=WildPkmnEventDefinition.deserialize(raw_val.get(const.TASK_FIGHT_WILD_PKMN)),
             item_event_def=InventoryEventDefinition.deserialize(raw_val.get(const.INVENTORY_EVENT_DEFINITON)),
             learn_move=LearnMoveEventDefinition.deserialize(raw_val.get(const.LEARN_MOVE_KEY)),
+            hold_item=HoldItemEventDefinition.deserialize(raw_val.get(const.TASK_HOLD_ITEM)),
         )
         if result.wild_pkmn_info is not None:
             result.trainer_def = None
@@ -395,6 +422,10 @@ class EventItem:
                 self.event_definition.learn_move.move_to_learn,
                 self.event_definition.learn_move.destination,
                 self.event_definition.learn_move.source,
+            )
+        elif self.event_definition.hold_item is not None:
+            self.final_state, self.error_message = cur_state.hold_item(
+                self.event_definition.hold_item.item_name
             )
         else:
             # Notes only, no processing just pass through

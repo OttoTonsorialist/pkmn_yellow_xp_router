@@ -80,22 +80,10 @@ def calculate_damage(
     
     if  move.name == const.EXPLOSION_MOVE_NAME or move.name == const.SELFDESTRUCT_MOVE_NAME:
         defending_stat = max(math.floor(defending_stat / 2), 1)
-    
-    """
-    if attacking_stat > 255 or defending_stat > 255:
-        # divide each stat by 4, by using 2 integer divisions by 2
-        attacking_stat = math.floor(attacking_stat / 2)
-        attacking_stat = math.floor(attacking_stat / 2)
-
-        defending_stat = math.floor(defending_stat / 2)
-        defending_stat = math.floor(defending_stat / 2)
-    """
 
     is_stab = (attacking_species.first_type == move.move_type) or (attacking_species.second_type == move.move_type)
 
     temp = 2 * attacking_pkmn.level
-    if is_crit:
-        temp *= 2
     temp = math.floor(temp / 5) + 2
 
     temp *= move.base_power
@@ -103,7 +91,30 @@ def calculate_damage(
     temp = math.floor(temp / defending_stat)
 
     temp = math.floor(temp / 50)
+
+    # TODO: Held item boost goes here
+    if False:
+        temp *= 1.1
+
+    # forcibly prevent crits for Flail, Reversal, and Future sight
+    if is_crit and move.name not in [const.FLAIL_MOVE_NAME, const.REVERSAL_MOVE_NAME, const.FUTURE_SIGHT_MOVE_NAME]:
+        temp *= 2
+
     temp += 2
+    
+    # TODO: weather check goes here
+    weather_boost = False
+    weather_penalty = False
+    
+    if weather_boost:
+        temp = math.floor(temp * 1.5)
+    elif weather_penalty:
+        temp = math.floor(temp * 0.5)
+    
+    # TODO: badge type boost check goes here
+    badge_type_boost = False
+    if badge_type_boost:
+        temp = math.floor(temp * 1.125)
 
     stab_bonus = 0
     if is_stab:
@@ -120,17 +131,52 @@ def calculate_damage(
         temp *= 2
     elif second_type_effectiveness == const.NOT_VERY_EFFECTIVE:
         temp = math.floor(temp / 2)
+
+    move_modifier = 1
+
+    # TODO: rollout logic goes here
+    if False:
+        num_rollout_turns = 0
+        defense_curl_used = false
+        if defense_curl_used:
+            num_rollout_turns += 1
+        
+        move_modifier = math.pow(2, num_rollout_turns)
+    # TODO: fury cutter logic goes here
+    elif False:
+        num_fury_cutter_turns = 0
+        move_modifier = math.pow(2, num_fury_cutter_turns)
+    # TODO: rage logic goes here
+    elif False:
+        num_times_hit_during_rage = 0
+        move_modifier = num_times_hit_during_rage
+    
+    temp *= move_modifier
+
+    # TODO: gust/twister + enemy flying logic goes here
+    # TODO: earthquake/magnitude + enemy digging logic goes here
+    # TODO: stomp + enemy minimized logic goes here
+    # TODO: pursuit + enemy switching logic goes here
+    double_damage = False
+
+    if double_damage:
+        temp *= 2
     
     if temp == 0:
         return None
 
     damage_vals = {}
-    for numerator in range(MIN_RANGE, MAX_RANGE + 1):
-        cur_damage = max(math.floor((temp * numerator) / MAX_RANGE), 1)
 
-        if cur_damage not in damage_vals:
-            damage_vals[cur_damage] = 0
-        
-        damage_vals[cur_damage] += 1
+    # TODO: flail and reversal don't get randomized
+    if False:
+        damage_vals[temp] = 1
+    else:
+        for numerator in range(MIN_RANGE, MAX_RANGE + 1):
+            cur_damage = max(math.floor((temp * numerator) / MAX_RANGE), 1)
+
+            if cur_damage not in damage_vals:
+                damage_vals[cur_damage] = 0
+            
+            damage_vals[cur_damage] += 1
     
     return damage_calc.DamageRange(damage_vals)

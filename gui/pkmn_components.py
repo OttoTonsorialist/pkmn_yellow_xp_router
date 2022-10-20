@@ -3,7 +3,7 @@ import tkinter.font
 from typing import List
 
 from gui import custom_tkinter
-import pkmn
+import pkmn as pkmn_gen_info
 from pkmn import universal_data_objects
 from routing import route_state_objects
 from routing import route_events
@@ -213,6 +213,8 @@ class PkmnViewer(tk.Frame):
         self._name_value = tk.Label(self, background=config.get_header_color(), font=font_to_use)
         self._name_value.grid(row=0, column=0, columnspan=2, sticky=tk.EW)
 
+        self._held_item = tk.Label(self, background=config.get_header_color(), font=font_to_use)
+
         self.stat_column = StatColumn(self, bg_color=config.get_secondary_color(), val_width=self.stat_width, num_rows=6, font=font_to_use)
         self.stat_column.set_labels(["HP:", "Attack:", "Defense:", "Spc Atk:", "Spc Def:", "Speed:"])
         self.stat_column.set_header("")
@@ -231,6 +233,12 @@ class PkmnViewer(tk.Frame):
             speed_bg_color = config.get_secondary_color()
         
         self._name_value.config(text=pkmn.name)
+        self._held_item.config(text=f"Held Item: {pkmn.held_item}")
+
+        if pkmn_gen_info.current_gen_info().get_generation() != 1:
+            self._held_item.grid(row=1, column=0, columnspan=2, sticky=tk.EW)
+        else:
+            self._held_item.grid_forget()
 
         attack_val = str(pkmn.cur_stats.attack)
         if badges is not None and badges.is_attack_boosted():
@@ -376,7 +384,7 @@ class BadgeBoostViewer(tk.Frame):
         prev_mod = universal_data_objects.StageModifiers()
         stage_mod = None
         for idx in range(1, len(self._frames)):
-            stage_mod = prev_mod.apply_stat_mod(pkmn.current_gen_info().move_db().get_stat_mod(move))
+            stage_mod = prev_mod.apply_stat_mod(pkmn_gen_info.current_gen_info().move_db().get_stat_mod(move))
             if stage_mod == prev_mod:
                 self._labels[idx].pack_forget()
                 self._viewers[idx].pack_forget()
@@ -393,7 +401,7 @@ class BadgeBoostViewer(tk.Frame):
     
     def set_state(self, state:route_state_objects.RouteState):
         self._state = state
-        self._move_selector.new_values(pkmn.current_gen_info().get_stat_modifer_moves())
+        self._move_selector.new_values(pkmn_gen_info.current_gen_info().get_stat_modifer_moves())
 
         # when state changes, update the badge list label
         raw_badge_text = self._state.badges.to_string(verbose=False)

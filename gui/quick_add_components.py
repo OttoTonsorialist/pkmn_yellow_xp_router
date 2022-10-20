@@ -1,7 +1,7 @@
 import tkinter as tk
 
 from gui import custom_tkinter
-from routing.route_events import EventDefinition, InventoryEventDefinition, LearnMoveEventDefinition, RareCandyEventDefinition, TrainerEventDefinition, VitaminEventDefinition, WildPkmnEventDefinition
+from routing.route_events import EventDefinition, HoldItemEventDefinition, InventoryEventDefinition, LearnMoveEventDefinition, RareCandyEventDefinition, TrainerEventDefinition, VitaminEventDefinition, WildPkmnEventDefinition
 from routing.router import Router
 from utils.constants import const
 import pkmn
@@ -255,7 +255,7 @@ class QuickItemAdd(tk.Frame):
         self.event_creation_callback = event_creation_callback
 
         self._cur_row = 0
-        self.padx = 5
+        self.padx = 2
         self.pady = 1
         self.option_menu_width = 20
         self.force_disable = True
@@ -308,7 +308,7 @@ class QuickItemAdd(tk.Frame):
 
         self._buttons = tk.Frame(self)
         self._buttons.pack(fill=tk.X, anchor=tk.CENTER, side=tk.BOTTOM)
-        self._btn_width = 8
+        self._btn_width = 6
 
         self._acquire_button = custom_tkinter.SimpleButton(self._buttons, text="Acquire", width=self._btn_width, command=self._acquire_item)
         self._acquire_button.grid(row=0, column=0, padx=self.padx, pady=self.pady)
@@ -317,16 +317,18 @@ class QuickItemAdd(tk.Frame):
 
         self._use_button = custom_tkinter.SimpleButton(self._buttons, text="Use", width=self._btn_width, command=self._use_item)
         self._use_button.grid(row=0, column=3, padx=self.padx, pady=self.pady)
+        self._hold_button = custom_tkinter.SimpleButton(self._buttons, text="Hold", width=self._btn_width, command=self._hold_item)
+        self._hold_button.grid(row=0, column=4, padx=self.padx, pady=self.pady)
         self._tm_hm_button = custom_tkinter.SimpleButton(self._buttons, text="TM/HM", width=self._btn_width, command=self._learn_move)
-        self._tm_hm_button.grid(row=0, column=4, padx=self.padx, pady=self.pady)
+        self._tm_hm_button.grid(row=0, column=5, padx=self.padx, pady=self.pady)
 
         self._buy_button = custom_tkinter.SimpleButton(self._buttons, text="Buy", width=self._btn_width, command=self._buy_item)
-        self._buy_button.grid(row=0, column=6, padx=self.padx, pady=self.pady)
+        self._buy_button.grid(row=0, column=7, padx=self.padx, pady=self.pady)
         self._sell_button = custom_tkinter.SimpleButton(self._buttons, text="Sell", width=self._btn_width, command=self._sell_item)
-        self._sell_button.grid(row=0, column=7, padx=self.padx, pady=self.pady)
+        self._sell_button.grid(row=0, column=8, padx=self.padx, pady=self.pady)
 
         self._buttons.columnconfigure(2, weight=1)
-        self._buttons.columnconfigure(5, weight=1)
+        self._buttons.columnconfigure(6, weight=1)
         self.update_button_status()
 
     def update_button_status(self, allow_enable=None):
@@ -337,6 +339,7 @@ class QuickItemAdd(tk.Frame):
             self._acquire_button.disable()
             self._drop_button.disable()
             self._use_button.disable()
+            self._hold_button.disable()
             self._tm_hm_button.disable()
             self._buy_button.disable()
             self._sell_button.disable()
@@ -348,6 +351,7 @@ class QuickItemAdd(tk.Frame):
             self._acquire_button.disable()
             self._drop_button.disable()
             self._use_button.disable()
+            self._hold_button.disable()
             self._tm_hm_button.disable()
             self._buy_button.disable()
             self._sell_button.disable()
@@ -361,6 +365,11 @@ class QuickItemAdd(tk.Frame):
                 self._use_button.enable()
             else:
                 self._use_button.disable()
+
+            if pkmn.current_gen_info().get_generation() != 1:
+                self._hold_button.enable()
+            else:
+                self._hold_button.disable()
 
             self._acquire_button.enable()
             self._drop_button.enable()
@@ -475,6 +484,14 @@ class QuickItemAdd(tk.Frame):
                     rare_candy=RareCandyEventDefinition(int(self._item_amount.get()))
                 )
             )
+    
+    def _hold_item(self, *arg, **kwargs):
+        cur_item = self._item_selector.get()
+        self._create_event(
+            EventDefinition(
+                hold_item=HoldItemEventDefinition(cur_item)
+            )
+        )
 
     def _learn_move(self, *arg, **kwargs):
         try:

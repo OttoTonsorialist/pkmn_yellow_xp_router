@@ -144,12 +144,14 @@ class SoloPokemon:
             realized_stat_xp:universal_data_objects.StatBlock=None,
             unrealized_stat_xp:universal_data_objects.StatBlock=None,
             gained_xp:int=0,
-            gained_stat_xp:universal_data_objects.StatBlock=None
+            gained_stat_xp:universal_data_objects.StatBlock=None,
+            held_item:str=None,
     ):
         self.name = name
         self.species_def = species_def
         self.dvs = dvs
         self.badges = badges
+        self.held_item = held_item
 
         if cur_xp == 0:
             # if no initial XP is defined, assume creating a new level 5 pkmn
@@ -229,7 +231,8 @@ class SoloPokemon:
             self.dvs != other.dvs or
             self.realized_stat_xp != other.realized_stat_xp or
             self.unrealized_stat_xp != other.unrealized_stat_xp or
-            self.cur_stats != other.cur_stats
+            self.cur_stats != other.cur_stats or
+            self.held_item != other.held_item
         ):
             return False
         
@@ -271,7 +274,8 @@ class SoloPokemon:
             self.species_def.stats,
             self.dvs,
             stat_xp=self.realized_stat_xp,
-            badges=badges
+            badges=badges,
+            held_item=self.held_item
         )
     
     def defeat_pkmn(self, enemy_pkmn: universal_data_objects.EnemyPkmn, badges:universal_data_objects.BadgeList):
@@ -286,7 +290,8 @@ class SoloPokemon:
             realized_stat_xp=self.realized_stat_xp,
             unrealized_stat_xp=self.unrealized_stat_xp,
             gained_xp=enemy_pkmn.xp,
-            gained_stat_xp=enemy_pkmn.base_stats
+            gained_stat_xp=enemy_pkmn.base_stats,
+            held_item=self.held_item
         )
     
     def rare_candy(self, badges:universal_data_objects.BadgeList):
@@ -300,6 +305,7 @@ class SoloPokemon:
             realized_stat_xp=self.realized_stat_xp,
             unrealized_stat_xp=self.unrealized_stat_xp,
             gained_xp=self.xp_to_next_level,
+            held_item=self.held_item
         )
     
     def get_move_destination(self, move_name, dest):
@@ -342,6 +348,7 @@ class SoloPokemon:
             cur_xp=self.cur_xp,
             realized_stat_xp=self.realized_stat_xp,
             unrealized_stat_xp=self.unrealized_stat_xp,
+            held_item=self.held_item
         )
     
     def take_vitamin(self, vit_name, badges, force=False):
@@ -383,6 +390,20 @@ class SoloPokemon:
             move_list=self.move_list,
             cur_xp=self.cur_xp,
             realized_stat_xp=self.realized_stat_xp.add(new_unrealized_stat_xp),
+            held_item=self.held_item
+        )
+    
+    def hold_item(self, item_name, badges):
+        return SoloPokemon(
+            self.name,
+            self.species_def,
+            self.dvs,
+            badges,
+            move_list=self.move_list,
+            cur_xp=self.cur_xp,
+            realized_stat_xp=self.realized_stat_xp,
+            unrealized_stat_xp=self.unrealized_stat_xp,
+            held_item=item_name
         )
 
 
@@ -494,3 +515,23 @@ class RouteState:
             inv = self.inventory.remove_item(pkmn.current_gen_info().item_db().get_item(item_name), amount, is_purchase, force=True)
 
         return RouteState(self.solo_pkmn, self.badges, inv), error_message
+    
+    def hold_item(self, item_name):
+        error_message = ""
+
+        inv = self.inventory
+        existing_held = self.solo_pkmn.held_item
+        if existing_held:
+            inv = inv.add_item(pkmn.current_gen_info().item_db().get_item(existing_held), 1)
+        
+        try:
+            inv = inv.remove_item(pkmn.current_gen_info().item_db().get_item(item_name), 1)
+        except Exception as e:
+            error_message = str(e)
+            inv = inv.remove_item(pkmn.current_gen_info().item_db().get_item(item_name), 1, force=True)
+        
+        return RouteState(
+            self.solo_pkmn.hold_item(item_name, self.badges),
+            self.badges,
+            inv
+        ), error_message

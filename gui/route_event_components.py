@@ -4,7 +4,7 @@ from gui import custom_tkinter
 from gui.pkmn_components import EnemyPkmnTeam
 from utils.constants import const
 import pkmn
-from routing.route_events import EventDefinition, InventoryEventDefinition, LearnMoveEventDefinition, RareCandyEventDefinition, VitaminEventDefinition, WildPkmnEventDefinition
+from routing.route_events import EventDefinition, HoldItemEventDefinition, InventoryEventDefinition, LearnMoveEventDefinition, RareCandyEventDefinition, VitaminEventDefinition, WildPkmnEventDefinition
 from utils.config_manager import config
 
 
@@ -546,6 +546,14 @@ class InventoryEventEditor(EventEditorBase):
         self._item_amount_label.grid(row=self._item_amount_row, column=0)
         self._item_amount.grid(row=self._item_amount_row, column=1)
         self._item_cost_label.grid(row=self._item_cost_row, column=0, columnspan=2)
+    
+    def _show_hold_item(self):
+        self._item_type_label.grid(row=self._item_type_row, column=0)
+        self._item_type_selector.grid(row=self._item_type_row, column=1)
+        self._item_filter_label.grid(row=self._item_filter_row, column=0)
+        self._item_filter.grid(row=self._item_filter_row, column=1)
+        self._item_selector_label.grid(row=self._item_selector_row, column=0)
+        self._item_selector.grid(row=self._item_selector_row, column=1)
 
     def _item_filter_callback(self, *args, **kwargs):
         item_type = self._item_type_selector.get()
@@ -622,6 +630,13 @@ class InventoryEventEditor(EventEditorBase):
             self.event_button.enable()
             return True
 
+        elif event_type == const.TASK_HOLD_ITEM:
+            self.event_type = event_type
+            self._hide_all_item_obj()
+            self._show_hold_item()
+            self.event_button.enable()
+            return True
+
         return False
 
     def configure(self, editor_params):
@@ -639,8 +654,11 @@ class InventoryEventEditor(EventEditorBase):
         self._item_type_selector.set(const.ITEM_TYPE_ALL_ITEMS)
         self.set_event_type(event_def.get_event_type())
 
-        self._item_selector.set(event_def.item_event_def.item_name)
-        self._item_amount.set(event_def.item_event_def.item_amount)
+        if self.event_type != const.TASK_HOLD_ITEM:
+            self._item_selector.set(event_def.item_event_def.item_name)
+            self._item_amount.set(event_def.item_event_def.item_amount)
+        else:
+            self._item_selector.set(event_def.hold_item.item_name)
 
     def get_event(self):
         if self.event_type == const.TASK_GET_FREE_ITEM:
@@ -683,6 +701,11 @@ class InventoryEventEditor(EventEditorBase):
                 )
             )
         
+        elif self.event_type == const.TASK_HOLD_ITEM:
+            return EventDefinition(
+                hold_item=HoldItemEventDefinition(self._item_selector.get())
+            )
+        
         raise ValueError(f"Cannot generate inventory event for event type: {self.editor_params.event_type}")
 
 
@@ -698,6 +721,7 @@ class EventEditorFactory:
         const.TASK_PURCHASE_ITEM: InventoryEventEditor,
         const.TASK_USE_ITEM: InventoryEventEditor,
         const.TASK_SELL_ITEM: InventoryEventEditor,
+        const.TASK_HOLD_ITEM: InventoryEventEditor,
         const.TASK_LEARN_MOVE_LEVELUP: LearnMoveEditor,
         const.TASK_LEARN_MOVE_TM: LearnMoveEditor,
         const.TASK_NOTES_ONLY: NotesEditor,

@@ -32,6 +32,7 @@ class Constants:
         self.GROWTH_RATE_KEY = "growth_rate"
         self.TM_HM_LEARNSET_KEY = "tm_hm_learnset"
         self.DVS_KEY = "dv"
+        self.HELD_ITEM_KEY = "held_item"
 
         self.LEVEL = "level"
         self.HP = "hp"
@@ -100,6 +101,7 @@ class Constants:
         self.TASK_PURCHASE_ITEM = "Purchase Item"
         self.TASK_USE_ITEM = "Use/Drop Item"
         self.TASK_SELL_ITEM = "Sell Item"
+        self.TASK_HOLD_ITEM = "Hold Item"
         self.TASK_LEARN_MOVE_LEVELUP = "Learn Levelup Move"
         self.TASK_LEARN_MOVE_TM = "Learn TM/HM Move"
         self.TASK_NOTES_ONLY = "Just Notes"
@@ -109,6 +111,7 @@ class Constants:
             self.TASK_PURCHASE_ITEM,
             self.TASK_USE_ITEM,
             self.TASK_SELL_ITEM,
+            self.TASK_HOLD_ITEM,
         ]
 
         self.ROUTE_EVENT_TYPES = [
@@ -229,6 +232,9 @@ class Constants:
         self.MIMIC_MOVE_NAME = "Mimic"
         self.EXPLOSION_MOVE_NAME = "Explosion"
         self.SELFDESTRUCT_MOVE_NAME = "Selfdestruct"
+        self.FLAIL_MOVE_NAME = "Flail"
+        self.REVERSAL_MOVE_NAME = "Reversal"
+        self.FUTURE_SIGHT_MOVE_NAME = "Future Sight"
 
         self.TYPE_TYPELESS = "none"
         self.TYPE_NORMAL = "normal"

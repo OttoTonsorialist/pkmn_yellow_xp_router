@@ -160,6 +160,7 @@ def _create_trainer(trainer_dict, pkmn_db:PkmnDB) -> universal_data_objects.Trai
                 ),
                 GenTwoStatBlock(0, 0, 0, 0, 0, 0),
                 None,
+                held_item=cur_mon[const.HELD_ITEM_KEY]
             )
         )
 

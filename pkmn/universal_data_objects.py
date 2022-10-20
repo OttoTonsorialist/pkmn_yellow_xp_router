@@ -268,6 +268,7 @@ class EnemyPkmn:
         dvs:StatBlock,
         stat_xp:StatBlock,
         badges:BadgeList,
+        held_item:str=None,
     ):
         self.name = name
         self.level = level
@@ -278,6 +279,7 @@ class EnemyPkmn:
         self.dvs = dvs
         self.stat_xp = stat_xp
         self.badges = badges
+        self.held_item = held_item
 
     def __eq__(self, other):
         if not isinstance(other, EnemyPkmn):
@@ -292,7 +294,8 @@ class EnemyPkmn:
             self.base_stats == other.base_stats and
             self.dvs == other.dvs and
             self.stat_xp == other.stat_xp and
-            self.badges == other.badges
+            self.badges == other.badges and
+            self.held_item == other.held_item
         )
     
     def __repr__(self):
@@ -300,10 +303,10 @@ class EnemyPkmn:
 
     def to_string(self, verbose=False):
         if verbose:
-            return f"Lv {self.level}: {self.name} ({self.cur_stats.hp}, {self.cur_stats.attack}, {self.cur_stats.defense}, {self.cur_stats.special_attack}, {self.cur_stats.special_defense}, {self.cur_stats.speed}), ({self.move_list})"
+            return f"Lv {self.level}: {self.name} (Held: {self.held_item}) ({self.cur_stats.hp}, {self.cur_stats.attack}, {self.cur_stats.defense}, {self.cur_stats.special_attack}, {self.cur_stats.special_defense}, {self.cur_stats.speed}), ({self.move_list})"
         return f"Lv {self.level}: {self.name}"
 
-    def get_battle_stats(self, stages:StageModifiers, is_crit:bool=False):
+    def get_battle_stats(self, stages:StageModifiers, is_crit:bool=False) -> StatBlock:
         return self.base_stats.calc_battle_stats(
             self.level,
             self.dvs,
