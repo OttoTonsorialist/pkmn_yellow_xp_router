@@ -2705,7 +2705,7 @@
         ],
         "money": 4700
     },
-    "Leader Lt.surge": {
+    "Leader Lt.Surge": {
         "dv": {
             "atk": 9,
             "def": 8,
@@ -2715,7 +2715,7 @@
         },
         "trainer_class": "Leader",
         "trainer_location": "VermilionGym",
-        "trainer_name": "Leader Lt.surge",
+        "trainer_name": "Leader Lt.Surge",
         "pokemon": [
             {
                 "name": "Raichu",

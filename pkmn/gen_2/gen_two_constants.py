@@ -59,7 +59,7 @@ class GenTwoConstants:
             "Champion Lance",
             "Leader Brock",
             "Leader Misty",
-            "Leader Lt.surge",
+            "Leader Lt.Surge",
             "Leader Erika",
             "Leader Janine",
             "Leader Sabrina",
@@ -69,46 +69,7 @@ class GenTwoConstants:
         ]
 
         # TODO: what are the appropriate minor fights for gen 2?
-        self.MINOR_FIGHTS = [
-            "Giovanni 1",
-            "Giovanni 2",
-            # rb yival fights
-            "Rival1 Squirtle 1",
-            "Rival1 Bulbasaur 1",
-            "Rival1 Charmander 1",
-            "Rival1 Squirtle 2",
-            "Rival1 Bulbasaur 2",
-            "Rival1 Charmander 2",
-            "Rival1 Squirtle 3",
-            "Rival1 Bulbasaur 3",
-            "Rival1 Charmander 3",
-            "Rival2 Squirtle 1",
-            "Rival2 Bulbasaur 1",
-            "Rival2 Charmander 1",
-            "Rival2 Squirtle 2",
-            "Rival2 Bulbasaur 2",
-            "Rival2 Charmander 2",
-            "Rival2 Squirtle 3",
-            "Rival2 Bulbasaur 3",
-            "Rival2 Charmander 3",
-            "Rival2 Squirtle 4",
-            "Rival2 Bulbasaur 4",
-            "Rival2 Charmander 4",
-            # yellow rival fights
-            "Rival1 1",
-            "Rival1 2",
-            "Rival1 3",
-            "Rival2 1",
-            "Rival2 2 Jolteon",
-            "Rival2 2 Flareon",
-            "Rival2 2 Vaporeon",
-            "Rival2 3 Jolteon",
-            "Rival2 3 Flareon",
-            "Rival2 3 Vaporeon",
-            "Rival2 4 Jolteon",
-            "Rival2 4 Flareon",
-            "Rival2 4 Vaporeon",
-        ]
+        self.MINOR_FIGHTS = []
 
         self.BADGE_REWARDS = {
             "Leader Falkner": self.ZEPHYR_BADGE,
@@ -120,30 +81,28 @@ class GenTwoConstants:
             "Leader Pryce": self.GLACIER_BADGE,
             "Leader Clair": self.RISING_BADGE,
 
-            "Brock 1": self.BOULDER_BADGE,
-            "Misty 1": self.CASCADE_BADGE,
-            "LtSurge 1": self.THUNDER_BADGE,
-            "Erika 1": self.RAINDBOW_BADGE,
-            "Koga 1": self.SOUL_BADGE,
-            "Sabrina 1": self.MARSH_BADGE,
-            "Blaine 1": self.VOLCANO_BADGE,
-            "Giovanni 3": self.EARTH_BADGE,
+            "Leader Brock": self.BOULDER_BADGE,
+            "Leader Misty": self.CASCADE_BADGE,
+            "Leader Lt.Surge": self.THUNDER_BADGE,
+            "Leader Erika": self.RAINDBOW_BADGE,
+            "Leader Janine": self.SOUL_BADGE,
+            "Leader Sabrina": self.MARSH_BADGE,
+            "Leader Blaine": self.VOLCANO_BADGE,
+            "Leader Blue": self.EARTH_BADGE,
         }
 
         self.FIGHT_REWARDS = {
-            "Brock 1": "TM34 Bide",
-            "Misty 1": "TM11 Bubblebeam",
-            "LtSurge 1": "TM24 Thunderbolt",
-            "Erika 1": "TM21 Mega Drain",
-            "Koga 1": "TM06 Toxic",
-            "Sabrina 1": "TM46 Psywave",
-            "Blaine 1": "TM38 Fire Blast",
-            "Giovanni 3": "TM27 Fissure",
-            "SuperNerd 2": "Helix Fossil",
-            "Rocket 6": "Nugget",
-            "Rocket 5": "TM28 Dig",
-            "Rocket 28": "Card Key",
-            "Jessie & James 3": "Poke Flute",
+            "Leader Falkner": "TM31 Mud Slap",
+            "Leader Bugsy": "TM49 Fury Cutter",
+            "Leader Whitney": "TM45 Attract",
+            "Leader Morty": "TM30 Shadow Ball",
+            "Leader Chuck": "TM01 DynamicPunch",
+            "Leader Jasmine": "TM23 Iron Tail",
+            "Leader Pryce": "TM16 Icy Wind",
+            "Leader Clair": "TM24 DragonBreath",
+
+            "Leader Erika": "TM19 Giga Drain",
+            "Leader Janine": "TM06 Toxic"
         }
 
         self.NO_BONUS = "No Bonus"
