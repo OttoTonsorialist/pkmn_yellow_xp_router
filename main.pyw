@@ -242,14 +242,7 @@ class Main(tk.Tk):
             self.run_status_label.config(text="Run Status: Valid", bg=const.VALID_COLOR)
     
     def update_run_version(self, *args, **kwargs):
-        if self._data.pkmn_version == const.YELLOW_VERSION:
-            bg_color = const.YELLOW_COLOR
-        elif self._data.pkmn_version == const.RED_VERSION:
-            bg_color = const.RED_COLOR
-        elif self._data.pkmn_version == const.BLUE_VERSION:
-            bg_color = const.BLUE_COLOR
-        else:
-            bg_color = "white"
+        bg_color =const.VERSION_COLORS.get(self._data.pkmn_version, "white")
 
         self.route_version.config(text=f"{self._data.pkmn_version} Version", background=bg_color)
         self.trainer_add.update_pkmn_version()

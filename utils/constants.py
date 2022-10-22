@@ -183,10 +183,6 @@ class Constants:
         # not configurable, just for the top-right indicator
         self.VALID_COLOR = "#abebc6"
         self.ERROR_COLOR = "#f9e79f"
-        # not configurable, just for the version indicator
-        self.YELLOW_COLOR = "yellow"
-        self.RED_COLOR = "#ff8888"
-        self.BLUE_COLOR = "#88b4ff"
 
         self.CONFIG_ROUTE_ONE_PATH = "route_one_path"
         self.CONFIG_WINDOW_GEOMETRY = "tkinter_window_geometry"
@@ -219,6 +215,16 @@ class Constants:
             self.SILVER_VERSION,
             self.CRYSTAL_VERSION,
         ]
+        # not configurable, just for the version indicator
+        self.VERSION_COLORS = {
+            self.RED_VERSION: "#ff8888",
+            self.BLUE_VERSION: "#88b4ff",
+            self.YELLOW_VERSION: "yellow",
+
+            self.GOLD_VERSION: "#aa9c66",
+            self.SILVER_VERSION: "#bbc3c8",
+            self.CRYSTAL_VERSION: "#4d96b9",
+        }
 
         self.NO_SAVED_ROUTES = "No Saved Routes"
         self.NO_FOLDERS = "No Matching Folders"
