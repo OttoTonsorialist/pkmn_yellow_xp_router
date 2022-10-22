@@ -89,7 +89,7 @@ class GenTwo(CurrentGen):
         return GenTwoBadgeList()
     
     def make_inventory(self) -> route_state_objects.Inventory:
-        return route_state_objects.Inventory(bag_limit=gen_two_const.BAG_LIMIT)
+        return route_state_objects.Inventory()
     
     def get_stat_modifer_moves(self) -> List[str]:
         return (
