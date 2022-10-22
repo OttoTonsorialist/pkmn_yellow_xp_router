@@ -142,13 +142,14 @@ class LearnMoveEventDefinition:
 
 
 class TrainerEventDefinition:
-    def __init__(self, trainer_name, verbose_export=False, setup_moves=None, mimic_selection=""):
+    def __init__(self, trainer_name, verbose_export=False, setup_moves=None, mimic_selection="", custom_move_data=None):
         self.trainer_name = trainer_name
         self.verbose_export = verbose_export
         if setup_moves is None:
             setup_moves = []
         self.setup_moves = setup_moves
         self.mimic_selection = mimic_selection
+        self.custom_move_data = custom_move_data
 
     def serialize(self):
         return {
@@ -156,6 +157,7 @@ class TrainerEventDefinition:
             const.VERBOSE_KEY: self.verbose_export,
             const.SETUP_MOVES_KEY: self.setup_moves,
             const.MIMIC_SELECTION: self.mimic_selection,
+            const.CUSTOM_MOVE_DATA: self.custom_move_data,
         }
     
     @staticmethod
@@ -178,6 +180,7 @@ class TrainerEventDefinition:
             verbose_export=raw_val[const.VERBOSE_KEY],
             setup_moves=raw_val[const.SETUP_MOVES_KEY],
             mimic_selection=raw_val[const.MIMIC_SELECTION],
+            custom_move_data=raw_val.get(const.CUSTOM_MOVE_DATA),
         )
     
     def __str__(self):

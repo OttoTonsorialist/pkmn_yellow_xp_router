@@ -702,7 +702,6 @@ class NewRouteWindow(custom_tkinter.Popup):
         self.pkmn_filter.focus()
 
     def _pkmn_version_callback(self, *args, **kwargs):
-        # TODO: gross! ugly! slow! fix later! reloading entire db from disk every time we change this dropdown value :/
         pkmn.change_version(self.pkmn_version.get())
         # now that we've loaded the right version, repopulate the pkmn selector just in case
         self.solo_selector.new_values(pkmn.current_gen_info().pkmn_db().get_filtered_names(filter_val=self.pkmn_filter.get().strip()))

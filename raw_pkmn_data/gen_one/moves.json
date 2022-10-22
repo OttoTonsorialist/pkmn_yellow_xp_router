@@ -4,7 +4,7 @@
         "accuracy": 100,
         "pp": 35,
         "base_power": 40,
-        "type": "normal",
+        "type": "Normal",
         "effects": [],
         "attack_flavor": null
     },
@@ -13,7 +13,7 @@
         "accuracy": 100,
         "pp": 25,
         "base_power": 50,
-        "type": "normal",
+        "type": "Normal",
         "effects": [],
         "attack_flavor": "high_crit"
     },
@@ -22,7 +22,7 @@
         "accuracy": 85,
         "pp": 10,
         "base_power": 15,
-        "type": "normal",
+        "type": "Normal",
         "effects": [],
         "attack_flavor": "multi_hit"
     },
@@ -31,7 +31,7 @@
         "accuracy": 85,
         "pp": 15,
         "base_power": 18,
-        "type": "normal",
+        "type": "Normal",
         "effects": [],
         "attack_flavor": "multi_hit"
     },
@@ -40,7 +40,7 @@
         "accuracy": 85,
         "pp": 20,
         "base_power": 80,
-        "type": "normal",
+        "type": "Normal",
         "effects": [],
         "attack_flavor": null
     },
@@ -49,7 +49,7 @@
         "accuracy": 100,
         "pp": 20,
         "base_power": 40,
-        "type": "normal",
+        "type": "Normal",
         "effects": [],
         "attack_flavor": "scatter_coins"
     },
@@ -58,7 +58,7 @@
         "accuracy": 100,
         "pp": 15,
         "base_power": 75,
-        "type": "fire",
+        "type": "Fire",
         "effects": [{"percent": 10, "status": "Burn"}],
         "attack_flavor": null
     },
@@ -67,7 +67,7 @@
         "accuracy": 100,
         "pp": 15,
         "base_power": 75,
-        "type": "ice",
+        "type": "Ice",
         "effects": [{"percent": 10, "status": "Freeze"}],
         "attack_flavor": null
     },
@@ -76,7 +76,7 @@
         "accuracy": 100,
         "pp": 15,
         "base_power": 75,
-        "type": "electric",
+        "type": "Electric",
         "effects": [{"percent": 10, "status": "Paralysis"}],
         "attack_flavor": null
     },
@@ -85,7 +85,7 @@
         "accuracy": 100,
         "pp": 35,
         "base_power": 40,
-        "type": "normal",
+        "type": "Normal",
         "effects": [],
         "attack_flavor": null
     },
@@ -94,7 +94,7 @@
         "accuracy": 100,
         "pp": 30,
         "base_power": 55,
-        "type": "normal",
+        "type": "Normal",
         "effects": [],
         "attack_flavor": null
     },
@@ -103,7 +103,7 @@
         "accuracy": 30,
         "pp": 5,
         "base_power": null,
-        "type": "normal",
+        "type": "Normal",
         "effects": [],
         "attack_flavor": "one_hit_ko"
     },
@@ -112,7 +112,7 @@
         "accuracy": 75,
         "pp": 10,
         "base_power": 80,
-        "type": "normal",
+        "type": "Normal",
         "effects": [],
         "attack_flavor": "two_turn"
     },
@@ -121,7 +121,7 @@
         "accuracy": null,
         "pp": 20,
         "base_power": null,
-        "type": "normal",
+        "type": "Normal",
         "effects": [{"chance": 100, "modifier": 2, "stat": "Attack", "target": "self"}],
         "attack_flavor": null
     },
@@ -130,7 +130,7 @@
         "accuracy": 95,
         "pp": 30,
         "base_power": 50,
-        "type": "normal",
+        "type": "Normal",
         "effects": [],
         "attack_flavor": null
     },
@@ -139,7 +139,7 @@
         "accuracy": 100,
         "pp": 35,
         "base_power": 40,
-        "type": "normal",
+        "type": "Normal",
         "effects": [],
         "attack_flavor": null
     },
@@ -148,7 +148,7 @@
         "accuracy": 100,
         "pp": 35,
         "base_power": 35,
-        "type": "flying",
+        "type": "Flying",
         "effects": [],
         "attack_flavor": null
     },
@@ -157,7 +157,7 @@
         "accuracy": null,
         "pp": 20,
         "base_power": null,
-        "type": "normal",
+        "type": "Normal",
         "effects": [],
         "attack_flavor": "end_wild_battle"
     },
@@ -166,7 +166,7 @@
         "accuracy": 95,
         "pp": 15,
         "base_power": 90,
-        "type": "flying",
+        "type": "Flying",
         "effects": [],
         "attack_flavor": "two_turn_semi_invulnerable"
     },
@@ -175,7 +175,7 @@
         "accuracy": 85,
         "pp": 20,
         "base_power": 15,
-        "type": "normal",
+        "type": "Normal",
         "effects": [],
         "attack_flavor": "partial_trapping"
     },
@@ -184,7 +184,7 @@
         "accuracy": 75,
         "pp": 20,
         "base_power": 80,
-        "type": "normal",
+        "type": "Normal",
         "effects": [],
         "attack_flavor": null
     },
@@ -193,7 +193,7 @@
         "accuracy": 100,
         "pp": 10,
         "base_power": 35,
-        "type": "grass",
+        "type": "Grass",
         "effects": [],
         "attack_flavor": null
     },
@@ -202,7 +202,7 @@
         "accuracy": 100,
         "pp": 20,
         "base_power": 65,
-        "type": "normal",
+        "type": "Normal",
         "effects": [{"chance": 30, "flinch": true}],
         "attack_flavor": null
     },
@@ -211,7 +211,7 @@
         "accuracy": 100,
         "pp": 30,
         "base_power": 30,
-        "type": "fighting",
+        "type": "Fighting",
         "effects": [],
         "attack_flavor": "two_hit"
     },
@@ -220,7 +220,7 @@
         "accuracy": 75,
         "pp": 5,
         "base_power": 120,
-        "type": "normal",
+        "type": "Normal",
         "effects": [],
         "attack_flavor": null
     },
@@ -229,7 +229,7 @@
         "accuracy": 95,
         "pp": 10,
         "base_power": 70,
-        "type": "fighting",
+        "type": "Fighting",
         "effects": [],
         "attack_flavor": "miss_crash"
     },
@@ -238,7 +238,7 @@
         "accuracy": 85,
         "pp": 15,
         "base_power": 60,
-        "type": "fighting",
+        "type": "Fighting",
         "effects": [{"chance": 30, "flinch": true}],
         "attack_flavor": null
     },
@@ -247,7 +247,7 @@
         "accuracy": 100,
         "pp": 15,
         "base_power": null,
-        "type": "normal",
+        "type": "Normal",
         "effects": [{"chance": 100, "modifier": -1, "stat": "Accuracy", "target": "enemy"}],
         "attack_flavor": null
     },
@@ -256,7 +256,7 @@
         "accuracy": 100,
         "pp": 15,
         "base_power": 70,
-        "type": "normal",
+        "type": "Normal",
         "effects": [{"chance": 30, "flinch": true}],
         "attack_flavor": null
     },
@@ -265,7 +265,7 @@
         "accuracy": 100,
         "pp": 25,
         "base_power": 65,
-        "type": "normal",
+        "type": "Normal",
         "effects": [],
         "attack_flavor": null
     },
@@ -274,7 +274,7 @@
         "accuracy": 85,
         "pp": 20,
         "base_power": 15,
-        "type": "normal",
+        "type": "Normal",
         "effects": [],
         "attack_flavor": "multi_hit"
     },
@@ -283,7 +283,7 @@
         "accuracy": 30,
         "pp": 5,
         "base_power": null,
-        "type": "normal",
+        "type": "Normal",
         "effects": [],
         "attack_flavor": "one_hit_ko"
     },
@@ -292,7 +292,7 @@
         "accuracy": 95,
         "pp": 35,
         "base_power": 35,
-        "type": "normal",
+        "type": "Normal",
         "effects": [],
         "attack_flavor": null
     },
@@ -301,7 +301,7 @@
         "accuracy": 100,
         "pp": 15,
         "base_power": 85,
-        "type": "normal",
+        "type": "Normal",
         "effects": [{"percent": 30, "status": "Paralysis"}],
         "attack_flavor": null
     },
@@ -310,7 +310,7 @@
         "accuracy": 85,
         "pp": 20,
         "base_power": 15,
-        "type": "normal",
+        "type": "Normal",
         "effects": [],
         "attack_flavor": "partial_trapping"
     },
@@ -319,7 +319,7 @@
         "accuracy": 85,
         "pp": 20,
         "base_power": 90,
-        "type": "normal",
+        "type": "Normal",
         "effects": [],
         "attack_flavor": "quarter_recoil"
     },
@@ -328,7 +328,7 @@
         "accuracy": 100,
         "pp": 20,
         "base_power": 90,
-        "type": "normal",
+        "type": "Normal",
         "effects": [],
         "attack_flavor": "self_confuse_multi_hit"
     },
@@ -337,7 +337,7 @@
         "accuracy": 100,
         "pp": 15,
         "base_power": 100,
-        "type": "normal",
+        "type": "Normal",
         "effects": [],
         "attack_flavor": "quarter_recoil"
     },
@@ -346,7 +346,7 @@
         "accuracy": 100,
         "pp": 30,
         "base_power": null,
-        "type": "normal",
+        "type": "Normal",
         "effects": [{"chance": 100, "modifier": -1, "stat": "Defense", "target": "enemy"}],
         "attack_flavor": null
     },
@@ -355,7 +355,7 @@
         "accuracy": 100,
         "pp": 35,
         "base_power": 15,
-        "type": "poison",
+        "type": "Poison",
         "effects": [{"chance": 20, "status": "Poison"}],
         "attack_flavor": null
     },
@@ -364,7 +364,7 @@
         "accuracy": 100,
         "pp": 20,
         "base_power": 25,
-        "type": "bug",
+        "type": "Bug",
         "effects": [{"chance": 20, "status": "Poison"}],
         "attack_flavor": "two_hit"
     },
@@ -373,7 +373,7 @@
         "accuracy": 85,
         "pp": 20,
         "base_power": 14,
-        "type": "bug",
+        "type": "Bug",
         "effects": [],
         "attack_flavor": "multi_hit"
     },
@@ -382,7 +382,7 @@
         "accuracy": 100,
         "pp": 30,
         "base_power": null,
-        "type": "normal",
+        "type": "Normal",
         "effects": [{"chance": 100, "modifier": -1, "stat": "Defense", "target": "enemy"}],
         "attack_flavor": null
     },
@@ -391,7 +391,7 @@
         "accuracy": 100,
         "pp": 25,
         "base_power": 60,
-        "type": "normal",
+        "type": "Normal",
         "effects": [{"chance": 10, "flinch": true}],
         "attack_flavor": null
     },
@@ -400,7 +400,7 @@
         "accuracy": 100,
         "pp": 40,
         "base_power": null,
-        "type": "normal",
+        "type": "Normal",
         "effects": [{"chance": 100, "modifier": -1, "stat": "Attack", "target": "enemy"}],
         "attack_flavor": null
     },
@@ -409,7 +409,7 @@
         "accuracy": null,
         "pp": 20,
         "base_power": null,
-        "type": "normal",
+        "type": "Normal",
         "effects": [],
         "attack_flavor": "end_wild_battle"
     },
@@ -418,7 +418,7 @@
         "accuracy": 55,
         "pp": 15,
         "base_power": null,
-        "type": "normal",
+        "type": "Normal",
         "effects": [{"chance": 100, "status": "Sleep"}],
         "attack_flavor": null
     },
@@ -427,7 +427,7 @@
         "accuracy": 55,
         "pp": 20,
         "base_power": null,
-        "type": "normal",
+        "type": "Normal",
         "effects": [{"chance": 100, "status": "Confusion"}],
         "attack_flavor": null
     },
@@ -436,7 +436,7 @@
         "accuracy": 90,
         "pp": 20,
         "base_power": 20,
-        "type": "normal",
+        "type": "Normal",
         "effects": [],
         "attack_flavor": "fixed_damage"
     },
@@ -445,7 +445,7 @@
         "accuracy": 55,
         "pp": 20,
         "base_power": null,
-        "type": "normal",
+        "type": "Normal",
         "effects": [{"chance": 100, "disable": true}],
         "attack_flavor": null
     },
@@ -454,7 +454,7 @@
         "accuracy": 100,
         "pp": 30,
         "base_power": 40,
-        "type": "poison",
+        "type": "Poison",
         "effects": [{"chance": 33.2, "modifier": -1, "stat": "Defense", "target": "enemy"}],
         "attack_flavor": null
     },
@@ -463,7 +463,7 @@
         "accuracy": 100,
         "pp": 25,
         "base_power": 40,
-        "type": "fire",
+        "type": "Fire",
         "effects": [{"chance": 10, "status": "Burn"}],
         "attack_flavor": null
     },
@@ -472,7 +472,7 @@
         "accuracy": 100,
         "pp": 15,
         "base_power": 95,
-        "type": "fire",
+        "type": "Fire",
         "effects": [{"chance": 10, "status": "Burn"}],
         "attack_flavor": null
     },
@@ -481,7 +481,7 @@
         "accuracy": null,
         "pp": 30,
         "base_power": null,
-        "type": "ice",
+        "type": "Ice",
         "effects": [],
         "attack_flavor": "stat_protection"
     },
@@ -490,7 +490,7 @@
         "accuracy": 100,
         "pp": 25,
         "base_power": 40,
-        "type": "water",
+        "type": "Water",
         "effects": [],
         "attack_flavor": null
     },
@@ -499,7 +499,7 @@
         "accuracy": 80,
         "pp": 5,
         "base_power": 120,
-        "type": "water",
+        "type": "Water",
         "effects": [],
         "attack_flavor": null
     },
@@ -508,7 +508,7 @@
         "accuracy": 100,
         "pp": 15,
         "base_power": 95,
-        "type": "water",
+        "type": "Water",
         "effects": [],
         "attack_flavor": null
     },
@@ -517,7 +517,7 @@
         "accuracy": 100,
         "pp": 10,
         "base_power": 95,
-        "type": "ice",
+        "type": "Ice",
         "effects": [{"chance": 10, "status": "Freeze"}],
         "attack_flavor": null
     },
@@ -526,7 +526,7 @@
         "accuracy": 90,
         "pp": 5,
         "base_power": 120,
-        "type": "ice",
+        "type": "Ice",
         "effects": [{"chance": 10, "status": "Freeze"}],
         "attack_flavor": null
     },
@@ -535,7 +535,7 @@
         "accuracy": 100,
         "pp": 20,
         "base_power": 65,
-        "type": "psychic",
+        "type": "Psychic",
         "effects": [{"chance": 10, "status": "Confusion"}],
         "attack_flavor": null
     },
@@ -544,7 +544,7 @@
         "accuracy": 100,
         "pp": 20,
         "base_power": 65,
-        "type": "water",
+        "type": "Water",
         "effects": [{"chance": 33.2, "modifier": -1, "stat": "Speed", "target": "enemy"}],
         "attack_flavor": null
     },
@@ -553,7 +553,7 @@
         "accuracy": 100,
         "pp": 20,
         "base_power": 65,
-        "type": "ice",
+        "type": "Ice",
         "effects": [{"chance": 33.2, "modifier": -1, "stat": "Attack", "target": "enemy"}],
         "attack_flavor": null
     },
@@ -562,7 +562,7 @@
         "accuracy": 90,
         "pp": 5,
         "base_power": 150,
-        "type": "normal",
+        "type": "Normal",
         "effects": [],
         "attack_flavor": "recharge"
     },
@@ -571,7 +571,7 @@
         "accuracy": 100,
         "pp": 35,
         "base_power": 35,
-        "type": "flying",
+        "type": "Flying",
         "effects": [],
         "attack_flavor": null
     },
@@ -580,7 +580,7 @@
         "accuracy": 100,
         "pp": 20,
         "base_power": 80,
-        "type": "flying",
+        "type": "Flying",
         "effects": [],
         "attack_flavor": null
     },
@@ -589,7 +589,7 @@
         "accuracy": 80,
         "pp": 20,
         "base_power": 80,
-        "type": "fighting",
+        "type": "Fighting",
         "effects": [],
         "attack_flavor": "quarter_recoil"
     },
@@ -598,7 +598,7 @@
         "accuracy": 90,
         "pp": 20,
         "base_power": 50,
-        "type": "fighting",
+        "type": "Fighting",
         "effects": [{"chance": 30, "flinch": true}],
         "attack_flavor": null
     },
@@ -607,7 +607,7 @@
         "accuracy": 100,
         "pp": 20,
         "base_power": null,
-        "type": "fighting",
+        "type": "Fighting",
         "effects": [],
         "attack_flavor": "counter"
     },
@@ -616,7 +616,7 @@
         "accuracy": 100,
         "pp": 20,
         "base_power": 1,
-        "type": "fighting",
+        "type": "Fighting",
         "effects": [],
         "attack_flavor": "level_damage"
     },
@@ -625,7 +625,7 @@
         "accuracy": 100,
         "pp": 15,
         "base_power": 80,
-        "type": "normal",
+        "type": "Normal",
         "effects": [],
         "attack_flavor": null
     },
@@ -634,7 +634,7 @@
         "accuracy": 100,
         "pp": 20,
         "base_power": 20,
-        "type": "grass",
+        "type": "Grass",
         "effects": [],
         "attack_flavor": "drain_hp"
     },
@@ -643,7 +643,7 @@
         "accuracy": 100,
         "pp": 10,
         "base_power": 40,
-        "type": "grass",
+        "type": "Grass",
         "effects": [],
         "attack_flavor": "drain_hp"
     },
@@ -652,7 +652,7 @@
         "accuracy": 90,
         "pp": 10,
         "base_power": null,
-        "type": "grass",
+        "type": "Grass",
         "effects": [{"chance": 100, "status": "Leech Seed"}],
         "attack_flavor": null
     },
@@ -661,7 +661,7 @@
         "accuracy": null,
         "pp": 20,
         "base_power": null,
-        "type": "normal",
+        "type": "Normal",
         "effects": [{"chance": 100, "modifier": 1, "stat": "Special", "target": "self"}],
         "attack_flavor": null
     },
@@ -670,7 +670,7 @@
         "accuracy": 95,
         "pp": 25,
         "base_power": 55,
-        "type": "grass",
+        "type": "Grass",
         "effects": [],
         "attack_flavor": "high_crit"
     },
@@ -679,7 +679,7 @@
         "accuracy": 100,
         "pp": 10,
         "base_power": 120,
-        "type": "grass",
+        "type": "Grass",
         "effects": [],
         "attack_flavor": "two_turn"
     },
@@ -688,7 +688,7 @@
         "accuracy": 75,
         "pp": 35,
         "base_power": null,
-        "type": "poison",
+        "type": "Poison",
         "effects": [{"chance": 100, "status": "Poison"}],
         "attack_flavor": null
     },
@@ -697,7 +697,7 @@
         "accuracy": 75,
         "pp": 30,
         "base_power": null,
-        "type": "grass",
+        "type": "Grass",
         "effects": [{"chance": 100, "status": "Paralysis"}],
         "attack_flavor": null
     },
@@ -706,7 +706,7 @@
         "accuracy": 75,
         "pp": 15,
         "base_power": null,
-        "type": "grass",
+        "type": "Grass",
         "effects": [{"chance": 100, "status": "Sleep"}],
         "attack_flavor": null
     },
@@ -715,7 +715,7 @@
         "accuracy": 100,
         "pp": 10,
         "base_power": 70,
-        "type": "grass",
+        "type": "Grass",
         "effects": [],
         "attack_flavor": "self_confuse_multi_hit"
     },
@@ -724,7 +724,7 @@
         "accuracy": 95,
         "pp": 40,
         "base_power": null,
-        "type": "bug",
+        "type": "Bug",
         "effects": [{"chance": 100, "modifier": -1, "stat": "Speed", "target": "enemy"}],
         "attack_flavor": null
     },
@@ -733,7 +733,7 @@
         "accuracy": 100,
         "pp": 10,
         "base_power": 40,
-        "type": "dragon",
+        "type": "Dragon",
         "effects": [],
         "attack_flavor": "fixed_damage"
     },
@@ -742,7 +742,7 @@
         "accuracy": 70,
         "pp": 15,
         "base_power": 15,
-        "type": "fire",
+        "type": "Fire",
         "effects": [],
         "attack_flavor": "partial_trapping"
     },
@@ -751,7 +751,7 @@
         "accuracy": 100,
         "pp": 30,
         "base_power": 40,
-        "type": "electric",
+        "type": "Electric",
         "effects": [{"chance": 10, "status": "Paralysis"}],
         "attack_flavor": null
     },
@@ -760,7 +760,7 @@
         "accuracy": 100,
         "pp": 15,
         "base_power": 95,
-        "type": "electric",
+        "type": "Electric",
         "effects": [{"chance": 10, "status": "Paralysis"}],
         "attack_flavor": null
     },
@@ -769,7 +769,7 @@
         "accuracy": 100,
         "pp": 20,
         "base_power": null,
-        "type": "electric",
+        "type": "Electric",
         "effects": [{"chance": 100, "status": "Paralysis"}],
         "attack_flavor": null
     },
@@ -778,7 +778,7 @@
         "accuracy": 70,
         "pp": 10,
         "base_power": 120,
-        "type": "electric",
+        "type": "Electric",
         "effect_chance": 30,
         "effects": [{"chance": 10, "status": "Paralysis"}],
         "attack_flavor": null
@@ -788,7 +788,7 @@
         "accuracy": 65,
         "pp": 15,
         "base_power": 50,
-        "type": "rock",
+        "type": "Rock",
         "effects": [],
         "attack_flavor": null
     },
@@ -797,7 +797,7 @@
         "accuracy": 100,
         "pp": 10,
         "base_power": 100,
-        "type": "ground",
+        "type": "Ground",
         "effects": [],
         "attack_flavor": null
     },
@@ -806,7 +806,7 @@
         "accuracy": 30,
         "pp": 5,
         "base_power": null,
-        "type": "ground",
+        "type": "Ground",
         "effects": [],
         "attack_flavor": "one_hit_ko"
     },
@@ -815,7 +815,7 @@
         "accuracy": 100,
         "pp": 10,
         "base_power": 100,
-        "type": "ground",
+        "type": "Ground",
         "effects": [],
         "attack_flavor": "two_turn_semi_invulnerable"
     },
@@ -824,7 +824,7 @@
         "accuracy": 85,
         "pp": 10,
         "base_power": null,
-        "type": "poison",
+        "type": "Poison",
         "effects": [{"chance": 100, "status": "Toxic"}],
         "attack_flavor": null
     },
@@ -833,7 +833,7 @@
         "accuracy": 100,
         "pp": 25,
         "base_power": 50,
-        "type": "psychic",
+        "type": "Psychic",
         "effects": [{"chance": 10, "status": "Confusion"}],
         "attack_flavor": null
     },
@@ -842,7 +842,7 @@
         "accuracy": 100,
         "pp": 10,
         "base_power": 90,
-        "type": "psychic",
+        "type": "Psychic",
         "effects": [{"chance": 33.2, "status": "Confusion"}],
         "attack_flavor": null
     },
@@ -851,7 +851,7 @@
         "accuracy": 60,
         "pp": 20,
         "base_power": null,
-        "type": "psychic",
+        "type": "Psychic",
         "effects": [{"chance": 100, "status": "Sleep"}],
         "attack_flavor": null
     },
@@ -860,7 +860,7 @@
         "accuracy": null,
         "pp": 40,
         "base_power": null,
-        "type": "psychic",
+        "type": "Psychic",
         "effects": [{"chance": 100, "modifier": 1, "stat": "Attack", "target": "self"}],
         "attack_flavor": null
     },
@@ -869,7 +869,7 @@
         "accuracy": null,
         "pp": 30,
         "base_power": null,
-        "type": "psychic",
+        "type": "Psychic",
         "effects": [{"chance": 100, "modifier": 2, "stat": "Speed", "target": "self"}],
         "attack_flavor": null
     },
@@ -878,7 +878,7 @@
         "accuracy": 100,
         "pp": 30,
         "base_power": 40,
-        "type": "normal",
+        "type": "Normal",
         "effects": [],
         "attack_flavor": "quick_attack"
     },
@@ -887,7 +887,7 @@
         "accuracy": 100,
         "pp": 20,
         "base_power": 20,
-        "type": "normal",
+        "type": "Normal",
         "effects": [],
         "attack_flavor": "rage"
     },
@@ -896,7 +896,7 @@
         "accuracy": null,
         "pp": 20,
         "base_power": null,
-        "type": "psychic",
+        "type": "Psychic",
         "effects": [],
         "attack_flavor": "end_wild_battle"
     },
@@ -905,7 +905,7 @@
         "accuracy": 100,
         "pp": 15,
         "base_power": 1,
-        "type": "ghost",
+        "type": "Ghost",
         "effects": [],
         "attack_flavor": "level_damage"
     },
@@ -914,7 +914,7 @@
         "accuracy": null,
         "pp": 10,
         "base_power": null,
-        "type": "normal",
+        "type": "Normal",
         "effects": [],
         "attack_flavor": "mimic"
     },
@@ -923,7 +923,7 @@
         "accuracy": 85,
         "pp": 40,
         "base_power": null,
-        "type": "normal",
+        "type": "Normal",
         "effects": [{"chance": 100, "modifier": -2, "stat": "Defense", "target": "enemy"}],
         "attack_flavor": null
     },
@@ -932,7 +932,7 @@
         "accuracy": null,
         "pp": 15,
         "base_power": null,
-        "type": "normal",
+        "type": "Normal",
         "effects": [{"chance": 100, "modifier": 1, "stat": "Evasion", "target": "self"}],
         "attack_flavor": null
     },
@@ -941,7 +941,7 @@
         "accuracy": null,
         "pp": 20,
         "base_power": null,
-        "type": "normal",
+        "type": "Normal",
         "effects": [],
         "attack_flavor": "recover"
     },
@@ -950,7 +950,7 @@
         "accuracy": null,
         "pp": 30,
         "base_power": null,
-        "type": "normal",
+        "type": "Normal",
         "effects": [{"chance": 100, "modifier": 1, "stat": "Defense", "target": "self"}],
         "attack_flavor": null
     },
@@ -959,7 +959,7 @@
         "accuracy": null,
         "pp": 20,
         "base_power": null,
-        "type": "normal",
+        "type": "Normal",
         "effects": [{"chance": 100, "modifier": 1, "stat": "Evasion", "target": "self"}],
         "attack_flavor": null
     },
@@ -968,7 +968,7 @@
         "accuracy": 100,
         "pp": 20,
         "base_power": null,
-        "type": "normal",
+        "type": "Normal",
         "effects": [{"chance": 100, "modifier": -1, "stat": "Accuracy", "target": "enemy"}],
         "attack_flavor": null
     },
@@ -977,7 +977,7 @@
         "accuracy": 100,
         "pp": 10,
         "base_power": null,
-        "type": "ghost",
+        "type": "Ghost",
         "effects": [{"chance": 100, "status": "Confusion"}],
         "attack_flavor": null
     },
@@ -986,7 +986,7 @@
         "accuracy": null,
         "pp": 40,
         "base_power": null,
-        "type": "water",
+        "type": "Water",
         "effects": [{"chance": 100, "modifier": 1, "stat": "Defense", "target": "self"}],
         "attack_flavor": null
     },
@@ -995,7 +995,7 @@
         "accuracy": null,
         "pp": 40,
         "base_power": null,
-        "type": "normal",
+        "type": "Normal",
         "effects": [{"chance": 100, "modifier": 1, "stat": "Defense", "target": "self"}],
         "attack_flavor": null
     },
@@ -1004,7 +1004,7 @@
         "accuracy": null,
         "pp": 30,
         "base_power": null,
-        "type": "psychic",
+        "type": "Psychic",
         "effects": [{"chance": 100, "modifier": 2, "stat": "Defense", "target": "self"}],
         "attack_flavor": null
     },
@@ -1013,7 +1013,7 @@
         "accuracy": null,
         "pp": 30,
         "base_power": null,
-        "type": "psychic",
+        "type": "Psychic",
         "effects": [{"chance": 100, "status": "Light Screen"}],
         "attack_flavor": null
     },
@@ -1022,7 +1022,7 @@
         "accuracy": null,
         "pp": 30,
         "base_power": null,
-        "type": "ice",
+        "type": "Ice",
         "effects": [],
         "attack_flavor": "haze"
     },
@@ -1031,7 +1031,7 @@
         "accuracy": null,
         "pp": 20,
         "base_power": null,
-        "type": "psychic",
+        "type": "Psychic",
         "effects": [{"chance": 100, "status": "Reflect"}],
         "attack_flavor": null
     },
@@ -1040,7 +1040,7 @@
         "accuracy": null,
         "pp": 30,
         "base_power": null,
-        "type": "normal",
+        "type": "Normal",
         "effects": [],
         "attack_flavor": "focus_energy"
     },
@@ -1049,7 +1049,7 @@
         "accuracy": null,
         "pp": 10,
         "base_power": null,
-        "type": "normal",
+        "type": "Normal",
         "effects": [],
         "attack_flavor": "bide"
     },
@@ -1058,7 +1058,7 @@
         "accuracy": null,
         "pp": 10,
         "base_power": null,
-        "type": "normal",
+        "type": "Normal",
         "effects": [],
         "attack_flavor": "metronome"
     },
@@ -1067,7 +1067,7 @@
         "accuracy": null,
         "pp": 20,
         "base_power": null,
-        "type": "flying",
+        "type": "Flying",
         "effects": [],
         "attack_flavor": "mirror_move"
     },
@@ -1076,7 +1076,7 @@
         "accuracy": 100,
         "pp": 5,
         "base_power": 130,
-        "type": "normal",
+        "type": "Normal",
         "effects": [],
         "attack_flavor": "self_destruct_explosion"
     },
@@ -1085,7 +1085,7 @@
         "accuracy": 75,
         "pp": 10,
         "base_power": 100,
-        "type": "normal",
+        "type": "Normal",
         "effects": [],
         "attack_flavor": null
     },
@@ -1094,7 +1094,7 @@
         "accuracy": 100,
         "pp": 30,
         "base_power": 20,
-        "type": "ghost",
+        "type": "Ghost",
         "effects": [{"chance": 30, "status": "Paralysis"}],
         "attack_flavor": null
     },
@@ -1103,7 +1103,7 @@
         "accuracy": 70,
         "pp": 20,
         "base_power": 20,
-        "type": "poison",
+        "type": "Poison",
         "effects": [{"chance": 40, "status": "Poison"}],
         "attack_flavor": null
     },
@@ -1112,7 +1112,7 @@
         "accuracy": 100,
         "pp": 20,
         "base_power": 65,
-        "type": "poison",
+        "type": "Poison",
         "effects": [{"chance": 40, "status": "Poison"}],
         "attack_flavor": null
     },
@@ -1121,7 +1121,7 @@
         "accuracy": 85,
         "pp": 20,
         "base_power": 65,
-        "type": "ground",
+        "type": "Ground",
         "effects": [{"chance": 10, "flinch": true}],
         "attack_flavor": null
     },
@@ -1130,7 +1130,7 @@
         "accuracy": 85,
         "pp": 5,
         "base_power": 120,
-        "type": "fire",
+        "type": "Fire",
         "effects": [{"chance": 30, "status": "Burn"}],
         "attack_flavor": null
     },
@@ -1139,7 +1139,7 @@
         "accuracy": 100,
         "pp": 15,
         "base_power": 80,
-        "type": "water",
+        "type": "Water",
         "effects": [],
         "attack_flavor": null
     },
@@ -1148,7 +1148,7 @@
         "accuracy": 75,
         "pp": 10,
         "base_power": 35,
-        "type": "water",
+        "type": "Water",
         "effects": [],
         "attack_flavor": "partial_trapping"
     },
@@ -1157,7 +1157,7 @@
         "accuracy": null,
         "pp": 20,
         "base_power": 60,
-        "type": "normal",
+        "type": "Normal",
         "effects": [],
         "attack_flavor": null
     },
@@ -1166,7 +1166,7 @@
         "accuracy": 100,
         "pp": 15,
         "base_power": 100,
-        "type": "normal",
+        "type": "Normal",
         "effects": [],
         "attack_flavor": "two_turn"
     },
@@ -1175,7 +1175,7 @@
         "accuracy": 100,
         "pp": 15,
         "base_power": 20,
-        "type": "normal",
+        "type": "Normal",
         "effects": [],
         "attack_flavor": "multi_hit"
     },
@@ -1184,7 +1184,7 @@
         "accuracy": 100,
         "pp": 35,
         "base_power": 10,
-        "type": "normal",
+        "type": "Normal",
         "effects": [{"chance": 33.2, "modifier": -1, "stat": "Speed", "target": "enemy"}],
         "attack_flavor": null
     },
@@ -1193,7 +1193,7 @@
         "accuracy": null,
         "pp": 20,
         "base_power": null,
-        "type": "psychic",
+        "type": "Psychic",
         "effects": [{"chance": 100, "modifier": 2, "stat": "Special", "target": "self"}],
         "attack_flavor": null
     },
@@ -1202,7 +1202,7 @@
         "accuracy": 80,
         "pp": 15,
         "base_power": null,
-        "type": "psychic",
+        "type": "Psychic",
         "effects": [{"chance": 100, "modifier": -1, "stat": "Accuracy", "target": "enemy"}],
         "attack_flavor": null
     },
@@ -1211,7 +1211,7 @@
         "accuracy": null,
         "pp": 10,
         "base_power": null,
-        "type": "normal",
+        "type": "Normal",
         "effects": [],
         "attack_flavor": "recover"
     },
@@ -1220,7 +1220,7 @@
         "accuracy": 90,
         "pp": 20,
         "base_power": 85,
-        "type": "fighting",
+        "type": "Fighting",
         "effects": [],
         "attack_flavor": "miss_crash"
     },
@@ -1229,7 +1229,7 @@
         "accuracy": 75,
         "pp": 30,
         "base_power": null,
-        "type": "normal",
+        "type": "Normal",
         "effects": [{"chance": 100, "status": "Paralysis"}],
         "attack_flavor": null
     },
@@ -1238,7 +1238,7 @@
         "accuracy": 100,
         "pp": 15,
         "base_power": 100,
-        "type": "psychic",
+        "type": "Psychic",
         "effects": [],
         "attack_flavor": "dream_eater"
     },
@@ -1247,7 +1247,7 @@
         "accuracy": 90,
         "pp": 40,
         "base_power": null,
-        "type": "poison",
+        "type": "Poison",
         "effects": [{"chance": 100, "status": "Poison"}],
         "attack_flavor": null
     },
@@ -1256,7 +1256,7 @@
         "accuracy": 85,
         "pp": 20,
         "base_power": 15,
-        "type": "normal",
+        "type": "Normal",
         "effects": [],
         "attack_flavor": "multi_hit"
     },
@@ -1265,7 +1265,7 @@
         "accuracy": 100,
         "pp": 15,
         "base_power": 20,
-        "type": "bug",
+        "type": "Bug",
         "effects": [],
         "attack_flavor": "drain_hp"
     },
@@ -1274,7 +1274,7 @@
         "accuracy": 75,
         "pp": 10,
         "base_power": null,
-        "type": "normal",
+        "type": "Normal",
         "effects": [{"chance": 100, "status": "Sleep"}],
         "attack_flavor": null
     },
@@ -1283,7 +1283,7 @@
         "accuracy": 90,
         "pp": 5,
         "base_power": 140,
-        "type": "flying",
+        "type": "Flying",
         "effects": [],
         "attack_flavor": "two_turn"
     },
@@ -1292,7 +1292,7 @@
         "accuracy": null,
         "pp": 10,
         "base_power": null,
-        "type": "normal",
+        "type": "Normal",
         "effects": [],
         "attack_flavor": "transform"
     },
@@ -1301,7 +1301,7 @@
         "accuracy": 100,
         "pp": 30,
         "base_power": 20,
-        "type": "water",
+        "type": "Water",
         "effects": [{"chance": 33.2, "modifier": -1, "stat": "Speed", "target": "enemy"}],
         "attack_flavor": null
     },
@@ -1310,7 +1310,7 @@
         "accuracy": 100,
         "pp": 10,
         "base_power": 70,
-        "type": "normal",
+        "type": "Normal",
         "effects": [],
         "attack_flavor": null
     },
@@ -1319,7 +1319,7 @@
         "accuracy": 100,
         "pp": 15,
         "base_power": null,
-        "type": "grass",
+        "type": "Grass",
         "effects": [{"chance": 100, "status": "Sleep"}],
         "attack_flavor": null
     },
@@ -1328,7 +1328,7 @@
         "accuracy": 70,
         "pp": 20,
         "base_power": null,
-        "type": "normal",
+        "type": "Normal",
         "effects": [{"chance": 100, "modifier": -1, "stat": "Accuracy", "target": "enemy"}],
         "attack_flavor": null
     },
@@ -1337,7 +1337,7 @@
         "accuracy": 100,
         "pp": 15,
         "base_power": 1,
-        "type": "psychic",
+        "type": "Psychic",
         "effects": [],
         "attack_flavor": "psywave"
     },
@@ -1346,7 +1346,7 @@
         "accuracy": null,
         "pp": 40,
         "base_power": null,
-        "type": "normal",
+        "type": "Normal",
         "effects": [],
         "attack_flavor": null
     },
@@ -1355,7 +1355,7 @@
         "accuracy": null,
         "pp": 40,
         "base_power": null,
-        "type": "poison",
+        "type": "Poison",
         "effects": [{"chance": 100, "modifier": 2, "stat": "Defense", "target": "self"}],
         "attack_flavor": null
     },
@@ -1364,7 +1364,7 @@
         "accuracy": 85,
         "pp": 10,
         "base_power": 90,
-        "type": "water",
+        "type": "Water",
         "effects": [],
         "attack_flavor": "high_crit"
     },
@@ -1373,7 +1373,7 @@
         "accuracy": 100,
         "pp": 5,
         "base_power": 170,
-        "type": "normal",
+        "type": "Normal",
         "effects": [],
         "attack_flavor": "self_destruct_explosion"
     },
@@ -1382,7 +1382,7 @@
         "accuracy": 80,
         "pp": 15,
         "base_power": 18,
-        "type": "normal",
+        "type": "Normal",
         "effects": [],
         "attack_flavor": "multi_hit"
     },
@@ -1391,7 +1391,7 @@
         "accuracy": 90,
         "pp": 10,
         "base_power": 50,
-        "type": "ground",
+        "type": "Ground",
         "effects": [],
         "attack_flavor": "two_hit"
     },
@@ -1400,7 +1400,7 @@
         "accuracy": null,
         "pp": 10,
         "base_power": null,
-        "type": "psychic",
+        "type": "Psychic",
         "effects": [],
         "attack_flavor": "rest"
     },
@@ -1409,7 +1409,7 @@
         "accuracy": 90,
         "pp": 10,
         "base_power": 75,
-        "type": "rock",
+        "type": "Rock",
         "effects": [],
         "attack_flavor": null
     },
@@ -1418,7 +1418,7 @@
         "accuracy": 90,
         "pp": 15,
         "base_power": 80,
-        "type": "normal",
+        "type": "Normal",
         "effect_chance": 10,
         "effects": [{"chance": 10, "flinch": true}],
         "attack_flavor": null
@@ -1428,7 +1428,7 @@
         "accuracy": null,
         "pp": 30,
         "base_power": null,
-        "type": "normal",
+        "type": "Normal",
         "effects": [{"chance": 100, "modifier": 1, "stat": "Attack", "target": "self"}],
         "attack_flavor": null
     },
@@ -1437,7 +1437,7 @@
         "accuracy": null,
         "pp": 30,
         "base_power": null,
-        "type": "normal",
+        "type": "Normal",
         "effects": [],
         "attack_flavor": "conversion"
     },
@@ -1446,7 +1446,7 @@
         "accuracy": 100,
         "pp": 10,
         "base_power": 80,
-        "type": "normal",
+        "type": "Normal",
         "effects": [],
         "attack_flavor": null
     },
@@ -1455,7 +1455,7 @@
         "accuracy": 90,
         "pp": 10,
         "base_power": 1,
-        "type": "normal",
+        "type": "Normal",
         "effects": [],
         "attack_flavor": "super_fang"
     },
@@ -1464,7 +1464,7 @@
         "accuracy": 100,
         "pp": 20,
         "base_power": 70,
-        "type": "normal",
+        "type": "Normal",
         "effects": [],
         "attack_flavor": "high_crit"
     },
@@ -1473,7 +1473,7 @@
         "accuracy": null,
         "pp": 10,
         "base_power": null,
-        "type": "normal",
+        "type": "Normal",
         "effects": [],
         "attack_flavor": "substitute"
     },
@@ -1482,7 +1482,7 @@
         "accuracy": null,
         "pp": 1,
         "base_power": 50,
-        "type": "normal",
+        "type": "Normal",
         "effects": [],
         "attack_flavor": "half_recoil"
     }

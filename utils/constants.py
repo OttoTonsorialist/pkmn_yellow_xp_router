@@ -61,6 +61,9 @@ class Constants:
         self.VERBOSE_KEY = "verbose"
         self.SETUP_MOVES_KEY = "setup_moves"
         self.MIMIC_SELECTION = "mimic_selection"
+        self.CUSTOM_MOVE_DATA = "custom_move_data"
+        self.PLAYER_KEY = "player"
+        self.ENEMY_KEY = "enemy"
 
         self.MOVE_TYPE = "type"
         self.BASE_POWER = "base_power"
@@ -223,6 +226,20 @@ class Constants:
         self.TRANSFER_EXISTING_FOLDER = "Existing Folder"
         self.TRANSFER_NEW_FOLDER = "New Folder"
 
+        self.MULTI_HIT_2 = "2 Hits"
+        self.MULTI_HIT_3 = "3 Hits"
+        self.MULTI_HIT_4 = "4 Hits"
+        self.MULTI_HIT_5 = "5 Hits"
+
+        self.MULTI_HIT_CUSTOM_DATA = [
+            self.MULTI_HIT_2,
+            self.MULTI_HIT_3,
+            self.MULTI_HIT_4,
+            self.MULTI_HIT_5,
+        ]
+
+        self.DOUBLE_HIT_FLAVOR = "two_hit"
+        self.FLAVOR_MULTI_HIT = "multi_hit"
         self.FLAVOR_HIGH_CRIT = "high_crit"
         self.FLAVOR_FIXED_DAMAGE = "fixed_damage"
         self.FLAVOR_LEVEL_DAMAGE = "level_damage"
@@ -237,23 +254,23 @@ class Constants:
         self.FUTURE_SIGHT_MOVE_NAME = "Future Sight"
 
         self.TYPE_TYPELESS = "none"
-        self.TYPE_NORMAL = "normal"
-        self.TYPE_FIGHTING = "fighting"
-        self.TYPE_FLYING = "flying"
-        self.TYPE_POISON = "poison"
-        self.TYPE_GROUND = "ground"
-        self.TYPE_ROCK = "rock"
-        self.TYPE_BUG = "bug"
-        self.TYPE_GHOST = "ghost"
-        self.TYPE_FIRE = "fire"
-        self.TYPE_WATER = "water"
-        self.TYPE_GRASS = "grass"
-        self.TYPE_ELECTRIC = "electric"
-        self.TYPE_PSYCHIC = "psychic"
-        self.TYPE_ICE = "ice"
-        self.TYPE_DRAGON = "dragon"
-        self.TYPE_STEEL = "steel"
-        self.TYPE_DARK = "dark"
+        self.TYPE_NORMAL = "Normal"
+        self.TYPE_FIGHTING = "Fighting"
+        self.TYPE_FLYING = "Flying"
+        self.TYPE_POISON = "Poison"
+        self.TYPE_GROUND = "Ground"
+        self.TYPE_ROCK = "Rock"
+        self.TYPE_BUG = "Bug"
+        self.TYPE_GHOST = "Ghost"
+        self.TYPE_FIRE = "Fire"
+        self.TYPE_WATER = "Water"
+        self.TYPE_GRASS = "Grass"
+        self.TYPE_ELECTRIC = "Electric"
+        self.TYPE_PSYCHIC = "Psychic"
+        self.TYPE_ICE = "Ice"
+        self.TYPE_DRAGON = "Dragon"
+        self.TYPE_STEEL = "Steel"
+        self.TYPE_DARK = "Dark"
 
         self.SUPER_EFFECTIVE = "Super Effective"
         self.NOT_VERY_EFFECTIVE = "Not Very Effective"

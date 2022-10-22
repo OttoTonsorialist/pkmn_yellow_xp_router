@@ -196,7 +196,8 @@ class EventDetails(tk.Frame):
                             self._cur_trainer_name,
                             verbose_export=self.verbose_trainer_label.is_checked(),
                             setup_moves=self.battle_summary_frame.get_setup_moves(),
-                            mimic_selection=self.battle_summary_frame.get_mimic_selection()
+                            mimic_selection=self.battle_summary_frame.get_mimic_selection(),
+                            custom_move_data=self.battle_summary_frame.get_custom_move_data()
                         )
                     )
             else:

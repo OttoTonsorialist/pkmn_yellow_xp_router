@@ -3,9 +3,9 @@ import copy
 from typing import List
 
 from pkmn import universal_data_objects
-from pkmn.gen_2 import pkmn_damage_calc, pkmn_utils
+from pkmn.gen_2 import pkmn_damage_calc
 from pkmn.damage_calc import DamageRange
-from pkmn.gen_2.data_objects import GenTwoBadgeList, GenTwoStatBlock
+from pkmn.gen_2.data_objects import GenTwoBadgeList, GenTwoStatBlock, instantiate_trainer_pokemon, instantiate_wild_pokemon
 from pkmn.gen_2.gen_two_constants import gen_two_const
 from pkmn.pkmn_db import ItemDB, MinBattlesDB, PkmnDB, TrainerDB, MoveDB
 from pkmn.pkmn_info import CurrentGen
@@ -55,10 +55,10 @@ class GenTwo(CurrentGen):
         return self._min_battles_db
 
     def create_trainer_pkmn(self, pkmn_name, pkmn_level):
-        return pkmn_utils.instantiate_trainer_pokemon(self._pkmn_db.get_pkmn(pkmn_name), pkmn_level)
+        return instantiate_trainer_pokemon(self._pkmn_db.get_pkmn(pkmn_name), pkmn_level)
     
     def create_wild_pkmn(self, pkmn_name, pkmn_level):
-        return pkmn_utils.instantiate_wild_pokemon(self._pkmn_db.get_pkmn(pkmn_name), pkmn_level)
+        return instantiate_wild_pokemon(self._pkmn_db.get_pkmn(pkmn_name), pkmn_level)
     
     def get_crit_rate(self, pkmn, move):
         return pkmn_damage_calc.get_crit_rate(pkmn, move)
@@ -69,7 +69,8 @@ class GenTwo(CurrentGen):
         defending_pkmn:universal_data_objects.EnemyPkmn,
         attacking_stage_modifiers:universal_data_objects.StageModifiers=None,
         defending_stage_modifiers:universal_data_objects.StageModifiers=None,
-        is_crit:bool=False
+        is_crit:bool=False,
+        custom_move_data:str=""
     ) -> DamageRange:
         return pkmn_damage_calc.calculate_damage(
             attacking_pkmn,
@@ -77,7 +78,8 @@ class GenTwo(CurrentGen):
             defending_pkmn,
             attacking_stage_modifiers=attacking_stage_modifiers,
             defending_stage_modifiers=defending_stage_modifiers,
-            is_crit=is_crit
+            is_crit=is_crit,
+            custom_move_data=custom_move_data,
         )
     
     def make_stat_block(self, hp, attack, defense, special_attack, special_defense, speed, is_stat_xp=False) -> universal_data_objects.StatBlock:
@@ -103,6 +105,9 @@ class GenTwo(CurrentGen):
     
     def is_major_fight(self, trainer_name) -> str:
         return trainer_name in gen_two_const.MAJOR_FIGHTS
+    
+    def get_move_custom_data(self, move_name) -> List[str]:
+        return gen_two_const.CUSTOM_MOVE_DATA.get(move_name)
 
 def _load_pkmn_db(path):
     result = {}

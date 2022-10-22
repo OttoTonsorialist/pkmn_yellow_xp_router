@@ -40,7 +40,8 @@ class CurrentGen:
         defending_pkmn:universal_data_objects.EnemyPkmn,
         attacking_stage_modifiers:universal_data_objects.StageModifiers=None,
         defending_stage_modifiers:universal_data_objects.StageModifiers=None,
-        is_crit:bool=False
+        is_crit:bool=False,
+        custom_move_data:str=""
     ) -> DamageRange:
         raise NotImplementedError()
 
@@ -79,5 +80,8 @@ class CurrentGen:
         raise NotImplementedError()
 
     def is_major_fight(self, trainer_name) -> str:
+        raise NotImplementedError()
+    
+    def get_move_custom_data(self, move_name) -> List[str]:
         raise NotImplementedError()
 

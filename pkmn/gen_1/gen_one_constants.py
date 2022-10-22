@@ -153,13 +153,13 @@ class GenOneConstants:
         }
 
         self.SPECIAL_TYPES = [
-            "water",
-            "grass",
-            "fire",
-            "ice",
-            "electric",
-            "psychic",
-            "dragon"
+            "Water",
+            "Grass",
+            "Fire",
+            "Ice",
+            "Electric",
+            "Psychic",
+            "Dragon"
         ]
 
         self.TYPE_CHART = {

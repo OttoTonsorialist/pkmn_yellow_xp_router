@@ -146,6 +146,97 @@ class GenTwoConstants:
             "Jessie & James 3": "Poke Flute",
         }
 
+        self.NO_BONUS = "No Bonus"
+        self.DIG_BONUS = "Dig Bonus"
+        self.FLY_BONUS = "Fly Bonus"
+        self.SWITCH_BONUS = "Switch Bonus"
+        self.MINIMIZE_BONUS = "Minimize Bonus"
+
+        self.MAGNITUDE_MOVE_NAME = "Magnitude"
+        self.MAGNITUDE_4 = "Mag 4"
+        self.MAGNITUDE_5 = "Mag 5"
+        self.MAGNITUDE_6 = "Mag 6"
+        self.MAGNITUDE_7 = "Mag 7"
+        self.MAGNITUDE_8 = "Mag 8"
+        self.MAGNITUDE_9 = "Mag 9"
+        self.MAGNITUDE_10 = "Mag 10"
+
+        self.FLAIL_FULL_HP = "100-69 % HP"
+        self.FLAIL_HALF_HP = "69-35 % HP"
+        self.FLAIL_QUARTER_HP = "35-20 % HP"
+        self.FLAIL_TEN_PERCENT_HP = "20-10 % HP"
+        self.FLAIL_FIVE_PERCENT_HP = "10-4 % HP"
+        self.FLAIL_MIN_HP = "4-0 % HP"
+
+        self.FURY_CUTTER_MOVE_NAME = "Fury Cutter"
+        self.ROLLOUT_MOVE_NAME = "Rollout"
+        self.TRIPLE_KICK_MOVE_NAME = "Triple Kick"
+        self.RAGE_MOVE_NAME = "Rage"
+
+        self.PURSUIT_MOVE_NAME = "Pursuit"
+        self.STOMP_MOVE_NAME = "Stomp"
+        self.GUST_MOVE_NAME = "Gust"
+        self.TWISTER_MOVE_NAME = "Twister"
+        self.EARTHQUAKE_MOVE_NAME = "Earthquake"
+
+        self.CUSTOM_MOVE_DATA = {
+            self.MAGNITUDE_MOVE_NAME: [
+                self.MAGNITUDE_7, self.MAGNITUDE_7 + " " + self.DIG_BONUS,
+                self.MAGNITUDE_4, self.MAGNITUDE_4 + " " + self.DIG_BONUS,
+                self.MAGNITUDE_5, self.MAGNITUDE_5 + " " + self.DIG_BONUS,
+                self.MAGNITUDE_6, self.MAGNITUDE_6 + " " + self.DIG_BONUS,
+                self.MAGNITUDE_8, self.MAGNITUDE_8 + " " + self.DIG_BONUS,
+                self.MAGNITUDE_9, self.MAGNITUDE_9 + " " + self.DIG_BONUS,
+                self.MAGNITUDE_10, self.MAGNITUDE_10 + " " + self.DIG_BONUS,
+            ],
+            const.FLAIL_MOVE_NAME: [
+                self.FLAIL_FULL_HP,
+                self.FLAIL_HALF_HP,
+                self.FLAIL_QUARTER_HP,
+                self.FLAIL_TEN_PERCENT_HP,
+                self.FLAIL_FIVE_PERCENT_HP,
+                self.FLAIL_MIN_HP,
+            ],
+            const.REVERSAL_MOVE_NAME: [
+                self.FLAIL_FULL_HP,
+                self.FLAIL_HALF_HP,
+                self.FLAIL_QUARTER_HP,
+                self.FLAIL_TEN_PERCENT_HP,
+                self.FLAIL_FIVE_PERCENT_HP,
+                self.FLAIL_MIN_HP,
+            ],
+            self.FURY_CUTTER_MOVE_NAME: ["1", "2", "3", "4", "5", "6"],
+            self.ROLLOUT_MOVE_NAME: ["1", "2", "3", "4", "5", "5 + DefenseCurl"],
+            self.TRIPLE_KICK_MOVE_NAME: ["1", "2", "3"],
+            self.RAGE_MOVE_NAME: ["1", "2", "3", "4", "5", "6"],
+
+            self.PURSUIT_MOVE_NAME: [self.NO_BONUS, self.SWITCH_BONUS],
+            self.STOMP_MOVE_NAME: [self.NO_BONUS, self.MINIMIZE_BONUS],
+            self.GUST_MOVE_NAME: [self.NO_BONUS, self.FLY_BONUS],
+            self.TWISTER_MOVE_NAME: [self.NO_BONUS, self.FLY_BONUS],
+            self.EARTHQUAKE_MOVE_NAME: [self.NO_BONUS, self.DIG_BONUS],
+        }
+
+        self.HELD_ITEM_BOOSTS = {
+            "Black Belt": const.TYPE_FIGHTING,
+            "BlackGlasses": const.TYPE_DARK,
+            "Charcoal": const.TYPE_FIGHTING,
+            "Dragon Scale": const.TYPE_DRAGON,
+            "Hard Stone": const.TYPE_ROCK,
+            "Magnet": const.TYPE_ELECTRIC,
+            "Metal Coat": const.TYPE_STEEL,
+            "Miracle Seed": const.TYPE_GRASS,
+            "Mystic Water": const.TYPE_WATER,
+            "Pink Bow": const.TYPE_NORMAL,
+            "Polkadot Bow": const.TYPE_NORMAL,
+            "Poison Barb": const.TYPE_POISON,
+            "Sharp Beak": const.TYPE_FLYING,
+            "SilverPowder": const.TYPE_BUG,
+            "Soft Sand": const.TYPE_GROUND,
+            "Spell Tag": const.TYPE_GHOST,
+            "TwistedSpoon": const.TYPE_PSYCHIC,
+        }
+
         self.STAT_INCREASE_MOVES = {
             "Growth": [(const.SPA, 1), (const.SPD, 1)],
             "Swords Dance": [(const.ATK, 2)],
@@ -181,14 +272,14 @@ class GenTwoConstants:
         }
 
         self.SPECIAL_TYPES = [
-            "water",
-            "grass",
-            "fire",
-            "ice",
-            "electric",
-            "psychic",
-            "dragon",
-            "dark"
+            "Water",
+            "Grass",
+            "Fire",
+            "Ice",
+            "Electric",
+            "Psychic",
+            "Dragon",
+            "Dark"
         ]
 
         self.TYPE_CHART = {

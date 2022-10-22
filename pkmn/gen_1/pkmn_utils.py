@@ -66,7 +66,7 @@ def get_to_hit(base_acc, ev_stage, acc_stage):
     """
     Returns the number (1-255) to check a random number against
 
-    NOTE: This is the "normal" case ONLY!  Assuming immunities, fly/dig invlun status, and guaranteed misses/hits
+    NOTE: This is the "Normal" case ONLY!  Assuming immunities, fly/dig invlun status, and guaranteed misses/hits
     have already been handled already. Also does not handle special AI status failure chance
     """
     # base_acc is a number, 0-100, of the percent accuracy

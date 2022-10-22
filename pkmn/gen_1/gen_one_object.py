@@ -69,7 +69,8 @@ class GenOne(CurrentGen):
         defending_pkmn:universal_data_objects.EnemyPkmn,
         attacking_stage_modifiers:universal_data_objects.StageModifiers=None,
         defending_stage_modifiers:universal_data_objects.StageModifiers=None,
-        is_crit:bool=False
+        is_crit:bool=False,
+        custom_move_data:str=""
     ) -> DamageRange:
         return pkmn_damage_calc.calculate_damage(
             attacking_pkmn,
@@ -77,7 +78,8 @@ class GenOne(CurrentGen):
             defending_pkmn,
             attacking_stage_modifiers=attacking_stage_modifiers,
             defending_stage_modifiers=defending_stage_modifiers,
-            is_crit=is_crit
+            is_crit=is_crit,
+            custom_move_data=custom_move_data
         )
     
     def make_stat_block(self, hp, attack, defense, special_attack, special_defense, speed, is_stat_xp=False) -> universal_data_objects.StatBlock:
@@ -103,6 +105,12 @@ class GenOne(CurrentGen):
     
     def is_major_fight(self, trainer_name) -> str:
         return trainer_name in gen_one_const.MAJOR_FIGHTS
+    
+    def get_move_custom_data(self, move_name) -> List[str]:
+        # Gen one moves that require custom data are already handled by the rendering engine
+        # Mimc, and all multi-hit moves
+        # so, no other moves will need custom data
+        return []
 
 def _load_pkmn_db(path):
     result = {}

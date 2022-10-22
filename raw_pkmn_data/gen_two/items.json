@@ -811,8 +811,8 @@
         "pocket": "Item",
         "marts": []
     },
-    "Silverpowder": {
-        "name": "Silverpowder",
+    "SilverPowder": {
+        "name": "SilverPowder",
         "key_item": false,
         "purchase_price": 0,
         "pocket": "Item",
@@ -860,8 +860,8 @@
         "pocket": "Item",
         "marts": []
     },
-    "Twistedspoon": {
-        "name": "Twistedspoon",
+    "TwistedSpoon": {
+        "name": "TwistedSpoon",
         "key_item": false,
         "purchase_price": 0,
         "pocket": "Item",
@@ -874,8 +874,8 @@
         "pocket": "Item",
         "marts": []
     },
-    "Blackbelt I": {
-        "name": "Blackbelt I",
+    "Black Belt": {
+        "name": "Black Belt",
         "key_item": false,
         "purchase_price": 0,
         "pocket": "Item",
@@ -895,8 +895,8 @@
         "pocket": "Item",
         "marts": []
     },
-    "Blackglasses": {
-        "name": "Blackglasses",
+    "BlackGlasses": {
+        "name": "BlackGlasses",
         "key_item": false,
         "purchase_price": 0,
         "pocket": "Item",

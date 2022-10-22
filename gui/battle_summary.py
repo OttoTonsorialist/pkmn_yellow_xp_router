@@ -1,9 +1,10 @@
 import tkinter as tk
+import tkinter.ttk as ttk
 import tkinter.font
-from typing import List
+from typing import Dict, List
 
 from gui import custom_tkinter
-from pkmn import damage_calc, universal_data_objects
+from pkmn import damage_calc, pkmn_info, universal_data_objects
 from routing import route_state_objects
 from routing import route_events
 from routing.router import Router
@@ -65,6 +66,25 @@ class BattleSummary(tk.Frame):
 
     def get_mimic_selection(self):
         return self._mimic_selection
+    
+    def get_custom_move_data(self):
+        result = []
+
+        using_custom_data = False
+        for idx, _ in enumerate(self._enemy_pkmn):
+            player_data, enemy_data = self._mon_pairs[idx].get_custom_move_data()
+            if player_data or enemy_data:
+                using_custom_data = True
+            
+            result.append({
+                const.PLAYER_KEY: player_data,
+                const.ENEMY_KEY: enemy_data
+            })
+        
+        if using_custom_data:
+            return result
+        
+        return None
 
     def pause_calculations(self):
         self.should_calculate = False
@@ -82,6 +102,7 @@ class BattleSummary(tk.Frame):
     ):
         # use the passed information to figure out the exact solo mon objects to use
         new_solo_pkmn = []
+        all_custom_move_data = None
 
         if event_group is not None and len(event_group.event_items) > 0:
             cur_item_idx = 0
@@ -89,6 +110,7 @@ class BattleSummary(tk.Frame):
                 self._mimic_selection = event_group.event_definition.trainer_def.mimic_selection
                 self.setup_moves.set_move_list(event_group.event_definition.trainer_def.setup_moves.copy())
             self._stage_modifiers = self.setup_moves.get_stage_modifiers()
+            all_custom_move_data = event_group.event_definition.trainer_def.custom_move_data
             for cur_pkmn in enemy_pkmn:
                 while cur_item_idx < len(event_group.event_items):
                     try:
@@ -148,10 +170,21 @@ class BattleSummary(tk.Frame):
         for cur_pkmn in enemy_pkmn:
             mimic_options.extend(cur_pkmn.move_list)
 
+        if all_custom_move_data is None:
+            all_custom_move_data = [{const.PLAYER_KEY: {}, const.ENEMY_KEY: {}} for _ in range(len(enemy_pkmn))]
+
         idx = -1
         enemy_stages = universal_data_objects.StageModifiers()
         for idx, cur_pkmn in enumerate(enemy_pkmn):
-            self._mon_pairs[idx].set_mons(new_solo_pkmn[idx], cur_pkmn, self._stage_modifiers, enemy_stages, mimic_options)
+            self._mon_pairs[idx].set_mons(
+                new_solo_pkmn[idx],
+                cur_pkmn,
+                self._stage_modifiers,
+                enemy_stages,
+                mimic_options,
+                all_custom_move_data[idx].get(const.PLAYER_KEY),
+                all_custom_move_data[idx].get(const.ENEMY_KEY),
+            )
             if self.simple_mode:
                 self._mon_pairs[idx].grid(row=idx + 1, column=0)
             else:
@@ -280,7 +313,22 @@ class MonPairSummary(tk.Frame):
 
         self.move_list:List[DamageSummary] = []
         for _ in range(8):
-            self.move_list.append(DamageSummary(self, mimic_callback=self.mimic_callback))
+            self.move_list.append(DamageSummary(self, mimic_callback=self.mimic_callback, custom_data_callback=self.recalc_best_move))
+    
+    def get_custom_move_data(self):
+        player_result = {}
+        for idx, move_name in enumerate(self.first_mon.move_list):
+            custom_move_data = self.move_list[idx].get_custom_move_data()
+            if custom_move_data is not None:
+                player_result[move_name] = custom_move_data
+
+        enemy_result = {}
+        for idx, move_name in enumerate(self.second_mon.move_list):
+            custom_move_data = self.move_list[idx + 4].get_custom_move_data()
+            if custom_move_data is not None:
+                enemy_result[move_name] = custom_move_data
+        
+        return player_result, enemy_result
     
     def recalc_mimic(self, mimiced_move_name):
         for cur_move in self.move_list:
@@ -297,6 +345,10 @@ class MonPairSummary(tk.Frame):
                 self._update_best_move()
                 self._update_best_move(is_enemy=True)
                 return
+    
+    def recalc_best_move(self):
+        self._update_best_move()
+        self._update_best_move(is_enemy=True)
     
     def _update_best_move(self, is_enemy=False):
         cur_best_attack_idx = None
@@ -342,7 +394,9 @@ class MonPairSummary(tk.Frame):
         second_mon:universal_data_objects.EnemyPkmn,
         first_stages:universal_data_objects.StageModifiers,
         second_stages:universal_data_objects.StageModifiers,
-        mimic_options
+        mimic_options:List[str],
+        player_custom_data:Dict[str, str],
+        enemy_custom_data:Dict[str, str],
     ):
         self.first_mon = first_mon
         self.second_mon = second_mon
@@ -381,10 +435,10 @@ class MonPairSummary(tk.Frame):
                 cur_move = self.first_mon.move_list[idx]
             
             if cur_move:
-                self.move_list[idx].calc_damages(cur_move, self.first_mon, self.second_mon, self.first_stages, self.second_stages, self.mimic_options)
+                self.move_list[idx].calc_damages(cur_move, self.first_mon, self.second_mon, self.first_stages, self.second_stages, self.mimic_options, player_custom_data.get(cur_move))
                 self.move_list[idx].grid(row=1, column=idx, sticky=tk.NSEW)
             elif not struggle_set:
-                self.move_list[idx].calc_damages(const.STRUGGLE_MOVE_NAME, self.first_mon, self.second_mon, self.first_stages, self.second_stages, self.mimic_options)
+                self.move_list[idx].calc_damages(const.STRUGGLE_MOVE_NAME, self.first_mon, self.second_mon, self.first_stages, self.second_stages, self.mimic_options, None)
                 self.move_list[idx].grid(row=1, column=idx, sticky=tk.NSEW)
                 struggle_set = True
             else:
@@ -396,7 +450,7 @@ class MonPairSummary(tk.Frame):
                 cur_move = self.second_mon.move_list[idx]
 
             if cur_move:
-                self.move_list[idx + 4].calc_damages(cur_move, self.second_mon, self.first_mon, self.second_stages, self.first_stages, self.mimic_options)
+                self.move_list[idx + 4].calc_damages(cur_move, self.second_mon, self.first_mon, self.second_stages, self.first_stages, self.mimic_options, enemy_custom_data.get(cur_move))
                 self.move_list[idx + 4].grid(row=1, column=(5 + idx), sticky=tk.NSEW)
             else:
                 self.move_list[idx + 4].grid_forget()
@@ -449,7 +503,7 @@ class SimpleMonPairSummary(tk.Frame):
 
         self.move_list:List[DamageSummary] = []
         for _ in range(8):
-            self.move_list.append(DamageSummary(self, mimic_callback=self.mimic_callback, width=170))
+            self.move_list.append(DamageSummary(self, mimic_callback=self.mimic_callback, width=170, allow_edits=False))
     
     def recalc_mimic(self, mimiced_move_name):
         for cur_move in self.move_list:
@@ -515,7 +569,9 @@ class SimpleMonPairSummary(tk.Frame):
         second_mon:universal_data_objects.EnemyPkmn,
         first_stages:universal_data_objects.StageModifiers,
         second_stages:universal_data_objects.StageModifiers,
-        mimic_options
+        mimic_options:List[str],
+        player_custom_data:Dict[str, str],
+        enemy_custom_data:Dict[str, str],
     ):
         self.first_mon = first_mon
         self.second_mon = second_mon
@@ -536,9 +592,9 @@ class SimpleMonPairSummary(tk.Frame):
                 cur_move = self.first_mon.move_list[idx]
             
             if cur_move:
-                self.move_list[idx].calc_damages(cur_move, self.first_mon, self.second_mon, self.first_stages, self.second_stages, self.mimic_options)
+                self.move_list[idx].calc_damages(cur_move, self.first_mon, self.second_mon, self.first_stages, self.second_stages, self.mimic_options, player_custom_data.get(cur_move))
             elif not struggle_set:
-                self.move_list[idx].calc_damages(const.STRUGGLE_MOVE_NAME, self.first_mon, self.second_mon, self.first_stages, self.second_stages, self.mimic_options)
+                self.move_list[idx].calc_damages(const.STRUGGLE_MOVE_NAME, self.first_mon, self.second_mon, self.first_stages, self.second_stages, self.mimic_options, None)
                 struggle_set = True
             
             # second mon attacking first
@@ -547,14 +603,14 @@ class SimpleMonPairSummary(tk.Frame):
                 cur_move = self.second_mon.move_list[idx]
 
             if cur_move:
-                self.move_list[idx + 4].calc_damages(cur_move, self.second_mon, self.first_mon, self.second_stages, self.first_stages, self.mimic_options)
+                self.move_list[idx + 4].calc_damages(cur_move, self.second_mon, self.first_mon, self.second_stages, self.first_stages, self.mimic_options, enemy_custom_data.get(cur_move))
         
         self._update_best_move()
         self._update_best_move(is_enemy=True)
 
 
 class DamageSummary(tk.Frame):
-    def __init__(self, *args, font_size=None, mimic_callback=None, **kwargs):
+    def __init__(self, *args, font_size=None, mimic_callback=None, custom_data_callback=None, allow_edits=True, **kwargs):
         super().__init__(*args, **kwargs, bg=config.get_background_color())
 
         self.cur_guaranteed_kill = None
@@ -563,10 +619,13 @@ class DamageSummary(tk.Frame):
         self.attacking_mon = None
         self.defending_mon = None
         self.move_name = None
+        self.move_has_custom_data = False
         self.attacking_stage_modifiers = None
         self.defending_stage_modifiers = None
         self._propagate_mimic_update = True
         self._outer_mimic_callback = mimic_callback
+        self._outer_custom_data_callback = custom_data_callback
+        self._allow_edits = allow_edits
 
         self.config(padx=2, pady=2)
         self.columnconfigure(0, weight=1)
@@ -579,7 +638,11 @@ class DamageSummary(tk.Frame):
         self.row_idx += 1
 
         self.move_name_label = tk.Label(self.header, background=config.get_primary_color())
-        self.mimic_dropdown = custom_tkinter.SimpleOptionMenu(self.header, [""], callback=self._mimic_callback, width=15)
+        self.custom_data_dropdown = custom_tkinter.SimpleOptionMenu(self.header, [""], callback=self._custom_data_callback, width=10)
+        if self._allow_edits:
+            self.custom_data_dropdown.bind('<ButtonPress>', self._config_custom_data_dropdown)
+        else:
+            self.custom_data_dropdown.disable()
 
         temp_bg_color = config.get_contrast_color()
         self.range_frame = tk.Frame(self, background=temp_bg_color)
@@ -617,14 +680,34 @@ class DamageSummary(tk.Frame):
         self.kill_frame.configure(background=config.get_secondary_color())
         self.num_to_kill.configure(background=config.get_secondary_color())
     
-    def _mimic_callback(self, *args, **kwargs):
-        if self._propagate_mimic_update and self._outer_mimic_callback is not None:
-            self._outer_mimic_callback(self.mimic_dropdown.get())
+    def get_custom_move_data(self):
+        if self.move_has_custom_data:
+            return self.custom_data_dropdown.get()
+        else:
+            return None
+    
+    def _config_custom_data_dropdown(self, event):
+        cur_font = tkinter.font.nametofont(str(event.widget.cget('font')))
+        longest_option = max(self.custom_data_dropdown.cur_options, key=len)
+        width = max(0, cur_font.measure(longest_option + "00000") - event.widget.winfo_width())
+
+        style_name = f'Combobox{event.widget.winfo_id()}.TCombobox'
+        event.widget.configure(style=style_name)
+        ttk.Style().configure(style_name, postoffset=(0,0,width,0))
+    
+    def _custom_data_callback(self, *args, **kwargs):
+        if self.move_name == const.MIMIC_MOVE_NAME:
+            if self._propagate_mimic_update and self._outer_mimic_callback is not None:
+                self._outer_mimic_callback(self.custom_data_dropdown.get())
+        else:
+            self._calc_damages_from_move(pkmn.current_gen_info().move_db().get_move(self.move_name))
+            if self._outer_custom_data_callback is not None:
+                self._outer_custom_data_callback()
 
     def new_mimic_move_selected(self, move_name):
         try:
             self._propagate_mimic_update = False
-            self.mimic_dropdown.set(move_name)
+            self.custom_data_dropdown.set(move_name)
             # kinda hacky, but whenever mimic isn't set, just use Leer to fake a non-damaging move
             if not move_name:
                 move_name = "Leer"
@@ -640,6 +723,7 @@ class DamageSummary(tk.Frame):
         attacking_stage_modifiers:universal_data_objects.StageModifiers,
         defending_stage_modifiers:universal_data_objects.StageModifiers,
         mimic_options:List,
+        initial_custom_data:str,
     ):
 
         self.attacking_mon = attacking_mon
@@ -653,26 +737,43 @@ class DamageSummary(tk.Frame):
             raise ValueError(f"Unknown move: {move_name}")
         self.move_name_label.configure(text=move_name)
 
-        if move_name == const.MIMIC_MOVE_NAME:
+        custom_data_options = pkmn.current_gen_info().get_move_custom_data(move_name)
+        if custom_data_options:
+            self.move_has_custom_data = True
+        else:
+            if move_name == const.MIMIC_MOVE_NAME:
+                custom_data_options = mimic_options
+                # NOTE: while mimic has a dropdown, it doesn't technically have custom data, because it just gets replaced with another move
+                self.move_has_custom_data = False
+            elif const.FLAVOR_MULTI_HIT in move.attack_flavor:
+                custom_data_options = const.MULTI_HIT_CUSTOM_DATA
+                self.move_has_custom_data = True
+
+        if custom_data_options:
             self.move_name_label.grid_forget()
             self.move_name_label.grid(row=0, column=0)
             self._propagate_mimic_update = False
-            self.mimic_dropdown.grid(row=0, column=1)
-            self.mimic_dropdown.new_values(mimic_options)
+            self.custom_data_dropdown.grid(row=0, column=1)
+            self.custom_data_dropdown.new_values(custom_data_options, default_val=initial_custom_data)
             self._propagate_mimic_update = True
         else:
             self.move_name_label.grid_forget()
             self.move_name_label.grid(row=0, column=0, columnspan=2)
-            self.mimic_dropdown.grid_forget()
+            self.custom_data_dropdown.grid_forget()
             self._calc_damages_from_move(move)
 
     def _calc_damages_from_move(self, move:universal_data_objects.Move):
+        custom_move_data = ""
+        if self.move_has_custom_data:
+            custom_move_data = self.custom_data_dropdown.get()
+
         single_attack = pkmn.current_gen_info().calculate_damage(
             self.attacking_mon,
             move,
             self.defending_mon,
             attacking_stage_modifiers=self.attacking_stage_modifiers,
             defending_stage_modifiers=self.defending_stage_modifiers,
+            custom_move_data=custom_move_data
         )
         crit_attack = pkmn.current_gen_info().calculate_damage(
             self.attacking_mon,
@@ -680,7 +781,8 @@ class DamageSummary(tk.Frame):
             self.defending_mon,
             attacking_stage_modifiers=self.attacking_stage_modifiers,
             defending_stage_modifiers=self.defending_stage_modifiers,
-            is_crit=True
+            is_crit=True,
+            custom_move_data=custom_move_data
         )
 
         if single_attack is None:

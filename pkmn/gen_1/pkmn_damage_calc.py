@@ -28,7 +28,8 @@ def calculate_damage(
     defending_stage_modifiers:universal_data_objects.StageModifiers=None,
     is_crit:bool=False,
     defender_has_light_screen:bool=False,
-    defender_has_reflect:bool=False
+    defender_has_reflect:bool=False,
+    custom_move_data:str=""
 ):
     if move.base_power is None or move.base_power == 0:
         return None
@@ -124,9 +125,24 @@ def calculate_damage(
     if temp == 0:
         return None
 
+    # NOTE: in gen one, all multi-hit moves roll damage (including crit) only once
+    # so, check whether a multi-hit occurs, and then just multiply the damage by the number of hits to get the final damage amount
+    multi_hit_multiplier = 1
+    if const.DOUBLE_HIT_FLAVOR in move.attack_flavor:
+        multi_hit_multiplier = 2
+    elif const.FLAVOR_MULTI_HIT in move.attack_flavor:
+        if const.MULTI_HIT_2 in custom_move_data:
+            multi_hit_multiplier = 2
+        elif const.MULTI_HIT_3 in custom_move_data:
+            multi_hit_multiplier = 3
+        elif const.MULTI_HIT_4 in custom_move_data:
+            multi_hit_multiplier = 4
+        elif const.MULTI_HIT_5 in custom_move_data:
+            multi_hit_multiplier = 5
+
     damage_vals = {}
     for numerator in range(MIN_RANGE, MAX_RANGE + 1):
-        cur_damage = max(math.floor((temp * numerator) / MAX_RANGE), 1)
+        cur_damage = max(math.floor((temp * numerator) / MAX_RANGE), 1) * multi_hit_multiplier
 
         if cur_damage not in damage_vals:
             damage_vals[cur_damage] = 0

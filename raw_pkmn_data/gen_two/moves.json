@@ -4,7 +4,7 @@
         "accuracy": 100,
         "pp": 35,
         "base_power": 40,
-        "type": "normal",
+        "type": "Normal",
         "attack_flavor": [],
         "effects": []
     },
@@ -13,7 +13,7 @@
         "accuracy": 100,
         "pp": 25,
         "base_power": 50,
-        "type": "fighting",
+        "type": "Fighting",
         "attack_flavor": ["high_crit"],
         "effects": []
     },
@@ -22,7 +22,7 @@
         "accuracy": 85,
         "pp": 10,
         "base_power": 15,
-        "type": "normal",
+        "type": "Normal",
         "attack_flavor": ["multi_hit"],
         "effects": []
     },
@@ -31,7 +31,7 @@
         "accuracy": 85,
         "pp": 15,
         "base_power": 18,
-        "type": "normal",
+        "type": "Normal",
         "attack_flavor": ["multi_hit"],
         "effects": []
     },
@@ -40,7 +40,7 @@
         "accuracy": 85,
         "pp": 20,
         "base_power": 80,
-        "type": "normal",
+        "type": "Normal",
         "attack_flavor": [],
         "effects": []
     },
@@ -49,7 +49,7 @@
         "accuracy": 100,
         "pp": 20,
         "base_power": 40,
-        "type": "normal",
+        "type": "Normal",
         "attack_flavor": ["scatter_coins"],
         "effects": []
     },
@@ -58,7 +58,7 @@
         "accuracy": 100,
         "pp": 15,
         "base_power": 75,
-        "type": "fire",
+        "type": "Fire",
         "attack_flavor": [],
         "effects": [
             {
@@ -72,7 +72,7 @@
         "accuracy": 100,
         "pp": 15,
         "base_power": 75,
-        "type": "ice",
+        "type": "Ice",
         "attack_flavor": [],
         "effects": [
             {
@@ -86,7 +86,7 @@
         "accuracy": 100,
         "pp": 15,
         "base_power": 75,
-        "type": "electric",
+        "type": "Electric",
         "attack_flavor": [],
         "effects": [
             {
@@ -100,7 +100,7 @@
         "accuracy": 100,
         "pp": 35,
         "base_power": 40,
-        "type": "normal",
+        "type": "Normal",
         "attack_flavor": [],
         "effects": []
     },
@@ -109,7 +109,7 @@
         "accuracy": 100,
         "pp": 30,
         "base_power": 55,
-        "type": "normal",
+        "type": "Normal",
         "attack_flavor": [],
         "effects": []
     },
@@ -118,7 +118,7 @@
         "accuracy": 30,
         "pp": 5,
         "base_power": 0,
-        "type": "normal",
+        "type": "Normal",
         "attack_flavor": ["one_hit_ko"],
         "effects": []
     },
@@ -127,7 +127,7 @@
         "accuracy": 75,
         "pp": 10,
         "base_power": 80,
-        "type": "normal",
+        "type": "Normal",
         "attack_flavor": ["two_turn", "high_crit"],
         "effects": []
     },
@@ -136,7 +136,7 @@
         "accuracy": 100,
         "pp": 30,
         "base_power": 0,
-        "type": "normal",
+        "type": "Normal",
         "attack_flavor": [],
         "effects": [
             {
@@ -152,7 +152,7 @@
         "accuracy": 95,
         "pp": 30,
         "base_power": 50,
-        "type": "normal",
+        "type": "Normal",
         "attack_flavor": [],
         "effects": []
     },
@@ -161,7 +161,7 @@
         "accuracy": 100,
         "pp": 35,
         "base_power": 40,
-        "type": "flying",
+        "type": "Flying",
         "attack_flavor": ["bonus_fly_damage"],
         "effects": []
     },
@@ -170,7 +170,7 @@
         "accuracy": 100,
         "pp": 35,
         "base_power": 60,
-        "type": "flying",
+        "type": "Flying",
         "attack_flavor": [],
         "effects": []
     },
@@ -179,7 +179,7 @@
         "accuracy": 100,
         "pp": 20,
         "base_power": 0,
-        "type": "normal",
+        "type": "Normal",
         "attack_flavor": ["force_switch"],
         "effects": []
     },
@@ -188,7 +188,7 @@
         "accuracy": 95,
         "pp": 15,
         "base_power": 70,
-        "type": "flying",
+        "type": "Flying",
         "attack_flavor": ["two_turn_semi_invulrnerable"],
         "effects": []
     },
@@ -197,7 +197,7 @@
         "accuracy": 75,
         "pp": 20,
         "base_power": 15,
-        "type": "normal",
+        "type": "Normal",
         "attack_flavor": ["trap"],
         "effects": []
     },
@@ -206,7 +206,7 @@
         "accuracy": 75,
         "pp": 20,
         "base_power": 80,
-        "type": "normal",
+        "type": "Normal",
         "attack_flavor": [],
         "effects": []
     },
@@ -215,7 +215,7 @@
         "accuracy": 100,
         "pp": 10,
         "base_power": 35,
-        "type": "grass",
+        "type": "Grass",
         "attack_flavor": [],
         "effects": []
     },
@@ -224,7 +224,7 @@
         "accuracy": 100,
         "pp": 20,
         "base_power": 65,
-        "type": "normal",
+        "type": "Normal",
         "attack_flavor": ["bonus_minimize_damage"],
         "effects": [
             {
@@ -238,7 +238,7 @@
         "accuracy": 100,
         "pp": 30,
         "base_power": 30,
-        "type": "fighting",
+        "type": "Fighting",
         "attack_flavor": ["two_hit"],
         "effects": []
     },
@@ -247,7 +247,7 @@
         "accuracy": 75,
         "pp": 5,
         "base_power": 120,
-        "type": "normal",
+        "type": "Normal",
         "attack_flavor": [],
         "effects": []
     },
@@ -256,7 +256,7 @@
         "accuracy": 95,
         "pp": 25,
         "base_power": 70,
-        "type": "fighting",
+        "type": "Fighting",
         "attack_flavor": ["miss_recoil_damage"],
         "effects": []
     },
@@ -265,7 +265,7 @@
         "accuracy": 85,
         "pp": 15,
         "base_power": 60,
-        "type": "fighting",
+        "type": "Fighting",
         "attack_flavor": [],
         "effects": [
             {
@@ -279,7 +279,7 @@
         "accuracy": 100,
         "pp": 15,
         "base_power": 0,
-        "type": "ground",
+        "type": "Ground",
         "attack_flavor": [],
         "effects": [
             {
@@ -295,7 +295,7 @@
         "accuracy": 100,
         "pp": 15,
         "base_power": 70,
-        "type": "normal",
+        "type": "Normal",
         "attack_flavor": [],
         "effects": [
             {
@@ -309,7 +309,7 @@
         "accuracy": 100,
         "pp": 25,
         "base_power": 65,
-        "type": "normal",
+        "type": "Normal",
         "attack_flavor": [],
         "effects": []
     },
@@ -318,7 +318,7 @@
         "accuracy": 85,
         "pp": 20,
         "base_power": 15,
-        "type": "normal",
+        "type": "Normal",
         "attack_flavor": ["multi_hit"],
         "effects": []
     },
@@ -327,7 +327,7 @@
         "accuracy": 30,
         "pp": 5,
         "base_power": 1,
-        "type": "normal",
+        "type": "Normal",
         "attack_flavor": ["one_hit_ko"],
         "effects": []
     },
@@ -336,7 +336,7 @@
         "accuracy": 95,
         "pp": 35,
         "base_power": 35,
-        "type": "normal",
+        "type": "Normal",
         "attack_flavor": [],
         "effects": []
     },
@@ -345,7 +345,7 @@
         "accuracy": 100,
         "pp": 15,
         "base_power": 85,
-        "type": "normal",
+        "type": "Normal",
         "attack_flavor": [],
         "effects": [
             {
@@ -359,7 +359,7 @@
         "accuracy": 85,
         "pp": 20,
         "base_power": 15,
-        "type": "normal",
+        "type": "Normal",
         "attack_flavor": ["trap"],
         "effects": []
     },
@@ -368,7 +368,7 @@
         "accuracy": 85,
         "pp": 20,
         "base_power": 90,
-        "type": "normal",
+        "type": "Normal",
         "attack_flavor": ["quarter_recoil"],
         "effects": []
     },
@@ -377,7 +377,7 @@
         "accuracy": 100,
         "pp": 20,
         "base_power": 90,
-        "type": "normal",
+        "type": "Normal",
         "attack_flavor": ["rampage"],
         "effects": []
     },
@@ -386,7 +386,7 @@
         "accuracy": 100,
         "pp": 15,
         "base_power": 120,
-        "type": "normal",
+        "type": "Normal",
         "attack_flavor": ["quarter_recoil"],
         "effects": []
     },
@@ -395,7 +395,7 @@
         "accuracy": 100,
         "pp": 30,
         "base_power": 0,
-        "type": "normal",
+        "type": "Normal",
         "attack_flavor": [],
         "effects": [
             {
@@ -411,7 +411,7 @@
         "accuracy": 100,
         "pp": 35,
         "base_power": 15,
-        "type": "poison",
+        "type": "Poison",
         "attack_flavor": [],
         "effects": [
             {
@@ -425,7 +425,7 @@
         "accuracy": 100,
         "pp": 20,
         "base_power": 25,
-        "type": "bug",
+        "type": "Bug",
         "attack_flavor": ["two_hit"],
         "effects": [
             {
@@ -439,7 +439,7 @@
         "accuracy": 85,
         "pp": 20,
         "base_power": 14,
-        "type": "bug",
+        "type": "Bug",
         "attack_flavor": ["multi_hit"],
         "effects": []
     },
@@ -448,7 +448,7 @@
         "accuracy": 100,
         "pp": 30,
         "base_power": 0,
-        "type": "normal",
+        "type": "Normal",
         "attack_flavor": [],
         "effects": [
             {
@@ -464,7 +464,7 @@
         "accuracy": 100,
         "pp": 25,
         "base_power": 60,
-        "type": "dark",
+        "type": "Dark",
         "attack_flavor": [],
         "effects": [
             {
@@ -478,7 +478,7 @@
         "accuracy": 100,
         "pp": 40,
         "base_power": 0,
-        "type": "normal",
+        "type": "Normal",
         "attack_flavor": [],
         "effects": [
             {
@@ -494,7 +494,7 @@
         "accuracy": 100,
         "pp": 20,
         "base_power": 0,
-        "type": "normal",
+        "type": "Normal",
         "attack_flavor": ["force_switch"],
         "effects": []
     },
@@ -503,7 +503,7 @@
         "accuracy": 55,
         "pp": 15,
         "base_power": 0,
-        "type": "normal",
+        "type": "Normal",
         "attack_flavor": [],
         "effects": [
             {
@@ -517,7 +517,7 @@
         "accuracy": 55,
         "pp": 20,
         "base_power": 0,
-        "type": "normal",
+        "type": "Normal",
         "attack_flavor": [],
         "effects": [
             {
@@ -531,7 +531,7 @@
         "accuracy": 90,
         "pp": 20,
         "base_power": 20,
-        "type": "normal",
+        "type": "Normal",
         "attack_flavor": ["fixed_damage"],
         "effects": []
     },
@@ -540,7 +540,7 @@
         "accuracy": 55,
         "pp": 20,
         "base_power": 0,
-        "type": "normal",
+        "type": "Normal",
         "attack_flavor": [],
         "effects": [
             {
@@ -554,7 +554,7 @@
         "accuracy": 100,
         "pp": 30,
         "base_power": 40,
-        "type": "poison",
+        "type": "Poison",
         "attack_flavor": [],
         "effects": [
             {
@@ -570,7 +570,7 @@
         "accuracy": 100,
         "pp": 25,
         "base_power": 40,
-        "type": "fire",
+        "type": "Fire",
         "attack_flavor": [],
         "effects": [
             {
@@ -584,7 +584,7 @@
         "accuracy": 100,
         "pp": 15,
         "base_power": 95,
-        "type": "fire",
+        "type": "Fire",
         "attack_flavor": [],
         "effects": [
             {
@@ -598,7 +598,7 @@
         "accuracy": 100,
         "pp": 30,
         "base_power": 0,
-        "type": "ice",
+        "type": "Ice",
         "attack_flavor": ["stat_protection"],
         "effects": []
     },
@@ -607,7 +607,7 @@
         "accuracy": 100,
         "pp": 25,
         "base_power": 40,
-        "type": "water",
+        "type": "Water",
         "attack_flavor": [],
         "effects": []
     },
@@ -616,7 +616,7 @@
         "accuracy": 80,
         "pp": 5,
         "base_power": 120,
-        "type": "water",
+        "type": "Water",
         "attack_flavor": [],
         "effects": []
     },
@@ -625,7 +625,7 @@
         "accuracy": 100,
         "pp": 15,
         "base_power": 95,
-        "type": "water",
+        "type": "Water",
         "attack_flavor": [],
         "effects": []
     },
@@ -634,7 +634,7 @@
         "accuracy": 100,
         "pp": 10,
         "base_power": 95,
-        "type": "ice",
+        "type": "Ice",
         "attack_flavor": [],
         "effects": [
             {
@@ -648,7 +648,7 @@
         "accuracy": 70,
         "pp": 5,
         "base_power": 120,
-        "type": "ice",
+        "type": "Ice",
         "attack_flavor": [],
         "effects": [
             {
@@ -662,7 +662,7 @@
         "accuracy": 100,
         "pp": 20,
         "base_power": 65,
-        "type": "psychic",
+        "type": "Psychic",
         "attack_flavor": [],
         "effects": [
             {
@@ -676,7 +676,7 @@
         "accuracy": 100,
         "pp": 20,
         "base_power": 65,
-        "type": "water",
+        "type": "Water",
         "attack_flavor": [],
         "effects": [
             {
@@ -692,7 +692,7 @@
         "accuracy": 100,
         "pp": 20,
         "base_power": 65,
-        "type": "ice",
+        "type": "Ice",
         "attack_flavor": [],
         "effects": [
             {
@@ -708,7 +708,7 @@
         "accuracy": 90,
         "pp": 5,
         "base_power": 150,
-        "type": "normal",
+        "type": "Normal",
         "attack_flavor": ["recharge"],
         "effects": []
     },
@@ -717,7 +717,7 @@
         "accuracy": 100,
         "pp": 35,
         "base_power": 35,
-        "type": "flying",
+        "type": "Flying",
         "attack_flavor": [],
         "effects": []
     },
@@ -726,7 +726,7 @@
         "accuracy": 100,
         "pp": 20,
         "base_power": 80,
-        "type": "flying",
+        "type": "Flying",
         "attack_flavor": [],
         "effects": []
     },
@@ -735,7 +735,7 @@
         "accuracy": 80,
         "pp": 25,
         "base_power": 80,
-        "type": "fighting",
+        "type": "Fighting",
         "attack_flavor": ["quarter_recoil"],
         "effects": []
     },
@@ -744,7 +744,7 @@
         "accuracy": 90,
         "pp": 20,
         "base_power": 50,
-        "type": "fighting",
+        "type": "Fighting",
         "attack_flavor": [],
         "effects": [
             {
@@ -758,7 +758,7 @@
         "accuracy": 100,
         "pp": 20,
         "base_power": 0,
-        "type": "fighting",
+        "type": "Fighting",
         "attack_flavor": ["counter"],
         "effects": []
     },
@@ -767,7 +767,7 @@
         "accuracy": 100,
         "pp": 20,
         "base_power": 1,
-        "type": "fighting",
+        "type": "Fighting",
         "attack_flavor": ["level_damage"],
         "effects": []
     },
@@ -776,7 +776,7 @@
         "accuracy": 100,
         "pp": 15,
         "base_power": 80,
-        "type": "normal",
+        "type": "Normal",
         "attack_flavor": [],
         "effects": []
     },
@@ -785,7 +785,7 @@
         "accuracy": 100,
         "pp": 20,
         "base_power": 20,
-        "type": "grass",
+        "type": "Grass",
         "attack_flavor": ["drain_hp"],
         "effects": []
     },
@@ -794,7 +794,7 @@
         "accuracy": 100,
         "pp": 10,
         "base_power": 40,
-        "type": "grass",
+        "type": "Grass",
         "attack_flavor": ["drain_hp"],
         "effects": []
     },
@@ -803,7 +803,7 @@
         "accuracy": 90,
         "pp": 10,
         "base_power": 0,
-        "type": "grass",
+        "type": "Grass",
         "attack_flavor": [],
         "effects": [
             {
@@ -817,7 +817,7 @@
         "accuracy": 100,
         "pp": 40,
         "base_power": 0,
-        "type": "normal",
+        "type": "Normal",
         "attack_flavor": [],
         "effects": [
             {
@@ -833,7 +833,7 @@
         "accuracy": 95,
         "pp": 25,
         "base_power": 55,
-        "type": "grass",
+        "type": "Grass",
         "attack_flavor": ["high_crit"],
         "effects": []
     },
@@ -842,7 +842,7 @@
         "accuracy": 100,
         "pp": 10,
         "base_power": 120,
-        "type": "grass",
+        "type": "Grass",
         "attack_flavor": ["two_turn"],
         "effects": []
     },
@@ -851,7 +851,7 @@
         "accuracy": 75,
         "pp": 35,
         "base_power": 0,
-        "type": "poison",
+        "type": "Poison",
         "attack_flavor": [],
         "effects": [
             {
@@ -865,7 +865,7 @@
         "accuracy": 75,
         "pp": 30,
         "base_power": 0,
-        "type": "grass",
+        "type": "Grass",
         "attack_flavor": [],
         "effects": [
             {
@@ -879,7 +879,7 @@
         "accuracy": 75,
         "pp": 15,
         "base_power": 0,
-        "type": "grass",
+        "type": "Grass",
         "attack_flavor": [],
         "effects": [
             {
@@ -893,7 +893,7 @@
         "accuracy": 100,
         "pp": 20,
         "base_power": 70,
-        "type": "grass",
+        "type": "Grass",
         "attack_flavor": ["rampage"],
         "effects": []
     },
@@ -902,7 +902,7 @@
         "accuracy": 95,
         "pp": 40,
         "base_power": 0,
-        "type": "bug",
+        "type": "Bug",
         "attack_flavor": [],
         "effects": [
             {
@@ -918,7 +918,7 @@
         "accuracy": 100,
         "pp": 10,
         "base_power": 40,
-        "type": "dragon",
+        "type": "Dragon",
         "attack_flavor": ["fixed_damage"],
         "effects": []
     },
@@ -927,7 +927,7 @@
         "accuracy": 70,
         "pp": 15,
         "base_power": 15,
-        "type": "fire",
+        "type": "Fire",
         "attack_flavor": ["trap"],
         "effects": []
     },
@@ -936,7 +936,7 @@
         "accuracy": 100,
         "pp": 30,
         "base_power": 40,
-        "type": "electric",
+        "type": "Electric",
         "attack_flavor": [],
         "effects": [
             {
@@ -950,7 +950,7 @@
         "accuracy": 100,
         "pp": 15,
         "base_power": 95,
-        "type": "electric",
+        "type": "Electric",
         "attack_flavor": [],
         "effects": [
             {
@@ -964,7 +964,7 @@
         "accuracy": 100,
         "pp": 20,
         "base_power": 0,
-        "type": "electric",
+        "type": "Electric",
         "attack_flavor": [],
         "effects": [
             {
@@ -978,7 +978,7 @@
         "accuracy": 70,
         "pp": 10,
         "base_power": 120,
-        "type": "electric",
+        "type": "Electric",
         "attack_flavor": ["hits_fly"],
         "effects": [
             {
@@ -992,7 +992,7 @@
         "accuracy": 90,
         "pp": 15,
         "base_power": 50,
-        "type": "rock",
+        "type": "Rock",
         "attack_flavor": [],
         "effects": []
     },
@@ -1001,7 +1001,7 @@
         "accuracy": 100,
         "pp": 10,
         "base_power": 100,
-        "type": "ground",
+        "type": "Ground",
         "attack_flavor": ["bonus_dig_damage"],
         "effects": []
     },
@@ -1010,7 +1010,7 @@
         "accuracy": 30,
         "pp": 5,
         "base_power": 1,
-        "type": "ground",
+        "type": "Ground",
         "attack_flavor": ["one_hit_ko"],
         "effects": []
     },
@@ -1019,7 +1019,7 @@
         "accuracy": 100,
         "pp": 10,
         "base_power": 60,
-        "type": "ground",
+        "type": "Ground",
         "attack_flavor": ["two_turn_semi_invlunerable"],
         "effects": []
     },
@@ -1028,7 +1028,7 @@
         "accuracy": 85,
         "pp": 10,
         "base_power": 0,
-        "type": "poison",
+        "type": "Poison",
         "attack_flavor": [],
         "effects": [
             {
@@ -1042,7 +1042,7 @@
         "accuracy": 100,
         "pp": 25,
         "base_power": 50,
-        "type": "psychic",
+        "type": "Psychic",
         "attack_flavor": [],
         "effects": [
             {
@@ -1056,7 +1056,7 @@
         "accuracy": 100,
         "pp": 10,
         "base_power": 90,
-        "type": "psychic",
+        "type": "Psychic",
         "attack_flavor": [],
         "effects": [
             {
@@ -1072,7 +1072,7 @@
         "accuracy": 60,
         "pp": 20,
         "base_power": 0,
-        "type": "psychic",
+        "type": "Psychic",
         "attack_flavor": [],
         "effects": [
             {
@@ -1086,7 +1086,7 @@
         "accuracy": 100,
         "pp": 40,
         "base_power": 0,
-        "type": "psychic",
+        "type": "Psychic",
         "attack_flavor": [],
         "effects": [
             {
@@ -1102,7 +1102,7 @@
         "accuracy": 100,
         "pp": 30,
         "base_power": 0,
-        "type": "psychic",
+        "type": "Psychic",
         "attack_flavor": [],
         "effects": [
             {
@@ -1118,7 +1118,7 @@
         "accuracy": 100,
         "pp": 30,
         "base_power": 40,
-        "type": "normal",
+        "type": "Normal",
         "attack_flavor": ["increased_priority"],
         "effects": []
     },
@@ -1127,7 +1127,7 @@
         "accuracy": 100,
         "pp": 20,
         "base_power": 20,
-        "type": "normal",
+        "type": "Normal",
         "attack_flavor": ["rage"],
         "effects": []
     },
@@ -1136,7 +1136,7 @@
         "accuracy": 100,
         "pp": 20,
         "base_power": 0,
-        "type": "psychic",
+        "type": "Psychic",
         "attack_flavor": ["end_wild_battle"],
         "effects": []
     },
@@ -1145,7 +1145,7 @@
         "accuracy": 100,
         "pp": 15,
         "base_power": 1,
-        "type": "ghos",
+        "type": "Ghost",
         "attack_flavor": ["level_damage"],
         "effects": []
     },
@@ -1154,7 +1154,7 @@
         "accuracy": 100,
         "pp": 10,
         "base_power": 0,
-        "type": "normal",
+        "type": "Normal",
         "attack_flavor": ["mimic"],
         "effects": []
     },
@@ -1163,7 +1163,7 @@
         "accuracy": 85,
         "pp": 40,
         "base_power": 0,
-        "type": "normal",
+        "type": "Normal",
         "attack_flavor": [],
         "effects": [
             {
@@ -1179,7 +1179,7 @@
         "accuracy": 100,
         "pp": 15,
         "base_power": 0,
-        "type": "normal",
+        "type": "Normal",
         "attack_flavor": [],
         "effects": [
             {
@@ -1195,7 +1195,7 @@
         "accuracy": 100,
         "pp": 20,
         "base_power": 0,
-        "type": "normal",
+        "type": "Normal",
         "attack_flavor": ["recover"],
         "effects": []
     },
@@ -1204,7 +1204,7 @@
         "accuracy": 100,
         "pp": 30,
         "base_power": 0,
-        "type": "normal",
+        "type": "Normal",
         "attack_flavor": [],
         "effects": [
             {
@@ -1220,7 +1220,7 @@
         "accuracy": 100,
         "pp": 20,
         "base_power": 0,
-        "type": "normal",
+        "type": "Normal",
         "attack_flavor": [],
         "effects": [
             {
@@ -1236,7 +1236,7 @@
         "accuracy": 100,
         "pp": 20,
         "base_power": 0,
-        "type": "normal",
+        "type": "Normal",
         "attack_flavor": [],
         "effects": [
             {
@@ -1252,7 +1252,7 @@
         "accuracy": 100,
         "pp": 10,
         "base_power": 0,
-        "type": "ghos",
+        "type": "Ghost",
         "attack_flavor": [],
         "effects": [
             {
@@ -1266,7 +1266,7 @@
         "accuracy": 100,
         "pp": 40,
         "base_power": 0,
-        "type": "water",
+        "type": "Water",
         "attack_flavor": [],
         "effects": [
             {
@@ -1282,7 +1282,7 @@
         "accuracy": 100,
         "pp": 40,
         "base_power": 0,
-        "type": "normal",
+        "type": "Normal",
         "attack_flavor": [],
         "effects": [
             {
@@ -1298,7 +1298,7 @@
         "accuracy": 100,
         "pp": 30,
         "base_power": 0,
-        "type": "psychic",
+        "type": "Psychic",
         "attack_flavor": [],
         "effects": [
             {
@@ -1314,7 +1314,7 @@
         "accuracy": 100,
         "pp": 30,
         "base_power": 0,
-        "type": "psychic",
+        "type": "Psychic",
         "attack_flavor": [],
         "effects": [
             {
@@ -1328,7 +1328,7 @@
         "accuracy": 100,
         "pp": 30,
         "base_power": 0,
-        "type": "ice",
+        "type": "Ice",
         "attack_flavor": ["haze"],
         "effects": []
     },
@@ -1337,7 +1337,7 @@
         "accuracy": 100,
         "pp": 20,
         "base_power": 0,
-        "type": "psychic",
+        "type": "Psychic",
         "attack_flavor": [],
         "effects": [
             {
@@ -1351,7 +1351,7 @@
         "accuracy": 100,
         "pp": 30,
         "base_power": 0,
-        "type": "normal",
+        "type": "Normal",
         "attack_flavor": ["focus_energy"],
         "effects": []
     },
@@ -1360,7 +1360,7 @@
         "accuracy": 100,
         "pp": 10,
         "base_power": 0,
-        "type": "normal",
+        "type": "Normal",
         "attack_flavor": ["bide"],
         "effects": []
     },
@@ -1369,7 +1369,7 @@
         "accuracy": 100,
         "pp": 10,
         "base_power": 0,
-        "type": "normal",
+        "type": "Normal",
         "attack_flavor": ["metronome"],
         "effects": []
     },
@@ -1378,7 +1378,7 @@
         "accuracy": 100,
         "pp": 20,
         "base_power": 0,
-        "type": "flying",
+        "type": "Flying",
         "attack_flavor": ["mirror_move"],
         "effects": []
     },
@@ -1387,7 +1387,7 @@
         "accuracy": 100,
         "pp": 5,
         "base_power": 200,
-        "type": "normal",
+        "type": "Normal",
         "attack_flavor": ["self_destruct_explosion"],
         "effects": []
     },
@@ -1396,7 +1396,7 @@
         "accuracy": 75,
         "pp": 10,
         "base_power": 100,
-        "type": "normal",
+        "type": "Normal",
         "attack_flavor": [],
         "effects": []
     },
@@ -1405,7 +1405,7 @@
         "accuracy": 100,
         "pp": 30,
         "base_power": 20,
-        "type": "ghos",
+        "type": "Ghost",
         "attack_flavor": [],
         "effects": [
             {
@@ -1419,7 +1419,7 @@
         "accuracy": 70,
         "pp": 20,
         "base_power": 20,
-        "type": "poison",
+        "type": "Poison",
         "attack_flavor": [],
         "effects": [
             {
@@ -1433,7 +1433,7 @@
         "accuracy": 100,
         "pp": 20,
         "base_power": 65,
-        "type": "poison",
+        "type": "Poison",
         "attack_flavor": [],
         "effects": [
             {
@@ -1447,7 +1447,7 @@
         "accuracy": 85,
         "pp": 20,
         "base_power": 65,
-        "type": "ground",
+        "type": "Ground",
         "attack_flavor": [],
         "effects": [
             {
@@ -1461,7 +1461,7 @@
         "accuracy": 85,
         "pp": 5,
         "base_power": 120,
-        "type": "fire",
+        "type": "Fire",
         "attack_flavor": [],
         "effects": [
             {
@@ -1475,7 +1475,7 @@
         "accuracy": 100,
         "pp": 15,
         "base_power": 80,
-        "type": "water",
+        "type": "Water",
         "attack_flavor": [],
         "effects": []
     },
@@ -1484,7 +1484,7 @@
         "accuracy": 75,
         "pp": 10,
         "base_power": 35,
-        "type": "water",
+        "type": "Water",
         "attack_flavor": ["trap"],
         "effects": []
     },
@@ -1493,7 +1493,7 @@
         "accuracy": null,
         "pp": 20,
         "base_power": 60,
-        "type": "normal",
+        "type": "Normal",
         "attack_flavor": [],
         "effects": []
     },
@@ -1502,7 +1502,7 @@
         "accuracy": 100,
         "pp": 15,
         "base_power": 100,
-        "type": "normal",
+        "type": "Normal",
         "attack_flavor": ["two_turn"],
         "effects": [
             {
@@ -1518,7 +1518,7 @@
         "accuracy": 100,
         "pp": 15,
         "base_power": 20,
-        "type": "normal",
+        "type": "Normal",
         "attack_flavor": ["multi_hit"],
         "effects": []
     },
@@ -1527,7 +1527,7 @@
         "accuracy": 100,
         "pp": 35,
         "base_power": 10,
-        "type": "normal",
+        "type": "Normal",
         "attack_flavor": [],
         "effects": [
             {
@@ -1543,7 +1543,7 @@
         "accuracy": 100,
         "pp": 20,
         "base_power": 0,
-        "type": "psychic",
+        "type": "Psychic",
         "attack_flavor": [],
         "effects": [
             {
@@ -1559,7 +1559,7 @@
         "accuracy": 80,
         "pp": 15,
         "base_power": 0,
-        "type": "psychic",
+        "type": "Psychic",
         "attack_flavor": [],
         "effects": [
             {
@@ -1575,7 +1575,7 @@
         "accuracy": 100,
         "pp": 10,
         "base_power": 0,
-        "type": "normal",
+        "type": "Normal",
         "attack_flavor": ["recover"],
         "effects": []
     },
@@ -1584,7 +1584,7 @@
         "accuracy": 90,
         "pp": 20,
         "base_power": 85,
-        "type": "fighting",
+        "type": "Fighting",
         "attack_flavor": ["miss_recoil_damage"],
         "effects": []
     },
@@ -1593,7 +1593,7 @@
         "accuracy": 75,
         "pp": 30,
         "base_power": 0,
-        "type": "normal",
+        "type": "Normal",
         "attack_flavor": [],
         "effects": [
             {
@@ -1607,7 +1607,7 @@
         "accuracy": 100,
         "pp": 15,
         "base_power": 100,
-        "type": "psychic",
+        "type": "Psychic",
         "attack_flavor": ["dream_eater", "drain_hp"],
         "effects": []
     },
@@ -1616,7 +1616,7 @@
         "accuracy": 55,
         "pp": 40,
         "base_power": 0,
-        "type": "poison",
+        "type": "Poison",
         "attack_flavor": [],
         "effects": [
             {
@@ -1630,7 +1630,7 @@
         "accuracy": 85,
         "pp": 20,
         "base_power": 15,
-        "type": "normal",
+        "type": "Normal",
         "attack_flavor": ["multi_hit"],
         "effects": []
     },
@@ -1639,7 +1639,7 @@
         "accuracy": 100,
         "pp": 15,
         "base_power": 20,
-        "type": "bug",
+        "type": "Bug",
         "attack_flavor": ["drain_hp"],
         "effects": []
     },
@@ -1648,7 +1648,7 @@
         "accuracy": 75,
         "pp": 10,
         "base_power": 0,
-        "type": "normal",
+        "type": "Normal",
         "attack_flavor": [],
         "effects": [
             {
@@ -1662,7 +1662,7 @@
         "accuracy": 90,
         "pp": 5,
         "base_power": 140,
-        "type": "flying",
+        "type": "Flying",
         "attack_flavor": ["two_turn"],
         "effects": []
     },
@@ -1671,7 +1671,7 @@
         "accuracy": 100,
         "pp": 10,
         "base_power": 0,
-        "type": "normal",
+        "type": "Normal",
         "attack_flavor": ["transform"],
         "effects": []
     },
@@ -1680,7 +1680,7 @@
         "accuracy": 100,
         "pp": 30,
         "base_power": 20,
-        "type": "water",
+        "type": "Water",
         "attack_flavor": [],
         "effects": [
             {
@@ -1696,7 +1696,7 @@
         "accuracy": 100,
         "pp": 10,
         "base_power": 70,
-        "type": "normal",
+        "type": "Normal",
         "attack_flavor": [],
         "effects": [
             {
@@ -1710,7 +1710,7 @@
         "accuracy": 100,
         "pp": 15,
         "base_power": 0,
-        "type": "grass",
+        "type": "Grass",
         "attack_flavor": [],
         "effects": [
             {
@@ -1724,7 +1724,7 @@
         "accuracy": 70,
         "pp": 20,
         "base_power": 0,
-        "type": "normal",
+        "type": "Normal",
         "attack_flavor": [],
         "effects": [
             {
@@ -1740,7 +1740,7 @@
         "accuracy": 80,
         "pp": 15,
         "base_power": 1,
-        "type": "psychic",
+        "type": "Psychic",
         "attack_flavor": ["psywave"],
         "effects": []
     },
@@ -1749,7 +1749,7 @@
         "accuracy": 100,
         "pp": 40,
         "base_power": 0,
-        "type": "normal",
+        "type": "Normal",
         "attack_flavor": [],
         "effects": []
     },
@@ -1758,7 +1758,7 @@
         "accuracy": 100,
         "pp": 40,
         "base_power": 0,
-        "type": "poison",
+        "type": "Poison",
         "attack_flavor": [],
         "effects": [
             {
@@ -1774,7 +1774,7 @@
         "accuracy": 85,
         "pp": 10,
         "base_power": 90,
-        "type": "water",
+        "type": "Water",
         "attack_flavor": ["high_crit"],
         "effects": []
     },
@@ -1783,7 +1783,7 @@
         "accuracy": 100,
         "pp": 5,
         "base_power": 250,
-        "type": "normal",
+        "type": "Normal",
         "attack_flavor": ["self_destruct_explosion"],
         "effects": []
     },
@@ -1792,7 +1792,7 @@
         "accuracy": 80,
         "pp": 15,
         "base_power": 18,
-        "type": "normal",
+        "type": "Normal",
         "attack_flavor": ["multi_hit"],
         "effects": []
     },
@@ -1801,7 +1801,7 @@
         "accuracy": 90,
         "pp": 10,
         "base_power": 50,
-        "type": "ground",
+        "type": "Ground",
         "attack_flavor": ["two_hit"],
         "effects": []
     },
@@ -1810,7 +1810,7 @@
         "accuracy": 100,
         "pp": 10,
         "base_power": 0,
-        "type": "psychic",
+        "type": "Psychic",
         "attack_flavor": ["rest"],
         "effects": []
     },
@@ -1819,7 +1819,7 @@
         "accuracy": 90,
         "pp": 10,
         "base_power": 75,
-        "type": "rock",
+        "type": "Rock",
         "attack_flavor": [],
         "effects": [
             {
@@ -1833,7 +1833,7 @@
         "accuracy": 90,
         "pp": 15,
         "base_power": 80,
-        "type": "normal",
+        "type": "Normal",
         "attack_flavor": [],
         "effects": [
             {
@@ -1847,7 +1847,7 @@
         "accuracy": 100,
         "pp": 30,
         "base_power": 0,
-        "type": "normal",
+        "type": "Normal",
         "attack_flavor": [],
         "effects": [
             {
@@ -1863,7 +1863,7 @@
         "accuracy": 100,
         "pp": 30,
         "base_power": 0,
-        "type": "normal",
+        "type": "Normal",
         "attack_flavor": ["conversion"],
         "effects": []
     },
@@ -1872,7 +1872,7 @@
         "accuracy": 100,
         "pp": 10,
         "base_power": 80,
-        "type": "normal",
+        "type": "Normal",
         "attack_flavor": ["tri_attack"],
         "effects": [
             {
@@ -1895,7 +1895,7 @@
         "accuracy": 90,
         "pp": 10,
         "base_power": 1,
-        "type": "normal",
+        "type": "Normal",
         "attack_flavor": ["super_fang"],
         "effects": []
     },
@@ -1904,7 +1904,7 @@
         "accuracy": 100,
         "pp": 20,
         "base_power": 70,
-        "type": "normal",
+        "type": "Normal",
         "attack_flavor": ["high_crit"],
         "effects": []
     },
@@ -1913,7 +1913,7 @@
         "accuracy": 100,
         "pp": 10,
         "base_power": 0,
-        "type": "normal",
+        "type": "Normal",
         "attack_flavor": ["substitute"],
         "effects": []
     },
@@ -1931,7 +1931,7 @@
         "accuracy": 100,
         "pp": 1,
         "base_power": 0,
-        "type": "normal",
+        "type": "Normal",
         "attack_flavor": ["sketch"],
         "effects": []
     },
@@ -1940,7 +1940,7 @@
         "accuracy": 90,
         "pp": 10,
         "base_power": 10,
-        "type": "fighting",
+        "type": "Fighting",
         "attack_flavor": ["triple_kick"],
         "effects": []
     },
@@ -1949,7 +1949,7 @@
         "accuracy": 100,
         "pp": 10,
         "base_power": 40,
-        "type": "dark",
+        "type": "Dark",
         "attack_flavor": ["thief"],
         "effects": []
     },
@@ -1958,7 +1958,7 @@
         "accuracy": 100,
         "pp": 10,
         "base_power": 0,
-        "type": "bug",
+        "type": "Bug",
         "attack_flavor": ["mean_look"],
         "effects": []
     },
@@ -1967,7 +1967,7 @@
         "accuracy": 100,
         "pp": 5,
         "base_power": 0,
-        "type": "normal",
+        "type": "Normal",
         "attack_flavor": ["lock_on"],
         "effects": []
     },
@@ -1976,7 +1976,7 @@
         "accuracy": 100,
         "pp": 15,
         "base_power": 0,
-        "type": "ghos",
+        "type": "Ghost",
         "attack_flavor": ["nightmare"],
         "effects": []
     },
@@ -1985,7 +1985,7 @@
         "accuracy": 100,
         "pp": 25,
         "base_power": 60,
-        "type": "fire",
+        "type": "Fire",
         "attack_flavor": ["self_thaw"],
         "effects": []
     },
@@ -1994,7 +1994,7 @@
         "accuracy": 100,
         "pp": 15,
         "base_power": 40,
-        "type": "normal",
+        "type": "Normal",
         "attack_flavor": ["snore"],
         "effects": []
     },
@@ -2003,7 +2003,7 @@
         "accuracy": 100,
         "pp": 10,
         "base_power": 0,
-        "type": "ghos",
+        "type": "Ghost",
         "attack_flavor": ["curse"],
         "effects": [
             {
@@ -2031,7 +2031,7 @@
         "accuracy": 100,
         "pp": 15,
         "base_power": 1,
-        "type": "normal",
+        "type": "Normal",
         "attack_flavor": ["reversal"],
         "effects": []
     },
@@ -2040,7 +2040,7 @@
         "accuracy": 100,
         "pp": 30,
         "base_power": 0,
-        "type": "normal",
+        "type": "Normal",
         "attack_flavor": ["conversion_2"],
         "effects": []
     },
@@ -2049,7 +2049,7 @@
         "accuracy": 95,
         "pp": 5,
         "base_power": 100,
-        "type": "flying",
+        "type": "Flying",
         "attack_flavor": [],
         "effects": []
     },
@@ -2058,7 +2058,7 @@
         "accuracy": 85,
         "pp": 40,
         "base_power": 0,
-        "type": "grass",
+        "type": "Grass",
         "attack_flavor": [],
         "effects": [
             {
@@ -2074,7 +2074,7 @@
         "accuracy": 100,
         "pp": 15,
         "base_power": 1,
-        "type": "fighting",
+        "type": "Fighting",
         "attack_flavor": ["reversal"],
         "effects": []
     },
@@ -2083,7 +2083,7 @@
         "accuracy": 100,
         "pp": 10,
         "base_power": 0,
-        "type": "ghos",
+        "type": "Ghost",
         "attack_flavor": ["spite"],
         "effects": []
     },
@@ -2092,7 +2092,7 @@
         "accuracy": 100,
         "pp": 25,
         "base_power": 40,
-        "type": "ice",
+        "type": "Ice",
         "attack_flavor": [],
         "effects": [
             {
@@ -2106,7 +2106,7 @@
         "accuracy": 100,
         "pp": 10,
         "base_power": 0,
-        "type": "normal",
+        "type": "Normal",
         "attack_flavor": ["protect"],
         "effects": []
     },
@@ -2115,7 +2115,7 @@
         "accuracy": 100,
         "pp": 30,
         "base_power": 40,
-        "type": "fighting",
+        "type": "Fighting",
         "attack_flavor": ["increased_priority"],
         "effects": []
     },
@@ -2124,7 +2124,7 @@
         "accuracy": 90,
         "pp": 10,
         "base_power": 0,
-        "type": "normal",
+        "type": "Normal",
         "attack_flavor": [],
         "effects": [
             {
@@ -2140,7 +2140,7 @@
         "accuracy": null,
         "pp": 20,
         "base_power": 60,
-        "type": "dark",
+        "type": "Dark",
         "attack_flavor": [],
         "effects": []
     },
@@ -2149,7 +2149,7 @@
         "accuracy": 75,
         "pp": 10,
         "base_power": 0,
-        "type": "normal",
+        "type": "Normal",
         "attack_flavor": [],
         "effects": [
             {
@@ -2163,7 +2163,7 @@
         "accuracy": 100,
         "pp": 10,
         "base_power": 0,
-        "type": "normal",
+        "type": "Normal",
         "attack_flavor": ["belly_drum"],
         "effects": [
             {
@@ -2179,7 +2179,7 @@
         "accuracy": 100,
         "pp": 10,
         "base_power": 90,
-        "type": "poison",
+        "type": "Poison",
         "attack_flavor": [],
         "effects": [
             {
@@ -2193,7 +2193,7 @@
         "accuracy": 100,
         "pp": 10,
         "base_power": 20,
-        "type": "ground",
+        "type": "Ground",
         "attack_flavor": [],
         "effects": [
             {
@@ -2209,7 +2209,7 @@
         "accuracy": 85,
         "pp": 10,
         "base_power": 65,
-        "type": "water",
+        "type": "Water",
         "attack_flavor": [],
         "effects": [
             {
@@ -2225,7 +2225,7 @@
         "accuracy": 100,
         "pp": 20,
         "base_power": 0,
-        "type": "ground",
+        "type": "Ground",
         "attack_flavor": [],
         "effects": [
             {
@@ -2239,7 +2239,7 @@
         "accuracy": 50,
         "pp": 5,
         "base_power": 100,
-        "type": "electric",
+        "type": "Electric",
         "attack_flavor": [],
         "effects": [
             {
@@ -2253,7 +2253,7 @@
         "accuracy": 100,
         "pp": 40,
         "base_power": 0,
-        "type": "normal",
+        "type": "Normal",
         "attack_flavor": ["foresight"],
         "effects": []
     },
@@ -2262,7 +2262,7 @@
         "accuracy": 100,
         "pp": 5,
         "base_power": 0,
-        "type": "ghos",
+        "type": "Ghost",
         "attack_flavor": ["destiny_bond"],
         "effects": []
     },
@@ -2271,7 +2271,7 @@
         "accuracy": 100,
         "pp": 5,
         "base_power": 0,
-        "type": "normal",
+        "type": "Normal",
         "attack_flavor": ["perish_song"],
         "effects": []
     },
@@ -2280,7 +2280,7 @@
         "accuracy": 95,
         "pp": 15,
         "base_power": 55,
-        "type": "ice",
+        "type": "Ice",
         "attack_flavor": [],
         "effects": [
             {
@@ -2296,7 +2296,7 @@
         "accuracy": 100,
         "pp": 5,
         "base_power": 0,
-        "type": "fighting",
+        "type": "Fighting",
         "attack_flavor": ["protect"],
         "effects": []
     },
@@ -2305,7 +2305,7 @@
         "accuracy": 80,
         "pp": 10,
         "base_power": 25,
-        "type": "ground",
+        "type": "Ground",
         "attack_flavor": ["multi_hit"],
         "effects": []
     },
@@ -2314,7 +2314,7 @@
         "accuracy": 100,
         "pp": 5,
         "base_power": 0,
-        "type": "normal",
+        "type": "Normal",
         "attack_flavor": ["lock_on"],
         "effects": []
     },
@@ -2323,7 +2323,7 @@
         "accuracy": 100,
         "pp": 15,
         "base_power": 90,
-        "type": "dragon",
+        "type": "Dragon",
         "attack_flavor": ["rampage"],
         "effects": []
     },
@@ -2332,7 +2332,7 @@
         "accuracy": 100,
         "pp": 10,
         "base_power": 0,
-        "type": "rock",
+        "type": "Rock",
         "attack_flavor": ["sandstorm"],
         "effects": []
     },
@@ -2341,7 +2341,7 @@
         "accuracy": 100,
         "pp": 5,
         "base_power": 60,
-        "type": "grass",
+        "type": "Grass",
         "attack_flavor": ["drain_hp"],
         "effects": []
     },
@@ -2350,7 +2350,7 @@
         "accuracy": 100,
         "pp": 10,
         "base_power": 0,
-        "type": "normal",
+        "type": "Normal",
         "attack_flavor": ["endure"],
         "effects": []
     },
@@ -2359,7 +2359,7 @@
         "accuracy": 100,
         "pp": 20,
         "base_power": 0,
-        "type": "normal",
+        "type": "Normal",
         "attack_flavor": [],
         "effects": [
             {
@@ -2375,7 +2375,7 @@
         "accuracy": 90,
         "pp": 20,
         "base_power": 30,
-        "type": "rock",
+        "type": "Rock",
         "attack_flavor": ["rollout"],
         "effects": []
     },
@@ -2384,7 +2384,7 @@
         "accuracy": 100,
         "pp": 40,
         "base_power": 40,
-        "type": "normal",
+        "type": "Normal",
         "attack_flavor": ["false_swipe"],
         "effects": []
     },
@@ -2393,7 +2393,7 @@
         "accuracy": 90,
         "pp": 15,
         "base_power": 0,
-        "type": "normal",
+        "type": "Normal",
         "attack_flavor": [],
         "effects": [
             {
@@ -2413,7 +2413,7 @@
         "accuracy": 100,
         "pp": 10,
         "base_power": 0,
-        "type": "normal",
+        "type": "Normal",
         "attack_flavor": ["recover"],
         "effects": []
     },
@@ -2422,7 +2422,7 @@
         "accuracy": 100,
         "pp": 20,
         "base_power": 65,
-        "type": "electric",
+        "type": "Electric",
         "attack_flavor": [],
         "effects": [
             {
@@ -2436,7 +2436,7 @@
         "accuracy": 95,
         "pp": 20,
         "base_power": 10,
-        "type": "bug",
+        "type": "Bug",
         "attack_flavor": ["fury_cutter"],
         "effects": []
     },
@@ -2445,7 +2445,7 @@
         "accuracy": 90,
         "pp": 25,
         "base_power": 70,
-        "type": "steel",
+        "type": "Steel",
         "attack_flavor": [],
         "effects": [
             {
@@ -2461,7 +2461,7 @@
         "accuracy": 100,
         "pp": 5,
         "base_power": 0,
-        "type": "normal",
+        "type": "Normal",
         "attack_flavor": ["mean_look"],
         "effects": []
     },
@@ -2470,7 +2470,7 @@
         "accuracy": 100,
         "pp": 15,
         "base_power": 0,
-        "type": "normal",
+        "type": "Normal",
         "attack_flavor": ["attract"],
         "effects": []
     },
@@ -2479,7 +2479,7 @@
         "accuracy": 100,
         "pp": 10,
         "base_power": 0,
-        "type": "normal",
+        "type": "Normal",
         "attack_flavor": ["sleep_talk"],
         "effects": []
     },
@@ -2488,7 +2488,7 @@
         "accuracy": 100,
         "pp": 5,
         "base_power": 0,
-        "type": "normal",
+        "type": "Normal",
         "attack_flavor": ["heal_bell"],
         "effects": []
     },
@@ -2496,8 +2496,8 @@
         "name": "Return",
         "accuracy": 100,
         "pp": 20,
-        "base_power": 1,
-        "type": "normal",
+        "base_power": 102,
+        "type": "Normal",
         "attack_flavor": ["return"],
         "effects": []
     },
@@ -2506,7 +2506,7 @@
         "accuracy": 90,
         "pp": 15,
         "base_power": 1,
-        "type": "normal",
+        "type": "Normal",
         "attack_flavor": ["present"],
         "effects": []
     },
@@ -2515,7 +2515,7 @@
         "accuracy": 100,
         "pp": 20,
         "base_power": 1,
-        "type": "normal",
+        "type": "Normal",
         "attack_flavor": ["frustration"],
         "effects": []
     },
@@ -2524,7 +2524,7 @@
         "accuracy": 100,
         "pp": 25,
         "base_power": 0,
-        "type": "normal",
+        "type": "Normal",
         "attack_flavor": ["safeguard"],
         "effects": []
     },
@@ -2533,7 +2533,7 @@
         "accuracy": 100,
         "pp": 20,
         "base_power": 0,
-        "type": "normal",
+        "type": "Normal",
         "attack_flavor": ["pain_split"],
         "effects": []
     },
@@ -2542,7 +2542,7 @@
         "accuracy": 95,
         "pp": 5,
         "base_power": 100,
-        "type": "fire",
+        "type": "Fire",
         "attack_flavor": ["self_thaw"],
         "effects": [
             {
@@ -2556,7 +2556,7 @@
         "accuracy": 100,
         "pp": 30,
         "base_power": 1,
-        "type": "ground",
+        "type": "Ground",
         "attack_flavor": ["magnitude"],
         "effects": []
     },
@@ -2565,7 +2565,7 @@
         "accuracy": 50,
         "pp": 5,
         "base_power": 100,
-        "type": "fighting",
+        "type": "Fighting",
         "attack_flavor": [],
         "effects": [
             {
@@ -2579,7 +2579,7 @@
         "accuracy": 85,
         "pp": 10,
         "base_power": 120,
-        "type": "bug",
+        "type": "Bug",
         "attack_flavor": [],
         "effects": []
     },
@@ -2588,7 +2588,7 @@
         "accuracy": 100,
         "pp": 20,
         "base_power": 60,
-        "type": "dragon",
+        "type": "Dragon",
         "attack_flavor": [],
         "effects": [
             {
@@ -2602,7 +2602,7 @@
         "accuracy": 100,
         "pp": 40,
         "base_power": 0,
-        "type": "normal",
+        "type": "Normal",
         "attack_flavor": ["baton_pass"],
         "effects": []
     },
@@ -2611,7 +2611,7 @@
         "accuracy": 100,
         "pp": 5,
         "base_power": 0,
-        "type": "normal",
+        "type": "Normal",
         "attack_flavor": ["encore"],
         "effects": []
     },
@@ -2620,7 +2620,7 @@
         "accuracy": 100,
         "pp": 20,
         "base_power": 40,
-        "type": "dark",
+        "type": "Dark",
         "attack_flavor": ["pursuit"],
         "effects": []
     },
@@ -2629,7 +2629,7 @@
         "accuracy": 100,
         "pp": 40,
         "base_power": 20,
-        "type": "normal",
+        "type": "Normal",
         "attack_flavor": ["rapid_spin"],
         "effects": []
     },
@@ -2638,7 +2638,7 @@
         "accuracy": 100,
         "pp": 20,
         "base_power": 0,
-        "type": "normal",
+        "type": "Normal",
         "attack_flavor": [],
         "effects": [
             {
@@ -2654,7 +2654,7 @@
         "accuracy": 75,
         "pp": 15,
         "base_power": 100,
-        "type": "steel",
+        "type": "Steel",
         "attack_flavor": [],
         "effects": [
             {
@@ -2670,7 +2670,7 @@
         "accuracy": 95,
         "pp": 35,
         "base_power": 50,
-        "type": "steel",
+        "type": "Steel",
         "attack_flavor": [],
         "effects": [
             {
@@ -2686,7 +2686,7 @@
         "accuracy": null,
         "pp": 10,
         "base_power": 70,
-        "type": "fighting",
+        "type": "Fighting",
         "attack_flavor": ["reduced_priority"],
         "effects": []
     },
@@ -2695,7 +2695,7 @@
         "accuracy": 100,
         "pp": 5,
         "base_power": 0,
-        "type": "normal",
+        "type": "Normal",
         "attack_flavor": ["morning_weather_heal"],
         "effects": []
     },
@@ -2704,7 +2704,7 @@
         "accuracy": 100,
         "pp": 5,
         "base_power": 0,
-        "type": "grass",
+        "type": "Grass",
         "attack_flavor": ["day_weather_heal"],
         "effects": []
     },
@@ -2713,7 +2713,7 @@
         "accuracy": 100,
         "pp": 5,
         "base_power": 0,
-        "type": "normal",
+        "type": "Normal",
         "attack_flavor": ["night_weather_heal"],
         "effects": []
     },
@@ -2722,7 +2722,7 @@
         "accuracy": 100,
         "pp": 15,
         "base_power": 0,
-        "type": "normal",
+        "type": "Normal",
         "attack_flavor": ["hidden_power"],
         "effects": []
     },
@@ -2731,7 +2731,7 @@
         "accuracy": 80,
         "pp": 5,
         "base_power": 100,
-        "type": "fighting",
+        "type": "Fighting",
         "attack_flavor": ["high_crit"],
         "effects": []
     },
@@ -2740,7 +2740,7 @@
         "accuracy": 100,
         "pp": 20,
         "base_power": 40,
-        "type": "dragon",
+        "type": "Dragon",
         "attack_flavor": ["bonus_fly_damage"],
         "effects": []
     },
@@ -2749,7 +2749,7 @@
         "accuracy": 90,
         "pp": 5,
         "base_power": 0,
-        "type": "water",
+        "type": "Water",
         "attack_flavor": ["rain_dance"],
         "effects": []
     },
@@ -2758,7 +2758,7 @@
         "accuracy": 90,
         "pp": 5,
         "base_power": 0,
-        "type": "fire",
+        "type": "Fire",
         "attack_flavor": ["sunny_day"],
         "effects": []
     },
@@ -2767,7 +2767,7 @@
         "accuracy": 100,
         "pp": 15,
         "base_power": 80,
-        "type": "dark",
+        "type": "Dark",
         "attack_flavor": [],
         "effects": [
             {
@@ -2783,7 +2783,7 @@
         "accuracy": 100,
         "pp": 20,
         "base_power": 1,
-        "type": "psychic",
+        "type": "Psychic",
         "attack_flavor": ["mirror_coat"],
         "effects": []
     },
@@ -2792,7 +2792,7 @@
         "accuracy": 100,
         "pp": 10,
         "base_power": 0,
-        "type": "normal",
+        "type": "Normal",
         "attack_flavor": ["psych_up"],
         "effects": []
     },
@@ -2801,7 +2801,7 @@
         "accuracy": 100,
         "pp": 5,
         "base_power": 80,
-        "type": "normal",
+        "type": "Normal",
         "attack_flavor": ["increased_priority"],
         "effects": []
     },
@@ -2810,7 +2810,7 @@
         "accuracy": 100,
         "pp": 5,
         "base_power": 60,
-        "type": "rock",
+        "type": "Rock",
         "attack_flavor": [
             {
                 "chance": 20,
@@ -2826,7 +2826,7 @@
         "accuracy": 100,
         "pp": 15,
         "base_power": 80,
-        "type": "ghos",
+        "type": "Ghost",
         "attack_flavor": [],
         "effects": [
             {
@@ -2842,7 +2842,7 @@
         "accuracy": 90,
         "pp": 15,
         "base_power": 80,
-        "type": "psychic",
+        "type": "Psychic",
         "attack_flavor": ["future_sight"],
         "effects": []
     },
@@ -2851,7 +2851,7 @@
         "accuracy": 100,
         "pp": 15,
         "base_power": 20,
-        "type": "fighting",
+        "type": "Fighting",
         "attack_flavor": [],
         "effects": [
             {
@@ -2867,7 +2867,7 @@
         "accuracy": 70,
         "pp": 15,
         "base_power": 15,
-        "type": "water",
+        "type": "Water",
         "attack_flavor": ["trap"],
         "effects": []
     },
@@ -2876,7 +2876,7 @@
         "accuracy": 100,
         "pp": 10,
         "base_power": 10,
-        "type": "dark",
+        "type": "Dark",
         "attack_flavor": ["beat_up"],
         "effects": []
     }
