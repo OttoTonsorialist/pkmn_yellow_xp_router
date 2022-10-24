@@ -19,14 +19,7 @@ class GenTwo(CurrentGen):
         self._pkmn_db = PkmnDB(_load_pkmn_db(pkmn_db_path))
         self._trainer_db = TrainerDB(_load_trainer_db(trainer_db_path, self._pkmn_db))
         self._item_db = ItemDB(_load_item_db(gen_two_const.ITEM_DB_PATH))
-
-        all_stat_modifying_moves = {}
-        for name, val in gen_two_const.STAT_INCREASE_MOVES.items():
-            all_stat_modifying_moves[name] = val
-        for name, val in gen_two_const.STAT_DECREASE_MOVES.items():
-            all_stat_modifying_moves[name] = val
-        self._move_db = MoveDB(_load_move_db(gen_two_const.MOVE_DB_PATH), all_stat_modifying_moves)
-
+        self._move_db = MoveDB(_load_move_db(gen_two_const.MOVE_DB_PATH))
         self._min_battles_db = MinBattlesDB(min_battles_path)
 
         self._pkmn_db.validate_moves(self._move_db)
@@ -92,10 +85,7 @@ class GenTwo(CurrentGen):
         return route_state_objects.Inventory()
     
     def get_stat_modifer_moves(self) -> List[str]:
-        return (
-            list(gen_two_const.STAT_INCREASE_MOVES.keys()) +
-            list(gen_two_const.STAT_DECREASE_MOVES.keys())
-        )
+        return list(self._move_db.stat_mod_moves.keys())
     
     def get_fight_reward(self, trainer_name) -> str:
         return gen_two_const.FIGHT_REWARDS.get(trainer_name)
@@ -239,7 +229,7 @@ def _load_move_db(path):
 gen_two_crystal = GenTwo(
     gen_two_const.CRYSTAL_POKEMON_PATH,
     gen_two_const.CRYSTAL_TRAINER_DB_PATH,
-    gen_two_const.MIN_BATTLES_DIR,
+    gen_two_const.CRYSTAL_MIN_BATTLES_DIR,
     const.CRYSTAL_VERSION
 )
 
@@ -247,13 +237,13 @@ gen_two_crystal = GenTwo(
 gen_two_gold = GenTwo(
     gen_two_const.GS_POKEMON_PATH,
     gen_two_const.GS_TRAINER_DB_PATH,
-    gen_two_const.MIN_BATTLES_DIR,
+    gen_two_const.GS_MIN_BATTLES_DIR,
     const.GOLD_VERSION
 )
 
 gen_two_silver = GenTwo(
     gen_two_const.GS_POKEMON_PATH,
     gen_two_const.GS_TRAINER_DB_PATH,
-    gen_two_const.MIN_BATTLES_DIR,
+    gen_two_const.GS_MIN_BATTLES_DIR,
     const.SILVER_VERSION
 )

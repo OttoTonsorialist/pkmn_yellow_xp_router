@@ -122,7 +122,7 @@
         "pp": 20,
         "base_power": null,
         "type": "Normal",
-        "effects": [{"chance": 100, "modifier": 2, "stat": "Attack", "target": "self"}],
+        "effects": [{"chance": 100, "modifier": 2, "stat": "atk", "target": "self"}],
         "attack_flavor": null
     },
     "Cut": {
@@ -248,7 +248,7 @@
         "pp": 15,
         "base_power": null,
         "type": "Normal",
-        "effects": [{"chance": 100, "modifier": -1, "stat": "Accuracy", "target": "enemy"}],
+        "effects": [{"chance": 100, "modifier": -1, "stat": "acc", "target": "enemy"}],
         "attack_flavor": null
     },
     "Headbutt": {
@@ -347,7 +347,7 @@
         "pp": 30,
         "base_power": null,
         "type": "Normal",
-        "effects": [{"chance": 100, "modifier": -1, "stat": "Defense", "target": "enemy"}],
+        "effects": [{"chance": 100, "modifier": -1, "stat": "def", "target": "enemy"}],
         "attack_flavor": null
     },
     "Poison Sting": {
@@ -383,7 +383,7 @@
         "pp": 30,
         "base_power": null,
         "type": "Normal",
-        "effects": [{"chance": 100, "modifier": -1, "stat": "Defense", "target": "enemy"}],
+        "effects": [{"chance": 100, "modifier": -1, "stat": "def", "target": "enemy"}],
         "attack_flavor": null
     },
     "Bite": {
@@ -401,7 +401,7 @@
         "pp": 40,
         "base_power": null,
         "type": "Normal",
-        "effects": [{"chance": 100, "modifier": -1, "stat": "Attack", "target": "enemy"}],
+        "effects": [{"chance": 100, "modifier": -1, "stat": "atk", "target": "enemy"}],
         "attack_flavor": null
     },
     "Roar": {
@@ -455,7 +455,7 @@
         "pp": 30,
         "base_power": 40,
         "type": "Poison",
-        "effects": [{"chance": 33.2, "modifier": -1, "stat": "Defense", "target": "enemy"}],
+        "effects": [{"chance": 33.2, "modifier": -1, "stat": "def", "target": "enemy"}],
         "attack_flavor": null
     },
     "Ember": {
@@ -545,7 +545,7 @@
         "pp": 20,
         "base_power": 65,
         "type": "Water",
-        "effects": [{"chance": 33.2, "modifier": -1, "stat": "Speed", "target": "enemy"}],
+        "effects": [{"chance": 33.2, "modifier": -1, "stat": "spe", "target": "enemy"}],
         "attack_flavor": null
     },
     "Aurora Beam": {
@@ -554,7 +554,7 @@
         "pp": 20,
         "base_power": 65,
         "type": "Ice",
-        "effects": [{"chance": 33.2, "modifier": -1, "stat": "Attack", "target": "enemy"}],
+        "effects": [{"chance": 33.2, "modifier": -1, "stat": "atk", "target": "enemy"}],
         "attack_flavor": null
     },
     "Hyper Beam": {
@@ -662,7 +662,7 @@
         "pp": 20,
         "base_power": null,
         "type": "Normal",
-        "effects": [{"chance": 100, "modifier": 1, "stat": "Special", "target": "self"}],
+        "effects": [{"chance": 100, "modifier": 1, "stat": "spd", "target": "self"}, {"chance": 100, "modifier": 1, "stat": "spa", "target": "self"}],
         "attack_flavor": null
     },
     "Razor Leaf": {
@@ -725,7 +725,7 @@
         "pp": 40,
         "base_power": null,
         "type": "Bug",
-        "effects": [{"chance": 100, "modifier": -1, "stat": "Speed", "target": "enemy"}],
+        "effects": [{"chance": 100, "modifier": -1, "stat": "spe", "target": "enemy"}],
         "attack_flavor": null
     },
     "Dragon Rage": {
@@ -843,7 +843,7 @@
         "pp": 10,
         "base_power": 90,
         "type": "Psychic",
-        "effects": [{"chance": 33.2, "status": "Confusion"}],
+        "effects": [{"chance": 100, "modifier": -1, "stat": "spa", "target": "self"}, {"chance": 100, "modifier": -1, "stat": "spd", "target": "self"}],
         "attack_flavor": null
     },
     "Hypnosis": {
@@ -861,7 +861,7 @@
         "pp": 40,
         "base_power": null,
         "type": "Psychic",
-        "effects": [{"chance": 100, "modifier": 1, "stat": "Attack", "target": "self"}],
+        "effects": [{"chance": 100, "modifier": 1, "stat": "atk", "target": "self"}],
         "attack_flavor": null
     },
     "Agility": {
@@ -870,7 +870,7 @@
         "pp": 30,
         "base_power": null,
         "type": "Psychic",
-        "effects": [{"chance": 100, "modifier": 2, "stat": "Speed", "target": "self"}],
+        "effects": [{"chance": 100, "modifier": 2, "stat": "spe", "target": "self"}],
         "attack_flavor": null
     },
     "Quick Attack": {
@@ -924,7 +924,7 @@
         "pp": 40,
         "base_power": null,
         "type": "Normal",
-        "effects": [{"chance": 100, "modifier": -2, "stat": "Defense", "target": "enemy"}],
+        "effects": [{"chance": 100, "modifier": -2, "stat": "def", "target": "enemy"}],
         "attack_flavor": null
     },
     "Double Team": {
@@ -933,7 +933,7 @@
         "pp": 15,
         "base_power": null,
         "type": "Normal",
-        "effects": [{"chance": 100, "modifier": 1, "stat": "Evasion", "target": "self"}],
+        "effects": [{"chance": 100, "modifier": 1, "stat": "ev", "target": "self"}],
         "attack_flavor": null
     },
     "Recover": {
@@ -951,7 +951,7 @@
         "pp": 30,
         "base_power": null,
         "type": "Normal",
-        "effects": [{"chance": 100, "modifier": 1, "stat": "Defense", "target": "self"}],
+        "effects": [{"chance": 100, "modifier": 1, "stat": "def", "target": "self"}],
         "attack_flavor": null
     },
     "Minimize": {
@@ -960,7 +960,7 @@
         "pp": 20,
         "base_power": null,
         "type": "Normal",
-        "effects": [{"chance": 100, "modifier": 1, "stat": "Evasion", "target": "self"}],
+        "effects": [{"chance": 100, "modifier": 1, "stat": "ev", "target": "self"}],
         "attack_flavor": null
     },
     "Smokescreen": {
@@ -969,7 +969,7 @@
         "pp": 20,
         "base_power": null,
         "type": "Normal",
-        "effects": [{"chance": 100, "modifier": -1, "stat": "Accuracy", "target": "enemy"}],
+        "effects": [{"chance": 100, "modifier": -1, "stat": "acc", "target": "enemy"}],
         "attack_flavor": null
     },
     "Confuse Ray": {
@@ -987,7 +987,7 @@
         "pp": 40,
         "base_power": null,
         "type": "Water",
-        "effects": [{"chance": 100, "modifier": 1, "stat": "Defense", "target": "self"}],
+        "effects": [{"chance": 100, "modifier": 1, "stat": "def", "target": "self"}],
         "attack_flavor": null
     },
     "Defense Curl": {
@@ -996,7 +996,7 @@
         "pp": 40,
         "base_power": null,
         "type": "Normal",
-        "effects": [{"chance": 100, "modifier": 1, "stat": "Defense", "target": "self"}],
+        "effects": [{"chance": 100, "modifier": 1, "stat": "def", "target": "self"}],
         "attack_flavor": null
     },
     "Barrier": {
@@ -1005,7 +1005,7 @@
         "pp": 30,
         "base_power": null,
         "type": "Psychic",
-        "effects": [{"chance": 100, "modifier": 2, "stat": "Defense", "target": "self"}],
+        "effects": [{"chance": 100, "modifier": 2, "stat": "def", "target": "self"}],
         "attack_flavor": null
     },
     "Light Screen": {
@@ -1185,7 +1185,7 @@
         "pp": 35,
         "base_power": 10,
         "type": "Normal",
-        "effects": [{"chance": 33.2, "modifier": -1, "stat": "Speed", "target": "enemy"}],
+        "effects": [{"chance": 33.2, "modifier": -1, "stat": "spe", "target": "enemy"}],
         "attack_flavor": null
     },
     "Amnesia": {
@@ -1194,7 +1194,7 @@
         "pp": 20,
         "base_power": null,
         "type": "Psychic",
-        "effects": [{"chance": 100, "modifier": 2, "stat": "Special", "target": "self"}],
+        "effects": [{"chance": 100, "modifier": 2, "stat": "spa", "target": "self"}, {"chance": 100, "modifier": 2, "stat": "spd", "target": "self"}],
         "attack_flavor": null
     },
     "Kinesis": {
@@ -1203,7 +1203,7 @@
         "pp": 15,
         "base_power": null,
         "type": "Psychic",
-        "effects": [{"chance": 100, "modifier": -1, "stat": "Accuracy", "target": "enemy"}],
+        "effects": [{"chance": 100, "modifier": -1, "stat": "acc", "target": "enemy"}],
         "attack_flavor": null
     },
     "Softboiled": {
@@ -1302,7 +1302,7 @@
         "pp": 30,
         "base_power": 20,
         "type": "Water",
-        "effects": [{"chance": 33.2, "modifier": -1, "stat": "Speed", "target": "enemy"}],
+        "effects": [{"chance": 33.2, "modifier": -1, "stat": "spe", "target": "enemy"}],
         "attack_flavor": null
     },
     "Dizzy Punch": {
@@ -1329,7 +1329,7 @@
         "pp": 20,
         "base_power": null,
         "type": "Normal",
-        "effects": [{"chance": 100, "modifier": -1, "stat": "Accuracy", "target": "enemy"}],
+        "effects": [{"chance": 100, "modifier": -1, "stat": "acc", "target": "enemy"}],
         "attack_flavor": null
     },
     "Psywave": {
@@ -1356,7 +1356,7 @@
         "pp": 40,
         "base_power": null,
         "type": "Poison",
-        "effects": [{"chance": 100, "modifier": 2, "stat": "Defense", "target": "self"}],
+        "effects": [{"chance": 100, "modifier": 2, "stat": "def", "target": "self"}],
         "attack_flavor": null
     },
     "Crabhammer": {
@@ -1429,7 +1429,7 @@
         "pp": 30,
         "base_power": null,
         "type": "Normal",
-        "effects": [{"chance": 100, "modifier": 1, "stat": "Attack", "target": "self"}],
+        "effects": [{"chance": 100, "modifier": 1, "stat": "atk", "target": "self"}],
         "attack_flavor": null
     },
     "Conversion": {

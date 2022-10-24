@@ -33,6 +33,9 @@ class Constants:
         self.TM_HM_LEARNSET_KEY = "tm_hm_learnset"
         self.DVS_KEY = "dv"
         self.HELD_ITEM_KEY = "held_item"
+        self.STAT_KEY = "stat"
+        self.MODIFIER_KEY = "modifier"
+        self.TARGET_KEY = "target"
 
         self.LEVEL = "level"
         self.HP = "hp"

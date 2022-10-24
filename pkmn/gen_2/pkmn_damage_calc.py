@@ -163,7 +163,7 @@ def calculate_damage(
     temp = math.floor(temp / 50)
 
     if held_item_boost:
-        temp *= math.floor(1.1)
+        temp = math.floor(temp * 1.1)
 
     # forcibly prevent crits for Flail, Reversal, and Future sight
     if is_crit and move.name not in [const.FLAIL_MOVE_NAME, const.REVERSAL_MOVE_NAME, const.FUTURE_SIGHT_MOVE_NAME]:

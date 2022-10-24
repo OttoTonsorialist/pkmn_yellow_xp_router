@@ -118,40 +118,6 @@ class GenOneConstants:
             "Jessie & James 3": "Poke Flute",
         }
 
-        self.STAT_INCREASE_MOVES = {
-            "Growth": [(const.SPA, 1), (const.SPD, 1)],
-            "Swords Dance": [(const.ATK, 2)],
-            "Meditate": [(const.ATK, 1)],
-            "Agility": [(const.SPE, 2)],
-            "Double Team": [(const.EV, 1)],
-            "Harden": [(const.DEF, 1)],
-            "Minimize": [(const.EV, 1)],
-            "Withdraw": [(const.DEF, 1)],
-            "Barrier": [(const.DEF, 2)],
-            "Amnesia": [(const.SPA, 2), (const.SPD, 2)],
-            "Acid Armor": [(const.DEF, 2)],
-            "Sharpen": [(const.ATK, 1)],
-        }
-
-        # still source of badge boost, but not controlled by player
-        self.STAT_DECREASE_MOVES = {
-            "Sand Attack": [(const.ACC, -1)],
-            "Smokescreen": [(const.ACC, -1)],
-            "Kinesis": [(const.ACC, -1)],
-            "Flash": [(const.ACC, -1)],
-            "Tail Whip": [(const.DEF, -1)],
-            "Leer": [(const.DEF, -1)],
-            "Growl": [(const.ATK, -1)],
-            "String Shot": [(const.SPE, -1)],
-            "Screech": [(const.DEF, -2)],
-            "Acid": [(const.DEF, -1)],
-            "BubbleBeam": [(const.SPE, -1)],
-            "Bubble": [(const.SPE, -1)],
-            "Constrict": [(const.SPE, -1)],
-            "Aurora Beam": [(const.ATK, -1)],
-            "Psychic": [(const.SPA, -1), (const.SPD, -1)],
-        }
-
         self.SPECIAL_TYPES = [
             "Water",
             "Grass",

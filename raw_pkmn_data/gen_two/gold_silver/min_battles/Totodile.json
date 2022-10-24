@@ -1,0 +1,3210 @@
+{
+    "name": "Raikou",
+    "dv": {
+        "hp": 15,
+        "atk": 15,
+        "def": 15,
+        "spd": 15,
+        "spc": 15
+    },
+    "Version": "Crystal",
+    "Learn Levelup Move": [
+        [
+            "Leer",
+            null,
+            "LevelUp",
+            1
+        ],
+        [
+            "Thundershock",
+            2,
+            "LevelUp",
+            11
+        ],
+        [
+            "Roar",
+            3,
+            "LevelUp",
+            21
+        ],
+        [
+            "Quick Attack",
+            null,
+            "LevelUp",
+            31
+        ],
+        [
+            "Spark",
+            null,
+            "LevelUp",
+            41
+        ],
+        [
+            "Reflect",
+            null,
+            "LevelUp",
+            51
+        ],
+        [
+            "Crunch",
+            null,
+            "LevelUp",
+            61
+        ],
+        [
+            "Thunder",
+            null,
+            "LevelUp",
+            71
+        ]
+    ],
+    "events": [
+        {
+            "Event Folder Name": "ROOT",
+            "Just Notes": "",
+            "events": [
+                {
+                    "Event Folder Name": "CherrygroveCity",
+                    "Just Notes": "",
+                    "events": [
+                        {
+                            "Enabled": false,
+                            "Fight Trainer": {
+                                "trainer_name": "Rival1 1 Chikorita",
+                                "verbose": false,
+                                "setup_moves": [],
+                                "mimic_selection": "",
+                                "custom_move_data": null
+                            }
+                        },
+                        {
+                            "Enabled": false,
+                            "Fight Trainer": {
+                                "trainer_name": "Rival1 1 Cyndaquil",
+                                "verbose": false,
+                                "setup_moves": [],
+                                "mimic_selection": "",
+                                "custom_move_data": null
+                            }
+                        },
+                        {
+                            "Enabled": true,
+                            "Fight Trainer": {
+                                "trainer_name": "Rival1 1 Totodile",
+                                "verbose": false,
+                                "setup_moves": [],
+                                "mimic_selection": "",
+                                "custom_move_data": null
+                            }
+                        }
+                    ],
+                    "Expanded": true
+                },
+                {
+                    "Enabled": true,
+                    "Fight Trainer": {
+                        "trainer_name": "Youngster Mikey",
+                        "verbose": false,
+                        "setup_moves": [],
+                        "mimic_selection": "",
+                        "custom_move_data": null
+                    }
+                },
+                {
+                    "Event Folder Name": "VioletGym",
+                    "Just Notes": "",
+                    "events": [
+                        {
+                            "Enabled": true,
+                            "Fight Trainer": {
+                                "trainer_name": "Bird Keeper Abe",
+                                "verbose": false,
+                                "setup_moves": [],
+                                "mimic_selection": "",
+                                "custom_move_data": null
+                            }
+                        },
+                        {
+                            "Enabled": true,
+                            "Fight Trainer": {
+                                "trainer_name": "Bird Keeper Rod",
+                                "verbose": false,
+                                "setup_moves": [],
+                                "mimic_selection": "",
+                                "custom_move_data": null
+                            }
+                        },
+                        {
+                            "Enabled": true,
+                            "Fight Trainer": {
+                                "trainer_name": "Leader Falkner",
+                                "verbose": false,
+                                "setup_moves": [],
+                                "mimic_selection": "",
+                                "custom_move_data": null
+                            }
+                        }
+                    ],
+                    "Expanded": true
+                },
+                {
+                    "Event Folder Name": "SproutTower",
+                    "Just Notes": "",
+                    "events": [
+                        {
+                            "Enabled": true,
+                            "Fight Trainer": {
+                                "trainer_name": "Sage Chow",
+                                "verbose": false,
+                                "setup_moves": [],
+                                "mimic_selection": "",
+                                "custom_move_data": null
+                            }
+                        },
+                        {
+                            "Enabled": false,
+                            "Fight Trainer": {
+                                "trainer_name": "Sage Nico",
+                                "verbose": false,
+                                "setup_moves": [],
+                                "mimic_selection": "",
+                                "custom_move_data": null
+                            }
+                        },
+                        {
+                            "Enabled": true,
+                            "Fight Trainer": {
+                                "trainer_name": "Sage Jin",
+                                "verbose": false,
+                                "setup_moves": [],
+                                "mimic_selection": "",
+                                "custom_move_data": null
+                            }
+                        },
+                        {
+                            "Enabled": false,
+                            "Fight Trainer": {
+                                "trainer_name": "Sage Troy",
+                                "verbose": false,
+                                "setup_moves": [],
+                                "mimic_selection": "",
+                                "custom_move_data": null
+                            }
+                        },
+                        {
+                            "Enabled": false,
+                            "Fight Trainer": {
+                                "trainer_name": "Sage Edmond",
+                                "verbose": false,
+                                "setup_moves": [],
+                                "mimic_selection": "",
+                                "custom_move_data": null
+                            }
+                        },
+                        {
+                            "Enabled": true,
+                            "Fight Trainer": {
+                                "trainer_name": "Sage Neal",
+                                "verbose": false,
+                                "setup_moves": [],
+                                "mimic_selection": "",
+                                "custom_move_data": null
+                            }
+                        },
+                        {
+                            "Enabled": true,
+                            "Fight Trainer": {
+                                "trainer_name": "Sage Li",
+                                "verbose": false,
+                                "setup_moves": [],
+                                "mimic_selection": "",
+                                "custom_move_data": null
+                            }
+                        }
+                    ],
+                    "Expanded": false
+                },
+                {
+                    "Event Folder Name": "UnionCave",
+                    "Just Notes": "",
+                    "events": [
+                        {
+                            "Enabled": false,
+                            "Fight Trainer": {
+                                "trainer_name": "CoolTrainerM Nick",
+                                "verbose": false,
+                                "setup_moves": [],
+                                "mimic_selection": "",
+                                "custom_move_data": null
+                            }
+                        },
+                        {
+                            "Enabled": false,
+                            "Fight Trainer": {
+                                "trainer_name": "CoolTrainerF Gwen",
+                                "verbose": false,
+                                "setup_moves": [],
+                                "mimic_selection": "",
+                                "custom_move_data": null
+                            }
+                        },
+                        {
+                            "Enabled": false,
+                            "Fight Trainer": {
+                                "trainer_name": "CoolTrainerF Emma",
+                                "verbose": false,
+                                "setup_moves": [],
+                                "mimic_selection": "",
+                                "custom_move_data": null
+                            }
+                        },
+                        {
+                            "Enabled": false,
+                            "Fight Trainer": {
+                                "trainer_name": "Pokemaniac Larry",
+                                "verbose": false,
+                                "setup_moves": [],
+                                "mimic_selection": "",
+                                "custom_move_data": null
+                            }
+                        },
+                        {
+                            "Enabled": false,
+                            "Fight Trainer": {
+                                "trainer_name": "Pokemaniac Andrew",
+                                "verbose": false,
+                                "setup_moves": [],
+                                "mimic_selection": "",
+                                "custom_move_data": null
+                            }
+                        },
+                        {
+                            "Enabled": false,
+                            "Fight Trainer": {
+                                "trainer_name": "Pokemaniac Calvin",
+                                "verbose": false,
+                                "setup_moves": [],
+                                "mimic_selection": "",
+                                "custom_move_data": null
+                            }
+                        },
+                        {
+                            "Enabled": true,
+                            "Fight Trainer": {
+                                "trainer_name": "Hiker Russell",
+                                "verbose": false,
+                                "setup_moves": [],
+                                "mimic_selection": "",
+                                "custom_move_data": null
+                            }
+                        },
+                        {
+                            "Enabled": false,
+                            "Fight Trainer": {
+                                "trainer_name": "Hiker Phillip",
+                                "verbose": false,
+                                "setup_moves": [],
+                                "mimic_selection": "",
+                                "custom_move_data": null
+                            }
+                        },
+                        {
+                            "Enabled": false,
+                            "Fight Trainer": {
+                                "trainer_name": "Hiker Leonard",
+                                "verbose": false,
+                                "setup_moves": [],
+                                "mimic_selection": "",
+                                "custom_move_data": null
+                            }
+                        },
+                        {
+                            "Enabled": false,
+                            "Fight Trainer": {
+                                "trainer_name": "Hiker Daniel",
+                                "verbose": false,
+                                "setup_moves": [],
+                                "mimic_selection": "",
+                                "custom_move_data": null
+                            }
+                        },
+                        {
+                            "Enabled": false,
+                            "Fight Trainer": {
+                                "trainer_name": "Firebreather Bill",
+                                "verbose": false,
+                                "setup_moves": [],
+                                "mimic_selection": "",
+                                "custom_move_data": null
+                            }
+                        },
+                        {
+                            "Enabled": false,
+                            "Fight Trainer": {
+                                "trainer_name": "Firebreather Ray",
+                                "verbose": false,
+                                "setup_moves": [],
+                                "mimic_selection": "",
+                                "custom_move_data": null
+                            }
+                        }
+                    ],
+                    "Expanded": false
+                },
+                {
+                    "Event Folder Name": "Route33",
+                    "Just Notes": "",
+                    "events": [
+                        {
+                            "Enabled": true,
+                            "Fight Trainer": {
+                                "trainer_name": "Hiker Anthony",
+                                "verbose": false,
+                                "setup_moves": [],
+                                "mimic_selection": "",
+                                "custom_move_data": null
+                            }
+                        }
+                    ],
+                    "Expanded": true
+                },
+                {
+                    "Event Folder Name": "SlowpokeWell",
+                    "Just Notes": "",
+                    "events": [
+                        {
+                            "Enabled": true,
+                            "Fight Trainer": {
+                                "trainer_name": "GruntM 29",
+                                "verbose": false,
+                                "setup_moves": [],
+                                "mimic_selection": "",
+                                "custom_move_data": null
+                            }
+                        },
+                        {
+                            "Enabled": true,
+                            "Fight Trainer": {
+                                "trainer_name": "GruntF 1",
+                                "verbose": false,
+                                "setup_moves": [],
+                                "mimic_selection": "",
+                                "custom_move_data": null
+                            }
+                        },
+                        {
+                            "Enabled": true,
+                            "Fight Trainer": {
+                                "trainer_name": "GruntM 2",
+                                "verbose": false,
+                                "setup_moves": [],
+                                "mimic_selection": "",
+                                "custom_move_data": null
+                            }
+                        },
+                        {
+                            "Enabled": true,
+                            "Fight Trainer": {
+                                "trainer_name": "GruntM 1",
+                                "verbose": false,
+                                "setup_moves": [],
+                                "mimic_selection": "",
+                                "custom_move_data": null
+                            }
+                        }
+                    ],
+                    "Expanded": false
+                },
+                {
+                    "Event Folder Name": "AzaleaGym",
+                    "Just Notes": "",
+                    "events": [
+                        {
+                            "Enabled": true,
+                            "Fight Trainer": {
+                                "trainer_name": "Twins Amy & May",
+                                "verbose": false,
+                                "setup_moves": [],
+                                "mimic_selection": "",
+                                "custom_move_data": null
+                            }
+                        },
+                        {
+                            "Enabled": true,
+                            "Inventory Event": [
+                                "Master Ball",
+                                1,
+                                true,
+                                false
+                            ]
+                        },
+                        {
+                            "Enabled": true,
+                            "Fight Trainer": {
+                                "trainer_name": "Bug Catcher Josh",
+                                "verbose": false,
+                                "setup_moves": [],
+                                "mimic_selection": "",
+                                "custom_move_data": null
+                            }
+                        },
+                        {
+                            "Enabled": true,
+                            "Fight Trainer": {
+                                "trainer_name": "Bug Catcher Benny",
+                                "verbose": false,
+                                "setup_moves": [],
+                                "mimic_selection": "",
+                                "custom_move_data": null
+                            }
+                        },
+                        {
+                            "Enabled": false,
+                            "Fight Trainer": {
+                                "trainer_name": "Bug Catcher Al",
+                                "verbose": false,
+                                "setup_moves": [],
+                                "mimic_selection": "",
+                                "custom_move_data": null
+                            }
+                        },
+                        {
+                            "Enabled": true,
+                            "Fight Trainer": {
+                                "trainer_name": "Leader Bugsy",
+                                "verbose": false,
+                                "setup_moves": [],
+                                "mimic_selection": "",
+                                "custom_move_data": null
+                            }
+                        }
+                    ],
+                    "Expanded": true
+                },
+                {
+                    "Event Folder Name": "AzaleaTown",
+                    "Just Notes": "",
+                    "events": [
+                        {
+                            "Enabled": false,
+                            "Fight Trainer": {
+                                "trainer_name": "Rival1 2 Chikorita",
+                                "verbose": false,
+                                "setup_moves": [],
+                                "mimic_selection": "",
+                                "custom_move_data": null
+                            }
+                        },
+                        {
+                            "Enabled": false,
+                            "Fight Trainer": {
+                                "trainer_name": "Rival1 2 Cyndaquil",
+                                "verbose": false,
+                                "setup_moves": [],
+                                "mimic_selection": "",
+                                "custom_move_data": null
+                            }
+                        },
+                        {
+                            "Enabled": true,
+                            "Fight Trainer": {
+                                "trainer_name": "Rival1 2 Totodile",
+                                "verbose": false,
+                                "setup_moves": [],
+                                "mimic_selection": "",
+                                "custom_move_data": null
+                            }
+                        }
+                    ],
+                    "Expanded": true
+                },
+                {
+                    "Event Folder Name": "GoldenrodUnderground",
+                    "Just Notes": "",
+                    "events": [
+                        {
+                            "Enabled": true,
+                            "Fight Trainer": {
+                                "trainer_name": "Super Nerd Eric",
+                                "verbose": false,
+                                "setup_moves": [],
+                                "mimic_selection": "",
+                                "custom_move_data": null
+                            }
+                        },
+                        {
+                            "Enabled": true,
+                            "Fight Trainer": {
+                                "trainer_name": "Pokemaniac Issac",
+                                "verbose": false,
+                                "setup_moves": [],
+                                "mimic_selection": "",
+                                "custom_move_data": null
+                            }
+                        },
+                        {
+                            "Enabled": true,
+                            "Fight Trainer": {
+                                "trainer_name": "Super Nerd Teru",
+                                "verbose": false,
+                                "setup_moves": [],
+                                "mimic_selection": "",
+                                "custom_move_data": null
+                            }
+                        },
+                        {
+                            "Enabled": true,
+                            "Fight Trainer": {
+                                "trainer_name": "Pokemaniac Donald",
+                                "verbose": false,
+                                "setup_moves": [],
+                                "mimic_selection": "",
+                                "custom_move_data": null
+                            }
+                        }
+                    ],
+                    "Expanded": true
+                },
+                {
+                    "Event Folder Name": "GoldenrodGym",
+                    "Just Notes": "",
+                    "events": [
+                        {
+                            "Enabled": true,
+                            "Fight Trainer": {
+                                "trainer_name": "Beauty Samantha",
+                                "verbose": false,
+                                "setup_moves": [],
+                                "mimic_selection": "",
+                                "custom_move_data": null
+                            }
+                        },
+                        {
+                            "Enabled": true,
+                            "Fight Trainer": {
+                                "trainer_name": "Lass Carrie",
+                                "verbose": false,
+                                "setup_moves": [],
+                                "mimic_selection": "",
+                                "custom_move_data": null
+                            }
+                        },
+                        {
+                            "Enabled": false,
+                            "Fight Trainer": {
+                                "trainer_name": "Lass Bridget",
+                                "verbose": false,
+                                "setup_moves": [],
+                                "mimic_selection": "",
+                                "custom_move_data": null
+                            }
+                        },
+                        {
+                            "Enabled": false,
+                            "Fight Trainer": {
+                                "trainer_name": "Beauty Victoria",
+                                "verbose": false,
+                                "setup_moves": [],
+                                "mimic_selection": "",
+                                "custom_move_data": null
+                            }
+                        },
+                        {
+                            "Enabled": true,
+                            "Fight Trainer": {
+                                "trainer_name": "Leader Whitney",
+                                "verbose": false,
+                                "setup_moves": [],
+                                "mimic_selection": "",
+                                "custom_move_data": null
+                            }
+                        }
+                    ],
+                    "Expanded": true
+                },
+                {
+                    "Event Folder Name": "Route35",
+                    "Just Notes": "",
+                    "events": [
+                        {
+                            "Enabled": true,
+                            "Fight Trainer": {
+                                "trainer_name": "Camper Ivan",
+                                "verbose": false,
+                                "setup_moves": [],
+                                "mimic_selection": "",
+                                "custom_move_data": null
+                            }
+                        },
+                        {
+                            "Enabled": true,
+                            "Fight Trainer": {
+                                "trainer_name": "Firebreather Walt",
+                                "verbose": false,
+                                "setup_moves": [],
+                                "mimic_selection": "",
+                                "custom_move_data": null
+                            }
+                        },
+                        {
+                            "Enabled": true,
+                            "Fight Trainer": {
+                                "trainer_name": "Juggler Irwin",
+                                "verbose": false,
+                                "setup_moves": [],
+                                "mimic_selection": "",
+                                "custom_move_data": null
+                            }
+                        },
+                        {
+                            "Enabled": true,
+                            "Fight Trainer": {
+                                "trainer_name": "Picnicker Kim",
+                                "verbose": false,
+                                "setup_moves": [],
+                                "mimic_selection": "",
+                                "custom_move_data": null
+                            }
+                        },
+                        {
+                            "Enabled": true,
+                            "Fight Trainer": {
+                                "trainer_name": "Bug Catcher Arnie",
+                                "verbose": false,
+                                "setup_moves": [],
+                                "mimic_selection": "",
+                                "custom_move_data": null
+                            }
+                        }
+                    ],
+                    "Expanded": true
+                },
+                {
+                    "Event Folder Name": "Route37",
+                    "Just Notes": "",
+                    "events": [
+                        {
+                            "Enabled": true,
+                            "Fight Trainer": {
+                                "trainer_name": "Psychic Greg",
+                                "verbose": false,
+                                "setup_moves": [],
+                                "mimic_selection": "",
+                                "custom_move_data": null
+                            }
+                        }
+                    ],
+                    "Expanded": true
+                },
+                {
+                    "Event Folder Name": "BurnedTower",
+                    "Just Notes": "",
+                    "events": [
+                        {
+                            "Enabled": false,
+                            "Fight Trainer": {
+                                "trainer_name": "Rival1 3 Chikorita",
+                                "verbose": false,
+                                "setup_moves": [],
+                                "mimic_selection": "",
+                                "custom_move_data": null
+                            }
+                        },
+                        {
+                            "Enabled": false,
+                            "Fight Trainer": {
+                                "trainer_name": "Rival1 3 Cyndaquil",
+                                "verbose": false,
+                                "setup_moves": [],
+                                "mimic_selection": "",
+                                "custom_move_data": null
+                            }
+                        },
+                        {
+                            "Enabled": true,
+                            "Fight Trainer": {
+                                "trainer_name": "Rival1 3 Totodile",
+                                "verbose": false,
+                                "setup_moves": [],
+                                "mimic_selection": "",
+                                "custom_move_data": null
+                            }
+                        }
+                    ],
+                    "Expanded": true
+                },
+                {
+                    "Event Folder Name": "Route38",
+                    "Just Notes": "",
+                    "events": [
+                        {
+                            "Enabled": true,
+                            "Fight Trainer": {
+                                "trainer_name": "Sailor Harry",
+                                "verbose": false,
+                                "setup_moves": [],
+                                "mimic_selection": "",
+                                "custom_move_data": null
+                            }
+                        },
+                        {
+                            "Enabled": true,
+                            "Fight Trainer": {
+                                "trainer_name": "Lass Dana",
+                                "verbose": false,
+                                "setup_moves": [],
+                                "mimic_selection": "",
+                                "custom_move_data": null
+                            }
+                        }
+                    ],
+                    "Expanded": true
+                },
+                {
+                    "Event Folder Name": "Route39",
+                    "Just Notes": "",
+                    "events": [
+                        {
+                            "Enabled": true,
+                            "Fight Trainer": {
+                                "trainer_name": "Psychic Norman",
+                                "verbose": false,
+                                "setup_moves": [],
+                                "mimic_selection": "",
+                                "custom_move_data": null
+                            }
+                        },
+                        {
+                            "Enabled": true,
+                            "Fight Trainer": {
+                                "trainer_name": "PokefanM Derek",
+                                "verbose": false,
+                                "setup_moves": [],
+                                "mimic_selection": "",
+                                "custom_move_data": null
+                            }
+                        }
+                    ],
+                    "Expanded": true
+                },
+                {
+                    "Event Folder Name": "OlivineLighthouse",
+                    "Just Notes": "",
+                    "events": [
+                        {
+                            "Enabled": true,
+                            "Fight Trainer": {
+                                "trainer_name": "Gentleman Alfred",
+                                "verbose": false,
+                                "setup_moves": [],
+                                "mimic_selection": "",
+                                "custom_move_data": null
+                            }
+                        },
+                        {
+                            "Enabled": true,
+                            "Fight Trainer": {
+                                "trainer_name": "Sailor Huey",
+                                "verbose": false,
+                                "setup_moves": [],
+                                "mimic_selection": "",
+                                "custom_move_data": null
+                            }
+                        },
+                        {
+                            "Enabled": false,
+                            "Fight Trainer": {
+                                "trainer_name": "Bird Keeper Theo",
+                                "verbose": false,
+                                "setup_moves": [],
+                                "mimic_selection": "",
+                                "custom_move_data": null
+                            }
+                        },
+                        {
+                            "Enabled": true,
+                            "Fight Trainer": {
+                                "trainer_name": "Gentleman Preston",
+                                "verbose": false,
+                                "setup_moves": [],
+                                "mimic_selection": "",
+                                "custom_move_data": null
+                            }
+                        },
+                        {
+                            "Enabled": true,
+                            "Fight Trainer": {
+                                "trainer_name": "Lass Connie",
+                                "verbose": false,
+                                "setup_moves": [],
+                                "mimic_selection": "",
+                                "custom_move_data": null
+                            }
+                        },
+                        {
+                            "Enabled": true,
+                            "Fight Trainer": {
+                                "trainer_name": "Sailor Terrell",
+                                "verbose": false,
+                                "setup_moves": [],
+                                "mimic_selection": "",
+                                "custom_move_data": null
+                            }
+                        },
+                        {
+                            "Enabled": true,
+                            "Fight Trainer": {
+                                "trainer_name": "Sailor Ernest",
+                                "verbose": false,
+                                "setup_moves": [],
+                                "mimic_selection": "",
+                                "custom_move_data": null
+                            }
+                        },
+                        {
+                            "Enabled": false,
+                            "Fight Trainer": {
+                                "trainer_name": "Bird Keeper Denis",
+                                "verbose": false,
+                                "setup_moves": [],
+                                "mimic_selection": "",
+                                "custom_move_data": null
+                            }
+                        },
+                        {
+                            "Enabled": false,
+                            "Fight Trainer": {
+                                "trainer_name": "Sailor Kent",
+                                "verbose": false,
+                                "setup_moves": [],
+                                "mimic_selection": "",
+                                "custom_move_data": null
+                            }
+                        }
+                    ],
+                    "Expanded": true
+                },
+                {
+                    "Event Folder Name": "DanceTheatre",
+                    "Just Notes": "",
+                    "events": [
+                        {
+                            "Enabled": true,
+                            "Fight Trainer": {
+                                "trainer_name": "Kimono Girl Naoko",
+                                "verbose": false,
+                                "setup_moves": [],
+                                "mimic_selection": "",
+                                "custom_move_data": null
+                            }
+                        },
+                        {
+                            "Enabled": true,
+                            "Fight Trainer": {
+                                "trainer_name": "Kimono Girl Sayo",
+                                "verbose": false,
+                                "setup_moves": [],
+                                "mimic_selection": "",
+                                "custom_move_data": null
+                            }
+                        },
+                        {
+                            "Enabled": true,
+                            "Fight Trainer": {
+                                "trainer_name": "Kimono Girl Zuki",
+                                "verbose": false,
+                                "setup_moves": [],
+                                "mimic_selection": "",
+                                "custom_move_data": null
+                            }
+                        },
+                        {
+                            "Enabled": true,
+                            "Fight Trainer": {
+                                "trainer_name": "Kimono Girl Kuni",
+                                "verbose": false,
+                                "setup_moves": [],
+                                "mimic_selection": "",
+                                "custom_move_data": null
+                            }
+                        },
+                        {
+                            "Enabled": true,
+                            "Fight Trainer": {
+                                "trainer_name": "Kimono Girl Miki",
+                                "verbose": false,
+                                "setup_moves": [],
+                                "mimic_selection": "",
+                                "custom_move_data": null
+                            }
+                        }
+                    ],
+                    "Expanded": true
+                },
+                {
+                    "Event Folder Name": "EcruteakGym",
+                    "Just Notes": "",
+                    "events": [
+                        {
+                            "Enabled": true,
+                            "Fight Trainer": {
+                                "trainer_name": "Sage Ping",
+                                "verbose": false,
+                                "setup_moves": [],
+                                "mimic_selection": "",
+                                "custom_move_data": null
+                            }
+                        },
+                        {
+                            "Enabled": true,
+                            "Fight Trainer": {
+                                "trainer_name": "Medium Grace",
+                                "verbose": false,
+                                "setup_moves": [],
+                                "mimic_selection": "",
+                                "custom_move_data": null
+                            }
+                        },
+                        {
+                            "Enabled": true,
+                            "Fight Trainer": {
+                                "trainer_name": "Sage Jeffrey",
+                                "verbose": false,
+                                "setup_moves": [],
+                                "mimic_selection": "",
+                                "custom_move_data": null
+                            }
+                        },
+                        {
+                            "Enabled": true,
+                            "Fight Trainer": {
+                                "trainer_name": "Medium Martha",
+                                "verbose": false,
+                                "setup_moves": [],
+                                "mimic_selection": "",
+                                "custom_move_data": null
+                            }
+                        },
+                        {
+                            "Enabled": true,
+                            "Fight Trainer": {
+                                "trainer_name": "Leader Morty",
+                                "verbose": false,
+                                "setup_moves": [],
+                                "mimic_selection": "",
+                                "custom_move_data": null
+                            }
+                        }
+                    ],
+                    "Expanded": true
+                },
+                {
+                    "Event Folder Name": "Route41",
+                    "Just Notes": "",
+                    "events": [
+                        {
+                            "Enabled": false,
+                            "Fight Trainer": {
+                                "trainer_name": "SwimmerM Charlie",
+                                "verbose": false,
+                                "setup_moves": [],
+                                "mimic_selection": "",
+                                "custom_move_data": null
+                            }
+                        },
+                        {
+                            "Enabled": false,
+                            "Fight Trainer": {
+                                "trainer_name": "SwimmerM George",
+                                "verbose": false,
+                                "setup_moves": [],
+                                "mimic_selection": "",
+                                "custom_move_data": null
+                            }
+                        },
+                        {
+                            "Enabled": false,
+                            "Fight Trainer": {
+                                "trainer_name": "SwimmerM Berke",
+                                "verbose": false,
+                                "setup_moves": [],
+                                "mimic_selection": "",
+                                "custom_move_data": null
+                            }
+                        },
+                        {
+                            "Enabled": false,
+                            "Fight Trainer": {
+                                "trainer_name": "SwimmerM Kirk",
+                                "verbose": false,
+                                "setup_moves": [],
+                                "mimic_selection": "",
+                                "custom_move_data": null
+                            }
+                        },
+                        {
+                            "Enabled": false,
+                            "Fight Trainer": {
+                                "trainer_name": "SwimmerM Mathew",
+                                "verbose": false,
+                                "setup_moves": [],
+                                "mimic_selection": "",
+                                "custom_move_data": null
+                            }
+                        },
+                        {
+                            "Enabled": false,
+                            "Fight Trainer": {
+                                "trainer_name": "SwimmerF Kaylee",
+                                "verbose": false,
+                                "setup_moves": [],
+                                "mimic_selection": "",
+                                "custom_move_data": null
+                            }
+                        },
+                        {
+                            "Enabled": true,
+                            "Fight Trainer": {
+                                "trainer_name": "SwimmerF Susie",
+                                "verbose": false,
+                                "setup_moves": [],
+                                "mimic_selection": "",
+                                "custom_move_data": null
+                            }
+                        },
+                        {
+                            "Enabled": false,
+                            "Fight Trainer": {
+                                "trainer_name": "SwimmerF Denise",
+                                "verbose": false,
+                                "setup_moves": [],
+                                "mimic_selection": "",
+                                "custom_move_data": null
+                            }
+                        },
+                        {
+                            "Enabled": false,
+                            "Fight Trainer": {
+                                "trainer_name": "SwimmerF Kara",
+                                "verbose": false,
+                                "setup_moves": [],
+                                "mimic_selection": "",
+                                "custom_move_data": null
+                            }
+                        },
+                        {
+                            "Enabled": false,
+                            "Fight Trainer": {
+                                "trainer_name": "SwimmerF Wendy",
+                                "verbose": false,
+                                "setup_moves": [],
+                                "mimic_selection": "",
+                                "custom_move_data": null
+                            }
+                        }
+                    ],
+                    "Expanded": true
+                },
+                {
+                    "Event Folder Name": "CianwoodGym",
+                    "Just Notes": "",
+                    "events": [
+                        {
+                            "Enabled": true,
+                            "Fight Trainer": {
+                                "trainer_name": "Blackbelt Yoshi",
+                                "verbose": false,
+                                "setup_moves": [],
+                                "mimic_selection": "",
+                                "custom_move_data": null
+                            }
+                        },
+                        {
+                            "Enabled": true,
+                            "Fight Trainer": {
+                                "trainer_name": "Blackbelt Lao",
+                                "verbose": false,
+                                "setup_moves": [],
+                                "mimic_selection": "",
+                                "custom_move_data": null
+                            }
+                        },
+                        {
+                            "Enabled": true,
+                            "Fight Trainer": {
+                                "trainer_name": "Blackbelt Nob",
+                                "verbose": false,
+                                "setup_moves": [],
+                                "mimic_selection": "",
+                                "custom_move_data": null
+                            }
+                        },
+                        {
+                            "Enabled": true,
+                            "Fight Trainer": {
+                                "trainer_name": "Blackbelt Lung",
+                                "verbose": false,
+                                "setup_moves": [],
+                                "mimic_selection": "",
+                                "custom_move_data": null
+                            }
+                        },
+                        {
+                            "Enabled": true,
+                            "Fight Trainer": {
+                                "trainer_name": "Leader Chuck",
+                                "verbose": false,
+                                "setup_moves": [],
+                                "mimic_selection": "",
+                                "custom_move_data": null
+                            }
+                        }
+                    ],
+                    "Expanded": true
+                },
+                {
+                    "Event Folder Name": "OlivineGym",
+                    "Just Notes": "",
+                    "events": [
+                        {
+                            "Enabled": true,
+                            "Fight Trainer": {
+                                "trainer_name": "Leader Jasmine",
+                                "verbose": false,
+                                "setup_moves": [],
+                                "mimic_selection": "",
+                                "custom_move_data": null
+                            }
+                        }
+                    ],
+                    "Expanded": true
+                },
+                {
+                    "Event Folder Name": "Route42",
+                    "Just Notes": "",
+                    "events": [
+                        {
+                            "Enabled": false,
+                            "Fight Trainer": {
+                                "trainer_name": "Pokemaniac Shane",
+                                "verbose": false,
+                                "setup_moves": [],
+                                "mimic_selection": "",
+                                "custom_move_data": null
+                            }
+                        },
+                        {
+                            "Enabled": true,
+                            "Fight Trainer": {
+                                "trainer_name": "Hiker Benjamin",
+                                "verbose": false,
+                                "setup_moves": [],
+                                "mimic_selection": "",
+                                "custom_move_data": null
+                            }
+                        }
+                    ],
+                    "Expanded": true
+                },
+                {
+                    "Event Folder Name": "Route43",
+                    "Just Notes": "",
+                    "events": [
+                        {
+                            "Enabled": false,
+                            "Fight Trainer": {
+                                "trainer_name": "Pokemaniac Ben",
+                                "verbose": false,
+                                "setup_moves": [],
+                                "mimic_selection": "",
+                                "custom_move_data": null
+                            }
+                        },
+                        {
+                            "Enabled": true,
+                            "Fight Trainer": {
+                                "trainer_name": "Pokemaniac Brent",
+                                "verbose": false,
+                                "setup_moves": [],
+                                "mimic_selection": "",
+                                "custom_move_data": null
+                            }
+                        },
+                        {
+                            "Enabled": false,
+                            "Fight Trainer": {
+                                "trainer_name": "Pokemaniac Ron",
+                                "verbose": false,
+                                "setup_moves": [],
+                                "mimic_selection": "",
+                                "custom_move_data": null
+                            }
+                        },
+                        {
+                            "Enabled": false,
+                            "Fight Trainer": {
+                                "trainer_name": "Fisher Marvin",
+                                "verbose": false,
+                                "setup_moves": [],
+                                "mimic_selection": "",
+                                "custom_move_data": null
+                            }
+                        },
+                        {
+                            "Enabled": false,
+                            "Fight Trainer": {
+                                "trainer_name": "Picnicker Tiffany",
+                                "verbose": false,
+                                "setup_moves": [],
+                                "mimic_selection": "",
+                                "custom_move_data": null
+                            }
+                        },
+                        {
+                            "Enabled": false,
+                            "Fight Trainer": {
+                                "trainer_name": "Camper Spencer",
+                                "verbose": false,
+                                "setup_moves": [],
+                                "mimic_selection": "",
+                                "custom_move_data": null
+                            }
+                        }
+                    ],
+                    "Expanded": true
+                },
+                {
+                    "Event Folder Name": "LakeOfRage",
+                    "Just Notes": "",
+                    "events": [
+                        {
+                            "Enabled": true,
+                            "Fight Wild Pkmn": [
+                                "Gyarados",
+                                30,
+                                1,
+                                false
+                            ]
+                        }
+                    ],
+                    "Expanded": true
+                },
+                {
+                    "Event Folder Name": "TeamRocketBase",
+                    "Just Notes": "",
+                    "events": [
+                        {
+                            "Enabled": true,
+                            "Fight Trainer": {
+                                "trainer_name": "GruntM 20",
+                                "verbose": false,
+                                "setup_moves": [],
+                                "mimic_selection": "",
+                                "custom_move_data": null
+                            }
+                        },
+                        {
+                            "Enabled": true,
+                            "Fight Trainer": {
+                                "trainer_name": "GruntM 21",
+                                "verbose": false,
+                                "setup_moves": [],
+                                "mimic_selection": "",
+                                "custom_move_data": null
+                            }
+                        },
+                        {
+                            "Enabled": true,
+                            "Fight Trainer": {
+                                "trainer_name": "Scientist Jed",
+                                "verbose": false,
+                                "setup_moves": [],
+                                "mimic_selection": "",
+                                "custom_move_data": null
+                            }
+                        },
+                        {
+                            "Enabled": true,
+                            "Fight Trainer": {
+                                "trainer_name": "GruntM 19",
+                                "verbose": false,
+                                "setup_moves": [],
+                                "mimic_selection": "",
+                                "custom_move_data": null
+                            }
+                        },
+                        {
+                            "Enabled": true,
+                            "Fight Trainer": {
+                                "trainer_name": "GruntF 5",
+                                "verbose": false,
+                                "setup_moves": [],
+                                "mimic_selection": "",
+                                "custom_move_data": null
+                            }
+                        },
+                        {
+                            "Enabled": true,
+                            "Fight Trainer": {
+                                "trainer_name": "GruntM 28",
+                                "verbose": false,
+                                "setup_moves": [],
+                                "mimic_selection": "",
+                                "custom_move_data": null
+                            }
+                        },
+                        {
+                            "Enabled": true,
+                            "Fight Trainer": {
+                                "trainer_name": "GruntM 18",
+                                "verbose": false,
+                                "setup_moves": [],
+                                "mimic_selection": "",
+                                "custom_move_data": null
+                            }
+                        },
+                        {
+                            "Enabled": false,
+                            "Fight Trainer": {
+                                "trainer_name": "Scientist Ross",
+                                "verbose": false,
+                                "setup_moves": [],
+                                "mimic_selection": "",
+                                "custom_move_data": null
+                            }
+                        },
+                        {
+                            "Enabled": false,
+                            "Fight Trainer": {
+                                "trainer_name": "Scientist Mitch",
+                                "verbose": false,
+                                "setup_moves": [],
+                                "mimic_selection": "",
+                                "custom_move_data": null
+                            }
+                        },
+                        {
+                            "Enabled": false,
+                            "Fight Trainer": {
+                                "trainer_name": "GruntM 16",
+                                "verbose": false,
+                                "setup_moves": [],
+                                "mimic_selection": "",
+                                "custom_move_data": null
+                            }
+                        },
+                        {
+                            "Enabled": false,
+                            "Fight Trainer": {
+                                "trainer_name": "GruntM 17",
+                                "verbose": false,
+                                "setup_moves": [],
+                                "mimic_selection": "",
+                                "custom_move_data": null
+                            }
+                        },
+                        {
+                            "Enabled": true,
+                            "Fight Trainer": {
+                                "trainer_name": "ExecutiveM 4",
+                                "verbose": false,
+                                "setup_moves": [],
+                                "mimic_selection": "",
+                                "custom_move_data": null
+                            }
+                        },
+                        {
+                            "Enabled": true,
+                            "Fight Trainer": {
+                                "trainer_name": "ExecutiveF 2",
+                                "verbose": false,
+                                "setup_moves": [],
+                                "mimic_selection": "",
+                                "custom_move_data": null
+                            }
+                        },
+                        {
+                            "Enabled": true,
+                            "Fight Wild Pkmn": [
+                                "Electrode",
+                                23,
+                                3,
+                                false
+                            ]
+                        }
+                    ],
+                    "Expanded": true
+                },
+                {
+                    "Event Folder Name": "MahoganyGym",
+                    "Just Notes": "",
+                    "events": [
+                        {
+                            "Enabled": false,
+                            "Fight Trainer": {
+                                "trainer_name": "Skier Roxanne",
+                                "verbose": false,
+                                "setup_moves": [],
+                                "mimic_selection": "",
+                                "custom_move_data": null
+                            }
+                        },
+                        {
+                            "Enabled": false,
+                            "Fight Trainer": {
+                                "trainer_name": "Skier Clarissa",
+                                "verbose": false,
+                                "setup_moves": [],
+                                "mimic_selection": "",
+                                "custom_move_data": null
+                            }
+                        },
+                        {
+                            "Enabled": false,
+                            "Fight Trainer": {
+                                "trainer_name": "Boarder Ronald",
+                                "verbose": false,
+                                "setup_moves": [],
+                                "mimic_selection": "",
+                                "custom_move_data": null
+                            }
+                        },
+                        {
+                            "Enabled": false,
+                            "Fight Trainer": {
+                                "trainer_name": "Boarder Brad",
+                                "verbose": false,
+                                "setup_moves": [],
+                                "mimic_selection": "",
+                                "custom_move_data": null
+                            }
+                        },
+                        {
+                            "Enabled": true,
+                            "Fight Trainer": {
+                                "trainer_name": "Boarder Douglas",
+                                "verbose": false,
+                                "setup_moves": [],
+                                "mimic_selection": "",
+                                "custom_move_data": null
+                            }
+                        },
+                        {
+                            "Enabled": true,
+                            "Fight Trainer": {
+                                "trainer_name": "Leader Pryce",
+                                "verbose": false,
+                                "setup_moves": [],
+                                "mimic_selection": "",
+                                "custom_move_data": null
+                            }
+                        }
+                    ],
+                    "Expanded": true
+                },
+                {
+                    "Event Folder Name": "RadioTower",
+                    "Just Notes": "",
+                    "events": [
+                        {
+                            "Enabled": true,
+                            "Fight Trainer": {
+                                "trainer_name": "GruntM 3",
+                                "verbose": false,
+                                "setup_moves": [],
+                                "mimic_selection": "",
+                                "custom_move_data": null
+                            }
+                        },
+                        {
+                            "Enabled": true,
+                            "Fight Trainer": {
+                                "trainer_name": "GruntF 2",
+                                "verbose": false,
+                                "setup_moves": [],
+                                "mimic_selection": "",
+                                "custom_move_data": null
+                            }
+                        },
+                        {
+                            "Enabled": true,
+                            "Fight Trainer": {
+                                "trainer_name": "GruntM 6",
+                                "verbose": false,
+                                "setup_moves": [],
+                                "mimic_selection": "",
+                                "custom_move_data": null
+                            }
+                        },
+                        {
+                            "Enabled": true,
+                            "Fight Trainer": {
+                                "trainer_name": "GruntM 4",
+                                "verbose": false,
+                                "setup_moves": [],
+                                "mimic_selection": "",
+                                "custom_move_data": null
+                            }
+                        },
+                        {
+                            "Enabled": true,
+                            "Fight Trainer": {
+                                "trainer_name": "Scientist Marc",
+                                "verbose": false,
+                                "setup_moves": [],
+                                "mimic_selection": "",
+                                "custom_move_data": null
+                            }
+                        },
+                        {
+                            "Enabled": true,
+                            "Fight Trainer": {
+                                "trainer_name": "GruntM 7",
+                                "verbose": false,
+                                "setup_moves": [],
+                                "mimic_selection": "",
+                                "custom_move_data": null
+                            }
+                        },
+                        {
+                            "Enabled": true,
+                            "Fight Trainer": {
+                                "trainer_name": "Scientist Rich",
+                                "verbose": false,
+                                "setup_moves": [],
+                                "mimic_selection": "",
+                                "custom_move_data": null
+                            }
+                        },
+                        {
+                            "Enabled": true,
+                            "Fight Trainer": {
+                                "trainer_name": "ExecutiveM 3",
+                                "verbose": false,
+                                "setup_moves": [],
+                                "mimic_selection": "",
+                                "custom_move_data": null
+                            }
+                        }
+                    ],
+                    "Expanded": true
+                },
+                {
+                    "Event Folder Name": "GoldenrodUnderground Trip:2",
+                    "Just Notes": "",
+                    "events": [
+                        {
+                            "Enabled": false,
+                            "Fight Trainer": {
+                                "trainer_name": "Rival1 4 Chikorita",
+                                "verbose": false,
+                                "setup_moves": [],
+                                "mimic_selection": "",
+                                "custom_move_data": null
+                            }
+                        },
+                        {
+                            "Enabled": false,
+                            "Fight Trainer": {
+                                "trainer_name": "Rival1 4 Cyndaquil",
+                                "verbose": false,
+                                "setup_moves": [],
+                                "mimic_selection": "",
+                                "custom_move_data": null
+                            }
+                        },
+                        {
+                            "Enabled": true,
+                            "Fight Trainer": {
+                                "trainer_name": "Rival1 4 Totodile",
+                                "verbose": false,
+                                "setup_moves": [],
+                                "mimic_selection": "",
+                                "custom_move_data": null
+                            }
+                        },
+                        {
+                            "Enabled": true,
+                            "Fight Trainer": {
+                                "trainer_name": "GruntM 13",
+                                "verbose": false,
+                                "setup_moves": [],
+                                "mimic_selection": "",
+                                "custom_move_data": null
+                            }
+                        },
+                        {
+                            "Enabled": true,
+                            "Fight Trainer": {
+                                "trainer_name": "GruntM 11",
+                                "verbose": false,
+                                "setup_moves": [],
+                                "mimic_selection": "",
+                                "custom_move_data": null
+                            }
+                        },
+                        {
+                            "Enabled": true,
+                            "Fight Trainer": {
+                                "trainer_name": "GruntM 25",
+                                "verbose": false,
+                                "setup_moves": [],
+                                "mimic_selection": "",
+                                "custom_move_data": null
+                            }
+                        },
+                        {
+                            "Enabled": true,
+                            "Fight Trainer": {
+                                "trainer_name": "Burglar Eddie",
+                                "verbose": false,
+                                "setup_moves": [],
+                                "mimic_selection": "",
+                                "custom_move_data": null
+                            }
+                        },
+                        {
+                            "Enabled": true,
+                            "Fight Trainer": {
+                                "trainer_name": "Burglar Duncan",
+                                "verbose": false,
+                                "setup_moves": [],
+                                "mimic_selection": "",
+                                "custom_move_data": null
+                            }
+                        },
+                        {
+                            "Enabled": true,
+                            "Fight Trainer": {
+                                "trainer_name": "GruntF 3",
+                                "verbose": false,
+                                "setup_moves": [],
+                                "mimic_selection": "",
+                                "custom_move_data": null
+                            }
+                        },
+                        {
+                            "Enabled": true,
+                            "Fight Trainer": {
+                                "trainer_name": "GruntM 14",
+                                "verbose": false,
+                                "setup_moves": [],
+                                "mimic_selection": "",
+                                "custom_move_data": null
+                            }
+                        },
+                        {
+                            "Enabled": true,
+                            "Fight Trainer": {
+                                "trainer_name": "GruntM 15",
+                                "verbose": false,
+                                "setup_moves": [],
+                                "mimic_selection": "",
+                                "custom_move_data": null
+                            }
+                        },
+                        {
+                            "Enabled": true,
+                            "Fight Trainer": {
+                                "trainer_name": "GruntM 24",
+                                "verbose": false,
+                                "setup_moves": [],
+                                "mimic_selection": "",
+                                "custom_move_data": null
+                            }
+                        }
+                    ],
+                    "Expanded": true
+                },
+                {
+                    "Event Folder Name": "RadioTower Trip:2",
+                    "Just Notes": "",
+                    "events": [
+                        {
+                            "Enabled": false,
+                            "Fight Trainer": {
+                                "trainer_name": "GruntM 5",
+                                "verbose": false,
+                                "setup_moves": [],
+                                "mimic_selection": "",
+                                "custom_move_data": null
+                            }
+                        },
+                        {
+                            "Enabled": false,
+                            "Fight Trainer": {
+                                "trainer_name": "GruntM 8",
+                                "verbose": false,
+                                "setup_moves": [],
+                                "mimic_selection": "",
+                                "custom_move_data": null
+                            }
+                        },
+                        {
+                            "Enabled": true,
+                            "Fight Trainer": {
+                                "trainer_name": "GruntM 9",
+                                "verbose": false,
+                                "setup_moves": [],
+                                "mimic_selection": "",
+                                "custom_move_data": null
+                            }
+                        },
+                        {
+                            "Enabled": false,
+                            "Fight Trainer": {
+                                "trainer_name": "GruntM 10",
+                                "verbose": false,
+                                "setup_moves": [],
+                                "mimic_selection": "",
+                                "custom_move_data": null
+                            }
+                        },
+                        {
+                            "Enabled": true,
+                            "Fight Trainer": {
+                                "trainer_name": "ExecutiveM 2",
+                                "verbose": false,
+                                "setup_moves": [],
+                                "mimic_selection": "",
+                                "custom_move_data": null
+                            }
+                        },
+                        {
+                            "Enabled": true,
+                            "Fight Trainer": {
+                                "trainer_name": "ExecutiveF 1",
+                                "verbose": false,
+                                "setup_moves": [],
+                                "mimic_selection": "",
+                                "custom_move_data": null
+                            }
+                        },
+                        {
+                            "Enabled": true,
+                            "Fight Trainer": {
+                                "trainer_name": "ExecutiveM 1",
+                                "verbose": false,
+                                "setup_moves": [],
+                                "mimic_selection": "",
+                                "custom_move_data": null
+                            }
+                        },
+                        {
+                            "Enabled": false,
+                            "Fight Trainer": {
+                                "trainer_name": "GruntF 4",
+                                "verbose": false,
+                                "setup_moves": [],
+                                "mimic_selection": "",
+                                "custom_move_data": null
+                            }
+                        }
+                    ],
+                    "Expanded": true
+                },
+                {
+                    "Event Folder Name": "Route44",
+                    "Just Notes": "",
+                    "events": [
+                        {
+                            "Enabled": true,
+                            "Fight Trainer": {
+                                "trainer_name": "Psychic Phil",
+                                "verbose": false,
+                                "setup_moves": [],
+                                "mimic_selection": "",
+                                "custom_move_data": null
+                            }
+                        },
+                        {
+                            "Enabled": false,
+                            "Fight Trainer": {
+                                "trainer_name": "Bird Keeper Vance",
+                                "verbose": false,
+                                "setup_moves": [],
+                                "mimic_selection": "",
+                                "custom_move_data": null
+                            }
+                        },
+                        {
+                            "Enabled": false,
+                            "Fight Trainer": {
+                                "trainer_name": "CoolTrainerM Allen",
+                                "verbose": false,
+                                "setup_moves": [],
+                                "mimic_selection": "",
+                                "custom_move_data": null
+                            }
+                        },
+                        {
+                            "Enabled": false,
+                            "Fight Trainer": {
+                                "trainer_name": "CoolTrainerF Cybil",
+                                "verbose": false,
+                                "setup_moves": [],
+                                "mimic_selection": "",
+                                "custom_move_data": null
+                            }
+                        },
+                        {
+                            "Enabled": false,
+                            "Fight Trainer": {
+                                "trainer_name": "Pokemaniac Zach",
+                                "verbose": false,
+                                "setup_moves": [],
+                                "mimic_selection": "",
+                                "custom_move_data": null
+                            }
+                        },
+                        {
+                            "Enabled": false,
+                            "Fight Trainer": {
+                                "trainer_name": "Fisher Wilton",
+                                "verbose": false,
+                                "setup_moves": [],
+                                "mimic_selection": "",
+                                "custom_move_data": null
+                            }
+                        },
+                        {
+                            "Enabled": false,
+                            "Fight Trainer": {
+                                "trainer_name": "Fisher Edgar",
+                                "verbose": false,
+                                "setup_moves": [],
+                                "mimic_selection": "",
+                                "custom_move_data": null
+                            }
+                        }
+                    ],
+                    "Expanded": true
+                },
+                {
+                    "Event Folder Name": "BlackthornGym",
+                    "Just Notes": "",
+                    "events": [
+                        {
+                            "Enabled": true,
+                            "Fight Trainer": {
+                                "trainer_name": "CoolTrainerM Paul",
+                                "verbose": false,
+                                "setup_moves": [],
+                                "mimic_selection": "",
+                                "custom_move_data": null
+                            }
+                        },
+                        {
+                            "Enabled": true,
+                            "Fight Trainer": {
+                                "trainer_name": "CoolTrainerF Fran",
+                                "verbose": false,
+                                "setup_moves": [],
+                                "mimic_selection": "",
+                                "custom_move_data": null
+                            }
+                        },
+                        {
+                            "Enabled": true,
+                            "Fight Trainer": {
+                                "trainer_name": "CoolTrainerM Cody",
+                                "verbose": false,
+                                "setup_moves": [],
+                                "mimic_selection": "",
+                                "custom_move_data": null
+                            }
+                        },
+                        {
+                            "Enabled": true,
+                            "Fight Trainer": {
+                                "trainer_name": "CoolTrainerM Mike",
+                                "verbose": false,
+                                "setup_moves": [],
+                                "mimic_selection": "",
+                                "custom_move_data": null
+                            }
+                        },
+                        {
+                            "Enabled": true,
+                            "Fight Trainer": {
+                                "trainer_name": "CoolTrainerF Lola",
+                                "verbose": false,
+                                "setup_moves": [],
+                                "mimic_selection": "",
+                                "custom_move_data": null
+                            }
+                        }
+                    ],
+                    "Expanded": true
+                },
+                {
+                    "Event Folder Name": "Route45",
+                    "Just Notes": "",
+                    "events": [
+                        {
+                            "Enabled": true,
+                            "Fight Trainer": {
+                                "trainer_name": "CoolTrainerM Ryan",
+                                "verbose": false,
+                                "setup_moves": [],
+                                "mimic_selection": "",
+                                "custom_move_data": null
+                            }
+                        },
+                        {
+                            "Enabled": true,
+                            "Fight Trainer": {
+                                "trainer_name": "CoolTrainerF Kelly",
+                                "verbose": false,
+                                "setup_moves": [],
+                                "mimic_selection": "",
+                                "custom_move_data": null
+                            }
+                        },
+                        {
+                            "Enabled": false,
+                            "Fight Trainer": {
+                                "trainer_name": "Hiker Erik",
+                                "verbose": false,
+                                "setup_moves": [],
+                                "mimic_selection": "",
+                                "custom_move_data": null
+                            }
+                        },
+                        {
+                            "Enabled": false,
+                            "Fight Trainer": {
+                                "trainer_name": "Hiker Michael",
+                                "verbose": false,
+                                "setup_moves": [],
+                                "mimic_selection": "",
+                                "custom_move_data": null
+                            }
+                        },
+                        {
+                            "Enabled": false,
+                            "Fight Trainer": {
+                                "trainer_name": "Hiker Parry",
+                                "verbose": false,
+                                "setup_moves": [],
+                                "mimic_selection": "",
+                                "custom_move_data": null
+                            }
+                        },
+                        {
+                            "Enabled": false,
+                            "Fight Trainer": {
+                                "trainer_name": "Hiker Timothy",
+                                "verbose": false,
+                                "setup_moves": [],
+                                "mimic_selection": "",
+                                "custom_move_data": null
+                            }
+                        },
+                        {
+                            "Enabled": true,
+                            "Fight Trainer": {
+                                "trainer_name": "Blackbelt Kenji",
+                                "verbose": false,
+                                "setup_moves": [],
+                                "mimic_selection": "",
+                                "custom_move_data": null
+                            }
+                        }
+                    ],
+                    "Expanded": true
+                },
+                {
+                    "Event Folder Name": "BlackthornGym Trip:2",
+                    "Just Notes": "",
+                    "events": [
+                        {
+                            "Enabled": true,
+                            "Fight Trainer": {
+                                "trainer_name": "Leader Clair",
+                                "verbose": false,
+                                "setup_moves": [],
+                                "mimic_selection": "",
+                                "custom_move_data": null
+                            }
+                        }
+                    ],
+                    "Expanded": true
+                },
+                {
+                    "Event Folder Name": "Route27",
+                    "Just Notes": "",
+                    "events": [
+                        {
+                            "Enabled": false,
+                            "Fight Trainer": {
+                                "trainer_name": "Bird Keeper Jose",
+                                "verbose": false,
+                                "setup_moves": [],
+                                "mimic_selection": "",
+                                "custom_move_data": null
+                            }
+                        },
+                        {
+                            "Enabled": false,
+                            "Fight Trainer": {
+                                "trainer_name": "CoolTrainerM Blake",
+                                "verbose": false,
+                                "setup_moves": [],
+                                "mimic_selection": "",
+                                "custom_move_data": null
+                            }
+                        },
+                        {
+                            "Enabled": false,
+                            "Fight Trainer": {
+                                "trainer_name": "CoolTrainerM Brian",
+                                "verbose": false,
+                                "setup_moves": [],
+                                "mimic_selection": "",
+                                "custom_move_data": null
+                            }
+                        },
+                        {
+                            "Enabled": false,
+                            "Fight Trainer": {
+                                "trainer_name": "CoolTrainerF Reena",
+                                "verbose": false,
+                                "setup_moves": [],
+                                "mimic_selection": "",
+                                "custom_move_data": null
+                            }
+                        },
+                        {
+                            "Enabled": true,
+                            "Fight Trainer": {
+                                "trainer_name": "CoolTrainerF Megan",
+                                "verbose": false,
+                                "setup_moves": [],
+                                "mimic_selection": "",
+                                "custom_move_data": null
+                            }
+                        },
+                        {
+                            "Enabled": false,
+                            "Fight Trainer": {
+                                "trainer_name": "Psychic Gilbert",
+                                "verbose": false,
+                                "setup_moves": [],
+                                "mimic_selection": "",
+                                "custom_move_data": null
+                            }
+                        }
+                    ],
+                    "Expanded": true
+                },
+                {
+                    "Event Folder Name": "Route26",
+                    "Just Notes": "",
+                    "events": [
+                        {
+                            "Enabled": false,
+                            "Fight Trainer": {
+                                "trainer_name": "CoolTrainerM Gaven",
+                                "verbose": false,
+                                "setup_moves": [],
+                                "mimic_selection": "",
+                                "custom_move_data": null
+                            }
+                        },
+                        {
+                            "Enabled": false,
+                            "Fight Trainer": {
+                                "trainer_name": "CoolTrainerM Jake",
+                                "verbose": false,
+                                "setup_moves": [],
+                                "mimic_selection": "",
+                                "custom_move_data": null
+                            }
+                        },
+                        {
+                            "Enabled": true,
+                            "Fight Trainer": {
+                                "trainer_name": "CoolTrainerF Joyce",
+                                "verbose": false,
+                                "setup_moves": [],
+                                "mimic_selection": "",
+                                "custom_move_data": null
+                            }
+                        },
+                        {
+                            "Enabled": true,
+                            "Fight Trainer": {
+                                "trainer_name": "CoolTrainerF Beth",
+                                "verbose": false,
+                                "setup_moves": [],
+                                "mimic_selection": "",
+                                "custom_move_data": null
+                            }
+                        },
+                        {
+                            "Enabled": false,
+                            "Fight Trainer": {
+                                "trainer_name": "Fisher Scott",
+                                "verbose": false,
+                                "setup_moves": [],
+                                "mimic_selection": "",
+                                "custom_move_data": null
+                            }
+                        },
+                        {
+                            "Enabled": false,
+                            "Fight Trainer": {
+                                "trainer_name": "Psychic Richard",
+                                "verbose": false,
+                                "setup_moves": [],
+                                "mimic_selection": "",
+                                "custom_move_data": null
+                            }
+                        }
+                    ],
+                    "Expanded": true
+                },
+                {
+                    "Event Folder Name": "VictoryRoad",
+                    "Just Notes": "",
+                    "events": [
+                        {
+                            "Enabled": false,
+                            "Fight Trainer": {
+                                "trainer_name": "Rival1 5 Chikorita",
+                                "verbose": false,
+                                "setup_moves": [],
+                                "mimic_selection": "",
+                                "custom_move_data": null
+                            }
+                        },
+                        {
+                            "Enabled": false,
+                            "Fight Trainer": {
+                                "trainer_name": "Rival1 5 Cyndaquil",
+                                "verbose": false,
+                                "setup_moves": [],
+                                "mimic_selection": "",
+                                "custom_move_data": null
+                            }
+                        },
+                        {
+                            "Enabled": true,
+                            "Fight Trainer": {
+                                "trainer_name": "Rival1 5 Totodile",
+                                "verbose": false,
+                                "setup_moves": [],
+                                "mimic_selection": "",
+                                "custom_move_data": null
+                            }
+                        }
+                    ],
+                    "Expanded": true
+                },
+                {
+                    "Event Folder Name": "elite_four",
+                    "Just Notes": "",
+                    "events": [
+                        {
+                            "Enabled": true,
+                            "Fight Trainer": {
+                                "trainer_name": "Elite Four Will",
+                                "verbose": false,
+                                "setup_moves": [],
+                                "mimic_selection": "",
+                                "custom_move_data": null
+                            }
+                        },
+                        {
+                            "Enabled": true,
+                            "Fight Trainer": {
+                                "trainer_name": "Elite Four Koga",
+                                "verbose": false,
+                                "setup_moves": [],
+                                "mimic_selection": "",
+                                "custom_move_data": null
+                            }
+                        },
+                        {
+                            "Enabled": true,
+                            "Fight Trainer": {
+                                "trainer_name": "Elite Four Bruno",
+                                "verbose": false,
+                                "setup_moves": [],
+                                "mimic_selection": "",
+                                "custom_move_data": null
+                            }
+                        },
+                        {
+                            "Enabled": true,
+                            "Fight Trainer": {
+                                "trainer_name": "Elite Four Karen",
+                                "verbose": false,
+                                "setup_moves": [],
+                                "mimic_selection": "",
+                                "custom_move_data": null
+                            }
+                        },
+                        {
+                            "Enabled": true,
+                            "Fight Trainer": {
+                                "trainer_name": "Champion Lance",
+                                "verbose": false,
+                                "setup_moves": [],
+                                "mimic_selection": "",
+                                "custom_move_data": null
+                            }
+                        }
+                    ],
+                    "Expanded": true
+                },
+                {
+                    "Event Folder Name": "FastShip",
+                    "Just Notes": "",
+                    "events": [
+                        {
+                            "Enabled": false,
+                            "Fight Trainer": {
+                                "trainer_name": "Schoolboy Nate",
+                                "verbose": false,
+                                "setup_moves": [],
+                                "mimic_selection": "",
+                                "custom_move_data": null
+                            }
+                        },
+                        {
+                            "Enabled": false,
+                            "Fight Trainer": {
+                                "trainer_name": "Schoolboy Ricky",
+                                "verbose": false,
+                                "setup_moves": [],
+                                "mimic_selection": "",
+                                "custom_move_data": null
+                            }
+                        },
+                        {
+                            "Enabled": false,
+                            "Fight Trainer": {
+                                "trainer_name": "CoolTrainerM Sean",
+                                "verbose": false,
+                                "setup_moves": [],
+                                "mimic_selection": "",
+                                "custom_move_data": null
+                            }
+                        },
+                        {
+                            "Enabled": false,
+                            "Fight Trainer": {
+                                "trainer_name": "CoolTrainerF Carol",
+                                "verbose": false,
+                                "setup_moves": [],
+                                "mimic_selection": "",
+                                "custom_move_data": null
+                            }
+                        },
+                        {
+                            "Enabled": false,
+                            "Fight Trainer": {
+                                "trainer_name": "Beauty Cassie",
+                                "verbose": false,
+                                "setup_moves": [],
+                                "mimic_selection": "",
+                                "custom_move_data": null
+                            }
+                        },
+                        {
+                            "Enabled": false,
+                            "Fight Trainer": {
+                                "trainer_name": "Pokemaniac Ethan",
+                                "verbose": false,
+                                "setup_moves": [],
+                                "mimic_selection": "",
+                                "custom_move_data": null
+                            }
+                        },
+                        {
+                            "Enabled": false,
+                            "Fight Trainer": {
+                                "trainer_name": "Gentleman Edward",
+                                "verbose": false,
+                                "setup_moves": [],
+                                "mimic_selection": "",
+                                "custom_move_data": null
+                            }
+                        },
+                        {
+                            "Enabled": false,
+                            "Fight Trainer": {
+                                "trainer_name": "Teacher Shirley",
+                                "verbose": false,
+                                "setup_moves": [],
+                                "mimic_selection": "",
+                                "custom_move_data": null
+                            }
+                        },
+                        {
+                            "Enabled": false,
+                            "Fight Trainer": {
+                                "trainer_name": "Bug Catcher Ken",
+                                "verbose": false,
+                                "setup_moves": [],
+                                "mimic_selection": "",
+                                "custom_move_data": null
+                            }
+                        },
+                        {
+                            "Enabled": false,
+                            "Fight Trainer": {
+                                "trainer_name": "Fisher Jonah",
+                                "verbose": false,
+                                "setup_moves": [],
+                                "mimic_selection": "",
+                                "custom_move_data": null
+                            }
+                        },
+                        {
+                            "Enabled": false,
+                            "Fight Trainer": {
+                                "trainer_name": "Sailor Jeff",
+                                "verbose": false,
+                                "setup_moves": [],
+                                "mimic_selection": "",
+                                "custom_move_data": null
+                            }
+                        },
+                        {
+                            "Enabled": false,
+                            "Fight Trainer": {
+                                "trainer_name": "Sailor Garrett",
+                                "verbose": false,
+                                "setup_moves": [],
+                                "mimic_selection": "",
+                                "custom_move_data": null
+                            }
+                        },
+                        {
+                            "Enabled": false,
+                            "Fight Trainer": {
+                                "trainer_name": "Sailor Kenneth",
+                                "verbose": false,
+                                "setup_moves": [],
+                                "mimic_selection": "",
+                                "custom_move_data": null
+                            }
+                        },
+                        {
+                            "Enabled": true,
+                            "Fight Trainer": {
+                                "trainer_name": "Sailor Stanly",
+                                "verbose": false,
+                                "setup_moves": [],
+                                "mimic_selection": "",
+                                "custom_move_data": null
+                            }
+                        },
+                        {
+                            "Enabled": false,
+                            "Fight Trainer": {
+                                "trainer_name": "Super Nerd Shawn",
+                                "verbose": false,
+                                "setup_moves": [],
+                                "mimic_selection": "",
+                                "custom_move_data": null
+                            }
+                        },
+                        {
+                            "Enabled": false,
+                            "Fight Trainer": {
+                                "trainer_name": "Guitarist Clyde",
+                                "verbose": false,
+                                "setup_moves": [],
+                                "mimic_selection": "",
+                                "custom_move_data": null
+                            }
+                        },
+                        {
+                            "Enabled": false,
+                            "Fight Trainer": {
+                                "trainer_name": "Hiker Noland",
+                                "verbose": false,
+                                "setup_moves": [],
+                                "mimic_selection": "",
+                                "custom_move_data": null
+                            }
+                        },
+                        {
+                            "Enabled": false,
+                            "Fight Trainer": {
+                                "trainer_name": "Burglar Corey",
+                                "verbose": false,
+                                "setup_moves": [],
+                                "mimic_selection": "",
+                                "custom_move_data": null
+                            }
+                        },
+                        {
+                            "Enabled": false,
+                            "Fight Trainer": {
+                                "trainer_name": "Firebreather Lyle",
+                                "verbose": false,
+                                "setup_moves": [],
+                                "mimic_selection": "",
+                                "custom_move_data": null
+                            }
+                        },
+                        {
+                            "Enabled": false,
+                            "Fight Trainer": {
+                                "trainer_name": "Juggler Fritz",
+                                "verbose": false,
+                                "setup_moves": [],
+                                "mimic_selection": "",
+                                "custom_move_data": null
+                            }
+                        },
+                        {
+                            "Enabled": false,
+                            "Fight Trainer": {
+                                "trainer_name": "Blackbelt Wai",
+                                "verbose": false,
+                                "setup_moves": [],
+                                "mimic_selection": "",
+                                "custom_move_data": null
+                            }
+                        },
+                        {
+                            "Enabled": false,
+                            "Fight Trainer": {
+                                "trainer_name": "Psychic Rodney",
+                                "verbose": false,
+                                "setup_moves": [],
+                                "mimic_selection": "",
+                                "custom_move_data": null
+                            }
+                        },
+                        {
+                            "Enabled": false,
+                            "Fight Trainer": {
+                                "trainer_name": "Picnicker Debra",
+                                "verbose": false,
+                                "setup_moves": [],
+                                "mimic_selection": "",
+                                "custom_move_data": null
+                            }
+                        },
+                        {
+                            "Enabled": false,
+                            "Fight Trainer": {
+                                "trainer_name": "PokefanM Jeremy",
+                                "verbose": false,
+                                "setup_moves": [],
+                                "mimic_selection": "",
+                                "custom_move_data": null
+                            }
+                        },
+                        {
+                            "Enabled": false,
+                            "Fight Trainer": {
+                                "trainer_name": "PokefanM Colin",
+                                "verbose": false,
+                                "setup_moves": [],
+                                "mimic_selection": "",
+                                "custom_move_data": null
+                            }
+                        },
+                        {
+                            "Enabled": false,
+                            "Fight Trainer": {
+                                "trainer_name": "Twins Meg & Peg",
+                                "verbose": false,
+                                "setup_moves": [],
+                                "mimic_selection": "",
+                                "custom_move_data": null
+                            }
+                        },
+                        {
+                            "Enabled": false,
+                            "Fight Trainer": {
+                                "trainer_name": "PokefanF Georgia",
+                                "verbose": false,
+                                "setup_moves": [],
+                                "mimic_selection": "",
+                                "custom_move_data": null
+                            }
+                        }
+                    ],
+                    "Expanded": false
+                },
+                {
+                    "Event Folder Name": "VermilionGym",
+                    "Just Notes": "",
+                    "events": [
+                        {
+                            "Enabled": false,
+                            "Fight Trainer": {
+                                "trainer_name": "Gentleman Gregory",
+                                "verbose": false,
+                                "setup_moves": [],
+                                "mimic_selection": "",
+                                "custom_move_data": null
+                            }
+                        },
+                        {
+                            "Enabled": false,
+                            "Fight Trainer": {
+                                "trainer_name": "Guitarist Vincent",
+                                "verbose": false,
+                                "setup_moves": [],
+                                "mimic_selection": "",
+                                "custom_move_data": null
+                            }
+                        },
+                        {
+                            "Enabled": true,
+                            "Fight Trainer": {
+                                "trainer_name": "Juggler Horton",
+                                "verbose": false,
+                                "setup_moves": [],
+                                "mimic_selection": "",
+                                "custom_move_data": null
+                            }
+                        },
+                        {
+                            "Enabled": true,
+                            "Fight Trainer": {
+                                "trainer_name": "Leader Lt.Surge",
+                                "verbose": false,
+                                "setup_moves": [],
+                                "mimic_selection": "",
+                                "custom_move_data": null
+                            }
+                        }
+                    ],
+                    "Expanded": true
+                },
+                {
+                    "Event Folder Name": "SaffronGym",
+                    "Just Notes": "",
+                    "events": [
+                        {
+                            "Enabled": true,
+                            "Fight Trainer": {
+                                "trainer_name": "Leader Sabrina",
+                                "verbose": false,
+                                "setup_moves": [],
+                                "mimic_selection": "",
+                                "custom_move_data": null
+                            }
+                        },
+                        {
+                            "Enabled": false,
+                            "Fight Trainer": {
+                                "trainer_name": "Psychic Franklin",
+                                "verbose": false,
+                                "setup_moves": [],
+                                "mimic_selection": "",
+                                "custom_move_data": null
+                            }
+                        },
+                        {
+                            "Enabled": false,
+                            "Fight Trainer": {
+                                "trainer_name": "Psychic Jared",
+                                "verbose": false,
+                                "setup_moves": [],
+                                "mimic_selection": "",
+                                "custom_move_data": null
+                            }
+                        },
+                        {
+                            "Enabled": false,
+                            "Fight Trainer": {
+                                "trainer_name": "Medium Rebecca",
+                                "verbose": false,
+                                "setup_moves": [],
+                                "mimic_selection": "",
+                                "custom_move_data": null
+                            }
+                        },
+                        {
+                            "Enabled": false,
+                            "Fight Trainer": {
+                                "trainer_name": "Medium Doris",
+                                "verbose": false,
+                                "setup_moves": [],
+                                "mimic_selection": "",
+                                "custom_move_data": null
+                            }
+                        }
+                    ],
+                    "Expanded": true
+                },
+                {
+                    "Event Folder Name": "CeladonGym",
+                    "Just Notes": "",
+                    "events": [
+                        {
+                            "Enabled": false,
+                            "Fight Trainer": {
+                                "trainer_name": "Lass Michelle",
+                                "verbose": false,
+                                "setup_moves": [],
+                                "mimic_selection": "",
+                                "custom_move_data": null
+                            }
+                        },
+                        {
+                            "Enabled": true,
+                            "Fight Trainer": {
+                                "trainer_name": "Twins Jo & Zoe",
+                                "verbose": false,
+                                "setup_moves": [],
+                                "mimic_selection": "",
+                                "custom_move_data": null
+                            }
+                        },
+                        {
+                            "Enabled": true,
+                            "Fight Trainer": {
+                                "trainer_name": "Picnicker Tanya",
+                                "verbose": false,
+                                "setup_moves": [],
+                                "mimic_selection": "",
+                                "custom_move_data": null
+                            }
+                        },
+                        {
+                            "Enabled": true,
+                            "Fight Trainer": {
+                                "trainer_name": "Beauty Julia",
+                                "verbose": false,
+                                "setup_moves": [],
+                                "mimic_selection": "",
+                                "custom_move_data": null
+                            }
+                        },
+                        {
+                            "Enabled": true,
+                            "Fight Trainer": {
+                                "trainer_name": "Leader Erika",
+                                "verbose": false,
+                                "setup_moves": [],
+                                "mimic_selection": "",
+                                "custom_move_data": null
+                            }
+                        }
+                    ],
+                    "Expanded": true
+                },
+                {
+                    "Event Folder Name": "Route8",
+                    "Just Notes": "",
+                    "events": [
+                        {
+                            "Enabled": false,
+                            "Fight Trainer": {
+                                "trainer_name": "Super Nerd Sam",
+                                "verbose": false,
+                                "setup_moves": [],
+                                "mimic_selection": "",
+                                "custom_move_data": null
+                            }
+                        },
+                        {
+                            "Enabled": true,
+                            "Fight Trainer": {
+                                "trainer_name": "Super Nerd Tom",
+                                "verbose": false,
+                                "setup_moves": [],
+                                "mimic_selection": "",
+                                "custom_move_data": null
+                            }
+                        },
+                        {
+                            "Enabled": false,
+                            "Fight Trainer": {
+                                "trainer_name": "Biker Dwayne",
+                                "verbose": false,
+                                "setup_moves": [],
+                                "mimic_selection": "",
+                                "custom_move_data": null
+                            }
+                        },
+                        {
+                            "Enabled": false,
+                            "Fight Trainer": {
+                                "trainer_name": "Biker Harris",
+                                "verbose": false,
+                                "setup_moves": [],
+                                "mimic_selection": "",
+                                "custom_move_data": null
+                            }
+                        },
+                        {
+                            "Enabled": false,
+                            "Fight Trainer": {
+                                "trainer_name": "Biker Zeke",
+                                "verbose": false,
+                                "setup_moves": [],
+                                "mimic_selection": "",
+                                "custom_move_data": null
+                            }
+                        }
+                    ],
+                    "Expanded": true
+                },
+                {
+                    "Event Folder Name": "Route9",
+                    "Just Notes": "",
+                    "events": [
+                        {
+                            "Enabled": false,
+                            "Fight Trainer": {
+                                "trainer_name": "Hiker Tim",
+                                "verbose": false,
+                                "setup_moves": [],
+                                "mimic_selection": "",
+                                "custom_move_data": null
+                            }
+                        },
+                        {
+                            "Enabled": false,
+                            "Fight Trainer": {
+                                "trainer_name": "Hiker Sidney",
+                                "verbose": false,
+                                "setup_moves": [],
+                                "mimic_selection": "",
+                                "custom_move_data": null
+                            }
+                        },
+                        {
+                            "Enabled": true,
+                            "Fight Trainer": {
+                                "trainer_name": "Picnicker Heidi",
+                                "verbose": false,
+                                "setup_moves": [],
+                                "mimic_selection": "",
+                                "custom_move_data": null
+                            }
+                        },
+                        {
+                            "Enabled": false,
+                            "Fight Trainer": {
+                                "trainer_name": "Picnicker Edna",
+                                "verbose": false,
+                                "setup_moves": [],
+                                "mimic_selection": "",
+                                "custom_move_data": null
+                            }
+                        },
+                        {
+                            "Enabled": true,
+                            "Fight Trainer": {
+                                "trainer_name": "Camper Dean",
+                                "verbose": false,
+                                "setup_moves": [],
+                                "mimic_selection": "",
+                                "custom_move_data": null
+                            }
+                        },
+                        {
+                            "Enabled": false,
+                            "Fight Trainer": {
+                                "trainer_name": "Camper Sid",
+                                "verbose": false,
+                                "setup_moves": [],
+                                "mimic_selection": "",
+                                "custom_move_data": null
+                            }
+                        }
+                    ],
+                    "Expanded": true
+                },
+                {
+                    "Event Folder Name": "Route25",
+                    "Just Notes": "",
+                    "events": [
+                        {
+                            "Enabled": true,
+                            "Fight Trainer": {
+                                "trainer_name": "Schoolboy Dudley",
+                                "verbose": false,
+                                "setup_moves": [],
+                                "mimic_selection": "",
+                                "custom_move_data": null
+                            }
+                        },
+                        {
+                            "Enabled": true,
+                            "Fight Trainer": {
+                                "trainer_name": "Lass Ellen",
+                                "verbose": false,
+                                "setup_moves": [],
+                                "mimic_selection": "",
+                                "custom_move_data": null
+                            }
+                        },
+                        {
+                            "Enabled": true,
+                            "Fight Trainer": {
+                                "trainer_name": "Schoolboy Joe",
+                                "verbose": false,
+                                "setup_moves": [],
+                                "mimic_selection": "",
+                                "custom_move_data": null
+                            }
+                        },
+                        {
+                            "Enabled": true,
+                            "Fight Trainer": {
+                                "trainer_name": "Lass Laura",
+                                "verbose": false,
+                                "setup_moves": [],
+                                "mimic_selection": "",
+                                "custom_move_data": null
+                            }
+                        },
+                        {
+                            "Enabled": true,
+                            "Fight Trainer": {
+                                "trainer_name": "Camper Lloyd",
+                                "verbose": false,
+                                "setup_moves": [],
+                                "mimic_selection": "",
+                                "custom_move_data": null
+                            }
+                        },
+                        {
+                            "Enabled": true,
+                            "Fight Trainer": {
+                                "trainer_name": "Lass Shannon",
+                                "verbose": false,
+                                "setup_moves": [],
+                                "mimic_selection": "",
+                                "custom_move_data": null
+                            }
+                        },
+                        {
+                            "Enabled": false,
+                            "Fight Trainer": {
+                                "trainer_name": "CoolTrainerM Kevin",
+                                "verbose": false,
+                                "setup_moves": [],
+                                "mimic_selection": "",
+                                "custom_move_data": null
+                            }
+                        },
+                        {
+                            "Enabled": true,
+                            "Fight Trainer": {
+                                "trainer_name": "Super Nerd Pat",
+                                "verbose": false,
+                                "setup_moves": [],
+                                "mimic_selection": "",
+                                "custom_move_data": null
+                            }
+                        }
+                    ],
+                    "Expanded": true
+                },
+                {
+                    "Event Folder Name": "CeruleanGym",
+                    "Just Notes": "",
+                    "events": [
+                        {
+                            "Enabled": true,
+                            "Fight Trainer": {
+                                "trainer_name": "Leader Misty",
+                                "verbose": false,
+                                "setup_moves": [],
+                                "mimic_selection": "",
+                                "custom_move_data": null
+                            }
+                        },
+                        {
+                            "Enabled": false,
+                            "Fight Trainer": {
+                                "trainer_name": "SwimmerM Parker",
+                                "verbose": false,
+                                "setup_moves": [],
+                                "mimic_selection": "",
+                                "custom_move_data": null
+                            }
+                        },
+                        {
+                            "Enabled": false,
+                            "Fight Trainer": {
+                                "trainer_name": "SwimmerF Diana",
+                                "verbose": false,
+                                "setup_moves": [],
+                                "mimic_selection": "",
+                                "custom_move_data": null
+                            }
+                        },
+                        {
+                            "Enabled": false,
+                            "Fight Trainer": {
+                                "trainer_name": "SwimmerF Briana",
+                                "verbose": false,
+                                "setup_moves": [],
+                                "mimic_selection": "",
+                                "custom_move_data": null
+                            }
+                        }
+                    ],
+                    "Expanded": true
+                },
+                {
+                    "Event Folder Name": "PewterGym",
+                    "Just Notes": "",
+                    "events": [
+                        {
+                            "Enabled": true,
+                            "Fight Trainer": {
+                                "trainer_name": "Camper Jerry",
+                                "verbose": false,
+                                "setup_moves": [],
+                                "mimic_selection": "",
+                                "custom_move_data": null
+                            }
+                        },
+                        {
+                            "Enabled": true,
+                            "Fight Trainer": {
+                                "trainer_name": "Leader Brock",
+                                "verbose": false,
+                                "setup_moves": [
+                                    "Swords Dance",
+                                    "Swords Dance"
+                                ],
+                                "mimic_selection": "",
+                                "custom_move_data": [
+                                    {
+                                        "player": {
+                                            "Earthquake": "No Bonus"
+                                        },
+                                        "enemy": {
+                                            "Defense Curl": "No Bonus",
+                                            "Rock Slide": "2 Hits",
+                                            "Rollout": "1",
+                                            "Earthquake": "No Bonus"
+                                        }
+                                    },
+                                    {
+                                        "player": {
+                                            "Earthquake": "No Bonus"
+                                        },
+                                        "enemy": {
+                                            "Fury Attack": "4 Hits",
+                                            "Scary Face": "No Bonus",
+                                            "Earthquake": "No Bonus"
+                                        }
+                                    },
+                                    {
+                                        "player": {
+                                            "Earthquake": "No Bonus"
+                                        },
+                                        "enemy": {
+                                            "Bite": "2 Hits",
+                                            "Protect": "2 Hits",
+                                            "Spike Cannon": "5 Hits"
+                                        }
+                                    },
+                                    {
+                                        "player": {
+                                            "Earthquake": "No Bonus"
+                                        },
+                                        "enemy": {}
+                                    },
+                                    {
+                                        "player": {
+                                            "Earthquake": "No Bonus"
+                                        },
+                                        "enemy": {}
+                                    }
+                                ]
+                            }
+                        }
+                    ],
+                    "Expanded": true
+                },
+                {
+                    "Event Folder Name": "SeafoamGym",
+                    "Just Notes": "",
+                    "events": [
+                        {
+                            "Enabled": true,
+                            "Fight Trainer": {
+                                "trainer_name": "Leader Blaine",
+                                "verbose": false,
+                                "setup_moves": [],
+                                "mimic_selection": "",
+                                "custom_move_data": [
+                                    {
+                                        "player": {
+                                            "Earthquake": "Dig Bonus"
+                                        },
+                                        "enemy": {}
+                                    },
+                                    {
+                                        "player": {
+                                            "Earthquake": "No Bonus"
+                                        },
+                                        "enemy": {}
+                                    },
+                                    {
+                                        "player": {
+                                            "Earthquake": "No Bonus"
+                                        },
+                                        "enemy": {
+                                            "Fury Attack": "2 Hits"
+                                        }
+                                    }
+                                ]
+                            }
+                        }
+                    ],
+                    "Expanded": true
+                },
+                {
+                    "Event Folder Name": "FuchsiaGym",
+                    "Just Notes": "",
+                    "events": [
+                        {
+                            "Enabled": false,
+                            "Fight Trainer": {
+                                "trainer_name": "Lass Alice",
+                                "verbose": false,
+                                "setup_moves": [],
+                                "mimic_selection": "",
+                                "custom_move_data": null
+                            }
+                        },
+                        {
+                            "Enabled": false,
+                            "Fight Trainer": {
+                                "trainer_name": "Lass Linda",
+                                "verbose": false,
+                                "setup_moves": [],
+                                "mimic_selection": "",
+                                "custom_move_data": null
+                            }
+                        },
+                        {
+                            "Enabled": true,
+                            "Fight Trainer": {
+                                "trainer_name": "Leader Janine",
+                                "verbose": false,
+                                "setup_moves": [],
+                                "mimic_selection": "",
+                                "custom_move_data": null
+                            }
+                        },
+                        {
+                            "Enabled": false,
+                            "Fight Trainer": {
+                                "trainer_name": "Picnicker Cindy",
+                                "verbose": false,
+                                "setup_moves": [],
+                                "mimic_selection": "",
+                                "custom_move_data": null
+                            }
+                        },
+                        {
+                            "Enabled": false,
+                            "Fight Trainer": {
+                                "trainer_name": "Camper Barry",
+                                "verbose": false,
+                                "setup_moves": [],
+                                "mimic_selection": "",
+                                "custom_move_data": null
+                            }
+                        }
+                    ],
+                    "Expanded": true
+                },
+                {
+                    "Event Folder Name": "ViridianGym",
+                    "Just Notes": "",
+                    "events": [
+                        {
+                            "Enabled": true,
+                            "Fight Trainer": {
+                                "trainer_name": "Leader Blue",
+                                "verbose": false,
+                                "setup_moves": [],
+                                "mimic_selection": "",
+                                "custom_move_data": [
+                                    {
+                                        "player": {
+                                            "Earthquake": "No Bonus"
+                                        },
+                                        "enemy": {}
+                                    },
+                                    {
+                                        "player": {
+                                            "Earthquake": "No Bonus"
+                                        },
+                                        "enemy": {}
+                                    },
+                                    {
+                                        "player": {
+                                            "Earthquake": "No Bonus"
+                                        },
+                                        "enemy": {
+                                            "Fury Attack": "4 Hits",
+                                            "Rock Slide": "2 Hits",
+                                            "Earthquake": "No Bonus"
+                                        }
+                                    },
+                                    {
+                                        "player": {
+                                            "Earthquake": "No Bonus"
+                                        },
+                                        "enemy": {
+                                            "Twister": "Fly Bonus"
+                                        }
+                                    },
+                                    {
+                                        "player": {
+                                            "Earthquake": "No Bonus"
+                                        },
+                                        "enemy": {
+                                            "Egg Bomb": "No Bonus"
+                                        }
+                                    },
+                                    {
+                                        "player": {
+                                            "Earthquake": "Dig Bonus"
+                                        },
+                                        "enemy": {}
+                                    }
+                                ]
+                            }
+                        }
+                    ],
+                    "Expanded": true
+                },
+                {
+                    "Event Folder Name": "Mt Silver",
+                    "Just Notes": "",
+                    "events": [
+                        {
+                            "Enabled": true,
+                            "Fight Trainer": {
+                                "trainer_name": "Leader Red",
+                                "verbose": false,
+                                "setup_moves": [],
+                                "mimic_selection": "",
+                                "custom_move_data": null
+                            }
+                        }
+                    ],
+                    "Expanded": true
+                }
+            ],
+            "Expanded": true
+        }
+    ]
+}

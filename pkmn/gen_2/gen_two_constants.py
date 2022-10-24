@@ -7,12 +7,13 @@ class GenTwoConstants:
         self.GEN_TWO_DATA_PATH = os.path.join(const.POKEMON_RAW_DATA, "gen_two")
         self.ITEM_DB_PATH = os.path.join(self.GEN_TWO_DATA_PATH, "items.json")
         self.MOVE_DB_PATH = os.path.join(self.GEN_TWO_DATA_PATH, "moves.json")
-        self.MIN_BATTLES_DIR = os.path.join(self.GEN_TWO_DATA_PATH, "min_battles")
 
         self.CRYSTAL_POKEMON_PATH = os.path.join(self.GEN_TWO_DATA_PATH, "crystal", "pokemon.json")
         self.CRYSTAL_TRAINER_DB_PATH = os.path.join(self.GEN_TWO_DATA_PATH, "crystal", "trainers.json")
+        self.CRYSTAL_MIN_BATTLES_DIR = os.path.join(self.GEN_TWO_DATA_PATH, "crystal", "min_battles")
         self.GS_POKEMON_PATH = os.path.join(self.GEN_TWO_DATA_PATH, "gold_silver", "pokemon.json")
         self.GS_TRAINER_DB_PATH = os.path.join(self.GEN_TWO_DATA_PATH, "gold_silver", "trainers.json")
+        self.GS_MIN_BATTLES_DIR = os.path.join(self.GEN_TWO_DATA_PATH, "gold_silver", "min_battles")
 
         self.ZEPHYR_BADGE = "zephyr"
         self.HIVE_BADGE = "hive"

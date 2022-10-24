@@ -181,9 +181,29 @@ class ItemDB:
 
 
 class MoveDB:
-    def __init__(self, data:Dict[str, universal_data_objects.Move], stat_mod_moves:Dict[str, List[Tuple[str, int]]]):
+    def __init__(self, data:Dict[str, universal_data_objects.Move]):
         self._data = data
-        self.stat_mod_moves = stat_mod_moves
+        self.stat_mod_moves = {}
+
+        # doing some weird stuff to make sure boosting moves appear at the top
+        stat_reduction_moves = {}
+        for cur_move in self._data.values():
+            cur_stat_mods = []
+            is_reduction = False
+            for cur_effect in cur_move.effects:
+                if const.STAT_KEY in cur_effect and const.MODIFIER_KEY in cur_effect:
+                    if cur_effect[const.MODIFIER_KEY] > 0:
+                        is_reduction = True
+                    
+                    cur_stat_mods.append((cur_effect[const.STAT_KEY], cur_effect[const.MODIFIER_KEY]))
+
+            if cur_stat_mods:
+                if is_reduction:
+                    self.stat_mod_moves[cur_move.name] = cur_stat_mods
+                else:
+                    stat_reduction_moves[cur_move.name] = cur_stat_mods
+
+        self.stat_mod_moves.update(stat_reduction_moves)
     
     def get_move(self, move_name):
         if move_name in self._data:

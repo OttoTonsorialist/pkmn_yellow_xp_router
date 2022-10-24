@@ -19,14 +19,7 @@ class GenOne(CurrentGen):
         self._pkmn_db = PkmnDB(_load_pkmn_db(pkmn_db_path))
         self._trainer_db = TrainerDB(_load_trainer_db(trainer_db_path, self._pkmn_db))
         self._item_db = ItemDB(_load_item_db(gen_one_const.ITEM_DB_PATH))
-
-        all_stat_modifying_moves = {}
-        for name, val in gen_one_const.STAT_INCREASE_MOVES.items():
-            all_stat_modifying_moves[name] = val
-        for name, val in gen_one_const.STAT_DECREASE_MOVES.items():
-            all_stat_modifying_moves[name] = val
-        self._move_db = MoveDB(_load_move_db(gen_one_const.MOVE_DB_PATH), all_stat_modifying_moves)
-
+        self._move_db = MoveDB(_load_move_db(gen_one_const.MOVE_DB_PATH))
         self._min_battles_db = MinBattlesDB(min_battles_path)
 
         self._pkmn_db.validate_moves(self._move_db)
@@ -92,10 +85,7 @@ class GenOne(CurrentGen):
         return route_state_objects.Inventory(bag_limit=gen_one_const.BAG_LIMIT)
     
     def get_stat_modifer_moves(self) -> List[str]:
-        return (
-            list(gen_one_const.STAT_INCREASE_MOVES.keys()) +
-            list(gen_one_const.STAT_DECREASE_MOVES.keys())
-        )
+        return list(self._move_db.stat_mod_moves.keys())
     
     def get_fight_reward(self, trainer_name) -> str:
         return gen_one_const.FIGHT_REWARDS.get(trainer_name)

@@ -326,7 +326,7 @@ class GenTwoStatBlock(universal_data_objects.StatBlock):
             level,
             stat_dv.special_attack,
             stat_xp.special_attack,
-            stage_modifiers.special_attack_stage,
+            stage_modifiers.special_defense_stage,
             is_badge_boosted=(badges is not None and badges.is_special_defense_boosted())
         )
 

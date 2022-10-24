@@ -185,7 +185,7 @@ class InventoryViewer(tk.Frame):
         idx = -1
         too_many_items = len(inventory.cur_items) > self.max_render_size
 
-        for idx in range(len(inventory.cur_items)):
+        for idx in range(min(len(inventory.cur_items), self.max_render_size)):
             cur_item = inventory.cur_items[idx]
             if too_many_items and idx == (self.max_render_size - 1):
                 self._all_items[idx].config(text=f"# {idx:0>2}+: More items...")
