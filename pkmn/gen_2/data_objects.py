@@ -480,3 +480,43 @@ def instantiate_wild_pokemon(pkmn_data:universal_data_objects.PokemonSpecies, ta
         GenTwoStatBlock(0, 0, 0, 0, 0, 0),
         None
     )
+
+
+_HIDDEN_POWER_TABLE = [
+    const.TYPE_FIGHTING,
+    const.TYPE_FLYING,
+    const.TYPE_POISON,
+    const.TYPE_GROUND,
+    const.TYPE_ROCK,
+    const.TYPE_BUG,
+    const.TYPE_GHOST,
+    const.TYPE_STEEL,
+    const.TYPE_FIRE,
+    const.TYPE_WATER,
+    const.TYPE_GRASS,
+    const.TYPE_ELECTRIC,
+    const.TYPE_PSYCHIC,
+    const.TYPE_ICE,
+    const.TYPE_DRAGON,
+    const.TYPE_DARK
+]
+def get_hidden_power_type(dvs:universal_data_objects.StatBlock) -> str:
+    result_idx = 4
+    result_idx *= (dvs.attack % 4)
+    result_idx += (dvs.defense % 4)
+
+    return _HIDDEN_POWER_TABLE[result_idx]
+
+
+def get_hidden_power_base_power(dvs:universal_data_objects.StatBlock) -> int:
+    # remember that single dv for special is stored in specal_attack
+    result = 5 * (1 if dvs.special_attack > 8 else 0)
+    result += (dvs.special_attack % 4)
+    result = math.floor(result / 2)
+
+    result += 5 * (1 if dvs.speed > 8 else 0)
+    result += 10 * (1 if dvs.defense > 8 else 0)
+    result += 20 * (1 if dvs.attack > 8 else 0)
+    result += 31
+
+    return result

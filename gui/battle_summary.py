@@ -735,6 +735,9 @@ class DamageSummary(tk.Frame):
         move = pkmn.current_gen_info().move_db().get_move(move_name)
         if move is None:
             raise ValueError(f"Unknown move: {move_name}")
+        if move.name == const.HIDDEN_POWER_MOVE_NAME:
+            hidden_power_type, hidden_power_base_power = pkmn.current_gen_info().get_hidden_power(attacking_mon.dvs)
+            move_name = f"{move_name} ({hidden_power_type}: {hidden_power_base_power})"
         self.move_name_label.configure(text=move_name)
 
         custom_data_options = pkmn.current_gen_info().get_move_custom_data(move_name)

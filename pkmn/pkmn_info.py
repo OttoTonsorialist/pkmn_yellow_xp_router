@@ -84,4 +84,8 @@ class CurrentGen:
     
     def get_move_custom_data(self, move_name) -> List[str]:
         raise NotImplementedError()
+    
+    def get_hidden_power(self, dvs:universal_data_objects.StatBlock) -> Tuple[str, int]:
+        raise NotImplementedError()
+
 

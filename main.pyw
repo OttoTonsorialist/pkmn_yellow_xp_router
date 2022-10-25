@@ -7,6 +7,7 @@ from tkinter import ttk, font
 
 from gui import custom_tkinter, route_event_components, pkmn_components, quick_add_components
 from gui.event_details import EventDetails
+from pkmn.universal_data_objects import StatBlock
 from utils.constants import const
 from utils.config_manager import config
 from utils import route_one_utils
@@ -53,6 +54,7 @@ class Main(tk.Tk):
         self.config(menu=self.top_menu_bar)
 
         self.file_menu = tk.Menu(self.top_menu_bar, tearoff=0)
+        self.file_menu.add_command(label="Customize DVs     (Ctrl+X)", command=self.open_new_route_window)
         self.file_menu.add_command(label="New Route       (Ctrl+N)", command=self.open_new_route_window)
         self.file_menu.add_command(label="Load Route      (Ctrl+L)", command=self.open_load_route_window)
         self.file_menu.add_command(label="Save Route       (Ctrl+S)", command=self.save_route)
@@ -184,6 +186,7 @@ class Main(tk.Tk):
         #self.info_panel.grid_columnconfigure(1, weight=1, uniform="test")
 
         # main route actions
+        self.bind('<Control-x>', self.open_customize_dvs_window)
         self.bind('<Control-n>', self.open_new_route_window)
         self.bind('<Control-l>', self.open_load_route_window)
         self.bind('<Control-s>', self.save_route)
@@ -417,6 +420,17 @@ class Main(tk.Tk):
         self.event_list.refresh()
         self._handle_new_selection()
 
+    def open_customize_dvs_window(self, *args, **kwargs):
+        if self._is_active_window() and self._data.init_route_state is not None:
+            self.new_event_window = CustomDvsWindow(self, self._data.init_route_state.solo_pkmn.dvs)
+    
+    def customize_dvs(self, new_dvs):
+        self.new_event_window.close()
+        self.new_event_window = None
+        self._data.change_current_dvs(new_dvs)
+        self.event_list.refresh()
+        self._handle_new_selection()
+
     def move_group_up(self, event=None):
         for cur_event in self.event_list.get_all_selected_event_ids(allow_event_items=False):
             self._data.move_event_object(cur_event, True)
@@ -613,6 +627,98 @@ class Main(tk.Tk):
         return True
 
 
+class CustomDvsWindow(custom_tkinter.Popup):
+    def __init__(self, main_window: Main, init_dvs:StatBlock, *args, **kwargs):
+        super().__init__(main_window, *args, **kwargs, width=400)
+
+        self.controls_frame = tk.Frame(self)
+        self.controls_frame.pack()
+        self.padx = 5
+        self.pady = 5
+
+        self.custom_dvs_hp_label = tk.Label(self.controls_frame, text="HP DV:")
+        self.custom_dvs_hp_label.grid(row=0, column=0, padx=self.padx, pady=self.pady)
+        self.custom_dvs_hp = custom_tkinter.AmountEntry(self.controls_frame, min_val=0, max_val=15, init_val=init_dvs.hp, callback=self._recalc_hidden_power)
+        self.custom_dvs_hp.grid(row=0, column=1, padx=self.padx, pady=self.pady)
+
+        self.custom_dvs_atk_label = tk.Label(self.controls_frame, text="Attack DV:")
+        self.custom_dvs_atk_label.grid(row=1, column=0, padx=self.padx, pady=self.pady)
+        self.custom_dvs_atk = custom_tkinter.AmountEntry(self.controls_frame, min_val=0, max_val=15, init_val=init_dvs.attack, callback=self._recalc_hidden_power)
+        self.custom_dvs_atk.grid(row=1, column=1, padx=self.padx, pady=self.pady)
+
+        self.custom_dvs_def_label = tk.Label(self.controls_frame, text="Defense DV:")
+        self.custom_dvs_def_label.grid(row=2, column=0, padx=self.padx, pady=self.pady)
+        self.custom_dvs_def = custom_tkinter.AmountEntry(self.controls_frame, min_val=0, max_val=15, init_val=init_dvs.defense, callback=self._recalc_hidden_power)
+        self.custom_dvs_def.grid(row=2, column=1, padx=self.padx, pady=self.pady)
+
+        self.custom_dvs_spd_label = tk.Label(self.controls_frame, text="Speed DV:")
+        self.custom_dvs_spd_label.grid(row=3, column=0, padx=self.padx, pady=self.pady)
+        self.custom_dvs_spd = custom_tkinter.AmountEntry(self.controls_frame, min_val=0, max_val=15, init_val=init_dvs.speed, callback=self._recalc_hidden_power)
+        self.custom_dvs_spd.grid(row=3, column=1, padx=self.padx, pady=self.pady)
+
+        self.custom_dvs_spc_label = tk.Label(self.controls_frame, text="Special DV:")
+        self.custom_dvs_spc_label.grid(row=4, column=0, padx=self.padx, pady=self.pady)
+        self.custom_dvs_spc = custom_tkinter.AmountEntry(self.controls_frame, min_val=0, max_val=15, init_val=init_dvs.special_attack, callback=self._recalc_hidden_power)
+        self.custom_dvs_spc.grid(row=4, column=1, padx=self.padx, pady=self.pady)
+
+        self.custom_dvs_hidden_power_label = tk.Label(self.controls_frame, text="Hidden Power:")
+        self.custom_dvs_hidden_power_label.grid(row=5, column=0, padx=self.padx, pady=self.pady)
+        self.custom_dvs_hidden_power = tk.Label(self.controls_frame)
+        self.custom_dvs_hidden_power.grid(row=5, column=1, padx=self.padx, pady=self.pady)
+
+
+        self.create_button = custom_tkinter.SimpleButton(self.controls_frame, text="Set New DVs", command=self.set_dvs)
+        self.create_button.grid(row=30, column=0, padx=self.padx, pady=self.pady)
+        self.cancel_button = custom_tkinter.SimpleButton(self.controls_frame, text="Cancel", command=self._main_window.cancel_new_event)
+        self.cancel_button.grid(row=30, column=1, padx=self.padx, pady=self.pady)
+
+        self.bind('<Return>', self.set_dvs)
+        self.bind('<Escape>', self._main_window.cancel_new_event)
+        self._recalc_hidden_power()
+    
+    def _recalc_hidden_power(self, *args, **kwargs):
+        try:
+            hp_type, hp_power = pkmn.current_gen_info().get_hidden_power(
+                StatBlock(
+                    int(self.custom_dvs_hp.get()),
+                    int(self.custom_dvs_atk.get()),
+                    int(self.custom_dvs_def.get()),
+                    int(self.custom_dvs_spc.get()),
+                    int(self.custom_dvs_spc.get()),
+                    int(self.custom_dvs_spd.get())
+                )
+            )
+
+            if not hp_type:
+                self.custom_dvs_hidden_power.configure(text=f"Not supported in gen 1")
+            else:
+                self.custom_dvs_hidden_power.configure(text=f"{hp_type}: {hp_power}")
+        except Exception as e:
+            self.custom_dvs_hidden_power.configure(text=f"Failed to calculate, invalid DVs")
+
+    def _get_custom_dvs(self, *args, **kwargs):
+        return StatBlock(
+            int(self.custom_dvs_hp.get()),
+            int(self.custom_dvs_atk.get()),
+            int(self.custom_dvs_def.get()),
+            int(self.custom_dvs_spc.get()),
+            int(self.custom_dvs_spc.get()),
+            int(self.custom_dvs_spd.get())
+        )
+    
+    def set_dvs(self, *args, **kwargs):
+        self._main_window.customize_dvs(
+            StatBlock(
+                int(self.custom_dvs_hp.get()),
+                int(self.custom_dvs_atk.get()),
+                int(self.custom_dvs_def.get()),
+                int(self.custom_dvs_spc.get()),
+                int(self.custom_dvs_spc.get()),
+                int(self.custom_dvs_spd.get())
+            )
+        )
+
+
 class NewRouteWindow(custom_tkinter.Popup):
     def __init__(self, main_window: Main, *args, **kwargs):
         super().__init__(main_window, *args, **kwargs, width=400)
@@ -657,28 +763,33 @@ class NewRouteWindow(custom_tkinter.Popup):
 
         self.custom_dvs_hp_label = tk.Label(self.custom_dvs_frame, text="HP DV:")
         self.custom_dvs_hp_label.grid(row=0, column=0, padx=self.padx, pady=self.pady)
-        self.custom_dvs_hp = custom_tkinter.AmountEntry(self.custom_dvs_frame, min_val=0, max_val=15, init_val=15)
+        self.custom_dvs_hp = custom_tkinter.AmountEntry(self.custom_dvs_frame, min_val=0, max_val=15, init_val=15, callback=self._recalc_hidden_power)
         self.custom_dvs_hp.grid(row=0, column=1, padx=self.padx, pady=self.pady)
 
         self.custom_dvs_atk_label = tk.Label(self.custom_dvs_frame, text="Attack DV:")
         self.custom_dvs_atk_label.grid(row=1, column=0, padx=self.padx, pady=self.pady)
-        self.custom_dvs_atk = custom_tkinter.AmountEntry(self.custom_dvs_frame, min_val=0, max_val=15, init_val=15)
+        self.custom_dvs_atk = custom_tkinter.AmountEntry(self.custom_dvs_frame, min_val=0, max_val=15, init_val=15, callback=self._recalc_hidden_power)
         self.custom_dvs_atk.grid(row=1, column=1, padx=self.padx, pady=self.pady)
 
         self.custom_dvs_def_label = tk.Label(self.custom_dvs_frame, text="Defense DV:")
         self.custom_dvs_def_label.grid(row=2, column=0, padx=self.padx, pady=self.pady)
-        self.custom_dvs_def = custom_tkinter.AmountEntry(self.custom_dvs_frame, min_val=0, max_val=15, init_val=15)
+        self.custom_dvs_def = custom_tkinter.AmountEntry(self.custom_dvs_frame, min_val=0, max_val=15, init_val=15, callback=self._recalc_hidden_power)
         self.custom_dvs_def.grid(row=2, column=1, padx=self.padx, pady=self.pady)
 
         self.custom_dvs_spd_label = tk.Label(self.custom_dvs_frame, text="Speed DV:")
         self.custom_dvs_spd_label.grid(row=3, column=0, padx=self.padx, pady=self.pady)
-        self.custom_dvs_spd = custom_tkinter.AmountEntry(self.custom_dvs_frame, min_val=0, max_val=15, init_val=15)
+        self.custom_dvs_spd = custom_tkinter.AmountEntry(self.custom_dvs_frame, min_val=0, max_val=15, init_val=15, callback=self._recalc_hidden_power)
         self.custom_dvs_spd.grid(row=3, column=1, padx=self.padx, pady=self.pady)
 
         self.custom_dvs_spc_label = tk.Label(self.custom_dvs_frame, text="Special DV:")
         self.custom_dvs_spc_label.grid(row=4, column=0, padx=self.padx, pady=self.pady)
-        self.custom_dvs_spc = custom_tkinter.AmountEntry(self.custom_dvs_frame, min_val=0, max_val=15, init_val=15)
+        self.custom_dvs_spc = custom_tkinter.AmountEntry(self.custom_dvs_frame, min_val=0, max_val=15, init_val=15, callback=self._recalc_hidden_power)
         self.custom_dvs_spc.grid(row=4, column=1, padx=self.padx, pady=self.pady)
+
+        self.custom_dvs_hidden_power_label = tk.Label(self.custom_dvs_frame, text="Hidden Power:")
+        self.custom_dvs_hidden_power_label.grid(row=5, column=0, padx=self.padx, pady=self.pady)
+        self.custom_dvs_hidden_power = tk.Label(self.custom_dvs_frame)
+        self.custom_dvs_hidden_power.grid(row=5, column=1, padx=self.padx, pady=self.pady)
 
 
         self.warning_label = tk.Label(self.controls_frame, text="WARNING: Any unsaved changes in your current route\nwill be lost when creating a new route!", justify=tk.CENTER, anchor=tk.CENTER)
@@ -693,6 +804,26 @@ class NewRouteWindow(custom_tkinter.Popup):
         self.bind('<Escape>', self._main_window.cancel_new_event)
         self._pkmn_version_callback()
         self.pkmn_filter.focus()
+    
+    def _recalc_hidden_power(self, *args, **kwargs):
+        try:
+            hp_type, hp_power = pkmn.current_gen_info().get_hidden_power(
+                StatBlock(
+                    int(self.custom_dvs_hp.get()),
+                    int(self.custom_dvs_atk.get()),
+                    int(self.custom_dvs_def.get()),
+                    int(self.custom_dvs_spc.get()),
+                    int(self.custom_dvs_spc.get()),
+                    int(self.custom_dvs_spd.get())
+                )
+            )
+
+            if not hp_type:
+                self.custom_dvs_hidden_power.configure(text=f"Not supported in gen 1")
+            else:
+                self.custom_dvs_hidden_power.configure(text=f"{hp_type}: {hp_power}")
+        except Exception as e:
+            self.custom_dvs_hidden_power.configure(text=f"Failed to calculate, invalid DVs")
 
     def _pkmn_version_callback(self, *args, **kwargs):
         pkmn.change_version(self.pkmn_version.get())
@@ -706,6 +837,7 @@ class NewRouteWindow(custom_tkinter.Popup):
     def _custom_dvs_callback(self, *args, **kwargs):
         if not self.max_dvs_flag.get():
             self.custom_dvs_frame.grid(row=5, column=0, columnspan=2)
+            self._recalc_hidden_power()
         else:
             self.custom_dvs_frame.grid_forget()
     
@@ -717,7 +849,7 @@ class NewRouteWindow(custom_tkinter.Popup):
             const.HP: int(self.custom_dvs_hp.get()),
             const.ATK: int(self.custom_dvs_atk.get()),
             const.DEF: int(self.custom_dvs_def.get()),
-            const.SPE: int(self.custom_dvs_spd.get()),
+            const.SPD: int(self.custom_dvs_spd.get()),
             const.SPC: int(self.custom_dvs_spc.get()),
         }
     

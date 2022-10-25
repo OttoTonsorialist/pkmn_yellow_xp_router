@@ -2,7 +2,7 @@ import math
 
 from pkmn import universal_data_objects, damage_calc
 import pkmn
-from pkmn.gen_2.data_objects import GenTwoBadgeList
+from pkmn.gen_2.data_objects import GenTwoBadgeList, get_hidden_power_type, get_hidden_power_base_power
 from utils.constants import const
 from pkmn.gen_2.gen_two_constants import gen_two_const
 
@@ -28,12 +28,19 @@ def calculate_damage(
     defender_has_reflect:bool=False,
     custom_move_data:str=""
 ):
-    if move.base_power is None or move.base_power == 0:
+    if move.name == const.HIDDEN_POWER_MOVE_NAME:
+        move_type = get_hidden_power_type(attacking_pkmn.dvs)
+        base_power = get_hidden_power_base_power(attacking_pkmn.dvs)
+    else:
+        move_type = move.move_type
+        base_power = move.base_power
+
+    if base_power is None or base_power == 0:
         return None
     
     # special move interactions
     if move.attack_flavor == const.FLAVOR_FIXED_DAMAGE:
-        return damage_calc.DamageRange({move.base_power: 1})
+        return damage_calc.DamageRange({base_power: 1})
     elif move.attack_flavor == const.FLAVOR_LEVEL_DAMAGE:
         return damage_calc.DamageRange({attacking_pkmn.level: 1})
     elif move.attack_flavor == const.FLAVOR_PSYWAVE:
@@ -50,15 +57,15 @@ def calculate_damage(
 
     attacking_species = pkmn.current_gen_info().pkmn_db().get_pkmn(attacking_pkmn.name)
     defending_species = pkmn.current_gen_info().pkmn_db().get_pkmn(defending_pkmn.name)
-    first_type_effectiveness = gen_two_const.TYPE_CHART.get(move.move_type).get(defending_species.first_type)
+    first_type_effectiveness = gen_two_const.TYPE_CHART.get(move_type).get(defending_species.first_type)
     second_type_effectiveness = None
     if defending_species.first_type != defending_species.second_type:
-        second_type_effectiveness = gen_two_const.TYPE_CHART.get(move.move_type).get(defending_species.second_type)
+        second_type_effectiveness = gen_two_const.TYPE_CHART.get(move_type).get(defending_species.second_type)
     
     if first_type_effectiveness == const.IMMUNE or second_type_effectiveness == const.IMMUNE:
         return None
     
-    if move.move_type in gen_two_const.SPECIAL_TYPES:
+    if move_type in gen_two_const.SPECIAL_TYPES:
         attacking_stat = attacking_battle_stats.special_attack
         defending_stat = defending_battle_stats.special_defense
         if defender_has_light_screen and not is_crit:
@@ -79,50 +86,49 @@ def calculate_damage(
     if  move.name == const.EXPLOSION_MOVE_NAME or move.name == const.SELFDESTRUCT_MOVE_NAME:
         defending_stat = max(math.floor(defending_stat / 2), 1)
 
-    is_stab = (attacking_species.first_type == move.move_type) or (attacking_species.second_type == move.move_type)
+    is_stab = (attacking_species.first_type == move_type) or (attacking_species.second_type == move_type)
     if move.name == const.FUTURE_SIGHT_MOVE_NAME:
         is_stab = False
 
-    held_item_boost = gen_two_const.HELD_ITEM_BOOSTS.get(attacking_pkmn.held_item) == move.move_type
+    held_item_boost = gen_two_const.HELD_ITEM_BOOSTS.get(attacking_pkmn.held_item) == move_type
 
     badges:GenTwoBadgeList = attacking_pkmn.badges
 
     if badges is None:
         badge_type_boost = False
-    elif move.move_type == const.TYPE_FLYING and badges.zephyr:
+    elif move_type == const.TYPE_FLYING and badges.zephyr:
         badge_type_boost = True
-    elif move.move_type == const.TYPE_BUG and badges.hive:
+    elif move_type == const.TYPE_BUG and badges.hive:
         badge_type_boost = True
-    elif move.move_type == const.TYPE_NORMAL and badges.plain:
+    elif move_type == const.TYPE_NORMAL and badges.plain:
         badge_type_boost = True
-    elif move.move_type == const.TYPE_GHOST and badges.fog:
+    elif move_type == const.TYPE_GHOST and badges.fog:
         badge_type_boost = True
-    elif move.move_type == const.TYPE_FIGHTING and badges.storm:
+    elif move_type == const.TYPE_FIGHTING and badges.storm:
         badge_type_boost = True
-    elif move.move_type == const.TYPE_STEEL and badges.mineral:
+    elif move_type == const.TYPE_STEEL and badges.mineral:
         badge_type_boost = True
-    elif move.move_type == const.TYPE_ICE and badges.glacier:
+    elif move_type == const.TYPE_ICE and badges.glacier:
         badge_type_boost = True
-    elif move.move_type == const.TYPE_DRAGON and badges.rising:
+    elif move_type == const.TYPE_DRAGON and badges.rising:
         badge_type_boost = True
-    elif move.move_type == const.TYPE_ROCK and badges.boulder:
+    elif move_type == const.TYPE_ROCK and badges.boulder:
         badge_type_boost = True
-    elif move.move_type == const.TYPE_WATER and badges.cascade:
+    elif move_type == const.TYPE_WATER and badges.cascade:
         badge_type_boost = True
-    elif move.move_type == const.TYPE_ELECTRIC and badges.thunder:
+    elif move_type == const.TYPE_ELECTRIC and badges.thunder:
         badge_type_boost = True
-    elif move.move_type == const.TYPE_GRASS and badges.rainbow:
+    elif move_type == const.TYPE_GRASS and badges.rainbow:
         badge_type_boost = True
-    elif move.move_type == const.TYPE_PSYCHIC and badges.marsh:
+    elif move_type == const.TYPE_PSYCHIC and badges.marsh:
         badge_type_boost = True
-    elif move.move_type == const.TYPE_FIGHTING and badges.volcano:
+    elif move_type == const.TYPE_FIGHTING and badges.volcano:
         badge_type_boost = True
-    elif move.move_type == const.TYPE_GROUND and badges.earth:
+    elif move_type == const.TYPE_GROUND and badges.earth:
         badge_type_boost = True
     else:
         badge_type_boost = False
     
-    base_power = move.base_power
     if move.name == gen_two_const.MAGNITUDE_MOVE_NAME:
         if gen_two_const.MAGNITUDE_4 in custom_move_data:
             base_power = 10

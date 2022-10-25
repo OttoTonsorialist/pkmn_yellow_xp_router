@@ -1,11 +1,11 @@
 import json
 import copy
-from typing import List
+from typing import List, Tuple
 
 from pkmn import universal_data_objects
 from pkmn.gen_2 import pkmn_damage_calc
 from pkmn.damage_calc import DamageRange
-from pkmn.gen_2.data_objects import GenTwoBadgeList, GenTwoStatBlock, instantiate_trainer_pokemon, instantiate_wild_pokemon
+from pkmn.gen_2.data_objects import GenTwoBadgeList, GenTwoStatBlock, instantiate_trainer_pokemon, instantiate_wild_pokemon, get_hidden_power_base_power, get_hidden_power_type
 from pkmn.gen_2.gen_two_constants import gen_two_const
 from pkmn.pkmn_db import ItemDB, MinBattlesDB, PkmnDB, TrainerDB, MoveDB
 from pkmn.pkmn_info import CurrentGen
@@ -98,6 +98,10 @@ class GenTwo(CurrentGen):
     
     def get_move_custom_data(self, move_name) -> List[str]:
         return gen_two_const.CUSTOM_MOVE_DATA.get(move_name)
+    
+    def get_hidden_power(self, dvs: universal_data_objects.StatBlock) -> Tuple[str, int]:
+        return get_hidden_power_type(dvs), get_hidden_power_base_power(dvs)
+
 
 def _load_pkmn_db(path):
     result = {}

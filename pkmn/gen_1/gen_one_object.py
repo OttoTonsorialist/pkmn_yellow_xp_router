@@ -1,6 +1,6 @@
 import json
 import copy
-from typing import List
+from typing import List, Tuple
 
 from pkmn import universal_data_objects
 from pkmn.gen_1 import pkmn_damage_calc, pkmn_utils
@@ -101,6 +101,9 @@ class GenOne(CurrentGen):
         # Mimc, and all multi-hit moves
         # so, no other moves will need custom data
         return []
+    
+    def get_hidden_power(self, dvs: universal_data_objects.StatBlock) -> Tuple[str, int]:
+        return "", 0
 
 def _load_pkmn_db(path):
     result = {}

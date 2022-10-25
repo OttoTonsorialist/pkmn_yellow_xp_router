@@ -78,6 +78,15 @@ class Router:
 
         self._recalc()
     
+    def change_current_dvs(self, new_dvs:universal_data_objects.StatBlock):
+        cur_mon = self.init_route_state.solo_pkmn
+        self.init_route_state = route_state_objects.RouteState(
+            route_state_objects.SoloPokemon(cur_mon.name, cur_mon.species_def, new_dvs, self.init_route_state.badges),
+            self.init_route_state.badges,
+            self.init_route_state.inventory
+        )
+        self._recalc()
+    
     def _recalc(self):
         self.event_item_lookup = {}
 

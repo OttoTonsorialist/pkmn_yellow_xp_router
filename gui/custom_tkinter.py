@@ -347,8 +347,8 @@ class AmountEntry(tk.Frame):
         try:
             val = int(self._amount.get().strip())
             if self.min_val is not None:
-                val = max(val, self.min_val)
-            self._amount.set(str(val - 1))
+                val = max(val - 1, self.min_val)
+            self._amount.set(str(val))
         except Exception:
             pass
 
@@ -356,8 +356,8 @@ class AmountEntry(tk.Frame):
         try:
             val = int(self._amount.get().strip())
             if self.max_val is not None:
-                val = min(val, self.max_val)
-            self._amount.set(str(val + 1))
+                val = min(val + 1, self.max_val)
+            self._amount.set(str(val))
         except Exception:
             pass
     
