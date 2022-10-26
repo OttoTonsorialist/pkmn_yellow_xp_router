@@ -253,8 +253,18 @@ class PkmnViewer(tk.Frame):
             spa_val = "*" + spa_val
 
         spd_val = str(pkmn.cur_stats.special_defense)
-        if badges is not None and badges.is_special_defense_boosted():
-            spd_val = "*" + spd_val
+        # TODO: ugly, fix later
+        if pkmn_gen_info.current_gen_info().get_generation() == 2:
+            if badges is not None and badges.is_special_defense_boosted():
+                unboosted_spa = pkmn.base_stats.calc_level_stats(pkmn.level, pkmn.dvs, pkmn.stat_xp, pkmn_gen_info.current_gen_info().make_badge_list()).special_attack
+                if (
+                    (unboosted_spa >= 206 and unboosted_spa <= 432) or
+                    (unboosted_spa >= 661 and unboosted_spa <= 999)
+                ) and badges is not None and badges.is_special_defense_boosted():
+                    spd_val = "*" + spd_val
+        else:
+            if badges is not None and badges.is_special_defense_boosted():
+                spd_val = "*" + spd_val
 
         speed_val = str(pkmn.cur_stats.speed)
         if badges is not None and badges.is_speed_boosted():

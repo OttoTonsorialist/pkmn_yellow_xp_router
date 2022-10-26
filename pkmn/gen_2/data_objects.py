@@ -249,6 +249,14 @@ class GenTwoStatBlock(universal_data_objects.StatBlock):
             self.special_attack = min(special_attack, STAT_XP_CAP)
             self.special_defense = min(special_defense, STAT_XP_CAP)
     
+    def _should_ignore_spd_badge_boost(self, unboosted_spa):
+        if (
+            (unboosted_spa >= 0 and unboosted_spa <= 205) or
+            (unboosted_spa >= 433 and unboosted_spa <= 660)
+        ):
+            return True
+        return False
+    
     def calc_level_stats(
         self,
         level:int,
@@ -257,13 +265,19 @@ class GenTwoStatBlock(universal_data_objects.StatBlock):
         badges:GenTwoBadgeList
     ) -> GenTwoStatBlock:
         # assume self is base stats, level is target level, stat_xp is StatBlock of stat_xp vals, badges is a BadgeList
+        unboosted_spa = calc_stat(self.special_attack, level, stat_dv.special_attack, stat_xp.special_attack, is_badge_boosted=False)
+        if self._should_ignore_spd_badge_boost(unboosted_spa):
+            final_spd = calc_stat(self.special_defense, level, stat_dv.special_attack, stat_xp.special_attack, is_badge_boosted=False)
+        else:
+            final_spd = calc_stat(self.special_defense, level, stat_dv.special_attack, stat_xp.special_attack, is_badge_boosted=badges.glacier)
+
         return GenTwoStatBlock(
             calc_stat(self.hp, level, stat_dv.hp, stat_xp.hp, is_hp=True),
-            calc_stat(self.attack, level, stat_dv.attack, stat_xp.attack, is_badge_bosted=badges.zephyr),
-            calc_stat(self.defense, level, stat_dv.defense, stat_xp.defense, is_badge_bosted=badges.mineral),
-            calc_stat(self.special_attack, level, stat_dv.special_attack, stat_xp.special_attack, is_badge_bosted=badges.glacier),
-            calc_stat(self.special_defense, level, stat_dv.special_attack, stat_xp.special_attack, is_badge_bosted=badges.glacier),
-            calc_stat(self.speed, level, stat_dv.speed, stat_xp.speed, is_badge_bosted=badges.plain),
+            calc_stat(self.attack, level, stat_dv.attack, stat_xp.attack, is_badge_boosted=badges.zephyr),
+            calc_stat(self.defense, level, stat_dv.defense, stat_xp.defense, is_badge_boosted=badges.mineral),
+            calc_stat(self.special_attack, level, stat_dv.special_attack, stat_xp.special_attack, is_badge_boosted=badges.glacier),
+            final_spd,
+            calc_stat(self.speed, level, stat_dv.speed, stat_xp.speed, is_badge_boosted=badges.plain),
         )
     
     def calc_battle_stats(
@@ -337,14 +351,33 @@ class GenTwoStatBlock(universal_data_objects.StatBlock):
             is_badge_boosted=(badges is not None and badges.is_special_attack_boosted())
         )
 
-        result.special_defense = calc_battle_stat(
-            self.special_defense,
+        unboosted_spa = calc_battle_stat(
+            self.special_attack,
             level,
             stat_dv.special_attack,
             stat_xp.special_attack,
-            stage_modifiers.special_defense_stage,
-            is_badge_boosted=(badges is not None and badges.is_special_defense_boosted())
+            stage_modifiers.special_attack_stage,
+            is_badge_boosted=False
         )
+
+        if self._should_ignore_spd_badge_boost(unboosted_spa):
+            result.special_defense = calc_battle_stat(
+                self.special_defense,
+                level,
+                stat_dv.special_attack,
+                stat_xp.special_attack,
+                stage_modifiers.special_defense_stage,
+                is_badge_boosted=False
+            )
+        else:
+            result.special_defense = calc_battle_stat(
+                self.special_defense,
+                level,
+                stat_dv.special_attack,
+                stat_xp.special_attack,
+                stage_modifiers.special_defense_stage,
+                is_badge_boosted=(badges is not None and badges.is_special_defense_boosted())
+            )
 
         return result
 
@@ -414,10 +447,10 @@ def calc_unboosted_stat(base_val, level, dv, stat_xp, is_hp=False):
 
     return temp + 5
 
-def calc_stat(base_val, level, dv, stat_xp, is_hp=False, is_badge_bosted=False):
+def calc_stat(base_val, level, dv, stat_xp, is_hp=False, is_badge_boosted=False):
     result = calc_unboosted_stat(base_val, level, dv, stat_xp, is_hp=is_hp)
 
-    if is_badge_bosted:
+    if is_badge_boosted:
         result = badge_boost_single_stat(result)
 
     return result
