@@ -276,8 +276,24 @@ class GenTwoStatBlock(universal_data_objects.StatBlock):
         is_crit=False
     ) -> GenTwoStatBlock:
         if is_crit:
-            # TODO: need to validate how crits are different in gen two...
-            pass
+            # NOTE: right now, only the solo mon's stats can be modified, so this approximation works
+            # but it's not a "full" solution if we were to support a full battle simulator
+            # in that case we would have to restructure more of how this works
+
+            # crits ignore modifiers if the effective stages would make the damage worse
+            # since the enemy is always neutral, just correct to 0
+
+            # correct attack/spa up (ignore negative penalties on crit)
+            # correct defense/spd down (ignore positive penalties on enemy crit)
+            stage_modifiers = universal_data_objects.StageModifiers(
+                attack=max(0, stage_modifiers.attack_stage),
+                defense=min(0, stage_modifiers.defense_stage),
+                speed=stage_modifiers.speed_stage,
+                special_attack=max(0, stage_modifiers.special_attack_stage),
+                special_defense=min(0, stage_modifiers.special_defense_stage),
+                accuracy=stage_modifiers.accuracy_stage,
+                evasion=stage_modifiers.evasion_stage
+            )
 
         # create a result object, to populate
         result = GenTwoStatBlock(
