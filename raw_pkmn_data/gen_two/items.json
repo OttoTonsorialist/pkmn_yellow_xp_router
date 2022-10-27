@@ -9,7 +9,7 @@
     "Ultra Ball": {
         "name": "Ultra Ball",
         "key_item": false,
-        "purchase_price": 0,
+        "purchase_price": 1200,
         "pocket": "Ball",
         "marts": [
             "Blackthorn",
@@ -25,14 +25,14 @@
     "Brightpowder": {
         "name": "Brightpowder",
         "key_item": false,
-        "purchase_price": 0,
+        "purchase_price": 10,
         "pocket": "Item",
         "marts": []
     },
     "Great Ball": {
         "name": "Great Ball",
         "key_item": false,
-        "purchase_price": 0,
+        "purchase_price": 600,
         "pocket": "Ball",
         "marts": [
             "Goldenrod2F2",
@@ -51,7 +51,7 @@
     "Poke Ball": {
         "name": "Poke Ball",
         "key_item": false,
-        "purchase_price": 0,
+        "purchase_price": 200,
         "pocket": "Ball",
         "marts": [
             "CherrygroveDex",
@@ -88,7 +88,7 @@
     "Antidote": {
         "name": "Antidote",
         "key_item": false,
-        "purchase_price": 0,
+        "purchase_price": 100,
         "pocket": "Item",
         "marts": [
             "Cherrygrove",
@@ -108,7 +108,7 @@
     "Burn Heal": {
         "name": "Burn Heal",
         "key_item": false,
-        "purchase_price": 0,
+        "purchase_price": 250,
         "pocket": "Item",
         "marts": [
             "Goldenrod2F1",
@@ -123,7 +123,7 @@
     "Ice Heal": {
         "name": "Ice Heal",
         "key_item": false,
-        "purchase_price": 0,
+        "purchase_price": 250,
         "pocket": "Item",
         "marts": [
             "Goldenrod2F1",
@@ -135,7 +135,7 @@
     "Awakening": {
         "name": "Awakening",
         "key_item": false,
-        "purchase_price": 0,
+        "purchase_price": 250,
         "pocket": "Item",
         "marts": [
             "Cherrygrove",
@@ -154,7 +154,7 @@
     "Parlyz Heal": {
         "name": "Parlyz Heal",
         "key_item": false,
-        "purchase_price": 0,
+        "purchase_price": 200,
         "pocket": "Item",
         "marts": [
             "Cherrygrove",
@@ -175,7 +175,7 @@
     "Full Restore": {
         "name": "Full Restore",
         "key_item": false,
-        "purchase_price": 0,
+        "purchase_price": 3000,
         "pocket": "Item",
         "marts": [
             "IndigoPlateau"
@@ -184,7 +184,7 @@
     "Max Potion": {
         "name": "Max Potion",
         "key_item": false,
-        "purchase_price": 0,
+        "purchase_price": 2500,
         "pocket": "Item",
         "marts": [
             "Blackthorn",
@@ -196,7 +196,7 @@
     "Hyper Potion": {
         "name": "Hyper Potion",
         "key_item": false,
-        "purchase_price": 0,
+        "purchase_price": 1200,
         "pocket": "Item",
         "marts": [
             "Cianwood",
@@ -214,7 +214,7 @@
     "Super Potion": {
         "name": "Super Potion",
         "key_item": false,
-        "purchase_price": 0,
+        "purchase_price": 700,
         "pocket": "Item",
         "marts": [
             "Azalea",
@@ -234,7 +234,7 @@
     "Potion": {
         "name": "Potion",
         "key_item": false,
-        "purchase_price": 0,
+        "purchase_price": 300,
         "pocket": "Item",
         "marts": [
             "Cherrygrove",
@@ -253,7 +253,7 @@
     "Escape Rope": {
         "name": "Escape Rope",
         "key_item": false,
-        "purchase_price": 0,
+        "purchase_price": 550,
         "pocket": "Item",
         "marts": [
             "Violet",
@@ -265,7 +265,7 @@
     "Repel": {
         "name": "Repel",
         "key_item": false,
-        "purchase_price": 0,
+        "purchase_price": 350,
         "pocket": "Item",
         "marts": [
             "Azalea",
@@ -276,35 +276,35 @@
     "Max Elixer": {
         "name": "Max Elixer",
         "key_item": false,
-        "purchase_price": 0,
+        "purchase_price": 4500,
         "pocket": "Item",
         "marts": []
     },
     "Fire Stone": {
         "name": "Fire Stone",
         "key_item": false,
-        "purchase_price": 0,
+        "purchase_price": 2100,
         "pocket": "Item",
         "marts": []
     },
     "Thunderstone": {
         "name": "Thunderstone",
         "key_item": false,
-        "purchase_price": 0,
+        "purchase_price": 2100,
         "pocket": "Item",
         "marts": []
     },
     "Water Stone": {
         "name": "Water Stone",
         "key_item": false,
-        "purchase_price": 0,
+        "purchase_price": 2100,
         "pocket": "Item",
         "marts": []
     },
     "Hp Up": {
         "name": "Hp Up",
         "key_item": false,
-        "purchase_price": 0,
+        "purchase_price": 9800,
         "pocket": "Item",
         "marts": [
             "Goldenrod4F",
@@ -314,7 +314,7 @@
     "Protein": {
         "name": "Protein",
         "key_item": false,
-        "purchase_price": 0,
+        "purchase_price": 9800,
         "pocket": "Item",
         "marts": [
             "Goldenrod4F",
@@ -324,7 +324,7 @@
     "Iron": {
         "name": "Iron",
         "key_item": false,
-        "purchase_price": 0,
+        "purchase_price": 9800,
         "pocket": "Item",
         "marts": [
             "Goldenrod4F",
@@ -334,7 +334,7 @@
     "Carbos": {
         "name": "Carbos",
         "key_item": false,
-        "purchase_price": 0,
+        "purchase_price": 9800,
         "pocket": "Item",
         "marts": [
             "Goldenrod4F",
@@ -344,14 +344,14 @@
     "Lucky Punch": {
         "name": "Lucky Punch",
         "key_item": false,
-        "purchase_price": 0,
+        "purchase_price": 10,
         "pocket": "Item",
         "marts": []
     },
     "Calcium": {
         "name": "Calcium",
         "key_item": false,
-        "purchase_price": 0,
+        "purchase_price": 9800,
         "pocket": "Item",
         "marts": [
             "Goldenrod4F",
@@ -361,14 +361,14 @@
     "Rare Candy": {
         "name": "Rare Candy",
         "key_item": false,
-        "purchase_price": 0,
+        "purchase_price": 4800,
         "pocket": "Item",
         "marts": []
     },
     "X Accuracy": {
         "name": "X Accuracy",
         "key_item": false,
-        "purchase_price": 0,
+        "purchase_price": 950,
         "pocket": "Item",
         "marts": [
             "Goldenrod3F",
@@ -378,28 +378,28 @@
     "Leaf Stone": {
         "name": "Leaf Stone",
         "key_item": false,
-        "purchase_price": 0,
+        "purchase_price": 2100,
         "pocket": "Item",
         "marts": []
     },
     "Metal Powder": {
         "name": "Metal Powder",
         "key_item": false,
-        "purchase_price": 0,
+        "purchase_price": 10,
         "pocket": "Item",
         "marts": []
     },
     "Nugget": {
         "name": "Nugget",
         "key_item": false,
-        "purchase_price": 0,
+        "purchase_price": 10000,
         "pocket": "Item",
         "marts": []
     },
     "Poke Doll": {
         "name": "Poke Doll",
         "key_item": false,
-        "purchase_price": 0,
+        "purchase_price": 1000,
         "pocket": "Item",
         "marts": [
             "Goldenrod2F2",
@@ -410,7 +410,7 @@
     "Full Heal": {
         "name": "Full Heal",
         "key_item": false,
-        "purchase_price": 0,
+        "purchase_price": 600,
         "pocket": "Item",
         "marts": [
             "Cianwood",
@@ -427,7 +427,7 @@
     "Revive": {
         "name": "Revive",
         "key_item": false,
-        "purchase_price": 0,
+        "purchase_price": 1500,
         "pocket": "Item",
         "marts": [
             "Cianwood",
@@ -444,7 +444,7 @@
     "Max Revive": {
         "name": "Max Revive",
         "key_item": false,
-        "purchase_price": 0,
+        "purchase_price": 4000,
         "pocket": "Item",
         "marts": []
     },
@@ -461,7 +461,7 @@
     "Super Repel": {
         "name": "Super Repel",
         "key_item": false,
-        "purchase_price": 0,
+        "purchase_price": 500,
         "pocket": "Item",
         "marts": [
             "Olivine",
@@ -474,7 +474,7 @@
     "Max Repel": {
         "name": "Max Repel",
         "key_item": false,
-        "purchase_price": 0,
+        "purchase_price": 700,
         "pocket": "Item",
         "marts": [
             "Blackthorn",
@@ -487,7 +487,7 @@
     "Dire Hit": {
         "name": "Dire Hit",
         "key_item": false,
-        "purchase_price": 0,
+        "purchase_price": 650,
         "pocket": "Item",
         "marts": [
             "Goldenrod3F",
@@ -498,7 +498,7 @@
     "Fresh Water": {
         "name": "Fresh Water",
         "key_item": false,
-        "purchase_price": 0,
+        "purchase_price": 200,
         "pocket": "Item",
         "marts": [
             "MtMoon"
@@ -507,7 +507,7 @@
     "Soda Pop": {
         "name": "Soda Pop",
         "key_item": false,
-        "purchase_price": 0,
+        "purchase_price": 300   ,
         "pocket": "Item",
         "marts": [
             "MtMoon"
@@ -516,7 +516,7 @@
     "Lemonade": {
         "name": "Lemonade",
         "key_item": false,
-        "purchase_price": 0,
+        "purchase_price": 350,
         "pocket": "Item",
         "marts": [
             "MtMoon"
@@ -525,7 +525,7 @@
     "X Attack": {
         "name": "X Attack",
         "key_item": false,
-        "purchase_price": 0,
+        "purchase_price": 500,
         "pocket": "Item",
         "marts": [
             "Violet",
@@ -539,7 +539,7 @@
     "X Defend": {
         "name": "X Defend",
         "key_item": false,
-        "purchase_price": 0,
+        "purchase_price": 550,
         "pocket": "Item",
         "marts": [
             "Violet",
@@ -553,7 +553,7 @@
     "X Speed": {
         "name": "X Speed",
         "key_item": false,
-        "purchase_price": 0,
+        "purchase_price": 350,
         "pocket": "Item",
         "marts": [
             "Violet",
@@ -564,7 +564,7 @@
     "X Special": {
         "name": "X Special",
         "key_item": false,
-        "purchase_price": 0,
+        "purchase_price": 350,
         "pocket": "Item",
         "marts": [
             "Goldenrod3F",
@@ -595,7 +595,7 @@
     "Exp Share": {
         "name": "Exp Share",
         "key_item": false,
-        "purchase_price": 0,
+        "purchase_price": 3000,
         "pocket": "Item",
         "marts": []
     },
@@ -616,7 +616,7 @@
     "Silver Leaf": {
         "name": "Silver Leaf",
         "key_item": false,
-        "purchase_price": 0,
+        "purchase_price": 1000,
         "pocket": "Item",
         "marts": []
     },
@@ -630,28 +630,28 @@
     "Pp Up": {
         "name": "Pp Up",
         "key_item": false,
-        "purchase_price": 0,
+        "purchase_price": 9800,
         "pocket": "Item",
         "marts": []
     },
     "Ether": {
         "name": "Ether",
         "key_item": false,
-        "purchase_price": 0,
+        "purchase_price": 1200,
         "pocket": "Item",
         "marts": []
     },
     "Max Ether": {
         "name": "Max Ether",
         "key_item": false,
-        "purchase_price": 0,
+        "purchase_price": 2000,
         "pocket": "Item",
         "marts": []
     },
     "Elixer": {
         "name": "Elixer",
         "key_item": false,
-        "purchase_price": 0,
+        "purchase_price": 3000,
         "pocket": "Item",
         "marts": []
     },
@@ -700,105 +700,105 @@
     "Moomoo Milk": {
         "name": "Moomoo Milk",
         "key_item": false,
-        "purchase_price": 0,
+        "purchase_price": 500,
         "pocket": "Item",
         "marts": []
     },
     "Quick Claw": {
         "name": "Quick Claw",
         "key_item": false,
-        "purchase_price": 0,
+        "purchase_price": 100,
         "pocket": "Item",
         "marts": []
     },
     "Psncureberry": {
         "name": "Psncureberry",
         "key_item": false,
-        "purchase_price": 0,
+        "purchase_price": 10,
         "pocket": "Item",
         "marts": []
     },
     "Gold Leaf": {
         "name": "Gold Leaf",
         "key_item": false,
-        "purchase_price": 0,
+        "purchase_price": 1000,
         "pocket": "Item",
         "marts": []
     },
     "Soft Sand": {
         "name": "Soft Sand",
         "key_item": false,
-        "purchase_price": 0,
+        "purchase_price": 100,
         "pocket": "Item",
         "marts": []
     },
     "Sharp Beak": {
         "name": "Sharp Beak",
         "key_item": false,
-        "purchase_price": 0,
+        "purchase_price": 100,
         "pocket": "Item",
         "marts": []
     },
     "Przcureberry": {
         "name": "Przcureberry",
         "key_item": false,
-        "purchase_price": 0,
+        "purchase_price": 10,
         "pocket": "Item",
         "marts": []
     },
     "Burnt Berry": {
         "name": "Burnt Berry",
         "key_item": false,
-        "purchase_price": 0,
+        "purchase_price": 10,
         "pocket": "Item",
         "marts": []
     },
     "Ice Berry": {
         "name": "Ice Berry",
         "key_item": false,
-        "purchase_price": 0,
+        "purchase_price": 10,
         "pocket": "Item",
         "marts": []
     },
     "Poison Barb": {
         "name": "Poison Barb",
         "key_item": false,
-        "purchase_price": 0,
+        "purchase_price": 100,
         "pocket": "Item",
         "marts": []
     },
     "Kings Rock": {
         "name": "Kings Rock",
         "key_item": false,
-        "purchase_price": 0,
+        "purchase_price": 100,
         "pocket": "Item",
         "marts": []
     },
     "Bitter Berry": {
         "name": "Bitter Berry",
         "key_item": false,
-        "purchase_price": 0,
+        "purchase_price": 10,
         "pocket": "Item",
         "marts": []
     },
     "Mint Berry": {
         "name": "Mint Berry",
         "key_item": false,
-        "purchase_price": 0,
+        "purchase_price": 10,
         "pocket": "Item",
         "marts": []
     },
     "Red Apricorn": {
         "name": "Red Apricorn",
         "key_item": false,
-        "purchase_price": 0,
+        "purchase_price": 200,
         "pocket": "Item",
         "marts": []
     },
     "Tinymushroom": {
         "name": "Tinymushroom",
         "key_item": false,
-        "purchase_price": 0,
+        "purchase_price": 500,
         "pocket": "Item",
         "marts": [
             "Mahogany1"
@@ -807,105 +807,105 @@
     "Big Mushroom": {
         "name": "Big Mushroom",
         "key_item": false,
-        "purchase_price": 0,
+        "purchase_price": 5000,
         "pocket": "Item",
         "marts": []
     },
     "SilverPowder": {
         "name": "SilverPowder",
         "key_item": false,
-        "purchase_price": 0,
+        "purchase_price": 100,
         "pocket": "Item",
         "marts": []
     },
     "Blu Apricorn": {
         "name": "Blu Apricorn",
         "key_item": false,
-        "purchase_price": 0,
+        "purchase_price": 200,
         "pocket": "Item",
         "marts": []
     },
     "Amulet Coin": {
         "name": "Amulet Coin",
         "key_item": false,
-        "purchase_price": 0,
+        "purchase_price": 100,
         "pocket": "Item",
         "marts": []
     },
     "Ylw Apricorn": {
         "name": "Ylw Apricorn",
         "key_item": false,
-        "purchase_price": 0,
+        "purchase_price": 200,
         "pocket": "Item",
         "marts": []
     },
     "Grn Apricorn": {
         "name": "Grn Apricorn",
         "key_item": false,
-        "purchase_price": 0,
+        "purchase_price": 200,
         "pocket": "Item",
         "marts": []
     },
     "Cleanse Tag": {
         "name": "Cleanse Tag",
         "key_item": false,
-        "purchase_price": 0,
+        "purchase_price": 200,
         "pocket": "Item",
         "marts": []
     },
     "Mystic Water": {
         "name": "Mystic Water",
         "key_item": false,
-        "purchase_price": 0,
+        "purchase_price": 100,
         "pocket": "Item",
         "marts": []
     },
     "TwistedSpoon": {
         "name": "TwistedSpoon",
         "key_item": false,
-        "purchase_price": 0,
+        "purchase_price": 100,
         "pocket": "Item",
         "marts": []
     },
     "Wht Apricorn": {
         "name": "Wht Apricorn",
         "key_item": false,
-        "purchase_price": 0,
+        "purchase_price": 200,
         "pocket": "Item",
         "marts": []
     },
     "Black Belt": {
         "name": "Black Belt",
         "key_item": false,
-        "purchase_price": 0,
+        "purchase_price": 100,
         "pocket": "Item",
         "marts": []
     },
     "Blk Apricorn": {
         "name": "Blk Apricorn",
         "key_item": false,
-        "purchase_price": 0,
+        "purchase_price": 200,
         "pocket": "Item",
         "marts": []
     },
     "Pnk Apricorn": {
         "name": "Pnk Apricorn",
         "key_item": false,
-        "purchase_price": 0,
+        "purchase_price": 200,
         "pocket": "Item",
         "marts": []
     },
     "BlackGlasses": {
         "name": "BlackGlasses",
         "key_item": false,
-        "purchase_price": 0,
+        "purchase_price": 100,
         "pocket": "Item",
         "marts": []
     },
     "Slowpoketail": {
         "name": "Slowpoketail",
         "key_item": false,
-        "purchase_price": 0,
+        "purchase_price": 9800,
         "pocket": "Item",
         "marts": [
             "Mahogany1"
@@ -914,77 +914,77 @@
     "Pink Bow": {
         "name": "Pink Bow",
         "key_item": false,
-        "purchase_price": 0,
+        "purchase_price": 100,
         "pocket": "Item",
         "marts": []
     },
     "Stick": {
         "name": "Stick",
         "key_item": false,
-        "purchase_price": 0,
+        "purchase_price": 200,
         "pocket": "Item",
         "marts": []
     },
     "Smoke Ball": {
         "name": "Smoke Ball",
         "key_item": false,
-        "purchase_price": 0,
+        "purchase_price": 200,
         "pocket": "Item",
         "marts": []
     },
     "Nevermeltice": {
         "name": "Nevermeltice",
         "key_item": false,
-        "purchase_price": 0,
+        "purchase_price": 100,
         "pocket": "Item",
         "marts": []
     },
     "Magnet": {
         "name": "Magnet",
         "key_item": false,
-        "purchase_price": 0,
+        "purchase_price": 100,
         "pocket": "Item",
         "marts": []
     },
     "Miracleberry": {
         "name": "Miracleberry",
         "key_item": false,
-        "purchase_price": 0,
+        "purchase_price": 10,
         "pocket": "Item",
         "marts": []
     },
     "Pearl": {
         "name": "Pearl",
         "key_item": false,
-        "purchase_price": 0,
+        "purchase_price": 1400,
         "pocket": "Item",
         "marts": []
     },
     "Big Pearl": {
         "name": "Big Pearl",
         "key_item": false,
-        "purchase_price": 0,
+        "purchase_price": 7500,
         "pocket": "Item",
         "marts": []
     },
     "Everstone": {
         "name": "Everstone",
         "key_item": false,
-        "purchase_price": 0,
+        "purchase_price": 200,
         "pocket": "Item",
         "marts": []
     },
     "Spell Tag": {
         "name": "Spell Tag",
         "key_item": false,
-        "purchase_price": 0,
+        "purchase_price": 100,
         "pocket": "Item",
         "marts": []
     },
     "Ragecandybar": {
         "name": "Ragecandybar",
         "key_item": false,
-        "purchase_price": 0,
+        "purchase_price": 300,
         "pocket": "Item",
         "marts": [
             "Mahogany2"
@@ -1007,28 +1007,28 @@
     "Miracle Seed": {
         "name": "Miracle Seed",
         "key_item": false,
-        "purchase_price": 0,
+        "purchase_price": 100,
         "pocket": "Item",
         "marts": []
     },
     "Thick Club": {
         "name": "Thick Club",
         "key_item": false,
-        "purchase_price": 0,
+        "purchase_price": 500,
         "pocket": "Item",
         "marts": []
     },
     "Focus Band": {
         "name": "Focus Band",
         "key_item": false,
-        "purchase_price": 0,
+        "purchase_price": 200,
         "pocket": "Item",
         "marts": []
     },
     "Energypowder": {
         "name": "Energypowder",
         "key_item": false,
-        "purchase_price": 0,
+        "purchase_price": 500,
         "pocket": "Item",
         "marts": [
             "Underground"
@@ -1037,7 +1037,7 @@
     "Energy Root": {
         "name": "Energy Root",
         "key_item": false,
-        "purchase_price": 0,
+        "purchase_price": 800,
         "pocket": "Item",
         "marts": [
             "Underground"
@@ -1046,7 +1046,7 @@
     "Heal Powder": {
         "name": "Heal Powder",
         "key_item": false,
-        "purchase_price": 0,
+        "purchase_price": 450,
         "pocket": "Item",
         "marts": [
             "Underground"
@@ -1055,7 +1055,7 @@
     "Revival Herb": {
         "name": "Revival Herb",
         "key_item": false,
-        "purchase_price": 0,
+        "purchase_price": 2800,
         "pocket": "Item",
         "marts": [
             "Underground"
@@ -1064,14 +1064,14 @@
     "Hard Stone": {
         "name": "Hard Stone",
         "key_item": false,
-        "purchase_price": 0,
+        "purchase_price": 100,
         "pocket": "Item",
         "marts": []
     },
     "Lucky Egg": {
         "name": "Lucky Egg",
         "key_item": false,
-        "purchase_price": 0,
+        "purchase_price": 200,
         "pocket": "Item",
         "marts": []
     },
@@ -1106,14 +1106,14 @@
     "Stardust": {
         "name": "Stardust",
         "key_item": false,
-        "purchase_price": 0,
+        "purchase_price": 2000,
         "pocket": "Item",
         "marts": []
     },
     "Star Piece": {
         "name": "Star Piece",
         "key_item": false,
-        "purchase_price": 0,
+        "purchase_price": 9800,
         "pocket": "Item",
         "marts": []
     },
@@ -1134,7 +1134,7 @@
     "Charcoal": {
         "name": "Charcoal",
         "key_item": false,
-        "purchase_price": 0,
+        "purchase_price": 9800,
         "pocket": "Item",
         "marts": [
             "Azalea"
@@ -1143,77 +1143,77 @@
     "Berry Juice": {
         "name": "Berry Juice",
         "key_item": false,
-        "purchase_price": 0,
+        "purchase_price": 100,
         "pocket": "Item",
         "marts": []
     },
     "Scope Lens": {
         "name": "Scope Lens",
         "key_item": false,
-        "purchase_price": 0,
+        "purchase_price": 200,
         "pocket": "Item",
         "marts": []
     },
     "Metal Coat": {
         "name": "Metal Coat",
         "key_item": false,
-        "purchase_price": 0,
+        "purchase_price": 100,
         "pocket": "Item",
         "marts": []
     },
     "Dragon Fang": {
         "name": "Dragon Fang",
         "key_item": false,
-        "purchase_price": 0,
+        "purchase_price": 100,
         "pocket": "Item",
         "marts": []
     },
     "Leftovers": {
         "name": "Leftovers",
         "key_item": false,
-        "purchase_price": 0,
+        "purchase_price": 200,
         "pocket": "Item",
         "marts": []
     },
     "Mysteryberry": {
         "name": "Mysteryberry",
         "key_item": false,
-        "purchase_price": 0,
+        "purchase_price": 10,
         "pocket": "Item",
         "marts": []
     },
     "Dragon Scale": {
         "name": "Dragon Scale",
         "key_item": false,
-        "purchase_price": 0,
+        "purchase_price": 2100,
         "pocket": "Item",
         "marts": []
     },
     "Berserk Gene": {
         "name": "Berserk Gene",
         "key_item": false,
-        "purchase_price": 0,
+        "purchase_price": 200,
         "pocket": "Item",
         "marts": []
     },
     "Sacred Ash": {
         "name": "Sacred Ash",
         "key_item": false,
-        "purchase_price": 0,
+        "purchase_price": 200,
         "pocket": "Item",
         "marts": []
     },
     "Heavy Ball": {
         "name": "Heavy Ball",
         "key_item": false,
-        "purchase_price": 0,
+        "purchase_price": 150,
         "pocket": "Ball",
         "marts": []
     },
     "Flower Mail": {
         "name": "Flower Mail",
         "key_item": false,
-        "purchase_price": 0,
+        "purchase_price": 50,
         "pocket": "Item",
         "marts": [
             "Violet",
@@ -1228,98 +1228,98 @@
     "Level Ball": {
         "name": "Level Ball",
         "key_item": false,
-        "purchase_price": 0,
+        "purchase_price": 150,
         "pocket": "Ball",
         "marts": []
     },
     "Lure Ball": {
         "name": "Lure Ball",
         "key_item": false,
-        "purchase_price": 0,
+        "purchase_price": 150,
         "pocket": "Ball",
         "marts": []
     },
     "Fast Ball": {
         "name": "Fast Ball",
         "key_item": false,
-        "purchase_price": 0,
+        "purchase_price": 150,
         "pocket": "Ball",
         "marts": []
     },
     "Light Ball": {
         "name": "Light Ball",
         "key_item": false,
-        "purchase_price": 0,
+        "purchase_price": 100,
         "pocket": "Item",
         "marts": []
     },
     "Friend Ball": {
         "name": "Friend Ball",
         "key_item": false,
-        "purchase_price": 0,
+        "purchase_price": 150,
         "pocket": "Ball",
         "marts": []
     },
     "Moon Ball": {
         "name": "Moon Ball",
         "key_item": false,
-        "purchase_price": 0,
+        "purchase_price": 150,
         "pocket": "Ball",
         "marts": []
     },
     "Love Ball": {
         "name": "Love Ball",
         "key_item": false,
-        "purchase_price": 0,
+        "purchase_price": 150,
         "pocket": "Ball",
         "marts": []
     },
     "Normal Box": {
         "name": "Normal Box",
         "key_item": false,
-        "purchase_price": 0,
+        "purchase_price": 10,
         "pocket": "Item",
         "marts": []
     },
     "Gorgeous Box": {
         "name": "Gorgeous Box",
         "key_item": false,
-        "purchase_price": 0,
+        "purchase_price": 10,
         "pocket": "Item",
         "marts": []
     },
     "Sun Stone": {
         "name": "Sun Stone",
         "key_item": false,
-        "purchase_price": 0,
+        "purchase_price": 2100,
         "pocket": "Item",
         "marts": []
     },
     "Polkadot Bow": {
         "name": "Polkadot Bow",
         "key_item": false,
-        "purchase_price": 0,
+        "purchase_price": 100,
         "pocket": "Item",
         "marts": []
     },
     "Up Grade": {
         "name": "Up Grade",
         "key_item": false,
-        "purchase_price": 0,
+        "purchase_price": 2100,
         "pocket": "Item",
         "marts": []
     },
     "Berry": {
         "name": "Berry",
         "key_item": false,
-        "purchase_price": 0,
+        "purchase_price": 10,
         "pocket": "Item",
         "marts": []
     },
     "Gold Berry": {
         "name": "Gold Berry",
         "key_item": false,
-        "purchase_price": 0,
+        "purchase_price": 10,
         "pocket": "Item",
         "marts": []
     },
@@ -1347,14 +1347,14 @@
     "Brick Piece": {
         "name": "Brick Piece",
         "key_item": false,
-        "purchase_price": 0,
+        "purchase_price": 50,
         "pocket": "Item",
         "marts": []
     },
     "Surf Mail": {
         "name": "Surf Mail",
         "key_item": false,
-        "purchase_price": 0,
+        "purchase_price": 50,
         "pocket": "Item",
         "marts": [
             "Olivine",
@@ -1365,7 +1365,7 @@
     "Litebluemail": {
         "name": "Litebluemail",
         "key_item": false,
-        "purchase_price": 0,
+        "purchase_price": 50,
         "pocket": "Item",
         "marts": [
             "Vermilion"
@@ -1374,7 +1374,7 @@
     "Portraitmail": {
         "name": "Portraitmail",
         "key_item": false,
-        "purchase_price": 0,
+        "purchase_price": 50,
         "pocket": "Item",
         "marts": [
             "MtMoon"
@@ -1383,7 +1383,7 @@
     "Lovely Mail": {
         "name": "Lovely Mail",
         "key_item": false,
-        "purchase_price": 0,
+        "purchase_price": 50,
         "pocket": "Item",
         "marts": [
             "Celadon4F"
@@ -1392,49 +1392,49 @@
     "Eon Mail": {
         "name": "Eon Mail",
         "key_item": false,
-        "purchase_price": 0,
+        "purchase_price": 50,
         "pocket": "Item",
         "marts": []
     },
     "Morph Mail": {
         "name": "Morph Mail",
         "key_item": false,
-        "purchase_price": 0,
+        "purchase_price": 50,
         "pocket": "Item",
         "marts": []
     },
     "Bluesky Mail": {
         "name": "Bluesky Mail",
         "key_item": false,
-        "purchase_price": 0,
+        "purchase_price": 50,
         "pocket": "Item",
         "marts": []
     },
     "Music Mail": {
         "name": "Music Mail",
         "key_item": false,
-        "purchase_price": 0,
+        "purchase_price": 50,
         "pocket": "Item",
         "marts": []
     },
     "Mirage Mail": {
         "name": "Mirage Mail",
         "key_item": false,
-        "purchase_price": 0,
+        "purchase_price": 50,
         "pocket": "Item",
         "marts": []
     },
     "TM01 DynamicPunch": {
         "name": "TM01 DynamicPunch",
         "key_item": false,
-        "purchase_price": 0,
+        "purchase_price": 3000,
         "pocket": "TM HM",
         "marts": []
     },
     "TM02 Headbutt": {
         "name": "TM02 Headbutt",
         "key_item": false,
-        "purchase_price": 0,
+        "purchase_price": 2000,
         "pocket": "TM HM",
         "marts": [
             "Goldenrod5F"
@@ -1443,42 +1443,42 @@
     "TM03 Curse": {
         "name": "TM03 Curse",
         "key_item": false,
-        "purchase_price": 0,
+        "purchase_price": 3000,
         "pocket": "TM HM",
         "marts": []
     },
     "TM04 Rollout": {
         "name": "TM04 Rollout",
         "key_item": false,
-        "purchase_price": 0,
+        "purchase_price": 2000,
         "pocket": "TM HM",
         "marts": []
     },
     "TM05 Roar": {
         "name": "TM05 Roar",
         "key_item": false,
-        "purchase_price": 0,
+        "purchase_price": 1000,
         "pocket": "TM HM",
         "marts": []
     },
     "TM06 Toxic": {
         "name": "TM06 Toxic",
         "key_item": false,
-        "purchase_price": 0,
+        "purchase_price": 3000,
         "pocket": "TM HM",
         "marts": []
     },
     "TM07 Zap Cannon": {
         "name": "TM07 Zap Cannon",
         "key_item": false,
-        "purchase_price": 0,
+        "purchase_price": 2000,
         "pocket": "TM HM",
         "marts": []
     },
     "TM08 Rock Smash": {
         "name": "TM08 Rock Smash",
         "key_item": false,
-        "purchase_price": 0,
+        "purchase_price": 1000,
         "pocket": "TM HM",
         "marts": [
             "Goldenrod5F"
@@ -1487,14 +1487,14 @@
     "TM09 Psych Up": {
         "name": "TM09 Psych Up",
         "key_item": false,
-        "purchase_price": 0,
+        "purchase_price": 1000,
         "pocket": "TM HM",
         "marts": []
     },
     "TM10 Hidden Power": {
         "name": "TM10 Hidden Power",
         "key_item": false,
-        "purchase_price": 0,
+        "purchase_price": 3000,
         "pocket": "TM HM",
         "marts": [
             "Celadon3F"
@@ -1503,7 +1503,7 @@
     "TM11 Sunny Day": {
         "name": "TM11 Sunny Day",
         "key_item": false,
-        "purchase_price": 0,
+        "purchase_price": 2000,
         "pocket": "TM HM",
         "marts": [
             "Celadon3F"
@@ -1512,42 +1512,42 @@
     "TM12 Sweet Scent": {
         "name": "TM12 Sweet Scent",
         "key_item": false,
-        "purchase_price": 0,
+        "purchase_price": 1000,
         "pocket": "TM HM",
         "marts": []
     },
     "TM13 Snore": {
         "name": "TM13 Snore",
         "key_item": false,
-        "purchase_price": 0,
+        "purchase_price": 1000,
         "pocket": "TM HM",
         "marts": []
     },
     "TM14 Blizzard": {
         "name": "TM14 Blizzard",
         "key_item": false,
-        "purchase_price": 0,
+        "purchase_price": 3000,
         "pocket": "TM HM",
         "marts": []
     },
     "TM15 Hyper Beam": {
         "name": "TM15 Hyper Beam",
         "key_item": false,
-        "purchase_price": 0,
+        "purchase_price": 3000,
         "pocket": "TM HM",
         "marts": []
     },
     "TM16 Icy Wind": {
         "name": "TM16 Icy Wind",
         "key_item": false,
-        "purchase_price": 0,
+        "purchase_price": 3000,
         "pocket": "TM HM",
         "marts": []
     },
     "TM17 Protect": {
         "name": "TM17 Protect",
         "key_item": false,
-        "purchase_price": 0,
+        "purchase_price": 3000,
         "pocket": "TM HM",
         "marts": [
             "Celadon3F"
@@ -1556,7 +1556,7 @@
     "TM18 Rain Dance": {
         "name": "TM18 Rain Dance",
         "key_item": false,
-        "purchase_price": 0,
+        "purchase_price": 2000,
         "pocket": "TM HM",
         "marts": [
             "Celadon3F"
@@ -1565,105 +1565,105 @@
     "TM19 Giga Drain": {
         "name": "TM19 Giga Drain",
         "key_item": false,
-        "purchase_price": 0,
+        "purchase_price": 3000,
         "pocket": "TM HM",
         "marts": []
     },
     "TM20 Endure": {
         "name": "TM20 Endure",
         "key_item": false,
-        "purchase_price": 0,
+        "purchase_price": 3000,
         "pocket": "TM HM",
         "marts": []
     },
     "TM21 Frustration": {
         "name": "TM21 Frustration",
         "key_item": false,
-        "purchase_price": 0,
+        "purchase_price": 1000,
         "pocket": "TM HM",
         "marts": []
     },
     "TM22 SolarBeam": {
         "name": "TM22 SolarBeam",
         "key_item": false,
-        "purchase_price": 0,
+        "purchase_price": 3000,
         "pocket": "TM HM",
         "marts": []
     },
     "TM23 Iron Tail": {
         "name": "TM23 Iron Tail",
         "key_item": false,
-        "purchase_price": 0,
+        "purchase_price": 3000,
         "pocket": "TM HM",
         "marts": []
     },
     "TM24 DragonBreath": {
         "name": "TM24 DragonBreath",
         "key_item": false,
-        "purchase_price": 0,
+        "purchase_price": 3000,
         "pocket": "TM HM",
         "marts": []
     },
     "TM25 Thunder": {
         "name": "TM25 Thunder",
         "key_item": false,
-        "purchase_price": 0,
+        "purchase_price": 2000,
         "pocket": "TM HM",
         "marts": []
     },
     "TM26 Earthquake": {
         "name": "TM26 Earthquake",
         "key_item": false,
-        "purchase_price": 0,
+        "purchase_price": 3000,
         "pocket": "TM HM",
         "marts": []
     },
     "TM27 Return": {
         "name": "TM27 Return",
         "key_item": false,
-        "purchase_price": 0,
+        "purchase_price": 1000,
         "pocket": "TM HM",
         "marts": []
     },
     "TM28 Dig": {
         "name": "TM28 Dig",
         "key_item": false,
-        "purchase_price": 0,
+        "purchase_price": 2000,
         "pocket": "TM HM",
         "marts": []
     },
     "TM29 Psychic": {
         "name": "TM29 Psychic",
         "key_item": false,
-        "purchase_price": 0,
+        "purchase_price": 2000,
         "pocket": "TM HM",
         "marts": []
     },
     "TM30 Shadow Ball": {
         "name": "TM30 Shadow Ball",
         "key_item": false,
-        "purchase_price": 0,
+        "purchase_price": 3000,
         "pocket": "TM HM",
         "marts": []
     },
     "TM31 Mud Slap": {
         "name": "TM31 Mud Slap",
         "key_item": false,
-        "purchase_price": 0,
+        "purchase_price": 3000,
         "pocket": "TM HM",
         "marts": []
     },
     "TM32 Double Team": {
         "name": "TM32 Double Team",
         "key_item": false,
-        "purchase_price": 0,
+        "purchase_price": 2000,
         "pocket": "TM HM",
         "marts": []
     },
     "TM33 Ice Punch": {
         "name": "TM33 Ice Punch",
         "key_item": false,
-        "purchase_price": 0,
+        "purchase_price": 3000,
         "pocket": "TM HM",
         "marts": [
             "Goldenrod5F"
@@ -1672,28 +1672,28 @@
     "TM34 Swagger": {
         "name": "TM34 Swagger",
         "key_item": false,
-        "purchase_price": 0,
+        "purchase_price": 1000,
         "pocket": "TM HM",
         "marts": []
     },
     "TM35 Sleep Talk": {
         "name": "TM35 Sleep Talk",
         "key_item": false,
-        "purchase_price": 0,
+        "purchase_price": 1000,
         "pocket": "TM HM",
         "marts": []
     },
     "TM36 Sludge Bomb": {
         "name": "TM36 Sludge Bomb",
         "key_item": false,
-        "purchase_price": 0,
+        "purchase_price": 1000,
         "pocket": "TM HM",
         "marts": []
     },
     "TM37 Sandstorm": {
         "name": "TM37 Sandstorm",
         "key_item": false,
-        "purchase_price": 0,
+        "purchase_price": 2000,
         "pocket": "TM HM",
         "marts": [
             "Celadon3F"
@@ -1702,28 +1702,28 @@
     "TM38 Fire Blast": {
         "name": "TM38 Fire Blast",
         "key_item": false,
-        "purchase_price": 0,
+        "purchase_price": 2000,
         "pocket": "TM HM",
         "marts": []
     },
     "TM39 Swift": {
         "name": "TM39 Swift",
         "key_item": false,
-        "purchase_price": 0,
+        "purchase_price": 2000,
         "pocket": "TM HM",
         "marts": []
     },
     "TM40 Defense Curl": {
         "name": "TM40 Defense Curl",
         "key_item": false,
-        "purchase_price": 0,
+        "purchase_price": 1000,
         "pocket": "TM HM",
         "marts": []
     },
     "TM41 ThunderPunch": {
         "name": "TM41 ThunderPunch",
         "key_item": false,
-        "purchase_price": 0,
+        "purchase_price": 3000,
         "pocket": "TM HM",
         "marts": [
             "Goldenrod5F"
@@ -1732,49 +1732,49 @@
     "TM42 Dream Eater": {
         "name": "TM42 Dream Eater",
         "key_item": false,
-        "purchase_price": 0,
+        "purchase_price": 3000,
         "pocket": "TM HM",
         "marts": []
     },
     "TM43 Detect": {
         "name": "TM43 Detect",
         "key_item": false,
-        "purchase_price": 0,
+        "purchase_price": 1000,
         "pocket": "TM HM",
         "marts": []
     },
     "TM44 Rest": {
         "name": "TM44 Rest",
         "key_item": false,
-        "purchase_price": 0,
+        "purchase_price": 3000,
         "pocket": "TM HM",
         "marts": []
     },
     "TM45 Attract": {
         "name": "TM45 Attract",
         "key_item": false,
-        "purchase_price": 0,
+        "purchase_price": 3000,
         "pocket": "TM HM",
         "marts": []
     },
     "TM46 Thief": {
         "name": "TM46 Thief",
         "key_item": false,
-        "purchase_price": 0,
+        "purchase_price": 3000,
         "pocket": "TM HM",
         "marts": []
     },
     "TM47 Steel Wing": {
         "name": "TM47 Steel Wing",
         "key_item": false,
-        "purchase_price": 0,
+        "purchase_price": 3000,
         "pocket": "TM HM",
         "marts": []
     },
     "TM48 Fire Punch": {
         "name": "TM48 Fire Punch",
         "key_item": false,
-        "purchase_price": 0,
+        "purchase_price": 3000,
         "pocket": "TM HM",
         "marts": [
             "Goldenrod5F"
@@ -1783,14 +1783,14 @@
     "TM49 Fury Cutter": {
         "name": "TM49 Fury Cutter",
         "key_item": false,
-        "purchase_price": 0,
+        "purchase_price": 3000,
         "pocket": "TM HM",
         "marts": []
     },
     "TM50 Nightmare": {
         "name": "TM50 Nightmare",
         "key_item": false,
-        "purchase_price": 0,
+        "purchase_price": 2000,
         "pocket": "TM HM",
         "marts": []
     },

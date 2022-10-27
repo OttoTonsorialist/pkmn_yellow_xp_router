@@ -129,8 +129,8 @@ class Router:
         for cur_item in event_group.event_items:
             self.event_item_lookup[cur_item.group_id] = cur_item
     
-    def add_area(self, area_name, insert_before=None, dest_folder_name=const.ROOT_FOLDER_NAME):
-        trainers_to_add = pkmn.current_gen_info().trainer_db().get_valid_trainers(trainer_loc=area_name, defeated_trainers=self.defeated_trainers)
+    def add_area(self, area_name, insert_before=None, dest_folder_name=const.ROOT_FOLDER_NAME, include_rematches=False):
+        trainers_to_add = pkmn.current_gen_info().trainer_db().get_valid_trainers(trainer_loc=area_name, defeated_trainers=self.defeated_trainers, show_rematches=include_rematches)
         if len(trainers_to_add) == 0:
             return
 
@@ -206,6 +206,8 @@ class Router:
         # once we've successfully removed the event, forget the lookup if it was a folder
         if isinstance(cur_event, route_events.EventFolder):
             del self.folder_lookup[cur_event.name]
+            # also recursively remove event objects so that defeated trainers get updated properly
+            self.batch_remove_events([x.group_id for x in cur_event.children])
         
         if recalc:
             self._recalc()

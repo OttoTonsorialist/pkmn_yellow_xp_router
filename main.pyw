@@ -358,14 +358,15 @@ class Main(tk.Tk):
         self.event_list.refresh()
         self._handle_new_selection()
     
-    def add_area(self, area_name):
+    def add_area(self, area_name, include_rematches):
         all_event_ids = self.event_list.get_all_selected_event_ids()
         if len(all_event_ids) > 1 or len(all_event_ids) == 0:
             return
 
         self._data.add_area(
             area_name=area_name,
-            insert_before=all_event_ids[0]
+            insert_before=all_event_ids[0],
+            include_rematches=include_rematches
         )
         self.trainer_add.trainer_filter_callback()
         self.event_list.refresh()
@@ -465,6 +466,7 @@ class Main(tk.Tk):
             # only don't prompt when deleting a single event (or empty folder)
             self._data.remove_event_object(all_event_ids[0])
             self.event_list.refresh()
+            self.trainer_add.trainer_filter_callback()
     
     def confirmed_delete(self):
         all_event_ids = self.event_list.get_all_selected_event_ids()
@@ -475,6 +477,7 @@ class Main(tk.Tk):
         self.new_event_window.close()
         self.new_event_window = None
         self.event_list.refresh()
+        self.trainer_add.trainer_filter_callback()
 
     def finalize_new_folder(self, new_folder_name, prev_folder_name=None):
         all_event_ids = self.event_list.get_all_selected_event_ids(allow_event_items=False)

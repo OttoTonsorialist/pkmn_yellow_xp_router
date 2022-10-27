@@ -117,7 +117,7 @@ class QuickTrainerAdd(tk.Frame):
     
     def add_area(self, *args, **kwargs):
         if self.area_add_callback is not None:
-            self.area_add_callback(self._trainers_by_loc.get())
+            self.area_add_callback(self._trainers_by_loc.get(), self._rematches_label.is_checked())
 
 
 class QuickWildPkmn(tk.Frame):
