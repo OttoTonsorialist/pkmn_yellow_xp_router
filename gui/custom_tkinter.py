@@ -345,18 +345,18 @@ class AmountEntry(tk.Frame):
     
     def _lower_amt(self, *args, **kwargs):
         try:
-            val = int(self._amount.get().strip())
+            val = int(self._amount.get().strip()) - 1
             if self.min_val is not None:
-                val = max(val - 1, self.min_val)
+                val = max(val, self.min_val)
             self._amount.set(str(val))
         except Exception:
             pass
 
     def _raise_amt(self, *args, **kwargs):
         try:
-            val = int(self._amount.get().strip())
+            val = int(self._amount.get().strip()) + 1
             if self.max_val is not None:
-                val = min(val + 1, self.max_val)
+                val = min(val, self.max_val)
             self._amount.set(str(val))
         except Exception:
             pass

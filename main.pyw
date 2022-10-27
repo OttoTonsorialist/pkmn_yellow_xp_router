@@ -54,7 +54,7 @@ class Main(tk.Tk):
         self.config(menu=self.top_menu_bar)
 
         self.file_menu = tk.Menu(self.top_menu_bar, tearoff=0)
-        self.file_menu.add_command(label="Customize DVs     (Ctrl+X)", command=self.open_new_route_window)
+        self.file_menu.add_command(label="Customize DVs     (Ctrl+X)", command=self.open_customize_dvs_window)
         self.file_menu.add_command(label="New Route       (Ctrl+N)", command=self.open_new_route_window)
         self.file_menu.add_command(label="Load Route      (Ctrl+L)", command=self.open_load_route_window)
         self.file_menu.add_command(label="Save Route       (Ctrl+S)", command=self.save_route)
