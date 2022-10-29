@@ -178,6 +178,7 @@ class Constants:
         self.SECONDARY_COLOR_KEY = "secondary_color"
         self.CONTRAST_COLOR_KEY = "contrast_color"
         self.BACKGROUND_COLOR_KEY = "background_color"
+        self.TEXT_COLOR_KEY = "text_color"
 
         self.CUSTOM_FONT_NAME_KEY = "custom_font_name"
 

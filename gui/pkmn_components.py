@@ -165,7 +165,7 @@ class InventoryViewer(tk.Frame):
         super().__init__(*args, **kwargs)
         self.config(bg=config.get_contrast_color(), padx=10, pady=10, height=150, width=250)
 
-        self._money_label = tk.Label(self, text="Current Money: ", bg=config.get_header_color())
+        self._money_label = tk.Label(self, text="Current Money: ", bg=config.get_header_color(), fg=config.get_text_color())
         self._money_label.grid(row=0, column=0, columnspan=2)
 
         self._all_items = []
@@ -174,7 +174,7 @@ class InventoryViewer(tk.Frame):
         self.max_render_size = 20
         split_point = self.max_render_size // 2
         for i in range(self.max_render_size):
-            cur_item_label = tk.Label(self, text=f"# {i:0>2}: ", anchor=tk.W)
+            cur_item_label = tk.Label(self, text=f"# {i:0>2}: ", anchor=tk.W, fg=config.get_text_color())
             cur_item_label.config(bg=config.get_contrast_color(), width=20)
             cur_item_label.grid(row=(i % split_point) + 1, column=i // split_point, sticky=tk.W)
             self._all_items.append(cur_item_label)
@@ -210,17 +210,17 @@ class PkmnViewer(tk.Frame):
         self.stat_width = 4
         self.move_width = 11
 
-        self._name_value = tk.Label(self, background=config.get_header_color(), font=font_to_use)
+        self._name_value = tk.Label(self, background=config.get_header_color(), font=font_to_use, fg=config.get_text_color())
         self._name_value.grid(row=0, column=0, columnspan=2, sticky=tk.EW)
 
-        self._held_item = tk.Label(self, background=config.get_header_color(), font=font_to_use)
+        self._held_item = tk.Label(self, background=config.get_header_color(), font=font_to_use, fg=config.get_text_color())
 
-        self.stat_column = StatColumn(self, bg_color=config.get_secondary_color(), val_width=self.stat_width, num_rows=6, font=font_to_use)
+        self.stat_column = StatColumn(self, bg_color=config.get_secondary_color(), val_width=self.stat_width, num_rows=6, font=font_to_use, fg_color=config.get_text_color())
         self.stat_column.set_labels(["HP:", "Attack:", "Defense:", "Spc Atk:", "Spc Def:", "Speed:"])
         self.stat_column.set_header("")
         self.stat_column.grid(row=2, column=0, sticky=tk.W)
 
-        self.move_column = StatColumn(self, bg_color=config.get_primary_color(), val_width=self.move_width, num_rows=6, font=font_to_use)
+        self.move_column = StatColumn(self, bg_color=config.get_primary_color(), val_width=self.move_width, num_rows=6, font=font_to_use, fg_color=config.get_text_color())
         self.move_column.set_labels(["Lv:", "Exp:", "Move 1:", "Move 2:", "Move 3:", "Move 4:"])
         self.move_column.set_header("")
 
@@ -339,12 +339,12 @@ class BadgeBoostViewer(tk.Frame):
         self._info_frame = tk.Frame(self, bg=config.get_background_color())
         self._info_frame.grid(row=0, column=0)
 
-        self._move_selector_label = tk.Label(self._info_frame, text="Setup Move: ", bg=config.get_background_color())
+        self._move_selector_label = tk.Label(self._info_frame, text="Setup Move: ", bg=config.get_background_color(), fg=config.get_text_color())
         self._move_selector = custom_tkinter.SimpleOptionMenu(self._info_frame, ["N/A"], callback=self._move_selected_callback)
         self._move_selector_label.pack()
         self._move_selector.pack()
 
-        self._badge_summary = tk.Label(self._info_frame, bg=config.get_background_color())
+        self._badge_summary = tk.Label(self._info_frame, bg=config.get_background_color(), fg=config.get_text_color())
         self._badge_summary.pack(pady=10)
 
         self._state:route_state_objects.RouteState = None
@@ -362,7 +362,7 @@ class BadgeBoostViewer(tk.Frame):
             cur_frame.grid(row=((idx + 1) // NUM_COLS), column=((idx + 1) % NUM_COLS), padx=3, pady=3)
 
             self._frames.append(cur_frame)
-            self._labels.append(tk.Label(cur_frame, bg=config.get_background_color()))
+            self._labels.append(tk.Label(cur_frame, bg=config.get_background_color(), fg=config.get_text_color()))
             self._viewers.append(PkmnViewer(cur_frame, stats_only=True))
     
     def _clear_all_summaries(self):
@@ -439,10 +439,13 @@ class BadgeBoostViewer(tk.Frame):
 
 
 class StatColumn(tk.Frame):
-    def __init__(self, *args, num_rows=4, bg_color=None, label_width=None, val_width=None, font=None, **kwargs):
+    def __init__(self, *args, num_rows=4, bg_color=None, fg_color=None, label_width=None, val_width=None, font=None, **kwargs):
         super().__init__(*args, **kwargs)
         if bg_color is None:
             bg_color = config.get_contrast_color()
+        if fg_color is None:
+            fg_color = config.get_text_color()
+
         self.bg_color = bg_color
         self.config(bg=self.bg_color)
 
@@ -452,7 +455,7 @@ class StatColumn(tk.Frame):
 
         self._header_frame = tk.Frame(self, background=self.bg_color)
         self._header_frame.pack()
-        self._header = tk.Label(self._header_frame, background=self.bg_color, font=font)
+        self._header = tk.Label(self._header_frame, background=self.bg_color, font=font, fg=fg_color)
 
         self._frames = []
         self._labels = []
@@ -463,11 +466,11 @@ class StatColumn(tk.Frame):
             cur_frame.pack(fill=tk.X)
             self._frames.append(cur_frame)
 
-            cur_label = tk.Label(cur_frame, anchor=tk.W, background=self.bg_color, width=label_width, font=font)
+            cur_label = tk.Label(cur_frame, anchor=tk.W, background=self.bg_color, width=label_width, font=font, fg=fg_color)
             cur_label.grid(row=0, column=0, sticky=tk.EW)
             self._labels.append(cur_label)
 
-            cur_value = tk.Label(cur_frame, anchor=tk.E, background=self.bg_color, width=val_width, font=font)
+            cur_value = tk.Label(cur_frame, anchor=tk.E, background=self.bg_color, width=val_width, font=font, fg=fg_color)
             cur_value.grid(row=0, column=1, sticky=tk.EW)
             self._values.append(cur_value)
 
@@ -523,17 +526,17 @@ class StatExpViewer(tk.Frame):
         ] 
 
         self._state = None
-        self._net_gain_column = StatColumn(self, num_rows=len(stat_labels), val_width=3, bg_color=config.get_header_color())
+        self._net_gain_column = StatColumn(self, num_rows=len(stat_labels), val_width=3, bg_color=config.get_header_color(), fg_color=config.get_text_color())
         self._net_gain_column.set_labels(stat_labels)
         self._net_gain_column.set_header("Net Stats\nFrom StatExp")
         self._net_gain_column.grid(row=0, column=0)
 
-        self._realized_stat_xp_column = StatColumn(self, num_rows=len(stat_labels), val_width=5, bg_color=config.get_secondary_color())
+        self._realized_stat_xp_column = StatColumn(self, num_rows=len(stat_labels), val_width=5, bg_color=config.get_secondary_color(), fg_color=config.get_text_color())
         self._realized_stat_xp_column.set_labels(stat_labels)
         self._realized_stat_xp_column.set_header("Realized\nStatExp")
         self._realized_stat_xp_column.grid(row=0, column=1)
 
-        self._total_stat_xp_column = StatColumn(self, num_rows=len(stat_labels), val_width=5, bg_color=config.get_primary_color())
+        self._total_stat_xp_column = StatColumn(self, num_rows=len(stat_labels), val_width=5, bg_color=config.get_primary_color(), fg_color=config.get_text_color())
         self._total_stat_xp_column.set_labels(stat_labels)
         self._total_stat_xp_column.set_header("Total\nStatExp")
         self._total_stat_xp_column.grid(row=0, column=2)

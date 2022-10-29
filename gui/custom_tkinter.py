@@ -230,13 +230,17 @@ class CheckboxLabel(tk.Frame):
     CHECKED_STATE = "checked"
     UNCHECKED_STATE =" unchecked"
 
-    def __init__(self, *args, text="", init_check_state=None, toggle_command=None, flip=False, **kwargs):
+    def __init__(self, *args, text="", init_check_state=None, toggle_command=None, flip=False, fg=None, **kwargs):
         super().__init__(*args, **kwargs)
         bg = None
         if 'bg' in kwargs:
             bg = kwargs['bg']
-        self._checkbox = tk.Label(self, bg=bg)
-        self._text_label = tk.Label(self, text=text, bg=bg)
+
+        if fg is None:
+            fg = config.get_text_color()
+
+        self._checkbox = tk.Label(self, bg=bg, fg=fg)
+        self._text_label = tk.Label(self, text=text, bg=bg, fg=fg)
 
         if flip:
             self.columnconfigure(0, weight=1)

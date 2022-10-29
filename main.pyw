@@ -1301,6 +1301,9 @@ class ConfigWindow(custom_tkinter.Popup):
         
         self._background_color = custom_tkinter.ConfigColorUpdater(self._color_frame, label_text="Background Color:", setter=config.set_background_color, getter=config.get_background_color, callback=self.lift)
         self._background_color.grid(row=10, column=0, sticky=tk.EW)
+        
+        self._text_color = custom_tkinter.ConfigColorUpdater(self._color_frame, label_text="Text Color:", setter=config.set_text_color, getter=config.get_text_color, callback=self.lift)
+        self._text_color.grid(row=11, column=0, sticky=tk.EW)
 
         self._restart_label = tk.Label(self._color_frame, text="After changing colors, you must restart the program\nbefore color changes will take effect")
         self._restart_label.grid(row=15, column=0, padx=5, pady=5, sticky=tk.EW)
@@ -1321,6 +1324,7 @@ class ConfigWindow(custom_tkinter.Popup):
         self._secondary_color.refresh_color()
         self._contrast_color.refresh_color()
         self._background_color.refresh_color()
+        self._text_color.refresh_color()
 
     def set_font_name(self, *args, **kwargs):
         config.set_custom_font_name(self._font_name.get())

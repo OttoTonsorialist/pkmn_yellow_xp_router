@@ -12,6 +12,7 @@ class Config:
     DEFAULT_SECONDARY = "#f0f3f4"
     DEFAULT_CONTRAST = "white"
     DEFAULT_BACKGROUND = "#f0f0f0"
+    DEFAULT_TEXT_COLOR = "black"
     DEFAULT_FONT_NAME = "Segoe UI"
     def __init__(self):
         try:
@@ -32,6 +33,7 @@ class Config:
         self._secondary_color = raw.get(const.SECONDARY_COLOR_KEY, self.DEFAULT_SECONDARY)
         self._contrast_color = raw.get(const.CONTRAST_COLOR_KEY, self.DEFAULT_CONTRAST)
         self._background_color = raw.get(const.BACKGROUND_COLOR_KEY, self.DEFAULT_BACKGROUND)
+        self._text_color = raw.get(const.TEXT_COLOR_KEY, self.DEFAULT_TEXT_COLOR)
 
         self._custom_font_name = raw.get(const.CUSTOM_FONT_NAME_KEY, self.DEFAULT_FONT_NAME)
     
@@ -49,6 +51,7 @@ class Config:
                 const.SECONDARY_COLOR_KEY: self._secondary_color,
                 const.CONTRAST_COLOR_KEY: self._contrast_color,
                 const.BACKGROUND_COLOR_KEY: self._background_color,
+                const.TEXT_COLOR_KEY: self._text_color,
                 const.CUSTOM_FONT_NAME_KEY: self._custom_font_name,
             }, f, indent=4)
     
@@ -103,6 +106,10 @@ class Config:
         self._background_color = new_color
         self._save()
 
+    def set_text_color(self, new_color):
+        self._text_color = new_color
+        self._save()
+
     def get_success_color(self):
         return self._success_color
 
@@ -130,6 +137,9 @@ class Config:
     def get_background_color(self):
         return self._background_color
     
+    def get_text_color(self):
+        return self._text_color
+    
     def reset_all_colors(self):
         self._success_color = self.DEFAULT_SUCCESS
         self._warning_color = self.DEFAULT_WARNING
@@ -140,6 +150,7 @@ class Config:
         self._secondary_color = self.DEFAULT_SECONDARY
         self._contrast_color = self.DEFAULT_CONTRAST
         self._background_color = self.DEFAULT_BACKGROUND
+        self._text_color = self.DEFAULT_TEXT_COLOR
         self._save()
     
     def set_custom_font_name(self, new_name):
