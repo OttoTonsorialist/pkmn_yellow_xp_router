@@ -237,7 +237,7 @@ class CheckboxLabel(tk.Frame):
             bg = kwargs['bg']
 
         if fg is None:
-            fg = config.get_text_color()
+            fg = config.DEFAULT_TEXT_COLOR
 
         self._checkbox = tk.Label(self, bg=bg, fg=fg)
         self._text_label = tk.Label(self, text=text, bg=bg, fg=fg)
