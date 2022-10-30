@@ -49,8 +49,16 @@ class BattleSummary(tk.Frame):
     
     def _mimic_callback(self, mimiced_move_name):
         self._mimic_selection = mimiced_move_name
+
+        can_be_mimiced = False
         for cur_pair in self._mon_pairs:
-            cur_pair.recalc_mimic(mimiced_move_name)
+            if not can_be_mimiced and mimiced_move_name in cur_pair.second_mon.move_list:
+                can_be_mimiced = True
+            
+            if can_be_mimiced:
+                cur_pair.recalc_mimic(mimiced_move_name)
+            else:
+                cur_pair.recalc_mimic("")
     
     def allow_calculations(self):
         # trigger calculations if they were paused before
