@@ -106,6 +106,15 @@ class GenTwoConstants:
             "Leader Janine": "TM06 Toxic"
         }
 
+        self.MAROWAK_NAME = "Marowak"
+        self.THICK_CLUB_NAME = "Thick Club"
+
+        self.PIKACHU_NAME = "Pikachu"
+        self.LIGHT_BALL_NAME = "Light Ball"
+
+        self.DITTO_NAME = "Ditto"
+        self.METAL_POWDER_NAME = "Metal Powder"
+
         self.NO_BONUS = "No Bonus"
         self.DIG_BONUS = "Dig Bonus"
         self.FLY_BONUS = "Fly Bonus"

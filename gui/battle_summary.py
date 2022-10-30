@@ -52,7 +52,7 @@ class BattleSummary(tk.Frame):
 
         can_be_mimiced = False
         for cur_pair in self._mon_pairs:
-            if not can_be_mimiced and mimiced_move_name in cur_pair.second_mon.move_list:
+            if not can_be_mimiced and cur_pair.second_mon is not None and mimiced_move_name in cur_pair.second_mon.move_list:
                 can_be_mimiced = True
             
             if can_be_mimiced:

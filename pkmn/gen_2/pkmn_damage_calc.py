@@ -72,6 +72,13 @@ def calculate_damage(
     attacking_battle_stats = attacking_pkmn.get_battle_stats(attacking_stage_modifiers, is_crit=ignore_badge_boosts)
     defending_battle_stats = defending_pkmn.get_battle_stats(defending_stage_modifiers, is_crit=ignore_badge_boosts)
 
+    if attacking_pkmn.name == gen_two_const.MAROWAK_NAME and attacking_pkmn.held_item == gen_two_const.THICK_CLUB_NAME:
+        attacking_battle_stats.attack *= 2
+    elif attacking_pkmn.name == gen_two_const.PIKACHU_NAME and attacking_pkmn.held_item == gen_two_const.LIGHT_BALL_NAME:
+        attacking_battle_stats.special_attack *= 2
+    elif defending_pkmn.name == gen_two_const.DITTO_NAME and defending_pkmn.held_item == gen_two_const.METAL_POWDER_NAME:
+        defending_battle_stats.defense = math.floor(defending_battle_stats.defense * 1.5)
+
     attacking_species = pkmn.current_gen_info().pkmn_db().get_pkmn(attacking_pkmn.name)
     defending_species = pkmn.current_gen_info().pkmn_db().get_pkmn(defending_pkmn.name)
     
