@@ -1,6 +1,6 @@
 
-from pkmn.gen_factory import current_gen_info, change_version
-__all__ = [current_gen_info, change_version]
+from pkmn.gen_factory import current_gen_info, change_version, specific_gen_info
+__all__ = [current_gen_info, change_version, specific_gen_info]
 
 # actually register the stuff
 # Everything imported after this point we'll del to clear the namespace

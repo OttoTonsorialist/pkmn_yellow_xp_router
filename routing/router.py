@@ -315,12 +315,11 @@ class Router:
             }, f, indent=4)
     
     def new_route(self, solo_mon, min_battles_name=None, pkmn_version=const.YELLOW_VERSION, custom_dvs=None):
-        self.set_solo_pkmn(solo_mon, custom_dvs=custom_dvs)
         self._change_version(pkmn_version)
+        self._reset_events()
+        self.set_solo_pkmn(solo_mon, custom_dvs=custom_dvs)
 
-        if min_battles_name is None:
-            self._reset_events()
-        else:
+        if min_battles_name is not None:
             self.load(min_battles_name, min_battles=True)
     
     def load(self, name, min_battles=False):

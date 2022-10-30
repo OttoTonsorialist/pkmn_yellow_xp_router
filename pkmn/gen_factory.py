@@ -16,6 +16,9 @@ class GenFactory:
     def current_gen_info(self) -> CurrentGen:
         return self._cur_gen
     
+    def get_specific_version(self, version_name) -> CurrentGen:
+        return self._all_gens.get(version_name)
+    
     def change_version(self, new_version_name) -> None:
         print(f"Changing to version: {new_version_name}")
         if new_version_name == self._cur_version:
@@ -36,3 +39,6 @@ def current_gen_info() -> CurrentGen:
 
 def change_version(new_version_name):
     gen_factory.change_version(new_version_name)
+
+def specific_gen_info(version_name) -> CurrentGen:
+    return gen_factory.get_specific_version(version_name)

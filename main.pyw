@@ -810,7 +810,7 @@ class NewRouteWindow(custom_tkinter.Popup):
     
     def _recalc_hidden_power(self, *args, **kwargs):
         try:
-            hp_type, hp_power = pkmn.current_gen_info().get_hidden_power(
+            hp_type, hp_power = pkmn.specific_gen_info(self.pkmn_version.get()).get_hidden_power(
                 StatBlock(
                     int(self.custom_dvs_hp.get()),
                     int(self.custom_dvs_atk.get()),
@@ -829,13 +829,13 @@ class NewRouteWindow(custom_tkinter.Popup):
             self.custom_dvs_hidden_power.configure(text=f"Failed to calculate, invalid DVs")
 
     def _pkmn_version_callback(self, *args, **kwargs):
-        pkmn.change_version(self.pkmn_version.get())
         # now that we've loaded the right version, repopulate the pkmn selector just in case
-        self.solo_selector.new_values(pkmn.current_gen_info().pkmn_db().get_filtered_names(filter_val=self.pkmn_filter.get().strip()))
-        self.min_battles_selector.new_values([const.EMPTY_ROUTE_NAME] + pkmn.current_gen_info().min_battles_db().data)
+        temp_gen = pkmn.specific_gen_info(self.pkmn_version.get())
+        self.solo_selector.new_values(temp_gen.pkmn_db().get_filtered_names(filter_val=self.pkmn_filter.get().strip()))
+        self.min_battles_selector.new_values([const.EMPTY_ROUTE_NAME] + temp_gen.min_battles_db().data)
 
     def _pkmn_filter_callback(self, *args, **kwargs):
-        self.solo_selector.new_values(pkmn.current_gen_info().pkmn_db().get_filtered_names(filter_val=self.pkmn_filter.get().strip()))
+        self.solo_selector.new_values(pkmn.specific_gen_info(self.pkmn_version.get()).pkmn_db().get_filtered_names(filter_val=self.pkmn_filter.get().strip()))
     
     def _custom_dvs_callback(self, *args, **kwargs):
         if not self.max_dvs_flag.get():
