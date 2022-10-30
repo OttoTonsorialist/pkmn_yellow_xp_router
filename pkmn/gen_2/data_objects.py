@@ -290,24 +290,16 @@ class GenTwoStatBlock(universal_data_objects.StatBlock):
         is_crit=False
     ) -> GenTwoStatBlock:
         if is_crit:
-            # NOTE: right now, only the solo mon's stats can be modified, so this approximation works
-            # but it's not a "full" solution if we were to support a full battle simulator
-            # in that case we would have to restructure more of how this works
+            # NOTE: Right now, we are relying on the damage calculator in pkmn_damage_calc to determine
+            # whether the stage modifiers should be modified on a crit. Only the damage calculator can
+            # do this, because it has the move in question. As such, we are assuming for a crit that
+            # the stage_modifiers passed in are always correct. Instead, the is_crit flag will serve
+            # to disable the badge boosts 
+            # This does mean that sometimes the damage calculator will "lie" to this function when a crit
+            # is happening, but we want the badge boosts (which can happen when the stage modifiers favor the attacker)
 
-            # crits ignore modifiers if the effective stages would make the damage worse
-            # since the enemy is always neutral, just correct to 0
-
-            # correct attack/spa up (ignore negative penalties on crit)
-            # correct defense/spd down (ignore positive penalties on enemy crit)
-            stage_modifiers = universal_data_objects.StageModifiers(
-                attack=max(0, stage_modifiers.attack_stage),
-                defense=min(0, stage_modifiers.defense_stage),
-                speed=stage_modifiers.speed_stage,
-                special_attack=max(0, stage_modifiers.special_attack_stage),
-                special_defense=min(0, stage_modifiers.special_defense_stage),
-                accuracy=stage_modifiers.accuracy_stage,
-                evasion=stage_modifiers.evasion_stage
-            )
+            # since this is just a badge boost flag now, disable all badge boosts when it's passed in
+            badges = GenTwoBadgeList()
 
         # create a result object, to populate
         result = GenTwoStatBlock(

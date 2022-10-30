@@ -52,17 +52,33 @@ def calculate_damage(
     if defending_stage_modifiers is None:
         defending_stage_modifiers = universal_data_objects.StageModifiers()
 
-    attacking_battle_stats = attacking_pkmn.get_battle_stats(attacking_stage_modifiers, is_crit=is_crit)
-    defending_battle_stats = defending_pkmn.get_battle_stats(defending_stage_modifiers, is_crit=is_crit)
+    # for gen two, the "is_crit" flag in the upcoming get_battle_stats call is effectively a flag to ignore badge boosts
+    # always calculate badge boosts during a non crit
+    # during a crit, if the stage modifiers are in favor of the attack, calculate badge boosts and stage modifiers
+    # during a crit, if the stage modifiers are equal or in favor of the defender, calculate stats without any badge boosts and without any stage modifiers
+    ignore_badge_boosts = False
+    if is_crit:
+        if move_type in gen_two_const.SPECIAL_TYPES and attacking_stage_modifiers.special_attack_stage <= defending_stage_modifiers.special_defense_stage:
+            # stage modifiers do not favor the attacker for a special move: zero out the stage modifiers
+            ignore_badge_boosts = True
+            attacking_stage_modifiers = universal_data_objects.StageModifiers()
+            defending_stage_modifiers = universal_data_objects.StageModifiers()
+        elif move_type not in gen_two_const.SPECIAL_TYPES and attacking_stage_modifiers.attack_stage <= defending_stage_modifiers.defense_stage:
+            # stage modifiers do not favor the attacker for a physical move: zero out the stage modifiers
+            ignore_badge_boosts = True
+            attacking_stage_modifiers = universal_data_objects.StageModifiers()
+            defending_stage_modifiers = universal_data_objects.StageModifiers()
+
+    attacking_battle_stats = attacking_pkmn.get_battle_stats(attacking_stage_modifiers, is_crit=ignore_badge_boosts)
+    defending_battle_stats = defending_pkmn.get_battle_stats(defending_stage_modifiers, is_crit=ignore_badge_boosts)
 
     attacking_species = pkmn.current_gen_info().pkmn_db().get_pkmn(attacking_pkmn.name)
     defending_species = pkmn.current_gen_info().pkmn_db().get_pkmn(defending_pkmn.name)
-    first_type_effectiveness = gen_two_const.TYPE_CHART.get(move_type).get(defending_species.first_type)
-    second_type_effectiveness = None
-    if defending_species.first_type != defending_species.second_type:
-        second_type_effectiveness = gen_two_const.TYPE_CHART.get(move_type).get(defending_species.second_type)
     
-    if first_type_effectiveness == const.IMMUNE or second_type_effectiveness == const.IMMUNE:
+    if (
+        gen_two_const.TYPE_CHART.get(move_type).get(defending_species.first_type) == const.IMMUNE or 
+        gen_two_const.TYPE_CHART.get(move_type).get(defending_species.second_type) == const.IMMUNE
+    ):
         return None
     
     if move_type in gen_two_const.SPECIAL_TYPES:
@@ -176,7 +192,7 @@ def calculate_damage(
         temp *= 2
 
     temp += 2
-    
+
     # TODO: weather check goes here
     weather_boost = False
     weather_penalty = False
@@ -194,16 +210,19 @@ def calculate_damage(
         stab_bonus = math.floor(temp / 2)
     
     temp += stab_bonus
-
-    if first_type_effectiveness == const.SUPER_EFFECTIVE:
-        temp *= 2
-    elif first_type_effectiveness == const.NOT_VERY_EFFECTIVE:
-        temp = math.floor(temp / 2)
-
-    if second_type_effectiveness == const.SUPER_EFFECTIVE:
-        temp *= 2
-    elif second_type_effectiveness == const.NOT_VERY_EFFECTIVE:
-        temp = math.floor(temp / 2)
+    
+    # the order type effectiveness gets applied is based on an ordering in an internal table
+    # the order is NOT based on which type is "first" or "second" for the defending mon
+    # this usually doesn't matter, but there's one specific case where it can
+    # specifically, if the move is both super effective and not very effective, the effective power will be neutral
+    # but you may lose 1 point of power due to rounding if the division happens first
+    for test_type in gen_two_const.TYPE_CHART.get(move_type):
+        if test_type == defending_species.first_type or test_type == defending_species.second_type:
+            effectiveness = gen_two_const.TYPE_CHART.get(move_type).get(test_type)
+            if effectiveness == const.SUPER_EFFECTIVE:
+                temp *= 2
+            elif effectiveness == const.NOT_VERY_EFFECTIVE:
+                temp = math.floor(temp / 2)
 
     move_modifier = 1
 
