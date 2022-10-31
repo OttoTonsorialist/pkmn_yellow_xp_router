@@ -372,9 +372,9 @@ class SoloPokemon:
                 raise ValueError(f"Ineffective Vitamin: {vit_name} (Already above vitamin cap)")
             new_unrealized_stat_xp = self.unrealized_stat_xp.add(pkmn.current_gen_info().make_stat_block(0, 0, pkmn_utils.VIT_AMT, 0, 0, 0, is_stat_xp=True))
         elif vit_name == const.CALCIUM:
-            if cur_stat_xp_total.special >= pkmn_utils.VIT_CAP and not force:
+            if cur_stat_xp_total.special_attack >= pkmn_utils.VIT_CAP and not force:
                 raise ValueError(f"Ineffective Vitamin: {vit_name} (Already above vitamin cap)")
-            new_unrealized_stat_xp = self.unrealized_stat_xp.add(pkmn.current_gen_info().make_stat_block(0, 0, 0, 0, pkmn_utils.VIT_AMT, pkmn_utils.VIT_AMT, 0, is_stat_xp=True))
+            new_unrealized_stat_xp = self.unrealized_stat_xp.add(pkmn.current_gen_info().make_stat_block(0, 0, 0, pkmn_utils.VIT_AMT, pkmn_utils.VIT_AMT, 0, is_stat_xp=True))
         elif vit_name == const.CARBOS:
             if cur_stat_xp_total.speed >= pkmn_utils.VIT_CAP and not force:
                 raise ValueError(f"Ineffective Vitamin: {vit_name} (Already above vitamin cap)")
