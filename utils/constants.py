@@ -1,18 +1,33 @@
 import os
+import appdirs
+import sys
 
 
 class Constants:
     def __init__(self):
+        self.APP_VERSION = "v2.3a"
+        self.APP_RELEASE_DATE = "2022-Nov-20"
+
         self.DEBUG_MODE = False
+        self.APP_NAME = "pkmn_xp_router"
+        self.APP_DATA_FOLDER_DEFAULT_NAME = "pkmn_xp_router_data"
+        self.USER_LOCATION_DATA_KEY = "user_data_location"
 
         self.SOURCE_ROOT_PATH = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-        self.CONFIG_PATH = os.path.join(self.SOURCE_ROOT_PATH, "config.json")
-        self.ROUTE_ONE_OUTPUT_PATH = os.path.join(self.SOURCE_ROOT_PATH, "route_one_output")
+        self.GLOBAL_CONFIG_DIR = os.path.realpath(appdirs.user_data_dir(appname=self.APP_NAME, appauthor=self.APP_NAME))
+        self.GLOBAL_CONFIG_FILE = os.path.join(self.GLOBAL_CONFIG_DIR, "config.json")
         self.POKEMON_RAW_DATA = os.path.join(self.SOURCE_ROOT_PATH, "raw_pkmn_data")
         self.ASSETS_PATH = os.path.join(self.SOURCE_ROOT_PATH, "assets")
 
-        self.SAVED_ROUTES_DIR = os.path.join(self.SOURCE_ROOT_PATH, "saved_routes")
-        self.OUTDATED_ROUTES_DIR = os.path.join(self.SOURCE_ROOT_PATH, "outdated_routes")
+        # internal constants for configurable locations
+        self._SAVED_ROUTES_FOLDER_NAME = "saved_routes"
+        self._OUTDATED_ROUTES_FOLDER_NAME = "outdated_routes"
+        self._ROUTE_ONE_OUTPUT_FOLDER_NAME = "route_one_output"
+        # locations that change based on user data dir
+        self.SAVED_ROUTES_DIR = None
+        self.OUTDATED_ROUTES_DIR = None
+        self.ROUTE_ONE_OUTPUT_PATH = None
+        self.ALL_USER_DATA_PATHS = []
 
         self.NAME_KEY = "name"
         self.BASE_HP_KEY = "base_hp"
@@ -195,6 +210,7 @@ class Constants:
         self.BADGE_BOOST_LABEL = "Badge Boost Calculator"
 
         self.ROOT_FOLDER_NAME = "ROOT"
+        self.FORCE_QUIT_EVENT = "<<PkmnXpForceQuit>>"
         self.ROUTE_LIST_REFRESH_EVENT = "<<RouteListRefresh>>"
         self.BATTLE_SUMMARY_SHOWN_EVENT = "<<BattleSummaryShown>>"
         self.BATTLE_SUMMARY_HIDDEN_EVENT = "<<BattleSummaryHidden>>"
@@ -286,6 +302,24 @@ class Constants:
         self.SUPER_EFFECTIVE = "Super Effective"
         self.NOT_VERY_EFFECTIVE = "Not Very Effective"
         self.IMMUNE = "Immune"
+    
+    def config_user_data_dir(self, user_data_dir):
+        self.SAVED_ROUTES_DIR = os.path.realpath(os.path.join(user_data_dir, self._SAVED_ROUTES_FOLDER_NAME))
+        self.OUTDATED_ROUTES_DIR = os.path.realpath(os.path.join(user_data_dir, self._OUTDATED_ROUTES_FOLDER_NAME))
+        self.ROUTE_ONE_OUTPUT_PATH = os.path.realpath(os.path.join(user_data_dir, self._ROUTE_ONE_OUTPUT_FOLDER_NAME))
+
+        self.ALL_USER_DATA_PATHS = [
+            self.SAVED_ROUTES_DIR,
+            self.OUTDATED_ROUTES_DIR,
+            self.ROUTE_ONE_OUTPUT_PATH
+        ]
+    
+    def get_potential_user_data_dirs(self, potential_user_data_dir):
+        return [
+            (self.SAVED_ROUTES_DIR, os.path.realpath(os.path.join(potential_user_data_dir, self._SAVED_ROUTES_FOLDER_NAME))),
+            (self.OUTDATED_ROUTES_DIR, os.path.realpath(os.path.join(potential_user_data_dir, self._OUTDATED_ROUTES_FOLDER_NAME))),
+            (self.ROUTE_ONE_OUTPUT_PATH, os.path.realpath(os.path.join(potential_user_data_dir, self._ROUTE_ONE_OUTPUT_FOLDER_NAME)))
+        ]
 
 
 const = Constants()

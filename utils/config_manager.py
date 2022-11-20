@@ -1,6 +1,8 @@
 import json
+import os
 
 from utils.constants import const
+from utils import io_utils
 
 class Config:
     DEFAULT_SUCCESS = "#abebc6"
@@ -16,13 +18,15 @@ class Config:
     DEFAULT_FONT_NAME = "Segoe UI"
     def __init__(self):
         try:
-            with open(const.CONFIG_PATH, 'r') as f:
+            with open(const.GLOBAL_CONFIG_FILE, 'r') as f:
                 raw = json.load(f)
         except Exception as e:
             raw = {}
         
         self._route_one_path = raw.get(const.CONFIG_ROUTE_ONE_PATH, "")
         self._window_geometry = raw.get(const.CONFIG_WINDOW_GEOMETRY, "")
+        self._user_data_dir = raw.get(const.USER_LOCATION_DATA_KEY, io_utils.get_default_user_data_dir())
+        const.config_user_data_dir(self._user_data_dir)
 
         self._success_color = raw.get(const.SUCCESS_COLOR_KEY, self.DEFAULT_SUCCESS)
         self._warning_color = raw.get(const.WARNING_COLOR_KEY, self.DEFAULT_WARNING)
@@ -38,10 +42,14 @@ class Config:
         self._custom_font_name = raw.get(const.CUSTOM_FONT_NAME_KEY, self.DEFAULT_FONT_NAME)
     
     def _save(self):
-        with open(const.CONFIG_PATH, 'w') as f:
+        if not os.path.exists(const.GLOBAL_CONFIG_DIR):
+            os.makedirs(const.GLOBAL_CONFIG_DIR)
+
+        with open(const.GLOBAL_CONFIG_FILE, 'w') as f:
             json.dump({
                 const.CONFIG_ROUTE_ONE_PATH: self._route_one_path,
                 const.CONFIG_WINDOW_GEOMETRY: self._window_geometry,
+                const.USER_LOCATION_DATA_KEY: self._user_data_dir,
                 const.SUCCESS_COLOR_KEY: self._success_color,
                 const.WARNING_COLOR_KEY: self._warning_color,
                 const.FAILURE_COLOR_KEY: self._failure_color,
@@ -69,6 +77,14 @@ class Config:
 
     def get_window_geometry(self):
         return self._window_geometry
+    
+    def get_user_data_dir(self):
+        return self._user_data_dir
+    
+    def set_user_data_dir(self, new_dir):
+        self._user_data_dir = new_dir
+        const.config_user_data_dir(new_dir)
+        self._save()
     
     def set_success_color(self, new_color):
         self._success_color = new_color

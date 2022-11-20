@@ -1,19 +1,37 @@
 import argparse
 import os
+import time
+import subprocess
+import sys
+import threading
+import logging
 
 import tkinter as tk
 from tkinter import filedialog
-from tkinter import ttk, font
+from tkinter import ttk, font, messagebox
 
 from gui import custom_tkinter, route_event_components, pkmn_components, quick_add_components
 from gui.event_details import EventDetails
 from pkmn.universal_data_objects import StatBlock
 from utils.constants import const
 from utils.config_manager import config
-from utils import route_one_utils
+from utils import route_one_utils, io_utils, auto_update, custom_logging
 import pkmn
 from routing.route_events import EventDefinition, EventFolder, EventGroup, EventItem, InventoryEventDefinition, TrainerEventDefinition, WildPkmnEventDefinition
 import routing.router as router
+
+
+if not os.path.exists(const.GLOBAL_CONFIG_FILE) or not os.path.exists(const.GLOBAL_CONFIG_DIR):
+    # First time setup. Just need to create a few folders
+    # TODO: proper error handling...? Idk man
+    os.makedirs(const.GLOBAL_CONFIG_DIR)
+    if not os.path.exists(config.get_user_data_dir()):
+        os.makedirs(config.get_user_data_dir())
+
+
+custom_logging.config_logging(const.GLOBAL_CONFIG_DIR)
+logger = logging.getLogger(__name__)
+flag_to_auto_update = False
 
 
 class Main(tk.Tk):
@@ -60,6 +78,7 @@ class Main(tk.Tk):
         self.file_menu.add_command(label="Save Route       (Ctrl+S)", command=self.save_route)
         self.file_menu.add_command(label="Export Notes       (Ctrl+Shift+W)", command=self.export_notes)
         self.file_menu.add_command(label="Config Colors       (Ctrl+Shift+D)", command=self.open_config_window)
+        self.file_menu.add_command(label="App Config       (Ctrl+Shift+Z)", command=self.open_app_config_window)
 
         self.event_menu = tk.Menu(self.top_menu_bar, tearoff=0)
         self.event_menu.add_command(label="New Event                   (Ctrl+F)", command=self.open_new_event_window)
@@ -206,10 +225,12 @@ class Main(tk.Tk):
         self.bind('<Control-R>', self.just_export_and_run)
         # config integrations
         self.bind('<Control-D>', self.open_config_window)
+        self.bind('<Control-Z>', self.open_app_config_window)
         # detail update function
         self.protocol("WM_DELETE_WINDOW", self._on_close)
         self.bind("<<TreeviewSelect>>", self._handle_new_selection)
         self.bind(const.ROUTE_LIST_REFRESH_EVENT, self.update_run_status)
+        self.bind(const.FORCE_QUIT_EVENT, self.cancel_and_quit)
 
         self.event_list.refresh()
         self.new_event_window = None
@@ -387,6 +408,10 @@ class Main(tk.Tk):
 
         self.trainer_add.trainer_filter_callback()
         self.event_list.refresh()
+
+    def open_app_config_window(self, *args, **kwargs):
+        if self._is_active_window():
+            self.new_event_window = DataDirConfigWindow(self)
     
     def open_config_window(self, *args, **kwargs):
         if self._is_active_window():
@@ -402,7 +427,15 @@ class Main(tk.Tk):
         
         self.new_event_window.close()
         self.new_event_window = None
-        self._data.new_route(solo_mon, min_battles_name, pkmn_version=pkmn_version, custom_dvs=custom_dvs)
+        try:
+            self._data.new_route(solo_mon, min_battles_name, pkmn_version=pkmn_version, custom_dvs=custom_dvs)
+        except Exception as e:
+            logger.error(f"Exception ocurred trying to copy route: {min_battles_name}")
+            logger.exception(e)
+            messagebox.showerror("Error!", "Failed to copy route.\nThis can happen if the route being copied is corrupted, or from a much older version")
+            # load an empty route, just in case
+            self._data.new_route(solo_mon)
+
         self.update_run_version()
         self.event_list.refresh()
         self._handle_new_selection()
@@ -414,9 +447,18 @@ class Main(tk.Tk):
     def load_route(self, route_to_load):
         self.new_event_window.close()
         self.new_event_window = None
-        self._data.load(route_to_load)
-        self.route_name.delete(0, tk.END)
-        self.route_name.insert(0, route_to_load)
+
+        try:
+            self._data.load(route_to_load)
+            self.route_name.delete(0, tk.END)
+            self.route_name.insert(0, route_to_load)
+        except Exception as e:
+            logger.error(f"Exception ocurred trying to load route: {route_to_load}")
+            logger.exception(e)
+            messagebox.showerror("Error!", "Failed to load route.\nThis can happen if the file is corrupted, or from a much older version")
+            # load an empty route, just in case
+            self._data.new_route("Abra")
+
         self.update_run_version()
         self.event_list.refresh()
         self._handle_new_selection()
@@ -612,6 +654,12 @@ class Main(tk.Tk):
         if self.new_event_window is not None:
             self.new_event_window.close()
             self.new_event_window = None
+
+    def cancel_and_quit(self, *args, **kwargs):
+        if self.new_event_window is not None:
+            self.new_event_window.close()
+            self.new_event_window = None
+        self.destroy()
     
     def new_event(self, event_def):
         all_event_ids = self.event_list.get_all_selected_event_ids()
@@ -628,6 +676,107 @@ class Main(tk.Tk):
         if self.new_event_window is not None and tk.Toplevel.winfo_exists(self.new_event_window):
             return False
         return True
+
+
+class DataDirConfigWindow(custom_tkinter.Popup):
+    def __init__(self, main_window: Main, *args, first_time_setup=False, **kwargs):
+        super().__init__(main_window, *args, **kwargs)
+
+        self.first_time_setup = first_time_setup
+        self._data_dir_changed = False
+        self._thread = None
+        self._new_app_version = None
+        self._new_asset_url = None
+
+        self.padx = 5
+        self.pady = 5
+        self.app_info_frame = tk.Frame(self)
+        self.app_info_frame.pack(padx=self.padx, pady=(2 * self.pady))
+        self.data_location_frame = tk.Frame(self)
+        self.data_location_frame.pack(padx=self.padx, pady=(4 * self.pady, 2 * self.pady))
+
+        self.app_version_label = tk.Label(self.app_info_frame, text="App Version:")
+        self.app_version_label.grid(row=0, column=0)
+        self.app_version_value = tk.Label(self.app_info_frame, text=const.APP_VERSION)
+        self.app_version_value.grid(row=0, column=1)
+
+        self.app_release_date_label = tk.Label(self.app_info_frame, text="Release Date:")
+        self.app_release_date_label.grid(row=1, column=0)
+        self.app_release_date_value = tk.Label(self.app_info_frame, text=const.APP_RELEASE_DATE)
+        self.app_release_date_value.grid(row=1, column=1)
+
+        self._windows_label = tk.Label(self.app_info_frame, text="Automatic updates only supported on windows machines")
+        self._windows_label.grid(row=5, column=0, columnspan=2, padx=self.padx, pady=(2 * self.pady, self.pady))
+        self._latest_version_label = tk.Label(self.app_info_frame, text="Fetching newest version...")
+        self._latest_version_label.grid(row=6, column=0, columnspan=2)
+        self._check_for_updates_button = custom_tkinter.SimpleButton(self.app_info_frame, text="No Upgrade Needed", command=self._kick_off_auto_update)
+        self._check_for_updates_button.grid(row=7, column=0, columnspan=2)
+        self._check_for_updates_button.disable()
+
+        self.data_location_value = tk.Label(self.data_location_frame, text=f"Data Location: {config.get_user_data_dir()}")
+        self.data_location_value.grid(row=15, column=0, columnspan=2)
+        self.data_location_label = custom_tkinter.SimpleButton(self.data_location_frame, text="Open Data Folder", command=self.open_data_location)
+        self.data_location_label.grid(row=16, column=0)
+        self.data_location_change_button = custom_tkinter.SimpleButton(self.data_location_frame, text="Move Data Location", command=self.change_data_location)
+        self.data_location_change_button.grid(row=16, column=1)
+
+        self.app_location_button = custom_tkinter.SimpleButton(self.data_location_frame, text="Open Config/Logs Folder", command=self.open_global_config_location)
+        self.app_location_button.grid(row=17, column=0, columnspan=2, padx=self.padx, pady=self.pady)
+
+        self.close_button = custom_tkinter.SimpleButton(self, text="Close", command=self._final_cleanup)
+        self.close_button.pack(padx=self.padx, pady=self.pady)
+
+        self.bind('<Return>', self._final_cleanup)
+        self.bind('<Escape>', self._final_cleanup)
+        self._thread = threading.Thread(target=self._get_new_updates_info)
+        self._thread.start()
+    
+    def _final_cleanup(self, *args, **kwargs):
+        if self.first_time_setup and not self._data_dir_changed:
+            io_utils.change_user_data_location(None, config.get_user_data_dir())
+        self._thread.join()
+        self._main_window.cancel_new_event()
+    
+    def _get_new_updates_info(self, *args, **kwargs):
+        self._new_app_version, self._new_asset_url = auto_update.get_new_version_info()
+        self._latest_version_label.configure(text=f"Newest Version: {self._new_app_version}")
+        if auto_update.is_upgrade_needed(self._new_app_version):
+            self._check_for_updates_button.configure(text="Upgrade")
+            self._check_for_updates_button.enable()
+    
+    def _kick_off_auto_update(self, *args, **kwargs):
+        global flag_to_auto_update
+        flag_to_auto_update = True
+        self._thread.join()
+        self._main_window.cancel_and_quit()
+
+    def open_global_config_location(self, *args, **kwargs):
+        io_utils.open_explorer(const.GLOBAL_CONFIG_DIR)
+
+    def open_data_location(self, *args, **kwargs):
+        io_utils.open_explorer(config.get_user_data_dir())
+
+    def change_data_location(self, *args, **kwargs):
+        valid_path_found = False
+        while not valid_path_found:
+            file_result = filedialog.askdirectory(initialdir=config.get_user_data_dir(), mustexist=False)
+            if not file_result:
+                self.lift()
+                return
+
+            new_path = os.path.realpath(file_result)
+            if os.path.realpath(const.SOURCE_ROOT_PATH) in new_path:
+                messagebox.showerror("Error", "Cannot place the data dir inside the app, as it will be removed during automatic updates")
+            else:
+                valid_path_found = True
+
+        if io_utils.change_user_data_location(config.get_user_data_dir(), new_path):
+            config.set_user_data_dir(new_path)
+            self.data_location_value.config(text=new_path)
+        else:
+            messagebox.showerror("Error", "Failed to change user data location...")
+
+        self.lift()
 
 
 class CustomDvsWindow(custom_tkinter.Popup):
@@ -1342,16 +1491,121 @@ def fixed_map(option, style):
     # should be future-safe.
     return [elm for elm in style.map('Treeview', query_opt=option) if
       elm[:2] != ('!disabled', '!selected')]
+
+
+def startup_check_for_upgrade(main_app:Main):
+    new_app_version, new_asset_url = auto_update.get_new_version_info()
+    logger.info(f"Latest version determined to be: {new_app_version}")
+
+    # kinda dumb, but this should have enough delay that when restarting
+    # the parent process should have died already, so we can properly clean it up
+    auto_update.auto_cleanup_old_version()
+
+    if not auto_update.is_upgrade_needed(new_app_version):
+        logger.info(f"No upgrade needed")
+        return
     
+    if not messagebox.askyesno("Update?", f"Found new version {new_app_version}\nDo you want to update?"):
+        logger.info(f"User rejected auto-update")
+        return
+    
+    logger.info(f"User requested auto-update")
+    global flag_to_auto_update
+    flag_to_auto_update = True
+    main_app.event_generate(const.FORCE_QUIT_EVENT)
+
+
+class AutoUpgradeGUI(tk.Tk):
+    def __init__(self, *args, **kwargs):
+        super().__init__()
+        self._allow_close = False
+
+        self.auto_update_frame = tk.Frame(self, width=250, height=150)
+        self.auto_update_frame.pack()
+        self.auto_update_frame.pack_propagate(False)
+
+        self.processing_message = tk.Label(self.auto_update_frame)
+        self.processing_message.pack(pady=10, padx=20)
+
+        self.auto_update_message = tk.Label(self.auto_update_frame)
+        self.auto_update_message.pack(pady=10, padx=10)
+
+        self.button = custom_tkinter.SimpleButton(self.auto_update_frame, text="Restart App", command=self._prevent_abort)
+        self.button.pack(pady=10, padx=10)
+        self.button.disable()
+        
+        self._dum_thread = threading.Thread(target=self._update_processing_text)
+        self._dum_thread.daemon = True
+        self._dum_thread.start()
+        
+        self._thread = threading.Thread(target=self._auto_update_app)
+        self._thread.daemon = True
+        self._thread.start()
+
+        self.bind(const.FORCE_QUIT_EVENT, self._prevent_abort)
+        self.protocol("WM_DELETE_WINDOW", self._prevent_abort)
+    
+    def _prevent_abort(self, *args, **kwargs):
+        if self._allow_close:
+            self.destroy()
+    
+    def _update_processing_text(self, *args, **kwargs):
+        messages = [
+            "Updating .",
+            "Updating ..",
+            "Updating ...",
+        ]
+        cur_idx = 0
+        while not self._allow_close:
+            self.processing_message.configure(text=messages[cur_idx])
+            cur_idx = (cur_idx + 1) % len(messages)
+            time.sleep(0.1)
+    
+    def _display_update_message(self, new_text):
+        self.auto_update_message.configure(text=new_text)
+
+    def _auto_update_app(self, *args, **kwargs):
+        try:
+            success = auto_update.update(display_fn=self._display_update_message)
+        except Exception as e:
+            success = False
+
+        self._allow_close = True
+        time.sleep(0.15)
+        if not success:
+            self.processing_message.configure(text="Error")
+            self.auto_update_message.configure(text="Failed automatic update\nTry manually installing the new version")
+        else:
+            self.processing_message.configure(text="Success!")
+            self.auto_update_message.configure(text="Automatic update successful!\nClick OK to restart app")
+        
+        self.button.enable()
 
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument("--debug", action="store_true")
-
     args = parser.parse_args()
-
     if args.debug:
         const.DEBUG_MODE = True
+    
+    app = Main()
+    background_thread = threading.Thread(target=startup_check_for_upgrade, args=(app,))
 
-    Main().run()
+    background_thread.start()
+    app.run()
+
+    background_thread.join()
+
+    if flag_to_auto_update:
+        auto_update.auto_cleanup_old_version()
+        app_upgrade = AutoUpgradeGUI()
+        app_upgrade.mainloop()
+
+        logger.info(f"About to restart: {sys.argv}")
+        if os.path.splitext(sys.argv[0])[1] == ".pyw":
+            subprocess.Popen([sys.executable] + sys.argv, start_new_session=True)
+        else:
+            subprocess.Popen(sys.argv, start_new_session=True)
+
+    

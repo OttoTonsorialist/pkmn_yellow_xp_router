@@ -27,6 +27,7 @@ class BattleSummary(tk.Frame):
         self._source_event_group:route_events.EventGroup = None
         self._stage_modifiers:universal_data_objects.StageModifiers = universal_data_objects.StageModifiers()
         self._mimic_selection = ""
+        self._custom_move_data = None
 
         self.setup_moves = SetupMovesSummary(self, callback=self._setup_move_callback)
         if not self.simple_mode:
@@ -76,8 +77,21 @@ class BattleSummary(tk.Frame):
         return self._mimic_selection
     
     def get_custom_move_data(self):
-        result = []
+        # make sure we have the latest user input
+        # however, this can fail (expectedly) if the user is not on the battle summary screen
+        # so just try to pull the info, if we can't then we already have the latest
+        try:
+            self._custom_move_data = self._pull_custom_move_data_from_fields()
+        except Exception as e:
+            pass
+            
+        return self._custom_move_data
 
+    def _pull_custom_move_data_from_fields(self):
+        if not self._enemy_pkmn or self.simple_mode:
+            return None
+
+        result = []
         using_custom_data = False
         for idx, _ in enumerate(self._enemy_pkmn):
             player_data, enemy_data = self._mon_pairs[idx].get_custom_move_data()
@@ -96,6 +110,10 @@ class BattleSummary(tk.Frame):
 
     def pause_calculations(self):
         self.should_calculate = False
+
+        # cache the changes the user made to the custom move data while calculations were active
+        self._custom_move_data = self._pull_custom_move_data_from_fields()
+
         # wipe out the rendering when not calculating
         # but only recalc, so we still remember what the current state and enemy pkmn are
         self.set_team(None, recalc_only=True)
@@ -110,15 +128,14 @@ class BattleSummary(tk.Frame):
     ):
         # use the passed information to figure out the exact solo mon objects to use
         new_solo_pkmn = []
-        all_custom_move_data = None
 
         if event_group is not None and len(event_group.event_items) > 0:
             cur_item_idx = 0
             if not new_setup_moves:
                 self._mimic_selection = event_group.event_definition.trainer_def.mimic_selection
                 self.setup_moves.set_move_list(event_group.event_definition.trainer_def.setup_moves.copy())
+                self._custom_move_data = event_group.event_definition.trainer_def.custom_move_data
             self._stage_modifiers = self.setup_moves.get_stage_modifiers()
-            all_custom_move_data = event_group.event_definition.trainer_def.custom_move_data
             for cur_pkmn in enemy_pkmn:
                 while cur_item_idx < len(event_group.event_items):
                     try:
@@ -131,9 +148,6 @@ class BattleSummary(tk.Frame):
                             new_solo_pkmn.append(
                                 cur_event_item.init_state.solo_pkmn.get_pkmn_obj(cur_event_item.init_state.badges, stage_modifiers=self._stage_modifiers)
                             )
-
-                            with_mods = cur_event_item.init_state.solo_pkmn.get_pkmn_obj(cur_event_item.init_state.badges, stage_modifiers=self._stage_modifiers)
-                            without_mods = cur_event_item.init_state.solo_pkmn.get_pkmn_obj(cur_event_item.init_state.badges)
                             break
                         cur_item_idx += 1
                     except Exception as e:
@@ -143,6 +157,7 @@ class BattleSummary(tk.Frame):
             if not new_setup_moves:
                 self._mimic_selection = ""
                 self.setup_moves.set_move_list([])
+                self._custom_move_data = None
             self._stage_modifiers = self.setup_moves.get_stage_modifiers()
             for cur_pkmn in enemy_pkmn:
                 new_solo_pkmn.append(cur_state.solo_pkmn.get_pkmn_obj(cur_state.badges, stage_modifiers=self._stage_modifiers))
@@ -178,8 +193,10 @@ class BattleSummary(tk.Frame):
         for cur_pkmn in enemy_pkmn:
             mimic_options.extend(cur_pkmn.move_list)
 
-        if all_custom_move_data is None:
+        if self._custom_move_data is None:
             all_custom_move_data = [{const.PLAYER_KEY: {}, const.ENEMY_KEY: {}} for _ in range(len(enemy_pkmn))]
+        else:
+            all_custom_move_data = self._custom_move_data
 
         idx = -1
         enemy_stages = universal_data_objects.StageModifiers()

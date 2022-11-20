@@ -95,6 +95,12 @@ class EventDetails(tk.Frame):
         self._tab_changed_callback()
     
     def _tab_changed_callback(self, *args, **kwargs):
+        if not self.tabbed_states.select():
+            # This doesn't occur during normal processing, but can occur when closing down the app
+            # Just prevent an extra error from occuring
+            # this value should be a string containing an identifier (or empty, if no tabs exist)
+            return
+
         selected_tab_index = self.tabbed_states.index(self.tabbed_states.select())
         prev_tab = self._prev_selected_tab
         self._prev_selected_tab = selected_tab_index

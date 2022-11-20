@@ -283,7 +283,8 @@ class Router:
 
         else:
             if event_group_obj.event_definition.trainer_def is not None:
-                self.defeated_trainers.remove(event_group_obj.event_definition.trainer_def.trainer_name)
+                if event_group_obj.event_definition.trainer_def.trainer_name in self.defeated_trainers:
+                    self.defeated_trainers.remove(event_group_obj.event_definition.trainer_def.trainer_name)
             
             if new_event_def.trainer_def is not None:
                 self.defeated_trainers.add(new_event_def.trainer_def.trainer_name)
