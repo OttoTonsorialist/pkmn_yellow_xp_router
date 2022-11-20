@@ -421,16 +421,18 @@ class Main(tk.Tk):
         if self._is_active_window():
             self.new_event_window = NewRouteWindow(self)
     
-    def create_new_route(self, solo_mon, min_battles_name, pkmn_version, custom_dvs=None):
-        if min_battles_name == const.EMPTY_ROUTE_NAME:
-            min_battles_name = None
+    def create_new_route(self, solo_mon, base_route_path, pkmn_version, custom_dvs=None):
+        if base_route_path == const.EMPTY_ROUTE_NAME:
+            base_route_path = None
         
         self.new_event_window.close()
         self.new_event_window = None
+        self.route_name.delete(0, tk.END)
+
         try:
-            self._data.new_route(solo_mon, min_battles_name, pkmn_version=pkmn_version, custom_dvs=custom_dvs)
+            self._data.new_route(solo_mon, base_route_path, pkmn_version=pkmn_version, custom_dvs=custom_dvs)
         except Exception as e:
-            logger.error(f"Exception ocurred trying to copy route: {min_battles_name}")
+            logger.error(f"Exception ocurred trying to copy route: {base_route_path}")
             logger.exception(e)
             messagebox.showerror("Error!", "Failed to copy route.\nThis can happen if the route being copied is corrupted, or from a much older version")
             # load an empty route, just in case
@@ -444,16 +446,19 @@ class Main(tk.Tk):
         if self._is_active_window():
             self.new_event_window = LoadRouteWindow(self)
 
-    def load_route(self, route_to_load):
+    def load_route(self, full_path_to_route):
         self.new_event_window.close()
         self.new_event_window = None
+        self.route_name.delete(0, tk.END)
 
         try:
-            self._data.load(route_to_load)
-            self.route_name.delete(0, tk.END)
-            self.route_name.insert(0, route_to_load)
+            _, route_name = os.path.split(full_path_to_route)
+            route_name = os.path.splitext(route_name)[0]
+
+            self._data.load(full_path_to_route)
+            self.route_name.insert(0, route_name)
         except Exception as e:
-            logger.error(f"Exception ocurred trying to load route: {route_to_load}")
+            logger.error(f"Exception ocurred trying to load route: {full_path_to_route}")
             logger.exception(e)
             messagebox.showerror("Error!", "Failed to load route.\nThis can happen if the file is corrupted, or from a much older version")
             # load an empty route, just in case
@@ -887,10 +892,10 @@ class NewRouteWindow(custom_tkinter.Popup):
         self.pkmn_version.grid(row=0, column=1, padx=self.padx, pady=self.pady)
 
         self.solo_selector_label = tk.Label(self.controls_frame, text="Solo Pokemon:")
-        self.solo_selector_label.grid(row=1, column=0, padx=self.padx, pady=self.pady)
+        self.solo_selector_label.grid(row=1, column=0, padx=self.padx, pady=(4 * self.pady, self.pady))
         self.solo_selector = custom_tkinter.SimpleOptionMenu(self.controls_frame, [const.NO_POKEMON])
         self.solo_selector.config(width=20)
-        self.solo_selector.grid(row=1, column=1, padx=self.padx, pady=self.pady)
+        self.solo_selector.grid(row=1, column=1, padx=self.padx, pady=(4 * self.pady, self.pady))
 
         self.pkmn_filter_label = tk.Label(self.controls_frame, text="Solo Pokemon Filter:")
         self.pkmn_filter_label.grid(row=2, column=0, padx=self.padx, pady=self.pady)
@@ -898,18 +903,26 @@ class NewRouteWindow(custom_tkinter.Popup):
         self.pkmn_filter.config(width=30)
         self.pkmn_filter.grid(row=2, column=1, padx=self.padx, pady=self.pady)
 
-        self.min_battles_selector_label = tk.Label(self.controls_frame, text="Base Min-Battles Route:")
-        self.min_battles_selector_label.grid(row=3, column=0, padx=self.padx, pady=self.pady)
-        self.min_battles_selector = custom_tkinter.SimpleOptionMenu(self.controls_frame, [const.EMPTY_ROUTE_NAME])
-        self.min_battles_selector.grid(row=3, column=1, padx=self.padx, pady=self.pady)
+        # need to create a local cache of all min battles due to all the version switching we're going to do
+        self._min_battles_cache = [const.EMPTY_ROUTE_NAME]
+        self.min_battles_selector_label = tk.Label(self.controls_frame, text="Base Route:")
+        self.min_battles_selector_label.grid(row=3, column=0, padx=self.padx, pady=(4 * self.pady, self.pady))
+        self.min_battles_selector = custom_tkinter.SimpleOptionMenu(self.controls_frame, self._min_battles_cache)
+        self.min_battles_selector.grid(row=3, column=1, padx=self.padx, pady=(4 * self.pady, self.pady))
+
+        self.min_battles_filter_label = tk.Label(self.controls_frame, text="Base Route Filter:")
+        self.min_battles_filter_label.grid(row=4, column=0, padx=self.padx, pady=self.pady)
+        self.min_battles_filter = custom_tkinter.SimpleEntry(self.controls_frame, callback=self._base_route_filter_callback)
+        self.min_battles_filter.config(width=30)
+        self.min_battles_filter.grid(row=4, column=1, padx=self.padx, pady=self.pady)
 
         self.max_dvs_flag = tk.BooleanVar()
         self.max_dvs_flag.set(True)
         self.max_dvs_flag.trace("w", self._custom_dvs_callback)
         self.custom_dvs_label = tk.Label(self.controls_frame, text="Max DVs?")
         self.custom_dvs_checkbox = tk.Checkbutton(self.controls_frame, variable=self.max_dvs_flag, onvalue=True, offvalue=False)
-        self.custom_dvs_label.grid(row=4, column=0)
-        self.custom_dvs_checkbox.grid(row=4, column=1)
+        self.custom_dvs_label.grid(row=5, column=0, padx=self.padx, pady=(4 * self.pady, self.pady))
+        self.custom_dvs_checkbox.grid(row=5, column=1, padx=self.padx, pady=(4 * self.pady, self.pady))
 
         self.custom_dvs_frame = tk.Frame(self.controls_frame)
 
@@ -981,10 +994,27 @@ class NewRouteWindow(custom_tkinter.Popup):
         # now that we've loaded the right version, repopulate the pkmn selector just in case
         temp_gen = pkmn.specific_gen_info(self.pkmn_version.get())
         self.solo_selector.new_values(temp_gen.pkmn_db().get_filtered_names(filter_val=self.pkmn_filter.get().strip()))
-        self.min_battles_selector.new_values([const.EMPTY_ROUTE_NAME] + temp_gen.min_battles_db().data)
+
+        all_routes = [const.EMPTY_ROUTE_NAME]
+        for preset_route_name in temp_gen.min_battles_db().data:
+            all_routes.append(const.PRESET_ROUTE_PREFIX + preset_route_name)
+        all_routes.extend(io_utils.get_existing_route_names())
+
+        self._min_battles_cache = all_routes
+        self._base_route_filter_callback()
 
     def _pkmn_filter_callback(self, *args, **kwargs):
         self.solo_selector.new_values(pkmn.specific_gen_info(self.pkmn_version.get()).pkmn_db().get_filtered_names(filter_val=self.pkmn_filter.get().strip()))
+
+    def _base_route_filter_callback(self, *args, **kwargs):
+        # NOTE: assume the _min_battles_cache is always accurate, and just filter it down as needed
+        filter_val = self.min_battles_filter.get().strip().lower()
+        new_vals = [x for x in self._min_battles_cache if filter_val in x.lower()]
+
+        if not new_vals:
+            new_vals = [const.EMPTY_ROUTE_NAME]
+
+        self.min_battles_selector.new_values(new_vals)
     
     def _custom_dvs_callback(self, *args, **kwargs):
         if not self.max_dvs_flag.get():
@@ -1006,9 +1036,18 @@ class NewRouteWindow(custom_tkinter.Popup):
         }
     
     def create(self, *args, **kwargs):
+        selected_base_route = self.min_battles_selector.get()
+        if selected_base_route == const.EMPTY_ROUTE_NAME:
+            selected_base_route = None
+        elif selected_base_route.startswith(const.PRESET_ROUTE_PREFIX):
+            temp_gen = pkmn.specific_gen_info(self.pkmn_version.get())
+            selected_base_route = os.path.join(temp_gen.min_battles_db().get_dir(), selected_base_route[len(const.PRESET_ROUTE_PREFIX):] + ".json")
+        else:
+            selected_base_route = io_utils.get_existing_route_path(selected_base_route)
+            
         self._main_window.create_new_route(
             self.solo_selector.get(),
-            self.min_battles_selector.get(),
+            selected_base_route,
             self.pkmn_version.get(),
             self._get_custom_dvs()
         )
@@ -1025,7 +1064,7 @@ class LoadRouteWindow(custom_tkinter.Popup):
 
         self.previous_route_label = tk.Label(self.controls_frame, text="Existing Routes:")
         self.previous_route_label.grid(row=0, column=0, padx=self.padx, pady=self.pady)
-        self.previous_route_names = custom_tkinter.SimpleOptionMenu(self.controls_frame, self.get_existing_routes(), callback=self._select_callback)
+        self.previous_route_names = custom_tkinter.SimpleOptionMenu(self.controls_frame, [const.NO_SAVED_ROUTES], callback=self._select_callback)
         self.previous_route_names.grid(row=0, column=1, padx=self.padx, pady=self.pady)
         self.previous_route_names.config(width=25)
 
@@ -1055,43 +1094,19 @@ class LoadRouteWindow(custom_tkinter.Popup):
         self.bind('<Return>', self.load)
         self.bind('<Escape>', self._main_window.cancel_new_event)
         self.filter.focus()
+        self._filter_callback()
         self._select_callback()
 
-    def get_existing_routes(self, filter_text="", load_backups=False):
-        loaded_routes = []
-        filter_text = filter_text.lower()
-
-        if os.path.exists(const.SAVED_ROUTES_DIR):
-            for fragment in os.listdir(const.SAVED_ROUTES_DIR):
-                name, ext = os.path.splitext(fragment)
-                if filter_text not in name.lower():
-                    continue
-                if ext != ".json":
-                    continue
-                loaded_routes.append(name)
-        
-        if load_backups:
-            if os.path.exists(const.OUTDATED_ROUTES_DIR):
-                for fragment in os.listdir(const.OUTDATED_ROUTES_DIR):
-                    name, ext = os.path.splitext(fragment)
-                    if filter_text not in name.lower():
-                        continue
-                    if ext != ".json":
-                        continue
-                    loaded_routes.append(name)
-        
-        if not loaded_routes:
-            loaded_routes = [const.NO_SAVED_ROUTES]
-
-        return sorted(loaded_routes, key=str.casefold)
-
     def _filter_callback(self, *args, **kwargs):
-        self.previous_route_names.new_values(
-            self.get_existing_routes(
-                filter_text=self.filter.get(),
-                load_backups=self.allow_oudated.get()
-            )
+        all_routes = io_utils.get_existing_route_names(
+            filter_text=self.filter.get(),
+            load_backups=self.allow_oudated.get()
         )
+
+        if not all_routes:
+            all_routes = [const.NO_SAVED_ROUTES]
+
+        self.previous_route_names.new_values(all_routes)
 
     def _select_callback(self, *args, **kwargs):
         selected_route = self.previous_route_names.get()
@@ -1104,7 +1119,7 @@ class LoadRouteWindow(custom_tkinter.Popup):
         selected_route = self.previous_route_names.get()
         if selected_route == const.NO_SAVED_ROUTES:
             return
-        self._main_window.load_route(self.previous_route_names.get())
+        self._main_window.load_route(io_utils.get_existing_route_path(self.previous_route_names.get()))
 
 
 class NewFolderWindow(custom_tkinter.Popup):

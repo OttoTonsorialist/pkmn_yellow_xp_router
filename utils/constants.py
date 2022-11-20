@@ -216,6 +216,7 @@ class Constants:
         self.BATTLE_SUMMARY_HIDDEN_EVENT = "<<BattleSummaryHidden>>"
 
         self.EMPTY_ROUTE_NAME = "Empty Route"
+        self.PRESET_ROUTE_PREFIX = "PRESET: "
 
         self.PKMN_VERSION_KEY = "Version"
 

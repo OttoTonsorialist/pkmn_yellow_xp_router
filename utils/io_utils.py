@@ -6,6 +6,40 @@ import logging
 from utils.constants import const
 
 
+def get_existing_route_path(route_name) -> str:
+    result = os.path.join(const.SAVED_ROUTES_DIR, f"{route_name}.json")
+    if not os.path.exists(result):
+        result = os.path.join(const.OUTDATED_ROUTES_DIR, f"{route_name}.json")
+    
+    return result
+
+
+def get_existing_route_names(filter_text="", load_backups=False):
+    loaded_routes = []
+    filter_text = filter_text.lower()
+
+    if os.path.exists(const.SAVED_ROUTES_DIR):
+        for fragment in os.listdir(const.SAVED_ROUTES_DIR):
+            name, ext = os.path.splitext(fragment)
+            if filter_text not in name.lower():
+                continue
+            if ext != ".json":
+                continue
+            loaded_routes.append(name)
+    
+    if load_backups:
+        if os.path.exists(const.OUTDATED_ROUTES_DIR):
+            for fragment in os.listdir(const.OUTDATED_ROUTES_DIR):
+                name, ext = os.path.splitext(fragment)
+                if filter_text not in name.lower():
+                    continue
+                if ext != ".json":
+                    continue
+                loaded_routes.append(name)
+
+    return sorted(loaded_routes, key=str.casefold)
+
+
 def change_user_data_location(orig_dir, new_dir) -> bool:
     try:
         # If the orig dir is invalid for some reason, assume this is first time setup

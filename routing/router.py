@@ -315,28 +315,23 @@ class Router:
                 const.EVENTS: [self.root_folder.serialize()]
             }, f, indent=4)
     
-    def new_route(self, solo_mon, min_battles_name=None, pkmn_version=const.YELLOW_VERSION, custom_dvs=None):
+    def new_route(self, solo_mon, base_route_path=None, pkmn_version=const.YELLOW_VERSION, custom_dvs=None):
         self._change_version(pkmn_version)
         self._reset_events()
         self.set_solo_pkmn(solo_mon, custom_dvs=custom_dvs)
 
-        if min_battles_name is not None:
-            self.load(min_battles_name, min_battles=True)
+        if base_route_path is not None:
+            self.load(base_route_path, load_events_only=True)
     
-    def load(self, name, min_battles=False):
-        if min_battles:
-            final_path = os.path.join(pkmn.current_gen_info().min_battles_db().get_dir(), f"{name}.json")
-        else:
-            final_path = os.path.join(const.SAVED_ROUTES_DIR, f"{name}.json")
-            if not os.path.exists(final_path):
-                final_path = os.path.join(const.OUTDATED_ROUTES_DIR, f"{name}.json")
-
-        with open(final_path, 'r') as f:
+    def load(self, route_path, load_events_only=False):
+        # if we're using a template, we're going to path the full path in
+        # otherwise, the name should exist in one of the two save dirs
+        with open(route_path, 'r') as f:
             result = json.load(f)
         
         self._reset_events()
 
-        if not min_battles:
+        if not load_events_only:
             self._change_version(result.get(const.PKMN_VERSION_KEY, const.YELLOW_VERSION))
             raw_level_up_moves = result.get(const.TASK_LEARN_MOVE_LEVELUP)
             if raw_level_up_moves is not None:
