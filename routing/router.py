@@ -132,7 +132,7 @@ class Router:
         for cur_item in event_group.event_items:
             self.event_item_lookup[cur_item.group_id] = cur_item
     
-    def add_area(self, area_name, insert_before=None, dest_folder_name=const.ROOT_FOLDER_NAME, include_rematches=False):
+    def add_area(self, area_name, insert_after=None, dest_folder_name=const.ROOT_FOLDER_NAME, include_rematches=False):
         trainers_to_add = pkmn.current_gen_info().trainer_db().get_valid_trainers(trainer_loc=area_name, defeated_trainers=self.defeated_trainers, show_rematches=include_rematches)
         if len(trainers_to_add) == 0:
             return
@@ -144,7 +144,7 @@ class Router:
             folder_name = f"{area_name} Trip:{count}"
         
         # once we have a valid folder name to create, go ahead and create the folder
-        self.add_event_object(new_folder_name=folder_name, insert_before=insert_before, dest_folder_name=dest_folder_name, recalc=False)
+        self.add_event_object(new_folder_name=folder_name, insert_after=insert_after, dest_folder_name=dest_folder_name, recalc=False)
         # then just create all the trainer events in that area
         for cur_trainer in trainers_to_add:
             self.add_event_object(
@@ -159,7 +159,7 @@ class Router:
         self,
         event_def:route_events.EventDefinition=None,
         new_folder_name=None,
-        insert_before=None,
+        insert_after=None,
         dest_folder_name=const.ROOT_FOLDER_NAME,
         recalc=True,
         folder_expanded=True,
@@ -170,12 +170,12 @@ class Router:
         if event_def is None and new_folder_name is None:
             raise ValueError("Must define either folder name or event definition")
         
-        if insert_before is not None:
-            insert_before_obj = self.get_event_obj(insert_before)
-            if isinstance(insert_before_obj, route_events.EventItem):
+        if insert_after is not None:
+            insert_after_obj = self.get_event_obj(insert_after)
+            if isinstance(insert_after_obj, route_events.EventItem):
                 raise ValueError("Cannot insert an object into the middle of a group")
 
-            parent_obj = insert_before_obj.parent
+            parent_obj = insert_after_obj.parent
         else:
             try:
                 parent_obj = self.folder_lookup[dest_folder_name]
@@ -200,7 +200,7 @@ class Router:
             new_obj = route_events.EventGroup(parent_obj, event_def)
         
         self.event_lookup[new_obj.group_id] = new_obj
-        parent_obj.insert_child_before(new_obj, before_obj=self.get_event_obj(insert_before))
+        parent_obj.insert_child_after(new_obj, after_obj=self.get_event_obj(insert_after))
         if recalc:
             self._recalc()
     
@@ -272,7 +272,7 @@ class Router:
         # If transferring to a destination folder that does not exist, create it just before the first event
         dest_folder = self.folder_lookup.get(dest_folder_name)
         if dest_folder is None:
-            self.add_event_object(new_folder_name=dest_folder_name, insert_before=event_id_list[0])
+            self.add_event_object(new_folder_name=dest_folder_name)
 
         # goofy-looking, but intentional. Do all error checking before any modification
         # This way, if any errors occur, the route isn't left in a half-valid state
@@ -290,7 +290,7 @@ class Router:
             cur_event = self.event_lookup.get(cur_event_id)
             dest_folder = self.folder_lookup.get(dest_folder_name)
             cur_event.parent.remove_child(cur_event)
-            dest_folder.insert_child_before(cur_event, before_obj=None)
+            dest_folder.insert_child_after(cur_event, after_obj=None)
 
         self._recalc()
     

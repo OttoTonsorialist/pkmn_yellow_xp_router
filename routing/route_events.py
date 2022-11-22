@@ -685,17 +685,17 @@ class EventFolder:
         if force_recalculation:
             self.apply(self.init_state)
     
-    def insert_child_before(self, child_obj, before_obj=None):
-        if before_obj is None:
+    def insert_child_after(self, child_obj, after_obj=None):
+        if after_obj is None:
             self.add_child(child_obj=child_obj)
         
         else:
             try:
-                insert_idx = self.children.index(before_obj)
-                self.children.insert(insert_idx, child_obj)
+                insert_idx = self.children.index(after_obj)
+                self.children.insert(insert_idx + 1, child_obj)
                 child_obj.parent = self
             except Exception as e:
-                raise ValueError(f"Could not find object to insert before: {before_obj}")
+                raise ValueError(f"Could not find object to insert before: {after_obj}")
 
     def move_child(self, child_obj, move_up_flag):
         try:

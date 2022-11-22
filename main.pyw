@@ -383,7 +383,7 @@ class Main(tk.Tk):
 
         self._data.add_area(
             area_name=area_name,
-            insert_before=all_event_ids[0],
+            insert_after=all_event_ids[0],
             include_rematches=include_rematches
         )
         self.trainer_add.trainer_filter_callback()
@@ -391,16 +391,14 @@ class Main(tk.Tk):
     
     def quick_add_event(self, new_event):
         all_event_ids = self.event_list.get_all_selected_event_ids()
-        if len(all_event_ids) > 1:
-            return
-        elif len(all_event_ids) == 0:
+        if len(all_event_ids) > 1 or len(all_event_ids) == 0:
             self._data.add_event_object(
                 event_def=new_event
             )
         else:
             self._data.add_event_object(
                 event_def=new_event,
-                insert_before=all_event_ids[0]
+                insert_after=all_event_ids[0]
             )
 
         self.trainer_add.trainer_filter_callback()
@@ -538,7 +536,7 @@ class Main(tk.Tk):
             if len(all_event_ids) == 0:
                 self._data.add_event_object(new_folder_name=new_folder_name)
             else:
-                self._data.add_event_object(new_folder_name=new_folder_name, insert_before=all_event_ids[0])
+                self._data.add_event_object(new_folder_name=new_folder_name, insert_after=all_event_ids[0])
         else:
             self._data.rename_event_folder(prev_folder_name, new_folder_name)
 
@@ -674,7 +672,7 @@ class Main(tk.Tk):
         if len(all_event_ids) > 1 or len(all_event_ids) == 0:
             return
 
-        self._data.add_event_object(event_def=event_def, insert_before=all_event_ids[0])
+        self._data.add_event_object(event_def=event_def, insert_after=all_event_ids[0])
         self.new_event_window.close()
         self.new_event_window = None
         self.event_list.refresh()
