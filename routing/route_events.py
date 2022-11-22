@@ -347,7 +347,7 @@ class EventItem:
         self.group_id = event_id_counter
         event_id_counter += 1
 
-        self.enabled = True
+        self._enabled = True
         self.parent = parent
         self.name = event_definition.get_item_label()
         self.to_defeat_idx = to_defeat_idx
@@ -365,8 +365,8 @@ class EventItem:
     
     def apply(self, cur_state: route_state_objects.RouteState):
         self.init_state = cur_state
-        self.enabled = self.event_definition.enabled
-        if not self.enabled:
+        self._enabled = self.event_definition.enabled
+        if not self.is_enabled():
             self.final_state = cur_state
             self.error_message = ""
             self.name = f"Disabled: {self.event_definition.get_label()}"
@@ -440,27 +440,27 @@ class EventItem:
         return ""
 
     def pkmn_level(self):
-        if not self.enabled:
+        if not self.is_enabled():
             return ""
         return self.final_state.solo_pkmn.cur_level
     
     def xp_to_next_level(self):
-        if not self.enabled:
+        if not self.is_enabled():
             return ""
         return self.final_state.solo_pkmn.xp_to_next_level
 
     def percent_xp_to_next_level(self):
-        if not self.enabled:
+        if not self.is_enabled():
             return ""
         return self.final_state.solo_pkmn.percent_xp_to_next_level
 
     def xp_gain(self):
-        if not self.enabled:
+        if not self.is_enabled():
             return ""
         return self.final_state.solo_pkmn.cur_xp - self.init_state.solo_pkmn.cur_xp
 
     def total_xp(self):
-        if not self.enabled:
+        if not self.is_enabled():
             return ""
         return self.final_state.solo_pkmn.cur_xp
 
@@ -468,7 +468,7 @@ class EventItem:
         return len(self.error_message) != 0
 
     def is_enabled(self):
-        return self.enabled
+        return self._enabled and self.parent.is_enabled()
     
     def is_major_fight(self):
         return False
@@ -487,7 +487,7 @@ class EventGroup:
         event_id_counter += 1
 
         self.parent = parent
-        self.enabled = True
+        self._enabled = True
         self.name = None
         self.init_state = None
         self.final_state = None
@@ -502,9 +502,9 @@ class EventGroup:
         self.init_state = cur_state
         self.pkmn_after_levelups = []
         self.event_items = []
-        self.enabled = self.event_definition.enabled
+        self._enabled = self.event_definition.enabled
 
-        if not self.enabled:
+        if not self.is_enabled():
             self.final_state = cur_state
             self.error_messages = []
             self.name = f"Disabled: {self.event_definition.get_label()}"
@@ -587,27 +587,27 @@ class EventGroup:
         return ",".join(self.pkmn_after_levelups)
 
     def pkmn_level(self):
-        if not self.enabled:
+        if not self.is_enabled():
             return ""
         return self.final_state.solo_pkmn.cur_level
     
     def xp_to_next_level(self):
-        if not self.enabled:
+        if not self.is_enabled():
             return ""
         return self.final_state.solo_pkmn.xp_to_next_level
 
     def percent_xp_to_next_level(self):
-        if not self.enabled:
+        if not self.is_enabled():
             return ""
         return self.final_state.solo_pkmn.percent_xp_to_next_level
 
     def xp_gain(self):
-        if not self.enabled:
+        if not self.is_enabled():
             return ""
         return self.final_state.solo_pkmn.cur_xp - self.init_state.solo_pkmn.cur_xp
 
     def total_xp(self):
-        if not self.enabled:
+        if not self.is_enabled():
             return ""
         return self.final_state.solo_pkmn.cur_xp
 
@@ -618,10 +618,10 @@ class EventGroup:
         return len(self.error_messages) != 0
     
     def is_enabled(self):
-        return self.enabled
+        return self._enabled and self.parent.is_enabled()
 
     def set_enabled_status(self, is_enabled):
-        self.enabled = self.event_definition.enabled = is_enabled
+        self._enabled = self.event_definition.enabled = is_enabled
 
     def is_major_fight(self):
         if self.event_definition.trainer_def is None:
@@ -644,14 +644,14 @@ class EventGroup:
 
 
 class EventFolder:
-    def __init__(self, parent, name, event_definition=None, expanded=True):
+    def __init__(self, parent, name, event_definition=None, expanded=True, enabled=True):
         global event_id_counter
         self.group_id = event_id_counter
         event_id_counter += 1
 
         self.parent = parent
         self.name = name
-        self.enabled = True
+        self._enabled = enabled
         self.expanded = expanded
         if event_definition is None:
             event_definition = EventDefinition(notes="")
@@ -709,7 +709,7 @@ class EventFolder:
         self.init_state = cur_state
         self.child_errors = False
 
-        if not self.enabled:
+        if not self.is_enabled():
             self.final_state = cur_state
             return
 
@@ -750,14 +750,16 @@ class EventFolder:
             const.EVENT_FOLDER_NAME: self.name,
             const.TASK_NOTES_ONLY: self.event_definition.notes,
             const.EVENTS: [x.serialize() for x in self.children],
-            const.EXPANDED_KEY: self.expanded
+            const.EXPANDED_KEY: self.expanded,
+            const.ENABLED_KEY: self._enabled
         }
 
     def is_enabled(self):
-        return self.enabled
+        parent_enabled = True if self.parent is None else self.parent.is_enabled()
+        return self._enabled and parent_enabled
 
     def set_enabled_status(self, is_enabled):
-        self.enabled = is_enabled
+        self._enabled = is_enabled
     
     def has_errors(self):
         return self.child_errors

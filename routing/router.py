@@ -152,7 +152,16 @@ class Router:
         
         self._recalc()
     
-    def add_event_object(self, event_def:route_events.EventDefinition=None, new_folder_name=None, insert_before=None, dest_folder_name=const.ROOT_FOLDER_NAME, recalc=True, folder_expanded=True):
+    def add_event_object(
+        self,
+        event_def:route_events.EventDefinition=None,
+        new_folder_name=None,
+        insert_before=None,
+        dest_folder_name=const.ROOT_FOLDER_NAME,
+        recalc=True,
+        folder_expanded=True,
+        folder_enabled=True
+    ):
         if not self.init_route_state:
             raise ValueError("Cannot add an event when solo pokmn is not yet selected")
         if event_def is None and new_folder_name is None:
@@ -171,7 +180,13 @@ class Router:
                 raise ValueError(f"Cannot find folder with name: {dest_folder_name}")
 
         if new_folder_name is not None:
-            new_obj = route_events.EventFolder(parent_obj, new_folder_name, expanded=folder_expanded, event_definition=event_def)
+            new_obj = route_events.EventFolder(
+                parent_obj,
+                new_folder_name,
+                expanded=folder_expanded,
+                event_definition=event_def,
+                enabled=folder_enabled
+            )
             self.folder_lookup[new_folder_name] = new_obj
 
         elif event_def is not None:
@@ -354,7 +369,8 @@ class Router:
                     new_folder_name=event_json[const.EVENT_FOLDER_NAME],
                     dest_folder_name=parent_folder.name,
                     recalc=False,
-                    folder_expanded=event_json.get(const.EXPANDED_KEY, True)
+                    folder_expanded=event_json.get(const.EXPANDED_KEY, True),
+                    folder_enabled=event_json.get(const.ENABLED_KEY, True),
                 )
                 inner_parent = self.folder_lookup[event_json[const.EVENT_FOLDER_NAME]]
                 self._load_events_recursive(inner_parent, event_json)
@@ -406,7 +422,7 @@ class Router:
 
     def _export_recursive(self, cur_folder:route_events.EventFolder, depth, output:list):
         for cur_obj in cur_folder.children:
-            if not cur_obj.enabled:
+            if not cur_obj.is_enabled():
                 continue
             if isinstance(cur_obj, route_events.EventFolder):
                 self._export_single_entry(cur_obj, depth, output)

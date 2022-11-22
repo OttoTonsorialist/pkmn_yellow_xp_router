@@ -44,7 +44,7 @@ class CheckboxTreeview(ttk.Treeview):
             return prev_state[0]
         return None
 
-    def set_checkbox_state(self, item, state, force=False, bubble_up=False, bubble_down=False):
+    def set_checkbox_state(self, item, state, force=False):
         tags = self.item(item, "tags")
 
         prev_state = [t for t in tags if t in self.ALL_STATES]
@@ -67,10 +67,7 @@ class CheckboxTreeview(ttk.Treeview):
 
         self.item(item, tags=tuple(new_tags))
 
-        if bubble_up:
-            self.update_parent(item, bubble_up=bubble_up)
-        if bubble_down:
-            self.update_descendants(item, state)
+        self.force_active_parent(item)
     
     def is_checked(self, item):
         return self.tag_has(self.CHECKED_TAG, item)
@@ -81,27 +78,11 @@ class CheckboxTreeview(ttk.Treeview):
     def is_tristate(self, item):
         return self.tag_has(self.TRISTATE_TAG, item)
 
-    def update_descendants(self, item, state):
-        # can't force tristate downwards, so just ignore if this happens
-        if state == self.TRISTATE_TAG:
-            return
-
-        for iid in self.get_children(item):
-            self.set_checkbox_state(iid, state)
-            self.update_descendants(iid, state)
-
-    def update_parent(self, item, bubble_up=False):
-        # we don't force states upwards, just need to recalculate what the parent will be
-        # with the new state just set on one its children
+    def force_active_parent(self, item):
+        # need to recalculate what the parent will be with the new state just set on one its children
         parent = self.parent(item)
         if parent:
-            children_checked = [self.is_checked(c) for c in self.get_children(parent)]
-            if all(children_checked):
-                self.set_checkbox_state(parent, self.CHECKED_TAG, bubble_up=bubble_up)
-            elif any(children_checked):
-                self.set_checkbox_state(parent, self.TRISTATE_TAG, bubble_up=bubble_up)
-            else:
-                self.set_checkbox_state(parent, self.UNCHECKED_TAG, bubble_up=bubble_up)
+            self.set_checkbox_state(parent, self.CHECKED_TAG)
 
     def _box_click(self, event):
         x, y, widget = event.x, event.y, event.widget
@@ -109,13 +90,12 @@ class CheckboxTreeview(ttk.Treeview):
         if "image" in elem:
             # a box was clicked
             item = self.identify_row(y)
-            if self.tag_has(self.UNCHECKED_TAG, item) or self.tag_has(self.TRISTATE_TAG, item):
+            if self.tag_has(self.UNCHECKED_TAG, item):
                 result_state = self.CHECKED_TAG
             else:
                 result_state = self.UNCHECKED_TAG
 
-            self.set_checkbox_state(item, result_state, bubble_up=True)
-            self.update_descendants(item, result_state)
+            self.set_checkbox_state(item, result_state)
 
             if self.checkbox_callback is not None:
                 self.checkbox_callback()

@@ -80,7 +80,7 @@ def _generate_recursively(result:list, root_folder:EventFolder):
             continue
 
         cur_event:EventDefinition = cur_obj.event_definition
-        if not cur_event.enabled:
+        if not cur_event.is_enabled():
             continue
 
         if cur_event.trainer_def:
