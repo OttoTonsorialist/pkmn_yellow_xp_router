@@ -84,6 +84,7 @@ class Main(tk.Tk):
         self.event_menu.add_command(label="New Event                   (Ctrl+F)", command=self.open_new_event_window)
         self.event_menu.add_command(label="Move Event Up           (Ctrl+E)", command=self.move_group_up)
         self.event_menu.add_command(label="Move Event Down      (Ctrl+D)", command=self.move_group_down)
+        self.event_menu.add_command(label="Toggle Highlight       (Ctrl+V)", command=self.toggle_event_highlight)
         self.event_menu.add_command(label="Transfer Event             (Ctrl+R)", command=self.open_transfer_event_window)
         self.event_menu.add_command(label="Delete Event             (Ctrl+B)", command=self.delete_group)
 
@@ -159,32 +160,28 @@ class Main(tk.Tk):
 
         self.group_controls = tk.Frame(self.left_info_panel)
         self.group_controls.pack(fill=tk.X, anchor=tk.CENTER)
-
-        self.padding_left = tk.Frame(self.group_controls)
-        self.padding_left.grid(row=0, column=0)
         
         self.move_group_up_button = custom_tkinter.SimpleButton(self.group_controls, text='Move Event Up', command=self.move_group_up, width=15)
         self.move_group_up_button.grid(row=0, column=1, padx=5, pady=1)
         self.move_group_down_button = custom_tkinter.SimpleButton(self.group_controls, text='Move Event Down', command=self.move_group_down, width=15)
         self.move_group_down_button.grid(row=0, column=2, padx=5, pady=1)
+        self.move_group_down_button = custom_tkinter.SimpleButton(self.group_controls, text='Toggle Highlight', command=self.toggle_event_highlight, width=15)
+        self.move_group_down_button.grid(row=0, column=3, padx=5, pady=1)
         self.transfer_event_button = custom_tkinter.SimpleButton(self.group_controls, text='Transfer Event', command=self.open_transfer_event_window, width=15)
-        self.transfer_event_button.grid(row=0, column=3, padx=5, pady=1)
+        self.transfer_event_button.grid(row=0, column=4, padx=5, pady=1)
 
         self.delete_event_button = custom_tkinter.SimpleButton(self.group_controls, text='Delete Event', command=self.delete_group, width=15)
-        self.delete_event_button.grid(row=0, column=5, padx=5, pady=1)
+        self.delete_event_button.grid(row=0, column=6, padx=5, pady=1)
 
         self.new_folder_button = custom_tkinter.SimpleButton(self.group_controls, text='New Folder', command=self.open_new_folder_window, width=15)
-        self.new_folder_button.grid(row=0, column=7, padx=5, pady=1)
+        self.new_folder_button.grid(row=0, column=8, padx=5, pady=1)
         self.rename_folder_button = custom_tkinter.SimpleButton(self.group_controls, text='Rename Folder', command=self.rename_folder, width=15)
-        self.rename_folder_button.grid(row=0, column=8, padx=5, pady=1)
-
-        self.padding_right = tk.Frame(self.group_controls)
-        self.padding_right.grid(row=0, column=10)
+        self.rename_folder_button.grid(row=0, column=9, padx=5, pady=1)
 
         self.group_controls.columnconfigure(0, weight=1)
-        self.group_controls.columnconfigure(4, weight=1)
-        self.group_controls.columnconfigure(6, weight=1)
-        self.group_controls.columnconfigure(10, weight=1)
+        self.group_controls.columnconfigure(5, weight=1)
+        self.group_controls.columnconfigure(7, weight=1)
+        self.group_controls.columnconfigure(11, weight=1)
 
         self.event_list = pkmn_components.RouteList(self._data, self.left_info_panel)
         self.scroll_bar = tk.Scrollbar(self.left_info_panel, orient="vertical", command=self.event_list.yview, width=30)
@@ -202,7 +199,6 @@ class Main(tk.Tk):
         self.info_panel.grid_rowconfigure(0, weight=1)
         # these uniform values don't have to be a specific value, they just have to match
         self.info_panel.grid_columnconfigure(0, weight=1, uniform="test")
-        #self.info_panel.grid_columnconfigure(1, weight=1, uniform="test")
 
         # main route actions
         self.bind('<Control-x>', self.open_customize_dvs_window)
@@ -214,6 +210,7 @@ class Main(tk.Tk):
         self.bind('<Control-f>', self.open_new_event_window)
         self.bind('<Control-d>', self.move_group_down)
         self.bind('<Control-e>', self.move_group_up)
+        self.bind('<Control-v>', self.toggle_event_highlight)
         self.bind('<Control-r>', self.open_transfer_event_window)
         self.bind('<Control-b>', self.delete_group)
         self.bind('<Delete>', self.delete_group)
@@ -489,6 +486,12 @@ class Main(tk.Tk):
         # NOTE: have to reverse the list since we move items one at a time
         for cur_event in reversed(self.event_list.get_all_selected_event_ids(allow_event_items=False)):
             self._data.move_event_object(cur_event, False)
+
+        self.event_list.refresh()
+
+    def toggle_event_highlight(self, event=None):
+        for cur_event in self.event_list.get_all_selected_event_ids(allow_event_items=False):
+            self._data.toggle_event_highlight(cur_event)
 
         self.event_list.refresh()
 

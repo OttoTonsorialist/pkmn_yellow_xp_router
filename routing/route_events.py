@@ -188,7 +188,7 @@ class TrainerEventDefinition:
 
 
 class EventDefinition:
-    def __init__(self, enabled=True, rare_candy=None, vitamin=None, trainer_def=None, wild_pkmn_info=None, item_event_def=None, learn_move=None, hold_item=None, notes=""):
+    def __init__(self, enabled=True, rare_candy=None, vitamin=None, trainer_def=None, wild_pkmn_info=None, item_event_def=None, learn_move=None, hold_item=None, notes="", tags=None):
         self.enabled = enabled
         self.rare_candy = rare_candy
         self.vitamin = vitamin
@@ -199,6 +199,9 @@ class EventDefinition:
         self.item_event_def = item_event_def
         self.learn_move = learn_move
         self.hold_item = hold_item
+        if tags is None:
+            tags = []
+        self.tags = tags
         self.notes = notes
 
     def get_trainer_obj(self):
@@ -294,12 +297,21 @@ class EventDefinition:
         
         return f"Notes: {self.notes}"
     
+    def is_highlighted(self):
+        return const.HIGHLIGHT_LABEL in self.tags
+    
+    def toggle_highlight(self):
+        if const.HIGHLIGHT_LABEL in self.tags:
+            self.tags.remove(const.HIGHLIGHT_LABEL)
+        else:
+            self.tags.append(const.HIGHLIGHT_LABEL)
+    
     def __str__(self):
         return self.get_label()
 
     
     def serialize(self):
-        result = {const.ENABLED_KEY: self.enabled}
+        result = {const.ENABLED_KEY: self.enabled, const.TAGS_KEY: self.tags}
         if self.notes:
             result[const.TASK_NOTES_ONLY] = self.notes
 
@@ -325,6 +337,8 @@ class EventDefinition:
         result = EventDefinition(
             enabled=raw_val.get(const.ENABLED_KEY, True),
             notes=raw_val.get(const.TASK_NOTES_ONLY, ""),
+            tags=raw_val.get(const.TAGS_KEY),
+
             rare_candy=RareCandyEventDefinition.deserialize(raw_val.get(const.TASK_RARE_CANDY)),
             vitamin=VitaminEventDefinition.deserialize(raw_val.get(const.TASK_VITAMIN)),
             trainer_def=TrainerEventDefinition.deserialize(raw_val.get(const.TASK_TRAINER_BATTLE)),
@@ -633,6 +647,9 @@ class EventGroup:
     def get_tags(self):
         if self.has_errors():
             return [const.EVENT_TAG_ERRORS]
+        
+        if self.event_definition.is_highlighted():
+            return [const.HIGHLIGHT_LABEL]
 
         if self.is_major_fight():
             return [const.EVENT_TAG_IMPORTANT]
@@ -768,7 +785,16 @@ class EventFolder:
         if self.has_errors():
             return [const.EVENT_TAG_ERRORS]
         
-        return []
+        if self.expanded:
+            return []
+
+        result = []
+        for cur_group in self.children:
+            if const.HIGHLIGHT_LABEL in cur_group.get_tags():
+                result.append(const.HIGHLIGHT_LABEL)
+                break
+        
+        return result
     
     def __repr__(self):
         return f"EventFolder: {self.name}"

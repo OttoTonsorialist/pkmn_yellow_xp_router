@@ -170,6 +170,9 @@ class Constants:
         self.EVENTS = "events"
         self.ENABLED_KEY = "Enabled"
         self.EXPANDED_KEY = "Expanded"
+        self.TAGS_KEY = "Tags"
+
+        self.HIGHLIGHT_LABEL = "highlight"
 
         self.IS_KEY_ITEM = "key_item"
         self.PURCHASE_PRICE = "purchase_price"
@@ -197,8 +200,10 @@ class Constants:
 
         self.CUSTOM_FONT_NAME_KEY = "custom_font_name"
 
-        # not configurable, just for import events in route list
+        # not configurable, just for important events in route list
         self.IMPORTANT_COLOR = "#b3b6b7"
+        # not configurable, just for user flagged events in route list
+        self.USER_FLAGGED_COLOR = "#ff8888"
         # not configurable, just for the top-right indicator
         self.VALID_COLOR = "#abebc6"
         self.ERROR_COLOR = "#f9e79f"

@@ -1,5 +1,6 @@
 import os
 import json
+import logging
 
 from utils.constants import const
 from pkmn import universal_data_objects
@@ -7,6 +8,8 @@ import pkmn
 from utils import io_utils
 from routing import route_events
 from routing import route_state_objects
+
+logger = logging.getLogger(__name__)
 
 
 class Router:
@@ -177,6 +180,8 @@ class Router:
             try:
                 parent_obj = self.folder_lookup[dest_folder_name]
             except Exception as e:
+                logger.error(f"Failed to lookup folder with name {dest_folder_name}:")
+                logger.exception(e)
                 raise ValueError(f"Cannot find folder with name: {dest_folder_name}")
 
         if new_folder_name is not None:
@@ -234,6 +239,19 @@ class Router:
             obj_to_move.parent.move_child(obj_to_move, move_up_flag)
             self._recalc()
         except Exception as e:
+            logger.error(f"Failed to move event object: {event_id}")
+            logger.exception(e)
+            raise ValueError(f"Failed to find event object with id: {event_id}")
+
+    def toggle_event_highlight(self, event_id):
+        # NOTE: can only move within a folder. To change folders, need to call a separate function
+        try:
+            obj_to_highlight = self.get_event_obj(event_id)
+            if isinstance(obj_to_highlight, route_events.EventGroup):
+                obj_to_highlight.event_definition.toggle_highlight()
+        except Exception as e:
+            logger.error(f"Failed to toggle highlight for event: {event_id}")
+            logger.exception(e)
             raise ValueError(f"Failed to find event object with id: {event_id}")
     
     def get_invalid_folder_transfers(self, event_id):

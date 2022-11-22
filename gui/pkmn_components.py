@@ -37,6 +37,7 @@ class RouteList(custom_tkinter.CustomGridview):
 
         self.tag_configure(const.EVENT_TAG_ERRORS, background=const.ERROR_COLOR)
         self.tag_configure(const.EVENT_TAG_IMPORTANT, background=const.IMPORTANT_COLOR)
+        self.tag_configure(const.HIGHLIGHT_LABEL, background=const.USER_FLAGGED_COLOR)
 
         self.bind("<<TreeviewOpen>>", self._treeview_opened_callback)
         self.bind("<<TreeviewClose>>", self._treeview_closed_callback)
@@ -53,6 +54,8 @@ class RouteList(custom_tkinter.CustomGridview):
             if isinstance(cur_obj, route_events.EventFolder):
                 cur_obj.expanded = True
 
+            self.refresh()
+
     def _treeview_closed_callback(self, event):
         selected = self.get_all_selected_event_ids()
         # no easy way to figure out unless only one is sleected. Just give up otherwise
@@ -60,6 +63,8 @@ class RouteList(custom_tkinter.CustomGridview):
             cur_obj = self._route_list.get_event_obj(selected[0])
             if isinstance(cur_obj, route_events.EventFolder):
                 cur_obj.expanded = False
+
+            self.refresh()
     
     def checkbox_item_callback_fn(self, item_id, new_state):
         raw_obj = self._route_list.get_event_obj(self._get_route_id_from_item_id(item_id))
