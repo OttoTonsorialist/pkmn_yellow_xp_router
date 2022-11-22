@@ -5,6 +5,7 @@ import subprocess
 import sys
 import threading
 import logging
+import json
 
 import tkinter as tk
 from tkinter import filedialog
@@ -999,7 +1000,15 @@ class NewRouteWindow(custom_tkinter.Popup):
         all_routes = [const.EMPTY_ROUTE_NAME]
         for preset_route_name in temp_gen.min_battles_db().data:
             all_routes.append(const.PRESET_ROUTE_PREFIX + preset_route_name)
-        all_routes.extend(io_utils.get_existing_route_names())
+
+        for test_route in io_utils.get_existing_route_names():
+            try:
+                with open(io_utils.get_existing_route_path(test_route), 'r') as f:
+                    raw = json.load(f)
+                    if raw[const.PKMN_VERSION_KEY] == self.pkmn_version.get():
+                        all_routes.append(test_route)
+            except Exception as e:
+                pass
 
         self._min_battles_cache = all_routes
         self._base_route_filter_callback()
