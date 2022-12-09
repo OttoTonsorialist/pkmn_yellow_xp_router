@@ -1,19 +1,19 @@
 import tkinter as tk
 import tkinter.font
 from typing import List
+from controllers.main_controller import MainController
 
 from gui import custom_tkinter
 import pkmn as pkmn_gen_info
 from pkmn import universal_data_objects
 from routing import route_state_objects
 from routing import route_events
-from routing.router import Router
 from utils.constants import const
 from utils.config_manager import config
 
 class RouteList(custom_tkinter.CustomGridview):
-    def __init__(self, route_list:Router, *args, **kwargs):
-        self._route_list = route_list
+    def __init__(self, controller:MainController, *args, **kwargs):
+        self._controller = controller
         super().__init__(
             *args,
             custom_col_data=[
@@ -43,14 +43,14 @@ class RouteList(custom_tkinter.CustomGridview):
         self.bind("<<TreeviewClose>>", self._treeview_closed_callback)
 
     def general_checkbox_callback_fn(self):
-        self._route_list._recalc()
+        self._controller.get_raw_route()._recalc()
         self.refresh()
 
     def _treeview_opened_callback(self, *args, **kwargs):
         selected = self.get_all_selected_event_ids()
         # no easy way to figure out unless only one is sleected. Just give up otherwise
         if len(selected) == 1:
-            cur_obj = self._route_list.get_event_obj(selected[0])
+            cur_obj = self._controller.get_event_by_id(selected[0])
             if isinstance(cur_obj, route_events.EventFolder):
                 cur_obj.expanded = True
 
@@ -60,14 +60,14 @@ class RouteList(custom_tkinter.CustomGridview):
         selected = self.get_all_selected_event_ids()
         # no easy way to figure out unless only one is sleected. Just give up otherwise
         if len(selected) == 1:
-            cur_obj = self._route_list.get_event_obj(selected[0])
+            cur_obj = self._controller.get_event_by_id(selected[0])
             if isinstance(cur_obj, route_events.EventFolder):
                 cur_obj.expanded = False
 
             self.refresh()
     
     def checkbox_item_callback_fn(self, item_id, new_state):
-        raw_obj = self._route_list.get_event_obj(self._get_route_id_from_item_id(item_id))
+        raw_obj = self._controller.get_event_by_id(self._get_route_id_from_item_id(item_id))
         raw_obj.set_enabled_status(new_state == self.CHECKED_TAG or new_state == self.TRISTATE_TAG)
     
     def _get_route_id_from_item_id(self, iid):
@@ -83,7 +83,7 @@ class RouteList(custom_tkinter.CustomGridview):
         for cur_iid in self.selection():
             # event items can't be manipulated at all
             cur_route_id = self._get_route_id_from_item_id(cur_iid)
-            if not allow_event_items and isinstance(self._route_list.get_event_obj(cur_route_id), route_events.EventItem):
+            if not allow_event_items and isinstance(self._controller.get_event_by_id(cur_route_id), route_events.EventItem):
                 continue
 
             # if any folders are selected, ignore all events that are children of that folder
@@ -99,7 +99,7 @@ class RouteList(custom_tkinter.CustomGridview):
         # begin keeping track of the stuff we already know we're displaying
         # so we can eventually delete stuff that has been removed
         to_delete_ids = set(self._treeview_id_lookup.keys())
-        self._refresh_recursively("", self._route_list.root_folder.children, to_delete_ids)
+        self._refresh_recursively("", self._controller.get_raw_route().root_folder.children, to_delete_ids)
 
         # we have now updated all relevant records, created missing ones, and ordered everything correctly
         # just need to remove any potentially deleted records

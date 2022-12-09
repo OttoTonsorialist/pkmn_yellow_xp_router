@@ -1,21 +1,21 @@
+import logging
+
 import tkinter as tk
+from controllers.main_controller import MainController
 
 from gui import custom_tkinter
-from routing.route_events import EventDefinition, HoldItemEventDefinition, InventoryEventDefinition, LearnMoveEventDefinition, RareCandyEventDefinition, TrainerEventDefinition, VitaminEventDefinition, WildPkmnEventDefinition
-from routing.router import Router
+from routing.route_events import EventDefinition, EventItem, HoldItemEventDefinition, InventoryEventDefinition, LearnMoveEventDefinition, RareCandyEventDefinition, TrainerEventDefinition, VitaminEventDefinition, WildPkmnEventDefinition
 from utils.constants import const
 import pkmn
 
+logger = logging.getLogger(__name__)
+
 
 class QuickTrainerAdd(tk.Frame):
-    def __init__(self, *args, router:Router=None, trainer_select_callback=None, trainer_add_callback=None, area_add_callback=None, **kwargs):
+    def __init__(self, controller:MainController, *args, trainer_select_callback=None, **kwargs):
         super().__init__(*args, **kwargs, highlightbackground="black", highlightthickness=2)
-
-        self.router = router
+        self._controller = controller
         self.trainer_select_callback = trainer_select_callback
-        self.trainer_add_callback = trainer_add_callback
-        self.area_add_callback = area_add_callback
-        self.force_disable = True
 
         self.padx = 5
         self.pady = 1
@@ -59,13 +59,12 @@ class QuickTrainerAdd(tk.Frame):
         self._add_trainer.grid(row=0, column=0, padx=self.padx, pady=self.pady + 1, sticky=tk.E)
         self._add_area = custom_tkinter.SimpleButton(self._buttons, text="Add Area", command=self.add_area)
         self._add_area.grid(row=0, column=1, padx=self.padx, pady=self.pady + 1, sticky=tk.W)
+        self._controller.register_event_selection(self.update_button_status)
+        self._controller.register_version_change(self.update_pkmn_version)
         self.update_button_status()
 
-    def update_button_status(self, allow_enable=None):
-        if allow_enable is not None:
-            self.force_disable = not allow_enable
-
-        if self.force_disable:
+    def update_button_status(self):
+        if not self._controller.can_insert_after_current_selection():
             self._add_trainer.disable()
             self._add_area.disable()
             return
@@ -93,7 +92,7 @@ class QuickTrainerAdd(tk.Frame):
         valid_trainers = pkmn.current_gen_info().trainer_db().get_valid_trainers(
             trainer_class=class_filter,
             trainer_loc=loc_filter,
-            defeated_trainers=self.router.defeated_trainers,
+            defeated_trainers=self._controller.get_defeated_trainers(),
             show_rematches=self._rematches_label.is_checked()
         )
         if not valid_trainers:
@@ -112,21 +111,28 @@ class QuickTrainerAdd(tk.Frame):
             self.trainer_select_callback(selected_trainer)
     
     def add_trainer(self, *args, **kwargs):
-        if self.trainer_add_callback is not None:
-            self.trainer_add_callback(EventDefinition(trainer_def=TrainerEventDefinition(self._trainer_names.get())))
+        self._controller.new_event(
+            EventDefinition(trainer_def=TrainerEventDefinition(self._trainer_names.get())),
+            insert_after=self._controller.get_single_selected_event_id()
+        )
     
     def add_area(self, *args, **kwargs):
-        if self.area_add_callback is not None:
-            self.area_add_callback(self._trainers_by_loc.get(), self._rematches_label.is_checked())
+        insert_after = self._controller.get_single_selected_event_id()
+        if insert_after is None:
+            return
+        
+        self._controller.add_area(
+            self._trainers_by_loc.get(),
+            self._rematches_label.is_checked(),
+            insert_after
+        )
 
 
 class QuickWildPkmn(tk.Frame):
-    def __init__(self, *args, router:Router=None, event_creation_callback=None, **kwargs):
+    def __init__(self, controller:MainController, *args, **kwargs):
         super().__init__(*args, **kwargs, highlightbackground="black", highlightthickness=2)
 
-        self.router = router
-        self.event_creation_callback = event_creation_callback
-        self.force_disable = True
+        self._controller = controller
 
         self.padx = 5
         self.pady = 1
@@ -174,19 +180,17 @@ class QuickWildPkmn(tk.Frame):
         self._add_trainer_pkmn.grid(row=0, column=1, padx=self.padx, pady=self.pady + 1, sticky=tk.W)
 
         self._level_val.set(5)
+        self._controller.register_event_selection(self.update_button_status)
+        self._controller.register_version_change(self.update_pkmn_version)
         self.update_button_status()
 
-    def update_button_status(self, allow_enable=None):
-        if allow_enable is not None:
-            self.force_disable = not allow_enable
-
-        if self.force_disable:
+    def update_button_status(self):
+        if not self._controller.can_insert_after_current_selection():
             self._add_wild_pkmn.disable()
             self._add_trainer_pkmn.disable()
             return
         
         valid = True
-        
         if self._pkmn_types.get().strip().startswith(const.NO_POKEMON):
             valid = False
 
@@ -222,43 +226,40 @@ class QuickWildPkmn(tk.Frame):
         self.update_button_status()
 
     def add_wild_pkmn_cmd(self, *args, **kwargs):
-        if self.event_creation_callback is not None:
-            self.event_creation_callback(
-                EventDefinition(
-                    wild_pkmn_info=WildPkmnEventDefinition(
-                        self._pkmn_types.get(),
-                        int(self._level_val.get().strip()),
-                        quantity=int(self._quantity_val.get().strip()),
-                    )
+        self._controller.new_event(
+            EventDefinition(
+                wild_pkmn_info=WildPkmnEventDefinition(
+                    self._pkmn_types.get(),
+                    int(self._level_val.get().strip()),
+                    quantity=int(self._quantity_val.get().strip()),
                 )
-            )
+            ),
+            insert_after=self._controller.get_single_selected_event_id()
+        )
 
     def add_trainer_pkmn_cmd(self, *args, **kwargs):
-        if self.event_creation_callback is not None:
-            self.event_creation_callback(
-                EventDefinition(
-                    wild_pkmn_info=WildPkmnEventDefinition(
-                        self._pkmn_types.get(),
-                        int(self._level_val.get().strip()),
-                        quantity=int(self._quantity_val.get().strip()),
-                        trainer_pkmn=True
-                    )
+        self._controller.new_event(
+            EventDefinition(
+                wild_pkmn_info=WildPkmnEventDefinition(
+                    self._pkmn_types.get(),
+                    int(self._level_val.get().strip()),
+                    quantity=int(self._quantity_val.get().strip()),
+                    trainer_pkmn=True
                 )
-            )
+            ),
+            insert_after=self._controller.get_single_selected_event_id()
+        )
 
 
 class QuickItemAdd(tk.Frame):
-    def __init__(self, *args, event_creation_callback=None, **kwargs):
+    def __init__(self, controller:MainController, *args, **kwargs):
         super().__init__(*args, **kwargs, highlightbackground="black", highlightthickness=2)
-
-        self.cur_state = None
-        self.event_creation_callback = event_creation_callback
+        self._controller = controller
 
         self._cur_row = 0
         self.padx = 2
         self.pady = 1
         self.option_menu_width = 20
-        self.force_disable = True
 
         self._dropdowns = tk.Frame(self)
         self._dropdowns.pack()
@@ -329,13 +330,16 @@ class QuickItemAdd(tk.Frame):
 
         self._buttons.columnconfigure(2, weight=1)
         self._buttons.columnconfigure(6, weight=1)
+        self._controller.register_event_selection(self.update_button_status)
+        self._controller.register_version_change(self.update_pkmn_version)
         self.update_button_status()
+    
+    def update_pkmn_version(self):
+        self._item_selector.new_values(pkmn.current_gen_info().item_db().get_filtered_names())
+        self._item_mart_selector.new_values([const.ITEM_TYPE_ALL_ITEMS] + sorted(list(pkmn.current_gen_info().item_db().mart_items.keys())))
 
-    def update_button_status(self, allow_enable=None):
-        if allow_enable is not None:
-            self.force_disable = not allow_enable
-
-        if self.force_disable:
+    def update_button_status(self):
+        if not self._controller.can_insert_after_current_selection():
             self._acquire_button.disable()
             self._drop_button.disable()
             self._use_button.disable()
@@ -375,10 +379,6 @@ class QuickItemAdd(tk.Frame):
             self._drop_button.enable()
             self._buy_button.enable()
             self._sell_button.enable()
-    
-    def update_pkmn_version(self):
-        self._item_selector.new_values(pkmn.current_gen_info().item_db().get_filtered_names())
-        self._item_mart_selector.new_values([const.ITEM_TYPE_ALL_ITEMS] + sorted(list(pkmn.current_gen_info().item_db().mart_items.keys())))
 
     def item_filter_callback(self, *args, **kwargs):
         item_type = self._item_type_selector.get()
@@ -393,10 +393,11 @@ class QuickItemAdd(tk.Frame):
         )
 
         if backpack_filter:
-            if self.cur_state is None:
+            cur_state = self._controller.get_single_selected_event_obj().final_state
+            if cur_state is None:
                 new_vals = []
             else:
-                backpack_items = [x.base_item.name for x in self.cur_state.inventory.cur_items]
+                backpack_items = [x.base_item.name for x in cur_state.inventory.cur_items]
                 new_vals = [x for x in new_vals if x in backpack_items]
         
         item_filter_val = self._item_filter.get().strip().lower()
@@ -497,21 +498,25 @@ class QuickItemAdd(tk.Frame):
         try:
             cur_item = self._item_selector.get()
             move_name = pkmn.current_gen_info().item_db().get_item(cur_item).move_name
+            cur_state = self._controller.get_single_selected_event_obj().final_state
             
             if cur_item in pkmn.current_gen_info().item_db().tms:
                 self._create_event(
                     EventDefinition(
                         learn_move=LearnMoveEventDefinition(
                             move_name,
-                            self.cur_state.solo_pkmn.get_move_destination(move_name, None)[0],
+                            cur_state.solo_pkmn.get_move_destination(move_name, None)[0],
                             cur_item,
                             const.LEVEL_ANY
                         )
                     )
                 )
         except Exception as e:
-            pass
+            logger.error(f"Silently ignoring error when trying to learn move")
+            logger.exception(e)
 
     def _create_event(self, event_def):
-        if self.event_creation_callback is not None:
-            self.event_creation_callback(event_def)
+        self._controller.new_event(
+            event_def,
+            self._controller.get_single_selected_event_id()
+        )

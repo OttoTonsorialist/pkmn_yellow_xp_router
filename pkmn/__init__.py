@@ -17,6 +17,9 @@ gen_factory.register_gen(gen_two_object.gen_two_gold, const.GOLD_VERSION)
 gen_factory.register_gen(gen_two_object.gen_two_silver, const.SILVER_VERSION)
 gen_factory.register_gen(gen_two_object.gen_two_crystal, const.CRYSTAL_VERSION)
 
+# default to yellow, just to make things happy
+change_version(const.YELLOW_VERSION)
+
 # now clean up the namespace
 del gen_factory
 del const

@@ -1,5 +1,6 @@
 import tkinter as tk
 from tkinter import ttk
+from controllers.main_controller import MainController
 
 from gui import custom_tkinter, route_event_components, pkmn_components, quick_add_components, battle_summary
 from routing.route_events import EventDefinition, EventFolder, EventGroup, EventItem, InventoryEventDefinition, LearnMoveEventDefinition, RareCandyEventDefinition, TrainerEventDefinition, VitaminEventDefinition
@@ -8,12 +9,12 @@ from utils.config_manager import config
 
 
 class EventDetails(tk.Frame):
-    def __init__(self, *args, event_update_callback=None, **kwargs):
+    def __init__(self, controller:MainController, *args, **kwargs):
         self.state_summary_width = 900
         self.battle_summary_width = 1400
         super().__init__(*args, **kwargs, width=self.state_summary_width, bg=config.get_background_color())
 
-        self.event_update_callback = event_update_callback
+        self._controller = controller
         self._cur_trainer_name = None
         self._prev_selected_tab = None
 
@@ -192,6 +193,10 @@ class EventDetails(tk.Frame):
                     self.current_event_editor.pack()
 
     def update_existing_event(self, *args, **kwargs):
+        event_to_update = self._controller.get_single_selected_event_id()
+        if event_to_update is None:
+            return
+
         try:
             if self.current_event_editor is None:
                 if self._cur_trainer_name is None:
@@ -213,6 +218,5 @@ class EventDetails(tk.Frame):
         except Exception as e:
             new_event = None
         
-        if self.event_update_callback is not None:
-            self.event_update_callback(new_event)
+        self._controller.update_existing_event(event_to_update, new_event)
     
