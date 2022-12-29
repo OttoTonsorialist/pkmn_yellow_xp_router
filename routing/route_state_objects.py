@@ -434,11 +434,11 @@ class RouteState:
         if source == const.MOVE_SOURCE_LEVELUP:
             inv = self.inventory
         else:
-            consume_item = True
             try:
                 consume_item = not pkmn.current_gen_info().item_db().get_item(source).is_key_item
             except:
-                pass
+                consume_item = False
+                error_message = f"Could not get valid item for move {move_name} source: {source}"
 
             if consume_item:
                 try:
@@ -535,3 +535,14 @@ class RouteState:
             self.badges,
             inv
         ), error_message
+
+    def blackout(self):
+        inv = self.inventory._copy()
+        inv.cur_money = self.inventory.cur_money // 2
+        # TODO: validate rounding is correct here...
+        return RouteState(
+            self.solo_pkmn,
+            self.badges,
+            inv
+        ), ""
+

@@ -1,12 +1,13 @@
 from __future__ import annotations
 import os
 import logging
-from typing import List
+import tkinter
+from typing import List, Tuple
 
 from utils.constants import const
 from utils.config_manager import config
 from utils import route_one_utils
-from routing.route_events import EventDefinition, EventFolder, EventGroup, EventItem, TrainerEventDefinition
+from routing.route_events import EventDefinition, EventFolder, EventGroup, EventItem, LearnMoveEventDefinition, TrainerEventDefinition
 import routing.router
 
 logger = logging.getLogger(__name__)
@@ -19,18 +20,19 @@ def handle_exceptions(controller_fn):
             controller_fn(*args, **kwargs)
         except Exception as e:
             controller:MainController = args[0]
-            controller._on_exception(e)
+            controller._on_exception(f"{type(e)}: {e}")
     
     return wrapper
 
 
 class MainController:
-    def __init__(self):
-        self._main_window = None
+    def __init__(self, tk_root:tkinter.Tk):
+        self._tk_root = tk_root
         self._data:routing.router.Router = routing.router.Router()
         self._current_preview_event = None
         self._route_name = ""
         self._selected_ids = []
+        self._is_record_mode_active = False
 
         self._name_change_callbacks = []
         self._version_change_callbacks = []
@@ -38,6 +40,7 @@ class MainController:
         self._event_change_callbacks = []
         self._event_selection_callbacks = []
         self._event_preview_callbacks = []
+        self._record_mode_change_callbacks = []
         self._exception_callbacks = []
 
 
@@ -63,6 +66,9 @@ class MainController:
     def register_event_preview(self, callback_fn):
         self._event_preview_callbacks.append(callback_fn)
 
+    def register_record_mode_change(self, callback_fn):
+        self._record_mode_change_callbacks.append(callback_fn)
+
     def register_exception_callback(self, callback_fn):
         self._exception_callbacks.append(callback_fn)
     
@@ -72,32 +78,73 @@ class MainController:
     
     def _on_name_change(self):
         for cur_callback in self._name_change_callbacks:
-            cur_callback()
+            try:
+                cur_callback()
+            except Exception as e:
+                logger.error(f"Exception encountered during name change callbacks")
+                logger.exception(e)
     
     def _on_version_change(self):
         for cur_callback in self._version_change_callbacks:
-            cur_callback()
+            try:
+                cur_callback()
+            except Exception as e:
+                logger.error(f"Exception encountered during version change callbacks")
+                logger.exception(e)
     
-    def _on_route_change(self):
+    def _on_route_change(self, debug=False):
         for cur_callback in self._route_change_callbacks:
-            cur_callback()
+            if debug:
+                logger.info(f"gonna call callback: {cur_callback}")
+            try:
+                cur_callback(debug=debug)
+            except Exception as e:
+                logger.error(f"Exception encountered during route change callbacks")
+                logger.exception(e)
+            if debug:
+                logger.info(f"finished with callback: {cur_callback}")
 
     def _on_event_change(self):
         for cur_callback in self._event_change_callbacks:
-            cur_callback()
+            try:
+                cur_callback()
+            except Exception as e:
+                logger.error(f"Exception encountered during event change callbacks")
+                logger.exception(e)
+
         self._on_route_change()
 
     def _on_event_selection(self):
         for cur_callback in self._event_selection_callbacks:
-            cur_callback()
+            try:
+                cur_callback()
+            except Exception as e:
+                logger.error(f"Exception encountered during event selection callbacks")
+                logger.exception(e)
 
     def _on_event_preview(self):
         for cur_callback in self._event_preview_callbacks:
-            cur_callback()
+            try:
+                cur_callback()
+            except Exception as e:
+                logger.error(f"Exception encountered during event preview callbacks")
+                logger.exception(e)
 
-    def _on_exception(self, exception):
-        for cur_callback in self._event_preview_callbacks:
-            cur_callback(exception)
+    def _on_record_mode_change(self):
+        for cur_callback in self._record_mode_change_callbacks:
+            try:
+                cur_callback()
+            except Exception as e:
+                logger.error(f"Exception encountered during record mode callbacks")
+                logger.exception(e)
+
+    def _on_exception(self, exception_message):
+        for cur_callback in self._exception_callbacks:
+            try:
+                cur_callback(exception_message)
+            except Exception as e:
+                logger.error(f"Exception encountered during exception callbacks lol")
+                logger.exception(e)
 
     ######
     # Methods that induce a state change
@@ -123,6 +170,11 @@ class MainController:
     @handle_exceptions
     def update_existing_event(self, event_group_id, new_event):
         self._data.replace_event_group(event_group_id, new_event)
+        self._on_event_change()
+
+    @handle_exceptions
+    def update_levelup_move(self, new_learn_move_event):
+        self._data.replace_levelup_move_event(new_learn_move_event)
         self._on_event_change()
     
     @handle_exceptions
@@ -171,7 +223,7 @@ class MainController:
         finally:
             self._on_name_change()
             self._on_version_change()
-            self._on_route_change()
+            self._on_route_change(debug=True)
 
     @handle_exceptions
     def customize_dvs(self, new_dvs):
@@ -201,12 +253,16 @@ class MainController:
         self._on_route_change()
 
     @handle_exceptions
-    def new_event(self, event_def, insert_after=None):
-        self._data.add_event_object(event_def=event_def, insert_after=insert_after)
+    def new_event(self, event_def, insert_after=None, dest_folder_name=const.ROOT_FOLDER_NAME, auto_select=False):
+        result = self._data.add_event_object(event_def=event_def, insert_after=insert_after, dest_folder_name=dest_folder_name)
         self._on_route_change()
+        if auto_select:
+            self.select_new_events([result])
+        return result
 
     @handle_exceptions
     def finalize_new_folder(self, new_folder_name, prev_folder_name=None, insert_after=None):
+        logger.info("adding new folder")
         if prev_folder_name is None and insert_after is None:
             self._data.add_event_object(new_folder_name=new_folder_name)
         elif prev_folder_name is None:
@@ -214,7 +270,9 @@ class MainController:
         else:
             self._data.rename_event_folder(prev_folder_name, new_folder_name)
 
-        self._on_route_change()
+        logger.info("gonna trigger event")
+        self._on_route_change(debug=True)
+        logger.info("event triggered")
 
     @handle_exceptions
     def toggle_event_highlight(self, event_ids):
@@ -222,6 +280,14 @@ class MainController:
             self._data.toggle_event_highlight(cur_event)
         
         self._on_route_change()
+
+    @handle_exceptions
+    def set_record_mode(self, new_record_mode):
+        self._is_record_mode_active = new_record_mode
+        self._on_record_mode_change()
+    
+    def trigger_exception(self, exception_message):
+        self._on_exception(exception_message)
 
     ######
     # Methods that do not induce a state change
@@ -338,3 +404,64 @@ class MainController:
             logger.exception(e)
         
         return success, result
+    
+    def is_record_mode_active(self):
+        return self._is_record_mode_active
+    
+    def get_levelup_move_event(self, move_name, new_level) -> LearnMoveEventDefinition:
+        levelup_move = self._data.level_up_move_defs.get(tuple(move_name, new_level))
+        if levelup_move is None:
+            # NOTE: check for edge case that mon got 2 level ups at once, and got move from first level up
+            # this is rare, but theoretically possible. It should also be safe, because there are no cases where
+            # the same move is learned 2 levels in a row
+            levelup_move = self._data.level_up_move_defs.get(tuple(move_name, new_level))
+        
+        return levelup_move
+    
+    def get_move_idx(self, move_name, state=None):
+        if state is None:
+            state = self.get_final_state()
+        
+        move_idx = None
+        for cur_idx, cur_move in enumerate(state.solo_pkmn.move_list):
+            if cur_move == move_name:
+                move_idx = cur_idx
+                break
+        
+        return move_idx
+    
+    def _walk_events_helper(self, cur_folder:EventFolder, cur_event_id:int, cur_event_found:bool, walk_forward=True) -> Tuple[bool, EventGroup]:
+        if walk_forward:
+            iterable = cur_folder.children
+        else:
+            iterable = reversed(cur_folder.children)
+
+        for test_obj in iterable:
+            if isinstance(test_obj, EventGroup):
+                if cur_event_found:
+                    return cur_event_found, test_obj
+                elif test_obj.group_id == cur_event_id:
+                    cur_event_found = True
+            elif isinstance(test_obj, EventFolder):
+                cur_event_found, prev_result = self._walk_events_helper(test_obj, cur_event_id, cur_event_found)
+                if cur_event_found and prev_result is not None:
+                    return cur_event_found, prev_result
+            else:
+                logger.error(f"Encountered unexpected types walking events: {type(test_obj)}")
+        
+        return cur_event_found, None
+            
+    def get_next_event(self, cur_event_id=None) -> EventGroup:
+        return self._walk_events_helper(
+            self._data.root_folder,
+            cur_event_id=cur_event_id,
+            cur_event_found=(cur_event_id == None)
+        )[1]
+
+    def get_previous_event(self, cur_event_id=None) -> EventGroup:
+        return self._walk_events_helper(
+            self._data.root_folder,
+            cur_event_id=cur_event_id,
+            cur_event_found=(cur_event_id == None),
+            walk_forward=False
+        )[1]

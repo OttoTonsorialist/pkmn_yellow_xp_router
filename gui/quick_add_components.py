@@ -4,7 +4,11 @@ import tkinter as tk
 from controllers.main_controller import MainController
 
 from gui import custom_tkinter
-from routing.route_events import EventDefinition, EventItem, HoldItemEventDefinition, InventoryEventDefinition, LearnMoveEventDefinition, RareCandyEventDefinition, TrainerEventDefinition, VitaminEventDefinition, WildPkmnEventDefinition
+from routing.route_events import \
+    EventDefinition, EventItem, HoldItemEventDefinition, InventoryEventDefinition, LearnMoveEventDefinition, \
+    RareCandyEventDefinition, TrainerEventDefinition, VitaminEventDefinition, WildPkmnEventDefinition, \
+    SaveEventDefinition, HealEventDefinition, BlackoutEventDefinition
+
 from utils.constants import const
 import pkmn
 
@@ -19,7 +23,7 @@ class QuickTrainerAdd(tk.Frame):
 
         self.padx = 5
         self.pady = 1
-        self.option_menu_width = 15
+        self.option_menu_width = 20
 
         self._dropdowns = tk.Frame(self)
         self._dropdowns.pack()
@@ -136,7 +140,7 @@ class QuickWildPkmn(tk.Frame):
 
         self.padx = 5
         self.pady = 1
-        self.option_menu_width = 15
+        self.option_menu_width = 20
 
         self._dropdowns = tk.Frame(self)
         self._dropdowns.pack()
@@ -158,14 +162,14 @@ class QuickWildPkmn(tk.Frame):
 
         self._level_label = tk.Label(self._dropdowns, text="Pkmn Level:", justify=tk.LEFT)
         self._level_val = custom_tkinter.AmountEntry(self._dropdowns, callback=self._update_button_callback_wrapper)
-        self._level_val.configure(width=self.option_menu_width - 5)
+        self._level_val._amount.configure(width=self.option_menu_width - 5)
         self._level_label.grid(row=self._cur_row, column=0, padx=self.padx, pady=self.pady, sticky=tk.W)
         self._level_val.grid(row=self._cur_row, column=1, padx=self.padx, pady=self.pady, sticky=tk.E)
         self._cur_row += 1
 
         self._quantity_label = tk.Label(self._dropdowns, text="Quantity:", justify=tk.LEFT)
         self._quantity_val = custom_tkinter.AmountEntry(self._dropdowns, callback=self._update_button_callback_wrapper)
-        self._quantity_val.configure(width=self.option_menu_width - 5)
+        self._quantity_val._amount.configure(width=self.option_menu_width - 5)
         self._quantity_label.grid(row=self._cur_row, column=0, padx=self.padx, pady=self.pady, sticky=tk.W)
         self._quantity_val.grid(row=self._cur_row, column=1, padx=self.padx, pady=self.pady, sticky=tk.E)
         self._cur_row += 1
@@ -259,7 +263,7 @@ class QuickItemAdd(tk.Frame):
         self._cur_row = 0
         self.padx = 2
         self.pady = 1
-        self.option_menu_width = 20
+        self.option_menu_width = 15
 
         self._dropdowns = tk.Frame(self)
         self._dropdowns.pack()
@@ -291,17 +295,17 @@ class QuickItemAdd(tk.Frame):
 
         self._item_amount_label = tk.Label(self._dropdowns, text="Quantity:")
         self._item_amount = custom_tkinter.AmountEntry(self._dropdowns, callback=self.item_selector_callback)
-        self._item_amount.configure(width=self.option_menu_width - 5)
+        self._item_amount._amount.configure(width=self.option_menu_width)
         self._item_amount_label.grid(row=self._cur_row, column=0, padx=self.padx, pady=self.pady, sticky=tk.W)
         self._item_amount.grid(row=self._cur_row, column=1, padx=self.padx, pady=self.pady, sticky=tk.E)
         self._cur_row += 1
 
-        self._purchase_cost_label = tk.Label(self._dropdowns, text="Purchase Cost:")
+        self._purchase_cost_label = tk.Label(self._dropdowns, text="Purchase:")
         self._purchase_cost_amt = tk.Label(self._dropdowns)
         self._purchase_cost_label.grid(row=self._cur_row, column=0, padx=self.padx, pady=2*self.pady, sticky=tk.W)
         self._purchase_cost_amt.grid(row=self._cur_row, column=1, padx=self.padx, pady=2*self.pady, sticky=tk.E)
 
-        self._sell_cost_label = tk.Label(self._dropdowns, text="Sell Cost:")
+        self._sell_cost_label = tk.Label(self._dropdowns, text="Sell Price:")
         self._sell_cost_amt = tk.Label(self._dropdowns)
         self._sell_cost_label.grid(row=self._cur_row, column=2, padx=self.padx, pady=2*self.pady, sticky=tk.W)
         self._sell_cost_amt.grid(row=self._cur_row, column=3, padx=self.padx, pady=2*self.pady, sticky=tk.E)
@@ -520,3 +524,69 @@ class QuickItemAdd(tk.Frame):
             event_def,
             self._controller.get_single_selected_event_id()
         )
+
+
+class QuickMiscEvents(tk.Frame):
+    def __init__(self, controller:MainController, *args, **kwargs):
+        super().__init__(*args, **kwargs, highlightbackground="black", highlightthickness=2)
+        self._controller = controller
+        self._uninitialized = True
+
+        self.padx = 5
+        self.pady = 1
+        self.option_menu_width = 15
+
+        self._buttons = tk.Frame(self)
+        self._buttons.pack(fill=tk.BOTH, anchor=tk.CENTER)
+        self._btn_width = 8
+
+        self._btn_add_save = custom_tkinter.SimpleButton(self._buttons, text="Add Save", command=self.add_save)
+        self._btn_add_save.grid(row=0, column=0, padx=self.padx, pady=self.pady + 1, sticky=tk.EW)
+        self._btn_add_heal = custom_tkinter.SimpleButton(self._buttons, text="Add Heal", command=self.add_heal)
+        self._btn_add_heal.grid(row=1, column=0, padx=self.padx, pady=self.pady + 1, sticky=tk.EW)
+        self._btn_add_black_out = custom_tkinter.SimpleButton(self._buttons, text="Add Black Out", command=self.add_black_out)
+        self._btn_add_black_out.grid(row=2, column=0, padx=self.padx, pady=self.pady + 1, sticky=tk.EW)
+        self._btn_add_notes = custom_tkinter.SimpleButton(self._buttons, text="Add Notes", command=self.add_notes)
+        self._btn_add_notes.grid(row=3, column=0, padx=self.padx, pady=self.pady + 1, sticky=tk.EW)
+
+        self._controller.register_event_selection(self.update_button_status)
+        self._controller.register_version_change(self.update_pkmn_version)
+        self.update_button_status()
+
+    def update_button_status(self):
+        if not self._controller.can_insert_after_current_selection() or self._uninitialized:
+            self._btn_add_save.disable()
+            self._btn_add_heal.disable()
+            self._btn_add_black_out.disable()
+            self._btn_add_notes.disable()
+            return
+
+        self._btn_add_save.enable()
+        self._btn_add_heal.enable()
+        self._btn_add_black_out.enable()
+        self._btn_add_notes.enable()
+    
+    def update_pkmn_version(self):
+        self._uninitialized = False
+
+    def add_save(self, *args, **kwargs):
+        self._controller.new_event(
+            EventDefinition(save=SaveEventDefinition()),
+            insert_after=self._controller.get_single_selected_event_id()
+        )
+
+    def add_heal(self, *args, **kwargs):
+        self._controller.new_event(
+            EventDefinition(heal=HealEventDefinition()),
+            insert_after=self._controller.get_single_selected_event_id()
+        )
+
+    def add_black_out(self, *args, **kwargs):
+        self._controller.new_event(
+            EventDefinition(blackout=BlackoutEventDefinition()),
+            insert_after=self._controller.get_single_selected_event_id()
+        )
+
+    def add_notes(self, *args, **kwargs):
+        self._controller.new_event(EventDefinition(), insert_after=self._controller.get_single_selected_event_id())
+    

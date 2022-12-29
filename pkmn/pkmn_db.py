@@ -39,6 +39,9 @@ class PkmnDB:
         return list(self._data.keys())
     
     def get_pkmn(self, name:str) -> universal_data_objects.PokemonSpecies:
+        if name is None:
+            return None
+
         if name in self._data:
             return self._data.get(name)
         
@@ -148,6 +151,9 @@ class ItemDB:
                 print(f"Found invalid move from TM/HM: {cur_item_name}")
     
     def get_item(self, item_name):
+        if item_name is None:
+            return None
+
         if item_name in self._data:
             return self._data.get(item_name)
         
@@ -206,6 +212,9 @@ class MoveDB:
         self.stat_mod_moves.update(stat_reduction_moves)
     
     def get_move(self, move_name):
+        if move_name is None:
+            return None
+
         if move_name in self._data:
             return self._data.get(move_name)
         

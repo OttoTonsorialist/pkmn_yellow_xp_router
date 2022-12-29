@@ -1,6 +1,7 @@
 import os
 import json
 import logging
+from typing import Dict, Tuple
 
 from utils.constants import const
 from pkmn import universal_data_objects
@@ -21,7 +22,7 @@ class Router:
         self.event_lookup = {}
         self.event_item_lookup = {}
 
-        self.level_up_move_defs = {}
+        self.level_up_move_defs:Dict[Tuple[str, int], route_events.LearnMoveEventDefinition] = {}
         self.defeated_trainers = set()
     
     def _reset_events(self):
@@ -72,12 +73,12 @@ class Router:
 
         if level_up_moves is None:
             self.level_up_move_defs = {
-                int(x[0]): route_events.LearnMoveEventDefinition(x[1], None, const.MOVE_SOURCE_LEVELUP, level=int(x[0]))
+                (x[1], int(x[0])): route_events.LearnMoveEventDefinition(x[1], None, const.MOVE_SOURCE_LEVELUP, level=int(x[0]))
                 for x in pkmn_base.levelup_moves
             }
         else:
             # TODO: should double check loaded moves against expected moves from DB, and complain if something doesn't match
-            self.level_up_move_defs = {x.level: x for x in level_up_moves}
+            self.level_up_move_defs = {(x.move_to_learn, x.level): x for x in level_up_moves}
 
         self._recalc()
     
@@ -123,8 +124,9 @@ class Router:
 
         to_learn = []
         for cur_new_level in new_levels:
-            if cur_new_level in self.level_up_move_defs:
-                to_learn.append(self.level_up_move_defs[cur_new_level])
+            for test_key in self.level_up_move_defs:
+                if test_key[1] == cur_new_level:
+                    to_learn.append(self.level_up_move_defs[test_key])
         
         if to_learn:
             event_group.apply(prev_state, level_up_learn_event_defs=to_learn)
@@ -203,6 +205,8 @@ class Router:
         parent_obj.insert_child_after(new_obj, after_obj=self.get_event_obj(insert_after))
         if recalc:
             self._recalc()
+        
+        return new_obj.group_id
     
     def batch_remove_events(self, event_id_list):
         for cur_event in event_id_list:
@@ -312,7 +316,7 @@ class Router:
                 raise ValueError(f"Can only update event items for level up moves, currentlty")
             
             # just replace the lookup definition
-            self.level_up_move_defs[new_event_def.learn_move.level] = new_event_def.learn_move
+            self.level_up_move_defs[(new_event_def.learn_move.move_to_learn, new_event_def.learn_move.level)] = new_event_def.learn_move
 
         else:
             if event_group_obj.event_definition.trainer_def is not None:
@@ -324,6 +328,10 @@ class Router:
             
             event_group_obj.event_definition = new_event_def
 
+        self._recalc()
+    
+    def replace_levelup_move_event(self, new_event_def:route_events.LearnMoveEventDefinition):
+        self.level_up_move_defs[(new_event_def.move_to_learn, new_event_def.level)] = new_event_def
         self._recalc()
 
     def rename_event_folder(self, cur_name, new_name):

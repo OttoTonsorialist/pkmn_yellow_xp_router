@@ -3,7 +3,7 @@ import logging
 
 
 def config_logging(base_log_dir):
-    formatter = logging.Formatter('%(asctime)s,%(msecs)d %(levelname)-8s [%(filename)s:%(lineno)d] %(message)s')
+    formatter = logging.Formatter('%(asctime)s %(levelname)-8s [%(filename)s:%(lineno)d] %(message)s')
 
     file_handler = logging.FileHandler(os.path.join(base_log_dir, "pkmn_router_logs.log"))
     file_handler.setFormatter(formatter)

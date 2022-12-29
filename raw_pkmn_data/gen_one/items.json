@@ -542,6 +542,12 @@
         "purchase_price": 350,
         "marts": ["Pewter", "Cerulean", "Vermilion"]
     },
+    "Moon Stone": {
+        "name": "Moon Stone",
+        "key_item": false,
+        "purchase_price": 0,
+        "marts": []
+    },
     "Fire Stone": {
         "name": "Fire Stone",
         "key_item": false,

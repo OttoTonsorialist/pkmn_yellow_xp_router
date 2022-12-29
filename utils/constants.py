@@ -125,6 +125,9 @@ class Constants:
         self.TASK_HOLD_ITEM = "Hold Item"
         self.TASK_LEARN_MOVE_LEVELUP = "Learn Levelup Move"
         self.TASK_LEARN_MOVE_TM = "Learn TM/HM Move"
+        self.TASK_SAVE = "Game Save"
+        self.TASK_HEAL = "PkmnCenter Heal"
+        self.TASK_BLACKOUT = "Blackout"
         self.TASK_NOTES_ONLY = "Just Notes"
 
         self.ITEM_ROUTE_EVENT_TYPES = [
@@ -308,6 +311,25 @@ class Constants:
         self.SUPER_EFFECTIVE = "Super Effective"
         self.NOT_VERY_EFFECTIVE = "Not Very Effective"
         self.IMMUNE = "Immune"
+
+        self.GAME_SAVED_FRAGMENT = "Game Saved: "
+        self.RECORDING_ERROR_FRAGMENT = "ERROR RECORDING! "
+
+        self.RECORDING_STATUS_DISCONNECTED = "Disconnected"
+        self.RECORDING_STATUS_CONNECTED = "Connected"
+        self.RECORDING_STATUS_READY = "Ready"
+        self.RECORDING_STATUS_NO_MAPPER = "Failed to load mapper. Have you loaded it in GameHook?"
+        self.RECORDING_STATUS_WRONG_MAPPER = "Incorrect Mapper Loaded"
+        self.RECORDING_STATUS_FAILED_CONNECTION = "Connection Failed. This usually means GameHook isn't running"
+
+        self.EVENT_NAME_CHANGE = "<<RouteNameChange>>"
+        self.EVENT_VERSION_CHANGE = "<<GameVersionChange>>"
+        self.EVENT_ROUTE_CHANGE = "<<RouteChange>>"
+        self.EVENT_EVENT_CHANGE = "<<RouteEventChange>>"
+        self.EVENT_SELECTION_CHANGE = "<<EventSelectionChange>>"
+        self.EVENT_PREVIEW_CHANGE = "<<PreviewChange>>"
+        self.EVENT_RECORD_MODE_CHANGE = "<<RecordModeChange>>"
+        self.EVENT_EXCEPTION = "<<RouteException>>"
     
     def config_user_data_dir(self, user_data_dir):
         self.SAVED_ROUTES_DIR = os.path.realpath(os.path.join(user_data_dir, self._SAVED_ROUTES_FOLDER_NAME))

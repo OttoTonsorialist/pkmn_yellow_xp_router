@@ -1,4 +1,5 @@
 import os
+import threading
 import logging
 
 import tkinter as tk
@@ -12,11 +13,12 @@ from gui.popups.custom_dvs_popup import CustomDvsWindow
 from gui.popups.data_dir_config_popup import DataDirConfigWindow
 from gui.popups.delete_confirmation_popup import DeleteConfirmation
 from gui.popups.load_route_popup import LoadRouteWindow
-from gui.popups.new_event_popup import NewEventWindow
 from gui.popups.new_folder_popup import NewFolderWindow
 from gui.popups.new_route_popup import NewRouteWindow
 from gui.popups.route_one_popup import RouteOneWindow
 from gui.popups.transfer_event_popup import TransferEventWindow
+from gui.recorder_status import RecorderStatus
+from route_recording.recorder import RecorderController
 from utils.constants import const
 from utils.config_manager import config
 from utils import route_one_utils
@@ -28,9 +30,10 @@ flag_to_auto_update = False
 
 
 class MainWindow(tk.Tk):
-    def __init__(self, controller:MainController):
+    def __init__(self):
         super().__init__()
-        self._controller = controller
+        self._controller = MainController(self)
+        self._recorder_controller = RecorderController(self._controller)
 
         geometry = config.get_window_geometry()
         if not geometry:
@@ -74,7 +77,6 @@ class MainWindow(tk.Tk):
         self.file_menu.add_command(label="App Config       (Ctrl+Shift+Z)", command=self.open_app_config_window)
 
         self.event_menu = tk.Menu(self.top_menu_bar, tearoff=0)
-        self.event_menu.add_command(label="New Event                   (Ctrl+F)", command=self.open_new_event_window)
         self.event_menu.add_command(label="Move Event Up           (Ctrl+E)", command=self.move_group_up)
         self.event_menu.add_command(label="Move Event Down      (Ctrl+D)", command=self.move_group_down)
         self.event_menu.add_command(label="Toggle Highlight       (Ctrl+V)", command=self.toggle_event_highlight)
@@ -103,21 +105,25 @@ class MainWindow(tk.Tk):
         self.top_row.pack(fill=tk.X)
         self.top_row.pack_propagate(False)
 
+        self.record_button = custom_tkinter.SimpleButton(self.top_row, text="Enable\nRecording", command=self.record_button_clicked)
+        self.record_button.grid(row=0, column=0, sticky=tk.W, padx=3, pady=3)
+        self.record_button.disable()
+
         self.run_status_label = tk.Label(self.top_row, text="Run Status: Valid", background=const.VALID_COLOR, anchor=tk.W, padx=10, pady=10)
-        self.run_status_label.grid(row=0, column=0, sticky=tk.W)
+        self.run_status_label.grid(row=0, column=1, sticky=tk.W)
 
         self.route_version = tk.Label(self.top_row, text="RBY Version", anchor=tk.W, padx=10, pady=10)
-        self.route_version.grid(row=0, column=1)
+        self.route_version.grid(row=0, column=2)
 
         self.route_name_label = tk.Label(self.top_row, text="Route Name: ")
-        self.route_name_label.grid(row=0, column=2)
+        self.route_name_label.grid(row=0, column=3)
 
         self.route_name = tk.Entry(self.top_row)
-        self.route_name.grid(row=0, column=3)
+        self.route_name.grid(row=0, column=4)
         self.route_name.config(width=30)
 
         self.message_label = custom_tkinter.AutoClearingLabel(self.top_row, width=100, justify=tk.LEFT, anchor=tk.W)
-        self.message_label.grid(row=0, column=4, sticky=tk.E)
+        self.message_label.grid(row=0, column=5, sticky=tk.E)
 
         # create container for split columns
         self.info_panel = tk.Frame(self.primary_window)
@@ -149,6 +155,14 @@ class MainWindow(tk.Tk):
         )
         self.wild_pkmn_add.grid(row=0, column=2, sticky=tk.NSEW, padx=5, pady=5)
 
+        self.misc_add = quick_add_components.QuickMiscEvents(
+            self._controller,
+            self.top_left_controls,
+        )
+        self.misc_add.grid(row=0, column=3, sticky=tk.NSEW, padx=5, pady=5)
+
+        self.recorder_status = RecorderStatus(self._controller, self._recorder_controller, self.top_left_controls)
+
         self.group_controls = tk.Frame(self.left_info_panel)
         self.group_controls.pack(fill=tk.X, anchor=tk.CENTER)
         
@@ -156,8 +170,8 @@ class MainWindow(tk.Tk):
         self.move_group_up_button.grid(row=0, column=1, padx=5, pady=1)
         self.move_group_down_button = custom_tkinter.SimpleButton(self.group_controls, text='Move Event Down', command=self.move_group_down, width=15)
         self.move_group_down_button.grid(row=0, column=2, padx=5, pady=1)
-        self.move_group_down_button = custom_tkinter.SimpleButton(self.group_controls, text='Toggle Highlight', command=self.toggle_event_highlight, width=15)
-        self.move_group_down_button.grid(row=0, column=3, padx=5, pady=1)
+        self.highlight_toggle_button = custom_tkinter.SimpleButton(self.group_controls, text='Toggle Highlight', command=self.toggle_event_highlight, width=15)
+        self.highlight_toggle_button.grid(row=0, column=3, padx=5, pady=1)
         self.transfer_event_button = custom_tkinter.SimpleButton(self.group_controls, text='Transfer Event', command=self.open_transfer_event_window, width=15)
         self.transfer_event_button.grid(row=0, column=4, padx=5, pady=1)
 
@@ -198,7 +212,6 @@ class MainWindow(tk.Tk):
         self.bind('<Control-s>', self.save_route)
         self.bind('<Control-W>', self.export_notes)
         # event actions
-        self.bind('<Control-f>', self.open_new_event_window)
         self.bind('<Control-d>', self.move_group_down)
         self.bind('<Control-e>', self.move_group_up)
         self.bind('<Control-v>', self.toggle_event_highlight)
@@ -224,6 +237,7 @@ class MainWindow(tk.Tk):
         self._controller.register_version_change(self.update_run_version)
         self._controller.register_exception_callback(self._on_exception)
         self._controller.register_name_change(self._on_name_change)
+        self._controller.register_record_mode_change(self._on_record_mode_changed)
         # TODO: should this be moved directly to the event list class?
         self._controller.register_route_change(self.event_list.refresh)
 
@@ -238,9 +252,12 @@ class MainWindow(tk.Tk):
         config.set_window_geometry(self.geometry())
         self.destroy()
     
-    def _on_exception(self, exception):
-        #messagebox.showerror("Error!", "Failed to load route.\nThis can happen if the file is corrupted, or from a much older version")
-        messagebox.showerror("Error!", f"Exception encountered ({type(exception)}): {exception}")
+    def _on_exception(self, exception_message):
+        threading.Thread(
+            target=messagebox.showerror,
+            args=("Error!", exception_message),
+            daemon=True
+        ).start()
     
     def _on_name_change(self):
         self.route_name.delete(0, tk.END)
@@ -273,7 +290,20 @@ class MainWindow(tk.Tk):
             text=f"{self._controller.get_version()} Version",
             background=const.VERSION_COLORS.get(self._controller.get_version(), "white")
         )
+        self.record_button.enable()
     
+    def record_button_clicked(self, *args, **kwargs):
+        self._controller.set_record_mode(not self._controller.is_record_mode_active())
+    
+    def _on_record_mode_changed(self):
+        if self._controller.is_record_mode_active():
+            self.record_button.configure(text="Cancel\nRecording")
+            self.recorder_status.grid(row=0, column=0, sticky=tk.NSEW, padx=5, pady=5, columnspan=4)
+        else:
+            self.record_button.configure(text="Enable\nRecording")
+            self.recorder_status.grid_forget()
+        self._handle_new_selection()
+
     def trainer_add_preview(self, trainer_name):
         # TODO: should migrate this to use the controller...
         all_event_ids = self.event_list.get_all_selected_event_ids()
@@ -300,67 +330,42 @@ class MainWindow(tk.Tk):
         self._controller.select_new_events(self.event_list.get_all_selected_event_ids())
     
     def _handle_new_selection(self, *args, **kwargs):
-        all_event_ids = self.event_list.get_all_selected_event_ids()
-        # slightly weird behavior, but intentional. If only one element is selected,
-        # we want to allow that element to be an EventItem, so that we can display the details.
-        # But if multiple elements are selected, we want to ignore EventItems since they can't be bulk-edited
-        if len(all_event_ids) > 1:
-            all_event_ids = self.event_list.get_all_selected_event_ids(allow_event_items=False)
-
+        all_event_ids = self.event_list.get_all_selected_event_ids(allow_event_items=False)
         if len(all_event_ids) > 1 or len(all_event_ids) == 0:
             event_group = None
         else:
             event_group = self._controller.get_event_by_id(all_event_ids[0])
-
-        if event_group is None:
-            self.event_details.show_event_details(None, self._controller.get_init_state(), self._controller.get_final_state(), allow_updates=False)
-            self.rename_folder_button.disable()
-            if self._controller.is_empty():
-                self.new_folder_button.enable()
-                self.delete_event_button.disable()
-                self.transfer_event_button.disable()
-            else:
-                self.new_folder_button.disable()
-                if len(all_event_ids) == 0:
-                    self.delete_event_button.disable()
-                    self.transfer_event_button.disable()
-                    self.move_group_down_button.disable()
-                    self.move_group_up_button.disable()
-                else:
-                    self.delete_event_button.enable()
-                    self.transfer_event_button.enable()
-                    self.move_group_down_button.enable()
-                    self.move_group_up_button.enable()
-        elif isinstance(event_group, EventFolder):
-            self.event_details.show_event_details(event_group.event_definition, event_group.init_state, event_group.final_state)
+        
+        disable_all = False
+        if self._controller.is_record_mode_active() or self._controller.get_raw_route().init_route_state is None:
+            disable_all = True
+        
+        if not disable_all and isinstance(event_group, EventFolder):
             self.rename_folder_button.enable()
+        else:
+            self.rename_folder_button.disable()
+        
+        if not disable_all and (event_group is not None or len(all_event_ids) > 0):
+            # As long as we have any editable events selected, toggle the buttons to allow editing those events
+            self.delete_event_button.enable()
             self.transfer_event_button.enable()
-            self.new_folder_button.enable()
             self.move_group_down_button.enable()
             self.move_group_up_button.enable()
-            self.delete_event_button.enable()
+            self.highlight_toggle_button.enable()
         else:
-            do_allow_updates = (
-                 isinstance(event_group, EventGroup) or 
-                 event_group.event_definition.get_event_type() == const.TASK_LEARN_MOVE_LEVELUP
-            )
-            trainer_event_group = event_group
-            if isinstance(trainer_event_group, EventItem):
-                trainer_event_group = trainer_event_group.parent
-            self.event_details.show_event_details(event_group.event_definition, event_group.init_state, event_group.final_state, do_allow_updates, event_group=trainer_event_group)
-            self.rename_folder_button.disable()
-            if isinstance(event_group, EventItem):
-                self.delete_event_button.disable()
-                self.transfer_event_button.disable()
-                self.new_folder_button.disable()
-                self.move_group_down_button.disable()
-                self.move_group_up_button.disable()
-            else:
-                self.delete_event_button.enable()
-                self.transfer_event_button.enable()
-                self.new_folder_button.enable()
-                self.move_group_down_button.enable()
-                self.move_group_up_button.enable()
+            self.delete_event_button.disable()
+            self.transfer_event_button.disable()
+            self.move_group_down_button.disable()
+            self.move_group_up_button.disable()
+            self.highlight_toggle_button.disable()
+        
+        if not disable_all and (event_group is not None or len(self.event_list.get_all_selected_event_ids()) == 0):
+            # as long as we have a finite place to create a new folder, enable the option
+            # either only a single event is selected, or no events are selected
+            # Need to check all events, not just editable ones
+            self.new_folder_button.enable()
+        else:
+            self.new_folder_button.disable()
     
     def open_app_config_window(self, *args, **kwargs):
         if self._is_active_window():
@@ -441,26 +446,6 @@ class MainWindow(tk.Tk):
 
         self.open_new_folder_window(**{const.EVENT_FOLDER_NAME: self._controller.get_event_by_id(all_event_ids[0]).name})
 
-    def open_new_event_window(self, *args, **kwargs):
-        if self._is_active_window():
-            all_event_ids = self.event_list.get_all_selected_event_ids()
-            if len(all_event_ids) > 1 or len(all_event_ids) == 0:
-                return
-
-            event_id = all_event_ids[0]
-            event_obj = self._controller.get_event_by_id(event_id)
-            if event_obj is None:
-                return
-
-            state = event_obj.init_state
-            self.new_event_window = NewEventWindow(
-                self,
-                self._controller,
-                self._controller.get_defeated_trainers(),
-                state,
-                insert_after=event_id
-            )
-
     def open_new_folder_window(self, *args, **kwargs):
         if self._is_active_window():
             all_event_ids = self.event_list.get_all_selected_event_ids()
@@ -479,41 +464,6 @@ class MainWindow(tk.Tk):
                 insert_after=all_event_ids[0] if len(all_event_ids) == 1 else None
             )
 
-    def combined_open_new_event_window(self, *args, **kwargs):
-        if self._is_active_window():
-            all_event_ids = self.event_list.get_all_selected_event_ids()
-            if len(all_event_ids) > 1 or len(all_event_ids) == 0:
-                return
-
-            event_id = all_event_ids[0]
-            event_obj = self._controller.get_event_by_id(event_id)
-
-            if isinstance(event_obj, EventFolder):
-                if const.EVENT_FOLDER_NAME in kwargs:
-                    existing_folder_name = kwargs.get(const.EVENT_FOLDER_NAME)
-                else:
-                    existing_folder_name = None
-                self.new_event_window = NewFolderWindow(
-                    self,
-                    self._controller,
-                    self._controller.get_all_folder_names(),
-                    existing_folder_name,
-                    insert_after=event_id
-                )
-            else:
-                if event_obj is None:
-                    state = self._controller.get_final_state()
-                else:
-                    state = event_obj.init_state
-
-                self.new_event_window = NewEventWindow(
-                    self,
-                    self._controller,
-                    self._controller.get_defeated_trainers(),
-                    state,
-                    insert_after=event_id
-                )
-    
     def just_export_and_run(self, *args, **kwargs):
         try:
             if self._controller.get_init_state() is None:

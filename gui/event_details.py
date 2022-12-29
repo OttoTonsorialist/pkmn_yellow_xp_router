@@ -93,6 +93,9 @@ class EventDetails(tk.Frame):
         self.footer_frame.columnconfigure(0, weight=1)
 
         self.tabbed_states.bind('<<NotebookTabChanged>>', self._tab_changed_callback)
+        self._controller.register_event_selection(self._handle_selection)
+        self._controller.register_record_mode_change(self._handle_selection)
+
         self._tab_changed_callback()
     
     def _tab_changed_callback(self, *args, **kwargs):
@@ -144,7 +147,27 @@ class EventDetails(tk.Frame):
             self.badge_boost_viewer.grid_forget()
             self.state_pre_viewer.grid(column=1, row=1, padx=10, pady=10, columnspan=2)
     
+    def _handle_selection(self):
+        event_group = self._controller.get_single_selected_event_obj()
+
+        if event_group is None:
+            self.show_event_details(None, self._controller.get_init_state(), self._controller.get_final_state(), allow_updates=False)
+        elif isinstance(event_group, EventFolder):
+            self.show_event_details(event_group.event_definition, event_group.init_state, event_group.final_state)
+        else:
+            do_allow_updates = (
+                 isinstance(event_group, EventGroup) or 
+                 event_group.event_definition.get_event_type() == const.TASK_LEARN_MOVE_LEVELUP
+            )
+            trainer_event_group = event_group
+            if isinstance(trainer_event_group, EventItem):
+                trainer_event_group = trainer_event_group.parent
+            self.show_event_details(event_group.event_definition, event_group.init_state, event_group.final_state, do_allow_updates, event_group=trainer_event_group)
+    
     def show_event_details(self, event_def:EventDefinition, init_state, final_state, allow_updates=True, event_group:EventGroup=None):
+        if self._controller.is_record_mode_active():
+            allow_updates = False
+
         self.state_pre_viewer.set_state(init_state)
         self.badge_boost_viewer.set_state(init_state)
 

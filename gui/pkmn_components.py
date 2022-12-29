@@ -2,6 +2,7 @@ import tkinter as tk
 import tkinter.font
 from typing import List
 from controllers.main_controller import MainController
+import logging
 
 from gui import custom_tkinter
 import pkmn as pkmn_gen_info
@@ -10,6 +11,9 @@ from routing import route_state_objects
 from routing import route_events
 from utils.constants import const
 from utils.config_manager import config
+
+logger = logging.getLogger(__name__)
+
 
 class RouteList(custom_tkinter.CustomGridview):
     def __init__(self, controller:MainController, *args, **kwargs):
@@ -96,10 +100,17 @@ class RouteList(custom_tkinter.CustomGridview):
         return result
 
     def refresh(self, *args, **kwargs):
+        debug = kwargs.get("debug", False)
         # begin keeping track of the stuff we already know we're displaying
         # so we can eventually delete stuff that has been removed
+        if debug:
+            logger.info(f"gonna refresh routelist")
         to_delete_ids = set(self._treeview_id_lookup.keys())
-        self._refresh_recursively("", self._controller.get_raw_route().root_folder.children, to_delete_ids)
+        if debug:
+            logger.info(f"to_delete_ids collected")
+        self._refresh_recursively("", self._controller.get_raw_route().root_folder.children, to_delete_ids, debug=debug)
+        if debug:
+            logger.info(f"refreshed")
 
         # we have now updated all relevant records, created missing ones, and ordered everything correctly
         # just need to remove any potentially deleted records
@@ -113,12 +124,20 @@ class RouteList(custom_tkinter.CustomGridview):
                 pass
             del self._treeview_id_lookup[cur_del_id]
 
+        if debug:
+            logger.info(f"updated metadata")
         self.event_generate(const.ROUTE_LIST_REFRESH_EVENT)
+        if debug:
+            logger.info(f"follow-up event generated")
     
-    def _refresh_recursively(self, parent_id, event_list, to_delete_ids:set):
+    def _refresh_recursively(self, parent_id, event_list, to_delete_ids:set, debug=False):
         for event_idx, event_obj in enumerate(event_list):
+            if debug:
+                logger.info(f"getting semantic id")
             semantic_id = self._get_attr_helper(event_obj, self._semantic_id_attr)
 
+            if debug:
+                logger.info(f"determining if folder")
             if isinstance(event_obj, route_events.EventFolder):
                 is_folder = True
                 force_open = event_obj.expanded
@@ -126,6 +145,8 @@ class RouteList(custom_tkinter.CustomGridview):
                 is_folder = False
                 force_open = False
 
+            if debug:
+                logger.info(f"upserting")
             if semantic_id in to_delete_ids:
                 to_delete_ids.remove(semantic_id)
                 cur_event_id = self._treeview_id_lookup[semantic_id]
@@ -134,12 +155,19 @@ class RouteList(custom_tkinter.CustomGridview):
                 # when first creating the event, make sure it is defined with a checkbox
                 cur_event_id = self.custom_upsert(event_obj, parent=parent_id, force_open=force_open, update_checkbox=True)
 
-            self.move(cur_event_id, parent_id, event_idx)
+            if debug:
+                logger.info(f"moving")
+            if self.index(cur_event_id) != event_idx or self.parent(cur_event_id) != parent_id:
+                if debug:
+                    logger.info(f"had to actually move :/")
+                self.move(cur_event_id, parent_id, event_idx)
 
             if is_folder:
                 self._refresh_recursively(cur_event_id, event_obj.children, to_delete_ids)
 
             elif isinstance(event_obj, route_events.EventGroup):
+                if debug:
+                    logger.info(f"dispalying event group")
                 if len(event_obj.event_items) > 1:
                     for item_idx, item_obj in enumerate(event_obj.event_items):
                         item_semantic_id = self._get_attr_helper(item_obj, self._semantic_id_attr)
@@ -150,7 +178,10 @@ class RouteList(custom_tkinter.CustomGridview):
                         else:
                             item_id = self.custom_upsert(item_obj, parent=cur_event_id)
 
-                        self.move(item_id, cur_event_id, item_idx)
+                        if self.index(cur_event_id) != item_idx or self.parent(cur_event_id) != cur_event_id:
+                            self.move(item_id, cur_event_id, item_idx)
+            if debug:
+                logger.info(f"donezo")
 
 
 class InventoryViewer(tk.Frame):

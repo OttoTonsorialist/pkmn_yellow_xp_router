@@ -9,6 +9,8 @@ from pkmn.gen_1.data_objects import GenOneBadgeList, GenOneStatBlock
 from pkmn.gen_1.gen_one_constants import gen_one_const
 from pkmn.pkmn_db import ItemDB, MinBattlesDB, PkmnDB, TrainerDB, MoveDB
 from pkmn.pkmn_info import CurrentGen
+from route_recording.game_recorders.yellow_recorder import YellowRecorder
+from route_recording.recorder import RecorderController, RecorderGameHookClient
 from routing import route_state_objects
 from utils.constants import const
 
@@ -46,6 +48,9 @@ class GenOne(CurrentGen):
     
     def min_battles_db(self) -> MinBattlesDB:
         return self._min_battles_db
+    
+    def get_recorder_client(self, recorder_controller:RecorderController) -> RecorderGameHookClient:
+        return _recorder_factory(recorder_controller, self._version_name)
 
     def create_trainer_pkmn(self, pkmn_name, pkmn_level):
         return pkmn_utils.instantiate_trainer_pokemon(self._pkmn_db.get_pkmn(pkmn_name), pkmn_level)
@@ -222,6 +227,12 @@ def _load_move_db(path):
         )
     
     return result
+
+
+def _recorder_factory(recorder_controller, version):
+    if version == const.YELLOW_VERSION:
+        return YellowRecorder(recorder_controller, "Pokemon Yellow")
+    return RecorderGameHookClient(recorder_controller, "Pokemon Red and Blue")
 
 
 gen_one_yellow = GenOne(

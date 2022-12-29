@@ -138,7 +138,10 @@ class LearnMoveEventDefinition:
     def __str__(self):
         if self.destination is None:
             return f"Ignoring {self.move_to_learn}, from {self.source}"
-        return f"Learning {self.move_to_learn} in slot #: {self.destination + 1}, from {self.source}"
+        elif isinstance(self.destination, int):
+            return f"Learning {self.move_to_learn} in slot #: {self.destination + 1}, from {self.source}"
+
+        return f"Learning {self.move_to_learn} over: {self.destination}, from {self.source}"
 
 
 class TrainerEventDefinition:
@@ -187,18 +190,79 @@ class TrainerEventDefinition:
         return f"Trainer {self.trainer_name}"
 
 
+class SaveEventDefinition:
+    def __init__(self, location=""):
+        self.location = location
+    
+    def serialize(self):
+        return [self.location]
+    
+    @staticmethod
+    def deserialize(raw_val):
+        if not raw_val:
+            return None
+        return SaveEventDefinition(raw_val[0])
+    
+    def __str__(self):
+        if self.location:
+            return f"Game Saved at: {self.location}"
+        return "Game Saved"
+
+
+class HealEventDefinition:
+    def __init__(self, location=""):
+        self.location = location
+    
+    def serialize(self):
+        return [self.location]
+    
+    @staticmethod
+    def deserialize(raw_val):
+        if not raw_val:
+            return None
+        return HealEventDefinition(raw_val[0])
+    
+    def __str__(self):
+        if self.location:
+            return f"PkmnCenter Heal at: {self.location}"
+        return f"PkmnCenter Heal"
+
+
+class BlackoutEventDefinition:
+    def __init__(self, location=""):
+        self.location = location
+    
+    def serialize(self):
+        return [self.location]
+    
+    @staticmethod
+    def deserialize(raw_val):
+        if not raw_val:
+            return None
+        return BlackoutEventDefinition(raw_val[0])
+    
+    def __str__(self):
+        if self.location:
+            return f"Black Out back to: {self.location}"
+        return f"Black Out"
+
+
 class EventDefinition:
-    def __init__(self, enabled=True, rare_candy=None, vitamin=None, trainer_def=None, wild_pkmn_info=None, item_event_def=None, learn_move=None, hold_item=None, notes="", tags=None):
+    def __init__(self, enabled=True, rare_candy=None, vitamin=None, trainer_def=None, wild_pkmn_info=None, item_event_def=None, learn_move=None, hold_item=None, save=None, heal=None, blackout=None, notes="", tags=None):
         self.enabled = enabled
-        self.rare_candy = rare_candy
-        self.vitamin = vitamin
-        self.trainer_def = trainer_def
+        self.rare_candy:RareCandyEventDefinition = rare_candy
+        self.vitamin:VitaminEventDefinition = vitamin
+        self.trainer_def:TrainerEventDefinition = trainer_def
         self._trainer_obj = None
-        self.wild_pkmn_info = wild_pkmn_info
+        self.wild_pkmn_info:WildPkmnEventDefinition = wild_pkmn_info
         self._wild_pkmn = None
-        self.item_event_def = item_event_def
-        self.learn_move = learn_move
-        self.hold_item = hold_item
+        self.item_event_def:InventoryEventDefinition = item_event_def
+        self.learn_move:LearnMoveEventDefinition = learn_move
+        self.hold_item:HoldItemEventDefinition = hold_item
+        self.save:SaveEventDefinition = save
+        self.heal:HealEventDefinition = heal
+        self.blackout:BlackoutEventDefinition = blackout
+
         if tags is None:
             tags = []
         self.tags = tags
@@ -256,6 +320,12 @@ class EventDefinition:
             return const.TASK_LEARN_MOVE_TM
         elif self.hold_item is not None:
             return const.TASK_HOLD_ITEM
+        elif self.save is not None:
+            return const.TASK_SAVE
+        elif self.heal is not None:
+            return const.TASK_HEAL
+        elif self.blackout is not None:
+            return const.TASK_BLACKOUT
         
         return const.TASK_NOTES_ONLY
 
@@ -275,6 +345,12 @@ class EventDefinition:
             return str(self.learn_move)
         elif self.hold_item is not None:
             return str(self.hold_item)
+        elif self.save is not None:
+            return str(self.save)
+        elif self.heal is not None:
+            return str(self.heal)
+        elif self.blackout is not None:
+            return str(self.blackout)
         
         return f"Notes: {self.notes}"
     
@@ -294,6 +370,12 @@ class EventDefinition:
             return str(self.learn_move)
         elif self.hold_item is not None:
             return str(self.hold_item)
+        elif self.save is not None:
+            return str(self.save)
+        elif self.heal is not None:
+            return str(self.heal)
+        elif self.blackout is not None:
+            return str(self.blackout)
         
         return f"Notes: {self.notes}"
     
@@ -329,6 +411,12 @@ class EventDefinition:
             result.update({const.LEARN_MOVE_KEY: self.learn_move.serialize()})
         elif self.hold_item is not None:
             result.update({const.TASK_HOLD_ITEM: self.hold_item.serialize()})
+        elif self.save is not None:
+            result.update({const.TASK_SAVE: self.save.serialize()})
+        elif self.heal is not None:
+            result.update({const.TASK_HEAL: self.heal.serialize()})
+        elif self.blackout is not None:
+            result.update({const.TASK_BLACKOUT: self.blackout.serialize()})
         
         return result    
 
@@ -346,6 +434,9 @@ class EventDefinition:
             item_event_def=InventoryEventDefinition.deserialize(raw_val.get(const.INVENTORY_EVENT_DEFINITON)),
             learn_move=LearnMoveEventDefinition.deserialize(raw_val.get(const.LEARN_MOVE_KEY)),
             hold_item=HoldItemEventDefinition.deserialize(raw_val.get(const.TASK_HOLD_ITEM)),
+            save=SaveEventDefinition.deserialize(raw_val.get(const.TASK_SAVE)),
+            heal=HealEventDefinition.deserialize(raw_val.get(const.TASK_HEAL)),
+            blackout=BlackoutEventDefinition.deserialize(raw_val.get(const.TASK_BLACKOUT)),
         )
         if result.wild_pkmn_info is not None:
             result.trainer_def = None
@@ -365,7 +456,7 @@ class EventItem:
         self.parent = parent
         self.name = event_definition.get_item_label()
         self.to_defeat_idx = to_defeat_idx
-        self.event_definition = event_definition
+        self.event_definition:EventDefinition = event_definition
 
         self.init_state = None
         self.final_state = None
@@ -386,6 +477,9 @@ class EventItem:
             self.name = f"Disabled: {self.event_definition.get_label()}"
             return
 
+        # NOTE: if you're confused by the strange inversion of "if None is self.event_definition.x" in the if statements below...
+        # Pylance forgets all type-hints for self.event_definition with the other order, for some reason...
+        # so do it this annoying way just to keep Pylance from shitting the bed. grumble grumble grumble
         if self.to_defeat_idx is not None:
             enemy_team = self.event_definition.get_pokemon_list()
             if len(enemy_team) <= self.to_defeat_idx:
@@ -393,7 +487,7 @@ class EventItem:
                 self.error_message = f"No Num {self.to_defeat_idx} pkmn from team: {self.event_definition}"
             else:
                 # you only "defeat" a trainer after defeating their final pokemon
-                if self.event_definition.trainer_def is not None:
+                if None is not self.event_definition.trainer_def:
                     if self.to_defeat_idx == len(enemy_team) - 1:
                         defeated_trainer_name = self.event_definition.trainer_def.trainer_name
                     else:
@@ -405,15 +499,15 @@ class EventItem:
 
                 self.name = f"{render_trainer_name}: {enemy_team[self.to_defeat_idx].name}"
                 self.final_state, self.error_message = cur_state.defeat_pkmn(enemy_team[self.to_defeat_idx], trainer_name=defeated_trainer_name)
-        elif self.event_definition.rare_candy is not None:
+        elif None is not self.event_definition.rare_candy:
             # note: deliberatley ignoring amount here, that's handled at the group level
             # just apply one rare candy at the item level
             self.final_state, self.error_message = cur_state.rare_candy()
-        elif self.event_definition.vitamin is not None:
+        elif None is not self.event_definition.vitamin:
             # note: deliberatley ignoring amount here, that's handled at the group level
             # just apply one vitamin at the item level
             self.final_state, self.error_message = cur_state.vitamin(self.event_definition.vitamin.vitamin)
-        elif self.event_definition.item_event_def is not None:
+        elif None is not self.event_definition.item_event_def:
             if self.event_definition.item_event_def.is_acquire:
                 self.final_state, self.error_message = cur_state.add_item(
                     self.event_definition.item_event_def.item_name,
@@ -426,7 +520,7 @@ class EventItem:
                     self.event_definition.item_event_def.item_amount,
                     self.event_definition.item_event_def.with_money,
                 )
-        elif self.event_definition.learn_move is not None:
+        elif None is not self.event_definition.learn_move:
             # little bit of book-keeping. Manually update the definition to accurately reflect what happened to the move
             dest_info = cur_state.solo_pkmn.get_move_destination(
                 self.event_definition.learn_move.move_to_learn,
@@ -440,14 +534,21 @@ class EventItem:
                 self.event_definition.learn_move.destination,
                 self.event_definition.learn_move.source,
             )
-        elif self.event_definition.hold_item is not None:
+        elif None is not self.event_definition.hold_item:
             self.final_state, self.error_message = cur_state.hold_item(
                 self.event_definition.hold_item.item_name
             )
+        elif None is not self.event_definition.blackout:
+            self.final_state, self.error_message = cur_state.blackout()
         else:
-            # Notes only, no processing just pass through
+            # Save events, heal events (both of which currently do nothing), or a notes only event
+            # No processing just pass through
             self.final_state = self.init_state
-            self.error_message = ""
+            # Check for recorder errors
+            if self.event_definition.notes and self.event_definition.notes.startswith(const.RECORDING_ERROR_FRAGMENT):
+                self.error_message = self.event_definition.notes
+            else:
+                self.error_message = ""
 
 
     def get_pkmn_after_levelups(self):
@@ -500,7 +601,7 @@ class EventGroup:
         self.group_id = event_id_counter
         event_id_counter += 1
 
-        self.parent = parent
+        self.parent:EventFolder = parent
         self._enabled = True
         self.name = None
         self.init_state = None

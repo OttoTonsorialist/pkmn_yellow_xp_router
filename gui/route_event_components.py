@@ -4,7 +4,7 @@ from gui import custom_tkinter
 from gui.pkmn_components import EnemyPkmnTeam
 from utils.constants import const
 import pkmn
-from routing.route_events import EventDefinition, HoldItemEventDefinition, InventoryEventDefinition, LearnMoveEventDefinition, RareCandyEventDefinition, VitaminEventDefinition, WildPkmnEventDefinition
+from routing.route_events import BlackoutEventDefinition, EventDefinition, HealEventDefinition, HoldItemEventDefinition, InventoryEventDefinition, LearnMoveEventDefinition, RareCandyEventDefinition, SaveEventDefinition, VitaminEventDefinition, WildPkmnEventDefinition
 from utils.config_manager import config
 
 
@@ -709,6 +709,60 @@ class InventoryEventEditor(EventEditorBase):
         raise ValueError(f"Cannot generate inventory event for event type: {self.editor_params.event_type}")
 
 
+class SaveEventEditor(EventEditorBase):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.event_button.enable()
+        self._location_label = tk.Label(self, text="Save Location", bg=config.get_background_color(), fg=config.get_text_color())
+        self._location_value = custom_tkinter.SimpleEntry(self)
+        self._location_label.grid(row=self._cur_row, column=0)
+        self._location_value.grid(row=self._cur_row, column=1)
+        self._cur_row += 1
+    
+    def load_event(self, event_def):
+        super().load_event(event_def)
+        self._location_value.set(str(event_def.save.location))
+
+    def get_event(self):
+        return EventDefinition(save=SaveEventDefinition(location=self._location_value.get()))
+
+
+class HealEventEditor(EventEditorBase):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.event_button.enable()
+        self._location_label = tk.Label(self, text="Heal Location", bg=config.get_background_color(), fg=config.get_text_color())
+        self._location_value = custom_tkinter.SimpleEntry(self)
+        self._location_label.grid(row=self._cur_row, column=0)
+        self._location_value.grid(row=self._cur_row, column=1)
+        self._cur_row += 1
+    
+    def load_event(self, event_def):
+        super().load_event(event_def)
+        self._location_value.set(str(event_def.heal.location))
+
+    def get_event(self):
+        return EventDefinition(heal=HealEventDefinition(location=self._location_value.get()))
+
+
+class BlackoutEventEditor(EventEditorBase):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.event_button.enable()
+        self._location_label = tk.Label(self, text="Black Out back to:", bg=config.get_background_color(), fg=config.get_text_color())
+        self._location_value = custom_tkinter.SimpleEntry(self)
+        self._location_label.grid(row=self._cur_row, column=0)
+        self._location_value.grid(row=self._cur_row, column=1)
+        self._cur_row += 1
+    
+    def load_event(self, event_def):
+        super().load_event(event_def)
+        self._location_value.set(str(event_def.blackout.location))
+
+    def get_event(self):
+        return EventDefinition(blackout=BlackoutEventDefinition(location=self._location_value.get()))
+
+
 class EventEditorFactory:
     # NOTE: any event type that we want to support must have an entry in this map
     # NOTE: otherwise, you won't be able to get a visual editor for it
@@ -724,6 +778,9 @@ class EventEditorFactory:
         const.TASK_HOLD_ITEM: InventoryEventEditor,
         const.TASK_LEARN_MOVE_LEVELUP: LearnMoveEditor,
         const.TASK_LEARN_MOVE_TM: LearnMoveEditor,
+        const.TASK_SAVE: SaveEventEditor,
+        const.TASK_HEAL: HealEventEditor,
+        const.TASK_BLACKOUT: BlackoutEventEditor,
         const.TASK_NOTES_ONLY: NotesEditor,
     }
 

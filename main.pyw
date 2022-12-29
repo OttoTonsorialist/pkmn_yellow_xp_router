@@ -12,6 +12,7 @@ from tkinter import ttk, font, messagebox
 from controllers.main_controller import MainController
 from gui.auto_upgrade_window import AutoUpgradeGUI
 from gui.main_window import MainWindow
+from route_recording.recorder import RecorderController
 
 from utils.constants import const
 from utils.config_manager import config
@@ -60,7 +61,7 @@ if __name__ == '__main__':
     if args.debug:
         const.DEBUG_MODE = True
     
-    app = MainWindow(MainController())
+    app = MainWindow()
     background_thread = threading.Thread(target=startup_check_for_upgrade, args=(app,))
 
     background_thread.start()

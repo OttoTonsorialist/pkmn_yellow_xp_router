@@ -4,6 +4,7 @@ from pkmn import universal_data_objects
 from pkmn.damage_calc import DamageRange
 from pkmn.pkmn_db import ItemDB, MinBattlesDB, MoveDB, PkmnDB, TrainerDB
 from routing import route_state_objects
+from route_recording.recorder import RecorderController, RecorderGameHookClient
 
 
 class CurrentGen:
@@ -26,6 +27,9 @@ class CurrentGen:
         raise NotImplementedError()
     
     def min_battles_db(self) -> MinBattlesDB:
+        raise NotImplementedError()
+    
+    def get_recorder_client(self, recorder_controller:RecorderController) -> RecorderGameHookClient:
         raise NotImplementedError()
     
     def create_trainer_pkmn(self, pkmn_name, pkmn_level):
