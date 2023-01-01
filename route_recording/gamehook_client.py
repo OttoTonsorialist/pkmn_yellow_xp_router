@@ -180,9 +180,9 @@ class GameHookClient:
         self.meta = mapper["meta"]
         self.glossary = mapper["glossary"]
         self.properties = {x["path"]: GameHookProperty(self, x) for x in mapper["properties"]}
-        logger.info("[GameHook Client] Mapper loaded successfully!")
 
         if propagate_event:
+            logger.info("[GameHook Client] Mapper loaded successfully!")
             if self._clear_callbacks_on_load:
                 self._change = {}
                 self._once = {}

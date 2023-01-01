@@ -1,11 +1,14 @@
 import tkinter as tk
 from tkinter import ttk
-from controllers.main_controller import MainController
+import logging
 
+from controllers.main_controller import MainController
 from gui import custom_tkinter, route_event_components, pkmn_components, quick_add_components, battle_summary
 from routing.route_events import EventDefinition, EventFolder, EventGroup, EventItem, InventoryEventDefinition, LearnMoveEventDefinition, RareCandyEventDefinition, TrainerEventDefinition, VitaminEventDefinition
 from utils.constants import const
 from utils.config_manager import config
+
+logger = logging.getLogger(__name__)
 
 
 class EventDetails(tk.Frame):
@@ -93,8 +96,8 @@ class EventDetails(tk.Frame):
         self.footer_frame.columnconfigure(0, weight=1)
 
         self.tabbed_states.bind('<<NotebookTabChanged>>', self._tab_changed_callback)
-        self._controller.register_event_selection(self._handle_selection)
-        self._controller.register_record_mode_change(self._handle_selection)
+        self.bind(self._controller.register_event_selection(self), self._handle_selection)
+        self.bind(self._controller.register_record_mode_change(self), self._handle_selection)
 
         self._tab_changed_callback()
     
@@ -147,8 +150,9 @@ class EventDetails(tk.Frame):
             self.badge_boost_viewer.grid_forget()
             self.state_pre_viewer.grid(column=1, row=1, padx=10, pady=10, columnspan=2)
     
-    def _handle_selection(self):
+    def _handle_selection(self, *args, **kwargs):
         event_group = self._controller.get_single_selected_event_obj()
+        logger.info(f"newly selected event_group: {event_group}")
 
         if event_group is None:
             self.show_event_details(None, self._controller.get_init_state(), self._controller.get_final_state(), allow_updates=False)
@@ -184,6 +188,8 @@ class EventDetails(tk.Frame):
             self.enemy_team_viewer.pack_forget()
             self.verbose_trainer_label.grid_forget()
             self.event_details_button.disable()
+            self.battle_summary_frame.set_team(None)
+            self.simple_battle_summary_frame.set_team(None)
         else:
             if allow_updates:
                 self.event_details_button.enable()

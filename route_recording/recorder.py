@@ -27,41 +27,45 @@ class RecorderController:
     """
     def __init__(self, controller:controllers.main_controller.MainController):
         self._controller = controller
-        self._status_callbacks = []
-        self._ready_callbacks = []
+        self._status_events = []
+        self._ready_events = []
+        self._game_state_events = []
         self._status = None
         self._ready = None
+        self._game_state = None
 
         # metadata for tracking/organizing events in the generated route
         self._potential_new_area_name = None
         self._potential_new_folder_name = None
         self._active_area_name = None
         self._active_folder_name = const.ROOT_FOLDER_NAME
-        self._last_save_point_id = None
-        self._last_save_folder_name = const.ROOT_FOLDER_NAME
-        self._last_save_area_name = None
     
-    def register_recorder_status_change(self, callback_fn):
-        self._status_callbacks.append(callback_fn)
+    def register_recorder_status_change(self, tk_obj):
+        new_event_name = const.EVENT_RECORDER_STATUS_CHANGE.format(len(self._status_events))
+        self._status_events.append((tk_obj, new_event_name))
+        return new_event_name
     
-    def register_recorder_ready_change(self, callback_fn):
-        self._ready_callbacks.append(callback_fn)
+    def register_recorder_ready_change(self, tk_obj):
+        new_event_name = const.EVENT_RECORDER_READY_CHANGE.format(len(self._ready_events))
+        self._ready_events.append((tk_obj, new_event_name))
+        return new_event_name
+    
+    def register_recorder_game_state_change(self, tk_obj):
+        new_event_name = const.EVENT_RECORDER_GAME_STATE_CHANGE.format(len(self._game_state_events))
+        self._game_state_events.append((tk_obj, new_event_name))
+        return new_event_name
     
     def _on_status_change(self):
-        for cur_callback in self._status_callbacks:
-            try:
-                cur_callback()
-            except Exception as e:
-                logger.error(f"Exception encountered during record status callbacks")
-                logger.exception(e)
+        for tk_obj, cur_event_name in self._status_events:
+            tk_obj.event_generate(cur_event_name, when="tail")
     
     def _on_ready_change(self):
-        for cur_callback in self._ready_callbacks:
-            try:
-                cur_callback()
-            except Exception as e:
-                logger.error(f"Exception encountered during record ready callbacks")
-                logger.exception(e)
+        for tk_obj, cur_event_name in self._ready_events:
+            tk_obj.event_generate(cur_event_name, when="tail")
+    
+    def _on_game_state_change(self):
+        for tk_obj, cur_event_name in self._game_state_events:
+            tk_obj.event_generate(cur_event_name, when="tail")
     
     def set_status(self, new_val):
         self._status = new_val
@@ -77,6 +81,13 @@ class RecorderController:
     def is_ready(self):
         return self._ready
     
+    def set_game_state(self, new_val):
+        self._game_state = new_val
+        self._on_game_state_change()
+    
+    def get_game_state(self):
+        return self._game_state
+    
     def route_restarted(self):
         # this function is called when we detect that a new game-file has been started
         # silently allow this if we haven't actually recording any events
@@ -86,26 +97,16 @@ class RecorderController:
             self.set_ready(False)
     
     def _on_enable(self):
-        # For now, when translator gets re-enabled, we're just going to default back to writing to the root folder initially
-        self._active_area_name = None
-        self._active_folder_name = const.ROOT_FOLDER_NAME
-
-        self._last_save_point_id = None
-        self._last_save_folder_name = const.ROOT_FOLDER_NAME
-        self._last_save_area_name = None
+        self._potential_new_area_name = None
+        self._potential_new_folder_name = None
 
         if not self._controller.is_empty():
-            last_obj = test_obj = self._controller.get_previous_event()
-            while test_obj.event_definition.save is None:
-                if test_obj is None:
-                    break
-                test_obj = self._controller.get_previous_event(test_obj.group_id)
-            
-            if test_obj is not None:
-                self._last_save_point_id = test_obj.group_id
-                self._last_save_folder_name = test_obj.parent.name
-                # TODO: can we do anything about this..?
-                self._last_save_area_name = None
+            test_obj = self._controller.get_previous_event()
+            self._active_folder_name = test_obj.parent.name
+            self._active_area_name = self._extract_area_name_from_folder_name(self._active_folder_name)
+        else:
+            self._active_folder_name = const.ROOT_FOLDER_NAME
+            self._active_area_name = None
 
     @skip_if_inactive
     def entered_new_area(self, new_area_name):
@@ -117,45 +118,35 @@ class RecorderController:
             folder_name = f"{new_area_name}: Trip {counter}"
 
         self._potential_new_folder_name = folder_name
+    
+    def _extract_area_name_from_folder_name(self, folder_name:str):
+        test = folder_name.split(":")
+        if len(test) == 2 and "Trip" in test[1]:
+            return test[0]
+        return folder_name
 
     @skip_if_inactive
     def game_reset(self):
-        if self._last_save_point_id is None:
-            # just double check, look for save point if possible
-            test_obj:EventGroup = self._controller.get_previous_event()
-            while test_obj is not None and test_obj.event_definition.save is None:
-                test_obj = self._controller.get_previous_event(test_obj.group_id)
-            
-            if test_obj is not None:
-                self._last_save_point_id = test_obj.group_id
+        to_delete = []
+        potentially_empty_folders = []
 
-        if self._last_save_point_id is None:
-            # if no last save point is defined, just nuking everything
-            to_delete = [x.group_id for x in self._controller.get_raw_route().root_folder.children]
-        else:
-            # Delete every event after the last save point
-            # and then bubble up one level in the folders, to delete all the subsequent folders/events
-            # Do this until we get to the top
-            to_delete = []
-            cur_split_point = self._controller.get_event_by_id(self._last_save_point_id)
-            parent_obj = cur_split_point.parent
-            while True:
-                if parent_obj is None:
-                    break
-                if parent_obj.children[0] != cur_split_point:
-                    past_split_point = False
-                    for other_child in parent_obj.children:
-                        if past_split_point:
-                            to_delete.append(other_child.group_id)
-                        elif other_child == cur_split_point:
-                            past_split_point = True
+        # find the save points
+        test_obj:EventGroup = self._controller.get_previous_event()
+        while test_obj is not None and test_obj.event_definition.save is None:
+            to_delete.append(test_obj.group_id)
+            potentially_empty_folders.append(test_obj.parent)
+            test_obj = self._controller.get_previous_event(test_obj.group_id)
 
-                cur_split_point = parent_obj
-                parent_obj = cur_split_point.parent
-        
+        logger.info(f"Cleaning up {len(to_delete)} events for reset")
         self._controller.delete_events(to_delete)
-        self._active_folder_name = self._last_save_folder_name
-        self._active_area_name = self._last_save_area_name
+        self._controller.purge_empty_folders()
+
+        if test_obj is not None:
+            self._active_folder_name = test_obj.parent.name
+            self._active_area_name = self._extract_area_name_from_folder_name(self._active_folder_name)
+        else:
+            self._active_folder_name = const.ROOT_FOLDER_NAME
+            self._active_area_name = None
         self._potential_new_area_name = None
         self._potential_new_folder_name = None
 
@@ -191,7 +182,6 @@ class RecorderController:
 
     @skip_if_inactive
     def add_event(self, event_def:EventDefinition):
-        logger.info("adding event from recorder")
         if self._potential_new_area_name is not None:
             if self._active_area_name == self._potential_new_area_name:
                 self._potential_new_area_name = None
@@ -201,11 +191,8 @@ class RecorderController:
                 self._active_folder_name = self._potential_new_folder_name
                 self._potential_new_area_name = None
                 self._potential_new_folder_name = None
-                logger.info("adding new folder")
                 self._controller.finalize_new_folder(self._active_folder_name)
-                logger.info("new folder added")
 
-        logger.info("Folders updated")
         if event_def.trainer_def is not None and event_def.trainer_def.trainer_name in self._controller.get_defeated_trainers():
             # log any errors for duplicate trainers being defeated
             msg = f"{const.RECORDING_ERROR_FRAGMENT} Tried to fight trainer that has already been defeated: {event_def.trainer_def.trainer_name}"
@@ -234,16 +221,39 @@ class RecorderController:
             if event_def.learn_move.source == const.MOVE_SOURCE_LEVELUP:
                 self._controller.update_levelup_move(event_def.learn_move)
                 return
-        elif event_def.save is not None:
-            self._last_save_folder_name = self._active_folder_name
-            self._last_save_area_name = self._active_area_name
+        elif None is not event_def.item_event_def:
+            last_event = self._controller.get_previous_event()
+            if (
+                last_event is not None and
+                last_event.event_definition.item_event_def is not None and
+                last_event.event_definition.item_event_def.item_name == event_def.item_event_def.item_name and
+                last_event.event_definition.item_event_def.is_acquire == event_def.item_event_def.is_acquire and
+                last_event.event_definition.item_event_def.with_money == event_def.item_event_def.with_money
+            ):
+                event_def.item_event_def.item_amount += last_event.event_definition.item_event_def.item_amount
+                self._controller.update_existing_event(last_event.group_id, event_def)
+                return
+        elif None is not event_def.vitamin:
+            last_event = self._controller.get_previous_event()
+            if (
+                last_event is not None and
+                last_event.event_definition.vitamin is not None and
+                last_event.event_definition.vitamin.vitamin == event_def.vitamin.vitamin
+            ):
+                event_def.vitamin.amount += last_event.event_definition.vitamin.amount
+                self._controller.update_existing_event(last_event.group_id, event_def)
+                return
+        elif None is not event_def.rare_candy:
+            last_event = self._controller.get_previous_event()
+            if (
+                last_event is not None and
+                last_event.event_definition.rare_candy is not None
+            ):
+                event_def.rare_candy.amount += last_event.event_definition.rare_candy.amount
+                self._controller.update_existing_event(last_event.group_id, event_def)
+                return
 
-        logger.info(f"Event validation finished, adding event {event_def} to folder {self._active_folder_name}")
-        new_event_id = self._controller.new_event(event_def, dest_folder_name=self._active_folder_name, auto_select=True)
-        logger.info(f"Event added")
-
-        if event_def.save is not None:
-            self._last_save_point_id = new_event_id
+        self._controller.new_event(event_def, dest_folder_name=self._active_folder_name, auto_select=True)
 
 
 class RecorderGameHookClient(GameHookClient):
@@ -260,6 +270,7 @@ class RecorderGameHookClient(GameHookClient):
             self._controller.set_ready(True)
             self._controller.set_status(const.RECORDING_STATUS_READY)
         else:
+            logger.info("yuh yoh")
             self._controller.set_ready(False)
             self._controller.set_status(const.RECORDING_STATUS_WRONG_MAPPER)
 

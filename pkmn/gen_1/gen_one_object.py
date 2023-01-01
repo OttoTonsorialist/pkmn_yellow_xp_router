@@ -9,7 +9,7 @@ from pkmn.gen_1.data_objects import GenOneBadgeList, GenOneStatBlock
 from pkmn.gen_1.gen_one_constants import gen_one_const
 from pkmn.pkmn_db import ItemDB, MinBattlesDB, PkmnDB, TrainerDB, MoveDB
 from pkmn.pkmn_info import CurrentGen
-from route_recording.game_recorders.yellow_recorder import YellowRecorder
+from route_recording.game_recorders.yellow_recorder import YellowRecorder, RedBlueRecorder
 from route_recording.recorder import RecorderController, RecorderGameHookClient
 from routing import route_state_objects
 from utils.constants import const
@@ -232,7 +232,7 @@ def _load_move_db(path):
 def _recorder_factory(recorder_controller, version):
     if version == const.YELLOW_VERSION:
         return YellowRecorder(recorder_controller, "Pokemon Yellow")
-    return RecorderGameHookClient(recorder_controller, "Pokemon Red and Blue")
+    return RedBlueRecorder(recorder_controller, "Pokemon Red and Blue")
 
 
 gen_one_yellow = GenOne(

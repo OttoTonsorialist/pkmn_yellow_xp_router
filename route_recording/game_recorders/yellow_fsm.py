@@ -8,7 +8,7 @@ from enum import Enum, auto
 import route_recording.recorder
 from route_recording.gamehook_client import GameHookProperty
 from routing.route_events import EventDefinition, InventoryEventDefinition, LearnMoveEventDefinition, RareCandyEventDefinition, VitaminEventDefinition
-from route_recording.game_recorders.yellow_gamehook_constants import gh_gen_one_const, gh_converter
+from route_recording.game_recorders.yellow_gamehook_constants import GameHookConstantConverter, gh_gen_one_const
 from pkmn.gen_1.gen_one_constants import gen_one_const
 from utils.constants import const
 import pkmn
@@ -21,8 +21,7 @@ class StateType(Enum):
     RESETTING = auto()
     OVERWORLD = auto()
     BATTLE = auto()
-    GAIN_ITEM = auto()
-    LOSE_ITEM = auto()
+    INVENTORY_CHANGE = auto()
     RARE_CANDY = auto()
     TM = auto()
     VITAMIN = auto()
@@ -44,9 +43,11 @@ class State:
 
 
 class Machine:
-    def __init__(self, controller:route_recording.recorder.RecorderController, gamehook_client:route_recording.recorder.RecorderGameHookClient):
+    def __init__(self, controller:route_recording.recorder.RecorderController, gamehook_client:route_recording.recorder.RecorderGameHookClient, gh_converter:GameHookConstantConverter):
         self._controller = controller
         self._gamehook_client = gamehook_client
+        self.gh_converter = gh_converter
+        self.debug_mode = False
 
         self._player_id = None
         self._solo_mon_species = None
@@ -70,9 +71,9 @@ class Machine:
 
         logger.info(f"Registering solo mon: {mon_name}")
         if self._solo_mon_species is not None:
-            logger.error("Trying to register solo mon when one is already registered")
+            logger.error(f"Trying to register solo mon when one is already registered: {self._solo_mon_species}")
         
-        self._solo_mon_species = gh_converter.pkmn_name_convert(mon_name)
+        self._solo_mon_species = self.gh_converter.pkmn_name_convert(mon_name)
         if self._solo_mon_species is None:
             self._move_cache_update(generate_events=False)
             return
@@ -108,12 +109,11 @@ class Machine:
         self._item_cache_update(generate_events=False)
         self._money_cache_update()
         self._controller.entered_new_area(
-            gh_converter.area_name_convert(self._gamehook_client.get(gh_gen_one_const.KEY_OVERWORLD_MAP).value)
+            self.gh_converter.area_name_convert(self._gamehook_client.get(gh_gen_one_const.KEY_OVERWORLD_MAP).value)
         )
     
     def _solo_mon_levelup(self, new_level):
         for move_name in self._level_up_moves.get(new_level, []):
-            logger.warning(f"Queueing level up event: {EventDefinition(learn_move=LearnMoveEventDefinition(move_name, None, const.MOVE_SOURCE_LEVELUP, level=new_level))}")
             self._queue_new_event(
                 EventDefinition(learn_move=LearnMoveEventDefinition(move_name, None, const.MOVE_SOURCE_LEVELUP, level=new_level))
             )
@@ -129,10 +129,10 @@ class Machine:
     
     def _move_cache_update(self, generate_events=True, tm_name=None, hm_expected=False, levelup_source=False):
         new_cache = []
-        new_cache.append(gh_converter.move_name_convert(self._gamehook_client.get(gh_gen_one_const.KEY_PLAYER_MON_MOVE_1).value))
-        new_cache.append(gh_converter.move_name_convert(self._gamehook_client.get(gh_gen_one_const.KEY_PLAYER_MON_MOVE_2).value))
-        new_cache.append(gh_converter.move_name_convert(self._gamehook_client.get(gh_gen_one_const.KEY_PLAYER_MON_MOVE_3).value))
-        new_cache.append(gh_converter.move_name_convert(self._gamehook_client.get(gh_gen_one_const.KEY_PLAYER_MON_MOVE_4).value))
+        new_cache.append(self.gh_converter.move_name_convert(self._gamehook_client.get(gh_gen_one_const.KEY_PLAYER_MON_MOVE_1).value))
+        new_cache.append(self.gh_converter.move_name_convert(self._gamehook_client.get(gh_gen_one_const.KEY_PLAYER_MON_MOVE_2).value))
+        new_cache.append(self.gh_converter.move_name_convert(self._gamehook_client.get(gh_gen_one_const.KEY_PLAYER_MON_MOVE_3).value))
+        new_cache.append(self.gh_converter.move_name_convert(self._gamehook_client.get(gh_gen_one_const.KEY_PLAYER_MON_MOVE_4).value))
 
         if generate_events:
             old_moves = set([x for x in self._cached_moves if x is not None])
@@ -162,16 +162,15 @@ class Machine:
                     level = self._gamehook_client.get(gh_gen_one_const.KEY_PLAYER_MON_LEVEL).value
                 else:
                     if hm_expected:
-                        tm_name = gh_converter.get_hm_name(to_learn_move)
-                        logger.error(f"Got hm_name: {tm_name} from hm {to_learn_move}")
+                        tm_name = self.gh_converter.get_hm_name(to_learn_move)
                     source = tm_name
                     level = const.LEVEL_ANY
 
                 self._queue_new_event(
                     EventDefinition(
                         learn_move=LearnMoveEventDefinition(
-                            gh_converter.move_name_convert(to_learn_move),
-                            gh_converter.move_name_convert(to_delete_move),
+                            self.gh_converter.move_name_convert(to_learn_move),
+                            self.gh_converter.move_name_convert(to_delete_move),
                             source,
                             level=level
                         )
@@ -204,7 +203,7 @@ class Machine:
         for new_item, new_count in new_cache.items():
             if new_item in compared:
                 continue
-            cur_count = self._cached_items.get(new_item, 0)
+            cur_count = 0
             if new_count > cur_count:
                 gained_items[new_item] = new_count - cur_count
             elif cur_count > new_count:
@@ -215,10 +214,23 @@ class Machine:
             if len(gained_items) > 0 and sale_expected:
                 logger.error(f"Gained the following items when expecting to be losing items to selling... {gained_items}")
             for cur_gained_item, cur_gain_num in gained_items.items():
-                app_item_name = gh_converter.item_name_convert(cur_gained_item)
-                if app_item_name in gen_one_const.FIGHT_REWARDS.values():
-                    continue
+                app_item_name = self.gh_converter.item_name_convert(cur_gained_item)
                 if app_item_name == gh_gen_one_const.OAKS_PARCEL:
+                    continue
+
+                if (
+                    app_item_name == gh_gen_one_const.NUGGET and
+                    self._gamehook_client.get(gh_gen_one_const.KEY_OVERWORLD_MAP).value == gh_gen_one_const.ROUTE_24
+                ):
+                    # SUPER DUPER JANK. just ignore nuggets on this Nugget Bridge, because the rocket gives you the nugget _before_ the fight
+                    # which is different from all other rewards that happen _after_ the fight
+                    continue
+                elif (
+                    app_item_name == gh_gen_one_const.DOME_FOSSIL and
+                    str(self._gamehook_client.get(gh_gen_one_const.KEY_OVERWORLD_MAP).value).split("-")[0].strip() == gh_gen_one_const.MT_MOON
+                ):
+                    # edge case: Fight Reward for the fossil only gives you (and therefore checks for) the helix fossil
+                    # special logic to ignore if the user picks up the dome fossil
                     continue
                 self._queue_new_event(
                     EventDefinition(
@@ -229,22 +241,22 @@ class Machine:
             if len(lost_items) > 0 and purchase_expected:
                 logger.error(f"Lost the following items when expecting to be gain items to purchasing... {lost_items}")
             for cur_lost_item, cur_lost_num in lost_items.items():
-                app_item_name = gh_converter.item_name_convert(cur_lost_item)
+                app_item_name = self.gh_converter.item_name_convert(cur_lost_item)
                 if app_item_name == gh_gen_one_const.OAKS_PARCEL:
                     continue
-                if vitamin_flag and gh_converter.is_game_vitamin(cur_lost_item):
+                if vitamin_flag and self.gh_converter.is_game_vitamin(cur_lost_item):
                     if sale_expected:
                         logger.error("Expected sale, but looks like vitamins were used too???")
                     self._queue_new_event(
                         EventDefinition(vitamin=VitaminEventDefinition(app_item_name, cur_lost_num))
                     )
-                elif candy_flag and gh_converter.is_game_rare_candy(cur_lost_item):
+                elif candy_flag and self.gh_converter.is_game_rare_candy(cur_lost_item):
                     if sale_expected:
                         logger.error("Expected sale, but looks like rare candy was used too???")
                     self._queue_new_event(
                         EventDefinition(rare_candy=RareCandyEventDefinition(cur_lost_num))
                     )
-                elif tm_flag and gh_converter.is_game_tm(cur_lost_item):
+                elif tm_flag and self.gh_converter.is_game_tm(cur_lost_item):
                     if sale_expected:
                         logger.error("Expected sale, but looks like TM was used too???")
                     self._move_cache_update(tm_name=app_item_name)
@@ -264,19 +276,29 @@ class Machine:
         self._active = True
         self._cur_state = self._registered_states[StateType.UNINITIALIZED]
         self._cur_state._on_enter(None)
+        self._controller.set_game_state(self._cur_state.state_type)
         self._processing_thread.start()
     
     def handle_event(self, new_prop:GameHookProperty, prev_prop:GameHookProperty):
+        if (
+            self.debug_mode and
+            new_prop.path != gh_gen_one_const.KEY_AUDIO_CHANNEL_4 and
+            new_prop.path != gh_gen_one_const.KEY_AUDIO_CHANNEL_5 and
+            new_prop.path != gh_gen_one_const.KEY_AUDIO_CHANNEL_7 and
+            new_prop.path != gh_gen_one_const.KEY_GAMETIME_SECONDS
+        ):
+            logger.info(f"Change of {new_prop.path} from {prev_prop.value} to {new_prop.value} for state {self._cur_state.state_type}")
         result = self._cur_state.transition(new_prop, prev_prop)
         if result != self._cur_state.state_type:
             new_state = self._registered_states.get(result)
             if new_state is None:
                 raise ValueError(f"Illegal transition from {self._cur_state.state_type} to unknown state {result}")
 
-            logger.info(f"Moving from {self._cur_state.state_type} state to {new_state.state_type} state")
+            logger.info(f"Moving from {self._cur_state.state_type} state to {new_state.state_type} due to change {new_prop.path}, from {prev_prop.value} to {new_prop.value}")
             self._cur_state._on_exit(new_state)
             new_state._on_enter(self._cur_state)
             self._cur_state = new_state
+            self._controller.set_game_state(self._cur_state.state_type)
     
     def shutdown(self):
         logger.info("Shutting down Yellow recording FSM")
@@ -295,12 +317,10 @@ class Machine:
         while self._active or len(self._events_to_generate) != 0:
             if len(self._events_to_generate) != 0:
                 cur_event = self._events_to_generate.pop(0)
-                logger.info(f"Handling the event: {cur_event}, {len(self._events_to_generate)} events left in the queue")
                 try:
                     if cur_event.notes == gh_gen_one_const.RESET_FLAG:
-                        logger.info(f"resetting...")
+                        logger.info(f"Resetting to last save...")
                         self._controller.game_reset()
-                        logger.info(f"reset complete")
                         continue
                     elif None is not cur_event.trainer_def:
                         trainer = pkmn.current_gen_info().trainer_db().get_trainer(cur_event.trainer_def.trainer_name)
@@ -314,7 +334,6 @@ class Machine:
                         if cur_event.notes == gh_gen_one_const.TRAINER_LOSS_FLAG:
                             logger.info(f"Handling trainer loss: {cur_event.trainer_def.trainer_name}")
                             self._controller.lost_trainer_battle(cur_event.trainer_def.trainer_name)
-                            logger.info(f"Events updated to represent trainer loss")
                             continue
                     elif None is not cur_event.item_event_def:
                         item = pkmn.current_gen_info().item_db().get_item(cur_event.item_event_def.item_name)
@@ -330,9 +349,14 @@ class Machine:
                             prev_event = self._controller._controller.get_previous_event()
                             if (
                                 prev_event is not None and
-                                cur_event.item_event_def.item_name == gen_one_const.FIGHT_REWARDS.get(prev_event.event_definition.get_trainer_obj())
+                                prev_event.event_definition.trainer_def is not None and
+                                cur_event.item_event_def.item_name == gen_one_const.FIGHT_REWARDS.get(prev_event.event_definition.get_trainer_obj().name)
                             ):
-                                    continue
+                                logger.info(f"Intentionally ignoring item add for battle reward: {cur_event.item_event_def.item_name}")
+                                continue
+                            elif item.is_key_item and self._controller._controller.get_final_state().inventory._item_lookup.get(item.name) != None:
+                                logger.info(f"Intentionally ignoring item add for duplicate key item: {cur_event.item_event_def.item_name}")
+                                continue
                     elif None is not cur_event.learn_move:
                         to_learn = pkmn.current_gen_info().move_db().get_move(cur_event.learn_move.move_to_learn)
                         to_forget = pkmn.current_gen_info().move_db().get_move(cur_event.learn_move.destination)
@@ -353,7 +377,6 @@ class Machine:
 
                     logger.info(f"adding event: {cur_event}")
                     self._controller.add_event(cur_event)
-                    logger.info(f"Event fully added: {cur_event}")
                 except Exception as e:
                     logger.error(f"Exception occurred trying to process event: {cur_event}")
                     logger.exception(e)

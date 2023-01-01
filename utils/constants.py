@@ -322,14 +322,17 @@ class Constants:
         self.RECORDING_STATUS_WRONG_MAPPER = "Incorrect Mapper Loaded"
         self.RECORDING_STATUS_FAILED_CONNECTION = "Connection Failed. This usually means GameHook isn't running"
 
-        self.EVENT_NAME_CHANGE = "<<RouteNameChange>>"
-        self.EVENT_VERSION_CHANGE = "<<GameVersionChange>>"
-        self.EVENT_ROUTE_CHANGE = "<<RouteChange>>"
-        self.EVENT_EVENT_CHANGE = "<<RouteEventChange>>"
-        self.EVENT_SELECTION_CHANGE = "<<EventSelectionChange>>"
-        self.EVENT_PREVIEW_CHANGE = "<<PreviewChange>>"
-        self.EVENT_RECORD_MODE_CHANGE = "<<RecordModeChange>>"
-        self.EVENT_EXCEPTION = "<<RouteException>>"
+        self.EVENT_NAME_CHANGE = "<<RouteNameChange_{}>>"
+        self.EVENT_VERSION_CHANGE = "<<GameVersionChange_{}>>"
+        self.EVENT_ROUTE_CHANGE = "<<RouteChange_{}>>"
+        self.EVENT_EVENT_CHANGE = "<<RouteEventChange_{}>>"
+        self.EVENT_SELECTION_CHANGE = "<<EventSelectionChange_{}>>"
+        self.EVENT_PREVIEW_CHANGE = "<<PreviewChange_{}>>"
+        self.EVENT_RECORD_MODE_CHANGE = "<<RecordModeChange_{}>>"
+        self.EVENT_EXCEPTION = "<<RouteException_{}>>"
+        self.EVENT_RECORDER_STATUS_CHANGE = "<<RecorderStatusChange_{}>>"
+        self.EVENT_RECORDER_READY_CHANGE = "<<RecorderReadyChange_{}>>"
+        self.EVENT_RECORDER_GAME_STATE_CHANGE = "<<RecorderGameStateChange_{}>>"
     
     def config_user_data_dir(self, user_data_dir):
         self.SAVED_ROUTES_DIR = os.path.realpath(os.path.join(user_data_dir, self._SAVED_ROUTES_FOLDER_NAME))

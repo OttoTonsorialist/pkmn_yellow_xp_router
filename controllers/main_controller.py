@@ -9,6 +9,7 @@ from utils.config_manager import config
 from utils import route_one_utils
 from routing.route_events import EventDefinition, EventFolder, EventGroup, EventItem, LearnMoveEventDefinition, TrainerEventDefinition
 import routing.router
+import pkmn
 
 logger = logging.getLogger(__name__)
 
@@ -33,118 +34,104 @@ class MainController:
         self._route_name = ""
         self._selected_ids = []
         self._is_record_mode_active = False
+        self._exception_info = []
 
-        self._name_change_callbacks = []
-        self._version_change_callbacks = []
-        self._route_change_callbacks = []
-        self._event_change_callbacks = []
-        self._event_selection_callbacks = []
-        self._event_preview_callbacks = []
-        self._record_mode_change_callbacks = []
-        self._exception_callbacks = []
-
+        self._name_change_events = []
+        self._version_change_events = []
+        self._route_change_events = []
+        self._event_change_events = []
+        self._event_selection_events = []
+        self._event_preview_events = []
+        self._record_mode_change_events = []
+        self._exception_events = []
+    
+    def get_next_exception_info(self):
+        if not len(self._exception_info):
+            return None
+        return self._exception_info.pop(0)
 
     #####
     # Registration methods
     #####
 
-    def register_name_change(self, callback_fn):
-        self._name_change_callbacks.append(callback_fn)
+    def register_name_change(self, tk_obj):
+        new_event_name = const.EVENT_NAME_CHANGE.format(len(self._name_change_events))
+        self._name_change_events.append((tk_obj, new_event_name))
+        return new_event_name
 
-    def register_version_change(self, callback_fn):
-        self._version_change_callbacks.append(callback_fn)
+    def register_version_change(self, tk_obj):
+        new_event_name = const.EVENT_VERSION_CHANGE.format(len(self._version_change_events))
+        self._version_change_events.append((tk_obj, new_event_name))
+        return new_event_name
 
-    def register_route_change(self, callback_fn):
-        self._route_change_callbacks.append(callback_fn)
+    def register_route_change(self, tk_obj):
+        new_event_name = const.EVENT_ROUTE_CHANGE.format(len(self._route_change_events))
+        self._route_change_events.append((tk_obj, new_event_name))
+        return new_event_name
 
-    def register_event_update(self, callback_fn):
-        self._event_change_callbacks.append(callback_fn)
+    def register_event_update(self, tk_obj):
+        new_event_name = const.EVENT_EVENT_CHANGE.format(len(self._event_change_events))
+        self._event_change_events.append((tk_obj, new_event_name))
+        return new_event_name
 
-    def register_event_selection(self, callback_fn):
-        self._event_selection_callbacks.append(callback_fn)
+    def register_event_selection(self, tk_obj):
+        new_event_name = const.EVENT_SELECTION_CHANGE.format(len(self._event_selection_events))
+        self._event_selection_events.append((tk_obj, new_event_name))
+        return new_event_name
 
-    def register_event_preview(self, callback_fn):
-        self._event_preview_callbacks.append(callback_fn)
+    def register_event_preview(self, tk_obj):
+        new_event_name = const.EVENT_PREVIEW_CHANGE.format(len(self._event_preview_events))
+        self._event_preview_events.append((tk_obj, new_event_name))
+        return new_event_name
 
-    def register_record_mode_change(self, callback_fn):
-        self._record_mode_change_callbacks.append(callback_fn)
+    def register_record_mode_change(self, tk_obj):
+        new_event_name = const.EVENT_RECORD_MODE_CHANGE.format(len(self._record_mode_change_events))
+        self._record_mode_change_events.append((tk_obj, new_event_name))
+        return new_event_name
 
-    def register_exception_callback(self, callback_fn):
-        self._exception_callbacks.append(callback_fn)
+    def register_exception_callback(self, tk_obj):
+        new_event_name = const.EVENT_EXCEPTION.format(len(self._exception_events))
+        self._exception_events.append((tk_obj, new_event_name))
+        return new_event_name
     
     #####
     # Event callbacks
     #####
     
     def _on_name_change(self):
-        for cur_callback in self._name_change_callbacks:
-            try:
-                cur_callback()
-            except Exception as e:
-                logger.error(f"Exception encountered during name change callbacks")
-                logger.exception(e)
+        for tk_obj, cur_event_name in self._name_change_events:
+            tk_obj.event_generate(cur_event_name, when="tail")
     
     def _on_version_change(self):
-        for cur_callback in self._version_change_callbacks:
-            try:
-                cur_callback()
-            except Exception as e:
-                logger.error(f"Exception encountered during version change callbacks")
-                logger.exception(e)
+        for tk_obj, cur_event_name in self._version_change_events:
+            tk_obj.event_generate(cur_event_name, when="tail")
     
-    def _on_route_change(self, debug=False):
-        for cur_callback in self._route_change_callbacks:
-            if debug:
-                logger.info(f"gonna call callback: {cur_callback}")
-            try:
-                cur_callback(debug=debug)
-            except Exception as e:
-                logger.error(f"Exception encountered during route change callbacks")
-                logger.exception(e)
-            if debug:
-                logger.info(f"finished with callback: {cur_callback}")
+    def _on_route_change(self):
+        for tk_obj, cur_event_name in self._route_change_events:
+            tk_obj.event_generate(cur_event_name, when="tail")
 
     def _on_event_change(self):
-        for cur_callback in self._event_change_callbacks:
-            try:
-                cur_callback()
-            except Exception as e:
-                logger.error(f"Exception encountered during event change callbacks")
-                logger.exception(e)
+        for tk_obj, cur_event_name in self._event_change_events:
+            tk_obj.event_generate(cur_event_name, when="tail")
 
         self._on_route_change()
 
     def _on_event_selection(self):
-        for cur_callback in self._event_selection_callbacks:
-            try:
-                cur_callback()
-            except Exception as e:
-                logger.error(f"Exception encountered during event selection callbacks")
-                logger.exception(e)
+        for tk_obj, cur_event_name in self._event_selection_events:
+            tk_obj.event_generate(cur_event_name, when="tail")
 
     def _on_event_preview(self):
-        for cur_callback in self._event_preview_callbacks:
-            try:
-                cur_callback()
-            except Exception as e:
-                logger.error(f"Exception encountered during event preview callbacks")
-                logger.exception(e)
+        for tk_obj, cur_event_name in self._event_preview_events:
+            tk_obj.event_generate(cur_event_name, when="tail")
 
     def _on_record_mode_change(self):
-        for cur_callback in self._record_mode_change_callbacks:
-            try:
-                cur_callback()
-            except Exception as e:
-                logger.error(f"Exception encountered during record mode callbacks")
-                logger.exception(e)
+        for tk_obj, cur_event_name in self._record_mode_change_events:
+            tk_obj.event_generate(cur_event_name, when="tail")
 
     def _on_exception(self, exception_message):
-        for cur_callback in self._exception_callbacks:
-            try:
-                cur_callback(exception_message)
-            except Exception as e:
-                logger.error(f"Exception encountered during exception callbacks lol")
-                logger.exception(e)
+        self._exception_info.append(exception_message)
+        for tk_obj, cur_event_name in self._exception_events:
+            tk_obj.event_generate(cur_event_name, when="tail")
 
     ######
     # Methods that induce a state change
@@ -163,8 +150,15 @@ class MainController:
             self._on_event_preview()
 
     @handle_exceptions
-    def trainer_add_preview(self, trainer_name):
-        self._current_preview_event = EventDefinition(trainer_def=TrainerEventDefinition(trainer_name))
+    def set_preview_trainer(self, trainer_name):
+        if self._current_preview_event is not None and self._current_preview_event.trainer_def.trainer_name == trainer_name:
+            return
+        
+        if pkmn.current_gen_info().trainer_db().get_trainer(trainer_name) is None:
+            self._current_preview_event = None
+        else:
+            self._current_preview_event = EventDefinition(trainer_def=TrainerEventDefinition(trainer_name))
+
         self._on_event_preview()
 
     @handle_exceptions
@@ -223,7 +217,7 @@ class MainController:
         finally:
             self._on_name_change()
             self._on_version_change()
-            self._on_route_change(debug=True)
+            self._on_route_change()
 
     @handle_exceptions
     def customize_dvs(self, new_dvs):
@@ -245,7 +239,31 @@ class MainController:
     @handle_exceptions
     def delete_events(self, event_ids):
         self._data.batch_remove_events(event_ids)
+
+        selection_changed = False
+        for cur_event_id in event_ids:
+            if cur_event_id in self._selected_ids:
+                self._selected_ids.remove(cur_event_id)
+                selection_changed = True
+
         self._on_route_change()
+        if selection_changed:
+            self._on_event_selection()
+
+    @handle_exceptions
+    def purge_empty_folders(self):
+        while True:
+            deleted_ids = []
+            for cur_folder_name, cur_folder in self._data.folder_lookup.items():
+                if cur_folder_name == const.ROOT_FOLDER_NAME:
+                    continue
+                if len(cur_folder.children) == 0:
+                    deleted_ids.append(cur_folder.group_id)
+            
+            if len(deleted_ids) != 0:
+                self.delete_events(deleted_ids)
+            else:
+                break
     
     @handle_exceptions
     def transfer_to_folder(self, event_ids, new_folder_name):
@@ -262,7 +280,6 @@ class MainController:
 
     @handle_exceptions
     def finalize_new_folder(self, new_folder_name, prev_folder_name=None, insert_after=None):
-        logger.info("adding new folder")
         if prev_folder_name is None and insert_after is None:
             self._data.add_event_object(new_folder_name=new_folder_name)
         elif prev_folder_name is None:
@@ -270,9 +287,7 @@ class MainController:
         else:
             self._data.rename_event_folder(prev_folder_name, new_folder_name)
 
-        logger.info("gonna trigger event")
-        self._on_route_change(debug=True)
-        logger.info("event triggered")
+        self._on_route_change()
 
     @handle_exceptions
     def toggle_event_highlight(self, event_ids):
@@ -299,7 +314,7 @@ class MainController:
     def get_current_route_name(self) -> str:
         return self._route_name
 
-    def get_preview_event_id(self):
+    def get_preview_event(self):
         return self._current_preview_event
 
     def get_event_by_id(self, event_id):
@@ -443,7 +458,7 @@ class MainController:
                 elif test_obj.group_id == cur_event_id:
                     cur_event_found = True
             elif isinstance(test_obj, EventFolder):
-                cur_event_found, prev_result = self._walk_events_helper(test_obj, cur_event_id, cur_event_found)
+                cur_event_found, prev_result = self._walk_events_helper(test_obj, cur_event_id, cur_event_found, walk_forward=walk_forward)
                 if cur_event_found and prev_result is not None:
                     return cur_event_found, prev_result
             else:

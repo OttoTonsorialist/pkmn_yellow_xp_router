@@ -81,6 +81,27 @@ class RouteList(custom_tkinter.CustomGridview):
         except (ValueError, IndexError):
             return -1
     
+    def set_all_selected_event_ids(self, event_ids):
+        new_selection = []
+        try:
+            for cur_event_id in event_ids:
+                new_selection.append(self._treeview_id_lookup[cur_event_id])
+            
+            self.selection_set(new_selection)
+        except Exception as e:
+            logger.error(f"Error occurred trying to update eventlist selection:")
+            logger.error(f"event_ids: {event_ids}")
+            logger.exception(e)
+
+        try:
+            if len(new_selection):
+                self.see(new_selection[-1])
+        except Exception as e:
+            # NOTE: this seems to happen when the controller creates a new event and immediately selects it
+            # in that case, the controller moves faster than the event list, so the event to select it fires before it exists
+            # ...maybe. I'm not totally sure. But everything seems fine, so ignore these errors for now
+            pass
+    
     def get_all_selected_event_ids(self, allow_event_items=True):
         temp = set(self.selection())
         result = []
@@ -100,17 +121,10 @@ class RouteList(custom_tkinter.CustomGridview):
         return result
 
     def refresh(self, *args, **kwargs):
-        debug = kwargs.get("debug", False)
         # begin keeping track of the stuff we already know we're displaying
         # so we can eventually delete stuff that has been removed
-        if debug:
-            logger.info(f"gonna refresh routelist")
         to_delete_ids = set(self._treeview_id_lookup.keys())
-        if debug:
-            logger.info(f"to_delete_ids collected")
-        self._refresh_recursively("", self._controller.get_raw_route().root_folder.children, to_delete_ids, debug=debug)
-        if debug:
-            logger.info(f"refreshed")
+        self._refresh_recursively("", self._controller.get_raw_route().root_folder.children, to_delete_ids)
 
         # we have now updated all relevant records, created missing ones, and ordered everything correctly
         # just need to remove any potentially deleted records
@@ -124,20 +138,12 @@ class RouteList(custom_tkinter.CustomGridview):
                 pass
             del self._treeview_id_lookup[cur_del_id]
 
-        if debug:
-            logger.info(f"updated metadata")
         self.event_generate(const.ROUTE_LIST_REFRESH_EVENT)
-        if debug:
-            logger.info(f"follow-up event generated")
     
-    def _refresh_recursively(self, parent_id, event_list, to_delete_ids:set, debug=False):
+    def _refresh_recursively(self, parent_id, event_list, to_delete_ids:set):
         for event_idx, event_obj in enumerate(event_list):
-            if debug:
-                logger.info(f"getting semantic id")
             semantic_id = self._get_attr_helper(event_obj, self._semantic_id_attr)
 
-            if debug:
-                logger.info(f"determining if folder")
             if isinstance(event_obj, route_events.EventFolder):
                 is_folder = True
                 force_open = event_obj.expanded
@@ -145,8 +151,6 @@ class RouteList(custom_tkinter.CustomGridview):
                 is_folder = False
                 force_open = False
 
-            if debug:
-                logger.info(f"upserting")
             if semantic_id in to_delete_ids:
                 to_delete_ids.remove(semantic_id)
                 cur_event_id = self._treeview_id_lookup[semantic_id]
@@ -155,19 +159,13 @@ class RouteList(custom_tkinter.CustomGridview):
                 # when first creating the event, make sure it is defined with a checkbox
                 cur_event_id = self.custom_upsert(event_obj, parent=parent_id, force_open=force_open, update_checkbox=True)
 
-            if debug:
-                logger.info(f"moving")
             if self.index(cur_event_id) != event_idx or self.parent(cur_event_id) != parent_id:
-                if debug:
-                    logger.info(f"had to actually move :/")
                 self.move(cur_event_id, parent_id, event_idx)
 
             if is_folder:
                 self._refresh_recursively(cur_event_id, event_obj.children, to_delete_ids)
 
             elif isinstance(event_obj, route_events.EventGroup):
-                if debug:
-                    logger.info(f"dispalying event group")
                 if len(event_obj.event_items) > 1:
                     for item_idx, item_obj in enumerate(event_obj.event_items):
                         item_semantic_id = self._get_attr_helper(item_obj, self._semantic_id_attr)
@@ -180,8 +178,6 @@ class RouteList(custom_tkinter.CustomGridview):
 
                         if self.index(cur_event_id) != item_idx or self.parent(cur_event_id) != cur_event_id:
                             self.move(item_id, cur_event_id, item_idx)
-            if debug:
-                logger.info(f"donezo")
 
 
 class InventoryViewer(tk.Frame):

@@ -16,10 +16,9 @@ logger = logging.getLogger(__name__)
 
 
 class QuickTrainerAdd(tk.Frame):
-    def __init__(self, controller:MainController, *args, trainer_select_callback=None, **kwargs):
+    def __init__(self, controller:MainController, *args, **kwargs):
         super().__init__(*args, **kwargs, highlightbackground="black", highlightthickness=2)
         self._controller = controller
-        self.trainer_select_callback = trainer_select_callback
 
         self.padx = 5
         self.pady = 1
@@ -63,11 +62,12 @@ class QuickTrainerAdd(tk.Frame):
         self._add_trainer.grid(row=0, column=0, padx=self.padx, pady=self.pady + 1, sticky=tk.E)
         self._add_area = custom_tkinter.SimpleButton(self._buttons, text="Add Area", command=self.add_area)
         self._add_area.grid(row=0, column=1, padx=self.padx, pady=self.pady + 1, sticky=tk.W)
-        self._controller.register_event_selection(self.update_button_status)
-        self._controller.register_version_change(self.update_pkmn_version)
+        self.bind(self._controller.register_event_selection(self), self.update_button_status)
+        self.bind(self._controller.register_version_change(self), self.update_pkmn_version)
+        self.bind(self._controller.register_route_change(self), self.trainer_filter_callback)
         self.update_button_status()
 
-    def update_button_status(self):
+    def update_button_status(self, *args, **kwargs):
         if not self._controller.can_insert_after_current_selection():
             self._add_trainer.disable()
             self._add_area.disable()
@@ -85,9 +85,10 @@ class QuickTrainerAdd(tk.Frame):
             else:
                 self._add_area.enable()
     
-    def update_pkmn_version(self):
+    def update_pkmn_version(self, *args, **kwargs):
         self._trainers_by_loc.new_values([const.ALL_TRAINERS] + sorted(pkmn.current_gen_info().trainer_db().get_all_locations()))
         self._trainers_by_class.new_values([const.ALL_TRAINERS] + sorted(pkmn.current_gen_info().trainer_db().get_all_classes()))
+        self._trainer_name_callback()
 
     def trainer_filter_callback(self, *args, **kwargs):
         loc_filter = self._trainers_by_loc.get()
@@ -111,8 +112,7 @@ class QuickTrainerAdd(tk.Frame):
         if selected_trainer == const.NO_TRAINERS:
             return
 
-        if self.trainer_select_callback is not None:
-            self.trainer_select_callback(selected_trainer)
+        self._controller.set_preview_trainer(selected_trainer)
     
     def add_trainer(self, *args, **kwargs):
         self._controller.new_event(
@@ -184,11 +184,11 @@ class QuickWildPkmn(tk.Frame):
         self._add_trainer_pkmn.grid(row=0, column=1, padx=self.padx, pady=self.pady + 1, sticky=tk.W)
 
         self._level_val.set(5)
-        self._controller.register_event_selection(self.update_button_status)
-        self._controller.register_version_change(self.update_pkmn_version)
+        self.bind(self._controller.register_event_selection(self), self.update_button_status)
+        self.bind(self._controller.register_version_change(self), self.update_pkmn_version)
         self.update_button_status()
 
-    def update_button_status(self):
+    def update_button_status(self, *args, **kwargs):
         if not self._controller.can_insert_after_current_selection():
             self._add_wild_pkmn.disable()
             self._add_trainer_pkmn.disable()
@@ -219,7 +219,7 @@ class QuickWildPkmn(tk.Frame):
             self._add_wild_pkmn.enable()
             self._add_trainer_pkmn.enable()
 
-    def update_pkmn_version(self):
+    def update_pkmn_version(self, *args, **kwargs):
         self._pkmn_types.new_values(pkmn.current_gen_info().pkmn_db().get_all_names())
 
     def _pkmn_filter_callback(self, *args, **kwargs):
@@ -334,15 +334,15 @@ class QuickItemAdd(tk.Frame):
 
         self._buttons.columnconfigure(2, weight=1)
         self._buttons.columnconfigure(6, weight=1)
-        self._controller.register_event_selection(self.update_button_status)
-        self._controller.register_version_change(self.update_pkmn_version)
+        self.bind(self._controller.register_event_selection(self), self.update_button_status)
+        self.bind(self._controller.register_version_change(self), self.update_pkmn_version)
         self.update_button_status()
     
-    def update_pkmn_version(self):
+    def update_pkmn_version(self, *args, **kwargs):
         self._item_selector.new_values(pkmn.current_gen_info().item_db().get_filtered_names())
         self._item_mart_selector.new_values([const.ITEM_TYPE_ALL_ITEMS] + sorted(list(pkmn.current_gen_info().item_db().mart_items.keys())))
 
-    def update_button_status(self):
+    def update_button_status(self, *args, **kwargs):
         if not self._controller.can_insert_after_current_selection():
             self._acquire_button.disable()
             self._drop_button.disable()
@@ -549,11 +549,11 @@ class QuickMiscEvents(tk.Frame):
         self._btn_add_notes = custom_tkinter.SimpleButton(self._buttons, text="Add Notes", command=self.add_notes)
         self._btn_add_notes.grid(row=3, column=0, padx=self.padx, pady=self.pady + 1, sticky=tk.EW)
 
-        self._controller.register_event_selection(self.update_button_status)
-        self._controller.register_version_change(self.update_pkmn_version)
+        self.bind(self._controller.register_event_selection(self), self.update_button_status)
+        self.bind(self._controller.register_version_change(self), self.update_pkmn_version)
         self.update_button_status()
 
-    def update_button_status(self):
+    def update_button_status(self, *args, **kwargs):
         if not self._controller.can_insert_after_current_selection() or self._uninitialized:
             self._btn_add_save.disable()
             self._btn_add_heal.disable()
@@ -566,7 +566,7 @@ class QuickMiscEvents(tk.Frame):
         self._btn_add_black_out.enable()
         self._btn_add_notes.enable()
     
-    def update_pkmn_version(self):
+    def update_pkmn_version(self, *args, **kwargs):
         self._uninitialized = False
 
     def add_save(self, *args, **kwargs):

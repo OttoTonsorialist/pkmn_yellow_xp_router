@@ -136,32 +136,33 @@ class MainWindow(tk.Tk):
         self.top_left_controls = tk.Frame(self.left_info_panel)
         self.top_left_controls.pack(fill=tk.X, anchor=tk.CENTER)
 
+        self.recorder_status = RecorderStatus(self._controller, self._recorder_controller, self.top_left_controls)
+
         self.trainer_add = quick_add_components.QuickTrainerAdd(
             self._controller,
-            self.top_left_controls,
-            trainer_select_callback=self.trainer_add_preview,
+            self.top_left_controls
         )
-        self.trainer_add.grid(row=0, column=0, sticky=tk.NSEW, padx=5, pady=5)
 
         self.item_add = quick_add_components.QuickItemAdd(
             self._controller,
             self.top_left_controls,
         )
-        self.item_add.grid(row=0, column=1, sticky=tk.NSEW, padx=5, pady=5)
 
         self.wild_pkmn_add = quick_add_components.QuickWildPkmn(
             self._controller,
             self.top_left_controls,
         )
-        self.wild_pkmn_add.grid(row=0, column=2, sticky=tk.NSEW, padx=5, pady=5)
 
         self.misc_add = quick_add_components.QuickMiscEvents(
             self._controller,
             self.top_left_controls,
         )
-        self.misc_add.grid(row=0, column=3, sticky=tk.NSEW, padx=5, pady=5)
 
-        self.recorder_status = RecorderStatus(self._controller, self._recorder_controller, self.top_left_controls)
+        self.recorder_status.grid(row=0, column=0, sticky=tk.NSEW, padx=5, pady=5, columnspan=4)
+        self.trainer_add.grid(row=0, column=0, sticky=tk.NSEW, padx=5, pady=5)
+        self.item_add.grid(row=0, column=1, sticky=tk.NSEW, padx=5, pady=5)
+        self.wild_pkmn_add.grid(row=0, column=2, sticky=tk.NSEW, padx=5, pady=5)
+        self.misc_add.grid(row=0, column=3, sticky=tk.NSEW, padx=5, pady=5)
 
         self.group_controls = tk.Frame(self.left_info_panel)
         self.group_controls.pack(fill=tk.X, anchor=tk.CENTER)
@@ -233,13 +234,13 @@ class MainWindow(tk.Tk):
         self.bind(const.ROUTE_LIST_REFRESH_EVENT, self.update_run_status)
         self.bind(const.FORCE_QUIT_EVENT, self.cancel_and_quit)
 
-        self._controller.register_event_selection(self._handle_new_selection)
-        self._controller.register_version_change(self.update_run_version)
-        self._controller.register_exception_callback(self._on_exception)
-        self._controller.register_name_change(self._on_name_change)
-        self._controller.register_record_mode_change(self._on_record_mode_changed)
+        self.bind(self._controller.register_event_selection(self), self._handle_new_selection)
+        self.bind(self._controller.register_version_change(self), self.update_run_version)
+        self.bind(self._controller.register_exception_callback(self), self._on_exception)
+        self.bind(self._controller.register_name_change(self), self._on_name_change)
+        self.bind(self._controller.register_record_mode_change(self), self._on_record_mode_changed)
         # TODO: should this be moved directly to the event list class?
-        self._controller.register_route_change(self.event_list.refresh)
+        self.bind(self._controller.register_route_change(self), self.event_list.refresh)
 
         self.event_list.refresh()
         self.new_event_window = None
@@ -252,14 +253,17 @@ class MainWindow(tk.Tk):
         config.set_window_geometry(self.geometry())
         self.destroy()
     
-    def _on_exception(self, exception_message):
-        threading.Thread(
-            target=messagebox.showerror,
-            args=("Error!", exception_message),
-            daemon=True
-        ).start()
+    def _on_exception(self, *args, **kwargs):
+        exception_message = self._controller.get_next_exception_info()
+        while exception_message is not None:
+            threading.Thread(
+                target=messagebox.showerror,
+                args=("Error!", exception_message),
+                daemon=True
+            ).start()
+            exception_message = self._controller.get_next_exception_info()
     
-    def _on_name_change(self):
+    def _on_name_change(self, *args, **kwargs):
         self.route_name.delete(0, tk.END)
         self.route_name.insert(0, self._controller.get_current_route_name())
 
@@ -295,17 +299,16 @@ class MainWindow(tk.Tk):
     def record_button_clicked(self, *args, **kwargs):
         self._controller.set_record_mode(not self._controller.is_record_mode_active())
     
-    def _on_record_mode_changed(self):
+    def _on_record_mode_changed(self, *args, **kwargs):
         if self._controller.is_record_mode_active():
             self.record_button.configure(text="Cancel\nRecording")
-            self.recorder_status.grid(row=0, column=0, sticky=tk.NSEW, padx=5, pady=5, columnspan=4)
+            self.recorder_status.lift()
         else:
             self.record_button.configure(text="Enable\nRecording")
-            self.recorder_status.grid_forget()
+            self.recorder_status.lower()
         self._handle_new_selection()
 
-    def trainer_add_preview(self, trainer_name):
-        # TODO: should migrate this to use the controller...
+    def trainer_preview(self):
         all_event_ids = self.event_list.get_all_selected_event_ids()
         if len(all_event_ids) > 1:
             return
@@ -317,7 +320,7 @@ class MainWindow(tk.Tk):
         # create a fake event_def just so we can show the trainer that the user is looking at
         # TODO: just using the init_state as the post_event state as well. Ideally would like to use None for an empty state, but that's not currently supported
         self.event_details.show_event_details(
-            EventDefinition(trainer_def=TrainerEventDefinition(trainer_name)),
+            self._controller.get_preview_event(),
             init_state,
             init_state,
             allow_updates=False
@@ -327,9 +330,19 @@ class MainWindow(tk.Tk):
         # this is different from _handle_new_selection as we are reporting the new selection
         # from the users action (via a tk event) to the controller
         # _handle_new_selection will respond to the controller's event about the selection changing
-        self._controller.select_new_events(self.event_list.get_all_selected_event_ids())
+
+        # guard against unnecessary updates so that the treeview can be updated without creating an infinite loop
+        cur_treeview_selected = self.event_list.get_all_selected_event_ids()
+        if self._controller.get_all_selected_ids() != cur_treeview_selected:
+            self._controller.select_new_events(cur_treeview_selected)
     
     def _handle_new_selection(self, *args, **kwargs):
+        # just re-use the variable temporarily
+        all_event_ids = self._controller.get_all_selected_ids()
+        if all_event_ids != self.event_list.get_all_selected_event_ids():
+            self.event_list.set_all_selected_event_ids(all_event_ids)
+
+        # now assign it the value it will have for the rest of the function
         all_event_ids = self.event_list.get_all_selected_event_ids(allow_event_items=False)
         if len(all_event_ids) > 1 or len(all_event_ids) == 0:
             event_group = None

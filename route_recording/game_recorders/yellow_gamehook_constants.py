@@ -12,9 +12,16 @@ class Gen1GameHookConstants:
         self.RESET_FLAG = const.RECORDING_ERROR_FRAGMENT + "FLAG TO SIGNAL GAME RESET. USER SHOULD NEVER SEE THIS"
         self.TRAINER_LOSS_FLAG = const.RECORDING_ERROR_FRAGMENT + "FLAG TO SIGNAL LOSING TO TRAINER. USER SHOULD NEVER SEE THIS"
         self.OAKS_PARCEL = "Oak's Parcel"
+        self.NUGGET = "Nugget"
+        self.ROUTE_24 = "Route 24"
+        self.NUGGET_ROCKET = "Rocket 6"
+        self.DOME_FOSSIL = "Dome Fossil"
+        self.MT_MOON = "Mt Moon"
 
         self.KEY_OVERWORLD_MAP = "overworld.map"
+        self.KEY_AUDIO_CHANNEL_4 = "audio.channel4"
         self.KEY_AUDIO_CHANNEL_5 = "audio.channel5"
+        self.KEY_AUDIO_CHANNEL_7 = "audio.channel7"
         self.KEY_PLAYER_PLAYERID = "player.playerId"
         self.KEY_PLAYER_MONEY = "player.money"
         self.KEY_PLAYER_MON_EXPPOINTS = "player.team.0.expPoints"
@@ -60,6 +67,7 @@ class Gen1GameHookConstants:
 
         self.ALL_KEYS_TO_REGISTER = [
             self.KEY_OVERWORLD_MAP,
+            self.KEY_AUDIO_CHANNEL_4,
             self.KEY_AUDIO_CHANNEL_5,
             self.KEY_PLAYER_PLAYERID,
             self.KEY_PLAYER_MONEY,
@@ -265,8 +273,35 @@ class GameHookConstantConverter:
         return area_name
 
 
+class RedBlueGameHookConstantConverter(GameHookConstantConverter):
+    def trainer_name_convert(self, trainer_class:str, trainer_num:int, overworld_map:str):
+        trainer_class = self._trainer_class_convert(trainer_class)
+
+        converted_name = f"{trainer_class} {trainer_num}"
+        if converted_name == "JrTrainerM 2" and overworld_map == "Route 25":
+            converted_name += " Duplicate"
+        elif converted_name == "Hiker 11" and overworld_map.startswith("Rock Tunnel"):
+            converted_name += " Duplicate"
+        elif converted_name == "Scientist 4" and overworld_map.startswith("Cinnabar Mansion"):
+            converted_name += " Duplicate"
+        elif converted_name == "Gentleman 3" and overworld_map == "Vermilion City - Gym":
+            converted_name += " Duplicate"
+        elif trainer_class.startswith("Rival"):
+            starter_selector = (trainer_num - 1) % 3
+            if starter_selector == 0:
+                starter_mon = "Squirtle"
+            elif starter_selector == 1:
+                starter_mon = "Bulbasaur"
+            elif starter_selector == 2:
+                starter_mon = "Charmander"
+            
+            trainer_num = (trainer_num // 3) + 1
+            if trainer_class == "Rival3":
+                converted_name = f"{trainer_class} {starter_mon}"
+            else:
+                converted_name = f"{trainer_class} {starter_mon} {trainer_num}"
+        
+        return converted_name
+    
+
 gh_gen_one_const = Gen1GameHookConstants()
-gh_converter = GameHookConstantConverter()
-
-
-

@@ -104,7 +104,7 @@ class GenOneConstants:
 
         self.FIGHT_REWARDS = {
             "Brock 1": "TM34 Bide",
-            "Misty 1": "TM11 Bubblebeam",
+            "Misty 1": "TM11 BubbleBeam",
             "LtSurge 1": "TM24 Thunderbolt",
             "Erika 1": "TM21 Mega Drain",
             "Koga 1": "TM06 Toxic",

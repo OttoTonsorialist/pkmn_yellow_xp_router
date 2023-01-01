@@ -4,7 +4,7 @@ import logging
 from route_recording.game_recorders.yellow_fsm import Machine, State, StateType
 from route_recording.gamehook_client import GameHookProperty
 from routing.route_events import BlackoutEventDefinition, EventDefinition, HealEventDefinition, InventoryEventDefinition, LearnMoveEventDefinition, RareCandyEventDefinition, SaveEventDefinition, TrainerEventDefinition, VitaminEventDefinition, WildPkmnEventDefinition
-from route_recording.game_recorders.yellow_gamehook_constants import gh_gen_one_const, gh_converter
+from route_recording.game_recorders.yellow_gamehook_constants import gh_gen_one_const
 from utils.constants import const
 
 logger = logging.getLogger(__name__)
@@ -53,7 +53,11 @@ class UninitializedState(WatchForResetState):
     def transition(self, new_prop:GameHookProperty, prev_prop:GameHookProperty) -> StateType:
         if new_prop.path == gh_gen_one_const.KEY_GAMETIME_SECONDS:
             if self._seconds_delay <= 0:
-                return StateType.OVERWORLD
+                cur_battle_mode = self.machine._gamehook_client.get(gh_gen_one_const.KEY_BATTLE_TYPE)
+                if cur_battle_mode == gh_gen_one_const.WILD_BATTLE_TYPE or cur_battle_mode == gh_gen_one_const.TRAINER_BATTLE_TYPE:
+                    return StateType.BATTLE
+                else:
+                    return StateType.OVERWORLD
             elif not self._is_waiting and self.machine._gamehook_client.get(gh_gen_one_const.KEY_PLAYER_PLAYERID).value != 0:
                 self._is_waiting = True
 
@@ -72,7 +76,6 @@ class ResettingState(State):
     def _on_enter(self, prev_state: State):
         self._is_waiting = False
         self._seconds_delay = 2
-        # TODO: ugly, but wtv. Revisit later maybe. Send an object that's basically just a flag to reset
         self.machine._queue_new_event(EventDefinition(notes=gh_gen_one_const.RESET_FLAG))
     
     def _on_exit(self, next_state: State):
@@ -122,7 +125,7 @@ class BattleState(WatchForResetState):
         self._loss_detected = False
 
         if self.is_trainer_battle:
-            self._trainer_name = gh_converter.trainer_name_convert(
+            self._trainer_name = self.machine.gh_converter.trainer_name_convert(
                 self.machine._gamehook_client.get(gh_gen_one_const.KEY_BATTLE_TRAINER_CLASS).value,
                 self.machine._gamehook_client.get(gh_gen_one_const.KEY_BATTLE_TRAINER_NUMBER).value,
                 self.machine._gamehook_client.get(gh_gen_one_const.KEY_OVERWORLD_MAP).value,
@@ -139,6 +142,10 @@ class BattleState(WatchForResetState):
                 self.machine._queue_new_event(
                     EventDefinition(trainer_def=TrainerEventDefinition(self._trainer_name), notes=gh_gen_one_const.TRAINER_LOSS_FLAG)
                 )
+                # super special case. If we lost to the rocket on nugget bridge
+                # He gives you the nugget before the fight, so make sure that happens
+                if self._trainer_name == gh_gen_one_const.NUGGET_ROCKET:
+                    self.machine._queue_new_event(EventDefinition(item_event_def=InventoryEventDefinition(gh_gen_one_const.NUGGET, 1, True, False)))
                 for trainer_mon_event in self._defeated_trainer_mons:
                     self.machine._queue_new_event(trainer_mon_event)
                 self.machine._queue_new_event(EventDefinition(blackout=BlackoutEventDefinition()))
@@ -196,58 +203,45 @@ class BattleState(WatchForResetState):
         return self.state_type
 
 
-class ItemGainState(WatchForResetState):
+class InventoryChangeState(WatchForResetState):
+    BASE_DELAY = 2
     def __init__(self, machine: Machine):
-        super().__init__(StateType.GAIN_ITEM, machine)
-        self._seconds_delay = None
-        self._money_lost = False
-    
-    def _on_enter(self, prev_state: State):
-        self._seconds_delay = 2
-        self._money_lost = False
-    
-    def _on_exit(self, next_state: State):
-        if next_state.state_type != StateType.RESETTING:
-            self.machine._item_cache_update(purchase_expected=self._money_lost)
-    
-    @auto_reset
-    def transition(self, new_prop:GameHookProperty, prev_prop:GameHookProperty) -> StateType:
-        if new_prop.path == gh_gen_one_const.KEY_PLAYER_MONEY:
-            if new_prop.value < prev_prop.value:
-                self._money_lost = True
-        elif new_prop.path == gh_gen_one_const.KEY_GAMETIME_SECONDS:
-            if self._seconds_delay <= 0:
-                return StateType.OVERWORLD
-            else:
-                self._seconds_delay -= 1
-
-        return self.state_type
-
-
-class ItemLoseState(WatchForResetState):
-    def __init__(self, machine: Machine):
-        super().__init__(StateType.LOSE_ITEM, machine)
-        self._seconds_delay = None
+        super().__init__(StateType.INVENTORY_CHANGE, machine)
+        self._seconds_delay = self.BASE_DELAY
         self._money_gained = False
+        self._money_lost = False
     
     def _on_enter(self, prev_state: State):
-        self._seconds_delay = 2
+        self._seconds_delay = self.BASE_DELAY
         self._money_gained = True if self.machine._money_cache_update() else False
+        self._money_lost = False
     
     def _on_exit(self, next_state: State):
         if next_state.state_type != StateType.RESETTING:
-            self.machine._item_cache_update(sale_expected=self._money_gained)
+            self.machine._item_cache_update(sale_expected=self._money_gained, purchase_expected=self._money_lost)
     
     @auto_reset
     def transition(self, new_prop:GameHookProperty, prev_prop:GameHookProperty) -> StateType:
         if new_prop.path == gh_gen_one_const.KEY_PLAYER_MONEY:
             if new_prop.value > prev_prop.value:
                 self._money_gained = True
-        elif new_prop.path == gh_gen_one_const.KEY_GAMETIME_SECONDS:
-            if self._seconds_delay <= 0:
-                return StateType.OVERWORLD
             else:
-                self._seconds_delay -= 1
+                self._money_lost = True
+        elif (
+            new_prop.path == gh_gen_one_const.KEY_ITEM_COUNT or
+            new_prop.path in gh_gen_one_const.ALL_KEYS_ITEM_QUANTITY or
+            new_prop.path in gh_gen_one_const.ALL_KEYS_ITEM_TYPE
+        ):
+            self._seconds_delay = self.BASE_DELAY
+        elif new_prop.path == gh_gen_one_const.KEY_GAMETIME_SECONDS:
+            # stupid hack for vending machines (listening for the rumble)
+            # vending machines are the only purchase in the game that deducts your money _after_ the item is added
+            # and it does it after that very long sound effect too. wait for the sound effect to finish
+            if self.machine._gamehook_client.get(gh_gen_one_const.KEY_AUDIO_CHANNEL_7).value != 168:
+                if self._seconds_delay <= 0:
+                    return StateType.OVERWORLD
+                else:
+                    self._seconds_delay -= 1
 
         return self.state_type
 
@@ -256,13 +250,11 @@ class UseRareCandyState(WatchForResetState):
     def __init__(self, machine: Machine):
         super().__init__(StateType.RARE_CANDY, machine)
         self._move_learned = False
-        self._waiting_flag = False
-        self._delay = 2
+        self._item_removal_detected = False
 
     def _on_enter(self, prev_state: State):
-        self._move_learned = True
-        self._waiting_flag = False
-        self._delay = 2
+        self._move_learned = False
+        self._item_removal_detected = False
     
     def _on_exit(self, next_state: State):
         if next_state.state_type != StateType.RESETTING:
@@ -275,17 +267,14 @@ class UseRareCandyState(WatchForResetState):
     def transition(self, new_prop:GameHookProperty, prev_prop:GameHookProperty) -> StateType:
         if new_prop.path in gh_gen_one_const.ALL_KEYS_PLAYER_MOVES:
             self._move_learned = True
-        elif (
-            new_prop.path in gh_gen_one_const.ALL_KEYS_ITEM_QUANTITY or
-            new_prop.path in gh_gen_one_const.ALL_KEYS_ITEM_TYPE or
-            new_prop.path == gh_gen_one_const.KEY_ITEM_COUNT
-        ):
-            self._waiting_flag = True
-        elif new_prop.path == gh_gen_one_const.KEY_GAMETIME_SECONDS:
-            if self._waiting_flag:
-                if self._delay <= 0:
-                    return StateType.OVERWORLD
-                self._delay -= 1
+        elif new_prop.path == gh_gen_one_const.KEY_ITEM_COUNT:
+            self._item_removal_detected = True
+        elif new_prop.path in gh_gen_one_const.ALL_KEYS_ITEM_QUANTITY:
+            if not self._item_removal_detected:
+                return StateType.OVERWORLD
+        elif new_prop.path in gh_gen_one_const.ALL_KEYS_ITEM_TYPE:
+            if new_prop.value == gh_gen_one_const.END_OF_ITEM_LIST:
+                return StateType.OVERWORLD
 
         return self.state_type
 
@@ -293,12 +282,10 @@ class UseRareCandyState(WatchForResetState):
 class UseTMState(WatchForResetState):
     def __init__(self, machine: Machine):
         super().__init__(StateType.TM, machine)
-        self._waiting_flag = False
-        self._delay = 2
+        self._item_removal_detected = False
 
     def _on_enter(self, prev_state: State):
-        self._waiting_flag = False
-        self._delay = 2
+        self._item_removal_detected = False
     
     def _on_exit(self, next_state: State):
         if next_state.state_type != StateType.RESETTING:
@@ -306,17 +293,14 @@ class UseTMState(WatchForResetState):
     
     @auto_reset
     def transition(self, new_prop:GameHookProperty, prev_prop:GameHookProperty) -> StateType:
-        if (
-            new_prop.path in gh_gen_one_const.ALL_KEYS_ITEM_QUANTITY or
-            new_prop.path in gh_gen_one_const.ALL_KEYS_ITEM_TYPE or
-            new_prop.path == gh_gen_one_const.KEY_ITEM_COUNT
-        ):
-            self._waiting_flag = True
-        elif new_prop.path == gh_gen_one_const.KEY_GAMETIME_SECONDS:
-            if self._waiting_flag:
-                if self._delay <= 0:
-                    return StateType.OVERWORLD
-                self._delay -= 1
+        if new_prop.path == gh_gen_one_const.KEY_ITEM_COUNT:
+            self._item_removal_detected = True
+        elif new_prop.path in gh_gen_one_const.ALL_KEYS_ITEM_QUANTITY:
+            if not self._item_removal_detected:
+                return StateType.OVERWORLD
+        elif new_prop.path in gh_gen_one_const.ALL_KEYS_ITEM_TYPE:
+            if new_prop.value == gh_gen_one_const.END_OF_ITEM_LIST:
+                return StateType.OVERWORLD
 
         return self.state_type
 
@@ -324,12 +308,10 @@ class UseTMState(WatchForResetState):
 class UseVitaminState(WatchForResetState):
     def __init__(self, machine: Machine):
         super().__init__(StateType.VITAMIN, machine)
-        self._waiting_flag = False
-        self._delay = 2
+        self._item_removal_detected = False
 
     def _on_enter(self, prev_state: State):
-        self._waiting_flag = False
-        self._delay = 2
+        self._item_removal_detected = False
     
     def _on_exit(self, next_state: State):
         if next_state.state_type != StateType.RESETTING:
@@ -337,17 +319,14 @@ class UseVitaminState(WatchForResetState):
     
     @auto_reset
     def transition(self, new_prop:GameHookProperty, prev_prop:GameHookProperty) -> StateType:
-        if (
-            new_prop.path in gh_gen_one_const.ALL_KEYS_ITEM_QUANTITY or
-            new_prop.path in gh_gen_one_const.ALL_KEYS_ITEM_TYPE or
-            new_prop.path == gh_gen_one_const.KEY_ITEM_COUNT
-        ):
-            self._waiting_flag = True
-        elif new_prop.path == gh_gen_one_const.KEY_GAMETIME_SECONDS:
-            if self._waiting_flag:
-                if self._delay <= 0:
-                    return StateType.OVERWORLD
-                self._delay -= 1
+        if new_prop.path == gh_gen_one_const.KEY_ITEM_COUNT:
+            self._item_removal_detected = True
+        elif new_prop.path in gh_gen_one_const.ALL_KEYS_ITEM_QUANTITY:
+            if not self._item_removal_detected:
+                return StateType.OVERWORLD
+        elif new_prop.path in gh_gen_one_const.ALL_KEYS_ITEM_TYPE:
+            if new_prop.value == gh_gen_one_const.END_OF_ITEM_LIST:
+                return StateType.OVERWORLD
 
         return self.state_type
 
@@ -364,6 +343,12 @@ class OverworldState(WatchForResetState):
         self._register_delay = 2
         self._waiting_for_new_file = False
         self._new_file_delay = 2
+        self._waiting_for_heal_completion = False
+        self._heal_delay = 2
+
+        self._waiting_for_solo_mon_in_slot_1 = False
+        self._wrong_mon_delay = 2
+        self._wrong_mon_in_slot_1 = False
     
     def _on_exit(self, next_state: State):
         pass
@@ -371,7 +356,7 @@ class OverworldState(WatchForResetState):
     @auto_reset
     def transition(self, new_prop:GameHookProperty, prev_prop:GameHookProperty) -> StateType:
         # intentionally ignore all updates while waiting for a new file
-        if self._waiting_for_new_file:
+        if self._waiting_for_new_file or self._waiting_for_solo_mon_in_slot_1:
             if new_prop.path == gh_gen_one_const.KEY_GAMETIME_SECONDS:
                 if self._new_file_delay <= 0:
                     self._waiting_for_new_file = False
@@ -384,67 +369,72 @@ class OverworldState(WatchForResetState):
         if new_prop.path == gh_gen_one_const.KEY_BATTLE_TYPE:
             return StateType.BATTLE
         elif new_prop.path == gh_gen_one_const.KEY_OVERWORLD_MAP:
-            self.machine._controller.entered_new_area(gh_converter.area_name_convert(new_prop.value))
+            self.machine._controller.entered_new_area(self.machine.gh_converter.area_name_convert(new_prop.value))
         elif new_prop.path == gh_gen_one_const.KEY_PLAYER_PLAYERID:
             if prev_prop.value and self.machine._player_id != self.machine._gamehook_client.get(gh_gen_one_const.KEY_PLAYER_PLAYERID).value:
                 self._waiting_for_new_file = True
-        elif new_prop.path == gh_gen_one_const.KEY_ITEM_COUNT:
-            if new_prop.value > prev_prop.value:
-                return StateType.GAIN_ITEM
-            else:
-                return StateType.LOSE_ITEM
-        elif new_prop.path in gh_gen_one_const.ALL_KEYS_ITEM_QUANTITY:
-            if new_prop.value > prev_prop.value:
-                return StateType.GAIN_ITEM
-            else:
-                return StateType.LOSE_ITEM
-        elif new_prop.path in gh_gen_one_const.ALL_KEYS_ITEM_TYPE:
-            # Kinda weird, but if type changes (AND count did not change first) this actually suggests someone messing around via gamehook
-            # as a result, we still want to try and handle it. Sending this case to lose_item *should* still accurately cover most cases
-            return StateType.LOSE_ITEM
+        elif (
+            new_prop.path == gh_gen_one_const.KEY_ITEM_COUNT or
+            new_prop.path in gh_gen_one_const.ALL_KEYS_ITEM_QUANTITY or
+            new_prop.path in gh_gen_one_const.ALL_KEYS_ITEM_TYPE
+        ):
+            return StateType.INVENTORY_CHANGE
         elif new_prop.path == gh_gen_one_const.KEY_PLAYER_MONEY:
             cur_location = self.machine._gamehook_client.get(gh_gen_one_const.KEY_OVERWORLD_MAP).value
             if new_prop.value > prev_prop.value and cur_location != gh_gen_one_const.MAP_GAME_CORNER:
                 # Kinda ugly, but intentionally configuring the cached money value to be correct for the sale check
                 self.machine._cached_money = prev_prop.value
-                return StateType.LOSE_ITEM
+                return StateType.INVENTORY_CHANGE
         elif new_prop.path == gh_gen_one_const.KEY_PLAYER_MON_SPECIES:
             if not prev_prop.value:
                 self._waiting_for_registration = True
+            elif self.machine._solo_mon_species == self.machine.gh_converter.pkmn_name_convert(prev_prop.value):
+                self._wrong_mon_in_slot_1 = True
+            elif self.machine._solo_mon_species == self.machine.gh_converter.pkmn_name_convert(new_prop.value):
+                self._wrong_mon_delay = 2
+                self._waiting_for_solo_mon_in_slot_1 = True
         elif new_prop.path == gh_gen_one_const.KEY_PLAYER_MON_LEVEL:
-            if (
-                not self._waiting_for_registration and 
-                self.machine._solo_mon_species == gh_converter.pkmn_name_convert(self.machine._gamehook_client.get(gh_gen_one_const.KEY_PLAYER_MON_SPECIES).value)
-            ):
+            if not self._waiting_for_registration and not self._wrong_mon_in_slot_1:
                 return StateType.RARE_CANDY
         elif new_prop.path in gh_gen_one_const.ALL_KEYS_PLAYER_MOVES:
             # This can occur if the player (for some reason, likely on accident) re-orders their party
             # let's try to prevent that from being an issue
-            if (
-                not self._waiting_for_registration and 
-                self.machine._solo_mon_species == gh_converter.pkmn_name_convert(self.machine._gamehook_client.get(gh_gen_one_const.KEY_PLAYER_MON_SPECIES).value)
-            ):
-                if gh_converter.get_hm_name(new_prop.value) is not None:
+            if not self._waiting_for_registration and not self._wrong_mon_in_slot_1:
+                if self.machine.gh_converter.get_hm_name(new_prop.value) is not None:
                     self.machine._move_cache_update(hm_expected=True)
                 else:
                     return StateType.TM
         elif new_prop.path in gh_gen_one_const.ALL_KEYS_STAT_EXP:
-            if (
-                not self._waiting_for_registration and 
-                self.machine._solo_mon_species == gh_converter.pkmn_name_convert(self.machine._gamehook_client.get(gh_gen_one_const.KEY_PLAYER_MON_SPECIES).value)
-            ):
+            if not self._waiting_for_registration and not self._wrong_mon_in_slot_1:
                 return StateType.VITAMIN
         elif new_prop.path == gh_gen_one_const.KEY_AUDIO_CHANNEL_5:
-            if new_prop.value == 158:
+            if new_prop.value == 158 and not self._waiting_for_heal_completion:
                 self.machine._queue_new_event(EventDefinition(heal=HealEventDefinition(location=self.machine._gamehook_client.get(gh_gen_one_const.KEY_OVERWORLD_MAP).value)))
+                self._waiting_for_heal_completion = True
+                self._heal_delay = 2
             elif new_prop.value == 182:
                 self.machine._queue_new_event(EventDefinition(save=SaveEventDefinition(location=self.machine._gamehook_client.get(gh_gen_one_const.KEY_OVERWORLD_MAP).value)))
+        elif new_prop.path == gh_gen_one_const.KEY_AUDIO_CHANNEL_4:
+            # channel 4 for R/B pokecenters, channel 5 for Y
+            if new_prop.value == 158 and not self._waiting_for_heal_completion:
+                self.machine._queue_new_event(EventDefinition(heal=HealEventDefinition(location=self.machine._gamehook_client.get(gh_gen_one_const.KEY_OVERWORLD_MAP).value)))
+                self._waiting_for_heal_completion = True
+                self._heal_delay = 2
         elif new_prop.path == gh_gen_one_const.KEY_GAMETIME_SECONDS:
             if self._waiting_for_registration:
                 if self._register_delay <= 0:
                     self._waiting_for_registration = False
                     self.machine.register_solo_mon(self.machine._gamehook_client.get(gh_gen_one_const.KEY_PLAYER_MON_SPECIES).value)
                 self._register_delay -= 1
+            if self._waiting_for_heal_completion:
+                if self._heal_delay <= 0:
+                    self._waiting_for_heal_completion = False
+                self._heal_delay -= 1
+            if self._waiting_for_solo_mon_in_slot_1:
+                if self._wrong_mon_delay <= 0:
+                    self._waiting_for_solo_mon_in_slot_1 = False
+                    self._wrong_mon_in_slot_1 = False
+                self._wrong_mon_delay -= 1
 
 
         return self.state_type
