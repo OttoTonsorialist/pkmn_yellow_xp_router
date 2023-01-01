@@ -3,7 +3,7 @@ import logging
 import tkinter as tk
 from controllers.main_controller import MainController
 
-from gui import custom_tkinter
+from gui import custom_components
 from routing.route_events import \
     EventDefinition, EventItem, HoldItemEventDefinition, InventoryEventDefinition, LearnMoveEventDefinition, \
     RareCandyEventDefinition, TrainerEventDefinition, VitaminEventDefinition, WildPkmnEventDefinition, \
@@ -29,27 +29,27 @@ class QuickTrainerAdd(tk.Frame):
 
         self._cur_row = 0
         self._trainers_by_loc_label = tk.Label(self._dropdowns, text="Location:", justify=tk.LEFT)
-        self._trainers_by_loc = custom_tkinter.SimpleOptionMenu(self._dropdowns, [const.ALL_TRAINERS], callback=self.trainer_filter_callback)
+        self._trainers_by_loc = custom_components.SimpleOptionMenu(self._dropdowns, [const.ALL_TRAINERS], callback=self.trainer_filter_callback)
         self._trainers_by_loc.configure(width=self.option_menu_width)
         self._trainers_by_loc_label.grid(row=self._cur_row, column=0, padx=self.padx, pady=self.pady, sticky=tk.W)
         self._trainers_by_loc.grid(row=self._cur_row, column=1, padx=self.padx, pady=self.pady, sticky=tk.E)
         self._cur_row += 1
 
         self._trainers_by_class_label = tk.Label(self._dropdowns, text="Trainer Class:", justify=tk.LEFT)
-        self._trainers_by_class = custom_tkinter.SimpleOptionMenu(self._dropdowns, [const.ALL_TRAINERS], callback=self.trainer_filter_callback)
+        self._trainers_by_class = custom_components.SimpleOptionMenu(self._dropdowns, [const.ALL_TRAINERS], callback=self.trainer_filter_callback)
         self._trainers_by_class.configure(width=self.option_menu_width)
         self._trainers_by_class_label.grid(row=self._cur_row, column=0, padx=self.padx, pady=self.pady, sticky=tk.W)
         self._trainers_by_class.grid(row=self._cur_row, column=1, padx=self.padx, pady=self.pady, sticky=tk.E)
         self._cur_row += 1
 
         self._trainer_names_label = tk.Label(self._dropdowns, text="Trainer:", justify=tk.LEFT)
-        self._trainer_names = custom_tkinter.SimpleOptionMenu(self._dropdowns, [const.NO_TRAINERS], callback=self._trainer_name_callback)
+        self._trainer_names = custom_components.SimpleOptionMenu(self._dropdowns, [const.NO_TRAINERS], callback=self._trainer_name_callback)
         self._trainer_names.configure(width=self.option_menu_width)
         self._trainer_names_label.grid(row=self._cur_row, column=0, padx=self.padx, pady=self.pady, sticky=tk.W)
         self._trainer_names.grid(row=self._cur_row, column=1, padx=self.padx, pady=self.pady, sticky=tk.E)
         self._cur_row += 1
 
-        self._rematches_label = custom_tkinter.CheckboxLabel(self._dropdowns, text="Show Rematches:", flip=True, toggle_command=self.trainer_filter_callback)
+        self._rematches_label = custom_components.CheckboxLabel(self._dropdowns, text="Show Rematches:", flip=True, toggle_command=self.trainer_filter_callback)
         self._rematches_label.configure(width=self.option_menu_width)
         self._rematches_label.grid(row=self._cur_row, column=0, columnspan=2, padx=self.padx, pady=self.pady, sticky=tk.EW)
         self._cur_row += 1
@@ -58,9 +58,9 @@ class QuickTrainerAdd(tk.Frame):
         self._buttons.pack(fill=tk.X, anchor=tk.CENTER, side=tk.BOTTOM)
         self._btn_width = 8
 
-        self._add_trainer = custom_tkinter.SimpleButton(self._buttons, text="Add Trainer", command=self.add_trainer)
+        self._add_trainer = custom_components.SimpleButton(self._buttons, text="Add Trainer", command=self.add_trainer)
         self._add_trainer.grid(row=0, column=0, padx=self.padx, pady=self.pady + 1, sticky=tk.E)
-        self._add_area = custom_tkinter.SimpleButton(self._buttons, text="Add Area", command=self.add_area)
+        self._add_area = custom_components.SimpleButton(self._buttons, text="Add Area", command=self.add_area)
         self._add_area.grid(row=0, column=1, padx=self.padx, pady=self.pady + 1, sticky=tk.W)
         self.bind(self._controller.register_event_selection(self), self.update_button_status)
         self.bind(self._controller.register_version_change(self), self.update_pkmn_version)
@@ -147,28 +147,28 @@ class QuickWildPkmn(tk.Frame):
 
         self._cur_row = 0
         self._pkmn_filter_label = tk.Label(self._dropdowns, text="Filter:", justify=tk.LEFT)
-        self._pkmn_filter = custom_tkinter.SimpleEntry(self._dropdowns, callback=self._pkmn_filter_callback)
+        self._pkmn_filter = custom_components.SimpleEntry(self._dropdowns, callback=self._pkmn_filter_callback)
         self._pkmn_filter.configure(width=self.option_menu_width)
         self._pkmn_filter_label.grid(row=self._cur_row, column=0, padx=self.padx, pady=self.pady, sticky=tk.W)
         self._pkmn_filter.grid(row=self._cur_row, column=1, padx=self.padx, pady=self.pady, sticky=tk.E)
         self._cur_row += 1
 
         self._pkmn_types_label = tk.Label(self._dropdowns, text="Wild Pkmn:", justify=tk.LEFT)
-        self._pkmn_types = custom_tkinter.SimpleOptionMenu(self._dropdowns, [const.NO_POKEMON])
+        self._pkmn_types = custom_components.SimpleOptionMenu(self._dropdowns, [const.NO_POKEMON])
         self._pkmn_types.configure(width=self.option_menu_width)
         self._pkmn_types_label.grid(row=self._cur_row, column=0, padx=self.padx, pady=self.pady, sticky=tk.W)
         self._pkmn_types.grid(row=self._cur_row, column=1, padx=self.padx, pady=self.pady, sticky=tk.E)
         self._cur_row += 1
 
         self._level_label = tk.Label(self._dropdowns, text="Pkmn Level:", justify=tk.LEFT)
-        self._level_val = custom_tkinter.AmountEntry(self._dropdowns, callback=self._update_button_callback_wrapper)
+        self._level_val = custom_components.AmountEntry(self._dropdowns, callback=self._update_button_callback_wrapper)
         self._level_val._amount.configure(width=self.option_menu_width - 5)
         self._level_label.grid(row=self._cur_row, column=0, padx=self.padx, pady=self.pady, sticky=tk.W)
         self._level_val.grid(row=self._cur_row, column=1, padx=self.padx, pady=self.pady, sticky=tk.E)
         self._cur_row += 1
 
         self._quantity_label = tk.Label(self._dropdowns, text="Quantity:", justify=tk.LEFT)
-        self._quantity_val = custom_tkinter.AmountEntry(self._dropdowns, callback=self._update_button_callback_wrapper)
+        self._quantity_val = custom_components.AmountEntry(self._dropdowns, callback=self._update_button_callback_wrapper)
         self._quantity_val._amount.configure(width=self.option_menu_width - 5)
         self._quantity_label.grid(row=self._cur_row, column=0, padx=self.padx, pady=self.pady, sticky=tk.W)
         self._quantity_val.grid(row=self._cur_row, column=1, padx=self.padx, pady=self.pady, sticky=tk.E)
@@ -178,9 +178,9 @@ class QuickWildPkmn(tk.Frame):
         self._buttons.pack(fill=tk.X, anchor=tk.CENTER, side=tk.BOTTOM)
         self._btn_width = 8
 
-        self._add_wild_pkmn = custom_tkinter.SimpleButton(self._buttons, text="Add Wild Pkmn", command=self.add_wild_pkmn_cmd)
+        self._add_wild_pkmn = custom_components.SimpleButton(self._buttons, text="Add Wild Pkmn", command=self.add_wild_pkmn_cmd)
         self._add_wild_pkmn.grid(row=0, column=0, padx=self.padx, pady=self.pady + 1, sticky=tk.W)
-        self._add_trainer_pkmn = custom_tkinter.SimpleButton(self._buttons, text="Add Trainer Pkmn", command=self.add_trainer_pkmn_cmd)
+        self._add_trainer_pkmn = custom_components.SimpleButton(self._buttons, text="Add Trainer Pkmn", command=self.add_trainer_pkmn_cmd)
         self._add_trainer_pkmn.grid(row=0, column=1, padx=self.padx, pady=self.pady + 1, sticky=tk.W)
 
         self._level_val.set(5)
@@ -269,32 +269,32 @@ class QuickItemAdd(tk.Frame):
         self._dropdowns.pack()
 
         self._item_filter_label = tk.Label(self._dropdowns, text="Search:")
-        self._item_filter = custom_tkinter.SimpleEntry(self._dropdowns, callback=self.item_filter_callback, width=self.option_menu_width + 5)
+        self._item_filter = custom_components.SimpleEntry(self._dropdowns, callback=self.item_filter_callback, width=self.option_menu_width + 5)
         self._item_filter_label.grid(row=self._cur_row, column=0, padx=self.padx, pady=self.pady, sticky=tk.W)
         self._item_filter.grid(row=self._cur_row, column=1, padx=self.padx, pady=self.pady, sticky=tk.E)
 
         self._item_type_label = tk.Label(self._dropdowns, text="Item Type:")
-        self._item_type_selector = custom_tkinter.SimpleOptionMenu(self._dropdowns, const.ITEM_TYPES, callback=self.item_filter_callback)
+        self._item_type_selector = custom_components.SimpleOptionMenu(self._dropdowns, const.ITEM_TYPES, callback=self.item_filter_callback)
         self._item_type_selector.configure(width=self.option_menu_width)
         self._item_type_label.grid(row=self._cur_row, column=2, padx=self.padx, pady=self.pady, sticky=tk.W)
         self._item_type_selector.grid(row=self._cur_row, column=3, padx=self.padx, pady=self.pady, sticky=tk.E)
         self._cur_row += 1
 
         self._item_selector_label = tk.Label(self._dropdowns, text="Item:")
-        self._item_selector = custom_tkinter.SimpleOptionMenu(self._dropdowns, [const.NO_ITEM], callback=self.item_selector_callback)
+        self._item_selector = custom_components.SimpleOptionMenu(self._dropdowns, [const.NO_ITEM], callback=self.item_selector_callback)
         self._item_selector.configure(width=self.option_menu_width)
         self._item_selector_label.grid(row=self._cur_row, column=0, padx=self.padx, pady=self.pady, sticky=tk.W)
         self._item_selector.grid(row=self._cur_row, column=1, padx=self.padx, pady=self.pady, sticky=tk.E)
 
         self._item_mart_label = tk.Label(self._dropdowns, text="Mart:")
-        self._item_mart_selector = custom_tkinter.SimpleOptionMenu(self._dropdowns, [const.ITEM_TYPE_ALL_ITEMS], callback=self.item_filter_callback)
+        self._item_mart_selector = custom_components.SimpleOptionMenu(self._dropdowns, [const.ITEM_TYPE_ALL_ITEMS], callback=self.item_filter_callback)
         self._item_mart_selector.configure(width=self.option_menu_width)
         self._item_mart_label.grid(row=self._cur_row, column=2, padx=self.padx, pady=self.pady, sticky=tk.W)
         self._item_mart_selector.grid(row=self._cur_row, column=3, padx=self.padx, pady=self.pady, sticky=tk.E)
         self._cur_row += 1
 
         self._item_amount_label = tk.Label(self._dropdowns, text="Quantity:")
-        self._item_amount = custom_tkinter.AmountEntry(self._dropdowns, callback=self.item_selector_callback)
+        self._item_amount = custom_components.AmountEntry(self._dropdowns, callback=self.item_selector_callback)
         self._item_amount._amount.configure(width=self.option_menu_width)
         self._item_amount_label.grid(row=self._cur_row, column=0, padx=self.padx, pady=self.pady, sticky=tk.W)
         self._item_amount.grid(row=self._cur_row, column=1, padx=self.padx, pady=self.pady, sticky=tk.E)
@@ -315,21 +315,21 @@ class QuickItemAdd(tk.Frame):
         self._buttons.pack(fill=tk.X, anchor=tk.CENTER, side=tk.BOTTOM)
         self._btn_width = 6
 
-        self._acquire_button = custom_tkinter.SimpleButton(self._buttons, text="Acquire", width=self._btn_width, command=self._acquire_item)
+        self._acquire_button = custom_components.SimpleButton(self._buttons, text="Acquire", width=self._btn_width, command=self._acquire_item)
         self._acquire_button.grid(row=0, column=0, padx=self.padx, pady=self.pady)
-        self._drop_button = custom_tkinter.SimpleButton(self._buttons, text="Drop", width=self._btn_width, command=self._drop_item)
+        self._drop_button = custom_components.SimpleButton(self._buttons, text="Drop", width=self._btn_width, command=self._drop_item)
         self._drop_button.grid(row=0, column=1, padx=self.padx, pady=self.pady)
 
-        self._use_button = custom_tkinter.SimpleButton(self._buttons, text="Use", width=self._btn_width, command=self._use_item)
+        self._use_button = custom_components.SimpleButton(self._buttons, text="Use", width=self._btn_width, command=self._use_item)
         self._use_button.grid(row=0, column=3, padx=self.padx, pady=self.pady)
-        self._hold_button = custom_tkinter.SimpleButton(self._buttons, text="Hold", width=self._btn_width, command=self._hold_item)
+        self._hold_button = custom_components.SimpleButton(self._buttons, text="Hold", width=self._btn_width, command=self._hold_item)
         self._hold_button.grid(row=0, column=4, padx=self.padx, pady=self.pady)
-        self._tm_hm_button = custom_tkinter.SimpleButton(self._buttons, text="TM/HM", width=self._btn_width, command=self._learn_move)
+        self._tm_hm_button = custom_components.SimpleButton(self._buttons, text="TM/HM", width=self._btn_width, command=self._learn_move)
         self._tm_hm_button.grid(row=0, column=5, padx=self.padx, pady=self.pady)
 
-        self._buy_button = custom_tkinter.SimpleButton(self._buttons, text="Buy", width=self._btn_width, command=self._buy_item)
+        self._buy_button = custom_components.SimpleButton(self._buttons, text="Buy", width=self._btn_width, command=self._buy_item)
         self._buy_button.grid(row=0, column=7, padx=self.padx, pady=self.pady)
-        self._sell_button = custom_tkinter.SimpleButton(self._buttons, text="Sell", width=self._btn_width, command=self._sell_item)
+        self._sell_button = custom_components.SimpleButton(self._buttons, text="Sell", width=self._btn_width, command=self._sell_item)
         self._sell_button.grid(row=0, column=8, padx=self.padx, pady=self.pady)
 
         self._buttons.columnconfigure(2, weight=1)
@@ -540,13 +540,13 @@ class QuickMiscEvents(tk.Frame):
         self._buttons.pack(fill=tk.BOTH, anchor=tk.CENTER)
         self._btn_width = 8
 
-        self._btn_add_save = custom_tkinter.SimpleButton(self._buttons, text="Add Save", command=self.add_save)
+        self._btn_add_save = custom_components.SimpleButton(self._buttons, text="Add Save", command=self.add_save)
         self._btn_add_save.grid(row=0, column=0, padx=self.padx, pady=self.pady + 1, sticky=tk.EW)
-        self._btn_add_heal = custom_tkinter.SimpleButton(self._buttons, text="Add Heal", command=self.add_heal)
+        self._btn_add_heal = custom_components.SimpleButton(self._buttons, text="Add Heal", command=self.add_heal)
         self._btn_add_heal.grid(row=1, column=0, padx=self.padx, pady=self.pady + 1, sticky=tk.EW)
-        self._btn_add_black_out = custom_tkinter.SimpleButton(self._buttons, text="Add Black Out", command=self.add_black_out)
+        self._btn_add_black_out = custom_components.SimpleButton(self._buttons, text="Add Black Out", command=self.add_black_out)
         self._btn_add_black_out.grid(row=2, column=0, padx=self.padx, pady=self.pady + 1, sticky=tk.EW)
-        self._btn_add_notes = custom_tkinter.SimpleButton(self._buttons, text="Add Notes", command=self.add_notes)
+        self._btn_add_notes = custom_components.SimpleButton(self._buttons, text="Add Notes", command=self.add_notes)
         self._btn_add_notes.grid(row=3, column=0, padx=self.padx, pady=self.pady + 1, sticky=tk.EW)
 
         self.bind(self._controller.register_event_selection(self), self.update_button_status)

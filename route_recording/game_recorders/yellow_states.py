@@ -47,7 +47,6 @@ class UninitializedState(WatchForResetState):
             self.machine._player_id = None
         
         self.machine.update_all_cached_info(include_solo_mon=True)
-        logger.info(f"Registering player id for current recorded run: {self.machine._player_id}")
     
     @auto_reset
     def transition(self, new_prop:GameHookProperty, prev_prop:GameHookProperty) -> StateType:

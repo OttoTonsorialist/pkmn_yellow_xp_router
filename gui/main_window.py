@@ -6,7 +6,7 @@ import tkinter as tk
 from tkinter import ttk, font, messagebox
 
 from controllers.main_controller import MainController
-from gui import custom_tkinter, pkmn_components, quick_add_components
+from gui import custom_components, pkmn_components, quick_add_components
 from gui.event_details import EventDetails
 from gui.popups.color_config import ConfigWindow
 from gui.popups.custom_dvs_popup import CustomDvsWindow
@@ -105,7 +105,7 @@ class MainWindow(tk.Tk):
         self.top_row.pack(fill=tk.X)
         self.top_row.pack_propagate(False)
 
-        self.record_button = custom_tkinter.SimpleButton(self.top_row, text="Enable\nRecording", command=self.record_button_clicked)
+        self.record_button = custom_components.SimpleButton(self.top_row, text="Enable\nRecording", command=self.record_button_clicked)
         self.record_button.grid(row=0, column=0, sticky=tk.W, padx=3, pady=3)
         self.record_button.disable()
 
@@ -122,7 +122,7 @@ class MainWindow(tk.Tk):
         self.route_name.grid(row=0, column=4)
         self.route_name.config(width=30)
 
-        self.message_label = custom_tkinter.AutoClearingLabel(self.top_row, width=100, justify=tk.LEFT, anchor=tk.W)
+        self.message_label = custom_components.AutoClearingLabel(self.top_row, width=100, justify=tk.LEFT, anchor=tk.W)
         self.message_label.grid(row=0, column=5, sticky=tk.E)
 
         # create container for split columns
@@ -167,21 +167,21 @@ class MainWindow(tk.Tk):
         self.group_controls = tk.Frame(self.left_info_panel)
         self.group_controls.pack(fill=tk.X, anchor=tk.CENTER)
         
-        self.move_group_up_button = custom_tkinter.SimpleButton(self.group_controls, text='Move Event Up', command=self.move_group_up, width=15)
+        self.move_group_up_button = custom_components.SimpleButton(self.group_controls, text='Move Event Up', command=self.move_group_up, width=15)
         self.move_group_up_button.grid(row=0, column=1, padx=5, pady=1)
-        self.move_group_down_button = custom_tkinter.SimpleButton(self.group_controls, text='Move Event Down', command=self.move_group_down, width=15)
+        self.move_group_down_button = custom_components.SimpleButton(self.group_controls, text='Move Event Down', command=self.move_group_down, width=15)
         self.move_group_down_button.grid(row=0, column=2, padx=5, pady=1)
-        self.highlight_toggle_button = custom_tkinter.SimpleButton(self.group_controls, text='Toggle Highlight', command=self.toggle_event_highlight, width=15)
+        self.highlight_toggle_button = custom_components.SimpleButton(self.group_controls, text='Toggle Highlight', command=self.toggle_event_highlight, width=15)
         self.highlight_toggle_button.grid(row=0, column=3, padx=5, pady=1)
-        self.transfer_event_button = custom_tkinter.SimpleButton(self.group_controls, text='Transfer Event', command=self.open_transfer_event_window, width=15)
+        self.transfer_event_button = custom_components.SimpleButton(self.group_controls, text='Transfer Event', command=self.open_transfer_event_window, width=15)
         self.transfer_event_button.grid(row=0, column=4, padx=5, pady=1)
 
-        self.delete_event_button = custom_tkinter.SimpleButton(self.group_controls, text='Delete Event', command=self.delete_group, width=15)
+        self.delete_event_button = custom_components.SimpleButton(self.group_controls, text='Delete Event', command=self.delete_group, width=15)
         self.delete_event_button.grid(row=0, column=6, padx=5, pady=1)
 
-        self.new_folder_button = custom_tkinter.SimpleButton(self.group_controls, text='New Folder', command=self.open_new_folder_window, width=15)
+        self.new_folder_button = custom_components.SimpleButton(self.group_controls, text='New Folder', command=self.open_new_folder_window, width=15)
         self.new_folder_button.grid(row=0, column=8, padx=5, pady=1)
-        self.rename_folder_button = custom_tkinter.SimpleButton(self.group_controls, text='Rename Folder', command=self.rename_folder, width=15)
+        self.rename_folder_button = custom_components.SimpleButton(self.group_controls, text='Rename Folder', command=self.rename_folder, width=15)
         self.rename_folder_button.grid(row=0, column=9, padx=5, pady=1)
 
         self.group_controls.columnconfigure(0, weight=1)
@@ -496,7 +496,7 @@ class MainWindow(tk.Tk):
 
     def open_export_window(self, event=None):
         if self._is_active_window():
-            self.new_event_window = RouteOneWindow(self, self.route_name.get())
+            self.new_event_window = RouteOneWindow(self, self._controller, self.route_name.get())
 
     def clear_popup(self, *args, **kwargs):
         # hook for when a pop-up cleans up after itself

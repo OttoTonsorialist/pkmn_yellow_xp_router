@@ -2,7 +2,7 @@ import tkinter as tk
 
 from controllers.main_controller import MainController
 from gui.popups.base_popup import Popup
-from gui import custom_tkinter
+from gui import custom_components
 from pkmn.universal_data_objects import StatBlock
 import pkmn
 
@@ -19,27 +19,27 @@ class CustomDvsWindow(Popup):
 
         self.custom_dvs_hp_label = tk.Label(self.controls_frame, text="HP DV:")
         self.custom_dvs_hp_label.grid(row=0, column=0, padx=self.padx, pady=self.pady)
-        self.custom_dvs_hp = custom_tkinter.AmountEntry(self.controls_frame, min_val=0, max_val=15, init_val=init_dvs.hp, callback=self._recalc_hidden_power)
+        self.custom_dvs_hp = custom_components.AmountEntry(self.controls_frame, min_val=0, max_val=15, init_val=init_dvs.hp, callback=self._recalc_hidden_power)
         self.custom_dvs_hp.grid(row=0, column=1, padx=self.padx, pady=self.pady)
 
         self.custom_dvs_atk_label = tk.Label(self.controls_frame, text="Attack DV:")
         self.custom_dvs_atk_label.grid(row=1, column=0, padx=self.padx, pady=self.pady)
-        self.custom_dvs_atk = custom_tkinter.AmountEntry(self.controls_frame, min_val=0, max_val=15, init_val=init_dvs.attack, callback=self._recalc_hidden_power)
+        self.custom_dvs_atk = custom_components.AmountEntry(self.controls_frame, min_val=0, max_val=15, init_val=init_dvs.attack, callback=self._recalc_hidden_power)
         self.custom_dvs_atk.grid(row=1, column=1, padx=self.padx, pady=self.pady)
 
         self.custom_dvs_def_label = tk.Label(self.controls_frame, text="Defense DV:")
         self.custom_dvs_def_label.grid(row=2, column=0, padx=self.padx, pady=self.pady)
-        self.custom_dvs_def = custom_tkinter.AmountEntry(self.controls_frame, min_val=0, max_val=15, init_val=init_dvs.defense, callback=self._recalc_hidden_power)
+        self.custom_dvs_def = custom_components.AmountEntry(self.controls_frame, min_val=0, max_val=15, init_val=init_dvs.defense, callback=self._recalc_hidden_power)
         self.custom_dvs_def.grid(row=2, column=1, padx=self.padx, pady=self.pady)
 
         self.custom_dvs_spd_label = tk.Label(self.controls_frame, text="Speed DV:")
         self.custom_dvs_spd_label.grid(row=3, column=0, padx=self.padx, pady=self.pady)
-        self.custom_dvs_spd = custom_tkinter.AmountEntry(self.controls_frame, min_val=0, max_val=15, init_val=init_dvs.speed, callback=self._recalc_hidden_power)
+        self.custom_dvs_spd = custom_components.AmountEntry(self.controls_frame, min_val=0, max_val=15, init_val=init_dvs.speed, callback=self._recalc_hidden_power)
         self.custom_dvs_spd.grid(row=3, column=1, padx=self.padx, pady=self.pady)
 
         self.custom_dvs_spc_label = tk.Label(self.controls_frame, text="Special DV:")
         self.custom_dvs_spc_label.grid(row=4, column=0, padx=self.padx, pady=self.pady)
-        self.custom_dvs_spc = custom_tkinter.AmountEntry(self.controls_frame, min_val=0, max_val=15, init_val=init_dvs.special_attack, callback=self._recalc_hidden_power)
+        self.custom_dvs_spc = custom_components.AmountEntry(self.controls_frame, min_val=0, max_val=15, init_val=init_dvs.special_attack, callback=self._recalc_hidden_power)
         self.custom_dvs_spc.grid(row=4, column=1, padx=self.padx, pady=self.pady)
 
         self.custom_dvs_hidden_power_label = tk.Label(self.controls_frame, text="Hidden Power:")
@@ -48,9 +48,9 @@ class CustomDvsWindow(Popup):
         self.custom_dvs_hidden_power.grid(row=5, column=1, padx=self.padx, pady=self.pady)
 
 
-        self.create_button = custom_tkinter.SimpleButton(self.controls_frame, text="Set New DVs", command=self.set_dvs)
+        self.create_button = custom_components.SimpleButton(self.controls_frame, text="Set New DVs", command=self.set_dvs)
         self.create_button.grid(row=30, column=0, padx=self.padx, pady=self.pady)
-        self.cancel_button = custom_tkinter.SimpleButton(self.controls_frame, text="Cancel", command=self.close)
+        self.cancel_button = custom_components.SimpleButton(self.controls_frame, text="Cancel", command=self.close)
         self.cancel_button.grid(row=30, column=1, padx=self.padx, pady=self.pady)
 
         self.bind('<Return>', self.set_dvs)

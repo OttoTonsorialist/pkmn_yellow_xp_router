@@ -1,6 +1,6 @@
 import tkinter as tk
 
-from gui import custom_tkinter
+from gui import custom_components
 from gui.pkmn_components import EnemyPkmnTeam
 from utils.constants import const
 import pkmn
@@ -75,17 +75,17 @@ class TrainerFightEditor(EventEditorBase):
 
         self._trainers_by_loc_label = tk.Label(self, text="Trainer Location Filter:", bg=config.get_background_color(), fg=config.get_text_color())
         trainer_locs = [const.ALL_TRAINERS] + sorted(pkmn.current_gen_info().trainer_db().get_all_locations())
-        self._trainers_by_loc = custom_tkinter.SimpleOptionMenu(self, trainer_locs, callback=self._trainer_filter_callback)
+        self._trainers_by_loc = custom_components.SimpleOptionMenu(self, trainer_locs, callback=self._trainer_filter_callback)
         self._trainers_by_loc_label.grid(row=self._cur_row, column=0)
         self._trainers_by_loc.grid(row=self._cur_row, column=1)
         self._cur_row += 1
 
         self._trainers_by_class_label = tk.Label(self, text="Trainer Class Filter:", bg=config.get_background_color(), fg=config.get_text_color())
         trainer_classes = [const.ALL_TRAINERS] + sorted(pkmn.current_gen_info().trainer_db().get_all_classes())
-        self._trainers_by_class = custom_tkinter.SimpleOptionMenu(self, trainer_classes, callback=self._trainer_filter_callback)
+        self._trainers_by_class = custom_components.SimpleOptionMenu(self, trainer_classes, callback=self._trainer_filter_callback)
 
         self._trainer_names_label = tk.Label(self, text="Trainer Name:", bg=config.get_background_color(), fg=config.get_text_color())
-        self._trainer_names = custom_tkinter.SimpleOptionMenu(self, pkmn.current_gen_info().trainer_db().get_valid_trainers(), callback=self._trainer_name_callback)
+        self._trainer_names = custom_components.SimpleOptionMenu(self, pkmn.current_gen_info().trainer_db().get_valid_trainers(), callback=self._trainer_name_callback)
         self._trainer_team = EnemyPkmnTeam(self)
 
         self._trainers_by_class_label.grid(row=self._cur_row, column=0)
@@ -165,13 +165,13 @@ class VitaminEditor(EventEditorBase):
         super().__init__(*args, **kwargs)
 
         self._vitamin_label = tk.Label(self, text="Vitamin Type:", bg=config.get_background_color(), fg=config.get_text_color())
-        self._vitamin_types = custom_tkinter.SimpleOptionMenu(self, const.VITAMIN_TYPES)
+        self._vitamin_types = custom_components.SimpleOptionMenu(self, const.VITAMIN_TYPES)
         self._vitamin_label.grid(row=self._cur_row, column=0)
         self._vitamin_types.grid(row=self._cur_row, column=1)
         self._cur_row += 1
 
         self._item_amount_label = tk.Label(self, text="Num Vitamins:", bg=config.get_background_color(), fg=config.get_text_color())
-        self._item_amount = custom_tkinter.AmountEntry(self, callback=self._amount_update, bg=config.get_background_color())
+        self._item_amount = custom_components.AmountEntry(self, callback=self._amount_update, bg=config.get_background_color())
         self._item_amount_label.grid(row=self._cur_row, column=0)
         self._item_amount.grid(row=self._cur_row, column=1)
         self._cur_row += 1
@@ -201,7 +201,7 @@ class RareCandyEditor(EventEditorBase):
         super().__init__(*args, **kwargs)
         self.event_button.enable()
         self._item_amount_label = tk.Label(self, text="Num Rare Candies:", bg=config.get_background_color(), fg=config.get_text_color())
-        self._item_amount = custom_tkinter.AmountEntry(self, callback=self._amount_update, bg=config.get_background_color())
+        self._item_amount = custom_components.AmountEntry(self, callback=self._amount_update, bg=config.get_background_color())
         self._item_amount_label.grid(row=self._cur_row, column=0)
         self._item_amount.grid(row=self._cur_row, column=1)
         self._cur_row += 1
@@ -238,7 +238,7 @@ class LearnMoveEditor(EventEditorBase):
         self._cur_row += 1
 
         self._destination_label = tk.Label(self, text="Move Destination:", bg=config.get_background_color(), fg=config.get_text_color())
-        self._destination = custom_tkinter.SimpleOptionMenu(self, [None])
+        self._destination = custom_components.SimpleOptionMenu(self, [None])
         self._destination_label.grid(row=self._cur_row, column=0)
         self._destination.grid(row=self._cur_row, column=1)
         self._cur_row += 1
@@ -248,17 +248,17 @@ class LearnMoveEditor(EventEditorBase):
         self._level = const.LEVEL_ANY
 
         self._item_type_label = tk.Label(self, text="Item Type:", bg=config.get_background_color(), fg=config.get_text_color())
-        self._item_type_selector = custom_tkinter.SimpleOptionMenu(self, [const.ITEM_TYPE_ALL_ITEMS, const.ITEM_TYPE_BACKPACK_ITEMS, const.ITEM_TYPE_TM], callback=self._item_filter_callback)
+        self._item_type_selector = custom_components.SimpleOptionMenu(self, [const.ITEM_TYPE_ALL_ITEMS, const.ITEM_TYPE_BACKPACK_ITEMS, const.ITEM_TYPE_TM], callback=self._item_filter_callback)
         self._item_type_row = self._cur_row
         self._cur_row += 1
 
         self._item_filter_label = tk.Label(self, text="Item Name Filter:", bg=config.get_background_color(), fg=config.get_text_color())
-        self._item_filter = custom_tkinter.SimpleEntry(self, callback=self._item_filter_callback)
+        self._item_filter = custom_components.SimpleEntry(self, callback=self._item_filter_callback)
         self._item_filter_row = self._cur_row
         self._cur_row += 1
 
         self._item_selector_label = tk.Label(self, text="Move:", bg=config.get_background_color(), fg=config.get_text_color())
-        self._item_selector = custom_tkinter.SimpleOptionMenu(self, [None], callback=self._move_selected_callback)
+        self._item_selector = custom_components.SimpleOptionMenu(self, [None], callback=self._move_selected_callback)
         self._item_selector_row = self._cur_row
         self._cur_row += 1
 
@@ -376,30 +376,30 @@ class WildPkmnEditor(EventEditorBase):
         super().__init__(*args, **kwargs)
 
         self._pkmn_label = tk.Label(self, text="Wild Pokemon Type:", bg=config.get_background_color(), fg=config.get_text_color())
-        self._pkmn_types = custom_tkinter.SimpleOptionMenu(self, pkmn.current_gen_info().pkmn_db().get_all_names())
+        self._pkmn_types = custom_components.SimpleOptionMenu(self, pkmn.current_gen_info().pkmn_db().get_all_names())
         self._pkmn_label.grid(row=self._cur_row, column=0)
         self._pkmn_types.grid(row=self._cur_row, column=1)
         self._cur_row += 1
 
         self._pkmn_filter_label = tk.Label(self, text="Wild Pokemon Type Filter:", bg=config.get_background_color(), fg=config.get_text_color())
-        self._pkmn_filter = custom_tkinter.SimpleEntry(self, callback=self._pkmn_filter_callback)
+        self._pkmn_filter = custom_components.SimpleEntry(self, callback=self._pkmn_filter_callback)
         self._pkmn_filter_label.grid(row=self._cur_row, column=0)
         self._pkmn_filter.grid(row=self._cur_row, column=1)
         self._cur_row += 1
 
         self._pkmn_level_label = tk.Label(self, text="Wild Pokemon Level:", bg=config.get_background_color(), fg=config.get_text_color())
-        self._pkmn_level = custom_tkinter.AmountEntry(self, callback=self._update_button_status, bg=config.get_background_color())
+        self._pkmn_level = custom_components.AmountEntry(self, callback=self._update_button_status, bg=config.get_background_color())
         self._pkmn_level_label.grid(row=self._cur_row, column=0)
         self._pkmn_level.grid(row=self._cur_row, column=1)
         self._cur_row += 1
 
         self._quantity_label = tk.Label(self, text="Num Pkmn:", bg=config.get_background_color(), fg=config.get_text_color())
-        self._quantity = custom_tkinter.AmountEntry(self, callback=self._update_button_status, bg=config.get_background_color())
+        self._quantity = custom_components.AmountEntry(self, callback=self._update_button_status, bg=config.get_background_color())
         self._quantity_label.grid(row=self._cur_row, column=0)
         self._quantity.grid(row=self._cur_row, column=1)
         self._cur_row += 1
 
-        self._pkmn_trainer_flag = custom_tkinter.CheckboxLabel(self, text="Is Trainer Pkmn?", bg=config.get_background_color(), fg=config.get_text_color())
+        self._pkmn_trainer_flag = custom_components.CheckboxLabel(self, text="Is Trainer Pkmn?", bg=config.get_background_color(), fg=config.get_text_color())
         self._pkmn_trainer_flag.grid(row=self._cur_row, column=0, columnspan=2)
         self._cur_row += 1
     
@@ -462,27 +462,27 @@ class InventoryEventEditor(EventEditorBase):
         super().__init__(*args, **kwargs)
 
         self._item_type_label = tk.Label(self, text="Item Type:", bg=config.get_background_color(), fg=config.get_text_color())
-        self._item_type_selector = custom_tkinter.SimpleOptionMenu(self, const.ITEM_TYPES, callback=self._item_filter_callback)
+        self._item_type_selector = custom_components.SimpleOptionMenu(self, const.ITEM_TYPES, callback=self._item_filter_callback)
         self._item_type_row = self._cur_row
         self._cur_row += 1
 
         self._item_mart_label = tk.Label(self, text="Mart:", bg=config.get_background_color(), fg=config.get_text_color())
-        self._item_mart_selector = custom_tkinter.SimpleOptionMenu(self, [const.ITEM_TYPE_ALL_ITEMS] + sorted(list(pkmn.current_gen_info().item_db().mart_items.keys())), callback=self._item_filter_callback)
+        self._item_mart_selector = custom_components.SimpleOptionMenu(self, [const.ITEM_TYPE_ALL_ITEMS] + sorted(list(pkmn.current_gen_info().item_db().mart_items.keys())), callback=self._item_filter_callback)
         self._item_mart_row = self._cur_row
         self._cur_row += 1
 
         self._item_filter_label = tk.Label(self, text="Item Name Filter:", bg=config.get_background_color(), fg=config.get_text_color())
-        self._item_filter = custom_tkinter.SimpleEntry(self, callback=self._item_filter_callback)
+        self._item_filter = custom_components.SimpleEntry(self, callback=self._item_filter_callback)
         self._item_filter_row = self._cur_row
         self._cur_row += 1
 
         self._item_selector_label = tk.Label(self, text="Item:", bg=config.get_background_color(), fg=config.get_text_color())
-        self._item_selector = custom_tkinter.SimpleOptionMenu(self, pkmn.current_gen_info().item_db().get_filtered_names(), callback=self._item_selector_callback)
+        self._item_selector = custom_components.SimpleOptionMenu(self, pkmn.current_gen_info().item_db().get_filtered_names(), callback=self._item_selector_callback)
         self._item_selector_row = self._cur_row
         self._cur_row += 1
 
         self._item_amount_label = tk.Label(self, text="Num Items:", bg=config.get_background_color(), fg=config.get_text_color())
-        self._item_amount = custom_tkinter.AmountEntry(self, callback=self._item_selector_callback, bg=config.get_background_color())
+        self._item_amount = custom_components.AmountEntry(self, callback=self._item_selector_callback, bg=config.get_background_color())
         self._item_amount_row = self._cur_row
         self._cur_row += 1
 
@@ -714,7 +714,7 @@ class SaveEventEditor(EventEditorBase):
         super().__init__(*args, **kwargs)
         self.event_button.enable()
         self._location_label = tk.Label(self, text="Save Location", bg=config.get_background_color(), fg=config.get_text_color())
-        self._location_value = custom_tkinter.SimpleEntry(self)
+        self._location_value = custom_components.SimpleEntry(self)
         self._location_label.grid(row=self._cur_row, column=0)
         self._location_value.grid(row=self._cur_row, column=1)
         self._cur_row += 1
@@ -732,7 +732,7 @@ class HealEventEditor(EventEditorBase):
         super().__init__(*args, **kwargs)
         self.event_button.enable()
         self._location_label = tk.Label(self, text="Heal Location", bg=config.get_background_color(), fg=config.get_text_color())
-        self._location_value = custom_tkinter.SimpleEntry(self)
+        self._location_value = custom_components.SimpleEntry(self)
         self._location_label.grid(row=self._cur_row, column=0)
         self._location_value.grid(row=self._cur_row, column=1)
         self._cur_row += 1
@@ -750,7 +750,7 @@ class BlackoutEventEditor(EventEditorBase):
         super().__init__(*args, **kwargs)
         self.event_button.enable()
         self._location_label = tk.Label(self, text="Black Out back to:", bg=config.get_background_color(), fg=config.get_text_color())
-        self._location_value = custom_tkinter.SimpleEntry(self)
+        self._location_value = custom_components.SimpleEntry(self)
         self._location_label.grid(row=self._cur_row, column=0)
         self._location_value.grid(row=self._cur_row, column=1)
         self._cur_row += 1

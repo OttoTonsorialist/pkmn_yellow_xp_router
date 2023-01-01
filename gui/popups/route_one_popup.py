@@ -3,7 +3,7 @@ from tkinter import filedialog
 
 from controllers.main_controller import MainController
 from gui.popups.base_popup import Popup
-from gui import custom_tkinter
+from gui import custom_components
 from utils.config_manager import config
 from utils import route_one_utils
 
@@ -33,9 +33,9 @@ class RouteOneWindow(Popup):
         self._route_jar_label = tk.Label(self, text=f"RouteOne jar Path: {config.get_route_one_path()}")
         self._route_jar_label.grid(row=2, column=0, columnspan=2, padx=10, pady=10)
 
-        self._set_jar_button = custom_tkinter.SimpleButton(self, text=f"Set R1 jar path", command=self.set_jar_path)
+        self._set_jar_button = custom_components.SimpleButton(self, text=f"Set R1 jar path", command=self.set_jar_path)
         self._set_jar_button.grid(row=3, column=0, padx=10, pady=10)
-        self._run_route_one_button = custom_tkinter.SimpleButton(self, text=f"Run RouteOne", command=self.run_route_one)
+        self._run_route_one_button = custom_components.SimpleButton(self, text=f"Run RouteOne", command=self.run_route_one)
         self._run_route_one_button.grid(row=3, column=1, padx=10, pady=10)
 
         # TODO: gross, ugly, wtv
@@ -45,7 +45,7 @@ class RouteOneWindow(Popup):
         self._route_one_results_label = tk.Label(self, text=route_one_results_init, justify=tk.CENTER)
         self._route_one_results_label.grid(row=4, column=0, padx=10, pady=10, columnspan=2)
 
-        self._close_button = custom_tkinter.SimpleButton(self, text="Close", command=self.close)
+        self._close_button = custom_components.SimpleButton(self, text="Close", command=self.close)
         self._close_button.grid(row=5, column=0, columnspan=2, padx=10, pady=10)
 
         self.bind('<Escape>', self.close)

@@ -3,7 +3,7 @@ import threading
 
 import tkinter as tk
 
-from gui import custom_tkinter
+from gui import custom_components
 from utils.constants import const
 from utils import auto_update
 
@@ -22,7 +22,7 @@ class AutoUpgradeGUI(tk.Tk):
         self.auto_update_message = tk.Label(self.auto_update_frame)
         self.auto_update_message.pack(pady=10, padx=10)
 
-        self.button = custom_tkinter.SimpleButton(self.auto_update_frame, text="Restart App", command=self._prevent_abort)
+        self.button = custom_components.SimpleButton(self.auto_update_frame, text="Restart App", command=self._prevent_abort)
         self.button.pack(pady=10, padx=10)
         self.button.disable()
         

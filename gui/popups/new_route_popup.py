@@ -5,7 +5,7 @@ import tkinter as tk
 
 from controllers.main_controller import MainController
 from gui.popups.base_popup import Popup
-from gui import custom_tkinter
+from gui import custom_components
 from pkmn.universal_data_objects import StatBlock
 from utils.constants import const
 from utils import io_utils
@@ -24,19 +24,19 @@ class NewRouteWindow(Popup):
 
         self.pkmn_version_label = tk.Label(self.controls_frame, text="Pokemon Version:")
         self.pkmn_version_label.grid(row=0, column=0, padx=self.padx, pady=self.pady)
-        self.pkmn_version = custom_tkinter.SimpleOptionMenu(self.controls_frame, const.VERSION_LIST, callback=self._pkmn_version_callback)
+        self.pkmn_version = custom_components.SimpleOptionMenu(self.controls_frame, const.VERSION_LIST, callback=self._pkmn_version_callback)
         self.pkmn_version.config(width=20)
         self.pkmn_version.grid(row=0, column=1, padx=self.padx, pady=self.pady)
 
         self.solo_selector_label = tk.Label(self.controls_frame, text="Solo Pokemon:")
         self.solo_selector_label.grid(row=1, column=0, padx=self.padx, pady=(4 * self.pady, self.pady))
-        self.solo_selector = custom_tkinter.SimpleOptionMenu(self.controls_frame, [const.NO_POKEMON])
+        self.solo_selector = custom_components.SimpleOptionMenu(self.controls_frame, [const.NO_POKEMON])
         self.solo_selector.config(width=20)
         self.solo_selector.grid(row=1, column=1, padx=self.padx, pady=(4 * self.pady, self.pady))
 
         self.pkmn_filter_label = tk.Label(self.controls_frame, text="Solo Pokemon Filter:")
         self.pkmn_filter_label.grid(row=2, column=0, padx=self.padx, pady=self.pady)
-        self.pkmn_filter = custom_tkinter.SimpleEntry(self.controls_frame, callback=self._pkmn_filter_callback)
+        self.pkmn_filter = custom_components.SimpleEntry(self.controls_frame, callback=self._pkmn_filter_callback)
         self.pkmn_filter.config(width=30)
         self.pkmn_filter.grid(row=2, column=1, padx=self.padx, pady=self.pady)
 
@@ -44,12 +44,12 @@ class NewRouteWindow(Popup):
         self._min_battles_cache = [const.EMPTY_ROUTE_NAME]
         self.min_battles_selector_label = tk.Label(self.controls_frame, text="Base Route:")
         self.min_battles_selector_label.grid(row=3, column=0, padx=self.padx, pady=(4 * self.pady, self.pady))
-        self.min_battles_selector = custom_tkinter.SimpleOptionMenu(self.controls_frame, self._min_battles_cache)
+        self.min_battles_selector = custom_components.SimpleOptionMenu(self.controls_frame, self._min_battles_cache)
         self.min_battles_selector.grid(row=3, column=1, padx=self.padx, pady=(4 * self.pady, self.pady))
 
         self.min_battles_filter_label = tk.Label(self.controls_frame, text="Base Route Filter:")
         self.min_battles_filter_label.grid(row=4, column=0, padx=self.padx, pady=self.pady)
-        self.min_battles_filter = custom_tkinter.SimpleEntry(self.controls_frame, callback=self._base_route_filter_callback)
+        self.min_battles_filter = custom_components.SimpleEntry(self.controls_frame, callback=self._base_route_filter_callback)
         self.min_battles_filter.config(width=30)
         self.min_battles_filter.grid(row=4, column=1, padx=self.padx, pady=self.pady)
 
@@ -65,27 +65,27 @@ class NewRouteWindow(Popup):
 
         self.custom_dvs_hp_label = tk.Label(self.custom_dvs_frame, text="HP DV:")
         self.custom_dvs_hp_label.grid(row=0, column=0, padx=self.padx, pady=self.pady)
-        self.custom_dvs_hp = custom_tkinter.AmountEntry(self.custom_dvs_frame, min_val=0, max_val=15, init_val=15, callback=self._recalc_hidden_power)
+        self.custom_dvs_hp = custom_components.AmountEntry(self.custom_dvs_frame, min_val=0, max_val=15, init_val=15, callback=self._recalc_hidden_power)
         self.custom_dvs_hp.grid(row=0, column=1, padx=self.padx, pady=self.pady)
 
         self.custom_dvs_atk_label = tk.Label(self.custom_dvs_frame, text="Attack DV:")
         self.custom_dvs_atk_label.grid(row=1, column=0, padx=self.padx, pady=self.pady)
-        self.custom_dvs_atk = custom_tkinter.AmountEntry(self.custom_dvs_frame, min_val=0, max_val=15, init_val=15, callback=self._recalc_hidden_power)
+        self.custom_dvs_atk = custom_components.AmountEntry(self.custom_dvs_frame, min_val=0, max_val=15, init_val=15, callback=self._recalc_hidden_power)
         self.custom_dvs_atk.grid(row=1, column=1, padx=self.padx, pady=self.pady)
 
         self.custom_dvs_def_label = tk.Label(self.custom_dvs_frame, text="Defense DV:")
         self.custom_dvs_def_label.grid(row=2, column=0, padx=self.padx, pady=self.pady)
-        self.custom_dvs_def = custom_tkinter.AmountEntry(self.custom_dvs_frame, min_val=0, max_val=15, init_val=15, callback=self._recalc_hidden_power)
+        self.custom_dvs_def = custom_components.AmountEntry(self.custom_dvs_frame, min_val=0, max_val=15, init_val=15, callback=self._recalc_hidden_power)
         self.custom_dvs_def.grid(row=2, column=1, padx=self.padx, pady=self.pady)
 
         self.custom_dvs_spd_label = tk.Label(self.custom_dvs_frame, text="Speed DV:")
         self.custom_dvs_spd_label.grid(row=3, column=0, padx=self.padx, pady=self.pady)
-        self.custom_dvs_spd = custom_tkinter.AmountEntry(self.custom_dvs_frame, min_val=0, max_val=15, init_val=15, callback=self._recalc_hidden_power)
+        self.custom_dvs_spd = custom_components.AmountEntry(self.custom_dvs_frame, min_val=0, max_val=15, init_val=15, callback=self._recalc_hidden_power)
         self.custom_dvs_spd.grid(row=3, column=1, padx=self.padx, pady=self.pady)
 
         self.custom_dvs_spc_label = tk.Label(self.custom_dvs_frame, text="Special DV:")
         self.custom_dvs_spc_label.grid(row=4, column=0, padx=self.padx, pady=self.pady)
-        self.custom_dvs_spc = custom_tkinter.AmountEntry(self.custom_dvs_frame, min_val=0, max_val=15, init_val=15, callback=self._recalc_hidden_power)
+        self.custom_dvs_spc = custom_components.AmountEntry(self.custom_dvs_frame, min_val=0, max_val=15, init_val=15, callback=self._recalc_hidden_power)
         self.custom_dvs_spc.grid(row=4, column=1, padx=self.padx, pady=self.pady)
 
         self.custom_dvs_hidden_power_label = tk.Label(self.custom_dvs_frame, text="Hidden Power:")
@@ -97,9 +97,9 @@ class NewRouteWindow(Popup):
         self.warning_label = tk.Label(self.controls_frame, text="WARNING: Any unsaved changes in your current route\nwill be lost when creating a new route!", justify=tk.CENTER, anchor=tk.CENTER)
         self.warning_label.grid(row=29, column=0, columnspan=2, sticky=tk.EW, padx=self.padx, pady=self.pady)
 
-        self.create_button = custom_tkinter.SimpleButton(self.controls_frame, text="Create Route", command=self.create)
+        self.create_button = custom_components.SimpleButton(self.controls_frame, text="Create Route", command=self.create)
         self.create_button.grid(row=30, column=0, padx=self.padx, pady=self.pady)
-        self.cancel_button = custom_tkinter.SimpleButton(self.controls_frame, text="Cancel", command=self.close)
+        self.cancel_button = custom_components.SimpleButton(self.controls_frame, text="Cancel", command=self.close)
         self.cancel_button.grid(row=30, column=1, padx=self.padx, pady=self.pady)
 
         self.bind('<Return>', self.create)

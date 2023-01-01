@@ -2,7 +2,7 @@ import tkinter as tk
 
 from controllers.main_controller import MainController
 from gui.popups.base_popup import Popup
-from gui import custom_tkinter
+from gui import custom_components
 from utils.constants import const
 from utils import io_utils
 
@@ -19,12 +19,12 @@ class LoadRouteWindow(Popup):
 
         self.previous_route_label = tk.Label(self.controls_frame, text="Existing Routes:")
         self.previous_route_label.grid(row=0, column=0, padx=self.padx, pady=self.pady)
-        self.previous_route_names = custom_tkinter.SimpleOptionMenu(self.controls_frame, [const.NO_SAVED_ROUTES], callback=self._select_callback)
+        self.previous_route_names = custom_components.SimpleOptionMenu(self.controls_frame, [const.NO_SAVED_ROUTES], callback=self._select_callback)
         self.previous_route_names.grid(row=0, column=1, padx=self.padx, pady=self.pady)
         self.previous_route_names.config(width=25)
 
         self.filter_label = tk.Label(self.controls_frame, text="Filter:")
-        self.filter = custom_tkinter.SimpleEntry(self.controls_frame, callback=self._filter_callback)
+        self.filter = custom_components.SimpleEntry(self.controls_frame, callback=self._filter_callback)
         self.filter_label.grid(row=1, column=0)
         self.filter.grid(row=1, column=1)
 
@@ -41,9 +41,9 @@ class LoadRouteWindow(Popup):
         self.warning_label = tk.Label(self.controls_frame, text="WARNING: Any unsaved changes in your current route\nwill be lost when loading an existing route!")
         self.warning_label.grid(row=4, column=0, columnspan=2, padx=self.padx, pady=self.pady)
 
-        self.create_button = custom_tkinter.SimpleButton(self.controls_frame, text="Load Route", command=self.load)
+        self.create_button = custom_components.SimpleButton(self.controls_frame, text="Load Route", command=self.load)
         self.create_button.grid(row=10, column=0, padx=self.padx, pady=self.pady)
-        self.cancel_button = custom_tkinter.SimpleButton(self.controls_frame, text="Cancel", command=self.close)
+        self.cancel_button = custom_components.SimpleButton(self.controls_frame, text="Cancel", command=self.close)
         self.cancel_button.grid(row=10, column=1, padx=self.padx, pady=self.pady)
 
         self.bind('<Return>', self.load)

@@ -3,7 +3,7 @@ import logging
 import tkinter as tk
 from controllers.main_controller import MainController
 
-from gui import custom_tkinter
+from gui import custom_components
 from route_recording.recorder import RecorderController, RecorderGameHookClient
 from utils.constants import const
 import pkmn
@@ -28,7 +28,7 @@ class RecorderStatus(tk.Frame):
         self.game_state_label = tk.Label(self, text="Game State: None", justify=tk.LEFT)
         self.game_state_label.pack()
 
-        self.connection_retry_button = custom_tkinter.SimpleButton(self, text="Reconnect to GameHook", justify=tk.LEFT, command=self.reconnect_button_pressed)
+        self.connection_retry_button = custom_components.SimpleButton(self, text="Reconnect to GameHook", justify=tk.LEFT, command=self.reconnect_button_pressed)
         self.connection_retry_button.disable()
         self.connection_retry_button.pack()
 

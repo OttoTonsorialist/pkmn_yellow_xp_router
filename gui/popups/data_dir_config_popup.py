@@ -5,7 +5,7 @@ import tkinter as tk
 from tkinter import filedialog
 from tkinter import messagebox
 
-from gui import custom_tkinter
+from gui import custom_components
 from gui.popups.base_popup import Popup
 from utils.constants import const
 from utils.config_manager import config
@@ -43,21 +43,21 @@ class DataDirConfigWindow(Popup):
         self._windows_label.grid(row=5, column=0, columnspan=2, padx=self.padx, pady=(2 * self.pady, self.pady))
         self._latest_version_label = tk.Label(self.app_info_frame, text="Fetching newest version...")
         self._latest_version_label.grid(row=6, column=0, columnspan=2)
-        self._check_for_updates_button = custom_tkinter.SimpleButton(self.app_info_frame, text="No Upgrade Needed", command=self._kick_off_auto_update)
+        self._check_for_updates_button = custom_components.SimpleButton(self.app_info_frame, text="No Upgrade Needed", command=self._kick_off_auto_update)
         self._check_for_updates_button.grid(row=7, column=0, columnspan=2)
         self._check_for_updates_button.disable()
 
         self.data_location_value = tk.Label(self.data_location_frame, text=f"Data Location: {config.get_user_data_dir()}")
         self.data_location_value.grid(row=15, column=0, columnspan=2)
-        self.data_location_label = custom_tkinter.SimpleButton(self.data_location_frame, text="Open Data Folder", command=self.open_data_location)
+        self.data_location_label = custom_components.SimpleButton(self.data_location_frame, text="Open Data Folder", command=self.open_data_location)
         self.data_location_label.grid(row=16, column=0)
-        self.data_location_change_button = custom_tkinter.SimpleButton(self.data_location_frame, text="Move Data Location", command=self.change_data_location)
+        self.data_location_change_button = custom_components.SimpleButton(self.data_location_frame, text="Move Data Location", command=self.change_data_location)
         self.data_location_change_button.grid(row=16, column=1)
 
-        self.app_location_button = custom_tkinter.SimpleButton(self.data_location_frame, text="Open Config/Logs Folder", command=self.open_global_config_location)
+        self.app_location_button = custom_components.SimpleButton(self.data_location_frame, text="Open Config/Logs Folder", command=self.open_global_config_location)
         self.app_location_button.grid(row=17, column=0, columnspan=2, padx=self.padx, pady=self.pady)
 
-        self.close_button = custom_tkinter.SimpleButton(self, text="Close", command=self._final_cleanup)
+        self.close_button = custom_components.SimpleButton(self, text="Close", command=self._final_cleanup)
         self.close_button.pack(padx=self.padx, pady=self.pady)
 
         self.bind('<Return>', self._final_cleanup)

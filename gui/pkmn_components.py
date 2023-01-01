@@ -4,7 +4,7 @@ from typing import List
 from controllers.main_controller import MainController
 import logging
 
-from gui import custom_tkinter
+from gui import custom_components
 import pkmn as pkmn_gen_info
 from pkmn import universal_data_objects
 from routing import route_state_objects
@@ -15,19 +15,19 @@ from utils.config_manager import config
 logger = logging.getLogger(__name__)
 
 
-class RouteList(custom_tkinter.CustomGridview):
+class RouteList(custom_components.CustomGridview):
     def __init__(self, controller:MainController, *args, **kwargs):
         self._controller = controller
         super().__init__(
             *args,
             custom_col_data=[
-                custom_tkinter.CustomGridview.CustomColumn('LevelUpsInto', 'get_pkmn_after_levelups', width=220),
-                custom_tkinter.CustomGridview.CustomColumn('Level', 'pkmn_level', width=50),
-                custom_tkinter.CustomGridview.CustomColumn('Total Exp', 'total_xp', width=80),
-                custom_tkinter.CustomGridview.CustomColumn('Exp Gain', 'xp_gain', width=80),
-                custom_tkinter.CustomGridview.CustomColumn('ToNextLevel', 'xp_to_next_level', width=80),
-                custom_tkinter.CustomGridview.CustomColumn('% TNL', 'percent_xp_to_next_level', width=80),
-                custom_tkinter.CustomGridview.CustomColumn('event_id', 'group_id', hidden=True),
+                custom_components.CustomGridview.CustomColumn('LevelUpsInto', 'get_pkmn_after_levelups', width=220),
+                custom_components.CustomGridview.CustomColumn('Level', 'pkmn_level', width=50),
+                custom_components.CustomGridview.CustomColumn('Total Exp', 'total_xp', width=80),
+                custom_components.CustomGridview.CustomColumn('Exp Gain', 'xp_gain', width=80),
+                custom_components.CustomGridview.CustomColumn('ToNextLevel', 'xp_to_next_level', width=80),
+                custom_components.CustomGridview.CustomColumn('% TNL', 'percent_xp_to_next_level', width=80),
+                custom_components.CustomGridview.CustomColumn('event_id', 'group_id', hidden=True),
             ],
             text_field_attr='name',
             semantic_id_attr='group_id',
@@ -360,7 +360,7 @@ class BadgeBoostViewer(tk.Frame):
         self._info_frame.grid(row=0, column=0)
 
         self._move_selector_label = tk.Label(self._info_frame, text="Setup Move: ", bg=config.get_background_color(), fg=config.get_text_color())
-        self._move_selector = custom_tkinter.SimpleOptionMenu(self._info_frame, ["N/A"], callback=self._move_selected_callback)
+        self._move_selector = custom_components.SimpleOptionMenu(self._info_frame, ["N/A"], callback=self._move_selected_callback)
         self._move_selector_label.pack()
         self._move_selector.pack()
 

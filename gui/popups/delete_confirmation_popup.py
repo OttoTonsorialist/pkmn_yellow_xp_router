@@ -2,7 +2,7 @@ import tkinter as tk
 
 from controllers.main_controller import MainController
 from gui.popups.base_popup import Popup
-from gui import custom_tkinter
+from gui import custom_components
 
 
 class DeleteConfirmation(Popup):
@@ -19,8 +19,8 @@ class DeleteConfirmation(Popup):
         self._label = tk.Label(self, text=text)
         self._label.grid(row=0, column=0, columnspan=2, padx=10, pady=10)
 
-        self._confirm_button = custom_tkinter.SimpleButton(self, text="Delete", command=self.delete)
-        self._cancel_button = custom_tkinter.SimpleButton(self, text="Cancel", command=self.close)
+        self._confirm_button = custom_components.SimpleButton(self, text="Delete", command=self.delete)
+        self._cancel_button = custom_components.SimpleButton(self, text="Cancel", command=self.close)
         self._confirm_button.grid(row=1, column=0, padx=10, pady=10)
         self._cancel_button.grid(row=1, column=1, padx=10, pady=10)
 

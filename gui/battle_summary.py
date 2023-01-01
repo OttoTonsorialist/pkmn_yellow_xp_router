@@ -3,7 +3,7 @@ import tkinter.ttk as ttk
 import tkinter.font
 from typing import Dict, List
 
-from gui import custom_tkinter
+from gui import custom_components
 from pkmn import damage_calc, pkmn_info, universal_data_objects
 from routing import route_state_objects
 from routing import route_events
@@ -229,16 +229,16 @@ class SetupMovesSummary(tk.Frame):
         self._callback = callback
         self._move_list = []
 
-        self.reset_button = custom_tkinter.SimpleButton(self, text="Reset Setup Moves", command=self._reset, bg=config.get_contrast_color(), fg=config.get_text_color())
+        self.reset_button = custom_components.SimpleButton(self, text="Reset Setup Moves", command=self._reset, bg=config.get_contrast_color(), fg=config.get_text_color())
         self.reset_button.grid(row=0, column=0, padx=2)
 
         self.setup_label = tk.Label(self, text="Move to Add:", bg=config.get_background_color(), fg=config.get_text_color())
         self.setup_label.grid(row=0, column=1, padx=2)
 
-        self.setup_moves = custom_tkinter.SimpleOptionMenu(self, ["N/A"])
+        self.setup_moves = custom_components.SimpleOptionMenu(self, ["N/A"])
         self.setup_moves.grid(row=0, column=2, padx=2)
 
-        self.add_button = custom_tkinter.SimpleButton(self, text="Add Setup Move", command=self._add_setup_move, bg=config.get_contrast_color(), fg=config.get_text_color())
+        self.add_button = custom_components.SimpleButton(self, text="Add Setup Move", command=self._add_setup_move, bg=config.get_contrast_color(), fg=config.get_text_color())
         self.add_button.grid(row=0, column=3, padx=2)
 
         self.extra_label = tk.Label(self, text="Current Setup Moves:", bg=config.get_background_color(), fg=config.get_text_color())
@@ -663,7 +663,7 @@ class DamageSummary(tk.Frame):
         self.row_idx += 1
 
         self.move_name_label = tk.Label(self.header, background=config.get_primary_color(), fg=config.get_text_color())
-        self.custom_data_dropdown = custom_tkinter.SimpleOptionMenu(self.header, [""], callback=self._custom_data_callback, width=10)
+        self.custom_data_dropdown = custom_components.SimpleOptionMenu(self.header, [""], callback=self._custom_data_callback, width=10)
         if self._allow_edits:
             self.custom_data_dropdown.bind('<ButtonPress>', self._config_custom_data_dropdown)
         else:
