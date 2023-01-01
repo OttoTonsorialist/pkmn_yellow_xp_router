@@ -17,7 +17,7 @@ def skip_if_inactive(controller_fn):
         if obj._controller.is_record_mode_active():
             controller_fn(*args, **kwargs)
         else:
-            logger.warning(f"Ignoring translator function call due to recorder being inactive: {controller_fn} with args: {args} and kwargs: {kwargs}")
+            logger.warning(f"Ignoring recorder function call due to recorder being inactive: {controller_fn} with args: {args} and kwargs: {kwargs}")
     
     return wrapper
 
@@ -270,7 +270,6 @@ class RecorderGameHookClient(GameHookClient):
             self._controller.set_ready(True)
             self._controller.set_status(const.RECORDING_STATUS_READY)
         else:
-            logger.info("yuh yoh")
             self._controller.set_ready(False)
             self._controller.set_status(const.RECORDING_STATUS_WRONG_MAPPER)
 

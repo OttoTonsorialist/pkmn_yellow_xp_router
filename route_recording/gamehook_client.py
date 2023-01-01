@@ -54,7 +54,7 @@ class GameHookProperty:
             try:
                 self._client._change[self.path].remove(fn)
             except ValueError:
-                logger.warning(f"Tried to remove callback that wasn't present: {fn}")
+                logger.warning(f"[GameHook Client] Tried to remove callback that wasn't present: {fn}")
     
     def once(self, fn):
         if self.path not in self._client._once:

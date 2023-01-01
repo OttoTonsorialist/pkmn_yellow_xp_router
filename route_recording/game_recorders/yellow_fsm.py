@@ -143,7 +143,7 @@ class Machine:
             if len(deleted_moves) == 1:
                 to_delete_move = list(deleted_moves)[0]
             elif len(deleted_moves) > 1:
-                logger.error(f"Got multiple deleted moves..? {deleted_moves}")
+                logger.error(f"Got multiple deleted moves..? {deleted_moves}, from {self._cached_moves} to {new_cache}")
                 to_delete_move = list(deleted_moves)[0]
             
             learned_moves = new_moves - old_moves
@@ -151,7 +151,7 @@ class Machine:
             if len(learned_moves) == 1:
                 to_learn_move = list(learned_moves)[0]
             elif len(learned_moves) > 1:
-                logger.error(f"Got multiple learned moves..? {learned_moves}")
+                logger.error(f"Got multiple learned moves..? {learned_moves}, from {self._cached_moves} to {new_cache}")
                 to_learn_move = list(learned_moves)[0]
             
             if to_learn_move is None and to_delete_move is not None:
@@ -375,7 +375,7 @@ class Machine:
                             )
                             continue
 
-                    logger.info(f"adding event: {cur_event}")
+                    logger.info(f"adding new event: {cur_event}")
                     self._controller.add_event(cur_event)
                 except Exception as e:
                     logger.error(f"Exception occurred trying to process event: {cur_event}")

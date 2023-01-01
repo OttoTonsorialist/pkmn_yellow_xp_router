@@ -211,7 +211,7 @@ class MainController:
             logger.error(f"Exception ocurred trying to load route: {full_path_to_route}")
             logger.exception(e)
             self._route_name = ""
-            # load an empty route, just in case. Hardcoded, but wtv, Abra is in ever game
+            # load an empty route, just in case. Hardcoded, but wtv, Abra is in every game
             self._data.new_route("Abra")
             raise e
         finally:

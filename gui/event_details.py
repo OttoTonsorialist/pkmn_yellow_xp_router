@@ -152,7 +152,6 @@ class EventDetails(tk.Frame):
     
     def _handle_selection(self, *args, **kwargs):
         event_group = self._controller.get_single_selected_event_obj()
-        logger.info(f"newly selected event_group: {event_group}")
 
         if event_group is None:
             self.show_event_details(None, self._controller.get_init_state(), self._controller.get_final_state(), allow_updates=False)
