@@ -1,6 +1,7 @@
 import tkinter as tk
 import tkinter.ttk as ttk
 import tkinter.font
+import customtkinter as ctk
 from typing import Dict, List
 
 from gui import custom_components
@@ -13,7 +14,7 @@ import pkmn
 from utils.config_manager import config
 
 
-class BattleSummary(tk.Frame):
+class BattleSummary(ctk.CTkFrame):
     def __init__(self, *args, font_size=None, simple_mode=False, **kwargs):
         super().__init__(*args, **kwargs)
 
@@ -41,7 +42,7 @@ class BattleSummary(tk.Frame):
             else:
                 self._mon_pairs.append(MonPairSummary(self, mimic_callback=self._mimic_callback))
         
-        self.error_message = tk.Label(self, text="Select a battle to see damage calculations")
+        self.error_message = ctk.CTkLabel(self, text="Select a battle to see damage calculations")
         self.should_calculate = False
         self.set_team(None)
     
@@ -222,29 +223,29 @@ class BattleSummary(tk.Frame):
             self._mimic_callback(self._mimic_selection)
 
 
-class SetupMovesSummary(tk.Frame):
+class SetupMovesSummary(ctk.CTkFrame):
     def __init__(self, *args, font_size=None, callback=None, **kwargs):
-        super().__init__(*args, **kwargs, bg=config.get_background_color())
+        super().__init__(*args, **kwargs, bg_color=config.get_background_color())
 
         self._callback = callback
         self._move_list = []
 
-        self.reset_button = custom_components.SimpleButton(self, text="Reset Setup Moves", command=self._reset, bg=config.get_contrast_color(), fg=config.get_text_color())
+        self.reset_button = custom_components.SimpleButton(self, text="Reset Setup Moves", command=self._reset, bg_color=config.get_contrast_color(), fg_color=config.get_text_color())
         self.reset_button.grid(row=0, column=0, padx=2)
 
-        self.setup_label = tk.Label(self, text="Move to Add:", bg=config.get_background_color(), fg=config.get_text_color())
+        self.setup_label = ctk.CTkLabel(self, text="Move to Add:", bg_color=config.get_background_color(), fg_color=config.get_text_color())
         self.setup_label.grid(row=0, column=1, padx=2)
 
         self.setup_moves = custom_components.SimpleOptionMenu(self, ["N/A"])
         self.setup_moves.grid(row=0, column=2, padx=2)
 
-        self.add_button = custom_components.SimpleButton(self, text="Add Setup Move", command=self._add_setup_move, bg=config.get_contrast_color(), fg=config.get_text_color())
+        self.add_button = custom_components.SimpleButton(self, text="Add Setup Move", command=self._add_setup_move, bg_color=config.get_contrast_color(), fg_color=config.get_text_color())
         self.add_button.grid(row=0, column=3, padx=2)
 
-        self.extra_label = tk.Label(self, text="Current Setup Moves:", bg=config.get_background_color(), fg=config.get_text_color())
+        self.extra_label = ctk.CTkLabel(self, text="Current Setup Moves:", bg_color=config.get_background_color(), fg_color=config.get_text_color())
         self.extra_label.grid(row=0, column=4, padx=2)
 
-        self.move_list_label = tk.Label(self, bg=config.get_background_color(), fg=config.get_text_color())
+        self.move_list_label = ctk.CTkLabel(self, bg_color=config.get_background_color(), fg_color=config.get_text_color())
         self.move_list_label.grid(row=0, column=5, padx=2)
     
     def _reset(self, *args, **kwargs):
@@ -278,9 +279,9 @@ class SetupMovesSummary(tk.Frame):
             self._callback()
 
 
-class MonPairSummary(tk.Frame):
+class MonPairSummary(ctk.CTkFrame):
     def __init__(self, *args, font_size=None, mimic_callback=None, **kwargs):
-        super().__init__(*args, **kwargs, highlightbackground="black", highlightthickness=1, bg=config.get_background_color())
+        super().__init__(*args, **kwargs, border_color="black", border_width=1, bg_color=config.get_background_color())
 
         self.mimic_callback = mimic_callback
 
@@ -292,32 +293,33 @@ class MonPairSummary(tk.Frame):
 
         bold_font = tkinter.font.nametofont("TkDefaultFont").copy()
         bold_font.configure(weight="bold")
+        bold_font = (bold_font, 12)
 
-        self.left_mon_label_frame = tk.Frame(self, background=config.get_header_color())
+        self.left_mon_label_frame = ctk.CTkFrame(self, bg_color=config.get_header_color())
         self.left_mon_label_frame.grid(row=0, column=0, columnspan=4, sticky=tk.EW, padx=2, pady=2)
 
-        self.left_attacking_mon = tk.Label(self.left_mon_label_frame, text="", background=config.get_header_color(), fg=config.get_text_color())
+        self.left_attacking_mon = ctk.CTkLabel(self.left_mon_label_frame, text="", bg_color=config.get_header_color(), fg_color=config.get_text_color())
         self.left_attacking_mon.grid(row=0, column=1)
-        self.left_verb = tk.Label(self.left_mon_label_frame, text="", background=config.get_header_color(), font=bold_font, fg=config.get_text_color())
+        self.left_verb = ctk.CTkLabel(self.left_mon_label_frame, text="", bg_color=config.get_header_color(), font=bold_font, fg_color=config.get_text_color())
         self.left_verb.grid(row=0, column=2)
-        self.left_defending_mon = tk.Label(self.left_mon_label_frame, text="", background=config.get_header_color(), fg=config.get_text_color())
+        self.left_defending_mon = ctk.CTkLabel(self.left_mon_label_frame, text="", bg_color=config.get_header_color(), fg_color=config.get_text_color())
         self.left_defending_mon.grid(row=0, column=3)
 
         self.left_mon_label_frame.columnconfigure(0, weight=1, uniform="left_col_group")
         self.left_mon_label_frame.columnconfigure(4, weight=1, uniform="left_col_group")
 
-        self.divider = tk.Frame(self, background=config.get_divider_color(), width=4)
+        self.divider = ctk.CTkFrame(self, bg_color=config.get_divider_color(), width=4)
         self.divider.grid(row=0, column=4, rowspan=2, sticky=tk.NS)
         self.divider.grid_propagate(0)
 
-        self.right_mon_label_frame = tk.Frame(self, background=config.get_header_color())
+        self.right_mon_label_frame = ctk.CTkFrame(self, bg_color=config.get_header_color())
         self.right_mon_label_frame.grid(row=0, column=5, columnspan=4, sticky=tk.EW, padx=2, pady=2)
 
-        self.right_attacking_mon = tk.Label(self.right_mon_label_frame, text="", background=config.get_header_color(), fg=config.get_text_color())
+        self.right_attacking_mon = ctk.CTkLabel(self.right_mon_label_frame, text="", bg_color=config.get_header_color(), fg_color=config.get_text_color())
         self.right_attacking_mon.grid(row=0, column=1)
-        self.right_verb = tk.Label(self.right_mon_label_frame, text="", background=config.get_header_color(), font=bold_font, fg=config.get_text_color())
+        self.right_verb = ctk.CTkLabel(self.right_mon_label_frame, text="", bg_color=config.get_header_color(), font=bold_font, fg_color=config.get_text_color())
         self.right_verb.grid(row=0, column=2)
-        self.right_defending_mon = tk.Label(self.right_mon_label_frame, text="", background=config.get_header_color(), fg=config.get_text_color())
+        self.right_defending_mon = ctk.CTkLabel(self.right_mon_label_frame, text="", bg_color=config.get_header_color(), fg_color=config.get_text_color())
         self.right_defending_mon.grid(row=0, column=3)
 
         self.right_mon_label_frame.columnconfigure(0, weight=1, uniform="right_col_group")
@@ -484,9 +486,9 @@ class MonPairSummary(tk.Frame):
         self._update_best_move(is_enemy=True)
 
 
-class SimpleMonPairSummary(tk.Frame):
+class SimpleMonPairSummary(ctk.CTkFrame):
     def __init__(self, *args, font_size=None, mimic_callback=None, **kwargs):
-        super().__init__(*args, **kwargs, highlightbackground="black", highlightthickness=1, bg=config.get_background_color())
+        super().__init__(*args, **kwargs, border_color="black", border_width=1, bg_color=config.get_background_color())
 
         self.mimic_callback = mimic_callback
 
@@ -499,23 +501,23 @@ class SimpleMonPairSummary(tk.Frame):
         bold_font = tkinter.font.nametofont("TkDefaultFont").copy()
         bold_font.configure(weight="bold")
 
-        self.left_mon_label_frame = tk.Frame(self, background=config.get_header_color())
+        self.left_mon_label_frame = ctk.CTkFrame(self, bg_color=config.get_header_color())
         self.left_mon_label_frame.grid(row=0, column=1, padx=2, pady=2, sticky=tk.EW)
 
-        self.left_attacking_mon = tk.Label(self.left_mon_label_frame, text="", background=config.get_header_color(), fg=config.get_text_color())
+        self.left_attacking_mon = ctk.CTkLabel(self.left_mon_label_frame, text="", bg_color=config.get_header_color(), fg_color=config.get_text_color())
         self.left_attacking_mon.grid(row=0, column=1)
 
         self.left_mon_label_frame.columnconfigure(0, weight=1, uniform="left_col_group")
         self.left_mon_label_frame.columnconfigure(2, weight=1, uniform="left_col_group")
 
-        self.divider = tk.Frame(self, background=config.get_divider_color(), width=4)
+        self.divider = ctk.CTkFrame(self, bg_color=config.get_divider_color(), width=4)
         self.divider.grid(row=0, column=2, rowspan=2, sticky=tk.NS)
         self.divider.grid_propagate(0)
 
-        self.right_mon_label_frame = tk.Frame(self, background=config.get_header_color())
+        self.right_mon_label_frame = ctk.CTkFrame(self, bg_color=config.get_header_color())
         self.right_mon_label_frame.grid(row=0, column=3, padx=2, pady=2, sticky=tk.EW)
 
-        self.right_attacking_mon = tk.Label(self.right_mon_label_frame, text="", background=config.get_header_color(), fg=config.get_text_color())
+        self.right_attacking_mon = ctk.CTkLabel(self.right_mon_label_frame, text="", bg_color=config.get_header_color(), fg_color=config.get_text_color())
         self.right_attacking_mon.grid(row=0, column=1)
 
         self.right_mon_label_frame.columnconfigure(0, weight=1, uniform="right_col_group")
@@ -634,9 +636,9 @@ class SimpleMonPairSummary(tk.Frame):
         self._update_best_move(is_enemy=True)
 
 
-class DamageSummary(tk.Frame):
+class DamageSummary(ctk.CTkFrame):
     def __init__(self, *args, font_size=None, mimic_callback=None, custom_data_callback=None, allow_edits=True, **kwargs):
-        super().__init__(*args, **kwargs, bg=config.get_background_color())
+        super().__init__(*args, **kwargs, bg_color=config.get_background_color())
 
         self.cur_guaranteed_kill = None
         self.cur_max_roll = None
@@ -652,17 +654,16 @@ class DamageSummary(tk.Frame):
         self._outer_custom_data_callback = custom_data_callback
         self._allow_edits = allow_edits
 
-        self.config(padx=2, pady=2)
         self.columnconfigure(0, weight=1)
 
         self.row_idx = 0
 
-        self.header = tk.Frame(self, background=config.get_primary_color())
+        self.header = ctk.CTkFrame(self, bg_color=config.get_primary_color())
         self.header.grid(row=self.row_idx, column=0, sticky=tk.NSEW)
         self.header.columnconfigure(0, weight=1)
         self.row_idx += 1
 
-        self.move_name_label = tk.Label(self.header, background=config.get_primary_color(), fg=config.get_text_color())
+        self.move_name_label = ctk.CTkLabel(self.header, bg_color=config.get_primary_color(), fg_color=config.get_text_color())
         self.custom_data_dropdown = custom_components.SimpleOptionMenu(self.header, [""], callback=self._custom_data_callback, width=10)
         if self._allow_edits:
             self.custom_data_dropdown.bind('<ButtonPress>', self._config_custom_data_dropdown)
@@ -670,26 +671,26 @@ class DamageSummary(tk.Frame):
             self.custom_data_dropdown.disable()
 
         temp_bg_color = config.get_contrast_color()
-        self.range_frame = tk.Frame(self, background=temp_bg_color)
+        self.range_frame = ctk.CTkFrame(self, bg_color=temp_bg_color)
         self.range_frame.grid(row=self.row_idx, column=0, sticky=tk.NSEW)
         self.range_frame.columnconfigure(0, weight=1)
         self.row_idx += 1
 
-        self.damage_range = tk.Label(self.range_frame, background=temp_bg_color, fg=config.get_text_color())
+        self.damage_range = ctk.CTkLabel(self.range_frame, bg_color=temp_bg_color, fg_color=config.get_text_color())
         self.damage_range.grid(row=0, column=0, sticky=tk.W)
-        self.pct_damage_range = tk.Label(self.range_frame, background=temp_bg_color, fg=config.get_text_color())
+        self.pct_damage_range = ctk.CTkLabel(self.range_frame, bg_color=temp_bg_color, fg_color=config.get_text_color())
         self.pct_damage_range.grid(row=0, column=1, sticky=tk.E)
-        self.crit_damage_range = tk.Label(self.range_frame, background=temp_bg_color, fg=config.get_text_color())
+        self.crit_damage_range = ctk.CTkLabel(self.range_frame, bg_color=temp_bg_color, fg_color=config.get_text_color())
         self.crit_damage_range.grid(row=1, column=0, sticky=tk.W)
-        self.crit_pct_damage_range = tk.Label(self.range_frame, background=temp_bg_color, fg=config.get_text_color())
+        self.crit_pct_damage_range = ctk.CTkLabel(self.range_frame, bg_color=temp_bg_color, fg_color=config.get_text_color())
         self.crit_pct_damage_range.grid(row=1, column=1, sticky=tk.E)
 
-        self.kill_frame = tk.Frame(self, background=config.get_secondary_color())
+        self.kill_frame = ctk.CTkFrame(self, bg_color=config.get_secondary_color())
         self.kill_frame.grid(row=self.row_idx, column=0, sticky=tk.NSEW)
         self.rowconfigure(self.row_idx, weight=1)
         self.row_idx += 1
 
-        self.num_to_kill = tk.Label(self.kill_frame, justify=tk.LEFT, background=config.get_secondary_color(), fg=config.get_text_color())
+        self.num_to_kill = ctk.CTkLabel(self.kill_frame, justify=tk.LEFT, bg_color=config.get_secondary_color(), fg_color=config.get_text_color())
         self.num_to_kill.grid(row=0, column=0, sticky=tk.NSEW)
     
     def flag_as_best_move(self, is_enemy=False):
@@ -698,12 +699,12 @@ class DamageSummary(tk.Frame):
         else:
             color = config.get_success_color()
 
-        self.kill_frame.configure(background=color)
-        self.num_to_kill.configure(background=color)
+        self.kill_frame.configure(bg_color=color)
+        self.num_to_kill.configure(bg_color=color)
 
     def unflag_as_best_move(self):
-        self.kill_frame.configure(background=config.get_secondary_color())
-        self.num_to_kill.configure(background=config.get_secondary_color())
+        self.kill_frame.configure(bg_color=config.get_secondary_color())
+        self.num_to_kill.configure(bg_color=config.get_secondary_color())
     
     def get_custom_move_data(self):
         if self.move_has_custom_data:
@@ -820,8 +821,8 @@ class DamageSummary(tk.Frame):
             self.pct_damage_range.configure(text="")
             self.crit_damage_range.configure(text="")
             self.crit_pct_damage_range.configure(text="")
-            self.kill_frame.configure(background=config.get_secondary_color())
-            self.num_to_kill.configure(text="", background=config.get_secondary_color())
+            self.kill_frame.configure(bg_color=config.get_secondary_color())
+            self.num_to_kill.configure(text="", bg_color=config.get_secondary_color())
         else:
             self.damage_range.configure(text=f"{single_attack.min_damage} - {single_attack.max_damage}")
             pct_min_damage = f"{single_attack.min_damage / self.defending_mon.cur_stats.hp * 100:.2f}%"
@@ -855,5 +856,5 @@ class DamageSummary(tk.Frame):
 
             kill_ranges = [format_message(x) for x in kill_ranges]
 
-            self.kill_frame.configure(background=config.get_secondary_color())
-            self.num_to_kill.configure(text="\n".join(kill_ranges), background=config.get_secondary_color())
+            self.kill_frame.configure(bg_color=config.get_secondary_color())
+            self.num_to_kill.configure(text="\n".join(kill_ranges), bg_color=config.get_secondary_color())

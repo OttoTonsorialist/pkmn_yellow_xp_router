@@ -1,7 +1,6 @@
 from __future__ import annotations
 import os
 import logging
-import tkinter
 from typing import List, Tuple
 
 from utils.constants import const
@@ -27,8 +26,7 @@ def handle_exceptions(controller_fn):
 
 
 class MainController:
-    def __init__(self, tk_root:tkinter.Tk):
-        self._tk_root = tk_root
+    def __init__(self):
         self._data:routing.router.Router = routing.router.Router()
         self._current_preview_event = None
         self._route_name = ""

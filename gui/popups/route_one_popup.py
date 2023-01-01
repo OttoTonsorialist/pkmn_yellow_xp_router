@@ -1,5 +1,6 @@
 import tkinter as tk
 from tkinter import filedialog
+import customtkinter as ctk
 
 from controllers.main_controller import MainController
 from gui.popups.base_popup import Popup
@@ -56,19 +57,19 @@ class RouteOneWindow(Popup):
             self.lift()
             return
         jar_path = file_result.name
-        self._route_jar_label.config(text=f"RouteOne jar Path: {jar_path}")
+        self._route_jar_label.configure(text=f"RouteOne jar Path: {jar_path}")
         config.set_route_one_path(jar_path)
         self.lift()
 
     def run_route_one(self, *args, **kwargs):
         if not config.get_route_one_path():
-            self._route_one_results_label.config(text="No RouteOne jar path set, cannot run...")
+            self._route_one_results_label.configure(text="No RouteOne jar path set, cannot run...")
             return
         
         result = route_one_utils.run_route_one(config.get_route_one_path(), self._final_config_path)
         if not result:
-            self._route_one_results_label.config(text=f"RouteOne finished: {self._final_output_path}\nDouble check top of output file for errors")
+            self._route_one_results_label.configure(text=f"RouteOne finished: {self._final_output_path}\nDouble check top of output file for errors")
         else:
-            self._route_one_results_label.config(text=f"Error encountered running RouteOne: {result}")
+            self._route_one_results_label.configure(text=f"Error encountered running RouteOne: {result}")
 
         self.lift()

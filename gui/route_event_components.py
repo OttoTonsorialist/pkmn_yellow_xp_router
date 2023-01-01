@@ -1,4 +1,5 @@
 import tkinter as tk
+import customtkinter as ctk
 
 from gui import custom_components
 from gui.pkmn_components import EnemyPkmnTeam
@@ -15,9 +16,9 @@ class EditorParams:
         self.cur_state = cur_state
 
 
-class EventEditorBase(tk.Frame):
+class EventEditorBase(ctk.CTkFrame):
     def __init__(self, parent, event_button, editor_params: EditorParams, *args, **kwargs):
-        super().__init__(parent, *args, **kwargs, bg=config.get_background_color())
+        super().__init__(parent, *args, **kwargs, bg_color=config.get_background_color())
         self.event_button = event_button
         self.event_button.disable()
         self.editor_params = editor_params
@@ -39,11 +40,11 @@ class NotesEditor(EventEditorBase):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
-        self._notes_label = tk.Label(self, text="Notes:", bg=config.get_background_color(), fg=config.get_text_color())
+        self._notes_label = ctk.CTkLabel(self, text="Notes:", bg_color=config.get_background_color(), fg_color=config.get_text_color())
         self._notes_label.grid(row=self._cur_row, column=0, sticky=tk.W, padx=5, pady=5)
-        self._stat_label = tk.Label(self, text="Stats with * are calculated with a badge boost", background=config.get_contrast_color(), fg=config.get_text_color())
+        self._stat_label = ctk.CTkLabel(self, text="Stats with * are calculated with a badge boost", bg_color=config.get_contrast_color(), fg_color=config.get_text_color())
         self._stat_label.grid(row=self._cur_row, column=1, sticky=tk.W, padx=5, pady=5)
-        self._padding_label = tk.Label(self, text="", bg=config.get_background_color(), fg=config.get_text_color())
+        self._padding_label = ctk.CTkLabel(self, text="", bg_color=config.get_background_color(), fg_color=config.get_text_color())
         self._padding_label.grid(row=self._cur_row, column=2, sticky=tk.W, padx=5, pady=5)
         self._cur_row += 1
 
@@ -73,18 +74,18 @@ class TrainerFightEditor(EventEditorBase):
 
         self.cached_defeated_trainers = self.editor_params.cur_defeated_trainers
 
-        self._trainers_by_loc_label = tk.Label(self, text="Trainer Location Filter:", bg=config.get_background_color(), fg=config.get_text_color())
+        self._trainers_by_loc_label = ctk.CTkLabel(self, text="Trainer Location Filter:", bg_color=config.get_background_color(), fg_color=config.get_text_color())
         trainer_locs = [const.ALL_TRAINERS] + sorted(pkmn.current_gen_info().trainer_db().get_all_locations())
         self._trainers_by_loc = custom_components.SimpleOptionMenu(self, trainer_locs, callback=self._trainer_filter_callback)
         self._trainers_by_loc_label.grid(row=self._cur_row, column=0)
         self._trainers_by_loc.grid(row=self._cur_row, column=1)
         self._cur_row += 1
 
-        self._trainers_by_class_label = tk.Label(self, text="Trainer Class Filter:", bg=config.get_background_color(), fg=config.get_text_color())
+        self._trainers_by_class_label = ctk.CTkLabel(self, text="Trainer Class Filter:", bg_color=config.get_background_color(), fg_color=config.get_text_color())
         trainer_classes = [const.ALL_TRAINERS] + sorted(pkmn.current_gen_info().trainer_db().get_all_classes())
         self._trainers_by_class = custom_components.SimpleOptionMenu(self, trainer_classes, callback=self._trainer_filter_callback)
 
-        self._trainer_names_label = tk.Label(self, text="Trainer Name:", bg=config.get_background_color(), fg=config.get_text_color())
+        self._trainer_names_label = ctk.CTkLabel(self, text="Trainer Name:", bg_color=config.get_background_color(), fg_color=config.get_text_color())
         self._trainer_names = custom_components.SimpleOptionMenu(self, pkmn.current_gen_info().trainer_db().get_valid_trainers(), callback=self._trainer_name_callback)
         self._trainer_team = EnemyPkmnTeam(self)
 
@@ -164,14 +165,14 @@ class VitaminEditor(EventEditorBase):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
-        self._vitamin_label = tk.Label(self, text="Vitamin Type:", bg=config.get_background_color(), fg=config.get_text_color())
+        self._vitamin_label = ctk.CTkLabel(self, text="Vitamin Type:", bg_color=config.get_background_color(), fg_color=config.get_text_color())
         self._vitamin_types = custom_components.SimpleOptionMenu(self, const.VITAMIN_TYPES)
         self._vitamin_label.grid(row=self._cur_row, column=0)
         self._vitamin_types.grid(row=self._cur_row, column=1)
         self._cur_row += 1
 
-        self._item_amount_label = tk.Label(self, text="Num Vitamins:", bg=config.get_background_color(), fg=config.get_text_color())
-        self._item_amount = custom_components.AmountEntry(self, callback=self._amount_update, bg=config.get_background_color())
+        self._item_amount_label = ctk.CTkLabel(self, text="Num Vitamins:", bg_color=config.get_background_color(), fg_color=config.get_text_color())
+        self._item_amount = custom_components.AmountEntry(self, callback=self._amount_update, bg_color=config.get_background_color())
         self._item_amount_label.grid(row=self._cur_row, column=0)
         self._item_amount.grid(row=self._cur_row, column=1)
         self._cur_row += 1
@@ -200,8 +201,8 @@ class RareCandyEditor(EventEditorBase):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.event_button.enable()
-        self._item_amount_label = tk.Label(self, text="Num Rare Candies:", bg=config.get_background_color(), fg=config.get_text_color())
-        self._item_amount = custom_components.AmountEntry(self, callback=self._amount_update, bg=config.get_background_color())
+        self._item_amount_label = ctk.CTkLabel(self, text="Num Rare Candies:", bg_color=config.get_background_color(), fg_color=config.get_text_color())
+        self._item_amount = custom_components.AmountEntry(self, callback=self._amount_update, bg_color=config.get_background_color())
         self._item_amount_label.grid(row=self._cur_row, column=0)
         self._item_amount.grid(row=self._cur_row, column=1)
         self._cur_row += 1
@@ -229,15 +230,15 @@ class LearnMoveEditor(EventEditorBase):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
-        self._source_label = tk.Label(self, bg=config.get_background_color(), fg=config.get_text_color())
+        self._source_label = ctk.CTkLabel(self, bg_color=config.get_background_color(), fg_color=config.get_text_color())
         self._source_label.grid(row=self._cur_row, column=0, columnspan=2)
         self._cur_row += 1
 
-        self._move_name_label = tk.Label(self, bg=config.get_background_color(), fg=config.get_text_color())
+        self._move_name_label = ctk.CTkLabel(self, bg_color=config.get_background_color(), fg_color=config.get_text_color())
         self._move_name_label.grid(row=self._cur_row, column=0, columnspan=2)
         self._cur_row += 1
 
-        self._destination_label = tk.Label(self, text="Move Destination:", bg=config.get_background_color(), fg=config.get_text_color())
+        self._destination_label = ctk.CTkLabel(self, text="Move Destination:", bg_color=config.get_background_color(), fg_color=config.get_text_color())
         self._destination = custom_components.SimpleOptionMenu(self, [None])
         self._destination_label.grid(row=self._cur_row, column=0)
         self._destination.grid(row=self._cur_row, column=1)
@@ -247,17 +248,17 @@ class LearnMoveEditor(EventEditorBase):
         self._move = None
         self._level = const.LEVEL_ANY
 
-        self._item_type_label = tk.Label(self, text="Item Type:", bg=config.get_background_color(), fg=config.get_text_color())
+        self._item_type_label = ctk.CTkLabel(self, text="Item Type:", bg_color=config.get_background_color(), fg_color=config.get_text_color())
         self._item_type_selector = custom_components.SimpleOptionMenu(self, [const.ITEM_TYPE_ALL_ITEMS, const.ITEM_TYPE_BACKPACK_ITEMS, const.ITEM_TYPE_TM], callback=self._item_filter_callback)
         self._item_type_row = self._cur_row
         self._cur_row += 1
 
-        self._item_filter_label = tk.Label(self, text="Item Name Filter:", bg=config.get_background_color(), fg=config.get_text_color())
+        self._item_filter_label = ctk.CTkLabel(self, text="Item Name Filter:", bg_color=config.get_background_color(), fg_color=config.get_text_color())
         self._item_filter = custom_components.SimpleEntry(self, callback=self._item_filter_callback)
         self._item_filter_row = self._cur_row
         self._cur_row += 1
 
-        self._item_selector_label = tk.Label(self, text="Move:", bg=config.get_background_color(), fg=config.get_text_color())
+        self._item_selector_label = ctk.CTkLabel(self, text="Move:", bg_color=config.get_background_color(), fg_color=config.get_text_color())
         self._item_selector = custom_components.SimpleOptionMenu(self, [None], callback=self._move_selected_callback)
         self._item_selector_row = self._cur_row
         self._cur_row += 1
@@ -291,7 +292,7 @@ class LearnMoveEditor(EventEditorBase):
                 self._move = item_obj.move_name
             else:
                 self._move = None
-            self._move_name_label.config(text=f"Move: {self._move}")
+            self._move_name_label.configure(text=f"Move: {self._move}")
         
         if self._move is None:
             self.event_button.disable()
@@ -319,7 +320,7 @@ class LearnMoveEditor(EventEditorBase):
             ]
         )
         if self.editor_params.event_type == const.TASK_LEARN_MOVE_LEVELUP:
-            self._source_label.config(text="Source: Levelup")
+            self._source_label.configure(text="Source: Levelup")
             self._item_type_label.grid_forget()
             self._item_type_selector.grid_forget()
             self._item_filter_label.grid_forget()
@@ -327,7 +328,7 @@ class LearnMoveEditor(EventEditorBase):
             self._item_selector_label.grid_forget()
             self._item_selector.grid_forget()
         else:
-            self._source_label.config(text="Source: TM/HM")
+            self._source_label.configure(text="Source: TM/HM")
             self._item_type_label.grid(row=self._item_type_row, column=0)
             self._item_type_selector.grid(row=self._item_type_row, column=1)
             self._item_filter_label.grid(row=self._item_filter_row, column=1)
@@ -341,7 +342,7 @@ class LearnMoveEditor(EventEditorBase):
         super().load_event(event_def)
         if self.editor_params.event_type == const.TASK_LEARN_MOVE_LEVELUP:
             self._move = event_def.learn_move.move_to_learn
-            self._move_name_label.config(text=f"Move: {self._move}")
+            self._move_name_label.configure(text=f"Move: {self._move}")
             self._level = event_def.learn_move.level
         else:
             self._item_type_selector.set(const.ITEM_TYPE_TM)
@@ -375,31 +376,31 @@ class WildPkmnEditor(EventEditorBase):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
-        self._pkmn_label = tk.Label(self, text="Wild Pokemon Type:", bg=config.get_background_color(), fg=config.get_text_color())
+        self._pkmn_label = ctk.CTkLabel(self, text="Wild Pokemon Type:", bg_color=config.get_background_color(), fg_color=config.get_text_color())
         self._pkmn_types = custom_components.SimpleOptionMenu(self, pkmn.current_gen_info().pkmn_db().get_all_names())
         self._pkmn_label.grid(row=self._cur_row, column=0)
         self._pkmn_types.grid(row=self._cur_row, column=1)
         self._cur_row += 1
 
-        self._pkmn_filter_label = tk.Label(self, text="Wild Pokemon Type Filter:", bg=config.get_background_color(), fg=config.get_text_color())
+        self._pkmn_filter_label = ctk.CTkLabel(self, text="Wild Pokemon Type Filter:", bg_color=config.get_background_color(), fg_color=config.get_text_color())
         self._pkmn_filter = custom_components.SimpleEntry(self, callback=self._pkmn_filter_callback)
         self._pkmn_filter_label.grid(row=self._cur_row, column=0)
         self._pkmn_filter.grid(row=self._cur_row, column=1)
         self._cur_row += 1
 
-        self._pkmn_level_label = tk.Label(self, text="Wild Pokemon Level:", bg=config.get_background_color(), fg=config.get_text_color())
-        self._pkmn_level = custom_components.AmountEntry(self, callback=self._update_button_status, bg=config.get_background_color())
+        self._pkmn_level_label = ctk.CTkLabel(self, text="Wild Pokemon Level:", bg_color=config.get_background_color(), fg_color=config.get_text_color())
+        self._pkmn_level = custom_components.AmountEntry(self, callback=self._update_button_status, bg_color=config.get_background_color())
         self._pkmn_level_label.grid(row=self._cur_row, column=0)
         self._pkmn_level.grid(row=self._cur_row, column=1)
         self._cur_row += 1
 
-        self._quantity_label = tk.Label(self, text="Num Pkmn:", bg=config.get_background_color(), fg=config.get_text_color())
-        self._quantity = custom_components.AmountEntry(self, callback=self._update_button_status, bg=config.get_background_color())
+        self._quantity_label = ctk.CTkLabel(self, text="Num Pkmn:", bg_color=config.get_background_color(), fg_color=config.get_text_color())
+        self._quantity = custom_components.AmountEntry(self, callback=self._update_button_status, bg_color=config.get_background_color())
         self._quantity_label.grid(row=self._cur_row, column=0)
         self._quantity.grid(row=self._cur_row, column=1)
         self._cur_row += 1
 
-        self._pkmn_trainer_flag = custom_components.CheckboxLabel(self, text="Is Trainer Pkmn?", bg=config.get_background_color(), fg=config.get_text_color())
+        self._pkmn_trainer_flag = custom_components.CheckboxLabel(self, text="Is Trainer Pkmn?", bg_color=config.get_background_color(), fg_color=config.get_text_color())
         self._pkmn_trainer_flag.grid(row=self._cur_row, column=0, columnspan=2)
         self._cur_row += 1
     
@@ -461,32 +462,32 @@ class InventoryEventEditor(EventEditorBase):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
-        self._item_type_label = tk.Label(self, text="Item Type:", bg=config.get_background_color(), fg=config.get_text_color())
+        self._item_type_label = ctk.CTkLabel(self, text="Item Type:", bg_color=config.get_background_color(), fg_color=config.get_text_color())
         self._item_type_selector = custom_components.SimpleOptionMenu(self, const.ITEM_TYPES, callback=self._item_filter_callback)
         self._item_type_row = self._cur_row
         self._cur_row += 1
 
-        self._item_mart_label = tk.Label(self, text="Mart:", bg=config.get_background_color(), fg=config.get_text_color())
+        self._item_mart_label = ctk.CTkLabel(self, text="Mart:", bg_color=config.get_background_color(), fg_color=config.get_text_color())
         self._item_mart_selector = custom_components.SimpleOptionMenu(self, [const.ITEM_TYPE_ALL_ITEMS] + sorted(list(pkmn.current_gen_info().item_db().mart_items.keys())), callback=self._item_filter_callback)
         self._item_mart_row = self._cur_row
         self._cur_row += 1
 
-        self._item_filter_label = tk.Label(self, text="Item Name Filter:", bg=config.get_background_color(), fg=config.get_text_color())
+        self._item_filter_label = ctk.CTkLabel(self, text="Item Name Filter:", bg_color=config.get_background_color(), fg_color=config.get_text_color())
         self._item_filter = custom_components.SimpleEntry(self, callback=self._item_filter_callback)
         self._item_filter_row = self._cur_row
         self._cur_row += 1
 
-        self._item_selector_label = tk.Label(self, text="Item:", bg=config.get_background_color(), fg=config.get_text_color())
+        self._item_selector_label = ctk.CTkLabel(self, text="Item:", bg_color=config.get_background_color(), fg_color=config.get_text_color())
         self._item_selector = custom_components.SimpleOptionMenu(self, pkmn.current_gen_info().item_db().get_filtered_names(), callback=self._item_selector_callback)
         self._item_selector_row = self._cur_row
         self._cur_row += 1
 
-        self._item_amount_label = tk.Label(self, text="Num Items:", bg=config.get_background_color(), fg=config.get_text_color())
-        self._item_amount = custom_components.AmountEntry(self, callback=self._item_selector_callback, bg=config.get_background_color())
+        self._item_amount_label = ctk.CTkLabel(self, text="Num Items:", bg_color=config.get_background_color(), fg_color=config.get_text_color())
+        self._item_amount = custom_components.AmountEntry(self, callback=self._item_selector_callback, bg_color=config.get_background_color())
         self._item_amount_row = self._cur_row
         self._cur_row += 1
 
-        self._item_cost_label = tk.Label(self, text="Total Cost:", bg=config.get_background_color(), fg=config.get_text_color())
+        self._item_cost_label = ctk.CTkLabel(self, text="Total Cost:", bg_color=config.get_background_color(), fg_color=config.get_text_color())
         self._item_cost_row = self._cur_row
         self._cur_row += 1
 
@@ -590,12 +591,12 @@ class InventoryEventEditor(EventEditorBase):
                 # update the cost if purchasing
                 cost = cur_item.purchase_price
                 cost *= item_amt
-                self._item_cost_label.config(text=f"Total Cost: {cost}")
+                self._item_cost_label.configure(text=f"Total Cost: {cost}")
             elif self.editor_params.event_type == const.TASK_SELL_ITEM:
                 # update the cost if purchasing
                 cost = cur_item.sell_price
                 cost *= item_amt
-                self._item_cost_label.config(text=f"Total Profit: {cost}")
+                self._item_cost_label.configure(text=f"Total Profit: {cost}")
 
             self.event_button.enable()
         except Exception as e:
@@ -713,7 +714,7 @@ class SaveEventEditor(EventEditorBase):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.event_button.enable()
-        self._location_label = tk.Label(self, text="Save Location", bg=config.get_background_color(), fg=config.get_text_color())
+        self._location_label = ctk.CTkLabel(self, text="Save Location", bg_color=config.get_background_color(), fg_color=config.get_text_color())
         self._location_value = custom_components.SimpleEntry(self)
         self._location_label.grid(row=self._cur_row, column=0)
         self._location_value.grid(row=self._cur_row, column=1)
@@ -731,7 +732,7 @@ class HealEventEditor(EventEditorBase):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.event_button.enable()
-        self._location_label = tk.Label(self, text="Heal Location", bg=config.get_background_color(), fg=config.get_text_color())
+        self._location_label = ctk.CTkLabel(self, text="Heal Location", bg_color=config.get_background_color(), fg_color=config.get_text_color())
         self._location_value = custom_components.SimpleEntry(self)
         self._location_label.grid(row=self._cur_row, column=0)
         self._location_value.grid(row=self._cur_row, column=1)
@@ -749,7 +750,7 @@ class BlackoutEventEditor(EventEditorBase):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.event_button.enable()
-        self._location_label = tk.Label(self, text="Black Out back to:", bg=config.get_background_color(), fg=config.get_text_color())
+        self._location_label = ctk.CTkLabel(self, text="Black Out back to:", bg_color=config.get_background_color(), fg_color=config.get_text_color())
         self._location_value = custom_components.SimpleEntry(self)
         self._location_label.grid(row=self._cur_row, column=0)
         self._location_value.grid(row=self._cur_row, column=1)

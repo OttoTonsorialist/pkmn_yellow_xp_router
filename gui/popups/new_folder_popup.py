@@ -1,4 +1,4 @@
-import tkinter as tk
+import customtkinter as ctk
 
 from controllers.main_controller import MainController
 from gui.popups.base_popup import Popup
@@ -13,7 +13,7 @@ class NewFolderWindow(Popup):
         self._prev_folder_name = prev_folder_name
         self._insert_after = insert_after
 
-        self._label = tk.Label(self)
+        self._label = ctk.CTkLabel(self)
         self._folder_name = custom_components.SimpleEntry(self, callback=self.folder_name_update)
         self._label.grid(row=0, column=0, padx=10, pady=10)
         self._folder_name.grid(row=0, column=1, padx=10, pady=10)

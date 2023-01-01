@@ -4,6 +4,7 @@ import threading
 import tkinter as tk
 from tkinter import filedialog
 from tkinter import messagebox
+import customtkinter as ctk
 
 from gui import custom_components
 from gui.popups.base_popup import Popup
@@ -24,30 +25,30 @@ class DataDirConfigWindow(Popup):
 
         self.padx = 5
         self.pady = 5
-        self.app_info_frame = tk.Frame(self)
+        self.app_info_frame = ctk.CTkFrame(self)
         self.app_info_frame.pack(padx=self.padx, pady=(2 * self.pady))
-        self.data_location_frame = tk.Frame(self)
+        self.data_location_frame = ctk.CTkFrame(self)
         self.data_location_frame.pack(padx=self.padx, pady=(4 * self.pady, 2 * self.pady))
 
-        self.app_version_label = tk.Label(self.app_info_frame, text="App Version:")
+        self.app_version_label = ctk.CTkLabel(self.app_info_frame, text="App Version:")
         self.app_version_label.grid(row=0, column=0)
-        self.app_version_value = tk.Label(self.app_info_frame, text=const.APP_VERSION)
+        self.app_version_value = ctk.CTkLabel(self.app_info_frame, text=const.APP_VERSION)
         self.app_version_value.grid(row=0, column=1)
 
-        self.app_release_date_label = tk.Label(self.app_info_frame, text="Release Date:")
+        self.app_release_date_label = ctk.CTkLabel(self.app_info_frame, text="Release Date:")
         self.app_release_date_label.grid(row=1, column=0)
-        self.app_release_date_value = tk.Label(self.app_info_frame, text=const.APP_RELEASE_DATE)
+        self.app_release_date_value = ctk.CTkLabel(self.app_info_frame, text=const.APP_RELEASE_DATE)
         self.app_release_date_value.grid(row=1, column=1)
 
-        self._windows_label = tk.Label(self.app_info_frame, text="Automatic updates only supported on windows machines")
+        self._windows_label = ctk.CTkLabel(self.app_info_frame, text="Automatic updates only supported on windows machines")
         self._windows_label.grid(row=5, column=0, columnspan=2, padx=self.padx, pady=(2 * self.pady, self.pady))
-        self._latest_version_label = tk.Label(self.app_info_frame, text="Fetching newest version...")
+        self._latest_version_label = ctk.CTkLabel(self.app_info_frame, text="Fetching newest version...")
         self._latest_version_label.grid(row=6, column=0, columnspan=2)
         self._check_for_updates_button = custom_components.SimpleButton(self.app_info_frame, text="No Upgrade Needed", command=self._kick_off_auto_update)
         self._check_for_updates_button.grid(row=7, column=0, columnspan=2)
         self._check_for_updates_button.disable()
 
-        self.data_location_value = tk.Label(self.data_location_frame, text=f"Data Location: {config.get_user_data_dir()}")
+        self.data_location_value = ctk.CTkLabel(self.data_location_frame, text=f"Data Location: {config.get_user_data_dir()}")
         self.data_location_value.grid(row=15, column=0, columnspan=2)
         self.data_location_label = custom_components.SimpleButton(self.data_location_frame, text="Open Data Folder", command=self.open_data_location)
         self.data_location_label.grid(row=16, column=0)
@@ -107,7 +108,7 @@ class DataDirConfigWindow(Popup):
 
         if io_utils.change_user_data_location(config.get_user_data_dir(), new_path):
             config.set_user_data_dir(new_path)
-            self.data_location_value.config(text=new_path)
+            self.data_location_value.configure(text=new_path)
         else:
             messagebox.showerror("Error", "Failed to change user data location...")
 

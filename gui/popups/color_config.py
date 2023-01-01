@@ -1,4 +1,5 @@
 import tkinter as tk
+import customtkinter as ctk
 from tkinter import font
 
 from gui.popups.base_popup import Popup
@@ -10,11 +11,11 @@ class ConfigWindow(Popup):
     def __init__(self, main_window, *args, **kwargs):
         super().__init__(main_window, *args, **kwargs)
         
-        self._font_frame = tk.Frame(self)
+        self._font_frame = ctk.CTkFrame(self)
         self._font_frame.grid(row=0, column=0)
         self._font_frame.columnconfigure(1, weight=1)
 
-        self._font_name_label = tk.Label(self._font_frame, text="Font Name:")
+        self._font_name_label = ctk.CTkLabel(self._font_frame, text="Font Name:")
         self._font_name_label.grid(row=3, column=0, padx=3, pady=3, sticky=tk.EW)
 
         self._font_name = custom_components.SimpleOptionMenu(self._font_frame, sorted(font.families()))
@@ -24,19 +25,19 @@ class ConfigWindow(Popup):
             custom_font_name = config.DEFAULT_FONT_NAME
         self._font_name.set(custom_font_name)
 
-        self._font_name_button = tk.Button(self._font_frame, text="Set Font Name", command=self.set_font_name)
+        self._font_name_button = ctk.CTkButton(self._font_frame, text="Set Font Name", command=self.set_font_name)
         self._font_name_button.grid(row=4, column=0, columnspan=2, padx=3, pady=3)
 
-        self._font_warning = tk.Label(self._font_frame, text=f"If your custom font is not present in the list\nMake sure that it is installed on your system\nAnd then restart the program")
+        self._font_warning = ctk.CTkLabel(self._font_frame, text=f"If your custom font is not present in the list\nMake sure that it is installed on your system\nAnd then restart the program")
         self._font_warning.grid(row=5, column=0, columnspan=2, padx=5, pady=3, sticky=tk.EW)
 
-        self._color_frame = tk.Frame(self)
+        self._color_frame = ctk.CTkFrame(self)
         self._color_frame.grid(row=2, column=0, pady=20)
 
-        self._color_header = tk.Label(self._color_frame, text="Color Config:")
+        self._color_header = ctk.CTkLabel(self._color_frame, text="Color Config:")
         self._color_header.grid(row=0, column=0, padx=5, pady=3, sticky=tk.EW)
 
-        self._reset_colors_button = tk.Button(self._color_frame, text="Reset all colors", command=self._reset_all_colors)
+        self._reset_colors_button = ctk.CTkButton(self._color_frame, text="Reset all colors", command=self._reset_all_colors)
         self._reset_colors_button.grid(row=1, column=0, padx=5, pady=3, sticky=tk.EW)
 
         self._success_color = custom_components.ConfigColorUpdater(self._color_frame, label_text="Success Color:", setter=config.set_success_color, getter=config.get_success_color, callback=self.lift)
@@ -69,7 +70,7 @@ class ConfigWindow(Popup):
         self._text_color = custom_components.ConfigColorUpdater(self._color_frame, label_text="Text Color:", setter=config.set_text_color, getter=config.get_text_color, callback=self.lift)
         self._text_color.grid(row=11, column=0, sticky=tk.EW)
 
-        self._restart_label = tk.Label(self._color_frame, text="After changing colors, you must restart the program\nbefore color changes will take effect")
+        self._restart_label = ctk.CTkLabel(self._color_frame, text="After changing colors, you must restart the program\nbefore color changes will take effect")
         self._restart_label.grid(row=15, column=0, padx=5, pady=5, sticky=tk.EW)
 
         self._close_button = custom_components.SimpleButton(self, text="Close", command=self.close)

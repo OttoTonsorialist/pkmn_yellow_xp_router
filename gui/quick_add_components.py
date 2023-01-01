@@ -1,8 +1,8 @@
 import logging
-
 import tkinter as tk
-from controllers.main_controller import MainController
+import customtkinter as ctk
 
+from controllers.main_controller import MainController
 from gui import custom_components
 from routing.route_events import \
     EventDefinition, EventItem, HoldItemEventDefinition, InventoryEventDefinition, LearnMoveEventDefinition, \
@@ -15,34 +15,34 @@ import pkmn
 logger = logging.getLogger(__name__)
 
 
-class QuickTrainerAdd(tk.Frame):
+class QuickTrainerAdd(ctk.CTkFrame):
     def __init__(self, controller:MainController, *args, **kwargs):
-        super().__init__(*args, **kwargs, highlightbackground="black", highlightthickness=2)
+        super().__init__(*args, **kwargs, border_color="black", border_width=2)
         self._controller = controller
 
         self.padx = 5
         self.pady = 1
         self.option_menu_width = 20
 
-        self._dropdowns = tk.Frame(self)
+        self._dropdowns = ctk.CTkFrame(self)
         self._dropdowns.pack()
 
         self._cur_row = 0
-        self._trainers_by_loc_label = tk.Label(self._dropdowns, text="Location:", justify=tk.LEFT)
+        self._trainers_by_loc_label = ctk.CTkLabel(self._dropdowns, text="Location:", justify=tk.LEFT)
         self._trainers_by_loc = custom_components.SimpleOptionMenu(self._dropdowns, [const.ALL_TRAINERS], callback=self.trainer_filter_callback)
         self._trainers_by_loc.configure(width=self.option_menu_width)
         self._trainers_by_loc_label.grid(row=self._cur_row, column=0, padx=self.padx, pady=self.pady, sticky=tk.W)
         self._trainers_by_loc.grid(row=self._cur_row, column=1, padx=self.padx, pady=self.pady, sticky=tk.E)
         self._cur_row += 1
 
-        self._trainers_by_class_label = tk.Label(self._dropdowns, text="Trainer Class:", justify=tk.LEFT)
+        self._trainers_by_class_label = ctk.CTkLabel(self._dropdowns, text="Trainer Class:", justify=tk.LEFT)
         self._trainers_by_class = custom_components.SimpleOptionMenu(self._dropdowns, [const.ALL_TRAINERS], callback=self.trainer_filter_callback)
         self._trainers_by_class.configure(width=self.option_menu_width)
         self._trainers_by_class_label.grid(row=self._cur_row, column=0, padx=self.padx, pady=self.pady, sticky=tk.W)
         self._trainers_by_class.grid(row=self._cur_row, column=1, padx=self.padx, pady=self.pady, sticky=tk.E)
         self._cur_row += 1
 
-        self._trainer_names_label = tk.Label(self._dropdowns, text="Trainer:", justify=tk.LEFT)
+        self._trainer_names_label = ctk.CTkLabel(self._dropdowns, text="Trainer:", justify=tk.LEFT)
         self._trainer_names = custom_components.SimpleOptionMenu(self._dropdowns, [const.NO_TRAINERS], callback=self._trainer_name_callback)
         self._trainer_names.configure(width=self.option_menu_width)
         self._trainer_names_label.grid(row=self._cur_row, column=0, padx=self.padx, pady=self.pady, sticky=tk.W)
@@ -54,7 +54,7 @@ class QuickTrainerAdd(tk.Frame):
         self._rematches_label.grid(row=self._cur_row, column=0, columnspan=2, padx=self.padx, pady=self.pady, sticky=tk.EW)
         self._cur_row += 1
 
-        self._buttons = tk.Frame(self)
+        self._buttons = ctk.CTkFrame(self)
         self._buttons.pack(fill=tk.X, anchor=tk.CENTER, side=tk.BOTTOM)
         self._btn_width = 8
 
@@ -132,9 +132,9 @@ class QuickTrainerAdd(tk.Frame):
         )
 
 
-class QuickWildPkmn(tk.Frame):
+class QuickWildPkmn(ctk.CTkFrame):
     def __init__(self, controller:MainController, *args, **kwargs):
-        super().__init__(*args, **kwargs, highlightbackground="black", highlightthickness=2)
+        super().__init__(*args, **kwargs, border_color="black", border_width=2)
 
         self._controller = controller
 
@@ -142,39 +142,39 @@ class QuickWildPkmn(tk.Frame):
         self.pady = 1
         self.option_menu_width = 20
 
-        self._dropdowns = tk.Frame(self)
+        self._dropdowns = ctk.CTkFrame(self)
         self._dropdowns.pack()
 
         self._cur_row = 0
-        self._pkmn_filter_label = tk.Label(self._dropdowns, text="Filter:", justify=tk.LEFT)
+        self._pkmn_filter_label = ctk.CTkLabel(self._dropdowns, text="Filter:", justify=tk.LEFT)
         self._pkmn_filter = custom_components.SimpleEntry(self._dropdowns, callback=self._pkmn_filter_callback)
         self._pkmn_filter.configure(width=self.option_menu_width)
         self._pkmn_filter_label.grid(row=self._cur_row, column=0, padx=self.padx, pady=self.pady, sticky=tk.W)
         self._pkmn_filter.grid(row=self._cur_row, column=1, padx=self.padx, pady=self.pady, sticky=tk.E)
         self._cur_row += 1
 
-        self._pkmn_types_label = tk.Label(self._dropdowns, text="Wild Pkmn:", justify=tk.LEFT)
+        self._pkmn_types_label = ctk.CTkLabel(self._dropdowns, text="Wild Pkmn:", justify=tk.LEFT)
         self._pkmn_types = custom_components.SimpleOptionMenu(self._dropdowns, [const.NO_POKEMON])
         self._pkmn_types.configure(width=self.option_menu_width)
         self._pkmn_types_label.grid(row=self._cur_row, column=0, padx=self.padx, pady=self.pady, sticky=tk.W)
         self._pkmn_types.grid(row=self._cur_row, column=1, padx=self.padx, pady=self.pady, sticky=tk.E)
         self._cur_row += 1
 
-        self._level_label = tk.Label(self._dropdowns, text="Pkmn Level:", justify=tk.LEFT)
+        self._level_label = ctk.CTkLabel(self._dropdowns, text="Pkmn Level:", justify=tk.LEFT)
         self._level_val = custom_components.AmountEntry(self._dropdowns, callback=self._update_button_callback_wrapper)
         self._level_val._amount.configure(width=self.option_menu_width - 5)
         self._level_label.grid(row=self._cur_row, column=0, padx=self.padx, pady=self.pady, sticky=tk.W)
         self._level_val.grid(row=self._cur_row, column=1, padx=self.padx, pady=self.pady, sticky=tk.E)
         self._cur_row += 1
 
-        self._quantity_label = tk.Label(self._dropdowns, text="Quantity:", justify=tk.LEFT)
+        self._quantity_label = ctk.CTkLabel(self._dropdowns, text="Quantity:", justify=tk.LEFT)
         self._quantity_val = custom_components.AmountEntry(self._dropdowns, callback=self._update_button_callback_wrapper)
         self._quantity_val._amount.configure(width=self.option_menu_width - 5)
         self._quantity_label.grid(row=self._cur_row, column=0, padx=self.padx, pady=self.pady, sticky=tk.W)
         self._quantity_val.grid(row=self._cur_row, column=1, padx=self.padx, pady=self.pady, sticky=tk.E)
         self._cur_row += 1
 
-        self._buttons = tk.Frame(self)
+        self._buttons = ctk.CTkFrame(self)
         self._buttons.pack(fill=tk.X, anchor=tk.CENTER, side=tk.BOTTOM)
         self._btn_width = 8
 
@@ -255,9 +255,9 @@ class QuickWildPkmn(tk.Frame):
         )
 
 
-class QuickItemAdd(tk.Frame):
+class QuickItemAdd(ctk.CTkFrame):
     def __init__(self, controller:MainController, *args, **kwargs):
-        super().__init__(*args, **kwargs, highlightbackground="black", highlightthickness=2)
+        super().__init__(*args, **kwargs, border_color="black", border_width=2)
         self._controller = controller
 
         self._cur_row = 0
@@ -265,53 +265,53 @@ class QuickItemAdd(tk.Frame):
         self.pady = 1
         self.option_menu_width = 15
 
-        self._dropdowns = tk.Frame(self)
+        self._dropdowns = ctk.CTkFrame(self)
         self._dropdowns.pack()
 
-        self._item_filter_label = tk.Label(self._dropdowns, text="Search:")
+        self._item_filter_label = ctk.CTkLabel(self._dropdowns, text="Search:")
         self._item_filter = custom_components.SimpleEntry(self._dropdowns, callback=self.item_filter_callback, width=self.option_menu_width + 5)
         self._item_filter_label.grid(row=self._cur_row, column=0, padx=self.padx, pady=self.pady, sticky=tk.W)
         self._item_filter.grid(row=self._cur_row, column=1, padx=self.padx, pady=self.pady, sticky=tk.E)
 
-        self._item_type_label = tk.Label(self._dropdowns, text="Item Type:")
+        self._item_type_label = ctk.CTkLabel(self._dropdowns, text="Item Type:")
         self._item_type_selector = custom_components.SimpleOptionMenu(self._dropdowns, const.ITEM_TYPES, callback=self.item_filter_callback)
         self._item_type_selector.configure(width=self.option_menu_width)
         self._item_type_label.grid(row=self._cur_row, column=2, padx=self.padx, pady=self.pady, sticky=tk.W)
         self._item_type_selector.grid(row=self._cur_row, column=3, padx=self.padx, pady=self.pady, sticky=tk.E)
         self._cur_row += 1
 
-        self._item_selector_label = tk.Label(self._dropdowns, text="Item:")
+        self._item_selector_label = ctk.CTkLabel(self._dropdowns, text="Item:")
         self._item_selector = custom_components.SimpleOptionMenu(self._dropdowns, [const.NO_ITEM], callback=self.item_selector_callback)
         self._item_selector.configure(width=self.option_menu_width)
         self._item_selector_label.grid(row=self._cur_row, column=0, padx=self.padx, pady=self.pady, sticky=tk.W)
         self._item_selector.grid(row=self._cur_row, column=1, padx=self.padx, pady=self.pady, sticky=tk.E)
 
-        self._item_mart_label = tk.Label(self._dropdowns, text="Mart:")
+        self._item_mart_label = ctk.CTkLabel(self._dropdowns, text="Mart:")
         self._item_mart_selector = custom_components.SimpleOptionMenu(self._dropdowns, [const.ITEM_TYPE_ALL_ITEMS], callback=self.item_filter_callback)
         self._item_mart_selector.configure(width=self.option_menu_width)
         self._item_mart_label.grid(row=self._cur_row, column=2, padx=self.padx, pady=self.pady, sticky=tk.W)
         self._item_mart_selector.grid(row=self._cur_row, column=3, padx=self.padx, pady=self.pady, sticky=tk.E)
         self._cur_row += 1
 
-        self._item_amount_label = tk.Label(self._dropdowns, text="Quantity:")
+        self._item_amount_label = ctk.CTkLabel(self._dropdowns, text="Quantity:")
         self._item_amount = custom_components.AmountEntry(self._dropdowns, callback=self.item_selector_callback)
         self._item_amount._amount.configure(width=self.option_menu_width)
         self._item_amount_label.grid(row=self._cur_row, column=0, padx=self.padx, pady=self.pady, sticky=tk.W)
         self._item_amount.grid(row=self._cur_row, column=1, padx=self.padx, pady=self.pady, sticky=tk.E)
         self._cur_row += 1
 
-        self._purchase_cost_label = tk.Label(self._dropdowns, text="Purchase:")
-        self._purchase_cost_amt = tk.Label(self._dropdowns)
+        self._purchase_cost_label = ctk.CTkLabel(self._dropdowns, text="Purchase:")
+        self._purchase_cost_amt = ctk.CTkLabel(self._dropdowns)
         self._purchase_cost_label.grid(row=self._cur_row, column=0, padx=self.padx, pady=2*self.pady, sticky=tk.W)
         self._purchase_cost_amt.grid(row=self._cur_row, column=1, padx=self.padx, pady=2*self.pady, sticky=tk.E)
 
-        self._sell_cost_label = tk.Label(self._dropdowns, text="Sell Price:")
-        self._sell_cost_amt = tk.Label(self._dropdowns)
+        self._sell_cost_label = ctk.CTkLabel(self._dropdowns, text="Sell Price:")
+        self._sell_cost_amt = ctk.CTkLabel(self._dropdowns)
         self._sell_cost_label.grid(row=self._cur_row, column=2, padx=self.padx, pady=2*self.pady, sticky=tk.W)
         self._sell_cost_amt.grid(row=self._cur_row, column=3, padx=self.padx, pady=2*self.pady, sticky=tk.E)
         self._cur_row += 1
 
-        self._buttons = tk.Frame(self)
+        self._buttons = ctk.CTkFrame(self)
         self._buttons.pack(fill=tk.X, anchor=tk.CENTER, side=tk.BOTTOM)
         self._btn_width = 6
 
@@ -419,11 +419,11 @@ class QuickItemAdd(tk.Frame):
         try:
             item_amt = int(self._item_amount.get())
             cur_item = pkmn.current_gen_info().item_db().get_item(self._item_selector.get())
-            self._purchase_cost_amt.config(text=f"{cur_item.purchase_price * item_amt}")
-            self._sell_cost_amt.config(text=f"{cur_item.sell_price * item_amt}")
+            self._purchase_cost_amt.configure(text=f"{cur_item.purchase_price * item_amt}")
+            self._sell_cost_amt.configure(text=f"{cur_item.sell_price * item_amt}")
         except Exception as e:
-            self._purchase_cost_amt.config(text="")
-            self._sell_cost_amt.config(text="")
+            self._purchase_cost_amt.configure(text="")
+            self._sell_cost_amt.configure(text="")
         
         self.update_button_status()
     
@@ -526,9 +526,9 @@ class QuickItemAdd(tk.Frame):
         )
 
 
-class QuickMiscEvents(tk.Frame):
+class QuickMiscEvents(ctk.CTkFrame):
     def __init__(self, controller:MainController, *args, **kwargs):
-        super().__init__(*args, **kwargs, highlightbackground="black", highlightthickness=2)
+        super().__init__(*args, **kwargs, border_color="black", border_width=2)
         self._controller = controller
         self._uninitialized = True
 
@@ -536,7 +536,7 @@ class QuickMiscEvents(tk.Frame):
         self.pady = 1
         self.option_menu_width = 15
 
-        self._buttons = tk.Frame(self)
+        self._buttons = ctk.CTkFrame(self)
         self._buttons.pack(fill=tk.BOTH, anchor=tk.CENTER)
         self._btn_width = 8
 

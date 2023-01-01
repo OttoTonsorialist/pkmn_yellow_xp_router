@@ -3,6 +3,7 @@ import os
 import tkinter as tk
 from tkinter import ttk, colorchooser
 from PIL import Image, ImageTk
+import customtkinter as ctk
 
 from utils.constants import const
 from utils.config_manager import config
@@ -206,21 +207,21 @@ class CustomGridview(CheckboxTreeview):
         return item_id
 
 
-class CheckboxLabel(tk.Frame):
+class CheckboxLabel(ctk.CTkFrame):
     CHECKED_STATE = "checked"
     UNCHECKED_STATE =" unchecked"
 
-    def __init__(self, *args, text="", init_check_state=None, toggle_command=None, flip=False, fg=None, **kwargs):
+    def __init__(self, *args, text="", init_check_state=None, toggle_command=None, flip=False, fg_color=None, **kwargs):
         super().__init__(*args, **kwargs)
-        bg = None
-        if 'bg' in kwargs:
-            bg = kwargs['bg']
+        bg_color = 'transparent'
+        if 'bg_color' in kwargs:
+            bg_color = kwargs['bg_color']
 
-        if fg is None:
-            fg = config.DEFAULT_TEXT_COLOR
+        if fg_color is None:
+            fg_color = config.DEFAULT_TEXT_COLOR
 
-        self._checkbox = tk.Label(self, bg=bg, fg=fg)
-        self._text_label = tk.Label(self, text=text, bg=bg, fg=fg)
+        self._checkbox = ctk.CTkLabel(self, bg_color=bg_color, fg_color=fg_color)
+        self._text_label = ctk.CTkLabel(self, text=text, bg_color=bg_color, fg_color=fg_color)
 
         if flip:
             self.columnconfigure(0, weight=1)
@@ -246,10 +247,10 @@ class CheckboxLabel(tk.Frame):
     def set_checked(self, is_checked):
         if is_checked:
             self._check_state = self.CHECKED_STATE
-            self._checkbox.config(image=self.im_checked)
+            self._checkbox.configure(image=self.im_checked)
         else:
             self._check_state = self.UNCHECKED_STATE
-            self._checkbox.config(image=self.im_unchecked)
+            self._checkbox.configure(image=self.im_unchecked)
 
     def is_checked(self):
         return self._check_state == self.CHECKED_STATE
@@ -288,14 +289,14 @@ class SimpleOptionMenu(ttk.Combobox):
     
     def new_values(self, option_list, default_val=None):
         self.cur_options = option_list
-        self.config(values=self.cur_options)
+        self.configure(values=self.cur_options)
 
         if default_val is None:
             default_val = option_list[0]
         self._val.set(default_val)
 
 
-class SimpleEntry(tk.Entry):
+class SimpleEntry(ctk.CTkEntry):
     def __init__(self, *args, initial_value="", callback=None, **kwargs):
         self._value = tk.StringVar(value=initial_value)
 
@@ -310,7 +311,7 @@ class SimpleEntry(tk.Entry):
         self._value.set(value)
 
 
-class AmountEntry(tk.Frame):
+class AmountEntry(ctk.CTkFrame):
     def __init__(self, *args, callback=None, max_val=None, min_val=None, init_val=None, **kwargs):
         super().__init__(*args, **kwargs)
 
@@ -320,11 +321,11 @@ class AmountEntry(tk.Frame):
         if init_val is None:
             init_val = "1"
         
-        self._down_button = tk.Button(self, text="v", command=self._lower_amt)
+        self._down_button = ctk.CTkButton(self, text="v", command=self._lower_amt)
         self._down_button.grid(row=0, column=0)
         self._amount = SimpleEntry(self, initial_value=init_val, callback=callback)
         self._amount.grid(row=0, column=1)
-        self._up_button = tk.Button(self, text="^", command=self._raise_amt)
+        self._up_button = ctk.CTkButton(self, text="^", command=self._raise_amt)
         self._up_button.grid(row=0, column=2)
     
     def _lower_amt(self, *args, **kwargs):
@@ -360,7 +361,7 @@ class AmountEntry(tk.Frame):
         self._amount.set(value)
 
 
-class SimpleButton(tk.Button):
+class SimpleButton(ctk.CTkButton):
     def enable(self):
         self["state"] = "normal"
 
@@ -368,14 +369,14 @@ class SimpleButton(tk.Button):
         self["state"] = "disabled"
 
 
-class AutoClearingLabel(tk.Label):
+class AutoClearingLabel(ctk.CTkLabel):
     def __init__(self, *args, clear_timeout=3000, **kwargs):
         super().__init__(*args, **kwargs)
         self.clear_timeout = clear_timeout
         self.latest_clear_id = 0
     
     def set_message(self, value):
-        self.config(text=value)
+        self.configure(text=value)
         self.latest_clear_id += 1
         self.after(self.clear_timeout, self._clear_id_curry(self.latest_clear_id))
     
@@ -388,10 +389,10 @@ class AutoClearingLabel(tk.Label):
         if id_to_clear != self.latest_clear_id:
             return
 
-        self.config(text="")
+        self.configure(text="")
 
 
-class ScrollableFrame(tk.Frame):
+class ScrollableFrame(ctk.CTkFrame):
     """
     NOTE: doesn't work, but leaving it here because I don't want to give up on it yet
     might not work though, seems like tkinter doesn't like the concept very much
@@ -407,7 +408,7 @@ class ScrollableFrame(tk.Frame):
         self.canvas = tk.Canvas(parent)
         self.canvas.pack(side=tk.LEFT, fill=tk.BOTH, expand=True)
 
-        self.inner_frame = tk.Frame(self.canvas)
+        self.inner_frame = ctk.CTkFrame(self.canvas)
         self.scrollbar = tk.Scrollbar(self, orient=tk.VERTICAL, command=self.canvas.yview)
         self.canvas.configure(yscrollcommand=self.scrollbar.set)
 
@@ -422,7 +423,7 @@ class ScrollableFrame(tk.Frame):
         self.canvas.configure(scrollregion=self.canvas.bbox("all"))
 
 
-class ConfigColorUpdater(tk.Frame):
+class ConfigColorUpdater(ctk.CTkFrame):
     def __init__(self, *args, label_text=None, getter=None, setter=None, callback=None, **kwargs):
         super().__init__(*args, **kwargs)
 
@@ -433,15 +434,15 @@ class ConfigColorUpdater(tk.Frame):
         self.columnconfigure(0, weight=1, uniform="group")
         self.columnconfigure(1, weight=1, uniform="group")
 
-        self._label = tk.Label(self, text=label_text)
+        self._label = ctk.CTkLabel(self, text=label_text)
         self._label.grid(row=0, column=0, padx=10, pady=2, sticky=tk.W)
 
-        self._inner_frame = tk.Frame(self)
+        self._inner_frame = ctk.CTkFrame(self)
         self._inner_frame.grid(row=0, column=1, sticky=tk.EW)
 
-        self._button = tk.Button(self._inner_frame, text="Change Color", command=self.change_success_color)
+        self._button = ctk.CTkButton(self._inner_frame, text="Change Color", command=self.change_success_color)
         self._button.grid(row=0, column=1, padx=5, pady=2, sticky=tk.E)
-        self._preview = tk.Frame(self._inner_frame, bg=self.getter(), width=20, height=20, highlightbackground="black", highlightthickness=2)
+        self._preview = ctk.CTkFrame(self._inner_frame, bg_color=self.getter(), width=20, height=20, border_color="black", border_width=2)
         self._preview.grid(row=0, column=2, padx=5, pady=2, sticky=tk.E)
         self._preview.grid_propagate(0)
     
@@ -449,10 +450,10 @@ class ConfigColorUpdater(tk.Frame):
         result = colorchooser.askcolor(color=self.getter())
         if result is not None and result[1] is not None:
             self.setter(result[1])
-            self._preview.configure(bg=self.getter())
+            self._preview.configure(bg_color=self.getter())
         
         if self.callback is not None:
             self.callback()
     
     def refresh_color(self, *args, **kwargs):
-        self._preview.configure(bg=self.getter())
+        self._preview.configure(bg_color=self.getter())

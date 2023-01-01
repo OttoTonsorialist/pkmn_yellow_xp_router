@@ -1,5 +1,6 @@
 import tkinter as tk
 from tkinter import ttk
+import customtkinter as ctk
 import logging
 
 from controllers.main_controller import MainController
@@ -11,43 +12,43 @@ from utils.config_manager import config
 logger = logging.getLogger(__name__)
 
 
-class EventDetails(tk.Frame):
+class EventDetails(ctk.CTkFrame):
     def __init__(self, controller:MainController, *args, **kwargs):
         self.state_summary_width = 900
         self.battle_summary_width = 1400
-        super().__init__(*args, **kwargs, width=self.state_summary_width, bg=config.get_background_color())
+        super().__init__(*args, **kwargs, width=self.state_summary_width, bg_color=config.get_background_color())
 
         self._controller = controller
         self._cur_trainer_name = None
         self._prev_selected_tab = None
 
-        self.notebook_holder = tk.Frame(self, highlightbackground="black", highlightthickness=1, bg=config.get_background_color())
+        self.notebook_holder = ctk.CTkFrame(self, border_color="black", border_width=1, bg_color=config.get_background_color())
         self.tabbed_states = ttk.Notebook(self.notebook_holder)
 
-        self.pre_state_frame = tk.Frame(self.tabbed_states, bg=config.get_background_color())
+        self.pre_state_frame = ctk.CTkFrame(self.tabbed_states, bg_color=config.get_background_color())
         self.pre_state_frame.pack(fill=tk.X)
-        self.state_pre_label = tk.Label(self.pre_state_frame, text="Pre-event State Display Mode:", bg=config.get_background_color(), fg=config.get_text_color())
+        self.state_pre_label = ctk.CTkLabel(self.pre_state_frame, text="Pre-event State Display Mode:", bg_color=config.get_background_color(), fg_color=config.get_text_color())
         self.state_pre_label.grid(column=1, row=0, padx=10, pady=10)
         self.pre_state_selector = custom_components.SimpleOptionMenu(self.pre_state_frame, [const.STATE_SUMMARY_LABEL, const.BADGE_BOOST_LABEL], callback=self._pre_state_display_mode_callback)
         self.pre_state_selector.grid(column=2, row=0, padx=10, pady=10)
-        self.state_pre_viewer = pkmn_components.StateViewer(self.pre_state_frame, bg=config.get_background_color())
+        self.state_pre_viewer = pkmn_components.StateViewer(self.pre_state_frame, bg_color=config.get_background_color())
         self.state_pre_viewer.grid(column=1, row=1, padx=10, pady=10, columnspan=2)
         self.badge_boost_viewer = pkmn_components.BadgeBoostViewer(self.pre_state_frame)
 
         self.pre_state_frame.columnconfigure(0, weight=1)
         self.pre_state_frame.columnconfigure(3, weight=1)
 
-        self.post_state_frame = tk.Frame(self.tabbed_states, bg=config.get_background_color())
+        self.post_state_frame = ctk.CTkFrame(self.tabbed_states, bg_color=config.get_background_color())
         self.post_state_frame.pack()
-        self.state_post_label = tk.Label(self.post_state_frame, text="Post-event State:", bg=config.get_background_color(), fg=config.get_text_color())
+        self.state_post_label = ctk.CTkLabel(self.post_state_frame, text="Post-event State:", bg_color=config.get_background_color(), fg_color=config.get_text_color())
         self.state_post_label.grid(column=1, row=0, padx=10, pady=10)
-        self.state_post_viewer = pkmn_components.StateViewer(self.post_state_frame, bg=config.get_background_color())
+        self.state_post_viewer = pkmn_components.StateViewer(self.post_state_frame, bg_color=config.get_background_color())
         self.state_post_viewer.grid(column=1, row=1, padx=10, pady=10)
 
-        self.battle_summary_frame = battle_summary.BattleSummary(self.tabbed_states, bg=config.get_background_color())
+        self.battle_summary_frame = battle_summary.BattleSummary(self.tabbed_states, bg_color=config.get_background_color())
         self.battle_summary_frame.pack(padx=2, pady=2)
 
-        self.simple_battle_summary_frame = battle_summary.BattleSummary(self.tabbed_states, bg=config.get_background_color(), simple_mode=True)
+        self.simple_battle_summary_frame = battle_summary.BattleSummary(self.tabbed_states, bg_color=config.get_background_color(), simple_mode=True)
         self.simple_battle_summary_frame.pack(padx=2, pady=2, expand=True, fill=tk.Y)
 
         self.tabbed_states.add(self.pre_state_frame, text="Pre-event State")
@@ -60,10 +61,10 @@ class EventDetails(tk.Frame):
         self.simple_battle_summary_tab_index = 3
         self.tabbed_states.pack(expand=True, fill=tk.BOTH)
 
-        self.event_viewer_frame = tk.Frame(self, highlightbackground="black", highlightthickness=1, bg=config.get_background_color())
+        self.event_viewer_frame = ctk.CTkFrame(self, border_color="black", border_width=1, bg_color=config.get_background_color())
         self.event_viewer_frame.pack(anchor=tk.N, fill=tk.BOTH, expand=True, padx=5, pady=5)
 
-        self.event_details_frame = tk.Frame(self.event_viewer_frame, bg=config.get_background_color())
+        self.event_details_frame = ctk.CTkFrame(self.event_viewer_frame, bg_color=config.get_background_color())
         self.event_details_frame.grid(row=0, column=0)
 
         self.enemy_team_viewer = pkmn_components.EnemyPkmnTeam(self.event_details_frame)
@@ -72,13 +73,13 @@ class EventDetails(tk.Frame):
         self.event_viewer_frame.rowconfigure(0, weight=1)
         self.event_viewer_frame.columnconfigure(0, weight=1)
 
-        self.footer_frame = tk.Frame(self.event_viewer_frame, bg=config.get_background_color())
+        self.footer_frame = ctk.CTkFrame(self.event_viewer_frame, bg_color=config.get_background_color())
         self.footer_frame.grid(row=1, column=0, sticky=tk.EW)
 
-        self.footer_button_frame = tk.Frame(self.footer_frame, bg=config.get_background_color())
+        self.footer_button_frame = ctk.CTkFrame(self.footer_frame, bg_color=config.get_background_color())
 
         # create this slightly out of order because we need the reference
-        self.event_details_button = custom_components.SimpleButton(self.footer_button_frame, text="Save", command=self.update_existing_event, bg=config.get_contrast_color(), fg=config.get_text_color())
+        self.event_details_button = custom_components.SimpleButton(self.footer_button_frame, text="Save", command=self.update_existing_event, bg_color=config.get_contrast_color(), fg_color=config.get_text_color())
         self.event_editor_lookup = route_event_components.EventEditorFactory(self.event_details_frame, self.event_details_button)
         self.current_event_editor = None
 
@@ -89,7 +90,7 @@ class EventDetails(tk.Frame):
 
         self.footer_button_frame.grid(row=1, column=0, sticky=tk.EW)
 
-        self.verbose_trainer_label = custom_components.CheckboxLabel(self.footer_button_frame, text="Verbose Route1 Export", toggle_command=self.update_existing_event, bg=config.get_background_color(), fg=config.get_text_color())
+        self.verbose_trainer_label = custom_components.CheckboxLabel(self.footer_button_frame, text="Verbose Route1 Export", toggle_command=self.update_existing_event, bg_color=config.get_background_color(), fg_color=config.get_text_color())
         self.event_details_button.grid(row=0, column=0, padx=5, pady=5, sticky=tk.W)
         self.event_details_button.disable()
 

@@ -199,7 +199,7 @@ class GameHookClient:
         # load it manually once, and then configure the auto refresh
         self._load_mapper_helper(propagate_event=True)
         
-        # if we haven't started already, kick off the background thread
+        # if we haven't started already, kick off the bg_color thread
         if self._thread_automatic_refresh is None:
             self._thread_automatic_refresh = threading.Thread(
                 target=self._refresh_mapper_helper,

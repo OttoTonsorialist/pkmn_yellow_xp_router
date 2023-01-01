@@ -312,7 +312,7 @@ class Machine:
     def _process_events(self):
         # Converts all in-game data to app data, then sends the events to the main app
 
-        # This is all done in a background thread so that the threads responding to the gamehook events
+        # This is all done in a bg_color thread so that the threads responding to the gamehook events
         # can react and update their time-sensitive state asap without blocking on any extra processing
         while self._active or len(self._events_to_generate) != 0:
             if len(self._events_to_generate) != 0:

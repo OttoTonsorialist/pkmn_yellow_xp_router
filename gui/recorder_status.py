@@ -1,8 +1,8 @@
 import logging
-
 import tkinter as tk
-from controllers.main_controller import MainController
+import customtkinter as ctk
 
+from controllers.main_controller import MainController
 from gui import custom_components
 from route_recording.recorder import RecorderController, RecorderGameHookClient
 from utils.constants import const
@@ -11,7 +11,7 @@ import pkmn
 logger = logging.getLogger(__name__)
 
 
-class RecorderStatus(tk.Frame):
+class RecorderStatus(ctk.CTkFrame):
     def __init__(self, main_controller:MainController, recorder_controller:RecorderController, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self._main_controller = main_controller
@@ -19,16 +19,16 @@ class RecorderStatus(tk.Frame):
         self._gamehook_client:RecorderGameHookClient = None
         self._gamehook_translator = None
 
-        self.client_status_label = tk.Label(self, text="Client Status: None", justify=tk.LEFT)
+        self.client_status_label = ctk.CTkLabel(self, text="Client Status: None", justify=tk.LEFT)
         self.client_status_label.pack()
 
-        self.recorder_ready_label = tk.Label(self, text="Recording Status: Inactive", justify=tk.LEFT)
+        self.recorder_ready_label = ctk.CTkLabel(self, text="Recording Status: Inactive", justify=tk.LEFT)
         self.recorder_ready_label.pack()
 
-        self.game_state_label = tk.Label(self, text="Game State: None", justify=tk.LEFT)
+        self.game_state_label = ctk.CTkLabel(self, text="Game State: None", justify=tk.LEFT)
         self.game_state_label.pack()
 
-        self.connection_retry_button = custom_components.SimpleButton(self, text="Reconnect to GameHook", justify=tk.LEFT, command=self.reconnect_button_pressed)
+        self.connection_retry_button = custom_components.SimpleButton(self, text="Reconnect to GameHook", command=self.reconnect_button_pressed)
         self.connection_retry_button.disable()
         self.connection_retry_button.pack()
 

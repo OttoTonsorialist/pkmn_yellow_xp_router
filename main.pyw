@@ -4,11 +4,8 @@ import subprocess
 import sys
 import threading
 import logging
-import json
 
-import tkinter as tk
-from tkinter import filedialog
-from tkinter import ttk, font, messagebox
+from tkinter import messagebox
 from controllers.main_controller import MainController
 from gui.auto_upgrade_window import AutoUpgradeGUI
 from gui.main_window import MainWindow

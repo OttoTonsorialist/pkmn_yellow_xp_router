@@ -1,4 +1,5 @@
 import tkinter as tk
+import customtkinter as ctk
 
 from controllers.main_controller import MainController
 from gui.popups.base_popup import Popup
@@ -16,7 +17,7 @@ class DeleteConfirmation(Popup):
         else:
             text = "You are trying to delete multiple items at once.\nAre you sure you want to delete all selected items?"
         
-        self._label = tk.Label(self, text=text)
+        self._label = ctk.CTkLabel(self, text=text)
         self._label.grid(row=0, column=0, columnspan=2, padx=10, pady=10)
 
         self._confirm_button = custom_components.SimpleButton(self, text="Delete", command=self.delete)

@@ -1,9 +1,10 @@
 import tkinter as tk
 import tkinter.font
 from typing import List
-from controllers.main_controller import MainController
+import customtkinter as ctk
 import logging
 
+from controllers.main_controller import MainController
 from gui import custom_components
 import pkmn as pkmn_gen_info
 from pkmn import universal_data_objects
@@ -180,12 +181,12 @@ class RouteList(custom_components.CustomGridview):
                             self.move(item_id, cur_event_id, item_idx)
 
 
-class InventoryViewer(tk.Frame):
+class InventoryViewer(ctk.CTkFrame):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.config(bg=config.get_contrast_color(), padx=10, pady=10, height=150, width=250)
+        self.configure(bg_color=config.get_contrast_color(), height=150, width=250)
 
-        self._money_label = tk.Label(self, text="Current Money: ", bg=config.get_header_color(), fg=config.get_text_color())
+        self._money_label = ctk.CTkLabel(self, text="Current Money: ", bg_color=config.get_header_color(), fg_color=config.get_text_color())
         self._money_label.grid(row=0, column=0, columnspan=2)
 
         self._all_items = []
@@ -194,13 +195,13 @@ class InventoryViewer(tk.Frame):
         self.max_render_size = 20
         split_point = self.max_render_size // 2
         for i in range(self.max_render_size):
-            cur_item_label = tk.Label(self, text=f"# {i:0>2}: ", anchor=tk.W, fg=config.get_text_color())
-            cur_item_label.config(bg=config.get_contrast_color(), width=20)
+            cur_item_label = ctk.CTkLabel(self, text=f"# {i:0>2}: ", anchor=tk.W, fg_color=config.get_text_color())
+            cur_item_label.configure(bg_color=config.get_contrast_color(), width=20)
             cur_item_label.grid(row=(i % split_point) + 1, column=i // split_point, sticky=tk.W)
             self._all_items.append(cur_item_label)
     
     def set_inventory(self, inventory:route_state_objects.Inventory):
-        self._money_label.config(text=f"Current Money: {inventory.cur_money}")
+        self._money_label.configure(text=f"Current Money: {inventory.cur_money}")
 
         idx = -1
         too_many_items = len(inventory.cur_items) > self.max_render_size
@@ -208,20 +209,20 @@ class InventoryViewer(tk.Frame):
         for idx in range(min(len(inventory.cur_items), self.max_render_size)):
             cur_item = inventory.cur_items[idx]
             if too_many_items and idx == (self.max_render_size - 1):
-                self._all_items[idx].config(text=f"# {idx:0>2}+: More items...")
+                self._all_items[idx].configure(text=f"# {idx:0>2}+: More items...")
             else:
-                self._all_items[idx].config(text=f"# {idx:0>2}: {cur_item.num}x {cur_item.base_item.name}")
+                self._all_items[idx].configure(text=f"# {idx:0>2}: {cur_item.num}x {cur_item.base_item.name}")
         
         for missing_idx in range(idx + 1, self.max_render_size):
-            self._all_items[missing_idx].config(text=f"# {missing_idx:0>2}:")
+            self._all_items[missing_idx].configure(text=f"# {missing_idx:0>2}:")
 
 
-class PkmnViewer(tk.Frame):
-    def __init__(self, *args, stats_only=False, font_size=None, **kwargs):
+class PkmnViewer(ctk.CTkFrame):
+    def __init__(self, *args, stats_only=False, font_size=12, **kwargs):
         super().__init__(*args, **kwargs)
 
         self.stats_only = stats_only
-        self.config(bg=config.get_contrast_color(), padx=5, pady=5, height=150)
+        self.configure(bg_color=config.get_contrast_color(), height=150)
 
         font_to_use = tkinter.font.nametofont("TkDefaultFont")
         if font_size is not None:
@@ -230,10 +231,10 @@ class PkmnViewer(tk.Frame):
         self.stat_width = 4
         self.move_width = 11
 
-        self._name_value = tk.Label(self, background=config.get_header_color(), font=font_to_use, fg=config.get_text_color())
+        self._name_value = ctk.CTkLabel(self, bg_color=config.get_header_color(), font=font_to_use, fg_color=config.get_text_color())
         self._name_value.grid(row=0, column=0, columnspan=2, sticky=tk.EW)
 
-        self._held_item = tk.Label(self, background=config.get_header_color(), font=font_to_use, fg=config.get_text_color())
+        self._held_item = ctk.CTkLabel(self, bg_color=config.get_header_color(), font=font_to_use, fg_color=config.get_text_color())
 
         self.stat_column = StatColumn(self, bg_color=config.get_secondary_color(), val_width=self.stat_width, num_rows=6, font=font_to_use, fg_color=config.get_text_color())
         self.stat_column.set_labels(["HP:", "Attack:", "Defense:", "Spc Atk:", "Spc Def:", "Speed:"])
@@ -252,8 +253,8 @@ class PkmnViewer(tk.Frame):
         if speed_bg_color is None:
             speed_bg_color = config.get_secondary_color()
         
-        self._name_value.config(text=pkmn.name)
-        self._held_item.config(text=f"Held Item: {pkmn.held_item}")
+        self._name_value.configure(text=pkmn.name)
+        self._held_item.configure(text=f"Held Item: {pkmn.held_item}")
 
         if pkmn_gen_info.current_gen_info().get_generation() != 1:
             self._held_item.grid(row=1, column=0, columnspan=2, sticky=tk.EW)
@@ -298,7 +299,7 @@ class PkmnViewer(tk.Frame):
         self.move_column.set_values([str(pkmn.level), str(pkmn.xp)] + pkmn.move_list)
 
 
-class StateViewer(tk.Frame):
+class StateViewer(ctk.CTkFrame):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.pkmn = PkmnViewer(self, font_size=10)
@@ -314,10 +315,10 @@ class StateViewer(tk.Frame):
         self.stat_xp.set_state(cur_state)
 
 
-class EnemyPkmnTeam(tk.Frame):
+class EnemyPkmnTeam(ctk.CTkFrame):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.configure(bg=config.get_background_color())
+        self.configure(bg_color=config.get_background_color())
 
         self._all_pkmn:List[PkmnViewer] = []
 
@@ -352,19 +353,19 @@ class EnemyPkmnTeam(tk.Frame):
             self._all_pkmn[missing_idx].grid_forget()
 
 
-class BadgeBoostViewer(tk.Frame):
+class BadgeBoostViewer(ctk.CTkFrame):
     def __init__(self, *args, **kwargs):
-        super().__init__(*args, bg=config.get_background_color(), **kwargs)
+        super().__init__(*args, bg_color=config.get_background_color(), **kwargs)
 
-        self._info_frame = tk.Frame(self, bg=config.get_background_color())
+        self._info_frame = ctk.CTkFrame(self, bg_color=config.get_background_color())
         self._info_frame.grid(row=0, column=0)
 
-        self._move_selector_label = tk.Label(self._info_frame, text="Setup Move: ", bg=config.get_background_color(), fg=config.get_text_color())
+        self._move_selector_label = ctk.CTkLabel(self._info_frame, text="Setup Move: ", bg_color=config.get_background_color(), fg_color=config.get_text_color())
         self._move_selector = custom_components.SimpleOptionMenu(self._info_frame, ["N/A"], callback=self._move_selected_callback)
         self._move_selector_label.pack()
         self._move_selector.pack()
 
-        self._badge_summary = tk.Label(self._info_frame, bg=config.get_background_color(), fg=config.get_text_color())
+        self._badge_summary = ctk.CTkLabel(self._info_frame, bg_color=config.get_background_color(), fg_color=config.get_text_color())
         self._badge_summary.pack(pady=10)
 
         self._state:route_state_objects.RouteState = None
@@ -377,12 +378,12 @@ class BadgeBoostViewer(tk.Frame):
         self._viewers = []
 
         for idx in range(NUM_SUMMARIES):
-            cur_frame = tk.Frame(self, bg=config.get_background_color())
+            cur_frame = ctk.CTkFrame(self, bg_color=config.get_background_color())
             # add 1 because the 0th frame is the info frame
             cur_frame.grid(row=((idx + 1) // NUM_COLS), column=((idx + 1) % NUM_COLS), padx=3, pady=3)
 
             self._frames.append(cur_frame)
-            self._labels.append(tk.Label(cur_frame, bg=config.get_background_color(), fg=config.get_text_color()))
+            self._labels.append(ctk.CTkLabel(cur_frame, bg_color=config.get_background_color(), fg_color=config.get_text_color()))
             self._viewers.append(PkmnViewer(cur_frame, stats_only=True))
     
     def _clear_all_summaries(self):
@@ -454,11 +455,11 @@ class BadgeBoostViewer(tk.Frame):
 
             final_badge_text += '\n' + badges.strip()
 
-        self._badge_summary.config(text=final_badge_text)
+        self._badge_summary.configure(text=final_badge_text)
         self._move_selected_callback()
 
 
-class StatColumn(tk.Frame):
+class StatColumn(ctk.CTkFrame):
     def __init__(self, *args, num_rows=4, bg_color=None, fg_color=None, label_width=None, val_width=None, font=None, **kwargs):
         super().__init__(*args, **kwargs)
         if bg_color is None:
@@ -467,30 +468,36 @@ class StatColumn(tk.Frame):
             fg_color = config.get_text_color()
 
         self.bg_color = bg_color
-        self.config(bg=self.bg_color)
+        self.configure(bg_color=self.bg_color)
 
         if font is None:
             font = tkinter.font.nametofont("TkDefaultFont")
-        self.font = font
+        font = (font, 12)
 
-        self._header_frame = tk.Frame(self, background=self.bg_color)
+        self._header_frame = ctk.CTkFrame(self, bg_color=self.bg_color)
         self._header_frame.pack()
-        self._header = tk.Label(self._header_frame, background=self.bg_color, font=font, fg=fg_color)
+        self._header = ctk.CTkLabel(self._header_frame, bg_color=self.bg_color, font=font, fg_color=fg_color)
 
         self._frames = []
         self._labels = []
         self._values = []
 
         for idx in range(num_rows):
-            cur_frame = tk.Frame(self, background=self.bg_color)
+            cur_frame = ctk.CTkFrame(self, bg_color=self.bg_color)
             cur_frame.pack(fill=tk.X)
             self._frames.append(cur_frame)
 
-            cur_label = tk.Label(cur_frame, anchor=tk.W, background=self.bg_color, width=label_width, font=font, fg=fg_color)
+            if label_width:
+                cur_label = ctk.CTkLabel(cur_frame, anchor=tk.W, bg_color=self.bg_color, width=label_width, font=font, fg_color=fg_color)
+            else:
+                cur_label = ctk.CTkLabel(cur_frame, anchor=tk.W, bg_color=self.bg_color, font=font, fg_color=fg_color)
             cur_label.grid(row=0, column=0, sticky=tk.EW)
             self._labels.append(cur_label)
 
-            cur_value = tk.Label(cur_frame, anchor=tk.E, background=self.bg_color, width=val_width, font=font, fg=fg_color)
+            if val_width:
+                cur_value = ctk.CTkLabel(cur_frame, anchor=tk.E, bg_color=self.bg_color, width=val_width, font=font, fg_color=fg_color)
+            else:
+                cur_value = ctk.CTkLabel(cur_frame, anchor=tk.E, bg_color=self.bg_color, font=font, fg_color=fg_color)
             cur_value.grid(row=0, column=1, sticky=tk.EW)
             self._values.append(cur_value)
 
@@ -502,7 +509,7 @@ class StatColumn(tk.Frame):
             return
         
         self._header.pack()
-        self._header.config(text=header)
+        self._header.configure(text=header)
     
     def set_labels(self, label_text_iterable):
         for idx, cur_label_text in enumerate(label_text_iterable):
@@ -525,18 +532,18 @@ class StatColumn(tk.Frame):
         for idx, cur_value_text in enumerate(value_text_iterable):
             if idx >= len(self._values):
                 break
-            self._values[idx].configure(text=cur_value_text, background=bg_color_iterable[idx])
-            self._labels[idx].configure(background=bg_color_iterable[idx])
+            self._values[idx].configure(text=cur_value_text, bg_color=bg_color_iterable[idx])
+            self._labels[idx].configure(bg_color=bg_color_iterable[idx])
         
         if len(value_text_iterable) < len(self._values):
             for idx in range(len(value_text_iterable), len(self._values)):
                 self._values[idx].configure(text="")
 
 
-class StatExpViewer(tk.Frame):
+class StatExpViewer(ctk.CTkFrame):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.config(bg=config.get_contrast_color(), padx=5, pady=5, height=150, width=250)
+        self.configure(bg_color=config.get_contrast_color(), height=150, width=250)
         stat_labels =[
             "HP:",
             "Attack:",
