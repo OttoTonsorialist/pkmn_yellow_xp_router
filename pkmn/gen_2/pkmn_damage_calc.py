@@ -143,9 +143,11 @@ def calculate_damage(
         badge_type_boost = True
     elif move_type == const.TYPE_GRASS and badges.rainbow:
         badge_type_boost = True
+    elif move_type == const.TYPE_POISON and badges.soul:
+        badge_type_boost = True
     elif move_type == const.TYPE_PSYCHIC and badges.marsh:
         badge_type_boost = True
-    elif move_type == const.TYPE_FIGHTING and badges.volcano:
+    elif move_type == const.TYPE_FIRE and badges.volcano:
         badge_type_boost = True
     elif move_type == const.TYPE_GROUND and badges.earth:
         badge_type_boost = True
