@@ -5,11 +5,11 @@ from typing import Dict, List
 
 from gui import custom_components
 from pkmn import damage_calc, pkmn_info, universal_data_objects
-from routing import route_state_objects
+from routing import full_route_state
 from routing import route_events
 from routing.router import Router
 from utils.constants import const
-import pkmn
+from pkmn.gen_factory import current_gen_info
 from utils.config_manager import config
 
 
@@ -23,7 +23,7 @@ class BattleSummary(tk.Frame):
         # these are matched lists, with the solo mon being updated for each enemy pkmn, in case of level-ups
         self._enemy_pkmn:List[universal_data_objects.EnemyPkmn] = None
         self._solo_pkmn:List[universal_data_objects.EnemyPkmn] = None
-        self._source_state:route_state_objects.RouteState = None
+        self._source_state:full_route_state.RouteState = None
         self._source_event_group:route_events.EventGroup = None
         self._stage_modifiers:universal_data_objects.StageModifiers = universal_data_objects.StageModifiers()
         self._mimic_selection = ""
@@ -121,7 +121,7 @@ class BattleSummary(tk.Frame):
     def set_team(
         self,
         enemy_pkmn:List[universal_data_objects.EnemyPkmn],
-        cur_state:route_state_objects.RouteState=None,
+        cur_state:full_route_state.RouteState=None,
         event_group:route_events.EventGroup=None,
         new_setup_moves:bool=False,
         recalc_only:bool=False
@@ -257,14 +257,14 @@ class SetupMovesSummary(tk.Frame):
     
     def set_move_list(self, new_moves, trigger_update=False):
         self._move_list = new_moves
-        self.setup_moves.new_values(pkmn.current_gen_info().get_stat_modifer_moves())
+        self.setup_moves.new_values(current_gen_info().get_stat_modifer_moves())
         self._move_list_updated(trigger_update=trigger_update)
     
     def get_stage_modifiers(self):
         result = universal_data_objects.StageModifiers()
 
         for cur_move in self._move_list:
-            result = result.apply_stat_mod(pkmn.current_gen_info().move_db().get_stat_mod(cur_move))
+            result = result.apply_stat_mod(current_gen_info().move_db().get_stat_mod(cur_move))
         
         return result
     
@@ -725,7 +725,7 @@ class DamageSummary(tk.Frame):
             if self._propagate_mimic_update and self._outer_mimic_callback is not None:
                 self._outer_mimic_callback(self.custom_data_dropdown.get())
         else:
-            self._calc_damages_from_move(pkmn.current_gen_info().move_db().get_move(self.move_name))
+            self._calc_damages_from_move(current_gen_info().move_db().get_move(self.move_name))
             if self._outer_custom_data_callback is not None:
                 self._outer_custom_data_callback()
 
@@ -736,7 +736,7 @@ class DamageSummary(tk.Frame):
             # kinda hacky, but whenever mimic isn't set, just use Leer to fake a non-damaging move
             if not move_name:
                 move_name = "Leer"
-            self._calc_damages_from_move(pkmn.current_gen_info().move_db().get_move(move_name))
+            self._calc_damages_from_move(current_gen_info().move_db().get_move(move_name))
         finally:
             self._propagate_mimic_update = True
 
@@ -757,15 +757,15 @@ class DamageSummary(tk.Frame):
         self.attacking_stage_modifiers = attacking_stage_modifiers
         self.defending_stage_modifiers = defending_stage_modifiers
 
-        move = pkmn.current_gen_info().move_db().get_move(move_name)
+        move = current_gen_info().move_db().get_move(move_name)
         if move is None:
             raise ValueError(f"Unknown move: {move_name}")
         if move.name == const.HIDDEN_POWER_MOVE_NAME:
-            hidden_power_type, hidden_power_base_power = pkmn.current_gen_info().get_hidden_power(attacking_mon.dvs)
+            hidden_power_type, hidden_power_base_power = current_gen_info().get_hidden_power(attacking_mon.dvs)
             move_name = f"{move_name} ({hidden_power_type}: {hidden_power_base_power})"
         self.move_name_label.configure(text=move_name)
 
-        custom_data_options = pkmn.current_gen_info().get_move_custom_data(move_name)
+        custom_data_options = current_gen_info().get_move_custom_data(move_name)
         if custom_data_options:
             self.move_has_custom_data = True
         else:
@@ -795,7 +795,7 @@ class DamageSummary(tk.Frame):
         if self.move_has_custom_data:
             custom_move_data = self.custom_data_dropdown.get()
 
-        single_attack = pkmn.current_gen_info().calculate_damage(
+        single_attack = current_gen_info().calculate_damage(
             self.attacking_mon,
             move,
             self.defending_mon,
@@ -803,7 +803,7 @@ class DamageSummary(tk.Frame):
             defending_stage_modifiers=self.defending_stage_modifiers,
             custom_move_data=custom_move_data
         )
-        crit_attack = pkmn.current_gen_info().calculate_damage(
+        crit_attack = current_gen_info().calculate_damage(
             self.attacking_mon,
             move,
             self.defending_mon,
@@ -836,7 +836,7 @@ class DamageSummary(tk.Frame):
             kill_ranges = damage_calc.find_kill(
                 single_attack,
                 crit_attack,
-                pkmn.current_gen_info().get_crit_rate(self.attacking_mon, move),
+                current_gen_info().get_crit_rate(self.attacking_mon, move),
                 self.defending_mon.cur_stats.hp
             )
 

@@ -6,7 +6,7 @@ from controllers.main_controller import MainController
 from gui import custom_components
 from route_recording.recorder import RecorderController, RecorderGameHookClient
 from utils.constants import const
-import pkmn
+from pkmn.gen_factory import current_gen_info
 
 logger = logging.getLogger(__name__)
 
@@ -45,7 +45,7 @@ class RecorderStatus(tk.Frame):
             
             self.client_status_label.configure(text="Client Status: Connecting...")
             try:
-                self._gamehook_client = pkmn.current_gen_info().get_recorder_client(self._recorder_controller)
+                self._gamehook_client = current_gen_info().get_recorder_client(self._recorder_controller)
                 self._gamehook_client.connect()
             except NotImplementedError as e:
                 self.client_status_label.configure(text="No recorder has been created yet for the current version")

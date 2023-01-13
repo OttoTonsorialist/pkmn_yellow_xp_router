@@ -4,7 +4,7 @@ from controllers.main_controller import MainController
 from gui.popups.base_popup import Popup
 from gui import custom_components
 from pkmn.universal_data_objects import StatBlock
-import pkmn
+from pkmn.gen_factory import current_gen_info
 
 
 class CustomDvsWindow(Popup):
@@ -59,7 +59,7 @@ class CustomDvsWindow(Popup):
     
     def _recalc_hidden_power(self, *args, **kwargs):
         try:
-            hp_type, hp_power = pkmn.current_gen_info().get_hidden_power(
+            hp_type, hp_power = current_gen_info().get_hidden_power(
                 StatBlock(
                     int(self.custom_dvs_hp.get()),
                     int(self.custom_dvs_atk.get()),

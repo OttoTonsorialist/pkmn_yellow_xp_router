@@ -69,9 +69,6 @@ class GenTwoConstants:
             "Leader Red",
         ]
 
-        # TODO: what are the appropriate minor fights for gen 2?
-        self.MINOR_FIGHTS = []
-
         self.BADGE_REWARDS = {
             "Leader Falkner": self.ZEPHYR_BADGE,
             "Leader Bugsy": self.HIVE_BADGE,

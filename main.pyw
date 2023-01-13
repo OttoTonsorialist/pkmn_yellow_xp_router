@@ -4,15 +4,14 @@ import subprocess
 import sys
 import threading
 import logging
-import json
 
-import tkinter as tk
-from tkinter import filedialog
-from tkinter import ttk, font, messagebox
-from controllers.main_controller import MainController
+from tkinter import messagebox
 from gui.auto_upgrade_window import AutoUpgradeGUI
 from gui.main_window import MainWindow
-from route_recording.recorder import RecorderController
+
+from pkmn.gen_1 import gen_one_object
+from pkmn.gen_2 import gen_two_object
+from pkmn import gen_factory
 
 from utils.constants import const
 from utils.config_manager import config
@@ -54,6 +53,18 @@ def startup_check_for_upgrade(main_app:MainWindow):
     main_app.event_generate(const.FORCE_QUIT_EVENT)
 
 
+def init_base_generations():
+    gen_factory._gen_factory.register_gen(gen_one_object.gen_one_red, const.RED_VERSION)
+    gen_factory._gen_factory.register_gen(gen_one_object.gen_one_blue, const.BLUE_VERSION)
+    gen_factory._gen_factory.register_gen(gen_one_object.gen_one_yellow, const.YELLOW_VERSION)
+
+    gen_factory._gen_factory.register_gen(gen_two_object.gen_two_gold, const.GOLD_VERSION)
+    gen_factory._gen_factory.register_gen(gen_two_object.gen_two_silver, const.SILVER_VERSION)
+    gen_factory._gen_factory.register_gen(gen_two_object.gen_two_crystal, const.CRYSTAL_VERSION)
+
+    gen_factory.change_version(const.YELLOW_VERSION)
+
+
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument("--debug", action="store_true")
@@ -61,6 +72,7 @@ if __name__ == '__main__':
     if args.debug:
         const.DEBUG_MODE = True
     
+    init_base_generations()
     app = MainWindow()
     background_thread = threading.Thread(target=startup_check_for_upgrade, args=(app,))
 

@@ -6,10 +6,10 @@ from typing import List, Tuple
 
 from utils.constants import const
 from utils.config_manager import config
-from utils import route_one_utils
 from routing.route_events import EventDefinition, EventFolder, EventGroup, EventItem, LearnMoveEventDefinition, TrainerEventDefinition
 import routing.router
-import pkmn
+from pkmn import gen_factory
+
 
 logger = logging.getLogger(__name__)
 
@@ -154,7 +154,7 @@ class MainController:
         if self._current_preview_event is not None and self._current_preview_event.trainer_def.trainer_name == trainer_name:
             return
         
-        if pkmn.current_gen_info().trainer_db().get_trainer(trainer_name) is None:
+        if gen_factory.current_gen_info().trainer_db().get_trainer(trainer_name) is None:
             self._current_preview_event = None
         else:
             self._current_preview_event = EventDefinition(trainer_def=TrainerEventDefinition(trainer_name))
@@ -398,28 +398,6 @@ class MainController:
     def export_notes(self, route_name):
         self._data.export_notes(route_name)
 
-    def just_export_and_run(self, route_name):
-        success = False
-        try:
-            jar_path = config.get_route_one_path()
-            if not jar_path:
-                config_path, _, _ = route_one_utils.export_to_route_one(self._data, route_name)
-                result = f"Could not run RouteOne, jar path not set. Exported RouteOne files: {config_path}"
-            else:
-                config_path, _, out_path = route_one_utils.export_to_route_one(self._data, route_name)
-                error_code = route_one_utils.run_route_one(jar_path, config_path)
-                if not error_code:
-                    success = True
-                    result = f"Ran RouteOne successfully. Result file: {out_path}"
-                else:
-                    result = f"RouteOne exited with error code: {error_code}"
-        except Exception as e:
-            result = f"Exception attempting to export and run RouteOne: {type(e)}: {e}"
-            logger.error(e)
-            logger.exception(e)
-        
-        return success, result
-    
     def is_record_mode_active(self):
         return self._is_record_mode_active
     

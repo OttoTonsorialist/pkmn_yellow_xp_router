@@ -10,7 +10,7 @@ from routing.route_events import \
     SaveEventDefinition, HealEventDefinition, BlackoutEventDefinition
 
 from utils.constants import const
-import pkmn
+from pkmn.gen_factory import current_gen_info
 
 logger = logging.getLogger(__name__)
 
@@ -86,15 +86,15 @@ class QuickTrainerAdd(tk.Frame):
                 self._add_area.enable()
     
     def update_pkmn_version(self, *args, **kwargs):
-        self._trainers_by_loc.new_values([const.ALL_TRAINERS] + sorted(pkmn.current_gen_info().trainer_db().get_all_locations()))
-        self._trainers_by_class.new_values([const.ALL_TRAINERS] + sorted(pkmn.current_gen_info().trainer_db().get_all_classes()))
+        self._trainers_by_loc.new_values([const.ALL_TRAINERS] + sorted(current_gen_info().trainer_db().get_all_locations()))
+        self._trainers_by_class.new_values([const.ALL_TRAINERS] + sorted(current_gen_info().trainer_db().get_all_classes()))
         self._trainer_name_callback()
 
     def trainer_filter_callback(self, *args, **kwargs):
         loc_filter = self._trainers_by_loc.get()
         class_filter = self._trainers_by_class.get()
 
-        valid_trainers = pkmn.current_gen_info().trainer_db().get_valid_trainers(
+        valid_trainers = current_gen_info().trainer_db().get_valid_trainers(
             trainer_class=class_filter,
             trainer_loc=loc_filter,
             defeated_trainers=self._controller.get_defeated_trainers(),
@@ -220,10 +220,10 @@ class QuickWildPkmn(tk.Frame):
             self._add_trainer_pkmn.enable()
 
     def update_pkmn_version(self, *args, **kwargs):
-        self._pkmn_types.new_values(pkmn.current_gen_info().pkmn_db().get_all_names())
+        self._pkmn_types.new_values(current_gen_info().pkmn_db().get_all_names())
 
     def _pkmn_filter_callback(self, *args, **kwargs):
-        self._pkmn_types.new_values(pkmn.current_gen_info().pkmn_db().get_filtered_names(filter_val=self._pkmn_filter.get().strip()))
+        self._pkmn_types.new_values(current_gen_info().pkmn_db().get_filtered_names(filter_val=self._pkmn_filter.get().strip()))
         self.update_button_status()
     
     def _update_button_callback_wrapper(self, *args, **kwargs):
@@ -339,8 +339,8 @@ class QuickItemAdd(tk.Frame):
         self.update_button_status()
     
     def update_pkmn_version(self, *args, **kwargs):
-        self._item_selector.new_values(pkmn.current_gen_info().item_db().get_filtered_names())
-        self._item_mart_selector.new_values([const.ITEM_TYPE_ALL_ITEMS] + sorted(list(pkmn.current_gen_info().item_db().mart_items.keys())))
+        self._item_selector.new_values(current_gen_info().item_db().get_filtered_names())
+        self._item_mart_selector.new_values([const.ITEM_TYPE_ALL_ITEMS] + sorted(list(current_gen_info().item_db().mart_items.keys())))
 
     def update_button_status(self, *args, **kwargs):
         if not self._controller.can_insert_after_current_selection():
@@ -353,7 +353,7 @@ class QuickItemAdd(tk.Frame):
             self._sell_button.disable()
             return
         
-        cur_item = pkmn.current_gen_info().item_db().get_item(self._item_selector.get())
+        cur_item = current_gen_info().item_db().get_item(self._item_selector.get())
 
         if cur_item is None:
             self._acquire_button.disable()
@@ -374,7 +374,7 @@ class QuickItemAdd(tk.Frame):
             else:
                 self._use_button.disable()
 
-            if pkmn.current_gen_info().get_generation() != 1:
+            if current_gen_info().get_generation() != 1:
                 self._hold_button.enable()
             else:
                 self._hold_button.disable()
@@ -391,7 +391,7 @@ class QuickItemAdd(tk.Frame):
             item_type = const.ITEM_TYPE_ALL_ITEMS
             backpack_filter = True
         
-        new_vals = pkmn.current_gen_info().item_db().get_filtered_names(
+        new_vals = current_gen_info().item_db().get_filtered_names(
             item_type=item_type,
             source_mart=self._item_mart_selector.get()
         )
@@ -414,11 +414,11 @@ class QuickItemAdd(tk.Frame):
         self._item_selector.new_values(new_vals)
 
     def item_selector_callback(self, *args, **kwargs):
-        cur_item = pkmn.current_gen_info().item_db().get_item(self._item_selector.get())
+        cur_item = current_gen_info().item_db().get_item(self._item_selector.get())
 
         try:
             item_amt = int(self._item_amount.get())
-            cur_item = pkmn.current_gen_info().item_db().get_item(self._item_selector.get())
+            cur_item = current_gen_info().item_db().get_item(self._item_selector.get())
             self._purchase_cost_amt.config(text=f"{cur_item.purchase_price * item_amt}")
             self._sell_cost_amt.config(text=f"{cur_item.sell_price * item_amt}")
         except Exception as e:
@@ -501,10 +501,10 @@ class QuickItemAdd(tk.Frame):
     def _learn_move(self, *arg, **kwargs):
         try:
             cur_item = self._item_selector.get()
-            move_name = pkmn.current_gen_info().item_db().get_item(cur_item).move_name
+            move_name = current_gen_info().item_db().get_item(cur_item).move_name
             cur_state = self._controller.get_single_selected_event_obj().final_state
             
-            if cur_item in pkmn.current_gen_info().item_db().tms:
+            if cur_item in current_gen_info().item_db().tms:
                 self._create_event(
                     EventDefinition(
                         learn_move=LearnMoveEventDefinition(

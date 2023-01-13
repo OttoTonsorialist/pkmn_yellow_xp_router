@@ -5,10 +5,9 @@ from controllers.main_controller import MainController
 import logging
 
 from gui import custom_components
-import pkmn as pkmn_gen_info
+from pkmn.gen_factory import current_gen_info
 from pkmn import universal_data_objects
-from routing import route_state_objects
-from routing import route_events
+from routing import state_objects, route_events, full_route_state
 from utils.constants import const
 from utils.config_manager import config
 
@@ -199,7 +198,7 @@ class InventoryViewer(tk.Frame):
             cur_item_label.grid(row=(i % split_point) + 1, column=i // split_point, sticky=tk.W)
             self._all_items.append(cur_item_label)
     
-    def set_inventory(self, inventory:route_state_objects.Inventory):
+    def set_inventory(self, inventory:state_objects.Inventory):
         self._money_label.config(text=f"Current Money: {inventory.cur_money}")
 
         idx = -1
@@ -255,7 +254,7 @@ class PkmnViewer(tk.Frame):
         self._name_value.config(text=pkmn.name)
         self._held_item.config(text=f"Held Item: {pkmn.held_item}")
 
-        if pkmn_gen_info.current_gen_info().get_generation() != 1:
+        if current_gen_info().get_generation() != 1:
             self._held_item.grid(row=1, column=0, columnspan=2, sticky=tk.EW)
         else:
             self._held_item.grid_forget()
@@ -274,9 +273,9 @@ class PkmnViewer(tk.Frame):
 
         spd_val = str(pkmn.cur_stats.special_defense)
         # TODO: ugly, fix later
-        if pkmn_gen_info.current_gen_info().get_generation() == 2:
+        if current_gen_info().get_generation() == 2:
             if badges is not None and badges.is_special_defense_boosted():
-                unboosted_spa = pkmn.base_stats.calc_level_stats(pkmn.level, pkmn.dvs, pkmn.stat_xp, pkmn_gen_info.current_gen_info().make_badge_list()).special_attack
+                unboosted_spa = pkmn.base_stats.calc_level_stats(pkmn.level, pkmn.dvs, pkmn.stat_xp, current_gen_info().make_badge_list()).special_attack
                 if (
                     (unboosted_spa >= 206 and unboosted_spa <= 432) or
                     (unboosted_spa >= 661 and unboosted_spa <= 999)
@@ -308,7 +307,7 @@ class StateViewer(tk.Frame):
         self.inventory = InventoryViewer(self)
         self.inventory.grid(row=0, column=2, padx=5, pady=5, sticky=tk.S)
     
-    def set_state(self, cur_state:route_state_objects.RouteState):
+    def set_state(self, cur_state:full_route_state.RouteState):
         self.inventory.set_inventory(cur_state.inventory)
         self.pkmn.set_pkmn(cur_state.solo_pkmn.get_pkmn_obj(cur_state.badges), cur_state.badges)
         self.stat_xp.set_state(cur_state)
@@ -328,7 +327,7 @@ class EnemyPkmnTeam(tk.Frame):
         self._all_pkmn.append(PkmnViewer(self))
         self._all_pkmn.append(PkmnViewer(self))
 
-    def set_team(self, enemy_pkmn:List[universal_data_objects.EnemyPkmn], cur_state:route_state_objects.RouteState=None):
+    def set_team(self, enemy_pkmn:List[universal_data_objects.EnemyPkmn], cur_state:full_route_state.RouteState=None):
         if enemy_pkmn is None:
             enemy_pkmn = []
 
@@ -367,7 +366,7 @@ class BadgeBoostViewer(tk.Frame):
         self._badge_summary = tk.Label(self._info_frame, bg=config.get_background_color(), fg=config.get_text_color())
         self._badge_summary.pack(pady=10)
 
-        self._state:route_state_objects.RouteState = None
+        self._state:full_route_state.RouteState = None
 
         # 6 possible badge boosts from a single setup move, plus unmodified summary
         NUM_SUMMARIES = 7
@@ -414,7 +413,7 @@ class BadgeBoostViewer(tk.Frame):
         prev_mod = universal_data_objects.StageModifiers()
         stage_mod = None
         for idx in range(1, len(self._frames)):
-            stage_mod = prev_mod.apply_stat_mod(pkmn_gen_info.current_gen_info().move_db().get_stat_mod(move))
+            stage_mod = prev_mod.apply_stat_mod(current_gen_info().move_db().get_stat_mod(move))
             if stage_mod == prev_mod:
                 self._labels[idx].pack_forget()
                 self._viewers[idx].pack_forget()
@@ -429,9 +428,9 @@ class BadgeBoostViewer(tk.Frame):
             self._viewers[idx].pack()
 
     
-    def set_state(self, state:route_state_objects.RouteState):
+    def set_state(self, state:full_route_state.RouteState):
         self._state = state
-        self._move_selector.new_values(pkmn_gen_info.current_gen_info().get_stat_modifer_moves())
+        self._move_selector.new_values(current_gen_info().get_stat_modifer_moves())
 
         # when state changes, update the badge list label
         raw_badge_text = self._state.badges.to_string(verbose=False)
@@ -565,7 +564,7 @@ class StatExpViewer(tk.Frame):
         # NOTE: re-ordering stats over special
         return [stat_block.hp, stat_block.attack, stat_block.defense, stat_block.special_attack, stat_block.speed]
 
-    def set_state(self, state:route_state_objects.RouteState):
+    def set_state(self, state:full_route_state.RouteState):
         self._state = state
 
         self._net_gain_column.set_values(

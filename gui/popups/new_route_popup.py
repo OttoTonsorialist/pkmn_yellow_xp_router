@@ -9,7 +9,7 @@ from gui import custom_components
 from pkmn.universal_data_objects import StatBlock
 from utils.constants import const
 from utils import io_utils
-import pkmn
+from pkmn.gen_factory import current_gen_info
 
 
 class NewRouteWindow(Popup):

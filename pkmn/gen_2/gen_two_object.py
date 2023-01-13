@@ -5,11 +5,11 @@ from typing import List, Tuple
 from pkmn import universal_data_objects
 from pkmn.gen_2 import pkmn_damage_calc
 from pkmn.damage_calc import DamageRange
-from pkmn.gen_2.data_objects import GenTwoBadgeList, GenTwoStatBlock, instantiate_trainer_pokemon, instantiate_wild_pokemon, get_hidden_power_base_power, get_hidden_power_type
+from pkmn.gen_2.data_objects import GenTwoBadgeList, GenTwoStatBlock, instantiate_trainer_pokemon, instantiate_wild_pokemon, get_hidden_power_base_power, get_hidden_power_type, VIT_AMT, VIT_CAP
 from pkmn.gen_2.gen_two_constants import gen_two_const
 from pkmn.pkmn_db import ItemDB, MinBattlesDB, PkmnDB, TrainerDB, MoveDB
 from pkmn.pkmn_info import CurrentGen
-from routing import route_state_objects
+from routing import full_route_state
 from utils.constants import const
 
 
@@ -67,8 +67,10 @@ class GenTwo(CurrentGen):
     ) -> DamageRange:
         return pkmn_damage_calc.calculate_damage(
             attacking_pkmn,
+            self.pkmn_db().get_pkmn(attacking_pkmn.name),
             move,
             defending_pkmn,
+            self.pkmn_db().get_pkmn(defending_pkmn.name),
             attacking_stage_modifiers=attacking_stage_modifiers,
             defending_stage_modifiers=defending_stage_modifiers,
             is_crit=is_crit,
@@ -81,17 +83,14 @@ class GenTwo(CurrentGen):
     def make_badge_list(self) -> universal_data_objects.BadgeList:
         return GenTwoBadgeList()
     
-    def make_inventory(self) -> route_state_objects.Inventory:
-        return route_state_objects.Inventory()
+    def make_inventory(self) -> full_route_state.Inventory:
+        return full_route_state.Inventory()
     
     def get_stat_modifer_moves(self) -> List[str]:
         return list(self._move_db.stat_mod_moves.keys())
     
     def get_fight_reward(self, trainer_name) -> str:
         return gen_two_const.FIGHT_REWARDS.get(trainer_name)
-    
-    def is_minor_fight(self, trainer_name) -> str:
-        return trainer_name in gen_two_const.MINOR_FIGHTS
     
     def is_major_fight(self, trainer_name) -> str:
         return trainer_name in gen_two_const.MAJOR_FIGHTS
@@ -101,6 +100,26 @@ class GenTwo(CurrentGen):
     
     def get_hidden_power(self, dvs: universal_data_objects.StatBlock) -> Tuple[str, int]:
         return get_hidden_power_type(dvs), get_hidden_power_base_power(dvs)
+    
+    def get_stats_boosted_by_vitamin(self, vit_name: str) -> List[str]:
+        if vit_name == const.HP_UP:
+            return [const.HP]
+        elif vit_name == const.PROTEIN:
+            return [const.ATK]
+        elif vit_name == const.IRON:
+            return [const.DEF]
+        elif vit_name == const.CALCIUM:
+            return [const.SPA, const.SPD]
+        elif vit_name == const.CARBOS:
+            return [const.SPE]
+
+        raise ValueError(f"Unknown vitamin: {vit_name}")
+    
+    def get_vitamin_amount(self) -> int:
+        return VIT_AMT
+    
+    def get_vitamin_cap(self) -> int:
+        return VIT_CAP
 
 
 def _load_pkmn_db(path):
@@ -168,7 +187,6 @@ def _create_trainer(trainer_dict, pkmn_db:PkmnDB) -> universal_data_objects.Trai
         trainer_dict[const.TRAINER_NAME],
         trainer_dict[const.TRAINER_LOC],
         trainer_dict[const.MONEY],
-        "NotImplementedYet",
         enemy_pkmn,
         rematch=("Rematch" in trainer_dict[const.TRAINER_NAME])
     )

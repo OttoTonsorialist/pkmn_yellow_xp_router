@@ -4,7 +4,7 @@ from typing import List, Tuple
 
 import controllers.main_controller
 from route_recording.gamehook_client import GameHookClient
-from routing.route_events import BlackoutEventDefinition, EventDefinition, EventGroup, InventoryEventDefinition, LearnMoveEventDefinition, RareCandyEventDefinition, TrainerEventDefinition, VitaminEventDefinition, WildPkmnEventDefinition
+import routing.route_events
 from utils.constants import const
 
 logger = logging.getLogger(__name__)
@@ -131,7 +131,7 @@ class RecorderController:
         potentially_empty_folders = []
 
         # find the save points
-        test_obj:EventGroup = self._controller.get_previous_event()
+        test_obj:routing.route_events.EventGroup = self._controller.get_previous_event()
         while test_obj is not None and test_obj.event_definition.save is None:
             to_delete.append(test_obj.group_id)
             potentially_empty_folders.append(test_obj.parent)
@@ -150,7 +150,7 @@ class RecorderController:
         self._potential_new_area_name = None
         self._potential_new_folder_name = None
 
-    def _is_trainer_event(self, event_obj:EventGroup, trainer_name:str):
+    def _is_trainer_event(self, event_obj:routing.route_events.EventGroup, trainer_name:str):
         return (
             event_obj is not None and
             event_obj.event_definition.trainer_def is not None and
@@ -173,7 +173,7 @@ class RecorderController:
             if test_obj is None:
                 msg = f"{const.RECORDING_ERROR_FRAGMENT} Could not find trainer event {trainer_name} to remove after losing to them"
                 logger.error(msg)
-                self._controller.new_event(EventDefinition(notes=msg), dest_folder_name=self._active_folder_name)
+                self._controller.new_event(routing.route_events.EventDefinition(notes=msg), dest_folder_name=self._active_folder_name)
             else:
                 if test_obj != last_obj:
                     logger.error(f"{const.RECORDING_ERROR_FRAGMENT} When removing trainer event {trainer_name}, it was not the last event... odd")
@@ -181,7 +181,7 @@ class RecorderController:
                 self._controller.delete_events([test_obj.group_id])
 
     @skip_if_inactive
-    def add_event(self, event_def:EventDefinition):
+    def add_event(self, event_def:routing.route_events.EventDefinition):
         if self._potential_new_area_name is not None:
             if self._active_area_name == self._potential_new_area_name:
                 self._potential_new_area_name = None
@@ -198,7 +198,7 @@ class RecorderController:
             msg = f"{const.RECORDING_ERROR_FRAGMENT} Tried to fight trainer that has already been defeated: {event_def.trainer_def.trainer_name}"
             logger.error(msg)
             self._controller.new_event(
-                EventDefinition(notes=msg),
+                routing.route_events.EventDefinition(notes=msg),
                 dest_folder_name=self._active_folder_name,
                 auto_select=True
             )
@@ -211,7 +211,7 @@ class RecorderController:
                     msg = f"{const.RECORDING_ERROR_FRAGMENT} When teaching level-up move {event_def} over {event_def.learn_move.destination}, Mon didn't have {event_def.learn_move.destination}"
                     logger.error(msg)
                     self._controller.new_event(
-                        EventDefinition(notes=msg),
+                        routing.route_events.EventDefinition(notes=msg),
                         dest_folder_name=self._active_folder_name,
                         auto_select=True
                     )

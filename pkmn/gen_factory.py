@@ -1,6 +1,5 @@
-
+from utils.constants import const
 from pkmn.pkmn_info import CurrentGen
-
 
 class GenFactory:
     def __init__(self):
@@ -28,17 +27,22 @@ class GenFactory:
         
         self._cur_gen = self._all_gens[new_version_name]
         self._cur_version = new_version_name
+    
+    def register_custom_version(self, base_path:str) -> None:
+        # first, figure out the name and base_version from top level metadata file
+        # from there, we want to redirect the creation of the actual gen to each generation
+        pass
 
-gen_factory = GenFactory()
+_gen_factory = GenFactory()
 
 #####
 # expose interface for easier access
 #####
 def current_gen_info() -> CurrentGen:
-    return gen_factory.current_gen_info()
+    return _gen_factory.current_gen_info()
 
 def change_version(new_version_name):
-    gen_factory.change_version(new_version_name)
+    _gen_factory.change_version(new_version_name)
 
 def specific_gen_info(version_name) -> CurrentGen:
-    return gen_factory.get_specific_version(version_name)
+    return _gen_factory.get_specific_version(version_name)

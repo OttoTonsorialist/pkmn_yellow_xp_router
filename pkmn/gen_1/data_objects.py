@@ -1,6 +1,6 @@
 from __future__ import annotations
 from utils.constants import const
-import pkmn.gen_1.pkmn_utils as pkmn_utils
+from pkmn.gen_1 import pkmn_utils
 from pkmn.gen_1.gen_one_constants import gen_one_const
 from pkmn import universal_data_objects
 

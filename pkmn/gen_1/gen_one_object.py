@@ -11,7 +11,7 @@ from pkmn.pkmn_db import ItemDB, MinBattlesDB, PkmnDB, TrainerDB, MoveDB
 from pkmn.pkmn_info import CurrentGen
 from route_recording.game_recorders.yellow_recorder import YellowRecorder, RedBlueRecorder
 from route_recording.recorder import RecorderController, RecorderGameHookClient
-from routing import route_state_objects
+from routing import full_route_state
 from utils.constants import const
 
 
@@ -50,7 +50,9 @@ class GenOne(CurrentGen):
         return self._min_battles_db
     
     def get_recorder_client(self, recorder_controller:RecorderController) -> RecorderGameHookClient:
-        return _recorder_factory(recorder_controller, self._version_name)
+        if self._version_name == const.YELLOW_VERSION:
+            return YellowRecorder(recorder_controller, "Pokemon Yellow")
+        return RedBlueRecorder(recorder_controller, "Pokemon Red and Blue")
 
     def create_trainer_pkmn(self, pkmn_name, pkmn_level):
         return pkmn_utils.instantiate_trainer_pokemon(self._pkmn_db.get_pkmn(pkmn_name), pkmn_level)
@@ -72,8 +74,10 @@ class GenOne(CurrentGen):
     ) -> DamageRange:
         return pkmn_damage_calc.calculate_damage(
             attacking_pkmn,
+            self.pkmn_db().get_pkmn(attacking_pkmn.name),
             move,
             defending_pkmn,
+            self.pkmn_db().get_pkmn(defending_pkmn.name),
             attacking_stage_modifiers=attacking_stage_modifiers,
             defending_stage_modifiers=defending_stage_modifiers,
             is_crit=is_crit,
@@ -86,17 +90,14 @@ class GenOne(CurrentGen):
     def make_badge_list(self) -> universal_data_objects.BadgeList:
         return GenOneBadgeList()
     
-    def make_inventory(self) -> route_state_objects.Inventory:
-        return route_state_objects.Inventory(bag_limit=gen_one_const.BAG_LIMIT)
+    def make_inventory(self) -> full_route_state.Inventory:
+        return full_route_state.Inventory(bag_limit=gen_one_const.BAG_LIMIT)
     
     def get_stat_modifer_moves(self) -> List[str]:
         return list(self._move_db.stat_mod_moves.keys())
     
     def get_fight_reward(self, trainer_name) -> str:
         return gen_one_const.FIGHT_REWARDS.get(trainer_name)
-    
-    def is_minor_fight(self, trainer_name) -> str:
-        return trainer_name in gen_one_const.MINOR_FIGHTS
     
     def is_major_fight(self, trainer_name) -> str:
         return trainer_name in gen_one_const.MAJOR_FIGHTS
@@ -109,6 +110,26 @@ class GenOne(CurrentGen):
     
     def get_hidden_power(self, dvs: universal_data_objects.StatBlock) -> Tuple[str, int]:
         return "", 0
+    
+    def get_stats_boosted_by_vitamin(self, vit_name: str) -> List[str]:
+        if vit_name == const.HP_UP:
+            return [const.HP]
+        elif vit_name == const.PROTEIN:
+            return [const.ATK]
+        elif vit_name == const.IRON:
+            return [const.DEF]
+        elif vit_name == const.CALCIUM:
+            return [const.SPA, const.SPD]
+        elif vit_name == const.CARBOS:
+            return [const.SPE]
+
+        raise ValueError(f"Unknown vitamin: {vit_name}")
+    
+    def get_vitamin_amount(self) -> int:
+        return pkmn_utils.VIT_AMT
+    
+    def get_vitamin_cap(self) -> int:
+        return pkmn_utils.VIT_CAP
 
 def _load_pkmn_db(path):
     result = {}
@@ -167,7 +188,6 @@ def _create_trainer(trainer_dict, pkmn_db:PkmnDB) -> universal_data_objects.Trai
         trainer_dict[const.TRAINER_NAME],
         trainer_dict[const.TRAINER_LOC],
         trainer_dict[const.MONEY],
-        trainer_dict[const.ROUTE_ONE_OFFSET],
         enemy_pkmn
     )
 
@@ -229,10 +249,28 @@ def _load_move_db(path):
     return result
 
 
-def _recorder_factory(recorder_controller, version):
-    if version == const.YELLOW_VERSION:
-        return YellowRecorder(recorder_controller, "Pokemon Yellow")
-    return RedBlueRecorder(recorder_controller, "Pokemon Red and Blue")
+def make_custom_gen_one_version(base_version:str, custom_name:str):
+    pass
+
+def _make_custom_gen_one_version_helper(base_version:str, custom_name:str):
+    # generate a new folder, with an appropriate name
+    # grab all the necessary flat files for the base_version
+    # copy them into the new folder
+    # create metadata json file for custom version
+    pass
+
+
+def load_custom_gen_one_version(root_path:str):
+    # load metadata json file to get custom version name, and base version name
+    # load all files (TODO: do we want to allow defaulting to base files if files are missing? unclear...)
+    # verify in THIS order:
+    # - get list of all types
+    # - verify all types have an entry in the type chart
+    # - verify all moves exist, and have a valid type
+    # - verify that all items correspond with valid moves (actually important..? probably..)
+    # - verify all mons exist, and have valid types, and valid moves
+    # - verify all trainers exist, and have valid mons
+    pass
 
 
 gen_one_yellow = GenOne(

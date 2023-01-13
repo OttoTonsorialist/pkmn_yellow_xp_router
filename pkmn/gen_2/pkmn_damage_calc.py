@@ -1,7 +1,6 @@
 import math
 
 from pkmn import universal_data_objects, damage_calc
-import pkmn
 from pkmn.gen_2.data_objects import GenTwoBadgeList, get_hidden_power_type, get_hidden_power_base_power
 from utils.constants import const
 from pkmn.gen_2.gen_two_constants import gen_two_const
@@ -19,8 +18,10 @@ def get_crit_rate(pkmn:universal_data_objects.EnemyPkmn, move:universal_data_obj
 
 def calculate_damage(
     attacking_pkmn:universal_data_objects.EnemyPkmn,
+    attacking_species:universal_data_objects.PokemonSpecies,
     move:universal_data_objects.Move,
     defending_pkmn:universal_data_objects.EnemyPkmn,
+    defending_species:universal_data_objects.PokemonSpecies,
     attacking_stage_modifiers:universal_data_objects.StageModifiers=None,
     defending_stage_modifiers:universal_data_objects.StageModifiers=None,
     is_crit:bool=False,
@@ -78,9 +79,6 @@ def calculate_damage(
         attacking_battle_stats.special_attack *= 2
     elif defending_pkmn.name == gen_two_const.DITTO_NAME and defending_pkmn.held_item == gen_two_const.METAL_POWDER_NAME:
         defending_battle_stats.defense = math.floor(defending_battle_stats.defense * 1.5)
-
-    attacking_species = pkmn.current_gen_info().pkmn_db().get_pkmn(attacking_pkmn.name)
-    defending_species = pkmn.current_gen_info().pkmn_db().get_pkmn(defending_pkmn.name)
     
     if (
         gen_two_const.TYPE_CHART.get(move_type).get(defending_species.first_type) == const.IMMUNE or 

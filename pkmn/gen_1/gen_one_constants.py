@@ -7,6 +7,8 @@ class GenOneConstants:
         self.GEN_ONE_DATA_PATH = os.path.join(const.POKEMON_RAW_DATA, "gen_one")
         self.ITEM_DB_PATH = os.path.join(self.GEN_ONE_DATA_PATH, "items.json")
         self.MOVE_DB_PATH = os.path.join(self.GEN_ONE_DATA_PATH, "moves.json")
+        self.TYPE_CHART_PATH = os.path.join(self.GEN_ONE_DATA_PATH, "type_chart.json")
+        self.FIGHTS_INFO_PATH = os.path.join(self.GEN_ONE_DATA_PATH, "type_chart.json")
 
         self.YELLOW_ASSETS_PATH = os.path.join(self.GEN_ONE_DATA_PATH, "yellow")
         self.YELLOW_POKEMON_DB_PATH = os.path.join(self.YELLOW_ASSETS_PATH, "pokemon.json")

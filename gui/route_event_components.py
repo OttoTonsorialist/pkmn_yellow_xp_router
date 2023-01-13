@@ -3,7 +3,7 @@ import tkinter as tk
 from gui import custom_components
 from gui.pkmn_components import EnemyPkmnTeam
 from utils.constants import const
-import pkmn
+from pkmn.gen_factory import current_gen_info
 from routing.route_events import BlackoutEventDefinition, EventDefinition, HealEventDefinition, HoldItemEventDefinition, InventoryEventDefinition, LearnMoveEventDefinition, RareCandyEventDefinition, SaveEventDefinition, VitaminEventDefinition, WildPkmnEventDefinition
 from utils.config_manager import config
 
@@ -74,18 +74,18 @@ class TrainerFightEditor(EventEditorBase):
         self.cached_defeated_trainers = self.editor_params.cur_defeated_trainers
 
         self._trainers_by_loc_label = tk.Label(self, text="Trainer Location Filter:", bg=config.get_background_color(), fg=config.get_text_color())
-        trainer_locs = [const.ALL_TRAINERS] + sorted(pkmn.current_gen_info().trainer_db().get_all_locations())
+        trainer_locs = [const.ALL_TRAINERS] + sorted(current_gen_info().trainer_db().get_all_locations())
         self._trainers_by_loc = custom_components.SimpleOptionMenu(self, trainer_locs, callback=self._trainer_filter_callback)
         self._trainers_by_loc_label.grid(row=self._cur_row, column=0)
         self._trainers_by_loc.grid(row=self._cur_row, column=1)
         self._cur_row += 1
 
         self._trainers_by_class_label = tk.Label(self, text="Trainer Class Filter:", bg=config.get_background_color(), fg=config.get_text_color())
-        trainer_classes = [const.ALL_TRAINERS] + sorted(pkmn.current_gen_info().trainer_db().get_all_classes())
+        trainer_classes = [const.ALL_TRAINERS] + sorted(current_gen_info().trainer_db().get_all_classes())
         self._trainers_by_class = custom_components.SimpleOptionMenu(self, trainer_classes, callback=self._trainer_filter_callback)
 
         self._trainer_names_label = tk.Label(self, text="Trainer Name:", bg=config.get_background_color(), fg=config.get_text_color())
-        self._trainer_names = custom_components.SimpleOptionMenu(self, pkmn.current_gen_info().trainer_db().get_valid_trainers(), callback=self._trainer_name_callback)
+        self._trainer_names = custom_components.SimpleOptionMenu(self, current_gen_info().trainer_db().get_valid_trainers(), callback=self._trainer_name_callback)
         self._trainer_team = EnemyPkmnTeam(self)
 
         self._trainers_by_class_label.grid(row=self._cur_row, column=0)
@@ -103,7 +103,7 @@ class TrainerFightEditor(EventEditorBase):
         loc_filter = self._trainers_by_loc.get()
         class_filter = self._trainers_by_class.get()
 
-        valid_trainers = pkmn.current_gen_info().trainer_db().get_valid_trainers(
+        valid_trainers = current_gen_info().trainer_db().get_valid_trainers(
             trainer_class=class_filter,
             trainer_loc=loc_filter,
             defeated_trainers=self.cached_defeated_trainers
@@ -117,7 +117,7 @@ class TrainerFightEditor(EventEditorBase):
         if self._trainer_names.get() != const.NO_TRAINERS:
             self.event_button.enable()
             self._trainer_team.grid(row=5, column=0, columnspan=2)
-            trainer = pkmn.current_gen_info().trainer_db().get_trainer(self._trainer_names.get())
+            trainer = current_gen_info().trainer_db().get_trainer(self._trainer_names.get())
             if trainer is not None:
                 self._trainer_team.set_team(trainer.pkmn, cur_state=self.editor_params.cur_state)
             else:
@@ -130,7 +130,7 @@ class TrainerFightEditor(EventEditorBase):
         loc_filter = self._trainers_by_loc.get()
         class_filter = self._trainers_by_class.get()
 
-        valid_trainers = pkmn.current_gen_info().trainer_db().get_valid_trainers(
+        valid_trainers = current_gen_info().trainer_db().get_valid_trainers(
             trainer_class=class_filter,
             trainer_loc=loc_filter,
             defeated_trainers=self.cached_defeated_trainers
@@ -269,7 +269,7 @@ class LearnMoveEditor(EventEditorBase):
             item_type = const.ITEM_TYPE_TM
             backpack_filter = True
         
-        new_vals = pkmn.current_gen_info().item_db().get_filtered_names(item_type=item_type)
+        new_vals = current_gen_info().item_db().get_filtered_names(item_type=item_type)
 
         if backpack_filter:
             backpack_items = [x.base_item.name for x in self.editor_params.cur_state.inventory.cur_items]
@@ -286,7 +286,7 @@ class LearnMoveEditor(EventEditorBase):
     
     def _move_selected_callback(self, *args, **kwargs):
         if self.editor_params.event_type == const.TASK_LEARN_MOVE_TM:
-            item_obj = pkmn.current_gen_info().item_db().get_item(self._item_selector.get())
+            item_obj = current_gen_info().item_db().get_item(self._item_selector.get())
             if item_obj is not None:
                 self._move = item_obj.move_name
             else:
@@ -376,7 +376,7 @@ class WildPkmnEditor(EventEditorBase):
         super().__init__(*args, **kwargs)
 
         self._pkmn_label = tk.Label(self, text="Wild Pokemon Type:", bg=config.get_background_color(), fg=config.get_text_color())
-        self._pkmn_types = custom_components.SimpleOptionMenu(self, pkmn.current_gen_info().pkmn_db().get_all_names())
+        self._pkmn_types = custom_components.SimpleOptionMenu(self, current_gen_info().pkmn_db().get_all_names())
         self._pkmn_label.grid(row=self._cur_row, column=0)
         self._pkmn_types.grid(row=self._cur_row, column=1)
         self._cur_row += 1
@@ -428,7 +428,7 @@ class WildPkmnEditor(EventEditorBase):
             self.event_button.disable()
 
     def _pkmn_filter_callback(self, *args, **kwargs):
-        self._pkmn_types.new_values(pkmn.current_gen_info().pkmn_db().get_filtered_names(filter_val=self._pkmn_filter.get().strip()))
+        self._pkmn_types.new_values(current_gen_info().pkmn_db().get_filtered_names(filter_val=self._pkmn_filter.get().strip()))
         self._update_button_status()
 
     def configure(self, editor_params):
@@ -467,7 +467,7 @@ class InventoryEventEditor(EventEditorBase):
         self._cur_row += 1
 
         self._item_mart_label = tk.Label(self, text="Mart:", bg=config.get_background_color(), fg=config.get_text_color())
-        self._item_mart_selector = custom_components.SimpleOptionMenu(self, [const.ITEM_TYPE_ALL_ITEMS] + sorted(list(pkmn.current_gen_info().item_db().mart_items.keys())), callback=self._item_filter_callback)
+        self._item_mart_selector = custom_components.SimpleOptionMenu(self, [const.ITEM_TYPE_ALL_ITEMS] + sorted(list(current_gen_info().item_db().mart_items.keys())), callback=self._item_filter_callback)
         self._item_mart_row = self._cur_row
         self._cur_row += 1
 
@@ -477,7 +477,7 @@ class InventoryEventEditor(EventEditorBase):
         self._cur_row += 1
 
         self._item_selector_label = tk.Label(self, text="Item:", bg=config.get_background_color(), fg=config.get_text_color())
-        self._item_selector = custom_components.SimpleOptionMenu(self, pkmn.current_gen_info().item_db().get_filtered_names(), callback=self._item_selector_callback)
+        self._item_selector = custom_components.SimpleOptionMenu(self, current_gen_info().item_db().get_filtered_names(), callback=self._item_selector_callback)
         self._item_selector_row = self._cur_row
         self._cur_row += 1
 
@@ -562,7 +562,7 @@ class InventoryEventEditor(EventEditorBase):
             item_type = const.ITEM_TYPE_ALL_ITEMS
             backpack_filter = True
         
-        new_vals = pkmn.current_gen_info().item_db().get_filtered_names(
+        new_vals = current_gen_info().item_db().get_filtered_names(
             item_type=item_type,
             source_mart=self._item_mart_selector.get()
         )
@@ -585,7 +585,7 @@ class InventoryEventEditor(EventEditorBase):
             # first, get the amount the user wants. We always do this to make sure it's actually an int
             # even if we aren't calcing the cost here, it has to be a valid number
             item_amt = int(self._item_amount.get())
-            cur_item = pkmn.current_gen_info().item_db().get_item(self._item_selector.get())
+            cur_item = current_gen_info().item_db().get_item(self._item_selector.get())
             if self.editor_params.event_type == const.TASK_PURCHASE_ITEM:
                 # update the cost if purchasing
                 cost = cur_item.purchase_price

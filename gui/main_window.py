@@ -15,13 +15,11 @@ from gui.popups.delete_confirmation_popup import DeleteConfirmation
 from gui.popups.load_route_popup import LoadRouteWindow
 from gui.popups.new_folder_popup import NewFolderWindow
 from gui.popups.new_route_popup import NewRouteWindow
-from gui.popups.route_one_popup import RouteOneWindow
 from gui.popups.transfer_event_popup import TransferEventWindow
 from gui.recorder_status import RecorderStatus
 from route_recording.recorder import RecorderController
 from utils.constants import const
 from utils.config_manager import config
-from utils import route_one_utils
 from routing.route_events import EventDefinition, EventFolder, EventGroup, EventItem, TrainerEventDefinition
 import routing.router as router
 
@@ -87,14 +85,9 @@ class MainWindow(tk.Tk):
         self.folder_menu.add_command(label="New Folder                   (Ctrl+Q)", command=self.open_new_folder_window)
         self.folder_menu.add_command(label="Rename Cur Folder       (Ctrl+W)", command=self.rename_folder)
 
-        self.export_menu = tk.Menu(self.top_menu_bar, tearoff=0)
-        self.export_menu.add_command(label="Export           (Ctrl+Shift+E)", command=self.open_export_window)
-        self.export_menu.add_command(label="Quick Run    (Ctrl+Shift+R)", command=self.just_export_and_run)
-
         self.top_menu_bar.add_cascade(label="File", menu=self.file_menu)
         self.top_menu_bar.add_cascade(label="Events", menu=self.event_menu)
         self.top_menu_bar.add_cascade(label="Folders", menu=self.folder_menu)
-        self.top_menu_bar.add_cascade(label="RouteOne", menu=self.export_menu)
 
         # main container for everything to sit in... might be unnecessary?
         self.primary_window = tk.Frame(self)
@@ -222,9 +215,6 @@ class MainWindow(tk.Tk):
         # folder actions
         self.bind('<Control-q>', self.open_new_folder_window)
         self.bind('<Control-w>', self.rename_folder)
-        # route One integrations
-        self.bind('<Control-E>', self.open_export_window)
-        self.bind('<Control-R>', self.just_export_and_run)
         # config integrations
         self.bind('<Control-D>', self.open_config_window)
         self.bind('<Control-Z>', self.open_app_config_window)
@@ -476,27 +466,6 @@ class MainWindow(tk.Tk):
                 existing_folder_name,
                 insert_after=all_event_ids[0] if len(all_event_ids) == 1 else None
             )
-
-    def just_export_and_run(self, *args, **kwargs):
-        try:
-            if self._controller.get_init_state() is None:
-                self.message_label.set_message(f"Cannot export when no route is loaded")
-
-            jar_path = config.get_route_one_path()
-            if not jar_path:
-                config_path, _, _ = route_one_utils.export_to_route_one(self._controller.get_raw_route(), self.route_name.get())
-                self.message_label.set_message(f"Could not run RouteOne, jar path not set. Exported RouteOne files: {config_path}")
-            else:
-                config_path, _, out_path = route_one_utils.export_to_route_one(self._controller.get_raw_route(), self.route_name.get())
-                result = route_one_utils.run_route_one(jar_path, config_path)
-                if not result:
-                    self.message_label.set_message(f"Ran RouteOne successfully. Result file: {out_path}")
-        except Exception as e:
-            self.message_label.set_message(f"Exception attempting to export and run: {type(e)}: {e}")
-
-    def open_export_window(self, event=None):
-        if self._is_active_window():
-            self.new_event_window = RouteOneWindow(self, self._controller, self.route_name.get())
 
     def clear_popup(self, *args, **kwargs):
         # hook for when a pop-up cleans up after itself
