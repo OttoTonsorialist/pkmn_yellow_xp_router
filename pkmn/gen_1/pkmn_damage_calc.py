@@ -1,4 +1,5 @@
 import math
+from typing import Dict, List
 
 from pkmn import universal_data_objects, damage_calc
 from utils.constants import const
@@ -19,12 +20,14 @@ def get_crit_rate(pkmn:universal_data_objects.EnemyPkmn, move:universal_data_obj
     return result
 
 
-def calculate_damage(
+def calculate_gen_one_damage(
     attacking_pkmn:universal_data_objects.EnemyPkmn,
     attacking_species:universal_data_objects.PokemonSpecies,
     move:universal_data_objects.Move,
     defending_pkmn:universal_data_objects.EnemyPkmn,
     defending_species:universal_data_objects.PokemonSpecies,
+    special_types:List[str],
+    type_chart:Dict[str, Dict[str, str]],
     attacking_stage_modifiers:universal_data_objects.StageModifiers=None,
     defending_stage_modifiers:universal_data_objects.StageModifiers=None,
     is_crit:bool=False,
@@ -52,15 +55,15 @@ def calculate_damage(
     attacking_battle_stats = attacking_pkmn.get_battle_stats(attacking_stage_modifiers, is_crit=is_crit)
     defending_battle_stats = defending_pkmn.get_battle_stats(defending_stage_modifiers, is_crit=is_crit)
 
-    first_type_effectiveness = gen_one_const.TYPE_CHART.get(move.move_type).get(defending_species.first_type)
+    first_type_effectiveness = type_chart.get(move.move_type).get(defending_species.first_type)
     second_type_effectiveness = None
     if defending_species.first_type != defending_species.second_type:
-        second_type_effectiveness = gen_one_const.TYPE_CHART.get(move.move_type).get(defending_species.second_type)
+        second_type_effectiveness = type_chart.get(move.move_type).get(defending_species.second_type)
     
     if first_type_effectiveness == const.IMMUNE or second_type_effectiveness == const.IMMUNE:
         return None
     
-    if move.move_type in gen_one_const.SPECIAL_TYPES:
+    if move.move_type in special_types:
         attacking_stat = attacking_battle_stats.special_attack
         defending_stat = defending_battle_stats.special_defense
         if defender_has_light_screen and not is_crit:

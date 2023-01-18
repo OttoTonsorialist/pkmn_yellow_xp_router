@@ -1,11 +1,9 @@
 from __future__ import annotations
 import os
 import logging
-import tkinter
 from typing import List, Tuple
 
 from utils.constants import const
-from utils.config_manager import config
 from routing.route_events import EventDefinition, EventFolder, EventGroup, EventItem, LearnMoveEventDefinition, TrainerEventDefinition
 import routing.router
 from pkmn import gen_factory
@@ -27,8 +25,7 @@ def handle_exceptions(controller_fn):
 
 
 class MainController:
-    def __init__(self, tk_root:tkinter.Tk):
-        self._tk_root = tk_root
+    def __init__(self):
         self._data:routing.router.Router = routing.router.Router()
         self._current_preview_event = None
         self._route_name = ""
@@ -301,6 +298,14 @@ class MainController:
         self._is_record_mode_active = new_record_mode
         self._on_record_mode_change()
     
+    @handle_exceptions
+    def load_all_custom_versions(self):
+        gen_factory._gen_factory.reload_all_custom_gens()
+    
+    @handle_exceptions
+    def create_custom_version(self, base_version, custom_version):
+        gen_factory._gen_factory.get_specific_version(base_version).create_new_custom_gen(custom_version)
+    
     def trigger_exception(self, exception_message):
         self._on_exception(exception_message)
 
@@ -378,6 +383,24 @@ class MainController:
         return self.get_event_by_id(
             self.get_single_selected_event_id(allow_event_items=allow_event_items)
         )
+    
+    def get_active_state(self):
+        # The idea here is we want to get the current state to operate on
+        # MOST of the time, this is just the final state of the selected event
+        # (since we will insert after the selected event)
+        result = self.get_single_selected_event_obj(allow_event_items=False)
+        if result is not None:
+            return result.final_state
+        
+        # If no event is selected, because we are looking at an empty route
+        # then just get the initial route state
+        if self.is_empty():
+            return self._data.init_route_state
+        
+        # If no event is selected, but the route is non-empty
+        # then we will insert after the final event
+        return self.get_final_state()
+
     
     def can_insert_after_current_selection(self):
         # Can always insert if the route is empty

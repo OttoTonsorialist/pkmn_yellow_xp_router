@@ -295,7 +295,7 @@ class RedBlueGameHookConstantConverter(GameHookConstantConverter):
             elif starter_selector == 2:
                 starter_mon = "Charmander"
             
-            trainer_num = (trainer_num // 3) + 1
+            trainer_num = ((trainer_num - 1) // 3) + 1
             if trainer_class == "Rival3":
                 converted_name = f"{trainer_class} {starter_mon}"
             else:

@@ -6,6 +6,7 @@ import threading
 import logging
 
 from tkinter import messagebox
+from controllers.main_controller import MainController
 from gui.auto_upgrade_window import AutoUpgradeGUI
 from gui.main_window import MainWindow
 
@@ -73,7 +74,8 @@ if __name__ == '__main__':
         const.DEBUG_MODE = True
     
     init_base_generations()
-    app = MainWindow()
+    controller = MainController()
+    app = MainWindow(controller)
     background_thread = threading.Thread(target=startup_check_for_upgrade, args=(app,))
 
     background_thread.start()

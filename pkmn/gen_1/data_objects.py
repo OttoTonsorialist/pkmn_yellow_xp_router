@@ -1,4 +1,5 @@
 from __future__ import annotations
+from typing import Dict
 from utils.constants import const
 from pkmn.gen_1 import pkmn_utils
 from pkmn.gen_1.gen_one_constants import gen_one_const
@@ -6,7 +7,8 @@ from pkmn import universal_data_objects
 
 
 class GenOneBadgeList(universal_data_objects.BadgeList):
-    def __init__(self, boulder=False, cascade=False, thunder=False, rainbow=False, soul=False, marsh=False, volcano=False, earth=False):
+    def __init__(self, badge_rewards, boulder=False, cascade=False, thunder=False, rainbow=False, soul=False, marsh=False, volcano=False, earth=False):
+        self._badge_rewards:Dict[str, str] = badge_rewards
         self.boulder = boulder
         self.cascade = cascade
         self.thunder = thunder
@@ -17,7 +19,7 @@ class GenOneBadgeList(universal_data_objects.BadgeList):
         self.earth = earth
     
     def award_badge(self, trainer_name) -> GenOneBadgeList:
-        reward = gen_one_const.BADGE_REWARDS.get(trainer_name)
+        reward = self._badge_rewards.get(trainer_name)
         result = self.copy()
         if reward == gen_one_const.BOULDER_BADGE:
             result.boulder = True
@@ -36,7 +38,6 @@ class GenOneBadgeList(universal_data_objects.BadgeList):
         elif reward == gen_one_const.EARTH_BADGE:
             result.earth = True
         else:
-            # no need to hold on to a copy wastefully if no badge was awarded
             return self
         
         return result
@@ -58,6 +59,7 @@ class GenOneBadgeList(universal_data_objects.BadgeList):
     
     def copy(self) -> GenOneBadgeList:
         return GenOneBadgeList(
+            self._badge_rewards,
             boulder=self.boulder,
             cascade=self.cascade,
             thunder=self.thunder,
@@ -161,7 +163,8 @@ class GenOneStatBlock(universal_data_objects.StatBlock):
         if is_crit:
             # prevent all badge-boosts and stage modifiers whenever a crit occurs
             # by just pretending you don't have any of either
-            badges = GenOneBadgeList()
+            if badges is not None:
+                badges = GenOneBadgeList(badges._badge_rewards)
             stage_modifiers = universal_data_objects.StageModifiers(
                 accuracy=stage_modifiers.accuracy_stage,
                 evasion=stage_modifiers.evasion_stage

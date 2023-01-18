@@ -1,6 +1,9 @@
 import json
 import copy
-from typing import List, Tuple
+from typing import Dict, List, Tuple
+import os
+import shutil
+import logging
 
 from pkmn import universal_data_objects
 from pkmn.gen_1 import pkmn_damage_calc, pkmn_utils
@@ -13,23 +16,92 @@ from route_recording.game_recorders.yellow_recorder import YellowRecorder, RedBl
 from route_recording.recorder import RecorderController, RecorderGameHookClient
 from routing import full_route_state
 from utils.constants import const
+from utils import io_utils
+
+logger = logging.getLogger(__name__)
 
 
 class GenOne(CurrentGen):
-    def __init__(self, pkmn_db_path, trainer_db_path, min_battles_path, version_name):
+    def __init__(self, pkmn_db_path, trainer_db_path, item_path, move_path, type_info_path, fight_info_path, min_battles_path, version_name, base_version_name=None):
         self._version_name = version_name
-        self._pkmn_db = PkmnDB(_load_pkmn_db(pkmn_db_path))
-        self._trainer_db = TrainerDB(_load_trainer_db(trainer_db_path, self._pkmn_db))
-        self._item_db = ItemDB(_load_item_db(gen_one_const.ITEM_DB_PATH))
-        self._move_db = MoveDB(_load_move_db(gen_one_const.MOVE_DB_PATH))
-        self._min_battles_db = MinBattlesDB(min_battles_path)
+        self._base_version_name = base_version_name
 
+        self._all_flat_files = [
+            pkmn_db_path, trainer_db_path, item_path, move_path, type_info_path, fight_info_path
+        ]
+
+        try:
+            self._pkmn_db = PkmnDB(_load_pkmn_db(pkmn_db_path))
+        except Exception as e:
+            logger.error(f"Error loading pokemon DB: {pkmn_db_path}")
+            logger.exception(e)
+            raise ValueError(f"Failed to load pokemon DB: {e}")
+
+        try:
+            self._trainer_db = TrainerDB(_load_trainer_db(trainer_db_path, self._pkmn_db))
+        except Exception as e:
+            logger.error(f"Error loading trainer DB: {pkmn_db_path}")
+            logger.exception(e)
+            raise ValueError(f"Failed to load trainer DB: {e}")
+
+        try:
+            self._item_db = ItemDB(_load_item_db(item_path))
+        except Exception as e:
+            logger.error(f"Error loading trainer DB: {pkmn_db_path}")
+            logger.exception(e)
+            raise ValueError(f"Failed to load trainer DB: {e}")
+
+        try:
+            self._move_db = MoveDB(_load_move_db(move_path))
+        except Exception as e:
+            logger.error(f"Error loading move DB: {pkmn_db_path}")
+            logger.exception(e)
+            raise ValueError(f"Failed to load move DB: {e}")
+
+        try:
+            self._min_battles_db = MinBattlesDB(min_battles_path)
+        except Exception as e:
+            logger.error(f"Error loading min battles DB: {pkmn_db_path}")
+            logger.exception(e)
+            raise ValueError(f"Failed to load min battles DB: {e}")
+
+        try:
+            with open(type_info_path, 'r') as f:
+                type_info = json.load(f)
+            
+            self._special_types:List[str] = type_info[const.SPECIAL_TYPES_KEY]
+            self._type_chart:Dict[str, Dict[str, str]] = type_info[const.TYPE_CHART_KEY]
+        except Exception as e:
+            logger.error(f"Error loading type info: {pkmn_db_path}")
+            logger.exception(e)
+            raise ValueError(f"Failed to load type info: {e}")
+
+        try:
+            with open(fight_info_path, 'r') as f:
+                fight_info = json.load(f)
+            
+            self._badge_rewards:Dict[str, str] = fight_info[const.BADGE_REWARDS_KEY]
+            self._major_fights:List[str] = fight_info[const.MAJOR_FIGHTS_KEY]
+            self._fight_rewards:Dict[str, str] = fight_info[const.FIGHT_REWARDS_KEY]
+        except Exception as e:
+            logger.error(f"Error loading fight info: {pkmn_db_path}")
+            logger.exception(e)
+            raise ValueError(f"Failed to load fight info: {e}")
+
+        supported_types = self._type_chart.keys()
+        self._validate_special_types(supported_types)
+        self._move_db.validate_move_types(supported_types)
+        self._item_db.validate_tms_hms(self._move_db)
+        self._validate_fight_rewards()
+        self._pkmn_db.validate_types(supported_types)
         self._pkmn_db.validate_moves(self._move_db)
         self._trainer_db.validate_trainers(self._pkmn_db, self._move_db)
-        self._item_db.validate_tms_hms(self._move_db)
 
     def version_name(self) -> str:
         return self._version_name
+    
+    def base_version_name(self) -> str:
+        return self._base_version_name
     
     def get_generation(self) -> int:
         return 1
@@ -50,7 +122,11 @@ class GenOne(CurrentGen):
         return self._min_battles_db
     
     def get_recorder_client(self, recorder_controller:RecorderController) -> RecorderGameHookClient:
-        if self._version_name == const.YELLOW_VERSION:
+        version_name = self._base_version_name
+        if version_name is None:
+            version_name = self._version_name
+
+        if version_name == const.YELLOW_VERSION:
             return YellowRecorder(recorder_controller, "Pokemon Yellow")
         return RedBlueRecorder(recorder_controller, "Pokemon Red and Blue")
 
@@ -72,12 +148,14 @@ class GenOne(CurrentGen):
         is_crit:bool=False,
         custom_move_data:str=""
     ) -> DamageRange:
-        return pkmn_damage_calc.calculate_damage(
+        return pkmn_damage_calc.calculate_gen_one_damage(
             attacking_pkmn,
             self.pkmn_db().get_pkmn(attacking_pkmn.name),
             move,
             defending_pkmn,
             self.pkmn_db().get_pkmn(defending_pkmn.name),
+            self._special_types,
+            self._type_chart,
             attacking_stage_modifiers=attacking_stage_modifiers,
             defending_stage_modifiers=defending_stage_modifiers,
             is_crit=is_crit,
@@ -88,7 +166,7 @@ class GenOne(CurrentGen):
         return GenOneStatBlock(hp, attack, defense, special_attack, special_defense, speed, is_stat_xp=is_stat_xp)
     
     def make_badge_list(self) -> universal_data_objects.BadgeList:
-        return GenOneBadgeList()
+        return GenOneBadgeList(self._badge_rewards)
     
     def make_inventory(self) -> full_route_state.Inventory:
         return full_route_state.Inventory(bag_limit=gen_one_const.BAG_LIMIT)
@@ -97,10 +175,10 @@ class GenOne(CurrentGen):
         return list(self._move_db.stat_mod_moves.keys())
     
     def get_fight_reward(self, trainer_name) -> str:
-        return gen_one_const.FIGHT_REWARDS.get(trainer_name)
+        return self._fight_rewards.get(trainer_name)
     
     def is_major_fight(self, trainer_name) -> str:
-        return trainer_name in gen_one_const.MAJOR_FIGHTS
+        return trainer_name in self._major_fights
     
     def get_move_custom_data(self, move_name) -> List[str]:
         # Gen one moves that require custom data are already handled by the rendering engine
@@ -130,6 +208,55 @@ class GenOne(CurrentGen):
     
     def get_vitamin_cap(self) -> int:
         return pkmn_utils.VIT_CAP
+    
+    def create_new_custom_gen(self, new_version_name):
+        folder_name = io_utils.get_safe_path_no_collision(const.CUSTOM_GENS_DIR, new_version_name)
+        os.makedirs(folder_name)
+
+        for cur_file in self._all_flat_files:
+            shutil.copy2(cur_file, os.path.join(folder_name, os.path.basename(cur_file)))
+
+        # create metadata json file for custom version
+        with open(os.path.join(folder_name, const.CUSTOM_GEN_META_FILE_NAME), 'w') as f:
+            json.dump(
+                {
+                    const.CUSTOM_GEN_NAME_KEY: new_version_name,
+                    const.BASE_GEN_NAME_KEY: self._version_name
+                },
+                f, indent=4
+            )
+    
+    def load_custom_gen(self, custom_version_name, root_path) -> CurrentGen:
+        return GenOne(
+            os.path.join(root_path, const.POKEMON_DB_FILE_NAME),
+            os.path.join(root_path, const.TRAINERS_DB_FILE_NAME),
+            os.path.join(root_path, const.ITEM_DB_FILE_NAME),
+            os.path.join(root_path, const.MOVE_DB_FILE_NAME),
+            os.path.join(root_path, const.TYPE_INFO_FILE_NAME),
+            os.path.join(root_path, const.FIGHTS_INFO_FILE_NAME),
+            "",
+            custom_version_name,
+            base_version_name=self._version_name
+        )
+    
+    def _validate_special_types(self, supported_types):
+        invalid_types = []
+        for cur_type in self._special_types:
+            if cur_type not in supported_types:
+                invalid_types.append(cur_type)
+        
+        if invalid_types:
+            raise ValueError(f"Detected invalid special type(s): {invalid_types}")
+    
+    def _validate_fight_rewards(self):
+        invalid_rewards = []
+        for cur_fight, cur_reward in self._fight_rewards.items():
+            if self._item_db.get_item(cur_reward) is None:
+                invalid_rewards.append((cur_fight, cur_reward))
+        
+        if len(invalid_rewards) > 0:
+            raise ValueError(f"Invalid Fight Rewards: {invalid_rewards}")
+
 
 def _load_pkmn_db(path):
     result = {}
@@ -162,6 +289,8 @@ def _load_pkmn_db(path):
 def _create_trainer(trainer_dict, pkmn_db:PkmnDB) -> universal_data_objects.Trainer:
     enemy_pkmn = []
     for cur_mon in trainer_dict[const.TRAINER_POKEMON]:
+        if pkmn_db.get_pkmn(cur_mon[const.NAME_KEY]) is None:
+            raise ValueError(f"Invalid mon found when creating trainer: {trainer_dict[const.TRAINER_NAME], cur_mon[const.NAME_KEY]}")
         enemy_pkmn.append(
             universal_data_objects.EnemyPkmn(
                 cur_mon[const.NAME_KEY],
@@ -249,33 +378,13 @@ def _load_move_db(path):
     return result
 
 
-def make_custom_gen_one_version(base_version:str, custom_name:str):
-    pass
-
-def _make_custom_gen_one_version_helper(base_version:str, custom_name:str):
-    # generate a new folder, with an appropriate name
-    # grab all the necessary flat files for the base_version
-    # copy them into the new folder
-    # create metadata json file for custom version
-    pass
-
-
-def load_custom_gen_one_version(root_path:str):
-    # load metadata json file to get custom version name, and base version name
-    # load all files (TODO: do we want to allow defaulting to base files if files are missing? unclear...)
-    # verify in THIS order:
-    # - get list of all types
-    # - verify all types have an entry in the type chart
-    # - verify all moves exist, and have a valid type
-    # - verify that all items correspond with valid moves (actually important..? probably..)
-    # - verify all mons exist, and have valid types, and valid moves
-    # - verify all trainers exist, and have valid mons
-    pass
-
-
 gen_one_yellow = GenOne(
     gen_one_const.YELLOW_POKEMON_DB_PATH,
     gen_one_const.YELLOW_TRAINER_DB_PATH,
+    gen_one_const.ITEM_DB_PATH,
+    gen_one_const.MOVE_DB_PATH,
+    gen_one_const.TYPE_INFO_PATH,
+    gen_one_const.FIGHTS_INFO_PATH,
     gen_one_const.YELLOW_MIN_BATTLES_DIR,
     const.YELLOW_VERSION
 )
@@ -284,6 +393,10 @@ gen_one_yellow = GenOne(
 gen_one_blue = GenOne(
     gen_one_const.RB_POKEMON_DB_PATH,
     gen_one_const.RB_TRAINER_DB_PATH,
+    gen_one_const.ITEM_DB_PATH,
+    gen_one_const.MOVE_DB_PATH,
+    gen_one_const.TYPE_INFO_PATH,
+    gen_one_const.FIGHTS_INFO_PATH,
     gen_one_const.RB_MIN_BATTLES_DIR,
     const.BLUE_VERSION
 )
@@ -291,6 +404,10 @@ gen_one_blue = GenOne(
 gen_one_red = GenOne(
     gen_one_const.RB_POKEMON_DB_PATH,
     gen_one_const.RB_TRAINER_DB_PATH,
+    gen_one_const.ITEM_DB_PATH,
+    gen_one_const.MOVE_DB_PATH,
+    gen_one_const.TYPE_INFO_PATH,
+    gen_one_const.FIGHTS_INFO_PATH,
     gen_one_const.RB_MIN_BATTLES_DIR,
     const.RED_VERSION
 )

@@ -397,7 +397,7 @@ class QuickItemAdd(tk.Frame):
         )
 
         if backpack_filter:
-            cur_state = self._controller.get_single_selected_event_obj().final_state
+            cur_state = self._controller.get_active_state()
             if cur_state is None:
                 new_vals = []
             else:
@@ -502,7 +502,7 @@ class QuickItemAdd(tk.Frame):
         try:
             cur_item = self._item_selector.get()
             move_name = current_gen_info().item_db().get_item(cur_item).move_name
-            cur_state = self._controller.get_single_selected_event_obj().final_state
+            cur_state = self._controller.get_active_state()
             
             if cur_item in current_gen_info().item_db().tms:
                 self._create_event(

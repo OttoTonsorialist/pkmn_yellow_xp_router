@@ -16,6 +16,7 @@ from gui.popups.load_route_popup import LoadRouteWindow
 from gui.popups.new_folder_popup import NewFolderWindow
 from gui.popups.new_route_popup import NewRouteWindow
 from gui.popups.transfer_event_popup import TransferEventWindow
+from gui.popups.custom_gen_popup import CustomGenWindow
 from gui.recorder_status import RecorderStatus
 from route_recording.recorder import RecorderController
 from utils.constants import const
@@ -28,9 +29,9 @@ flag_to_auto_update = False
 
 
 class MainWindow(tk.Tk):
-    def __init__(self):
+    def __init__(self, controller:MainController):
         super().__init__()
-        self._controller = MainController(self)
+        self._controller = controller
         self._recorder_controller = RecorderController(self._controller)
 
         geometry = config.get_window_geometry()
@@ -72,6 +73,7 @@ class MainWindow(tk.Tk):
         self.file_menu.add_command(label="Save Route       (Ctrl+S)", command=self.save_route)
         self.file_menu.add_command(label="Export Notes       (Ctrl+Shift+W)", command=self.export_notes)
         self.file_menu.add_command(label="Config Colors       (Ctrl+Shift+D)", command=self.open_config_window)
+        self.file_menu.add_command(label="Custom Gens       (Ctrl+Shift+E)", command=self.open_custom_gens_window)
         self.file_menu.add_command(label="App Config       (Ctrl+Shift+Z)", command=self.open_app_config_window)
 
         self.event_menu = tk.Menu(self.top_menu_bar, tearoff=0)
@@ -216,6 +218,7 @@ class MainWindow(tk.Tk):
         self.bind('<Control-q>', self.open_new_folder_window)
         self.bind('<Control-w>', self.rename_folder)
         # config integrations
+        self.bind('<Control-E>', self.open_custom_gens_window)
         self.bind('<Control-D>', self.open_config_window)
         self.bind('<Control-Z>', self.open_app_config_window)
         # detail update function
@@ -236,6 +239,8 @@ class MainWindow(tk.Tk):
         self.new_event_window = None
 
     def run(self):
+        # TODO: is this the right place for it?
+        self._controller.load_all_custom_versions()
         self.mainloop()
     
     def _on_close(self, *args, **kwargs):
@@ -373,6 +378,10 @@ class MainWindow(tk.Tk):
     def open_app_config_window(self, *args, **kwargs):
         if self._is_active_window():
             self.new_event_window = DataDirConfigWindow(self, self.cancel_and_quit)
+    
+    def open_custom_gens_window(self, *args, **kwargs):
+        if self._is_active_window():
+            self.new_event_window = CustomGenWindow(self, self._controller)
     
     def open_config_window(self, *args, **kwargs):
         if self._is_active_window():

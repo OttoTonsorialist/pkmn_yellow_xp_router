@@ -1,9 +1,30 @@
 import sys
 import os
 import shutil
+import re
 import logging
 
 from utils.constants import const
+
+logger = logging.getLogger(__name__)
+
+
+def get_path_safe_string(raw_string):
+    value = re.sub('[^\w\s-]', '', raw_string).strip().lower()
+    value = re.sub('[-\s]+', '-', value)
+    return value
+
+
+def get_safe_path_no_collision(base_folder, name):
+    name = get_path_safe_string(name)
+    result = os.path.join(base_folder, name)
+    if os.path.exists(result):
+        counter = 0
+        while os.path.exists(result):
+            counter += 1
+            result = os.path.join(base_folder, f"{name}_{counter}")
+    
+    return result
 
 
 def get_existing_route_path(route_name) -> str:
@@ -67,9 +88,8 @@ def change_user_data_location(orig_dir, new_dir) -> bool:
 
         return True
     except Exception as e:
-        print(f"Failed to change data location to: {new_dir}")
-        print(f"Exception: {e}")
-        logging.getLogger().exception(e)
+        logger.error(f"Failed to change data location to: {new_dir}")
+        logger.exception(e)
         return False
 
 
@@ -86,7 +106,8 @@ def open_explorer(path) -> bool:
         
         return True
     except Exception as e:
-        print(f"got exception: {e}")
+        logger.error(f"Failed to open explorer to location: {path}")
+        logger.exception(e)
         return False
 
 

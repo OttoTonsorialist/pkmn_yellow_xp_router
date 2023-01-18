@@ -2,6 +2,7 @@ import tkinter as tk
 import tkinter.ttk as ttk
 import tkinter.font
 from typing import Dict, List
+import logging
 
 from gui import custom_components
 from pkmn import damage_calc, pkmn_info, universal_data_objects
@@ -11,6 +12,8 @@ from routing.router import Router
 from utils.constants import const
 from pkmn.gen_factory import current_gen_info
 from utils.config_manager import config
+
+logger = logging.getLogger(__name__)
 
 
 class BattleSummary(tk.Frame):
@@ -151,7 +154,7 @@ class BattleSummary(tk.Frame):
                             break
                         cur_item_idx += 1
                     except Exception as e:
-                        print(f"Failed to extra solo mon info from event group: ({type(e)}) {e}")
+                        logger.error(f"Failed to extra solo mon info from event group: ({type(e)}) {e}")
                         raise e
         elif cur_state is not None:
             if not new_setup_moves:

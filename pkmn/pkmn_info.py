@@ -1,3 +1,4 @@
+from __future__ import annotations
 
 from typing import Dict, Tuple, List
 from pkmn import universal_data_objects
@@ -9,6 +10,9 @@ from route_recording.recorder import RecorderController, RecorderGameHookClient
 
 class CurrentGen:
     def version_name(self) -> str:
+        raise NotImplementedError()
+
+    def base_version_name(self) -> str:
         raise NotImplementedError()
     
     def get_generation(self) -> int:
@@ -96,5 +100,11 @@ class CurrentGen:
         raise NotImplementedError()
     
     def get_vitamin_cap(self) -> int:
+        raise NotImplementedError()
+    
+    def create_new_custom_gen(self, new_version_name):
+        raise NotImplementedError()
+    
+    def load_custom_gen(self, custom_version_name, root_path) -> CurrentGen:
         raise NotImplementedError()
 

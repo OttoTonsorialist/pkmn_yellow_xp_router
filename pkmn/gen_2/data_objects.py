@@ -1,6 +1,7 @@
 from __future__ import annotations
 import math
 import copy
+from typing import Dict
 
 from utils.constants import const
 from pkmn.gen_2.gen_two_constants import gen_two_const
@@ -33,11 +34,12 @@ STAGE_MOFIDIERS = [
 
 class GenTwoBadgeList(universal_data_objects.BadgeList):
     def __init__(
-        self,
+        self, badge_rewards,
         zephyr=False, hive=False, plain=False, fog=False, storm=False, mineral=False, glacier=False, rising=False,
-        efour_will=False, efour_koga=False, efour_bruno=False, efour_karen=False, efour_lance=False,
         boulder=False, cascade=False, thunder=False, rainbow=False, soul=False, marsh=False, volcano=False, earth=False
     ):
+        self._badge_rewards:Dict[str, str] = badge_rewards
+
         self.zephyr = zephyr
         self.hive = hive
         self.plain = plain
@@ -46,12 +48,6 @@ class GenTwoBadgeList(universal_data_objects.BadgeList):
         self.mineral = mineral
         self.glacier = glacier
         self.rising = rising
-
-        self.efour_will = efour_will
-        self.efour_koga = efour_koga
-        self.efour_bruno = efour_bruno
-        self.efour_karen = efour_karen
-        self.efour_lance = efour_lance
 
         self.boulder = boulder
         self.cascade = cascade
@@ -63,7 +59,7 @@ class GenTwoBadgeList(universal_data_objects.BadgeList):
         self.earth = earth
     
     def award_badge(self, trainer_name) -> GenTwoBadgeList:
-        reward = gen_two_const.BADGE_REWARDS.get(trainer_name)
+        reward = self._badge_rewards.get(trainer_name)
         result = self.copy()
         if reward == gen_two_const.ZEPHYR_BADGE:
             result.zephyr = True
@@ -82,17 +78,6 @@ class GenTwoBadgeList(universal_data_objects.BadgeList):
         elif reward == gen_two_const.RISING_BADGE:
             result.rising = True
 
-        elif reward == gen_two_const.EFOUR_WILL_BOOST:
-            result.efour_will = True
-        elif reward == gen_two_const.EFOUR_KOGA_BOOST:
-            result.efour_koga = True
-        elif reward == gen_two_const.EFOUR_BRUNO_BOOST:
-            result.efour_bruno = True
-        elif reward == gen_two_const.EFOUR_KAREN_BOOST:
-            result.efour_karen = True
-        elif reward == gen_two_const.EFOUR_LANCE_BOOST:
-            result.efour_lance = True
-
         elif reward == gen_two_const.BOULDER_BADGE:
             result.boulder = True
         elif reward == gen_two_const.CASCADE_BADGE:
@@ -110,7 +95,6 @@ class GenTwoBadgeList(universal_data_objects.BadgeList):
         elif reward == gen_two_const.EARTH_BADGE:
             result.earth = True
         else:
-            # no need to hold on to a copy wastefully if no badge was awarded
             return self
         
         return result
@@ -132,6 +116,7 @@ class GenTwoBadgeList(universal_data_objects.BadgeList):
     
     def copy(self) -> GenTwoBadgeList:
         return GenTwoBadgeList(
+            self._badge_rewards,
             zephyr=self.zephyr,
             hive=self.hive,
             plain=self.plain,
@@ -140,12 +125,6 @@ class GenTwoBadgeList(universal_data_objects.BadgeList):
             mineral=self.mineral,
             glacier=self.glacier,
             rising=self.rising,
-
-            efour_will=self.efour_will,
-            efour_koga=self.efour_koga,
-            efour_bruno=self.efour_bruno,
-            efour_karen=self.efour_karen,
-            efour_lance=self.efour_lance,
 
             boulder=self.boulder,
             cascade=self.cascade,
@@ -215,12 +194,6 @@ class GenTwoBadgeList(universal_data_objects.BadgeList):
             self.mineral == other.mineral and
             self.glacier == other.glacier and
             self.rising == other.rising and
-
-            self.efour_will == other.efour_will and
-            self.efour_koga == other.efour_koga and
-            self.efour_bruno == other.efour_bruno and
-            self.efour_karen == other.efour_karen and
-            self.efour_lance == other.efour_lance and
 
             self.boulder == other.boulder and
             self.cascade == other.cascade and
@@ -299,7 +272,8 @@ class GenTwoStatBlock(universal_data_objects.StatBlock):
             # is happening, but we want the badge boosts (which can happen when the stage modifiers favor the attacker)
 
             # since this is just a badge boost flag now, disable all badge boosts when it's passed in
-            badges = GenTwoBadgeList()
+            if badges is not None:
+                badges = GenTwoBadgeList(badges._badge_rewards)
 
         # create a result object, to populate
         result = GenTwoStatBlock(

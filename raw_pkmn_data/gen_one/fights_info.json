@@ -1,0 +1,47 @@
+{
+    "badge_rewards": {
+        "Brock 1": "boulder",
+        "Misty 1": "cascade",
+        "LtSurge 1": "thunder",
+        "Erika 1": "rainbow",
+        "Koga 1": "soul",
+        "Sabrina 1": "marsh",
+        "Blaine 1": "volcano",
+        "Giovanni 3": "earth"
+    },
+    "major_fights": [
+        "Brock 1",
+        "Misty 1",
+        "LtSurge 1",
+        "Erika 1",
+        "Koga 1",
+        "Sabrina 1",
+        "Blaine 1",
+        "Giovanni 3",
+        "Agatha 1",
+        "Bruno 1",
+        "Lorelei 1",
+        "Lance 1",
+        "Rival3 Jolteon",
+        "Rival3 Flareon",
+        "Rival3 Vaporeon",
+        "Rival3 Squirtle",
+        "Rival3 Bulbasaur",
+        "Rival3 Charmander"
+    ],
+    "fight_rewards": {
+        "Brock 1": "TM34 Bide",
+        "Misty 1": "TM11 BubbleBeam",
+        "LtSurge 1": "TM24 Thunderbolt",
+        "Erika 1": "TM21 Mega Drain",
+        "Koga 1": "TM06 Toxic",
+        "Sabrina 1": "TM46 Psywave",
+        "Blaine 1": "TM38 Fire Blast",
+        "Giovanni 3": "TM27 Fissure",
+        "SuperNerd 2": "Helix Fossil",
+        "Rocket 6": "Nugget",
+        "Rocket 5": "TM28 Dig",
+        "Rocket 28": "Card Key",
+        "Jessie & James 3": "Poke Flute"
+    }
+}
