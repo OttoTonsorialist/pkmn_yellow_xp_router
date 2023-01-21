@@ -165,7 +165,7 @@
         "name": "Fly",
         "accuracy": 95,
         "pp": 15,
-        "base_power": 90,
+        "base_power": 70,
         "type": "Flying",
         "effects": [],
         "attack_flavor": "two_turn_semi_invulnerable"
