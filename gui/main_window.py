@@ -18,6 +18,7 @@ from gui.popups.new_route_popup import NewRouteWindow
 from gui.popups.transfer_event_popup import TransferEventWindow
 from gui.popups.custom_gen_popup import CustomGenWindow
 from gui.recorder_status import RecorderStatus
+from gui.route_search_component import RouteSearch
 from route_recording.recorder import RecorderController
 from utils.constants import const
 from utils.config_manager import config
@@ -184,8 +185,14 @@ class MainWindow(tk.Tk):
         self.group_controls.columnconfigure(7, weight=1)
         self.group_controls.columnconfigure(11, weight=1)
 
-        self.event_list = pkmn_components.RouteList(self._controller, self.left_info_panel)
-        self.scroll_bar = tk.Scrollbar(self.left_info_panel, orient="vertical", command=self.event_list.yview, width=30)
+        self.route_search = RouteSearch(self._controller, self.left_info_panel)
+        self.route_search.pack(fill=tk.X, anchor=tk.CENTER)
+
+        self.frame_for_event_list = tk.Frame(self.left_info_panel)
+        self.frame_for_event_list.pack(fill=tk.BOTH, anchor=tk.CENTER, expand=True)
+
+        self.event_list = pkmn_components.RouteList(self._controller, self.frame_for_event_list)
+        self.scroll_bar = tk.Scrollbar(self.frame_for_event_list, orient="vertical", command=self.event_list.yview, width=30)
 
         # intentionally pack event list after scrollbar, so they're ordered correctly
         self.scroll_bar.pack(side="right", fill=tk.BOTH)
@@ -336,6 +343,8 @@ class MainWindow(tk.Tk):
         all_event_ids = self._controller.get_all_selected_ids()
         if all_event_ids != self.event_list.get_all_selected_event_ids():
             self.event_list.set_all_selected_event_ids(all_event_ids)
+
+        self.event_list.scroll_to_selected_events()
 
         # now assign it the value it will have for the rest of the function
         all_event_ids = self.event_list.get_all_selected_event_ids(allow_event_items=False)

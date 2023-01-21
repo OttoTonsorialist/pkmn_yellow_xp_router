@@ -88,13 +88,14 @@ class RouteList(custom_components.CustomGridview):
             
             self.selection_set(new_selection)
         except Exception as e:
-            logger.error(f"Error occurred trying to update eventlist selection:")
-            logger.error(f"event_ids: {event_ids}")
-            logger.exception(e)
-
+            # This *should* only happen in the case that events are selected which are currently hidden by filters
+            # So, just ignore and carry on
+            pass
+    
+    def scroll_to_selected_events(self):
         try:
-            if len(new_selection):
-                self.see(new_selection[-1])
+            if self.selection():
+                self.see(self.selection()[-1])
         except Exception as e:
             # NOTE: this seems to happen when the controller creates a new event and immediately selects it
             # in that case, the controller moves faster than the event list, so the event to select it fires before it exists
@@ -142,6 +143,12 @@ class RouteList(custom_components.CustomGridview):
     def _refresh_recursively(self, parent_id, event_list, to_delete_ids:set):
         for event_idx, event_obj in enumerate(event_list):
             semantic_id = self._get_attr_helper(event_obj, self._semantic_id_attr)
+
+            if not event_obj.do_render(
+                search=self._controller.get_route_search_string(),
+                filter_types=self._controller.get_route_filter_types(),
+            ):
+                continue
 
             if isinstance(event_obj, route_events.EventFolder):
                 is_folder = True

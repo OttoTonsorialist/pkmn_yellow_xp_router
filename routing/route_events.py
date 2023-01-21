@@ -381,6 +381,20 @@ class EventDefinition:
     def is_highlighted(self):
         return const.HIGHLIGHT_LABEL in self.tags
     
+    def do_render(self, search=None, filter_types=None):
+        if filter_types is not None:
+            if self.get_event_type() not in filter_types:
+                return False
+
+        if search is not None:
+            if (
+                search.lower() not in self.get_item_label().lower() and
+                search.lower() not in self.notes.lower()
+            ):
+                return False
+
+        return True
+    
     def toggle_highlight(self):
         if const.HIGHLIGHT_LABEL in self.tags:
             self.tags.remove(const.HIGHLIGHT_LABEL)
@@ -742,6 +756,15 @@ class EventGroup:
             return False
         return current_gen_info().is_major_fight(self.event_definition.trainer_def.trainer_name)
     
+    def do_render(self, search=None, filter_types=None):
+        for learn_move in self.level_up_learn_event_defs:
+            # TODO: pretty hacky, but fixing this requires updating the entire way we handle level-up moves
+            # TODO: unclear if the change is actually worth it
+            if EventDefinition(learn_move=learn_move).do_render(search=search, filter_types=filter_types):
+                return True
+
+        return self.event_definition.do_render(search=search, filter_types=filter_types)
+    
     def get_tags(self):
         if self.has_errors():
             return [const.EVENT_TAG_ERRORS]
@@ -878,6 +901,13 @@ class EventFolder:
     
     def has_errors(self):
         return self.child_errors
+    
+    def do_render(self, search=None, filter_types=None):
+        for test_event in self.children:
+            if test_event.do_render(search=search, filter_types=filter_types):
+                return True
+
+        return False
     
     def get_tags(self):
         if self.has_errors():

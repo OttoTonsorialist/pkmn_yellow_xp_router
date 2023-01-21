@@ -32,6 +32,8 @@ class MainController:
         self._selected_ids = []
         self._is_record_mode_active = False
         self._exception_info = []
+        self._route_filter_types = []
+        self._route_search = ""
 
         self._name_change_events = []
         self._version_change_events = []
@@ -297,6 +299,18 @@ class MainController:
     def set_record_mode(self, new_record_mode):
         self._is_record_mode_active = new_record_mode
         self._on_record_mode_change()
+
+    @handle_exceptions
+    def set_route_filter_types(self, filter_options):
+        self._route_filter_types = filter_options
+        self._on_route_change()
+        self._on_event_selection()
+
+    @handle_exceptions
+    def set_route_search(self, search):
+        self._route_search = search
+        self._on_route_change()
+        self._on_event_selection()
     
     @handle_exceptions
     def load_all_custom_versions(self):
@@ -358,6 +372,16 @@ class MainController:
     
     def get_defeated_trainers(self):
         return self._data.defeated_trainers
+    
+    def get_route_search_string(self) -> str:
+        if not self._route_search:
+            return None
+        return self._route_search
+    
+    def get_route_filter_types(self) -> List[str]:
+        if len(self._route_filter_types) == 0:
+            return None
+        return self._route_filter_types
     
     def is_empty(self):
         return len(self._data.root_folder.children) == 0

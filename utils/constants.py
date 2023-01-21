@@ -5,8 +5,8 @@ import sys
 
 class Constants:
     def __init__(self):
-        self.APP_VERSION = "v2.3e"
-        self.APP_RELEASE_DATE = "2023-Jan-20"
+        self.APP_VERSION = "v2.3f"
+        self.APP_RELEASE_DATE = "2023-Jan-21"
 
         self.DEBUG_MODE = False
         self.APP_NAME = "pkmn_xp_router"
@@ -159,14 +159,19 @@ class Constants:
 
         self.ROUTE_EVENT_TYPES = [
             self.TASK_TRAINER_BATTLE,
+            self.TASK_FIGHT_WILD_PKMN,
+            self.TASK_LEARN_MOVE_LEVELUP,
+            self.TASK_LEARN_MOVE_TM,
+            self.TASK_HOLD_ITEM,
             self.TASK_RARE_CANDY,
             self.TASK_VITAMIN,
-            self.TASK_FIGHT_WILD_PKMN,
             self.TASK_GET_FREE_ITEM,
             self.TASK_PURCHASE_ITEM,
             self.TASK_USE_ITEM,
             self.TASK_SELL_ITEM,
-            self.TASK_LEARN_MOVE_TM,
+            self.TASK_SAVE,
+            self.TASK_HEAL,
+            self.TASK_BLACKOUT,
             self.TASK_NOTES_ONLY,
         ]
 
