@@ -1,4 +1,5 @@
 import tkinter as tk
+from tkinter import ttk
 
 from controllers.main_controller import MainController
 from gui.popups.base_popup import Popup
@@ -12,7 +13,7 @@ class LoadRouteWindow(Popup):
         super().__init__(main_window, *args, **kwargs)
         self._controller = controller
 
-        self.controls_frame = tk.Frame(self)
+        self.controls_frame = ttk.Frame(self)
         self.controls_frame.pack()
         self.padx = 5
         self.pady = 5

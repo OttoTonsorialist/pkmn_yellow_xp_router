@@ -1,6 +1,7 @@
 import logging
 
 import tkinter as tk
+from tkinter import ttk
 from controllers.main_controller import MainController
 
 from gui import custom_components
@@ -11,7 +12,7 @@ from pkmn.gen_factory import current_gen_info
 logger = logging.getLogger(__name__)
 
 
-class RecorderStatus(tk.Frame):
+class RecorderStatus(ttk.Frame):
     def __init__(self, main_controller:MainController, recorder_controller:RecorderController, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self._main_controller = main_controller
@@ -28,7 +29,7 @@ class RecorderStatus(tk.Frame):
         self.game_state_label = tk.Label(self, text="Game State: None", justify=tk.LEFT)
         self.game_state_label.pack()
 
-        self.connection_retry_button = custom_components.SimpleButton(self, text="Reconnect to GameHook", justify=tk.LEFT, command=self.reconnect_button_pressed)
+        self.connection_retry_button = custom_components.SimpleButton(self, text="Reconnect to GameHook", command=self.reconnect_button_pressed)
         self.connection_retry_button.disable()
         self.connection_retry_button.pack()
 

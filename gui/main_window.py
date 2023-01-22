@@ -41,6 +41,10 @@ class MainWindow(tk.Tk):
         self.geometry(geometry)
         self.title("Pokemon RBY XP Router")
 
+        self.call("source", os.path.join("assets", "azure.tcl"))
+        self.call("set_theme", "dark")
+
+        """
         # fix tkinter bug
         style = ttk.Style()
         style.map("Treeview", foreground=fixed_map("foreground", style), background=fixed_map("background", style))
@@ -60,6 +64,7 @@ class MainWindow(tk.Tk):
         style.configure("TNotebook", background=config.get_background_color())
         style.configure("TNotebook.Tab", background=config.get_secondary_color(), borderwidth=1, bordercolor="black")
         style.map("TNotebook.Tab", background=[("selected", config.get_primary_color())])
+        """
 
         self.load_custom_font()
 
@@ -73,7 +78,7 @@ class MainWindow(tk.Tk):
         self.file_menu.add_command(label="Load Route      (Ctrl+L)", command=self.open_load_route_window)
         self.file_menu.add_command(label="Save Route       (Ctrl+S)", command=self.save_route)
         self.file_menu.add_command(label="Export Notes       (Ctrl+Shift+W)", command=self.export_notes)
-        self.file_menu.add_command(label="Config Colors       (Ctrl+Shift+D)", command=self.open_config_window)
+        self.file_menu.add_command(label="Config Font       (Ctrl+Shift+D)", command=self.open_config_window)
         self.file_menu.add_command(label="Custom Gens       (Ctrl+Shift+E)", command=self.open_custom_gens_window)
         self.file_menu.add_command(label="App Config       (Ctrl+Shift+Z)", command=self.open_app_config_window)
 
@@ -93,11 +98,11 @@ class MainWindow(tk.Tk):
         self.top_menu_bar.add_cascade(label="Folders", menu=self.folder_menu)
 
         # main container for everything to sit in... might be unnecessary?
-        self.primary_window = tk.Frame(self)
+        self.primary_window = ttk.Frame(self)
         self.primary_window.pack(fill=tk.BOTH, expand=True)
 
         # create top row, which goes across the whole screen
-        self.top_row = tk.Frame(self.primary_window)
+        self.top_row = ttk.Frame(self.primary_window)
         self.top_row.pack(fill=tk.X)
         self.top_row.pack_propagate(False)
 
@@ -105,16 +110,20 @@ class MainWindow(tk.Tk):
         self.record_button.grid(row=0, column=0, sticky=tk.W, padx=3, pady=3)
         self.record_button.disable()
 
-        self.run_status_label = tk.Label(self.top_row, text="Run Status: Valid", background=const.VALID_COLOR, anchor=tk.W, padx=10, pady=10)
-        self.run_status_label.grid(row=0, column=1, sticky=tk.W)
+        self.run_status_frame = ttk.Frame(self.top_row, style="Success.TFrame")
+        self.run_status_frame.grid(row=0, column=1, sticky=tk.W)
 
-        self.route_version = tk.Label(self.top_row, text="RBY Version", anchor=tk.W, padx=10, pady=10)
+        self.run_status_label = ttk.Label(self.run_status_frame, text="Run Status: Valid", style="Success.TLabel")
+        self.run_status_label.pack(padx=10, pady=10)
+
+        # NOTE: Intentionally leaving this as a tk.Label so that we can just control the color in code
+        self.route_version = tk.Label(self.top_row, text="RBY Version", anchor=tk.W, padx=10, pady=10, fg="black", bg="white")
         self.route_version.grid(row=0, column=2)
 
-        self.route_name_label = tk.Label(self.top_row, text="Route Name: ")
+        self.route_name_label = ttk.Label(self.top_row, text="Route Name: ")
         self.route_name_label.grid(row=0, column=3)
 
-        self.route_name = tk.Entry(self.top_row)
+        self.route_name = ttk.Entry(self.top_row)
         self.route_name.grid(row=0, column=4)
         self.route_name.config(width=30)
 
@@ -122,14 +131,14 @@ class MainWindow(tk.Tk):
         self.message_label.grid(row=0, column=5, sticky=tk.E)
 
         # create container for split columns
-        self.info_panel = tk.Frame(self.primary_window)
+        self.info_panel = ttk.Frame(self.primary_window)
         self.info_panel.pack(expand=True, fill=tk.BOTH)
 
         # left panel for controls and event list
-        self.left_info_panel = tk.Frame(self.info_panel)
+        self.left_info_panel = ttk.Frame(self.info_panel)
         self.left_info_panel.grid(row=0, column=0, sticky="nsew")
 
-        self.top_left_controls = tk.Frame(self.left_info_panel)
+        self.top_left_controls = ttk.Frame(self.left_info_panel)
         self.top_left_controls.pack(fill=tk.X, anchor=tk.CENTER)
 
         self.recorder_status = RecorderStatus(self._controller, self._recorder_controller, self.top_left_controls)
@@ -160,7 +169,7 @@ class MainWindow(tk.Tk):
         self.wild_pkmn_add.grid(row=0, column=2, sticky=tk.NSEW, padx=5, pady=5)
         self.misc_add.grid(row=0, column=3, sticky=tk.NSEW, padx=5, pady=5)
 
-        self.group_controls = tk.Frame(self.left_info_panel)
+        self.group_controls = ttk.Frame(self.left_info_panel)
         self.group_controls.pack(fill=tk.X, anchor=tk.CENTER)
         
         self.move_group_up_button = custom_components.SimpleButton(self.group_controls, text='Move Event Up', command=self.move_group_up, width=15)
@@ -188,11 +197,11 @@ class MainWindow(tk.Tk):
         self.route_search = RouteSearch(self._controller, self.left_info_panel)
         self.route_search.pack(fill=tk.X, anchor=tk.CENTER)
 
-        self.frame_for_event_list = tk.Frame(self.left_info_panel)
+        self.frame_for_event_list = ttk.Frame(self.left_info_panel)
         self.frame_for_event_list.pack(fill=tk.BOTH, anchor=tk.CENTER, expand=True)
 
         self.event_list = pkmn_components.RouteList(self._controller, self.frame_for_event_list)
-        self.scroll_bar = tk.Scrollbar(self.frame_for_event_list, orient="vertical", command=self.event_list.yview, width=30)
+        self.scroll_bar = ttk.Scrollbar(self.frame_for_event_list, orient="vertical", command=self.event_list.yview, style="Wide.Vertical.TScrollbar")
 
         # intentionally pack event list after scrollbar, so they're ordered correctly
         self.scroll_bar.pack(side="right", fill=tk.BOTH)
@@ -287,9 +296,11 @@ class MainWindow(tk.Tk):
 
     def update_run_status(self, *args, **kwargs):
         if self._controller.has_errors():
-            self.run_status_label.config(text="Run Status: Invalid", bg=const.ERROR_COLOR)
+            self.run_status_frame.config(style="Warning.TFrame")
+            self.run_status_label.config(text="Run Status: Invalid", style="Warning.TLabel")
         else:
-            self.run_status_label.config(text="Run Status: Valid", bg=const.VALID_COLOR)
+            self.run_status_frame.config(style="Success.TFrame")
+            self.run_status_label.config(text="Run Status: Valid", style="Success.TLabel")
     
     def update_run_version(self, *args, **kwargs):
         self.route_version.config(

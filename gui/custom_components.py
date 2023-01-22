@@ -8,9 +8,9 @@ from utils.constants import const
 from utils.config_manager import config
 
 # These three checkbox icons were isolated from Checkbox States.svg (https://commons.wikimedia.org/wiki/File:Checkbox_States.svg?uselang=en)
-IM_CHECKED = os.path.join(const.ASSETS_PATH, "checked.png")
-IM_UNCHECKED = os.path.join(const.ASSETS_PATH, "unchecked.png")
-IM_TRISTATE = os.path.join(const.ASSETS_PATH, "tristate.png")
+IM_UNCHECKED = os.path.join(const.ASSETS_PATH, "theme", "dark", "circle-hover.gif")
+IM_CHECKED = os.path.join(const.ASSETS_PATH, "theme", "dark", "check-basic.gif")
+IM_TRISTATE = os.path.join(const.ASSETS_PATH, "theme", "dark", "check-tri-basic.gif")
 
 
 class CheckboxTreeview(ttk.Treeview):
@@ -24,10 +24,12 @@ class CheckboxTreeview(ttk.Treeview):
         super().__init__(root, **kwargs)
 
         # checkboxes are implemented with pictures
-        self.im_checked = ImageTk.PhotoImage(Image.open(IM_CHECKED), master=self)
-        self.im_unchecked = ImageTk.PhotoImage(Image.open(IM_UNCHECKED), master=self)
-        self.im_tristate = ImageTk.PhotoImage(Image.open(IM_TRISTATE), master=self)
-        self.tag_configure(self.UNCHECKED_TAG, image=self.im_unchecked, background="#E6E6E6", foreground="gray40")
+        img_resize = 14
+        self.im_checked = ImageTk.PhotoImage(Image.open(IM_CHECKED).resize((img_resize, img_resize)), master=self)
+        self.im_unchecked = ImageTk.PhotoImage(Image.open(IM_UNCHECKED).resize((img_resize, img_resize)), master=self)
+        self.im_tristate = ImageTk.PhotoImage(Image.open(IM_TRISTATE).resize((img_resize, img_resize)), master=self)
+        # TODO: figure out how to connect this to the actual styles...
+        self.tag_configure(self.UNCHECKED_TAG, image=self.im_unchecked, background="#cbcbcb", foreground="gray40")
         self.tag_configure(self.TRISTATE_TAG, image=self.im_tristate)
         self.tag_configure(self.CHECKED_TAG, image=self.im_checked)
 
@@ -206,21 +208,13 @@ class CustomGridview(CheckboxTreeview):
         return item_id
 
 
-class CheckboxLabel(tk.Frame):
-    CHECKED_STATE = "checked"
-    UNCHECKED_STATE =" unchecked"
-
-    def __init__(self, *args, text="", init_check_state=None, toggle_command=None, flip=False, fg=None, **kwargs):
+class CheckboxLabel(ttk.Frame):
+    def __init__(self, *args, text="", toggle_command=None, flip=False, **kwargs):
         super().__init__(*args, **kwargs)
-        bg = None
-        if 'bg' in kwargs:
-            bg = kwargs['bg']
-
-        if fg is None:
-            fg = config.DEFAULT_TEXT_COLOR
-
-        self._checkbox = tk.Label(self, bg=bg, fg=fg)
-        self._text_label = tk.Label(self, text=text, bg=bg, fg=fg)
+        self._var = tk.BooleanVar()
+        self._var.trace("w", self._did_toggle)
+        self._checkbox = ttk.Checkbutton(self, variable=self._var)
+        self._text_label = ttk.Label(self, text=text)
 
         if flip:
             self.columnconfigure(0, weight=1)
@@ -231,33 +225,22 @@ class CheckboxLabel(tk.Frame):
             self._checkbox.grid(row=0, column=0)
             self._text_label.grid(row=0, column=1)
 
-        self.im_checked = ImageTk.PhotoImage(Image.open(IM_CHECKED), master=self)
-        self.im_unchecked = ImageTk.PhotoImage(Image.open(IM_UNCHECKED), master=self)
-
         self.toggle_command = toggle_command
-        if init_check_state is None:
-            init_check_state = self.UNCHECKED_STATE
-        self.set_checked(init_check_state == self.CHECKED_STATE)
-
         self.bind("<Button-1>", self.toggle_checked)
-        self._checkbox.bind("<Button-1>", self.toggle_checked)
         self._text_label.bind("<Button-1>", self.toggle_checked)
 
-    def set_checked(self, is_checked):
-        if is_checked:
-            self._check_state = self.CHECKED_STATE
-            self._checkbox.config(image=self.im_checked)
-        else:
-            self._check_state = self.UNCHECKED_STATE
-            self._checkbox.config(image=self.im_unchecked)
-
     def is_checked(self):
-        return self._check_state == self.CHECKED_STATE
+        return self._var.get()
+    
+    def set_checked(self, val):
+        self._var.set(val)
     
     def toggle_checked(self, *args, **kwargs):
-        self.set_checked(not self.is_checked())
+        self._var.set(not self._var.get())
+    
+    def _did_toggle(self, *args, **kwargs):
         if self.toggle_command is not None:
-            self.toggle_command(self.is_checked())
+            self.toggle_command()
 
 class SimpleOptionMenu(ttk.Combobox):
     def __init__(self, root, option_list, callback=None, default_val=None, **kwargs):
@@ -271,10 +254,12 @@ class SimpleOptionMenu(ttk.Combobox):
         if callback is not None:
             self._val.trace("w", callback)
 
-        super().__init__(root, textvariable=self._val, values=option_list, state="readonly", **kwargs)
+        kwargs['state'] = "readonly"
+        kwargs['exportselection'] = False
+        super().__init__(root, textvariable=self._val, values=option_list, **kwargs)
     
     def enable(self):
-        self.configure(state="active")
+        self.configure(state="readonly")
     
     def disable(self):
         self.configure(state="disabled")
@@ -295,7 +280,7 @@ class SimpleOptionMenu(ttk.Combobox):
         self._val.set(default_val)
 
 
-class SimpleEntry(tk.Entry):
+class SimpleEntry(ttk.Entry):
     def __init__(self, *args, initial_value="", callback=None, **kwargs):
         self._value = tk.StringVar(value=initial_value)
 
@@ -310,7 +295,7 @@ class SimpleEntry(tk.Entry):
         self._value.set(value)
 
 
-class AmountEntry(tk.Frame):
+class AmountEntry(ttk.Frame):
     def __init__(self, *args, callback=None, max_val=None, min_val=None, init_val=None, **kwargs):
         super().__init__(*args, **kwargs)
 
@@ -320,11 +305,11 @@ class AmountEntry(tk.Frame):
         if init_val is None:
             init_val = "1"
         
-        self._down_button = tk.Button(self, text="v", command=self._lower_amt)
+        self._down_button = ttk.Button(self, text="v", command=self._lower_amt, width=1)
         self._down_button.grid(row=0, column=0)
         self._amount = SimpleEntry(self, initial_value=init_val, callback=callback)
         self._amount.grid(row=0, column=1)
-        self._up_button = tk.Button(self, text="^", command=self._raise_amt)
+        self._up_button = ttk.Button(self, text="^", command=self._raise_amt, width=1)
         self._up_button.grid(row=0, column=2)
     
     def _lower_amt(self, *args, **kwargs):
@@ -360,7 +345,10 @@ class AmountEntry(tk.Frame):
         self._amount.set(value)
 
 
-class SimpleButton(tk.Button):
+class SimpleButton(ttk.Button):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+
     def enable(self):
         self["state"] = "normal"
 
@@ -368,7 +356,7 @@ class SimpleButton(tk.Button):
         self["state"] = "disabled"
 
 
-class AutoClearingLabel(tk.Label):
+class AutoClearingLabel(ttk.Label):
     def __init__(self, *args, clear_timeout=3000, **kwargs):
         super().__init__(*args, **kwargs)
         self.clear_timeout = clear_timeout
@@ -391,7 +379,7 @@ class AutoClearingLabel(tk.Label):
         self.config(text="")
 
 
-class ScrollableFrame(tk.Frame):
+class ScrollableFrame(ttk.Frame):
     """
     NOTE: doesn't work, but leaving it here because I don't want to give up on it yet
     might not work though, seems like tkinter doesn't like the concept very much
@@ -407,7 +395,7 @@ class ScrollableFrame(tk.Frame):
         self.canvas = tk.Canvas(parent)
         self.canvas.pack(side=tk.LEFT, fill=tk.BOTH, expand=True)
 
-        self.inner_frame = tk.Frame(self.canvas)
+        self.inner_frame = ttk.Frame(self.canvas)
         self.scrollbar = tk.Scrollbar(self, orient=tk.VERTICAL, command=self.canvas.yview)
         self.canvas.configure(yscrollcommand=self.scrollbar.set)
 
@@ -422,7 +410,7 @@ class ScrollableFrame(tk.Frame):
         self.canvas.configure(scrollregion=self.canvas.bbox("all"))
 
 
-class ConfigColorUpdater(tk.Frame):
+class ConfigColorUpdater(ttk.Frame):
     def __init__(self, *args, label_text=None, getter=None, setter=None, callback=None, **kwargs):
         super().__init__(*args, **kwargs)
 
@@ -433,15 +421,15 @@ class ConfigColorUpdater(tk.Frame):
         self.columnconfigure(0, weight=1, uniform="group")
         self.columnconfigure(1, weight=1, uniform="group")
 
-        self._label = tk.Label(self, text=label_text)
+        self._label = ttk.Label(self, text=label_text)
         self._label.grid(row=0, column=0, padx=10, pady=2, sticky=tk.W)
 
-        self._inner_frame = tk.Frame(self)
+        self._inner_frame = ttk.Frame(self)
         self._inner_frame.grid(row=0, column=1, sticky=tk.EW)
 
-        self._button = tk.Button(self._inner_frame, text="Change Color", command=self.change_success_color)
+        self._button = ttk.Button(self._inner_frame, text="Change Color", command=self.change_success_color)
         self._button.grid(row=0, column=1, padx=5, pady=2, sticky=tk.E)
-        self._preview = tk.Frame(self._inner_frame, bg=self.getter(), width=20, height=20, highlightbackground="black", highlightthickness=2)
+        self._preview = tk.Frame(self._inner_frame, bg=self.getter(), width=20, height=20)
         self._preview.grid(row=0, column=2, padx=5, pady=2, sticky=tk.E)
         self._preview.grid_propagate(0)
     

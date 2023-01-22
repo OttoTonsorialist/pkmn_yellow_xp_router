@@ -1,6 +1,7 @@
 import logging
 
 import tkinter as tk
+from tkinter import ttk
 from controllers.main_controller import MainController
 
 from gui import custom_components
@@ -15,16 +16,18 @@ from pkmn.gen_factory import current_gen_info
 logger = logging.getLogger(__name__)
 
 
-class QuickTrainerAdd(tk.Frame):
+class QuickTrainerAdd(ttk.LabelFrame):
     def __init__(self, controller:MainController, *args, **kwargs):
-        super().__init__(*args, **kwargs, highlightbackground="black", highlightthickness=2)
+        kwargs['text'] = "Trainers"
+        kwargs['padding'] = 5
+        super().__init__(*args, **kwargs)
         self._controller = controller
 
         self.padx = 5
         self.pady = 1
         self.option_menu_width = 20
 
-        self._dropdowns = tk.Frame(self)
+        self._dropdowns = ttk.Frame(self)
         self._dropdowns.pack()
 
         self._cur_row = 0
@@ -54,7 +57,7 @@ class QuickTrainerAdd(tk.Frame):
         self._rematches_label.grid(row=self._cur_row, column=0, columnspan=2, padx=self.padx, pady=self.pady, sticky=tk.EW)
         self._cur_row += 1
 
-        self._buttons = tk.Frame(self)
+        self._buttons = ttk.Frame(self)
         self._buttons.pack(fill=tk.X, anchor=tk.CENTER, side=tk.BOTTOM)
         self._btn_width = 8
 
@@ -132,9 +135,11 @@ class QuickTrainerAdd(tk.Frame):
         )
 
 
-class QuickWildPkmn(tk.Frame):
+class QuickWildPkmn(ttk.LabelFrame):
     def __init__(self, controller:MainController, *args, **kwargs):
-        super().__init__(*args, **kwargs, highlightbackground="black", highlightthickness=2)
+        kwargs['text'] = "Wild Pkmn"
+        kwargs['padding'] = 5
+        super().__init__(*args, **kwargs)
 
         self._controller = controller
 
@@ -142,7 +147,7 @@ class QuickWildPkmn(tk.Frame):
         self.pady = 1
         self.option_menu_width = 20
 
-        self._dropdowns = tk.Frame(self)
+        self._dropdowns = ttk.Frame(self)
         self._dropdowns.pack()
 
         self._cur_row = 0
@@ -162,19 +167,19 @@ class QuickWildPkmn(tk.Frame):
 
         self._level_label = tk.Label(self._dropdowns, text="Pkmn Level:", justify=tk.LEFT)
         self._level_val = custom_components.AmountEntry(self._dropdowns, callback=self._update_button_callback_wrapper)
-        self._level_val._amount.configure(width=self.option_menu_width - 5)
+        self._level_val._amount.configure(width=self.option_menu_width - 15)
         self._level_label.grid(row=self._cur_row, column=0, padx=self.padx, pady=self.pady, sticky=tk.W)
         self._level_val.grid(row=self._cur_row, column=1, padx=self.padx, pady=self.pady, sticky=tk.E)
         self._cur_row += 1
 
         self._quantity_label = tk.Label(self._dropdowns, text="Quantity:", justify=tk.LEFT)
         self._quantity_val = custom_components.AmountEntry(self._dropdowns, callback=self._update_button_callback_wrapper)
-        self._quantity_val._amount.configure(width=self.option_menu_width - 5)
+        self._quantity_val._amount.configure(width=self.option_menu_width - 15)
         self._quantity_label.grid(row=self._cur_row, column=0, padx=self.padx, pady=self.pady, sticky=tk.W)
         self._quantity_val.grid(row=self._cur_row, column=1, padx=self.padx, pady=self.pady, sticky=tk.E)
         self._cur_row += 1
 
-        self._buttons = tk.Frame(self)
+        self._buttons = ttk.Frame(self)
         self._buttons.pack(fill=tk.X, anchor=tk.CENTER, side=tk.BOTTOM)
         self._btn_width = 8
 
@@ -255,9 +260,11 @@ class QuickWildPkmn(tk.Frame):
         )
 
 
-class QuickItemAdd(tk.Frame):
+class QuickItemAdd(ttk.LabelFrame):
     def __init__(self, controller:MainController, *args, **kwargs):
-        super().__init__(*args, **kwargs, highlightbackground="black", highlightthickness=2)
+        kwargs['text'] = "Items"
+        kwargs['padding'] = 5
+        super().__init__(*args, **kwargs)
         self._controller = controller
 
         self._cur_row = 0
@@ -265,7 +272,7 @@ class QuickItemAdd(tk.Frame):
         self.pady = 1
         self.option_menu_width = 15
 
-        self._dropdowns = tk.Frame(self)
+        self._dropdowns = ttk.Frame(self)
         self._dropdowns.pack()
 
         self._item_filter_label = tk.Label(self._dropdowns, text="Search:")
@@ -295,7 +302,7 @@ class QuickItemAdd(tk.Frame):
 
         self._item_amount_label = tk.Label(self._dropdowns, text="Quantity:")
         self._item_amount = custom_components.AmountEntry(self._dropdowns, callback=self.item_selector_callback)
-        self._item_amount._amount.configure(width=self.option_menu_width)
+        self._item_amount._amount.configure(width=self.option_menu_width - 10)
         self._item_amount_label.grid(row=self._cur_row, column=0, padx=self.padx, pady=self.pady, sticky=tk.W)
         self._item_amount.grid(row=self._cur_row, column=1, padx=self.padx, pady=self.pady, sticky=tk.E)
         self._cur_row += 1
@@ -311,11 +318,11 @@ class QuickItemAdd(tk.Frame):
         self._sell_cost_amt.grid(row=self._cur_row, column=3, padx=self.padx, pady=2*self.pady, sticky=tk.E)
         self._cur_row += 1
 
-        self._buttons = tk.Frame(self)
+        self._buttons = ttk.Frame(self)
         self._buttons.pack(fill=tk.X, anchor=tk.CENTER, side=tk.BOTTOM)
         self._btn_width = 6
 
-        self._acquire_button = custom_components.SimpleButton(self._buttons, text="Acquire", width=self._btn_width, command=self._acquire_item)
+        self._acquire_button = custom_components.SimpleButton(self._buttons, text="Get", width=self._btn_width, command=self._acquire_item)
         self._acquire_button.grid(row=0, column=0, padx=self.padx, pady=self.pady)
         self._drop_button = custom_components.SimpleButton(self._buttons, text="Drop", width=self._btn_width, command=self._drop_item)
         self._drop_button.grid(row=0, column=1, padx=self.padx, pady=self.pady)
@@ -526,9 +533,11 @@ class QuickItemAdd(tk.Frame):
         )
 
 
-class QuickMiscEvents(tk.Frame):
+class QuickMiscEvents(ttk.LabelFrame):
     def __init__(self, controller:MainController, *args, **kwargs):
-        super().__init__(*args, **kwargs, highlightbackground="black", highlightthickness=2)
+        kwargs['text'] = "Misc"
+        kwargs['padding'] = 5
+        super().__init__(*args, **kwargs)
         self._controller = controller
         self._uninitialized = True
 
@@ -536,7 +545,7 @@ class QuickMiscEvents(tk.Frame):
         self.pady = 1
         self.option_menu_width = 15
 
-        self._buttons = tk.Frame(self)
+        self._buttons = ttk.Frame(self)
         self._buttons.pack(fill=tk.BOTH, anchor=tk.CENTER)
         self._btn_width = 8
 

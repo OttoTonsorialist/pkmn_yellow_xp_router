@@ -2,6 +2,7 @@ import os
 import json
 
 import tkinter as tk
+from tkinter import ttk
 
 from controllers.main_controller import MainController
 from gui.popups.base_popup import Popup
@@ -17,7 +18,7 @@ class NewRouteWindow(Popup):
         super().__init__(main_window, *args, **kwargs, width=400)
         self._controller = controller
 
-        self.controls_frame = tk.Frame(self)
+        self.controls_frame = ttk.Frame(self)
         self.controls_frame.pack()
         self.padx = 5
         self.pady = 5
@@ -61,7 +62,7 @@ class NewRouteWindow(Popup):
         self.custom_dvs_label.grid(row=5, column=0, padx=self.padx, pady=(4 * self.pady, self.pady))
         self.custom_dvs_checkbox.grid(row=5, column=1, padx=self.padx, pady=(4 * self.pady, self.pady))
 
-        self.custom_dvs_frame = tk.Frame(self.controls_frame)
+        self.custom_dvs_frame = ttk.Frame(self.controls_frame)
 
         self.custom_dvs_hp_label = tk.Label(self.custom_dvs_frame, text="HP DV:")
         self.custom_dvs_hp_label.grid(row=0, column=0, padx=self.padx, pady=self.pady)

@@ -2,6 +2,7 @@ import os
 import threading
 
 import tkinter as tk
+from tkinter import ttk
 from tkinter import filedialog
 from tkinter import messagebox
 
@@ -24,9 +25,9 @@ class DataDirConfigWindow(Popup):
 
         self.padx = 5
         self.pady = 5
-        self.app_info_frame = tk.Frame(self)
+        self.app_info_frame = ttk.Frame(self)
         self.app_info_frame.pack(padx=self.padx, pady=(2 * self.pady))
-        self.data_location_frame = tk.Frame(self)
+        self.data_location_frame = ttk.Frame(self)
         self.data_location_frame.pack(padx=self.padx, pady=(4 * self.pady, 2 * self.pady))
 
         self.app_version_label = tk.Label(self.app_info_frame, text="App Version:")

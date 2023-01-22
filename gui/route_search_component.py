@@ -1,6 +1,7 @@
 import logging
 
 import tkinter as tk
+from tkinter import ttk
 from controllers.main_controller import MainController
 
 from gui import custom_components
@@ -11,7 +12,7 @@ from pkmn.gen_factory import current_gen_info
 logger = logging.getLogger(__name__)
 
 
-class RouteSearch(tk.Frame):
+class RouteSearch(ttk.Frame):
     def __init__(self, controller:MainController, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self._controller:MainController = controller
@@ -28,14 +29,9 @@ class RouteSearch(tk.Frame):
             cur_col = (cur_idx % num_filters_per_row) * 2
 
             cur_checkbox = custom_components.CheckboxLabel(self, text=event_type, toggle_command=self.curry_filter_callback(event_type))
-            cur_checkbox.grid(row=cur_row, column=cur_col, padx=self.padx, pady=self.pady, sticky=tk.W)
+            cur_checkbox.grid(row=cur_row, column=cur_col, padx=self.padx, pady=self.pady, sticky=tk.EW)
             self._filter_components.append(cur_checkbox)
 
-        """
-        for cur_idx in range(num_filters_per_row):
-            self.columnconfigure((2 * cur_idx) + 1, weight=1)
-            """
-        
         row_idx = len(const.ROUTE_EVENT_TYPES) + 1
         self.reset_button = custom_components.SimpleButton(self, text="Reset All Filters", command=self.reset_all_filters)
         self.reset_button.grid(row=row_idx, column=0, padx=self.padx, pady=self.pady, sticky=tk.W)

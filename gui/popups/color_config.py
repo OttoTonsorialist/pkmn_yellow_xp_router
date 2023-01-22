@@ -1,4 +1,5 @@
 import tkinter as tk
+from tkinter import ttk
 from tkinter import font
 
 from gui.popups.base_popup import Popup
@@ -10,7 +11,7 @@ class ConfigWindow(Popup):
     def __init__(self, main_window, *args, **kwargs):
         super().__init__(main_window, *args, **kwargs)
         
-        self._font_frame = tk.Frame(self)
+        self._font_frame = ttk.Frame(self)
         self._font_frame.grid(row=0, column=0)
         self._font_frame.columnconfigure(1, weight=1)
 
@@ -30,8 +31,8 @@ class ConfigWindow(Popup):
         self._font_warning = tk.Label(self._font_frame, text=f"If your custom font is not present in the list\nMake sure that it is installed on your system\nAnd then restart the program")
         self._font_warning.grid(row=5, column=0, columnspan=2, padx=5, pady=3, sticky=tk.EW)
 
-        self._color_frame = tk.Frame(self)
-        self._color_frame.grid(row=2, column=0, pady=20)
+        self._color_frame = ttk.Frame(self)
+        #self._color_frame.grid(row=2, column=0, pady=20)
 
         self._color_header = tk.Label(self._color_frame, text="Color Config:")
         self._color_header.grid(row=0, column=0, padx=5, pady=3, sticky=tk.EW)

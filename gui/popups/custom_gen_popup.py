@@ -1,4 +1,5 @@
 import tkinter as tk
+from tkinter import ttk
 from controllers.main_controller import MainController
 
 from gui import custom_components
@@ -12,7 +13,7 @@ class CustomGenWindow(Popup):
         self._controller = controller
         self.padx = 5
         self.pady = 5
-        self.new_version_frame = tk.Frame(self)
+        self.new_version_frame = ttk.Frame(self)
         self.new_version_frame.pack(padx=self.padx, pady=(2 * self.pady))
 
         self.instructions_label_1 = tk.Label(self.new_version_frame, text="Custom Gen Instructions:")
@@ -53,7 +54,7 @@ but any custom gens with errors detected will not be loaded
         self.custom_create_button.disable()
 
         # dynamic stuff
-        self.cur_custom_gens_frame = tk.Frame(self)
+        self.cur_custom_gens_frame = ttk.Frame(self)
         self.cur_custom_gens_frame.pack(padx=self.padx, pady=(4 * self.pady, 2 * self.pady))
         self.loaded_gens_label = tk.Label(self.cur_custom_gens_frame, text="All Custom Gens")
         self.loaded_gens_label.grid(row=0, column=0, columnspan=2)
