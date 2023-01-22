@@ -27,7 +27,7 @@ class EventDetails(ctk.CTkFrame):
 
         self.pre_state_frame = ctk.CTkFrame(self.tabbed_states, bg_color=config.get_background_color())
         self.pre_state_frame.pack(fill=tk.X)
-        self.state_pre_label = ctk.CTkLabel(self.pre_state_frame, text="Pre-event State Display Mode:", bg_color=config.get_background_color(), fg_color=config.get_text_color())
+        self.state_pre_label = ctk.CTkLabel(self.pre_state_frame, text="Pre-event State Display Mode:", bg_color=config.get_background_color())
         self.state_pre_label.grid(column=1, row=0, padx=10, pady=10)
         self.pre_state_selector = custom_components.SimpleOptionMenu(self.pre_state_frame, [const.STATE_SUMMARY_LABEL, const.BADGE_BOOST_LABEL], callback=self._pre_state_display_mode_callback)
         self.pre_state_selector.grid(column=2, row=0, padx=10, pady=10)
@@ -40,7 +40,7 @@ class EventDetails(ctk.CTkFrame):
 
         self.post_state_frame = ctk.CTkFrame(self.tabbed_states, bg_color=config.get_background_color())
         self.post_state_frame.pack()
-        self.state_post_label = ctk.CTkLabel(self.post_state_frame, text="Post-event State:", bg_color=config.get_background_color(), fg_color=config.get_text_color())
+        self.state_post_label = ctk.CTkLabel(self.post_state_frame, text="Post-event State:", bg_color=config.get_background_color())
         self.state_post_label.grid(column=1, row=0, padx=10, pady=10)
         self.state_post_viewer = pkmn_components.StateViewer(self.post_state_frame, bg_color=config.get_background_color())
         self.state_post_viewer.grid(column=1, row=1, padx=10, pady=10)
@@ -79,7 +79,7 @@ class EventDetails(ctk.CTkFrame):
         self.footer_button_frame = ctk.CTkFrame(self.footer_frame, bg_color=config.get_background_color())
 
         # create this slightly out of order because we need the reference
-        self.event_details_button = custom_components.SimpleButton(self.footer_button_frame, text="Save", command=self.update_existing_event, bg_color=config.get_contrast_color(), fg_color=config.get_text_color())
+        self.event_details_button = custom_components.SimpleButton(self.footer_button_frame, text="Save", command=self.update_existing_event, bg_color=config.get_contrast_color())
         self.event_editor_lookup = route_event_components.EventEditorFactory(self.event_details_frame, self.event_details_button)
         self.current_event_editor = None
 
@@ -90,7 +90,7 @@ class EventDetails(ctk.CTkFrame):
 
         self.footer_button_frame.grid(row=1, column=0, sticky=tk.EW)
 
-        self.verbose_trainer_label = custom_components.CheckboxLabel(self.footer_button_frame, text="Verbose Route1 Export", toggle_command=self.update_existing_event, bg_color=config.get_background_color(), fg_color=config.get_text_color())
+        self.verbose_trainer_label = custom_components.CheckboxLabel(self.footer_button_frame, text="Verbose Route1 Export", toggle_command=self.update_existing_event)
         self.event_details_button.grid(row=0, column=0, padx=5, pady=5, sticky=tk.W)
         self.event_details_button.disable()
 

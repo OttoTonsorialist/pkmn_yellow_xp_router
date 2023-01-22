@@ -5,10 +5,10 @@ from typing import Dict, Tuple
 
 from utils.constants import const
 from pkmn import universal_data_objects
-import pkmn
+from pkmn.gen_factory import current_gen_info, change_version
 from utils import io_utils
 from routing import route_events
-from routing import route_state_objects
+from routing import full_route_state
 
 logger = logging.getLogger(__name__)
 
@@ -35,7 +35,7 @@ class Router:
     
     def _change_version(self, new_version):
         self.pkmn_version = new_version
-        pkmn.change_version(self.pkmn_version)
+        change_version(self.pkmn_version)
     
     def get_event_obj(self, event_id):
         return self.event_lookup.get(event_id, self.event_item_lookup.get(event_id))
@@ -46,14 +46,14 @@ class Router:
         return self.init_route_state
     
     def set_solo_pkmn(self, pkmn_name, level_up_moves=None, custom_dvs=None):
-        pkmn_base = pkmn.current_gen_info().pkmn_db().get_pkmn(pkmn_name)
+        pkmn_base = current_gen_info().pkmn_db().get_pkmn(pkmn_name)
         if pkmn_base is None:
             raise ValueError(f"Could not find base stats for Pokemon: {pkmn_name}")
         
         if custom_dvs is not None:
             # when setting custom DVs, should expect a dict of all values
             # Convert that to a StatBlock here when appropriate
-            custom_dvs = pkmn.current_gen_info().make_stat_block(
+            custom_dvs = current_gen_info().make_stat_block(
                 custom_dvs[const.HP],
                 custom_dvs[const.ATK],
                 custom_dvs[const.DEF],
@@ -62,13 +62,13 @@ class Router:
                 custom_dvs[const.SPD]
             )
         else:
-            custom_dvs = pkmn.current_gen_info().make_stat_block(15, 15, 15, 15, 15, 15)
+            custom_dvs = current_gen_info().make_stat_block(15, 15, 15, 15, 15, 15)
         
-        new_badge_list = pkmn.current_gen_info().make_badge_list()
-        self.init_route_state = route_state_objects.RouteState(
-            route_state_objects.SoloPokemon(pkmn_name, pkmn_base, custom_dvs, new_badge_list),
+        new_badge_list = current_gen_info().make_badge_list()
+        self.init_route_state = full_route_state.RouteState(
+            full_route_state.SoloPokemon(pkmn_name, pkmn_base, custom_dvs, new_badge_list, current_gen_info().make_stat_block(0, 0, 0, 0, 0, 0, is_stat_xp=True)),
             new_badge_list,
-            pkmn.current_gen_info().make_inventory()
+            current_gen_info().make_inventory()
         )
 
         if level_up_moves is None:
@@ -84,8 +84,8 @@ class Router:
     
     def change_current_dvs(self, new_dvs:universal_data_objects.StatBlock):
         cur_mon = self.init_route_state.solo_pkmn
-        self.init_route_state = route_state_objects.RouteState(
-            route_state_objects.SoloPokemon(cur_mon.name, cur_mon.species_def, new_dvs, self.init_route_state.badges),
+        self.init_route_state = full_route_state.RouteState(
+            full_route_state.SoloPokemon(cur_mon.name, cur_mon.species_def, new_dvs, self.init_route_state.badges, current_gen_info().make_stat_block(0, 0, 0, 0, 0, 0, is_stat_xp=True)),
             self.init_route_state.badges,
             self.init_route_state.inventory
         )
@@ -135,7 +135,7 @@ class Router:
             self.event_item_lookup[cur_item.group_id] = cur_item
     
     def add_area(self, area_name, insert_after=None, dest_folder_name=const.ROOT_FOLDER_NAME, include_rematches=False):
-        trainers_to_add = pkmn.current_gen_info().trainer_db().get_valid_trainers(trainer_loc=area_name, defeated_trainers=self.defeated_trainers, show_rematches=include_rematches)
+        trainers_to_add = current_gen_info().trainer_db().get_valid_trainers(trainer_loc=area_name, defeated_trainers=self.defeated_trainers, show_rematches=include_rematches)
         if len(trainers_to_add) == 0:
             return
 

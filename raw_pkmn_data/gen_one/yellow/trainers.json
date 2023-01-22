@@ -3,7 +3,6 @@
         "trainer_class": "Youngster",
         "trainer_name": "Youngster 1",
         "trainer_location": "Route 03",
-        "route_one_offset": "0x39E2F",
         "pokemon": [
             {
                 "name": "Rattata",
@@ -42,7 +41,6 @@
         "trainer_class": "Youngster",
         "trainer_name": "Youngster 2",
         "trainer_location": "Route 03",
-        "route_one_offset": "0x39E33",
         "pokemon": [
             {
                 "name": "Spearow",
@@ -66,7 +64,6 @@
         "trainer_class": "Youngster",
         "trainer_name": "Youngster 3",
         "trainer_location": "Mt. Moon",
-        "route_one_offset": "0x39E36",
         "pokemon": [
             {
                 "name": "Rattata",
@@ -119,7 +116,6 @@
         "trainer_class": "Youngster",
         "trainer_name": "Youngster 4",
         "trainer_location": "Route 24",
-        "route_one_offset": "0x39E3B",
         "pokemon": [
             {
                 "name": "Rattata",
@@ -173,7 +169,6 @@
         "trainer_class": "Youngster",
         "trainer_name": "Youngster 5",
         "trainer_location": "Route 25",
-        "route_one_offset": "0x39E40",
         "pokemon": [
             {
                 "name": "Rattata",
@@ -214,7 +209,6 @@
         "trainer_class": "Youngster",
         "trainer_name": "Youngster 6",
         "trainer_location": "Route 25",
-        "route_one_offset": "0x39E44",
         "pokemon": [
             {
                 "name": "Slowpoke",
@@ -236,7 +230,6 @@
         "trainer_class": "Youngster",
         "trainer_name": "Youngster 7",
         "trainer_location": "Route 25",
-        "route_one_offset": "0x39E47",
         "pokemon": [
             {
                 "name": "Ekans",
@@ -274,7 +267,6 @@
         "trainer_class": "Youngster",
         "trainer_name": "Youngster 8",
         "trainer_location": "SS Anne",
-        "route_one_offset": "0x39E4B",
         "pokemon": [
             {
                 "name": "Nidoran_M",
@@ -299,7 +291,6 @@
         "trainer_class": "Youngster",
         "trainer_name": "Youngster 9",
         "trainer_location": "Route 11",
-        "route_one_offset": "0x39E4E",
         "pokemon": [
             {
                 "name": "Ekans",
@@ -324,7 +315,6 @@
         "trainer_class": "Youngster",
         "trainer_name": "Youngster 10",
         "trainer_location": "Route 11",
-        "route_one_offset": "0x39E51",
         "pokemon": [
             {
                 "name": "Sandshrew",
@@ -363,7 +353,6 @@
         "trainer_class": "Youngster",
         "trainer_name": "Youngster 11",
         "trainer_location": "Route 11",
-        "route_one_offset": "0x39E55",
         "pokemon": [
             {
                 "name": "Rattata",
@@ -420,7 +409,6 @@
         "trainer_class": "Youngster",
         "trainer_name": "Youngster 12",
         "trainer_location": "Route 11",
-        "route_one_offset": "0x39E5A",
         "pokemon": [
             {
                 "name": "Nidoran_M",
@@ -461,7 +449,6 @@
         "trainer_class": "Youngster",
         "trainer_name": "Youngster 13",
         "trainer_location": "Unused",
-        "route_one_offset": "0x39E5E",
         "pokemon": [
             {
                 "name": "Spearow",
@@ -534,7 +521,6 @@
         "trainer_class": "Youngster",
         "trainer_name": "Youngster 14",
         "trainer_location": "Route 09",
-        "route_one_offset": "0x39E64",
         "pokemon": [
             {
                 "name": "Sandshrew",
@@ -559,7 +545,6 @@
         "trainer_class": "BugCatcher",
         "trainer_name": "BugCatcher 1",
         "trainer_location": "Viridian Forest",
-        "route_one_offset": "0x39E67",
         "pokemon": [
             {
                 "name": "Caterpie",
@@ -596,7 +581,6 @@
         "trainer_class": "BugCatcher",
         "trainer_name": "BugCatcher 2",
         "trainer_location": "Viridian Forest",
-        "route_one_offset": "0x39E6B",
         "pokemon": [
             {
                 "name": "Metapod",
@@ -645,7 +629,6 @@
         "trainer_class": "BugCatcher",
         "trainer_name": "BugCatcher 3",
         "trainer_location": "Viridian Forest",
-        "route_one_offset": "0x39E70",
         "pokemon": [
             {
                 "name": "Caterpie",
@@ -668,7 +651,6 @@
         "trainer_class": "BugCatcher",
         "trainer_name": "BugCatcher 4",
         "trainer_location": "Route 03",
-        "route_one_offset": "0x39E73",
         "pokemon": [
             {
                 "name": "Caterpie",
@@ -719,7 +701,6 @@
         "trainer_class": "BugCatcher",
         "trainer_name": "BugCatcher 5",
         "trainer_location": "Route 03",
-        "route_one_offset": "0x39E78",
         "pokemon": [
             {
                 "name": "Weedle",
@@ -782,7 +763,6 @@
         "trainer_class": "BugCatcher",
         "trainer_name": "BugCatcher 6",
         "trainer_location": "Route 03",
-        "route_one_offset": "0x39E7E",
         "pokemon": [
             {
                 "name": "Caterpie",
@@ -818,7 +798,6 @@
         "trainer_class": "BugCatcher",
         "trainer_name": "BugCatcher 7",
         "trainer_location": "Mt. Moon",
-        "route_one_offset": "0x39E82",
         "pokemon": [
             {
                 "name": "Weedle",
@@ -854,7 +833,6 @@
         "trainer_class": "BugCatcher",
         "trainer_name": "BugCatcher 8",
         "trainer_location": "Mt. Moon",
-        "route_one_offset": "0x39E86",
         "pokemon": [
             {
                 "name": "Caterpie",
@@ -904,7 +882,6 @@
         "trainer_class": "BugCatcher",
         "trainer_name": "BugCatcher 9",
         "trainer_location": "Route 24",
-        "route_one_offset": "0x39E8B",
         "pokemon": [
             {
                 "name": "Caterpie",
@@ -941,7 +918,6 @@
         "trainer_class": "BugCatcher",
         "trainer_name": "BugCatcher 10",
         "trainer_location": "Route 06",
-        "route_one_offset": "0x39E8F",
         "pokemon": [
             {
                 "name": "Weedle",
@@ -992,7 +968,6 @@
         "trainer_class": "BugCatcher",
         "trainer_name": "BugCatcher 11",
         "trainer_location": "Route 06",
-        "route_one_offset": "0x39E94",
         "pokemon": [
             {
                 "name": "Butterfree",
@@ -1017,7 +992,6 @@
         "trainer_class": "BugCatcher",
         "trainer_name": "BugCatcher 12",
         "trainer_location": "Unused",
-        "route_one_offset": "0x39E97",
         "pokemon": [
             {
                 "name": "Metapod",
@@ -1068,7 +1042,6 @@
         "trainer_class": "BugCatcher",
         "trainer_name": "BugCatcher 13",
         "trainer_location": "Route 09",
-        "route_one_offset": "0x39E9C",
         "pokemon": [
             {
                 "name": "Beedrill",
@@ -1105,7 +1078,6 @@
         "trainer_class": "BugCatcher",
         "trainer_name": "BugCatcher 14",
         "trainer_location": "Route 09",
-        "route_one_offset": "0x39EA0",
         "pokemon": [
             {
                 "name": "Caterpie",
@@ -1158,7 +1130,6 @@
         "trainer_class": "BugCatcher",
         "trainer_name": "BugCatcher 15",
         "trainer_location": "Viridian Forest",
-        "route_one_offset": "0x39EA5",
         "pokemon": [
             {
                 "name": "Caterpie",
@@ -1196,7 +1167,6 @@
         "trainer_class": "Lass",
         "trainer_name": "Lass 1",
         "trainer_location": "Route 03",
-        "route_one_offset": "0x39EA9",
         "pokemon": [
             {
                 "name": "Pidgey",
@@ -1233,7 +1203,6 @@
         "trainer_class": "Lass",
         "trainer_name": "Lass 2",
         "trainer_location": "Route 03",
-        "route_one_offset": "0x39EAD",
         "pokemon": [
             {
                 "name": "Rattata",
@@ -1272,7 +1241,6 @@
         "trainer_class": "Lass",
         "trainer_name": "Lass 3",
         "trainer_location": "Route 03",
-        "route_one_offset": "0x39EB1",
         "pokemon": [
             {
                 "name": "Jigglypuff",
@@ -1296,7 +1264,6 @@
         "trainer_class": "Lass",
         "trainer_name": "Lass 4",
         "trainer_location": "Route 04",
-        "route_one_offset": "0x39EB4",
         "pokemon": [
             {
                 "name": "Paras",
@@ -1353,7 +1320,6 @@
         "trainer_class": "Lass",
         "trainer_name": "Lass 5",
         "trainer_location": "Mt. Moon",
-        "route_one_offset": "0x39EB9",
         "pokemon": [
             {
                 "name": "Oddish",
@@ -1389,7 +1355,6 @@
         "trainer_class": "Lass",
         "trainer_name": "Lass 6",
         "trainer_location": "Mt. Moon",
-        "route_one_offset": "0x39EBD",
         "pokemon": [
             {
                 "name": "Clefairy",
@@ -1413,7 +1378,6 @@
         "trainer_class": "Lass",
         "trainer_name": "Lass 7",
         "trainer_location": "Route 24",
-        "route_one_offset": "0x39EC0",
         "pokemon": [
             {
                 "name": "Pidgey",
@@ -1453,7 +1417,6 @@
         "trainer_class": "Lass",
         "trainer_name": "Lass 8",
         "trainer_location": "Route 24",
-        "route_one_offset": "0x39EC4",
         "pokemon": [
             {
                 "name": "Pidgey",
@@ -1527,8 +1490,7 @@
                 ]
             }
         ],
-        "money": 225,
-        "route_one_offset": "0x39EC8"
+        "money": 225
     },
     "Lass 10": {
         "trainer_class": "Lass",
@@ -1577,8 +1539,7 @@
                 ]
             }
         ],
-        "money": 195,
-        "route_one_offset": "0x39ECC"
+        "money": 195
     },
     "Lass 11": {
         "trainer_class": "Lass",
@@ -1617,8 +1578,7 @@
                 ]
             }
         ],
-        "money": 270,
-        "route_one_offset": "0x39ED1"
+        "money": 270
     },
     "Lass 12": {
         "trainer_class": "Lass",
@@ -1642,8 +1602,7 @@
                 ]
             }
         ],
-        "money": 300,
-        "route_one_offset": "0x39ED5"
+        "money": 300
     },
     "Lass 13": {
         "trainer_class": "Lass",
@@ -1683,8 +1642,7 @@
                 ]
             }
         ],
-        "money": 345,
-        "route_one_offset": "0x39ED8"
+        "money": 345
     },
     "Lass 14": {
         "trainer_class": "Lass",
@@ -1740,8 +1698,7 @@
                 ]
             }
         ],
-        "money": 360,
-        "route_one_offset": "0x39EDC"
+        "money": 360
     },
     "Lass 15": {
         "trainer_class": "Lass",
@@ -1829,8 +1786,7 @@
                 ]
             }
         ],
-        "money": 285,
-        "route_one_offset": "0x39EE1"
+        "money": 285
     },
     "Lass 16": {
         "trainer_class": "Lass",
@@ -1870,8 +1826,7 @@
                 ]
             }
         ],
-        "money": 330,
-        "route_one_offset": "0x39EE8"
+        "money": 330
     },
     "Lass 17": {
         "trainer_class": "Lass",
@@ -1911,8 +1866,7 @@
                 ]
             }
         ],
-        "money": 345,
-        "route_one_offset": "0x39EEC"
+        "money": 345
     },
     "Lass 18": {
         "trainer_class": "Lass",
@@ -1952,8 +1906,7 @@
                 ]
             }
         ],
-        "money": 345,
-        "route_one_offset": "0x39EF0"
+        "money": 345
     },
     "Lass 19": {
         "trainer_class": "Lass",
@@ -1989,8 +1942,7 @@
                 ]
             }
         ],
-        "money": 90,
-        "route_one_offset": "0x39EF4"
+        "money": 90
     },
     "Sailor 1": {
         "trainer_class": "Sailor",
@@ -2026,8 +1978,7 @@
                 ]
             }
         ],
-        "money": 540,
-        "route_one_offset": "0x39EF8"
+        "money": 540
     },
     "Sailor 2": {
         "trainer_class": "Sailor",
@@ -2063,8 +2014,7 @@
                 ]
             }
         ],
-        "money": 510,
-        "route_one_offset": "0x39EFC"
+        "money": 510
     },
     "Sailor 3": {
         "trainer_class": "Sailor",
@@ -2087,8 +2037,7 @@
                 ]
             }
         ],
-        "money": 630,
-        "route_one_offset": "0x39F00"
+        "money": 630
     },
     "Sailor 4": {
         "trainer_class": "Sailor",
@@ -2138,8 +2087,7 @@
                 ]
             }
         ],
-        "money": 510,
-        "route_one_offset": "0x39F03"
+        "money": 510
     },
     "Sailor 5": {
         "trainer_class": "Sailor",
@@ -2177,8 +2125,7 @@
                 ]
             }
         ],
-        "money": 540,
-        "route_one_offset": "0x39F08"
+        "money": 540
     },
     "Sailor 6": {
         "trainer_class": "Sailor",
@@ -2225,8 +2172,7 @@
                 ]
             }
         ],
-        "money": 510,
-        "route_one_offset": "0x39F0C"
+        "money": 510
     },
     "Sailor 7": {
         "trainer_class": "Sailor",
@@ -2248,8 +2194,7 @@
                 ]
             }
         ],
-        "money": 600,
-        "route_one_offset": "0x39F11"
+        "money": 600
     },
     "Sailor 8": {
         "trainer_class": "Sailor",
@@ -2271,8 +2216,7 @@
                 ]
             }
         ],
-        "money": 720,
-        "route_one_offset": "0x39F14"
+        "money": 720
     },
     "JrTrainerM 1": {
         "trainer_class": "JrTrainerM",
@@ -2306,8 +2250,7 @@
                 ]
             }
         ],
-        "money": 180,
-        "route_one_offset": "0x39F17"
+        "money": 180
     },
     "JrTrainerM 2": {
         "trainer_class": "JrTrainerM",
@@ -2346,8 +2289,7 @@
                 ]
             }
         ],
-        "money": 280,
-        "route_one_offset": "0x39F1B"
+        "money": 280
     },
     "JrTrainerM 2 Duplicate": {
         "trainer_class": "JrTrainerM",
@@ -2386,8 +2328,7 @@
                 ]
             }
         ],
-        "money": 280,
-        "route_one_offset": "0x39F1B"
+        "money": 280
     },
     "JrTrainerM 3": {
         "trainer_class": "JrTrainerM",
@@ -2411,8 +2352,7 @@
                 ]
             }
         ],
-        "money": 360,
-        "route_one_offset": "0x39F1F"
+        "money": 360
     },
     "JrTrainerM 4": {
         "trainer_class": "JrTrainerM",
@@ -2436,8 +2376,7 @@
                 ]
             }
         ],
-        "money": 400,
-        "route_one_offset": "0x39F22"
+        "money": 400
     },
     "JrTrainerM 5": {
         "trainer_class": "JrTrainerM",
@@ -2477,8 +2416,7 @@
                 ]
             }
         ],
-        "money": 320,
-        "route_one_offset": "0x39F25"
+        "money": 320
     },
     "JrTrainerM 6": {
         "trainer_class": "JrTrainerM",
@@ -2529,8 +2467,7 @@
                 ]
             }
         ],
-        "money": 360,
-        "route_one_offset": "0x39F29"
+        "money": 360
     },
     "JrTrainerM 7": {
         "trainer_class": "JrTrainerM",
@@ -2569,8 +2506,7 @@
                 ]
             }
         ],
-        "money": 420,
-        "route_one_offset": "0x39F2E"
+        "money": 420
     },
     "JrTrainerM 8": {
         "trainer_class": "JrTrainerM",
@@ -2640,8 +2576,7 @@
                 ]
             }
         ],
-        "money": 380,
-        "route_one_offset": "0x39F32"
+        "money": 380
     },
     "JrTrainerM 9": {
         "trainer_class": "JrTrainerM",
@@ -2681,8 +2616,7 @@
                 ]
             }
         ],
-        "money": 580,
-        "route_one_offset": "0x39F38"
+        "money": 580
     },
     "JrTrainerM 10": {
         "trainer_class": "JrTrainerM",
@@ -2706,8 +2640,7 @@
                 ]
             }
         ],
-        "money": 320,
-        "route_one_offset": "0x39F3C"
+        "money": 320
     },
     "JrTrainerF 1": {
         "trainer_class": "JrTrainerF",
@@ -2730,8 +2663,7 @@
                 ]
             }
         ],
-        "money": 380,
-        "route_one_offset": "0x39F3F"
+        "money": 380
     },
     "JrTrainerF 2": {
         "trainer_class": "JrTrainerF",
@@ -2769,8 +2701,7 @@
                 ]
             }
         ],
-        "money": 320,
-        "route_one_offset": "0x39F42"
+        "money": 320
     },
     "JrTrainerF 3": {
         "trainer_class": "JrTrainerF",
@@ -2823,8 +2754,7 @@
                 ]
             }
         ],
-        "money": 320,
-        "route_one_offset": "0x39F46"
+        "money": 320
     },
     "JrTrainerF 4": {
         "trainer_class": "JrTrainerF",
@@ -2848,8 +2778,7 @@
                 ]
             }
         ],
-        "money": 440,
-        "route_one_offset": "0x39F4B"
+        "money": 440
     },
     "JrTrainerF 5": {
         "trainer_class": "JrTrainerF",
@@ -2919,8 +2848,7 @@
                 ]
             }
         ],
-        "money": 360,
-        "route_one_offset": "0x39F4E"
+        "money": 360
     },
     "JrTrainerF 6": {
         "trainer_class": "JrTrainerF",
@@ -2944,8 +2872,7 @@
                 ]
             }
         ],
-        "money": 460,
-        "route_one_offset": "0x39F54"
+        "money": 460
     },
     "JrTrainerF 7": {
         "trainer_class": "JrTrainerF",
@@ -2985,8 +2912,7 @@
                 ]
             }
         ],
-        "money": 400,
-        "route_one_offset": "0x39F57"
+        "money": 400
     },
     "JrTrainerF 8": {
         "trainer_class": "JrTrainerF",
@@ -3026,8 +2952,7 @@
                 ]
             }
         ],
-        "money": 420,
-        "route_one_offset": "0x39F5B"
+        "money": 420
     },
     "JrTrainerF 9": {
         "trainer_class": "JrTrainerF",
@@ -3083,8 +3008,7 @@
                 ]
             }
         ],
-        "money": 420,
-        "route_one_offset": "0x39F5F"
+        "money": 420
     },
     "JrTrainerF 10": {
         "trainer_class": "JrTrainerF",
@@ -3124,8 +3048,7 @@
                 ]
             }
         ],
-        "money": 440,
-        "route_one_offset": "0x39F64"
+        "money": 440
     },
     "JrTrainerF 11": {
         "trainer_class": "JrTrainerF",
@@ -3165,8 +3088,7 @@
                 ]
             }
         ],
-        "money": 480,
-        "route_one_offset": "0x39F68"
+        "money": 480
     },
     "JrTrainerF 12": {
         "trainer_class": "JrTrainerF",
@@ -3254,8 +3176,7 @@
                 ]
             }
         ],
-        "money": 480,
-        "route_one_offset": "0x39F6C"
+        "money": 480
     },
     "JrTrainerF 13": {
         "trainer_class": "JrTrainerF",
@@ -3295,8 +3216,7 @@
                 ]
             }
         ],
-        "money": 600,
-        "route_one_offset": "0x39F73"
+        "money": 600
     },
     "JrTrainerF 14": {
         "trainer_class": "JrTrainerF",
@@ -3368,8 +3288,7 @@
                 ]
             }
         ],
-        "money": 540,
-        "route_one_offset": "0x39F77"
+        "money": 540
     },
     "JrTrainerF 15": {
         "trainer_class": "JrTrainerF",
@@ -3424,8 +3343,7 @@
                 ]
             }
         ],
-        "money": 560,
-        "route_one_offset": "0x39F7D"
+        "money": 560
     },
     "JrTrainerF 16": {
         "trainer_class": "JrTrainerF",
@@ -3465,8 +3383,7 @@
                 ]
             }
         ],
-        "money": 620,
-        "route_one_offset": "0x39F82"
+        "money": 620
     },
     "JrTrainerF 17": {
         "trainer_class": "JrTrainerF",
@@ -3506,8 +3423,7 @@
                 ]
             }
         ],
-        "money": 440,
-        "route_one_offset": "0x39F86"
+        "money": 440
     },
     "JrTrainerF 18": {
         "trainer_class": "JrTrainerF",
@@ -3563,8 +3479,7 @@
                 ]
             }
         ],
-        "money": 400,
-        "route_one_offset": "0x39F8A"
+        "money": 400
     },
     "JrTrainerF 19": {
         "trainer_class": "JrTrainerF",
@@ -3636,8 +3551,7 @@
                 ]
             }
         ],
-        "money": 380,
-        "route_one_offset": "0x39F8F"
+        "money": 380
     },
     "JrTrainerF 20": {
         "trainer_class": "JrTrainerF",
@@ -3693,8 +3607,7 @@
                 ]
             }
         ],
-        "money": 560,
-        "route_one_offset": "0x39F95"
+        "money": 560
     },
     "JrTrainerF 21": {
         "trainer_class": "JrTrainerF",
@@ -3734,8 +3647,7 @@
                 ]
             }
         ],
-        "money": 580,
-        "route_one_offset": "0x39F9A"
+        "money": 580
     },
     "JrTrainerF 22": {
         "trainer_class": "JrTrainerF",
@@ -3759,8 +3671,7 @@
                 ]
             }
         ],
-        "money": 660,
-        "route_one_offset": "0x39F9E"
+        "money": 660
     },
     "JrTrainerF 23": {
         "trainer_class": "JrTrainerF",
@@ -3816,8 +3727,7 @@
                 ]
             }
         ],
-        "money": 580,
-        "route_one_offset": "0x39FA1"
+        "money": 580
     },
     "JrTrainerF 24": {
         "trainer_class": "JrTrainerF",
@@ -3871,8 +3781,7 @@
                 ]
             }
         ],
-        "money": 600,
-        "route_one_offset": "0x39FA6"
+        "money": 600
     },
     "JrTrainerF 25": {
         "trainer_class": "JrTrainerF",
@@ -3896,8 +3805,7 @@
                 ]
             }
         ],
-        "money": 400,
-        "route_one_offset": "0x39FAB"
+        "money": 400
     },
     "Pokemaniac 1": {
         "trainer_class": "Pokemaniac",
@@ -3935,8 +3843,7 @@
                 ]
             }
         ],
-        "money": 1500,
-        "route_one_offset": "0x39FAE"
+        "money": 1500
     },
     "Pokemaniac 2": {
         "trainer_class": "Pokemaniac",
@@ -3974,8 +3881,7 @@
                 ]
             }
         ],
-        "money": 1000,
-        "route_one_offset": "0x39FB2"
+        "money": 1000
     },
     "Pokemaniac 3": {
         "trainer_class": "Pokemaniac",
@@ -4025,8 +3931,7 @@
                 ]
             }
         ],
-        "money": 1000,
-        "route_one_offset": "0x39FB6"
+        "money": 1000
     },
     "Pokemaniac 4": {
         "trainer_class": "Pokemaniac",
@@ -4066,8 +3971,7 @@
                 ]
             }
         ],
-        "money": 1100,
-        "route_one_offset": "0x39FBB"
+        "money": 1100
     },
     "Pokemaniac 5": {
         "trainer_class": "Pokemaniac",
@@ -4090,8 +3994,7 @@
                 ]
             }
         ],
-        "money": 1250,
-        "route_one_offset": "0x39FBF"
+        "money": 1250
     },
     "Pokemaniac 6": {
         "trainer_class": "Pokemaniac",
@@ -4147,8 +4050,7 @@
                 ]
             }
         ],
-        "money": 2000,
-        "route_one_offset": "0x39FC2"
+        "money": 2000
     },
     "Pokemaniac 7": {
         "trainer_class": "Pokemaniac",
@@ -4187,8 +4089,7 @@
                 ]
             }
         ],
-        "money": 1150,
-        "route_one_offset": "0x39FC7"
+        "money": 1150
     },
     "SuperNerd 1": {
         "trainer_class": "SuperNerd",
@@ -4223,8 +4124,7 @@
                 ]
             }
         ],
-        "money": 275,
-        "route_one_offset": "0x39FCB"
+        "money": 275
     },
     "SuperNerd 2": {
         "trainer_class": "SuperNerd",
@@ -4274,8 +4174,7 @@
                 ]
             }
         ],
-        "money": 300,
-        "route_one_offset": "0x39FCF"
+        "money": 300
     },
     "SuperNerd 3": {
         "trainer_class": "SuperNerd",
@@ -4340,8 +4239,7 @@
                 ]
             }
         ],
-        "money": 500,
-        "route_one_offset": "0x39FD4"
+        "money": 500
     },
     "SuperNerd 4": {
         "trainer_class": "SuperNerd",
@@ -4392,8 +4290,7 @@
                 ]
             }
         ],
-        "money": 550,
-        "route_one_offset": "0x39FDA"
+        "money": 550
     },
     "SuperNerd 5": {
         "trainer_class": "SuperNerd",
@@ -4415,8 +4312,7 @@
                 ]
             }
         ],
-        "money": 650,
-        "route_one_offset": "0x39FDF"
+        "money": 650
     },
     "SuperNerd 6": {
         "trainer_class": "SuperNerd",
@@ -4467,8 +4363,7 @@
                 ]
             }
         ],
-        "money": 550,
-        "route_one_offset": "0x39FE2"
+        "money": 550
     },
     "SuperNerd 7": {
         "trainer_class": "SuperNerd",
@@ -4529,8 +4424,7 @@
                 ]
             }
         ],
-        "money": 500,
-        "route_one_offset": "0x39FE7"
+        "money": 500
     },
     "SuperNerd 8": {
         "trainer_class": "SuperNerd",
@@ -4568,8 +4462,7 @@
                 ]
             }
         ],
-        "money": 600,
-        "route_one_offset": "0x39FED"
+        "money": 600
     },
     "SuperNerd 9": {
         "trainer_class": "SuperNerd",
@@ -4625,8 +4518,7 @@
                 ]
             }
         ],
-        "money": 900,
-        "route_one_offset": "0x39FF1"
+        "money": 900
     },
     "SuperNerd 10": {
         "trainer_class": "SuperNerd",
@@ -4697,8 +4589,7 @@
                 ]
             }
         ],
-        "money": 850,
-        "route_one_offset": "0x39FF6"
+        "money": 850
     },
     "SuperNerd 11": {
         "trainer_class": "SuperNerd",
@@ -4722,8 +4613,7 @@
                 ]
             }
         ],
-        "money": 1025,
-        "route_one_offset": "0x39FFC"
+        "money": 1025
     },
     "SuperNerd 12": {
         "trainer_class": "SuperNerd",
@@ -4763,8 +4653,7 @@
                 ]
             }
         ],
-        "money": 925,
-        "route_one_offset": "0x39FFF"
+        "money": 925
     },
     "Hiker 1": {
         "trainer_class": "Hiker",
@@ -4812,8 +4701,7 @@
                 ]
             }
         ],
-        "money": 350,
-        "route_one_offset": "0x3A003"
+        "money": 350
     },
     "Hiker 2": {
         "trainer_class": "Hiker",
@@ -4848,8 +4736,7 @@
                 ]
             }
         ],
-        "money": 525,
-        "route_one_offset": "0x3A008"
+        "money": 525
     },
     "Hiker 3": {
         "trainer_class": "Hiker",
@@ -4912,8 +4799,7 @@
                 ]
             }
         ],
-        "money": 455,
-        "route_one_offset": "0x3A00C"
+        "money": 455
     },
     "Hiker 4": {
         "trainer_class": "Hiker",
@@ -4936,8 +4822,7 @@
                 ]
             }
         ],
-        "money": 595,
-        "route_one_offset": "0x3A012"
+        "money": 595
     },
     "Hiker 5": {
         "trainer_class": "Hiker",
@@ -4977,8 +4862,7 @@
                 ]
             }
         ],
-        "money": 735,
-        "route_one_offset": "0x3A015"
+        "money": 735
     },
     "Hiker 6": {
         "trainer_class": "Hiker",
@@ -5030,8 +4914,7 @@
                 ]
             }
         ],
-        "money": 700,
-        "route_one_offset": "0x3A019"
+        "money": 700
     },
     "Hiker 7": {
         "trainer_class": "Hiker",
@@ -5071,8 +4954,7 @@
                 ]
             }
         ],
-        "money": 735,
-        "route_one_offset": "0x3A01E"
+        "money": 735
     },
     "Hiker 8": {
         "trainer_class": "Hiker",
@@ -5111,8 +4993,7 @@
                 ]
             }
         ],
-        "money": 665,
-        "route_one_offset": "0x3A022"
+        "money": 665
     },
     "Hiker 9": {
         "trainer_class": "Hiker",
@@ -5168,8 +5049,7 @@
                 ]
             }
         ],
-        "money": 735,
-        "route_one_offset": "0x3A026"
+        "money": 735
     },
     "Hiker 10": {
         "trainer_class": "Hiker",
@@ -5193,8 +5073,7 @@
                 ]
             }
         ],
-        "money": 875,
-        "route_one_offset": "0x3A02B"
+        "money": 875
     },
     "Hiker 11": {
         "trainer_class": "Hiker",
@@ -5232,8 +5111,7 @@
                 ]
             }
         ],
-        "money": 700,
-        "route_one_offset": "0x3A02E"
+        "money": 700
     },
     "Hiker 11 Duplicate": {
         "trainer_class": "Hiker",
@@ -5271,8 +5149,7 @@
                 ]
             }
         ],
-        "money": 700,
-        "route_one_offset": "0x3A02E"
+        "money": 700
     },
     "Hiker 12": {
         "trainer_class": "Hiker",
@@ -5338,8 +5215,7 @@
                 ]
             }
         ],
-        "money": 665,
-        "route_one_offset": "0x3A032"
+        "money": 665
     },
     "Hiker 13": {
         "trainer_class": "Hiker",
@@ -5394,8 +5270,7 @@
                 ]
             }
         ],
-        "money": 700,
-        "route_one_offset": "0x3A038"
+        "money": 700
     },
     "Hiker 14": {
         "trainer_class": "Hiker",
@@ -5435,8 +5310,7 @@
                 ]
             }
         ],
-        "money": 735,
-        "route_one_offset": "0x3A03D"
+        "money": 735
     },
     "Biker 1": {
         "trainer_class": "Biker",
@@ -5486,8 +5360,7 @@
                 ]
             }
         ],
-        "money": 560,
-        "route_one_offset": "0x3A041"
+        "money": 560
     },
     "Biker 2": {
         "trainer_class": "Biker",
@@ -5523,8 +5396,7 @@
                 ]
             }
         ],
-        "money": 580,
-        "route_one_offset": "0x3A046"
+        "money": 580
     },
     "Biker 3": {
         "trainer_class": "Biker",
@@ -5603,8 +5475,7 @@
                 ]
             }
         ],
-        "money": 500,
-        "route_one_offset": "0x3A04A"
+        "money": 500
     },
     "Biker 4": {
         "trainer_class": "Biker",
@@ -5655,8 +5526,7 @@
                 ]
             }
         ],
-        "money": 560,
-        "route_one_offset": "0x3A051"
+        "money": 560
     },
     "Biker 5": {
         "trainer_class": "Biker",
@@ -5692,8 +5562,7 @@
                 ]
             }
         ],
-        "money": 580,
-        "route_one_offset": "0x3A056"
+        "money": 580
     },
     "Biker 6": {
         "trainer_class": "Biker",
@@ -5716,8 +5585,7 @@
                 ]
             }
         ],
-        "money": 660,
-        "route_one_offset": "0x3A05A"
+        "money": 660
     },
     "Biker 7": {
         "trainer_class": "Biker",
@@ -5781,8 +5649,7 @@
                 ]
             }
         ],
-        "money": 520,
-        "route_one_offset": "0x3A05D"
+        "money": 520
     },
     "Biker 8": {
         "trainer_class": "Biker",
@@ -5834,8 +5701,7 @@
                 ]
             }
         ],
-        "money": 560,
-        "route_one_offset": "0x3A063"
+        "money": 560
     },
     "Biker 9": {
         "trainer_class": "Biker",
@@ -5859,8 +5725,7 @@
                 ]
             }
         ],
-        "money": 660,
-        "route_one_offset": "0x3A068"
+        "money": 660
     },
     "Biker 10": {
         "trainer_class": "Biker",
@@ -5900,8 +5765,7 @@
                 ]
             }
         ],
-        "money": 580,
-        "route_one_offset": "0x3A06B"
+        "money": 580
     },
     "Biker 11": {
         "trainer_class": "Biker",
@@ -5939,8 +5803,7 @@
                 ]
             }
         ],
-        "money": 580,
-        "route_one_offset": "0x3A06F"
+        "money": 580
     },
     "Biker 12": {
         "trainer_class": "Biker",
@@ -6020,8 +5883,7 @@
                 ]
             }
         ],
-        "money": 500,
-        "route_one_offset": "0x3A073"
+        "money": 500
     },
     "Biker 13": {
         "trainer_class": "Biker",
@@ -6085,8 +5947,7 @@
                 ]
             }
         ],
-        "money": 520,
-        "route_one_offset": "0x3A07A"
+        "money": 520
     },
     "Biker 14": {
         "trainer_class": "Biker",
@@ -6136,8 +5997,7 @@
                 ]
             }
         ],
-        "money": 560,
-        "route_one_offset": "0x3A080"
+        "money": 560
     },
     "Biker 15": {
         "trainer_class": "Biker",
@@ -6174,8 +6034,7 @@
                 ]
             }
         ],
-        "money": 580,
-        "route_one_offset": "0x3A085"
+        "money": 580
     },
     "Burglar 1": {
         "trainer_class": "Burglar",
@@ -6215,8 +6074,7 @@
                 ]
             }
         ],
-        "money": 2610,
-        "route_one_offset": "0x3A089"
+        "money": 2610
     },
     "Burglar 2": {
         "trainer_class": "Burglar",
@@ -6240,8 +6098,7 @@
                 ]
             }
         ],
-        "money": 2970,
-        "route_one_offset": "0x3A08D"
+        "money": 2970
     },
     "Burglar 3": {
         "trainer_class": "Burglar",
@@ -6294,8 +6151,7 @@
                 ]
             }
         ],
-        "money": 2520,
-        "route_one_offset": "0x3A090"
+        "money": 2520
     },
     "Burglar 4": {
         "trainer_class": "Burglar",
@@ -6351,8 +6207,7 @@
                 ]
             }
         ],
-        "money": 3240,
-        "route_one_offset": "0x3A095"
+        "money": 3240
     },
     "Burglar 5": {
         "trainer_class": "Burglar",
@@ -6376,8 +6231,7 @@
                 ]
             }
         ],
-        "money": 3690,
-        "route_one_offset": "0x3A09A"
+        "money": 3690
     },
     "Burglar 6": {
         "trainer_class": "Burglar",
@@ -6417,8 +6271,7 @@
                 ]
             }
         ],
-        "money": 3330,
-        "route_one_offset": "0x3A09D"
+        "money": 3330
     },
     "Burglar 7": {
         "trainer_class": "Burglar",
@@ -6458,8 +6311,7 @@
                 ]
             }
         ],
-        "money": 3060,
-        "route_one_offset": "0x3A0A1"
+        "money": 3060
     },
     "Burglar 8": {
         "trainer_class": "Burglar",
@@ -6483,8 +6335,7 @@
                 ]
             }
         ],
-        "money": 3420,
-        "route_one_offset": "0x3A0A5"
+        "money": 3420
     },
     "Burglar 9": {
         "trainer_class": "Burglar",
@@ -6523,8 +6374,7 @@
                 ]
             }
         ],
-        "money": 3060,
-        "route_one_offset": "0x3A0A8"
+        "money": 3060
     },
     "Engineer 1": {
         "trainer_class": "Engineer",
@@ -6561,8 +6411,7 @@
                 ]
             }
         ],
-        "money": 1050,
-        "route_one_offset": "0x3A0AC"
+        "money": 1050
     },
     "Engineer 2": {
         "trainer_class": "Engineer",
@@ -6584,8 +6433,7 @@
                 ]
             }
         ],
-        "money": 1050,
-        "route_one_offset": "0x3A0B0"
+        "money": 1050
     },
     "Engineer 3": {
         "trainer_class": "Engineer",
@@ -6634,8 +6482,7 @@
                 ]
             }
         ],
-        "money": 900,
-        "route_one_offset": "0x3A0B3"
+        "money": 900
     },
     "Fisher 1": {
         "trainer_class": "Fisher",
@@ -6686,8 +6533,7 @@
                 ]
             }
         ],
-        "money": 595,
-        "route_one_offset": "0x3A0B8"
+        "money": 595
     },
     "Fisher 2": {
         "trainer_class": "Fisher",
@@ -6738,8 +6584,7 @@
                 ]
             }
         ],
-        "money": 595,
-        "route_one_offset": "0x3A0BD"
+        "money": 595
     },
     "Fisher 3": {
         "trainer_class": "Fisher",
@@ -6792,8 +6637,7 @@
                 ]
             }
         ],
-        "money": 770,
-        "route_one_offset": "0x3A0C2"
+        "money": 770
     },
     "Fisher 4": {
         "trainer_class": "Fisher",
@@ -6833,8 +6677,7 @@
                 ]
             }
         ],
-        "money": 840,
-        "route_one_offset": "0x3A0C7"
+        "money": 840
     },
     "Fisher 5": {
         "trainer_class": "Fisher",
@@ -6858,8 +6701,7 @@
                 ]
             }
         ],
-        "money": 945,
-        "route_one_offset": "0x3A0CB"
+        "money": 945
     },
     "Fisher 6": {
         "trainer_class": "Fisher",
@@ -6926,8 +6768,7 @@
                 ]
             }
         ],
-        "money": 735,
-        "route_one_offset": "0x3A0CE"
+        "money": 735
     },
     "Fisher 7": {
         "trainer_class": "Fisher",
@@ -6999,8 +6840,7 @@
                 ]
             }
         ],
-        "money": 980,
-        "route_one_offset": "0x3A0D4"
+        "money": 980
     },
     "Fisher 8": {
         "trainer_class": "Fisher",
@@ -7040,8 +6880,7 @@
                 ]
             }
         ],
-        "money": 1085,
-        "route_one_offset": "0x3A0DA"
+        "money": 1085
     },
     "Fisher 9": {
         "trainer_class": "Fisher",
@@ -7133,8 +6972,7 @@
                 ]
             }
         ],
-        "money": 945,
-        "route_one_offset": "0x3A0DE"
+        "money": 945
     },
     "Fisher 10": {
         "trainer_class": "Fisher",
@@ -7174,8 +7012,7 @@
                 ]
             }
         ],
-        "money": 1155,
-        "route_one_offset": "0x3A0E6"
+        "money": 1155
     },
     "Fisher 11": {
         "trainer_class": "Fisher",
@@ -7211,8 +7048,7 @@
                 ]
             }
         ],
-        "money": 840,
-        "route_one_offset": "0x3A0EA"
+        "money": 840
     },
     "Swimmer 1": {
         "trainer_class": "Swimmer",
@@ -7247,8 +7083,7 @@
                 ]
             }
         ],
-        "money": 80,
-        "route_one_offset": "0x3A0EE"
+        "money": 80
     },
     "Swimmer 2": {
         "trainer_class": "Swimmer",
@@ -7288,8 +7123,7 @@
                 ]
             }
         ],
-        "money": 150,
-        "route_one_offset": "0x3A0F2"
+        "money": 150
     },
     "Swimmer 3": {
         "trainer_class": "Swimmer",
@@ -7344,8 +7178,7 @@
                 ]
             }
         ],
-        "money": 145,
-        "route_one_offset": "0x3A0F6"
+        "money": 145
     },
     "Swimmer 4": {
         "trainer_class": "Swimmer",
@@ -7385,8 +7218,7 @@
                 ]
             }
         ],
-        "money": 150,
-        "route_one_offset": "0x3A0FB"
+        "money": 150
     },
     "Swimmer 5": {
         "trainer_class": "Swimmer",
@@ -7457,8 +7289,7 @@
                 ]
             }
         ],
-        "money": 135,
-        "route_one_offset": "0x3A0FF"
+        "money": 135
     },
     "Swimmer 6": {
         "trainer_class": "Swimmer",
@@ -7514,8 +7345,7 @@
                 ]
             }
         ],
-        "money": 145,
-        "route_one_offset": "0x3A105"
+        "money": 145
     },
     "Swimmer 7": {
         "trainer_class": "Swimmer",
@@ -7555,8 +7385,7 @@
                 ]
             }
         ],
-        "money": 150,
-        "route_one_offset": "0x3A10A"
+        "money": 150
     },
     "Swimmer 8": {
         "trainer_class": "Swimmer",
@@ -7643,8 +7472,7 @@
                 ]
             }
         ],
-        "money": 135,
-        "route_one_offset": "0x3A10E"
+        "money": 135
     },
     "Swimmer 9": {
         "trainer_class": "Swimmer",
@@ -7684,8 +7512,7 @@
                 ]
             }
         ],
-        "money": 155,
-        "route_one_offset": "0x3A115"
+        "money": 155
     },
     "Swimmer 10": {
         "trainer_class": "Swimmer",
@@ -7709,8 +7536,7 @@
                 ]
             }
         ],
-        "money": 175,
-        "route_one_offset": "0x3A119"
+        "money": 175
     },
     "Swimmer 11": {
         "trainer_class": "Swimmer",
@@ -7778,8 +7604,7 @@
                 ]
             }
         ],
-        "money": 140,
-        "route_one_offset": "0x3A11C"
+        "money": 140
     },
     "Swimmer 12": {
         "trainer_class": "Swimmer",
@@ -7819,8 +7644,7 @@
                 ]
             }
         ],
-        "money": 165,
-        "route_one_offset": "0x3A122"
+        "money": 165
     },
     "Swimmer 13": {
         "trainer_class": "Swimmer",
@@ -7843,8 +7667,7 @@
                 ]
             }
         ],
-        "money": 185,
-        "route_one_offset": "0x3A126"
+        "money": 185
     },
     "Swimmer 14": {
         "trainer_class": "Swimmer",
@@ -7884,8 +7707,7 @@
                 ]
             }
         ],
-        "money": 165,
-        "route_one_offset": "0x3A129"
+        "money": 165
     },
     "Swimmer 15": {
         "trainer_class": "Swimmer",
@@ -7941,8 +7763,7 @@
                 ]
             }
         ],
-        "money": 160,
-        "route_one_offset": "0x3A12D"
+        "money": 160
     },
     "CueBall 1": {
         "trainer_class": "CueBall",
@@ -7996,8 +7817,7 @@
                 ]
             }
         ],
-        "money": 700,
-        "route_one_offset": "0x3A132"
+        "money": 700
     },
     "CueBall 2": {
         "trainer_class": "CueBall",
@@ -8036,8 +7856,7 @@
                 ]
             }
         ],
-        "money": 725,
-        "route_one_offset": "0x3A137"
+        "money": 725
     },
     "CueBall 3": {
         "trainer_class": "CueBall",
@@ -8061,8 +7880,7 @@
                 ]
             }
         ],
-        "money": 825,
-        "route_one_offset": "0x3A13B"
+        "money": 825
     },
     "CueBall 4": {
         "trainer_class": "CueBall",
@@ -8102,8 +7920,7 @@
                 ]
             }
         ],
-        "money": 725,
-        "route_one_offset": "0x3A13E"
+        "money": 725
     },
     "CueBall 5": {
         "trainer_class": "CueBall",
@@ -8141,8 +7958,7 @@
                 ]
             }
         ],
-        "money": 725,
-        "route_one_offset": "0x3A142"
+        "money": 725
     },
     "CueBall 6": {
         "trainer_class": "CueBall",
@@ -8165,8 +7981,7 @@
                 ]
             }
         ],
-        "money": 825,
-        "route_one_offset": "0x3A146"
+        "money": 825
     },
     "CueBall 7": {
         "trainer_class": "CueBall",
@@ -8236,8 +8051,7 @@
                 ]
             }
         ],
-        "money": 650,
-        "route_one_offset": "0x3A149"
+        "money": 650
     },
     "CueBall 8": {
         "trainer_class": "CueBall",
@@ -8276,8 +8090,7 @@
                 ]
             }
         ],
-        "money": 725,
-        "route_one_offset": "0x3A14F"
+        "money": 725
     },
     "CueBall 9": {
         "trainer_class": "CueBall",
@@ -8333,8 +8146,7 @@
                 ]
             }
         ],
-        "money": 775,
-        "route_one_offset": "0x3A153"
+        "money": 775
     },
     "Gambler 1": {
         "trainer_class": "Gambler",
@@ -8369,8 +8181,7 @@
                 ]
             }
         ],
-        "money": 1260,
-        "route_one_offset": "0x3A158"
+        "money": 1260
     },
     "Gambler 2": {
         "trainer_class": "Gambler",
@@ -8409,8 +8220,7 @@
                 ]
             }
         ],
-        "money": 1260,
-        "route_one_offset": "0x3A15C"
+        "money": 1260
     },
     "Gambler 3": {
         "trainer_class": "Gambler",
@@ -8446,8 +8256,7 @@
                 ]
             }
         ],
-        "money": 1260,
-        "route_one_offset": "0x3A160"
+        "money": 1260
     },
     "Gambler 4": {
         "trainer_class": "Gambler",
@@ -8485,8 +8294,7 @@
                 ]
             }
         ],
-        "money": 1260,
-        "route_one_offset": "0x3A164"
+        "money": 1260
     },
     "Gambler 5": {
         "trainer_class": "Gambler",
@@ -8539,8 +8347,7 @@
                 ]
             }
         ],
-        "money": 1540,
-        "route_one_offset": "0x3A168"
+        "money": 1540
     },
     "Gambler 6": {
         "trainer_class": "Gambler",
@@ -8596,8 +8403,7 @@
                 ]
             }
         ],
-        "money": 1540,
-        "route_one_offset": "0x3A16D"
+        "money": 1540
     },
     "Gambler 7": {
         "trainer_class": "Gambler",
@@ -8637,8 +8443,7 @@
                 ]
             }
         ],
-        "money": 1680,
-        "route_one_offset": "0x3A172"
+        "money": 1680
     },
     "Beauty 1": {
         "trainer_class": "Beauty",
@@ -8710,8 +8515,7 @@
                 ]
             }
         ],
-        "money": 1470,
-        "route_one_offset": "0x3A176"
+        "money": 1470
     },
     "Beauty 2": {
         "trainer_class": "Beauty",
@@ -8751,8 +8555,7 @@
                 ]
             }
         ],
-        "money": 1680,
-        "route_one_offset": "0x3A17C"
+        "money": 1680
     },
     "Beauty 3": {
         "trainer_class": "Beauty",
@@ -8775,8 +8578,7 @@
                 ]
             }
         ],
-        "money": 1820,
-        "route_one_offset": "0x3A180"
+        "money": 1820
     },
     "Beauty 4": {
         "trainer_class": "Beauty",
@@ -8832,8 +8634,7 @@
                 ]
             }
         ],
-        "money": 1890,
-        "route_one_offset": "0x3A183"
+        "money": 1890
     },
     "Beauty 5": {
         "trainer_class": "Beauty",
@@ -8873,8 +8674,7 @@
                 ]
             }
         ],
-        "money": 2030,
-        "route_one_offset": "0x3A188"
+        "money": 2030
     },
     "Beauty 6": {
         "trainer_class": "Beauty",
@@ -8898,8 +8698,7 @@
                 ]
             }
         ],
-        "money": 2450,
-        "route_one_offset": "0x3A18C"
+        "money": 2450
     },
     "Beauty 7": {
         "trainer_class": "Beauty",
@@ -8955,8 +8754,7 @@
                 ]
             }
         ],
-        "money": 2100,
-        "route_one_offset": "0x3A18F"
+        "money": 2100
     },
     "Beauty 8": {
         "trainer_class": "Beauty",
@@ -8996,8 +8794,7 @@
                 ]
             }
         ],
-        "money": 2170,
-        "route_one_offset": "0x3A194"
+        "money": 2170
     },
     "Beauty 9": {
         "trainer_class": "Beauty",
@@ -9037,8 +8834,7 @@
                 ]
             }
         ],
-        "money": 2030,
-        "route_one_offset": "0x3A198"
+        "money": 2030
     },
     "Beauty 10": {
         "trainer_class": "Beauty",
@@ -9078,8 +8874,7 @@
                 ]
             }
         ],
-        "money": 2030,
-        "route_one_offset": "0x3A19C"
+        "money": 2030
     },
     "Beauty 11": {
         "trainer_class": "Beauty",
@@ -9135,8 +8930,7 @@
                 ]
             }
         ],
-        "money": 2310,
-        "route_one_offset": "0x3A1A0"
+        "money": 2310
     },
     "Beauty 12": {
         "trainer_class": "Beauty",
@@ -9224,8 +9018,7 @@
                 ]
             }
         ],
-        "money": 1890,
-        "route_one_offset": "0x3A1A5"
+        "money": 1890
     },
     "Beauty 13": {
         "trainer_class": "Beauty",
@@ -9265,8 +9058,7 @@
                 ]
             }
         ],
-        "money": 2100,
-        "route_one_offset": "0x3A1AC"
+        "money": 2100
     },
     "Beauty 14": {
         "trainer_class": "Beauty",
@@ -9322,8 +9114,7 @@
                 ]
             }
         ],
-        "money": 2030,
-        "route_one_offset": "0x3A1B0"
+        "money": 2030
     },
     "Beauty 15": {
         "trainer_class": "Beauty",
@@ -9379,8 +9170,7 @@
                 ]
             }
         ],
-        "money": 2100,
-        "route_one_offset": "0x3A1B5"
+        "money": 2100
     },
     "Psychic 1": {
         "trainer_class": "Psychic",
@@ -9452,8 +9242,7 @@
                 ]
             }
         ],
-        "money": 310,
-        "route_one_offset": "0x3A1BA"
+        "money": 310
     },
     "Psychic 2": {
         "trainer_class": "Psychic",
@@ -9493,8 +9282,7 @@
                 ]
             }
         ],
-        "money": 340,
-        "route_one_offset": "0x3A1C0"
+        "money": 340
     },
     "Psychic 3": {
         "trainer_class": "Psychic",
@@ -9550,8 +9338,7 @@
                 ]
             }
         ],
-        "money": 330,
-        "route_one_offset": "0x3A1C4"
+        "money": 330
     },
     "Psychic 4": {
         "trainer_class": "Psychic",
@@ -9575,8 +9362,7 @@
                 ]
             }
         ],
-        "money": 380,
-        "route_one_offset": "0x3A1C9"
+        "money": 380
     },
     "Rocker 1": {
         "trainer_class": "Rocker",
@@ -9629,8 +9415,7 @@
                 ]
             }
         ],
-        "money": 500,
-        "route_one_offset": "0x3A1CC"
+        "money": 500
     },
     "Rocker 2": {
         "trainer_class": "Rocker",
@@ -9670,8 +9455,7 @@
                 ]
             }
         ],
-        "money": 725,
-        "route_one_offset": "0x3A1D1"
+        "money": 725
     },
     "Juggler 1": {
         "trainer_class": "Juggler",
@@ -9710,8 +9494,7 @@
                 ]
             }
         ],
-        "money": 1015,
-        "route_one_offset": "0x3A1D5"
+        "money": 1015
     },
     "Juggler 2": {
         "trainer_class": "Juggler",
@@ -9783,8 +9566,7 @@
                 ]
             }
         ],
-        "money": 1435,
-        "route_one_offset": "0x3A1D9"
+        "money": 1435
     },
     "Juggler 3": {
         "trainer_class": "Juggler",
@@ -9856,8 +9638,7 @@
                 ]
             }
         ],
-        "money": 1085,
-        "route_one_offset": "0x3A1DF"
+        "money": 1085
     },
     "Juggler 4": {
         "trainer_class": "Juggler",
@@ -9897,8 +9678,7 @@
                 ]
             }
         ],
-        "money": 1190,
-        "route_one_offset": "0x3A1E5"
+        "money": 1190
     },
     "Juggler 5": {
         "trainer_class": "Juggler",
@@ -9922,8 +9702,7 @@
                 ]
             }
         ],
-        "money": 1680,
-        "route_one_offset": "0x3A1E9"
+        "money": 1680
     },
     "Juggler 6": {
         "trainer_class": "Juggler",
@@ -9947,8 +9726,7 @@
                 ]
             }
         ],
-        "money": 1155,
-        "route_one_offset": "0x3A1EC"
+        "money": 1155
     },
     "Juggler 7": {
         "trainer_class": "Juggler",
@@ -9972,8 +9750,7 @@
                 ]
             }
         ],
-        "money": 1330,
-        "route_one_offset": "0x3A1EF"
+        "money": 1330
     },
     "Juggler 8": {
         "trainer_class": "Juggler",
@@ -10013,8 +9790,7 @@
                 ]
             }
         ],
-        "money": 1190,
-        "route_one_offset": "0x3A1F2"
+        "money": 1190
     },
     "Tamer 1": {
         "trainer_class": "Tamer",
@@ -10054,8 +9830,7 @@
                 ]
             }
         ],
-        "money": 1360,
-        "route_one_offset": "0x3A1F6"
+        "money": 1360
     },
     "Tamer 2": {
         "trainer_class": "Tamer",
@@ -10111,8 +9886,7 @@
                 ]
             }
         ],
-        "money": 1320,
-        "route_one_offset": "0x3A1FA"
+        "money": 1320
     },
     "Tamer 3": {
         "trainer_class": "Tamer",
@@ -10136,8 +9910,7 @@
                 ]
             }
         ],
-        "money": 1720,
-        "route_one_offset": "0x3A1FF"
+        "money": 1720
     },
     "Tamer 4": {
         "trainer_class": "Tamer",
@@ -10177,8 +9950,7 @@
                 ]
             }
         ],
-        "money": 1560,
-        "route_one_offset": "0x3A202"
+        "money": 1560
     },
     "Tamer 5": {
         "trainer_class": "Tamer",
@@ -10218,8 +9990,7 @@
                 ]
             }
         ],
-        "money": 1760,
-        "route_one_offset": "0x3A206"
+        "money": 1760
     },
     "Tamer 6": {
         "trainer_class": "Tamer",
@@ -10291,8 +10062,7 @@
                 ]
             }
         ],
-        "money": 1680,
-        "route_one_offset": "0x3A20A"
+        "money": 1680
     },
     "BirdKeeper 1": {
         "trainer_class": "BirdKeeper",
@@ -10332,8 +10102,7 @@
                 ]
             }
         ],
-        "money": 725,
-        "route_one_offset": "0x3A210"
+        "money": 725
     },
     "BirdKeeper 2": {
         "trainer_class": "BirdKeeper",
@@ -10421,8 +10190,7 @@
                 ]
             }
         ],
-        "money": 625,
-        "route_one_offset": "0x3A214"
+        "money": 625
     },
     "BirdKeeper 3": {
         "trainer_class": "BirdKeeper",
@@ -10494,8 +10262,7 @@
                 ]
             }
         ],
-        "money": 650,
-        "route_one_offset": "0x3A21B"
+        "money": 650
     },
     "BirdKeeper 4": {
         "trainer_class": "BirdKeeper",
@@ -10519,8 +10286,7 @@
                 ]
             }
         ],
-        "money": 825,
-        "route_one_offset": "0x3A221"
+        "money": 825
     },
     "BirdKeeper 5": {
         "trainer_class": "BirdKeeper",
@@ -10560,8 +10326,7 @@
                 ]
             }
         ],
-        "money": 725,
-        "route_one_offset": "0x3A224"
+        "money": 725
     },
     "BirdKeeper 6": {
         "trainer_class": "BirdKeeper",
@@ -10632,8 +10397,7 @@
                 ]
             }
         ],
-        "money": 650,
-        "route_one_offset": "0x3A228"
+        "money": 650
     },
     "BirdKeeper 7": {
         "trainer_class": "BirdKeeper",
@@ -10686,8 +10450,7 @@
                 ]
             }
         ],
-        "money": 700,
-        "route_one_offset": "0x3A22E"
+        "money": 700
     },
     "BirdKeeper 8": {
         "trainer_class": "BirdKeeper",
@@ -10727,8 +10490,7 @@
                 ]
             }
         ],
-        "money": 725,
-        "route_one_offset": "0x3A233"
+        "money": 725
     },
     "BirdKeeper 9": {
         "trainer_class": "BirdKeeper",
@@ -10752,8 +10514,7 @@
                 ]
             }
         ],
-        "money": 850,
-        "route_one_offset": "0x3A237"
+        "money": 850
     },
     "BirdKeeper 10": {
         "trainer_class": "BirdKeeper",
@@ -10825,8 +10586,7 @@
                 ]
             }
         ],
-        "money": 650,
-        "route_one_offset": "0x3A23A"
+        "money": 650
     },
     "BirdKeeper 11": {
         "trainer_class": "BirdKeeper",
@@ -10882,8 +10642,7 @@
                 ]
             }
         ],
-        "money": 750,
-        "route_one_offset": "0x3A240"
+        "money": 750
     },
     "BirdKeeper 12": {
         "trainer_class": "BirdKeeper",
@@ -10955,8 +10714,7 @@
                 ]
             }
         ],
-        "money": 975,
-        "route_one_offset": "0x3A245"
+        "money": 975
     },
     "BirdKeeper 13": {
         "trainer_class": "BirdKeeper",
@@ -10996,8 +10754,7 @@
                 ]
             }
         ],
-        "money": 1050,
-        "route_one_offset": "0x3A24B"
+        "money": 1050
     },
     "BirdKeeper 14": {
         "trainer_class": "BirdKeeper",
@@ -11052,8 +10809,7 @@
                 ]
             }
         ],
-        "money": 700,
-        "route_one_offset": "0x3A24F"
+        "money": 700
     },
     "BirdKeeper 15": {
         "trainer_class": "BirdKeeper",
@@ -11125,8 +10881,7 @@
                 ]
             }
         ],
-        "money": 650,
-        "route_one_offset": "0x3A254"
+        "money": 650
     },
     "BirdKeeper 16": {
         "trainer_class": "BirdKeeper",
@@ -11166,8 +10921,7 @@
                 ]
             }
         ],
-        "money": 725,
-        "route_one_offset": "0x3A25A"
+        "money": 725
     },
     "BirdKeeper 17": {
         "trainer_class": "BirdKeeper",
@@ -11222,8 +10976,7 @@
                 ]
             }
         ],
-        "money": 700,
-        "route_one_offset": "0x3A25E"
+        "money": 700
     },
     "Blackbelt 1": {
         "trainer_class": "Blackbelt",
@@ -11261,8 +11014,7 @@
                 ]
             }
         ],
-        "money": 925,
-        "route_one_offset": "0x3A263"
+        "money": 925
     },
     "Blackbelt 2": {
         "trainer_class": "Blackbelt",
@@ -11318,8 +11070,7 @@
                 ]
             }
         ],
-        "money": 775,
-        "route_one_offset": "0x3A267"
+        "money": 775
     },
     "Blackbelt 3": {
         "trainer_class": "Blackbelt",
@@ -11358,8 +11109,7 @@
                 ]
             }
         ],
-        "money": 800,
-        "route_one_offset": "0x3A26C"
+        "money": 800
     },
     "Blackbelt 4": {
         "trainer_class": "Blackbelt",
@@ -11383,8 +11133,7 @@
                 ]
             }
         ],
-        "money": 900,
-        "route_one_offset": "0x3A270"
+        "money": 900
     },
     "Blackbelt 5": {
         "trainer_class": "Blackbelt",
@@ -11439,8 +11188,7 @@
                 ]
             }
         ],
-        "money": 775,
-        "route_one_offset": "0x3A273"
+        "money": 775
     },
     "Blackbelt 6": {
         "trainer_class": "Blackbelt",
@@ -11480,8 +11228,7 @@
                 ]
             }
         ],
-        "money": 1000,
-        "route_one_offset": "0x3A278"
+        "money": 1000
     },
     "Blackbelt 7": {
         "trainer_class": "Blackbelt",
@@ -11505,8 +11252,7 @@
                 ]
             }
         ],
-        "money": 1075,
-        "route_one_offset": "0x3A27C"
+        "money": 1075
     },
     "Blackbelt 8": {
         "trainer_class": "Blackbelt",
@@ -11562,8 +11308,7 @@
                 ]
             }
         ],
-        "money": 950,
-        "route_one_offset": "0x3A27F"
+        "money": 950
     },
     "Blackbelt 9": {
         "trainer_class": "Blackbelt",
@@ -11619,8 +11364,7 @@
                 ]
             }
         ],
-        "money": 1075,
-        "route_one_offset": "0x3A284"
+        "money": 1075
     },
     "Rival1 1": {
         "trainer_class": "Rival1",
@@ -11642,8 +11386,7 @@
                 ]
             }
         ],
-        "money": 175,
-        "route_one_offset": "0x3A289"
+        "money": 175
     },
     "Rival1 2": {
         "trainer_class": "Rival1",
@@ -11681,8 +11424,7 @@
                 ]
             }
         ],
-        "money": 280,
-        "route_one_offset": "0x3A28C"
+        "money": 280
     },
     "Rival1 3": {
         "trainer_class": "Rival1",
@@ -11752,8 +11494,7 @@
                 ]
             }
         ],
-        "money": 595,
-        "route_one_offset": "0x3A292"
+        "money": 595
     },
     "ProfOak 1": {
         "trainer_class": "ProfOak",
@@ -11840,8 +11581,7 @@
                 ]
             }
         ],
-        "money": 6930,
-        "route_one_offset": "0x3A29C"
+        "money": 6930
     },
     "ProfOak 2": {
         "trainer_class": "ProfOak",
@@ -11928,8 +11668,7 @@
                 ]
             }
         ],
-        "money": 6930,
-        "route_one_offset": "0x3A2A8"
+        "money": 6930
     },
     "ProfOak 3": {
         "trainer_class": "ProfOak",
@@ -12016,8 +11755,7 @@
                 ]
             }
         ],
-        "money": 6930,
-        "route_one_offset": "0x3A2B4"
+        "money": 6930
     },
     "Scientist 1": {
         "trainer_class": "Scientist",
@@ -12056,8 +11794,7 @@
                 ]
             }
         ],
-        "money": 1700,
-        "route_one_offset": "0x3A2C0"
+        "money": 1700
     },
     "Scientist 2": {
         "trainer_class": "Scientist",
@@ -12123,8 +11860,7 @@
                 ]
             }
         ],
-        "money": 1300,
-        "route_one_offset": "0x3A2C4"
+        "money": 1300
     },
     "Scientist 3": {
         "trainer_class": "Scientist",
@@ -12178,8 +11914,7 @@
                 ]
             }
         ],
-        "money": 1400,
-        "route_one_offset": "0x3A2CA"
+        "money": 1400
     },
     "Scientist 4": {
         "trainer_class": "Scientist",
@@ -12218,8 +11953,7 @@
                 ]
             }
         ],
-        "money": 1450,
-        "route_one_offset": "0x3A2CF"
+        "money": 1450
     },
     "Scientist 4 Duplicate": {
         "trainer_class": "Scientist",
@@ -12258,8 +11992,7 @@
                 ]
             }
         ],
-        "money": 1450,
-        "route_one_offset": "0x3A2CF"
+        "money": 1450
     },
     "Scientist 5": {
         "trainer_class": "Scientist",
@@ -12283,8 +12016,7 @@
                 ]
             }
         ],
-        "money": 1650,
-        "route_one_offset": "0x3A2D3"
+        "money": 1650
     },
     "Scientist 6": {
         "trainer_class": "Scientist",
@@ -12351,8 +12083,7 @@
                 ]
             }
         ],
-        "money": 1300,
-        "route_one_offset": "0x3A2D6"
+        "money": 1300
     },
     "Scientist 7": {
         "trainer_class": "Scientist",
@@ -12434,8 +12165,7 @@
                 ]
             }
         ],
-        "money": 1250,
-        "route_one_offset": "0x3A2DC"
+        "money": 1250
     },
     "Scientist 8": {
         "trainer_class": "Scientist",
@@ -12474,8 +12204,7 @@
                 ]
             }
         ],
-        "money": 1450,
-        "route_one_offset": "0x3A2E3"
+        "money": 1450
     },
     "Scientist 9": {
         "trainer_class": "Scientist",
@@ -12513,8 +12242,7 @@
                 ]
             }
         ],
-        "money": 1450,
-        "route_one_offset": "0x3A2E7"
+        "money": 1450
     },
     "Scientist 10": {
         "trainer_class": "Scientist",
@@ -12567,8 +12295,7 @@
                 ]
             }
         ],
-        "money": 1400,
-        "route_one_offset": "0x3A2EB"
+        "money": 1400
     },
     "Scientist 11": {
         "trainer_class": "Scientist",
@@ -12606,8 +12333,7 @@
                 ]
             }
         ],
-        "money": 1450,
-        "route_one_offset": "0x3A2F0"
+        "money": 1450
     },
     "Scientist 12": {
         "trainer_class": "Scientist",
@@ -12663,8 +12389,7 @@
                 ]
             }
         ],
-        "money": 1650,
-        "route_one_offset": "0x3A2F4"
+        "money": 1650
     },
     "Scientist 13": {
         "trainer_class": "Scientist",
@@ -12704,8 +12429,7 @@
                 ]
             }
         ],
-        "money": 1700,
-        "route_one_offset": "0x3A2F9"
+        "money": 1700
     },
     "Giovanni 1": {
         "trainer_class": "Giovanni",
@@ -12758,8 +12482,7 @@
                 ]
             }
         ],
-        "money": 2871,
-        "route_one_offset": "0x3A2FD"
+        "money": 2871
     },
     "Giovanni 2": {
         "trainer_class": "Giovanni",
@@ -12830,8 +12553,7 @@
                 ]
             }
         ],
-        "money": 4059,
-        "route_one_offset": "0x3A305"
+        "money": 4059
     },
     "Giovanni 3": {
         "trainer_class": "Giovanni",
@@ -12919,8 +12641,7 @@
                 ]
             }
         ],
-        "money": 5445,
-        "route_one_offset": "0x3A30F"
+        "money": 5445
     },
     "Rocket 1": {
         "trainer_class": "Rocket",
@@ -12957,8 +12678,7 @@
                 ]
             }
         ],
-        "money": 390,
-        "route_one_offset": "0x3A31B"
+        "money": 390
     },
     "Rocket 2": {
         "trainer_class": "Rocket",
@@ -13009,8 +12729,7 @@
                 ]
             }
         ],
-        "money": 330,
-        "route_one_offset": "0x3A31F"
+        "money": 330
     },
     "Rocket 3": {
         "trainer_class": "Rocket",
@@ -13047,8 +12766,7 @@
                 ]
             }
         ],
-        "money": 360,
-        "route_one_offset": "0x3A324"
+        "money": 360
     },
     "Rocket 4": {
         "trainer_class": "Rocket",
@@ -13072,8 +12790,7 @@
                 ]
             }
         ],
-        "money": 480,
-        "route_one_offset": "0x3A328"
+        "money": 480
     },
     "Rocket 5": {
         "trainer_class": "Rocket",
@@ -13110,8 +12827,7 @@
                 ]
             }
         ],
-        "money": 510,
-        "route_one_offset": "0x3A32B"
+        "money": 510
     },
     "Rocket 6": {
         "trainer_class": "Rocket",
@@ -13149,8 +12865,7 @@
                 ]
             }
         ],
-        "money": 450,
-        "route_one_offset": "0x3A32F"
+        "money": 450
     },
     "Rocket 7": {
         "trainer_class": "Rocket",
@@ -13189,8 +12904,7 @@
                 ]
             }
         ],
-        "money": 600,
-        "route_one_offset": "0x3A333"
+        "money": 600
     },
     "Rocket 8": {
         "trainer_class": "Rocket",
@@ -13228,8 +12942,7 @@
                 ]
             }
         ],
-        "money": 630,
-        "route_one_offset": "0x3A337"
+        "money": 630
     },
     "Rocket 9": {
         "trainer_class": "Rocket",
@@ -13269,8 +12982,7 @@
                 ]
             }
         ],
-        "money": 630,
-        "route_one_offset": "0x3A33B"
+        "money": 630
     },
     "Rocket 10": {
         "trainer_class": "Rocket",
@@ -13320,8 +13032,7 @@
                 ]
             }
         ],
-        "money": 600,
-        "route_one_offset": "0x3A33F"
+        "money": 600
     },
     "Rocket 11": {
         "trainer_class": "Rocket",
@@ -13393,8 +13104,7 @@
                 ]
             }
         ],
-        "money": 570,
-        "route_one_offset": "0x3A344"
+        "money": 570
     },
     "Rocket 12": {
         "trainer_class": "Rocket",
@@ -13430,8 +13140,7 @@
                 ]
             }
         ],
-        "money": 660,
-        "route_one_offset": "0x3A34A"
+        "money": 660
     },
     "Rocket 13": {
         "trainer_class": "Rocket",
@@ -13513,8 +13222,7 @@
                 ]
             }
         ],
-        "money": 510,
-        "route_one_offset": "0x3A34E"
+        "money": 510
     },
     "Rocket 14": {
         "trainer_class": "Rocket",
@@ -13570,8 +13278,7 @@
                 ]
             }
         ],
-        "money": 600,
-        "route_one_offset": "0x3A355"
+        "money": 600
     },
     "Rocket 15": {
         "trainer_class": "Rocket",
@@ -13607,8 +13314,7 @@
                 ]
             }
         ],
-        "money": 630,
-        "route_one_offset": "0x3A35A"
+        "money": 630
     },
     "Rocket 16": {
         "trainer_class": "Rocket",
@@ -13662,8 +13368,7 @@
                 ]
             }
         ],
-        "money": 690,
-        "route_one_offset": "0x3A35E"
+        "money": 690
     },
     "Rocket 17": {
         "trainer_class": "Rocket",
@@ -13718,8 +13423,7 @@
                 ]
             }
         ],
-        "money": 690,
-        "route_one_offset": "0x3A363"
+        "money": 690
     },
     "Rocket 18": {
         "trainer_class": "Rocket",
@@ -13757,8 +13461,7 @@
                 ]
             }
         ],
-        "money": 630,
-        "route_one_offset": "0x3A368"
+        "money": 630
     },
     "Rocket 19": {
         "trainer_class": "Rocket",
@@ -13814,8 +13517,7 @@
                 ]
             }
         ],
-        "money": 750,
-        "route_one_offset": "0x3A36C"
+        "money": 750
     },
     "Rocket 20": {
         "trainer_class": "Rocket",
@@ -13853,8 +13555,7 @@
                 ]
             }
         ],
-        "money": 780,
-        "route_one_offset": "0x3A371"
+        "money": 780
     },
     "Rocket 21": {
         "trainer_class": "Rocket",
@@ -13926,8 +13627,7 @@
                 ]
             }
         ],
-        "money": 690,
-        "route_one_offset": "0x3A375"
+        "money": 690
     },
     "Rocket 22": {
         "trainer_class": "Rocket",
@@ -13965,8 +13665,7 @@
                 ]
             }
         ],
-        "money": 780,
-        "route_one_offset": "0x3A37B"
+        "money": 780
     },
     "Rocket 23": {
         "trainer_class": "Rocket",
@@ -14006,8 +13705,7 @@
                 ]
             }
         ],
-        "money": 870,
-        "route_one_offset": "0x3A37F"
+        "money": 870
     },
     "Rocket 24": {
         "trainer_class": "Rocket",
@@ -14095,8 +13793,7 @@
                 ]
             }
         ],
-        "money": 750,
-        "route_one_offset": "0x3A383"
+        "money": 750
     },
     "Rocket 25": {
         "trainer_class": "Rocket",
@@ -14152,8 +13849,7 @@
                 ]
             }
         ],
-        "money": 840,
-        "route_one_offset": "0x3A38A"
+        "money": 840
     },
     "Rocket 26": {
         "trainer_class": "Rocket",
@@ -14192,8 +13888,7 @@
                 ]
             }
         ],
-        "money": 870,
-        "route_one_offset": "0x3A38F"
+        "money": 870
     },
     "Rocket 27": {
         "trainer_class": "Rocket",
@@ -14249,8 +13944,7 @@
                 ]
             }
         ],
-        "money": 840,
-        "route_one_offset": "0x3A393"
+        "money": 840
     },
     "Rocket 28": {
         "trainer_class": "Rocket",
@@ -14274,8 +13968,7 @@
                 ]
             }
         ],
-        "money": 990,
-        "route_one_offset": "0x3A398"
+        "money": 990
     },
     "Rocket 29": {
         "trainer_class": "Rocket",
@@ -14299,8 +13992,7 @@
                 ]
             }
         ],
-        "money": 990,
-        "route_one_offset": "0x3A39B"
+        "money": 990
     },
     "Rocket 30": {
         "trainer_class": "Rocket",
@@ -14338,8 +14030,7 @@
                 ]
             }
         ],
-        "money": 870,
-        "route_one_offset": "0x3A39E"
+        "money": 870
     },
     "Rocket 31": {
         "trainer_class": "Rocket",
@@ -14395,8 +14086,7 @@
                 ]
             }
         ],
-        "money": 840,
-        "route_one_offset": "0x3A3A2"
+        "money": 840
     },
     "Rocket 32": {
         "trainer_class": "Rocket",
@@ -14466,8 +14156,7 @@
                 ]
             }
         ],
-        "money": 780,
-        "route_one_offset": "0x3A3A7"
+        "money": 780
     },
     "Rocket 33": {
         "trainer_class": "Rocket",
@@ -14507,8 +14196,7 @@
                 ]
             }
         ],
-        "money": 870,
-        "route_one_offset": "0x3A3AD"
+        "money": 870
     },
     "Rocket 34": {
         "trainer_class": "Rocket",
@@ -14548,8 +14236,7 @@
                 ]
             }
         ],
-        "money": 870,
-        "route_one_offset": "0x3A3B1"
+        "money": 870
     },
     "Rocket 35": {
         "trainer_class": "Rocket",
@@ -14621,8 +14308,7 @@
                 ]
             }
         ],
-        "money": 780,
-        "route_one_offset": "0x3A3B5"
+        "money": 780
     },
     "Rocket 36": {
         "trainer_class": "Rocket",
@@ -14675,8 +14361,7 @@
                 ]
             }
         ],
-        "money": 840,
-        "route_one_offset": "0x3A3BB"
+        "money": 840
     },
     "Rocket 37": {
         "trainer_class": "Rocket",
@@ -14729,8 +14414,7 @@
                 ]
             }
         ],
-        "money": 840,
-        "route_one_offset": "0x3A3C0"
+        "money": 840
     },
     "Rocket 38": {
         "trainer_class": "Rocket",
@@ -14786,8 +14470,7 @@
                 ]
             }
         ],
-        "money": 840,
-        "route_one_offset": "0x3A3C5"
+        "money": 840
     },
     "Rocket 39": {
         "trainer_class": "Rocket",
@@ -14810,8 +14493,7 @@
                 ]
             }
         ],
-        "money": 990,
-        "route_one_offset": "0x3A3CA"
+        "money": 990
     },
     "Rocket 40": {
         "trainer_class": "Rocket",
@@ -14899,8 +14581,7 @@
                 ]
             }
         ],
-        "money": 750,
-        "route_one_offset": "0x3A3CD"
+        "money": 750
     },
     "Rocket 41": {
         "trainer_class": "Rocket",
@@ -14956,8 +14637,7 @@
                 ]
             }
         ],
-        "money": 960,
-        "route_one_offset": "0x3A3D4"
+        "money": 960
     },
     "Jessie & James 1": {
         "trainer_class": "Rocket",
@@ -15009,8 +14689,7 @@
                 ]
             }
         ],
-        "money": 420,
-        "route_one_offset": "0x3A3D9"
+        "money": 420
     },
     "Jessie & James 2": {
         "trainer_class": "Rocket",
@@ -15064,8 +14743,7 @@
                 ]
             }
         ],
-        "money": 750,
-        "route_one_offset": "0x3A3DE"
+        "money": 750
     },
     "Jessie & James 3": {
         "trainer_class": "Rocket",
@@ -15120,8 +14798,7 @@
                 ]
             }
         ],
-        "money": 810,
-        "route_one_offset": "0x3A3E3"
+        "money": 810
     },
     "Jessie & James 4": {
         "trainer_class": "Rocket",
@@ -15176,8 +14853,7 @@
                 ]
             }
         ],
-        "money": 930,
-        "route_one_offset": "0x3A3E8"
+        "money": 930
     },
     "Rocket 46": {
         "trainer_class": "Rocket",
@@ -15199,8 +14875,7 @@
                 ]
             }
         ],
-        "money": 480,
-        "route_one_offset": "0x3A3ED"
+        "money": 480
     },
     "Rocket 47": {
         "trainer_class": "Rocket",
@@ -15222,8 +14897,7 @@
                 ]
             }
         ],
-        "money": 810,
-        "route_one_offset": "0x3A3F0"
+        "money": 810
     },
     "Rocket 48": {
         "trainer_class": "Rocket",
@@ -15246,8 +14920,7 @@
                 ]
             }
         ],
-        "money": 870,
-        "route_one_offset": "0x3A3F3"
+        "money": 870
     },
     "Rocket 49": {
         "trainer_class": "Rocket",
@@ -15270,8 +14943,7 @@
                 ]
             }
         ],
-        "money": 990,
-        "route_one_offset": "0x3A3F6"
+        "money": 990
     },
     "CooltrainerM 1": {
         "trainer_class": "CooltrainerM",
@@ -15311,8 +14983,7 @@
                 ]
             }
         ],
-        "money": 1365,
-        "route_one_offset": "0x3A3F9"
+        "money": 1365
     },
     "CooltrainerM 2": {
         "trainer_class": "CooltrainerM",
@@ -15367,8 +15038,7 @@
                 ]
             }
         ],
-        "money": 1505,
-        "route_one_offset": "0x3A3FD"
+        "money": 1505
     },
     "CooltrainerM 3": {
         "trainer_class": "CooltrainerM",
@@ -15424,8 +15094,7 @@
                 ]
             }
         ],
-        "money": 1505,
-        "route_one_offset": "0x3A402"
+        "money": 1505
     },
     "CooltrainerM 4": {
         "trainer_class": "CooltrainerM",
@@ -15464,8 +15133,7 @@
                 ]
             }
         ],
-        "money": 1575,
-        "route_one_offset": "0x3A407"
+        "money": 1575
     },
     "CooltrainerM 5": {
         "trainer_class": "CooltrainerM",
@@ -15537,8 +15205,7 @@
                 ]
             }
         ],
-        "money": 1470,
-        "route_one_offset": "0x3A40B"
+        "money": 1470
     },
     "CooltrainerM 6": {
         "trainer_class": "CooltrainerM",
@@ -15594,8 +15261,7 @@
                 ]
             }
         ],
-        "money": 1540,
-        "route_one_offset": "0x3A411"
+        "money": 1540
     },
     "CooltrainerM 7": {
         "trainer_class": "CooltrainerM",
@@ -15619,8 +15285,7 @@
                 ]
             }
         ],
-        "money": 1715,
-        "route_one_offset": "0x3A416"
+        "money": 1715
     },
     "CooltrainerM 8": {
         "trainer_class": "CooltrainerM",
@@ -15660,8 +15325,7 @@
                 ]
             }
         ],
-        "money": 1540,
-        "route_one_offset": "0x3A419"
+        "money": 1540
     },
     "CooltrainerM 9": {
         "trainer_class": "CooltrainerM",
@@ -15701,8 +15365,7 @@
                 ]
             }
         ],
-        "money": 1365,
-        "route_one_offset": "0x3A41D"
+        "money": 1365
     },
     "CooltrainerM 10": {
         "trainer_class": "CooltrainerM",
@@ -15726,8 +15389,7 @@
                 ]
             }
         ],
-        "money": 1505,
-        "route_one_offset": "0x3A421"
+        "money": 1505
     },
     "CooltrainerF 1": {
         "trainer_class": "CooltrainerF",
@@ -15783,8 +15445,7 @@
                 ]
             }
         ],
-        "money": 840,
-        "route_one_offset": "0x3A424"
+        "money": 840
     },
     "CooltrainerF 2": {
         "trainer_class": "CooltrainerF",
@@ -15840,8 +15501,7 @@
                 ]
             }
         ],
-        "money": 1505,
-        "route_one_offset": "0x3A429"
+        "money": 1505
     },
     "CooltrainerF 3": {
         "trainer_class": "CooltrainerF",
@@ -15896,8 +15556,7 @@
                 ]
             }
         ],
-        "money": 1505,
-        "route_one_offset": "0x3A42E"
+        "money": 1505
     },
     "CooltrainerF 4": {
         "trainer_class": "CooltrainerF",
@@ -15937,8 +15596,7 @@
                 ]
             }
         ],
-        "money": 1610,
-        "route_one_offset": "0x3A433"
+        "money": 1610
     },
     "CooltrainerF 5": {
         "trainer_class": "CooltrainerF",
@@ -15978,8 +15636,7 @@
                 ]
             }
         ],
-        "money": 1540,
-        "route_one_offset": "0x3A437"
+        "money": 1540
     },
     "CooltrainerF 6": {
         "trainer_class": "CooltrainerF",
@@ -16019,8 +15676,7 @@
                 ]
             }
         ],
-        "money": 1575,
-        "route_one_offset": "0x3A43B"
+        "money": 1575
     },
     "CooltrainerF 7": {
         "trainer_class": "CooltrainerF",
@@ -16060,8 +15716,7 @@
                 ]
             }
         ],
-        "money": 1575,
-        "route_one_offset": "0x3A43F"
+        "money": 1575
     },
     "CooltrainerF 8": {
         "trainer_class": "CooltrainerF",
@@ -16116,8 +15771,7 @@
                 ]
             }
         ],
-        "money": 1505,
-        "route_one_offset": "0x3A443"
+        "money": 1505
     },
     "Bruno 1": {
         "trainer_class": "Bruno",
@@ -16205,8 +15859,7 @@
                 ]
             }
         ],
-        "money": 5742,
-        "route_one_offset": "0x3A448"
+        "money": 5742
     },
     "Brock 1": {
         "trainer_class": "Brock",
@@ -16243,8 +15896,7 @@
                 ]
             }
         ],
-        "money": 1188,
-        "route_one_offset": "0x3A454"
+        "money": 1188
     },
     "Misty 1": {
         "trainer_class": "Misty",
@@ -16282,8 +15934,7 @@
                 ]
             }
         ],
-        "money": 2079,
-        "route_one_offset": "0x3A45A"
+        "money": 2079
     },
     "LtSurge 1": {
         "trainer_class": "LtSurge",
@@ -16307,8 +15958,7 @@
                 ]
             }
         ],
-        "money": 2772,
-        "route_one_offset": "0x3A460"
+        "money": 2772
     },
     "Erika 1": {
         "trainer_class": "Erika",
@@ -16364,8 +16014,7 @@
                 ]
             }
         ],
-        "money": 3168,
-        "route_one_offset": "0x3A464"
+        "money": 3168
     },
     "Koga 1": {
         "trainer_class": "Koga",
@@ -16437,8 +16086,7 @@
                 ]
             }
         ],
-        "money": 4950,
-        "route_one_offset": "0x3A46C"
+        "money": 4950
     },
     "Blaine 1": {
         "trainer_class": "Blaine",
@@ -16494,8 +16142,7 @@
                 ]
             }
         ],
-        "money": 5346,
-        "route_one_offset": "0x3A476"
+        "money": 5346
     },
     "Sabrina 1": {
         "trainer_class": "Sabrina",
@@ -16548,8 +16195,7 @@
                 ]
             }
         ],
-        "money": 4950,
-        "route_one_offset": "0x3A47E"
+        "money": 4950
     },
     "Gentleman 1": {
         "trainer_class": "Gentleman",
@@ -16587,8 +16233,7 @@
                 ]
             }
         ],
-        "money": 1260,
-        "route_one_offset": "0x3A486"
+        "money": 1260
     },
     "Gentleman 2": {
         "trainer_class": "Gentleman",
@@ -16628,8 +16273,7 @@
                 ]
             }
         ],
-        "money": 1330,
-        "route_one_offset": "0x3A48A"
+        "money": 1330
     },
     "Gentleman 3": {
         "trainer_class": "Gentleman",
@@ -16667,8 +16311,7 @@
                 ]
             }
         ],
-        "money": 1540,
-        "route_one_offset": "0x3A48E"
+        "money": 1540
     },
     "Gentleman 3 Duplicate": {
         "trainer_class": "Gentleman",
@@ -16706,8 +16349,7 @@
                 ]
             }
         ],
-        "money": 1540,
-        "route_one_offset": "0x3A48E"
+        "money": 1540
     },
     "Gentleman 4": {
         "trainer_class": "Gentleman",
@@ -16731,8 +16373,7 @@
                 ]
             }
         ],
-        "money": 3360,
-        "route_one_offset": "0x3A492"
+        "money": 3360
     },
     "Gentleman 5": {
         "trainer_class": "Gentleman",
@@ -16767,8 +16408,7 @@
                 ]
             }
         ],
-        "money": 1190,
-        "route_one_offset": "0x3A495"
+        "money": 1190
     },
     "Rival2 1": {
         "trainer_class": "Rival2",
@@ -16839,8 +16479,7 @@
                 ]
             }
         ],
-        "money": 1300,
-        "route_one_offset": "0x3A499"
+        "money": 1300
     },
     "Rival2 2 Jolteon": {
         "trainer_class": "Rival2",
@@ -16927,8 +16566,7 @@
                 ]
             }
         ],
-        "money": 1625,
-        "route_one_offset": "0x3A4A3"
+        "money": 1625
     },
     "Rival2 2 Flareon": {
         "trainer_class": "Rival2",
@@ -17012,8 +16650,7 @@
                 ]
             }
         ],
-        "money": 1625,
-        "route_one_offset": "0x3A4AF"
+        "money": 1625
     },
     "Rival2 2 Vaporeon": {
         "trainer_class": "Rival2",
@@ -17098,8 +16735,7 @@
                 ]
             }
         ],
-        "money": 1625,
-        "route_one_offset": "0x3A4BB"
+        "money": 1625
     },
     "Rival2 3 Jolteon": {
         "trainer_class": "Rival2",
@@ -17187,8 +16823,7 @@
                 ]
             }
         ],
-        "money": 2600,
-        "route_one_offset": "0x3A4C7"
+        "money": 2600
     },
     "Rival2 3 Flareon": {
         "trainer_class": "Rival2",
@@ -17276,8 +16911,7 @@
                 ]
             }
         ],
-        "money": 2600,
-        "route_one_offset": "0x3A4D3"
+        "money": 2600
     },
     "Rival2 3 Vaporeon": {
         "trainer_class": "Rival2",
@@ -17365,8 +16999,7 @@
                 ]
             }
         ],
-        "money": 2600,
-        "route_one_offset": "0x3A4DF"
+        "money": 2600
     },
     "Rival2 4 Jolteon": {
         "trainer_class": "Rival2",
@@ -17470,8 +17103,7 @@
                 ]
             }
         ],
-        "money": 3445,
-        "route_one_offset": "0x3A4EB"
+        "money": 3445
     },
     "Rival2 4 Flareon": {
         "trainer_class": "Rival2",
@@ -17575,8 +17207,7 @@
                 ]
             }
         ],
-        "money": 3445,
-        "route_one_offset": "0x3A4F9"
+        "money": 3445
     },
     "Rival2 4 Vaporeon": {
         "trainer_class": "Rival2",
@@ -17680,8 +17311,7 @@
                 ]
             }
         ],
-        "money": 3445,
-        "route_one_offset": "0x3A507"
+        "money": 3445
     },
     "Rival3 Jolteon": {
         "trainer_class": "Rival3",
@@ -17785,8 +17415,7 @@
                 ]
             }
         ],
-        "money": 6435,
-        "route_one_offset": "0x3A515"
+        "money": 6435
     },
     "Rival3 Flareon": {
         "trainer_class": "Rival3",
@@ -17890,8 +17519,7 @@
                 ]
             }
         ],
-        "money": 6435,
-        "route_one_offset": "0x3A523"
+        "money": 6435
     },
     "Rival3 Vaporeon": {
         "trainer_class": "Rival3",
@@ -17995,8 +17623,7 @@
                 ]
             }
         ],
-        "money": 6435,
-        "route_one_offset": "0x3A531"
+        "money": 6435
     },
     "Lorelei 1": {
         "trainer_class": "Lorelei",
@@ -18084,8 +17711,7 @@
                 ]
             }
         ],
-        "money": 5544,
-        "route_one_offset": "0x3A53F"
+        "money": 5544
     },
     "Channeler 1": {
         "trainer_class": "Channeler",
@@ -18108,8 +17734,7 @@
                 ]
             }
         ],
-        "money": 660,
-        "route_one_offset": "0x3A54B"
+        "money": 660
     },
     "Channeler 2": {
         "trainer_class": "Channeler",
@@ -18132,8 +17757,7 @@
                 ]
             }
         ],
-        "money": 720,
-        "route_one_offset": "0x3A54E"
+        "money": 720
     },
     "Channeler 3": {
         "trainer_class": "Channeler",
@@ -18171,8 +17795,7 @@
                 ]
             }
         ],
-        "money": 690,
-        "route_one_offset": "0x3A551"
+        "money": 690
     },
     "Channeler 4": {
         "trainer_class": "Channeler",
@@ -18195,8 +17818,7 @@
                 ]
             }
         ],
-        "money": 720,
-        "route_one_offset": "0x3A555"
+        "money": 720
     },
     "Channeler 5": {
         "trainer_class": "Channeler",
@@ -18219,8 +17841,7 @@
                 ]
             }
         ],
-        "money": 690,
-        "route_one_offset": "0x3A558"
+        "money": 690
     },
     "Channeler 6": {
         "trainer_class": "Channeler",
@@ -18243,8 +17864,7 @@
                 ]
             }
         ],
-        "money": 720,
-        "route_one_offset": "0x3A55B"
+        "money": 720
     },
     "Channeler 7": {
         "trainer_class": "Channeler",
@@ -18267,8 +17887,7 @@
                 ]
             }
         ],
-        "money": 720,
-        "route_one_offset": "0x3A55E"
+        "money": 720
     },
     "Channeler 8": {
         "trainer_class": "Channeler",
@@ -18291,8 +17910,7 @@
                 ]
             }
         ],
-        "money": 660,
-        "route_one_offset": "0x3A561"
+        "money": 660
     },
     "Channeler 9": {
         "trainer_class": "Channeler",
@@ -18315,8 +17933,7 @@
                 ]
             }
         ],
-        "money": 720,
-        "route_one_offset": "0x3A564"
+        "money": 720
     },
     "Channeler 10": {
         "trainer_class": "Channeler",
@@ -18354,8 +17971,7 @@
                 ]
             }
         ],
-        "money": 690,
-        "route_one_offset": "0x3A567"
+        "money": 690
     },
     "Channeler 11": {
         "trainer_class": "Channeler",
@@ -18378,8 +17994,7 @@
                 ]
             }
         ],
-        "money": 720,
-        "route_one_offset": "0x3A56B"
+        "money": 720
     },
     "Channeler 12": {
         "trainer_class": "Channeler",
@@ -18402,8 +18017,7 @@
                 ]
             }
         ],
-        "money": 660,
-        "route_one_offset": "0x3A56E"
+        "money": 660
     },
     "Channeler 13": {
         "trainer_class": "Channeler",
@@ -18426,8 +18040,7 @@
                 ]
             }
         ],
-        "money": 720,
-        "route_one_offset": "0x3A571"
+        "money": 720
     },
     "Channeler 14": {
         "trainer_class": "Channeler",
@@ -18450,8 +18063,7 @@
                 ]
             }
         ],
-        "money": 690,
-        "route_one_offset": "0x3A574"
+        "money": 690
     },
     "Channeler 15": {
         "trainer_class": "Channeler",
@@ -18474,8 +18086,7 @@
                 ]
             }
         ],
-        "money": 720,
-        "route_one_offset": "0x3A577"
+        "money": 720
     },
     "Channeler 16": {
         "trainer_class": "Channeler",
@@ -18498,8 +18109,7 @@
                 ]
             }
         ],
-        "money": 660,
-        "route_one_offset": "0x3A57A"
+        "money": 660
     },
     "Channeler 17": {
         "trainer_class": "Channeler",
@@ -18522,8 +18132,7 @@
                 ]
             }
         ],
-        "money": 720,
-        "route_one_offset": "0x3A57D"
+        "money": 720
     },
     "Channeler 18": {
         "trainer_class": "Channeler",
@@ -18546,8 +18155,7 @@
                 ]
             }
         ],
-        "money": 660,
-        "route_one_offset": "0x3A580"
+        "money": 660
     },
     "Channeler 19": {
         "trainer_class": "Channeler",
@@ -18600,8 +18208,7 @@
                 ]
             }
         ],
-        "money": 660,
-        "route_one_offset": "0x3A583"
+        "money": 660
     },
     "Channeler 20": {
         "trainer_class": "Channeler",
@@ -18624,8 +18231,7 @@
                 ]
             }
         ],
-        "money": 720,
-        "route_one_offset": "0x3A588"
+        "money": 720
     },
     "Channeler 21": {
         "trainer_class": "Channeler",
@@ -18648,8 +18254,7 @@
                 ]
             }
         ],
-        "money": 720,
-        "route_one_offset": "0x3A58B"
+        "money": 720
     },
     "Channeler 22": {
         "trainer_class": "Channeler",
@@ -18689,8 +18294,7 @@
                 ]
             }
         ],
-        "money": 1020,
-        "route_one_offset": "0x3A58E"
+        "money": 1020
     },
     "Channeler 23": {
         "trainer_class": "Channeler",
@@ -18714,8 +18318,7 @@
                 ]
             }
         ],
-        "money": 1140,
-        "route_one_offset": "0x3A592"
+        "money": 1140
     },
     "Channeler 24": {
         "trainer_class": "Channeler",
@@ -18771,8 +18374,7 @@
                 ]
             }
         ],
-        "money": 990,
-        "route_one_offset": "0x3A595"
+        "money": 990
     },
     "Agatha 1": {
         "trainer_class": "Agatha",
@@ -18860,8 +18462,7 @@
                 ]
             }
         ],
-        "money": 5940,
-        "route_one_offset": "0x3A59A"
+        "money": 5940
     },
     "Lance 1": {
         "trainer_class": "Lance",
@@ -18949,7 +18550,6 @@
                 ]
             }
         ],
-        "money": 6138,
-        "route_one_offset": "0x3A5A6"
+        "money": 6138
     }
 }

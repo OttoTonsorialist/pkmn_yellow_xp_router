@@ -1,0 +1,125 @@
+{
+    "special_types": [
+        "Water",
+        "Grass",
+        "Fire",
+        "Ice",
+        "Electric",
+        "Psychic",
+        "Dragon"
+    ],
+    "type_chart": {
+        "Normal": {
+            "Rock": "Not Very Effective",
+            "Ghost": "Immune"
+        },
+        "Fighting": {
+            "Normal": "Super Effective",
+            "Flying": "Not Very Effective",
+            "Poison": "Not Very Effective",
+            "Rock": "Super Effective",
+            "Bug": "Not Very Effective",
+            "Ghost": "Immune",
+            "Psychic": "Not Very Effective",
+            "Ice": "Super Effective"
+        },
+        "Flying": {
+            "Fighting": "Super Effective",
+            "Rock": "Not Very Effective",
+            "Bug": "Super Effective",
+            "Grass": "Super Effective",
+            "Electric": "Not Very Effective"
+        },
+        "Poison": {
+            "Poison": "Not Very Effective",
+            "Ground": "Not Very Effective",
+            "Rock": "Not Very Effective",
+            "Bug": "Super Effective",
+            "Ghost": "Not Very Effective",
+            "Grass": "Super Effective"
+        },
+        "Ground": {
+            "Flying": "Immune",
+            "Poison": "Super Effective",
+            "Rock": "Super Effective",
+            "Bug": "Not Very Effective",
+            "Fire": "Super Effective",
+            "Grass": "Not Very Effective",
+            "Electric": "Super Effective"
+        },
+        "Rock": {
+            "Fighting": "Not Very Effective",
+            "Flying": "Super Effective",
+            "Ground": "Not Very Effective",
+            "Bug": "Super Effective",
+            "Fire": "Super Effective",
+            "Ice": "Super Effective"
+        },
+        "Bug": {
+            "Fighting": "Not Very Effective",
+            "Flying": "Not Very Effective",
+            "Poison": "Super Effective",
+            "Ghost": "Not Very Effective",
+            "Fire": "Not Very Effective",
+            "Grass": "Super Effective",
+            "Psychic": "Super Effective"
+        },
+        "Ghost": {
+            "Normal": "Immune",
+            "Ghost": "Super Effective",
+            "Psychic": "Immune"
+        },
+        "Fire": {
+            "Rock": "Not Very Effective",
+            "Bug": "Super Effective",
+            "Fire": "Not Very Effective",
+            "Water": "Not Very Effective",
+            "Grass": "Super Effective",
+            "Ice": "Super Effective",
+            "Dragon": "Not Very Effective"
+        },
+        "Water": {
+            "Ground": "Super Effective",
+            "Rock": "Super Effective",
+            "Fire": "Super Effective",
+            "Water": "Not Very Effective",
+            "Grass": "Not Very Effective",
+            "Dragon": "Not Very Effective"
+        },
+        "Grass": {
+            "Flying": "Not Very Effective",
+            "Poison": "Not Very Effective",
+            "Ground": "Super Effective",
+            "Rock": "Super Effective",
+            "Bug": "Not Very Effective",
+            "Fire": "Not Very Effective",
+            "Water": "Super Effective",
+            "Grass": "Not Very Effective",
+            "Dragon": "Not Very Effective"
+        },
+        "Electric": {
+            "Flying": "Super Effective",
+            "Ground": "Immune",
+            "Water": "Super Effective",
+            "Grass": "Not Very Effective",
+            "Electric": "Not Very Effective",
+            "Dragon": "Not Very Effective"
+        },
+        "Psychic": {
+            "Fighting": "Super Effective",
+            "Poison": "Super Effective",
+            "Psychic": "Not Very Effective"
+        },
+        "Ice": {
+            "Flying": "Super Effective",
+            "Ground": "Super Effective",
+            "Water": "Not Very Effective",
+            "Grass": "Super Effective",
+            "Ice": "Not Very Effective",
+            "Dragon": "Super Effective"
+        },
+        "Dragon": {
+            "Dragon": "Super Effective"
+        }
+    }
+}

@@ -4,11 +4,10 @@ import logging
 from typing import List, Tuple
 
 from utils.constants import const
-from utils.config_manager import config
-from utils import route_one_utils
 from routing.route_events import EventDefinition, EventFolder, EventGroup, EventItem, LearnMoveEventDefinition, TrainerEventDefinition
 import routing.router
-import pkmn
+from pkmn import gen_factory
+
 
 logger = logging.getLogger(__name__)
 
@@ -33,6 +32,8 @@ class MainController:
         self._selected_ids = []
         self._is_record_mode_active = False
         self._exception_info = []
+        self._route_filter_types = []
+        self._route_search = ""
 
         self._name_change_events = []
         self._version_change_events = []
@@ -152,7 +153,7 @@ class MainController:
         if self._current_preview_event is not None and self._current_preview_event.trainer_def.trainer_name == trainer_name:
             return
         
-        if pkmn.current_gen_info().trainer_db().get_trainer(trainer_name) is None:
+        if gen_factory.current_gen_info().trainer_db().get_trainer(trainer_name) is None:
             self._current_preview_event = None
         else:
             self._current_preview_event = EventDefinition(trainer_def=TrainerEventDefinition(trainer_name))
@@ -298,6 +299,26 @@ class MainController:
     def set_record_mode(self, new_record_mode):
         self._is_record_mode_active = new_record_mode
         self._on_record_mode_change()
+
+    @handle_exceptions
+    def set_route_filter_types(self, filter_options):
+        self._route_filter_types = filter_options
+        self._on_route_change()
+        self._on_event_selection()
+
+    @handle_exceptions
+    def set_route_search(self, search):
+        self._route_search = search
+        self._on_route_change()
+        self._on_event_selection()
+    
+    @handle_exceptions
+    def load_all_custom_versions(self):
+        gen_factory._gen_factory.reload_all_custom_gens()
+    
+    @handle_exceptions
+    def create_custom_version(self, base_version, custom_version):
+        gen_factory._gen_factory.get_specific_version(base_version).create_new_custom_gen(custom_version)
     
     def trigger_exception(self, exception_message):
         self._on_exception(exception_message)
@@ -352,6 +373,16 @@ class MainController:
     def get_defeated_trainers(self):
         return self._data.defeated_trainers
     
+    def get_route_search_string(self) -> str:
+        if not self._route_search:
+            return None
+        return self._route_search
+    
+    def get_route_filter_types(self) -> List[str]:
+        if len(self._route_filter_types) == 0:
+            return None
+        return self._route_filter_types
+    
     def is_empty(self):
         return len(self._data.root_folder.children) == 0
     
@@ -377,6 +408,24 @@ class MainController:
             self.get_single_selected_event_id(allow_event_items=allow_event_items)
         )
     
+    def get_active_state(self):
+        # The idea here is we want to get the current state to operate on
+        # MOST of the time, this is just the final state of the selected event
+        # (since we will insert after the selected event)
+        result = self.get_single_selected_event_obj(allow_event_items=False)
+        if result is not None:
+            return result.final_state
+        
+        # If no event is selected, because we are looking at an empty route
+        # then just get the initial route state
+        if self.is_empty():
+            return self._data.init_route_state
+        
+        # If no event is selected, but the route is non-empty
+        # then we will insert after the final event
+        return self.get_final_state()
+
+    
     def can_insert_after_current_selection(self):
         # Can always insert if the route is empty
         if self.is_empty():
@@ -396,28 +445,6 @@ class MainController:
     def export_notes(self, route_name):
         self._data.export_notes(route_name)
 
-    def just_export_and_run(self, route_name):
-        success = False
-        try:
-            jar_path = config.get_route_one_path()
-            if not jar_path:
-                config_path, _, _ = route_one_utils.export_to_route_one(self._data, route_name)
-                result = f"Could not run RouteOne, jar path not set. Exported RouteOne files: {config_path}"
-            else:
-                config_path, _, out_path = route_one_utils.export_to_route_one(self._data, route_name)
-                error_code = route_one_utils.run_route_one(jar_path, config_path)
-                if not error_code:
-                    success = True
-                    result = f"Ran RouteOne successfully. Result file: {out_path}"
-                else:
-                    result = f"RouteOne exited with error code: {error_code}"
-        except Exception as e:
-            result = f"Exception attempting to export and run RouteOne: {type(e)}: {e}"
-            logger.error(e)
-            logger.exception(e)
-        
-        return success, result
-    
     def is_record_mode_active(self):
         return self._is_record_mode_active
     

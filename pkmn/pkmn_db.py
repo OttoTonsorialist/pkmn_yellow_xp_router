@@ -26,14 +26,31 @@ class PkmnDB:
         self._data = data
     
     def validate_moves(self, move_db:MoveDB):
+        invalid_mons = []
+
         for cur_mon in self._data.values():
             for move in cur_mon.initial_moves + cur_mon.tmhm_moves:
                 if move_db.get_move(move) == None:
-                    print(f"Found invalid move {move} for mon {cur_mon.name}")
+                    invalid_mons.append((cur_mon.name, move))
 
             for [_, move] in cur_mon.levelup_moves:
                 if move_db.get_move(move) == None:
-                    print(f"Found invalid move {move} for mon {cur_mon.name}")
+                    invalid_mons.append((cur_mon.name, move))
+        
+        if len(invalid_mons) > 0:
+            raise ValueError(f"Invalid mons detected with unsupported moves: {invalid_mons}")
+    
+    def validate_types(self, supported_types):
+        invalid_mons = []
+
+        for cur_mon in self._data.values():
+            if cur_mon.first_type not in supported_types:
+                invalid_mons.append((cur_mon.name, cur_mon.first_type))
+            if cur_mon.second_type not in supported_types:
+                invalid_mons.append((cur_mon.name, cur_mon.second_type))
+        
+        if len(invalid_mons) > 0:
+            raise ValueError(f"Invalid mons detected with unsupported types: {invalid_mons}")
     
     def get_all_names(self) -> List[str]:
         return list(self._data.keys())
@@ -79,14 +96,19 @@ class TrainerDB:
             self.class_oriented_trainers[trainer_obj.trainer_class].append(trainer_obj.name)
     
     def validate_trainers(self, pkmn_db:PkmnDB, move_db:MoveDB):
+        invalid_trainers = []
+
         for cur_trainer in self._data.values():
             for cur_mon in cur_trainer.pkmn:
                 if pkmn_db.get_pkmn(cur_mon.name) is None:
-                    print(f"Invalid mon found: {cur_mon.name} from trainer {cur_trainer.name}")
+                    invalid_trainers.append((cur_trainer.name, cur_mon.name))
                 
                 for cur_move in cur_mon.move_list:
                     if move_db.get_move(cur_move) is None:
-                        print(f"Invalid move found: {cur_move} on mon {cur_mon.name} from trainer {cur_trainer.name}")
+                        invalid_trainers.append((cur_trainer.name, cur_mon.name, cur_move))
+        
+        if len(invalid_trainers) > 0:
+            raise ValueError(f"Invalid trainers found with invalid mons/moves: {invalid_trainers}")
     
     def get_trainer(self, trainer_name):
         return self._data.get(trainer_name)
@@ -146,9 +168,14 @@ class ItemDB:
                 self.mart_items[mart].append(cur_base_item.name)
     
     def validate_tms_hms(self, move_db:MoveDB):
+        invalid_tms_hms = []
         for cur_item_name in self.tms:
-            if move_db.get_move(self.get_item(cur_item_name).move_name) is None:
-                print(f"Found invalid move from TM/HM: {cur_item_name}")
+            move_name = self.get_item(cur_item_name).move_name
+            if move_db.get_move(move_name) is None:
+                invalid_tms_hms.append((cur_item_name, move_name))
+        
+        if len(invalid_tms_hms) > 0:
+            raise ValueError(f"Found TM/HM(s) with invalid moves: {invalid_tms_hms}")
     
     def get_item(self, item_name):
         if item_name is None:
@@ -210,6 +237,15 @@ class MoveDB:
                     stat_reduction_moves[cur_move.name] = cur_stat_mods
 
         self.stat_mod_moves.update(stat_reduction_moves)
+    
+    def validate_move_types(self, supported_types):
+        invalid_moves = []
+        for cur_move in self._data.values():
+            if cur_move.move_type not in supported_types:
+                invalid_moves.append((cur_move.name, cur_move.move_type))
+        
+        if len(invalid_moves) > 0:
+            raise ValueError(f"Detected moves with invalid types: {invalid_moves}")
     
     def get_move(self, move_name):
         if move_name is None:

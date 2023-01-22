@@ -6902,7 +6902,7 @@
         ],
         "money": 1632
     },
-    "CoolTrainerM Gaven Rematch 1": {
+    "CoolTrainerM Gaven Rematch 2": {
         "dv": {
             "atk": 13,
             "def": 8,
@@ -6912,7 +6912,7 @@
         },
         "trainer_class": "CoolTrainerM",
         "trainer_location": "Route26",
-        "trainer_name": "CoolTrainerM Gaven Rematch 1",
+        "trainer_name": "CoolTrainerM Gaven Rematch 2",
         "pokemon": [
             {
                 "name": "Victreebel",
@@ -27561,4 +27561,5 @@
         ],
         "money": 720
     }
+
 }

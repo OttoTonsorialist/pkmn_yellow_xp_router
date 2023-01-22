@@ -1,8 +1,7 @@
 
 from typing import List
 from utils.constants import const
-from routing import route_state_objects
-import pkmn
+from pkmn.gen_factory import current_gen_info
 
 event_id_counter = 0
 
@@ -270,17 +269,17 @@ class EventDefinition:
 
     def get_trainer_obj(self):
         if self._trainer_obj is None and self.trainer_def is not None:
-            self._trainer_obj = pkmn.current_gen_info().trainer_db().get_trainer(self.trainer_def.trainer_name)
+            self._trainer_obj = current_gen_info().trainer_db().get_trainer(self.trainer_def.trainer_name)
             if self._trainer_obj is None:
-                raise ValueError(f"Could not find trainer object for trainer named: '{self.trainer_def.trainer_name}', from trainer_db for version: {pkmn.current_gen_info().version_name()}")
+                raise ValueError(f"Could not find trainer object for trainer named: '{self.trainer_def.trainer_name}', from trainer_db for version: {current_gen_info().version_name()}")
         return self._trainer_obj
     
     def get_wild_pkmn(self):
         if self._wild_pkmn is None and self.wild_pkmn_info is not None:
             if self.wild_pkmn_info.trainer_pkmn:
-                self._wild_pkmn = pkmn.current_gen_info().create_trainer_pkmn(self.wild_pkmn_info.name, self.wild_pkmn_info.level)
+                self._wild_pkmn = current_gen_info().create_trainer_pkmn(self.wild_pkmn_info.name, self.wild_pkmn_info.level)
             else:
-                self._wild_pkmn = pkmn.current_gen_info().create_wild_pkmn(self.wild_pkmn_info.name, self.wild_pkmn_info.level)
+                self._wild_pkmn = current_gen_info().create_wild_pkmn(self.wild_pkmn_info.name, self.wild_pkmn_info.level)
         return self._wild_pkmn
     
     def get_pokemon_list(self):
@@ -382,6 +381,20 @@ class EventDefinition:
     def is_highlighted(self):
         return const.HIGHLIGHT_LABEL in self.tags
     
+    def do_render(self, search=None, filter_types=None):
+        if filter_types is not None:
+            if self.get_event_type() not in filter_types:
+                return False
+
+        if search is not None:
+            if (
+                search.lower() not in self.get_item_label().lower() and
+                search.lower() not in self.notes.lower()
+            ):
+                return False
+
+        return True
+    
     def toggle_highlight(self):
         if const.HIGHLIGHT_LABEL in self.tags:
             self.tags.remove(const.HIGHLIGHT_LABEL)
@@ -468,7 +481,7 @@ class EventItem:
     def contains_id(self, id_val):
         return self.group_id == id_val
     
-    def apply(self, cur_state: route_state_objects.RouteState):
+    def apply(self, cur_state):
         self.init_state = cur_state
         self._enabled = self.event_definition.enabled
         if not self.is_enabled():
@@ -638,8 +651,6 @@ class EventGroup:
                 pkmn_counter[cur_pkmn.name] = pkmn_counter.get(cur_pkmn.name, 0) + 1
                 
                 next_state = self.event_items[-1].final_state
-                if next_state is None or cur_state is None:
-                    breakpoint()
                 # when a level up occurs
                 if next_state.solo_pkmn.cur_level != cur_state.solo_pkmn.cur_level:
                     # learn moves, if needed
@@ -741,9 +752,18 @@ class EventGroup:
     def is_major_fight(self):
         if self.event_definition.trainer_def is None:
             return False
-        if pkmn.current_gen_info() is None:
+        if current_gen_info() is None:
             return False
-        return pkmn.current_gen_info().is_major_fight(self.event_definition.trainer_def.trainer_name)
+        return current_gen_info().is_major_fight(self.event_definition.trainer_def.trainer_name)
+    
+    def do_render(self, search=None, filter_types=None):
+        for learn_move in self.level_up_learn_event_defs:
+            # TODO: pretty hacky, but fixing this requires updating the entire way we handle level-up moves
+            # TODO: unclear if the change is actually worth it
+            if EventDefinition(learn_move=learn_move).do_render(search=search, filter_types=filter_types):
+                return True
+
+        return self.event_definition.do_render(search=search, filter_types=filter_types)
     
     def get_tags(self):
         if self.has_errors():
@@ -881,6 +901,13 @@ class EventFolder:
     
     def has_errors(self):
         return self.child_errors
+    
+    def do_render(self, search=None, filter_types=None):
+        for test_event in self.children:
+            if test_event.do_render(search=search, filter_types=filter_types):
+                return True
+
+        return False
     
     def get_tags(self):
         if self.has_errors():

@@ -23,7 +23,6 @@ class Config:
         except Exception as e:
             raw = {}
         
-        self._route_one_path = raw.get(const.CONFIG_ROUTE_ONE_PATH, "")
         self._window_geometry = raw.get(const.CONFIG_WINDOW_GEOMETRY, "")
         self._user_data_dir = raw.get(const.USER_LOCATION_DATA_KEY, io_utils.get_default_user_data_dir())
         const.config_user_data_dir(self._user_data_dir)
@@ -47,7 +46,6 @@ class Config:
 
         with open(const.GLOBAL_CONFIG_FILE, 'w') as f:
             json.dump({
-                const.CONFIG_ROUTE_ONE_PATH: self._route_one_path,
                 const.CONFIG_WINDOW_GEOMETRY: self._window_geometry,
                 const.USER_LOCATION_DATA_KEY: self._user_data_dir,
                 const.SUCCESS_COLOR_KEY: self._success_color,
@@ -62,13 +60,6 @@ class Config:
                 const.TEXT_COLOR_KEY: self._text_color,
                 const.CUSTOM_FONT_NAME_KEY: self._custom_font_name,
             }, f, indent=4)
-    
-    def set_route_one_path(self, new_path):
-        self._route_one_path = new_path
-        self._save()
-
-    def get_route_one_path(self):
-        return self._route_one_path
     
     def set_window_geometry(self, new_geometry):
         if new_geometry != self._window_geometry:

@@ -5,8 +5,8 @@ import sys
 
 class Constants:
     def __init__(self):
-        self.APP_VERSION = "v2.2a"
-        self.APP_RELEASE_DATE = "2022-Nov-22"
+        self.APP_VERSION = "v2.3f"
+        self.APP_RELEASE_DATE = "2023-Jan-21"
 
         self.DEBUG_MODE = False
         self.APP_NAME = "pkmn_xp_router"
@@ -22,12 +22,32 @@ class Constants:
         # internal constants for configurable locations
         self._SAVED_ROUTES_FOLDER_NAME = "saved_routes"
         self._OUTDATED_ROUTES_FOLDER_NAME = "outdated_routes"
-        self._ROUTE_ONE_OUTPUT_FOLDER_NAME = "route_one_output"
+        self._CUSTOM_GENS_FOLDER_NAME = "custom_gens"
         # locations that change based on user data dir
         self.SAVED_ROUTES_DIR = None
         self.OUTDATED_ROUTES_DIR = None
-        self.ROUTE_ONE_OUTPUT_PATH = None
+        self.CUSTOM_GENS_DIR = None
         self.ALL_USER_DATA_PATHS = []
+
+        self.CUSTOM_GEN_META_FILE_NAME = "custom_gen.json"
+        self.CUSTOM_GEN_NAME_KEY = "custom_gen_name"
+        self.BASE_GEN_NAME_KEY = "base_gen_name"
+
+        # bunch of keys just for file management crap
+        self.MAJOR_FIGHTS_KEY = "major_fights"
+        self.BADGE_REWARDS_KEY = "badge_rewards"
+        self.FIGHT_REWARDS_KEY = "fight_rewards"
+        self.TYPE_CHART_KEY = "type_chart"
+        self.SPECIAL_TYPES_KEY = "special_types"
+        self.HELD_ITEM_BOOSTS_KEY = "held_item_boosts"
+
+        # file names (without full paths)
+        self.ITEM_DB_FILE_NAME = "items.json"
+        self.MOVE_DB_FILE_NAME = "moves.json"
+        self.POKEMON_DB_FILE_NAME = "pokemon.json"
+        self.TRAINERS_DB_FILE_NAME = "trainers.json"
+        self.TYPE_INFO_FILE_NAME = "type_info.json"
+        self.FIGHTS_INFO_FILE_NAME = "fights_info.json"
 
         self.NAME_KEY = "name"
         self.BASE_HP_KEY = "base_hp"
@@ -75,7 +95,6 @@ class Constants:
         self.TRAINER_POKEMON = "pokemon"
         self.SPECIAL_MOVES = "special_moves"
         self.MONEY = "money"
-        self.ROUTE_ONE_OFFSET = "route_one_offset"
         self.VERBOSE_KEY = "verbose"
         self.SETUP_MOVES_KEY = "setup_moves"
         self.MIMIC_SELECTION = "mimic_selection"
@@ -140,14 +159,19 @@ class Constants:
 
         self.ROUTE_EVENT_TYPES = [
             self.TASK_TRAINER_BATTLE,
+            self.TASK_FIGHT_WILD_PKMN,
+            self.TASK_LEARN_MOVE_LEVELUP,
+            self.TASK_LEARN_MOVE_TM,
+            self.TASK_HOLD_ITEM,
             self.TASK_RARE_CANDY,
             self.TASK_VITAMIN,
-            self.TASK_FIGHT_WILD_PKMN,
             self.TASK_GET_FREE_ITEM,
             self.TASK_PURCHASE_ITEM,
             self.TASK_USE_ITEM,
             self.TASK_SELL_ITEM,
-            self.TASK_LEARN_MOVE_TM,
+            self.TASK_SAVE,
+            self.TASK_HEAL,
+            self.TASK_BLACKOUT,
             self.TASK_NOTES_ONLY,
         ]
 
@@ -337,19 +361,19 @@ class Constants:
     def config_user_data_dir(self, user_data_dir):
         self.SAVED_ROUTES_DIR = os.path.realpath(os.path.join(user_data_dir, self._SAVED_ROUTES_FOLDER_NAME))
         self.OUTDATED_ROUTES_DIR = os.path.realpath(os.path.join(user_data_dir, self._OUTDATED_ROUTES_FOLDER_NAME))
-        self.ROUTE_ONE_OUTPUT_PATH = os.path.realpath(os.path.join(user_data_dir, self._ROUTE_ONE_OUTPUT_FOLDER_NAME))
+        self.CUSTOM_GENS_DIR = os.path.realpath(os.path.join(user_data_dir, self._CUSTOM_GENS_FOLDER_NAME))
 
         self.ALL_USER_DATA_PATHS = [
             self.SAVED_ROUTES_DIR,
             self.OUTDATED_ROUTES_DIR,
-            self.ROUTE_ONE_OUTPUT_PATH
+            self.CUSTOM_GENS_DIR
         ]
     
     def get_potential_user_data_dirs(self, potential_user_data_dir):
         return [
             (self.SAVED_ROUTES_DIR, os.path.realpath(os.path.join(potential_user_data_dir, self._SAVED_ROUTES_FOLDER_NAME))),
             (self.OUTDATED_ROUTES_DIR, os.path.realpath(os.path.join(potential_user_data_dir, self._OUTDATED_ROUTES_FOLDER_NAME))),
-            (self.ROUTE_ONE_OUTPUT_PATH, os.path.realpath(os.path.join(potential_user_data_dir, self._ROUTE_ONE_OUTPUT_FOLDER_NAME)))
+            (self.CUSTOM_GENS_DIR, os.path.realpath(os.path.join(potential_user_data_dir, self._CUSTOM_GENS_FOLDER_NAME))),
         ]
 
 

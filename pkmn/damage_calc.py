@@ -1,9 +1,6 @@
 import math
 from typing import Dict, Tuple
 
-import pkmn
-from utils.constants import const
-
 
 class DamageRange:
     def __init__(self, damage_vals:dict, num_attacks=1):

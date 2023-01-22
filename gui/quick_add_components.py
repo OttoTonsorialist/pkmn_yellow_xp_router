@@ -10,7 +10,7 @@ from routing.route_events import \
     SaveEventDefinition, HealEventDefinition, BlackoutEventDefinition
 
 from utils.constants import const
-import pkmn
+from pkmn.gen_factory import current_gen_info
 
 logger = logging.getLogger(__name__)
 
@@ -29,28 +29,24 @@ class QuickTrainerAdd(ctk.CTkFrame):
 
         self._cur_row = 0
         self._trainers_by_loc_label = ctk.CTkLabel(self._dropdowns, text="Location:", justify=tk.LEFT)
-        self._trainers_by_loc = custom_components.SimpleOptionMenu(self._dropdowns, [const.ALL_TRAINERS], callback=self.trainer_filter_callback)
-        self._trainers_by_loc.configure(width=self.option_menu_width)
+        self._trainers_by_loc = custom_components.SimpleOptionMenu(self._dropdowns, [const.ALL_TRAINERS], callback=self.trainer_filter_callback, width=self.option_menu_width)
         self._trainers_by_loc_label.grid(row=self._cur_row, column=0, padx=self.padx, pady=self.pady, sticky=tk.W)
         self._trainers_by_loc.grid(row=self._cur_row, column=1, padx=self.padx, pady=self.pady, sticky=tk.E)
         self._cur_row += 1
 
         self._trainers_by_class_label = ctk.CTkLabel(self._dropdowns, text="Trainer Class:", justify=tk.LEFT)
-        self._trainers_by_class = custom_components.SimpleOptionMenu(self._dropdowns, [const.ALL_TRAINERS], callback=self.trainer_filter_callback)
-        self._trainers_by_class.configure(width=self.option_menu_width)
+        self._trainers_by_class = custom_components.SimpleOptionMenu(self._dropdowns, [const.ALL_TRAINERS], callback=self.trainer_filter_callback, width=self.option_menu_width)
         self._trainers_by_class_label.grid(row=self._cur_row, column=0, padx=self.padx, pady=self.pady, sticky=tk.W)
         self._trainers_by_class.grid(row=self._cur_row, column=1, padx=self.padx, pady=self.pady, sticky=tk.E)
         self._cur_row += 1
 
         self._trainer_names_label = ctk.CTkLabel(self._dropdowns, text="Trainer:", justify=tk.LEFT)
-        self._trainer_names = custom_components.SimpleOptionMenu(self._dropdowns, [const.NO_TRAINERS], callback=self._trainer_name_callback)
-        self._trainer_names.configure(width=self.option_menu_width)
+        self._trainer_names = custom_components.SimpleOptionMenu(self._dropdowns, [const.NO_TRAINERS], callback=self._trainer_name_callback, width=self.option_menu_width)
         self._trainer_names_label.grid(row=self._cur_row, column=0, padx=self.padx, pady=self.pady, sticky=tk.W)
         self._trainer_names.grid(row=self._cur_row, column=1, padx=self.padx, pady=self.pady, sticky=tk.E)
         self._cur_row += 1
 
         self._rematches_label = custom_components.CheckboxLabel(self._dropdowns, text="Show Rematches:", flip=True, toggle_command=self.trainer_filter_callback)
-        self._rematches_label.configure(width=self.option_menu_width)
         self._rematches_label.grid(row=self._cur_row, column=0, columnspan=2, padx=self.padx, pady=self.pady, sticky=tk.EW)
         self._cur_row += 1
 
@@ -58,9 +54,9 @@ class QuickTrainerAdd(ctk.CTkFrame):
         self._buttons.pack(fill=tk.X, anchor=tk.CENTER, side=tk.BOTTOM)
         self._btn_width = 8
 
-        self._add_trainer = custom_components.SimpleButton(self._buttons, text="Add Trainer", command=self.add_trainer)
+        self._add_trainer = custom_components.SimpleButton(self._buttons, text="Add Trainer", command=self.add_trainer, width=80)
         self._add_trainer.grid(row=0, column=0, padx=self.padx, pady=self.pady + 1, sticky=tk.E)
-        self._add_area = custom_components.SimpleButton(self._buttons, text="Add Area", command=self.add_area)
+        self._add_area = custom_components.SimpleButton(self._buttons, text="Add Area", command=self.add_area, width=80)
         self._add_area.grid(row=0, column=1, padx=self.padx, pady=self.pady + 1, sticky=tk.W)
         self.bind(self._controller.register_event_selection(self), self.update_button_status)
         self.bind(self._controller.register_version_change(self), self.update_pkmn_version)
@@ -86,15 +82,15 @@ class QuickTrainerAdd(ctk.CTkFrame):
                 self._add_area.enable()
     
     def update_pkmn_version(self, *args, **kwargs):
-        self._trainers_by_loc.new_values([const.ALL_TRAINERS] + sorted(pkmn.current_gen_info().trainer_db().get_all_locations()))
-        self._trainers_by_class.new_values([const.ALL_TRAINERS] + sorted(pkmn.current_gen_info().trainer_db().get_all_classes()))
+        self._trainers_by_loc.new_values([const.ALL_TRAINERS] + sorted(current_gen_info().trainer_db().get_all_locations()))
+        self._trainers_by_class.new_values([const.ALL_TRAINERS] + sorted(current_gen_info().trainer_db().get_all_classes()))
         self._trainer_name_callback()
 
     def trainer_filter_callback(self, *args, **kwargs):
         loc_filter = self._trainers_by_loc.get()
         class_filter = self._trainers_by_class.get()
 
-        valid_trainers = pkmn.current_gen_info().trainer_db().get_valid_trainers(
+        valid_trainers = current_gen_info().trainer_db().get_valid_trainers(
             trainer_class=class_filter,
             trainer_loc=loc_filter,
             defeated_trainers=self._controller.get_defeated_trainers(),
@@ -162,14 +158,12 @@ class QuickWildPkmn(ctk.CTkFrame):
 
         self._level_label = ctk.CTkLabel(self._dropdowns, text="Pkmn Level:", justify=tk.LEFT)
         self._level_val = custom_components.AmountEntry(self._dropdowns, callback=self._update_button_callback_wrapper)
-        self._level_val._amount.configure(width=self.option_menu_width - 5)
         self._level_label.grid(row=self._cur_row, column=0, padx=self.padx, pady=self.pady, sticky=tk.W)
         self._level_val.grid(row=self._cur_row, column=1, padx=self.padx, pady=self.pady, sticky=tk.E)
         self._cur_row += 1
 
         self._quantity_label = ctk.CTkLabel(self._dropdowns, text="Quantity:", justify=tk.LEFT)
         self._quantity_val = custom_components.AmountEntry(self._dropdowns, callback=self._update_button_callback_wrapper)
-        self._quantity_val._amount.configure(width=self.option_menu_width - 5)
         self._quantity_label.grid(row=self._cur_row, column=0, padx=self.padx, pady=self.pady, sticky=tk.W)
         self._quantity_val.grid(row=self._cur_row, column=1, padx=self.padx, pady=self.pady, sticky=tk.E)
         self._cur_row += 1
@@ -178,9 +172,9 @@ class QuickWildPkmn(ctk.CTkFrame):
         self._buttons.pack(fill=tk.X, anchor=tk.CENTER, side=tk.BOTTOM)
         self._btn_width = 8
 
-        self._add_wild_pkmn = custom_components.SimpleButton(self._buttons, text="Add Wild Pkmn", command=self.add_wild_pkmn_cmd)
+        self._add_wild_pkmn = custom_components.SimpleButton(self._buttons, text="Add Wild Pkmn", command=self.add_wild_pkmn_cmd, width=80)
         self._add_wild_pkmn.grid(row=0, column=0, padx=self.padx, pady=self.pady + 1, sticky=tk.W)
-        self._add_trainer_pkmn = custom_components.SimpleButton(self._buttons, text="Add Trainer Pkmn", command=self.add_trainer_pkmn_cmd)
+        self._add_trainer_pkmn = custom_components.SimpleButton(self._buttons, text="Add Trainer Pkmn", command=self.add_trainer_pkmn_cmd, width=80)
         self._add_trainer_pkmn.grid(row=0, column=1, padx=self.padx, pady=self.pady + 1, sticky=tk.W)
 
         self._level_val.set(5)
@@ -220,10 +214,10 @@ class QuickWildPkmn(ctk.CTkFrame):
             self._add_trainer_pkmn.enable()
 
     def update_pkmn_version(self, *args, **kwargs):
-        self._pkmn_types.new_values(pkmn.current_gen_info().pkmn_db().get_all_names())
+        self._pkmn_types.new_values(current_gen_info().pkmn_db().get_all_names())
 
     def _pkmn_filter_callback(self, *args, **kwargs):
-        self._pkmn_types.new_values(pkmn.current_gen_info().pkmn_db().get_filtered_names(filter_val=self._pkmn_filter.get().strip()))
+        self._pkmn_types.new_values(current_gen_info().pkmn_db().get_filtered_names(filter_val=self._pkmn_filter.get().strip()))
         self.update_button_status()
     
     def _update_button_callback_wrapper(self, *args, **kwargs):
@@ -269,7 +263,7 @@ class QuickItemAdd(ctk.CTkFrame):
         self._dropdowns.pack()
 
         self._item_filter_label = ctk.CTkLabel(self._dropdowns, text="Search:")
-        self._item_filter = custom_components.SimpleEntry(self._dropdowns, callback=self.item_filter_callback, width=self.option_menu_width + 5)
+        self._item_filter = custom_components.SimpleEntry(self._dropdowns, callback=self.item_filter_callback, width=150)
         self._item_filter_label.grid(row=self._cur_row, column=0, padx=self.padx, pady=self.pady, sticky=tk.W)
         self._item_filter.grid(row=self._cur_row, column=1, padx=self.padx, pady=self.pady, sticky=tk.E)
 
@@ -295,18 +289,17 @@ class QuickItemAdd(ctk.CTkFrame):
 
         self._item_amount_label = ctk.CTkLabel(self._dropdowns, text="Quantity:")
         self._item_amount = custom_components.AmountEntry(self._dropdowns, callback=self.item_selector_callback)
-        self._item_amount._amount.configure(width=self.option_menu_width)
         self._item_amount_label.grid(row=self._cur_row, column=0, padx=self.padx, pady=self.pady, sticky=tk.W)
         self._item_amount.grid(row=self._cur_row, column=1, padx=self.padx, pady=self.pady, sticky=tk.E)
         self._cur_row += 1
 
         self._purchase_cost_label = ctk.CTkLabel(self._dropdowns, text="Purchase:")
-        self._purchase_cost_amt = ctk.CTkLabel(self._dropdowns)
+        self._purchase_cost_amt = ctk.CTkLabel(self._dropdowns, text="")
         self._purchase_cost_label.grid(row=self._cur_row, column=0, padx=self.padx, pady=2*self.pady, sticky=tk.W)
         self._purchase_cost_amt.grid(row=self._cur_row, column=1, padx=self.padx, pady=2*self.pady, sticky=tk.E)
 
         self._sell_cost_label = ctk.CTkLabel(self._dropdowns, text="Sell Price:")
-        self._sell_cost_amt = ctk.CTkLabel(self._dropdowns)
+        self._sell_cost_amt = ctk.CTkLabel(self._dropdowns, text="")
         self._sell_cost_label.grid(row=self._cur_row, column=2, padx=self.padx, pady=2*self.pady, sticky=tk.W)
         self._sell_cost_amt.grid(row=self._cur_row, column=3, padx=self.padx, pady=2*self.pady, sticky=tk.E)
         self._cur_row += 1
@@ -339,8 +332,8 @@ class QuickItemAdd(ctk.CTkFrame):
         self.update_button_status()
     
     def update_pkmn_version(self, *args, **kwargs):
-        self._item_selector.new_values(pkmn.current_gen_info().item_db().get_filtered_names())
-        self._item_mart_selector.new_values([const.ITEM_TYPE_ALL_ITEMS] + sorted(list(pkmn.current_gen_info().item_db().mart_items.keys())))
+        self._item_selector.new_values(current_gen_info().item_db().get_filtered_names())
+        self._item_mart_selector.new_values([const.ITEM_TYPE_ALL_ITEMS] + sorted(list(current_gen_info().item_db().mart_items.keys())))
 
     def update_button_status(self, *args, **kwargs):
         if not self._controller.can_insert_after_current_selection():
@@ -353,7 +346,7 @@ class QuickItemAdd(ctk.CTkFrame):
             self._sell_button.disable()
             return
         
-        cur_item = pkmn.current_gen_info().item_db().get_item(self._item_selector.get())
+        cur_item = current_gen_info().item_db().get_item(self._item_selector.get())
 
         if cur_item is None:
             self._acquire_button.disable()
@@ -374,7 +367,7 @@ class QuickItemAdd(ctk.CTkFrame):
             else:
                 self._use_button.disable()
 
-            if pkmn.current_gen_info().get_generation() != 1:
+            if current_gen_info().get_generation() != 1:
                 self._hold_button.enable()
             else:
                 self._hold_button.disable()
@@ -391,13 +384,13 @@ class QuickItemAdd(ctk.CTkFrame):
             item_type = const.ITEM_TYPE_ALL_ITEMS
             backpack_filter = True
         
-        new_vals = pkmn.current_gen_info().item_db().get_filtered_names(
+        new_vals = current_gen_info().item_db().get_filtered_names(
             item_type=item_type,
             source_mart=self._item_mart_selector.get()
         )
 
         if backpack_filter:
-            cur_state = self._controller.get_single_selected_event_obj().final_state
+            cur_state = self._controller.get_active_state()
             if cur_state is None:
                 new_vals = []
             else:
@@ -414,11 +407,11 @@ class QuickItemAdd(ctk.CTkFrame):
         self._item_selector.new_values(new_vals)
 
     def item_selector_callback(self, *args, **kwargs):
-        cur_item = pkmn.current_gen_info().item_db().get_item(self._item_selector.get())
+        cur_item = current_gen_info().item_db().get_item(self._item_selector.get())
 
         try:
             item_amt = int(self._item_amount.get())
-            cur_item = pkmn.current_gen_info().item_db().get_item(self._item_selector.get())
+            cur_item = current_gen_info().item_db().get_item(self._item_selector.get())
             self._purchase_cost_amt.configure(text=f"{cur_item.purchase_price * item_amt}")
             self._sell_cost_amt.configure(text=f"{cur_item.sell_price * item_amt}")
         except Exception as e:
@@ -501,10 +494,10 @@ class QuickItemAdd(ctk.CTkFrame):
     def _learn_move(self, *arg, **kwargs):
         try:
             cur_item = self._item_selector.get()
-            move_name = pkmn.current_gen_info().item_db().get_item(cur_item).move_name
-            cur_state = self._controller.get_single_selected_event_obj().final_state
+            move_name = current_gen_info().item_db().get_item(cur_item).move_name
+            cur_state = self._controller.get_active_state()
             
-            if cur_item in pkmn.current_gen_info().item_db().tms:
+            if cur_item in current_gen_info().item_db().tms:
                 self._create_event(
                     EventDefinition(
                         learn_move=LearnMoveEventDefinition(

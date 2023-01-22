@@ -3,15 +3,18 @@ import tkinter.ttk as ttk
 import tkinter.font
 import customtkinter as ctk
 from typing import Dict, List
+import logging
 
 from gui import custom_components
 from pkmn import damage_calc, pkmn_info, universal_data_objects
-from routing import route_state_objects
+from routing import full_route_state
 from routing import route_events
 from routing.router import Router
 from utils.constants import const
-import pkmn
+from pkmn.gen_factory import current_gen_info
 from utils.config_manager import config
+
+logger = logging.getLogger(__name__)
 
 
 class BattleSummary(ctk.CTkFrame):
@@ -24,7 +27,7 @@ class BattleSummary(ctk.CTkFrame):
         # these are matched lists, with the solo mon being updated for each enemy pkmn, in case of level-ups
         self._enemy_pkmn:List[universal_data_objects.EnemyPkmn] = None
         self._solo_pkmn:List[universal_data_objects.EnemyPkmn] = None
-        self._source_state:route_state_objects.RouteState = None
+        self._source_state:full_route_state.RouteState = None
         self._source_event_group:route_events.EventGroup = None
         self._stage_modifiers:universal_data_objects.StageModifiers = universal_data_objects.StageModifiers()
         self._mimic_selection = ""
@@ -122,7 +125,7 @@ class BattleSummary(ctk.CTkFrame):
     def set_team(
         self,
         enemy_pkmn:List[universal_data_objects.EnemyPkmn],
-        cur_state:route_state_objects.RouteState=None,
+        cur_state:full_route_state.RouteState=None,
         event_group:route_events.EventGroup=None,
         new_setup_moves:bool=False,
         recalc_only:bool=False
@@ -152,7 +155,7 @@ class BattleSummary(ctk.CTkFrame):
                             break
                         cur_item_idx += 1
                     except Exception as e:
-                        print(f"Failed to extra solo mon info from event group: ({type(e)}) {e}")
+                        logger.error(f"Failed to extra solo mon info from event group: ({type(e)}) {e}")
                         raise e
         elif cur_state is not None:
             if not new_setup_moves:
@@ -230,22 +233,22 @@ class SetupMovesSummary(ctk.CTkFrame):
         self._callback = callback
         self._move_list = []
 
-        self.reset_button = custom_components.SimpleButton(self, text="Reset Setup Moves", command=self._reset, bg_color=config.get_contrast_color(), fg_color=config.get_text_color())
+        self.reset_button = custom_components.SimpleButton(self, text="Reset Setup Moves", command=self._reset, bg_color=config.get_contrast_color())
         self.reset_button.grid(row=0, column=0, padx=2)
 
-        self.setup_label = ctk.CTkLabel(self, text="Move to Add:", bg_color=config.get_background_color(), fg_color=config.get_text_color())
+        self.setup_label = ctk.CTkLabel(self, text="Move to Add:", bg_color=config.get_background_color())
         self.setup_label.grid(row=0, column=1, padx=2)
 
         self.setup_moves = custom_components.SimpleOptionMenu(self, ["N/A"])
         self.setup_moves.grid(row=0, column=2, padx=2)
 
-        self.add_button = custom_components.SimpleButton(self, text="Add Setup Move", command=self._add_setup_move, bg_color=config.get_contrast_color(), fg_color=config.get_text_color())
+        self.add_button = custom_components.SimpleButton(self, text="Add Setup Move", command=self._add_setup_move, bg_color=config.get_contrast_color())
         self.add_button.grid(row=0, column=3, padx=2)
 
-        self.extra_label = ctk.CTkLabel(self, text="Current Setup Moves:", bg_color=config.get_background_color(), fg_color=config.get_text_color())
+        self.extra_label = ctk.CTkLabel(self, text="Current Setup Moves:", bg_color=config.get_background_color())
         self.extra_label.grid(row=0, column=4, padx=2)
 
-        self.move_list_label = ctk.CTkLabel(self, bg_color=config.get_background_color(), fg_color=config.get_text_color())
+        self.move_list_label = ctk.CTkLabel(self, bg_color=config.get_background_color())
         self.move_list_label.grid(row=0, column=5, padx=2)
     
     def _reset(self, *args, **kwargs):
@@ -258,14 +261,14 @@ class SetupMovesSummary(ctk.CTkFrame):
     
     def set_move_list(self, new_moves, trigger_update=False):
         self._move_list = new_moves
-        self.setup_moves.new_values(pkmn.current_gen_info().get_stat_modifer_moves())
+        self.setup_moves.new_values(current_gen_info().get_stat_modifer_moves())
         self._move_list_updated(trigger_update=trigger_update)
     
     def get_stage_modifiers(self):
         result = universal_data_objects.StageModifiers()
 
         for cur_move in self._move_list:
-            result = result.apply_stat_mod(pkmn.current_gen_info().move_db().get_stat_mod(cur_move))
+            result = result.apply_stat_mod(current_gen_info().move_db().get_stat_mod(cur_move))
         
         return result
     
@@ -298,28 +301,28 @@ class MonPairSummary(ctk.CTkFrame):
         self.left_mon_label_frame = ctk.CTkFrame(self, bg_color=config.get_header_color())
         self.left_mon_label_frame.grid(row=0, column=0, columnspan=4, sticky=tk.EW, padx=2, pady=2)
 
-        self.left_attacking_mon = ctk.CTkLabel(self.left_mon_label_frame, text="", bg_color=config.get_header_color(), fg_color=config.get_text_color())
+        self.left_attacking_mon = ctk.CTkLabel(self.left_mon_label_frame, text="", bg_color=config.get_header_color())
         self.left_attacking_mon.grid(row=0, column=1)
-        self.left_verb = ctk.CTkLabel(self.left_mon_label_frame, text="", bg_color=config.get_header_color(), font=bold_font, fg_color=config.get_text_color())
+        self.left_verb = ctk.CTkLabel(self.left_mon_label_frame, text="", bg_color=config.get_header_color(), font=bold_font)
         self.left_verb.grid(row=0, column=2)
-        self.left_defending_mon = ctk.CTkLabel(self.left_mon_label_frame, text="", bg_color=config.get_header_color(), fg_color=config.get_text_color())
+        self.left_defending_mon = ctk.CTkLabel(self.left_mon_label_frame, text="", bg_color=config.get_header_color())
         self.left_defending_mon.grid(row=0, column=3)
 
         self.left_mon_label_frame.columnconfigure(0, weight=1, uniform="left_col_group")
         self.left_mon_label_frame.columnconfigure(4, weight=1, uniform="left_col_group")
 
-        self.divider = ctk.CTkFrame(self, bg_color=config.get_divider_color(), width=4)
+        self.divider = ctk.CTkFrame(self, width=4)
         self.divider.grid(row=0, column=4, rowspan=2, sticky=tk.NS)
         self.divider.grid_propagate(0)
 
         self.right_mon_label_frame = ctk.CTkFrame(self, bg_color=config.get_header_color())
         self.right_mon_label_frame.grid(row=0, column=5, columnspan=4, sticky=tk.EW, padx=2, pady=2)
 
-        self.right_attacking_mon = ctk.CTkLabel(self.right_mon_label_frame, text="", bg_color=config.get_header_color(), fg_color=config.get_text_color())
+        self.right_attacking_mon = ctk.CTkLabel(self.right_mon_label_frame, text="", bg_color=config.get_header_color())
         self.right_attacking_mon.grid(row=0, column=1)
-        self.right_verb = ctk.CTkLabel(self.right_mon_label_frame, text="", bg_color=config.get_header_color(), font=bold_font, fg_color=config.get_text_color())
+        self.right_verb = ctk.CTkLabel(self.right_mon_label_frame, text="", bg_color=config.get_header_color(), font=bold_font)
         self.right_verb.grid(row=0, column=2)
-        self.right_defending_mon = ctk.CTkLabel(self.right_mon_label_frame, text="", bg_color=config.get_header_color(), fg_color=config.get_text_color())
+        self.right_defending_mon = ctk.CTkLabel(self.right_mon_label_frame, text="", bg_color=config.get_header_color())
         self.right_defending_mon.grid(row=0, column=3)
 
         self.right_mon_label_frame.columnconfigure(0, weight=1, uniform="right_col_group")
@@ -504,20 +507,20 @@ class SimpleMonPairSummary(ctk.CTkFrame):
         self.left_mon_label_frame = ctk.CTkFrame(self, bg_color=config.get_header_color())
         self.left_mon_label_frame.grid(row=0, column=1, padx=2, pady=2, sticky=tk.EW)
 
-        self.left_attacking_mon = ctk.CTkLabel(self.left_mon_label_frame, text="", bg_color=config.get_header_color(), fg_color=config.get_text_color())
+        self.left_attacking_mon = ctk.CTkLabel(self.left_mon_label_frame, text="", bg_color=config.get_header_color())
         self.left_attacking_mon.grid(row=0, column=1)
 
         self.left_mon_label_frame.columnconfigure(0, weight=1, uniform="left_col_group")
         self.left_mon_label_frame.columnconfigure(2, weight=1, uniform="left_col_group")
 
-        self.divider = ctk.CTkFrame(self, bg_color=config.get_divider_color(), width=4)
+        self.divider = ctk.CTkFrame(self, width=4)
         self.divider.grid(row=0, column=2, rowspan=2, sticky=tk.NS)
         self.divider.grid_propagate(0)
 
         self.right_mon_label_frame = ctk.CTkFrame(self, bg_color=config.get_header_color())
         self.right_mon_label_frame.grid(row=0, column=3, padx=2, pady=2, sticky=tk.EW)
 
-        self.right_attacking_mon = ctk.CTkLabel(self.right_mon_label_frame, text="", bg_color=config.get_header_color(), fg_color=config.get_text_color())
+        self.right_attacking_mon = ctk.CTkLabel(self.right_mon_label_frame, text="", bg_color=config.get_header_color())
         self.right_attacking_mon.grid(row=0, column=1)
 
         self.right_mon_label_frame.columnconfigure(0, weight=1, uniform="right_col_group")
@@ -663,7 +666,7 @@ class DamageSummary(ctk.CTkFrame):
         self.header.columnconfigure(0, weight=1)
         self.row_idx += 1
 
-        self.move_name_label = ctk.CTkLabel(self.header, bg_color=config.get_primary_color(), fg_color=config.get_text_color())
+        self.move_name_label = ctk.CTkLabel(self.header, bg_color=config.get_primary_color())
         self.custom_data_dropdown = custom_components.SimpleOptionMenu(self.header, [""], callback=self._custom_data_callback, width=10)
         if self._allow_edits:
             self.custom_data_dropdown.bind('<ButtonPress>', self._config_custom_data_dropdown)
@@ -676,13 +679,13 @@ class DamageSummary(ctk.CTkFrame):
         self.range_frame.columnconfigure(0, weight=1)
         self.row_idx += 1
 
-        self.damage_range = ctk.CTkLabel(self.range_frame, bg_color=temp_bg_color, fg_color=config.get_text_color())
+        self.damage_range = ctk.CTkLabel(self.range_frame, bg_color=temp_bg_color)
         self.damage_range.grid(row=0, column=0, sticky=tk.W)
-        self.pct_damage_range = ctk.CTkLabel(self.range_frame, bg_color=temp_bg_color, fg_color=config.get_text_color())
+        self.pct_damage_range = ctk.CTkLabel(self.range_frame, bg_color=temp_bg_color)
         self.pct_damage_range.grid(row=0, column=1, sticky=tk.E)
-        self.crit_damage_range = ctk.CTkLabel(self.range_frame, bg_color=temp_bg_color, fg_color=config.get_text_color())
+        self.crit_damage_range = ctk.CTkLabel(self.range_frame, bg_color=temp_bg_color)
         self.crit_damage_range.grid(row=1, column=0, sticky=tk.W)
-        self.crit_pct_damage_range = ctk.CTkLabel(self.range_frame, bg_color=temp_bg_color, fg_color=config.get_text_color())
+        self.crit_pct_damage_range = ctk.CTkLabel(self.range_frame, bg_color=temp_bg_color)
         self.crit_pct_damage_range.grid(row=1, column=1, sticky=tk.E)
 
         self.kill_frame = ctk.CTkFrame(self, bg_color=config.get_secondary_color())
@@ -690,7 +693,7 @@ class DamageSummary(ctk.CTkFrame):
         self.rowconfigure(self.row_idx, weight=1)
         self.row_idx += 1
 
-        self.num_to_kill = ctk.CTkLabel(self.kill_frame, justify=tk.LEFT, bg_color=config.get_secondary_color(), fg_color=config.get_text_color())
+        self.num_to_kill = ctk.CTkLabel(self.kill_frame, justify=tk.LEFT, bg_color=config.get_secondary_color())
         self.num_to_kill.grid(row=0, column=0, sticky=tk.NSEW)
     
     def flag_as_best_move(self, is_enemy=False):
@@ -726,7 +729,7 @@ class DamageSummary(ctk.CTkFrame):
             if self._propagate_mimic_update and self._outer_mimic_callback is not None:
                 self._outer_mimic_callback(self.custom_data_dropdown.get())
         else:
-            self._calc_damages_from_move(pkmn.current_gen_info().move_db().get_move(self.move_name))
+            self._calc_damages_from_move(current_gen_info().move_db().get_move(self.move_name))
             if self._outer_custom_data_callback is not None:
                 self._outer_custom_data_callback()
 
@@ -737,7 +740,7 @@ class DamageSummary(ctk.CTkFrame):
             # kinda hacky, but whenever mimic isn't set, just use Leer to fake a non-damaging move
             if not move_name:
                 move_name = "Leer"
-            self._calc_damages_from_move(pkmn.current_gen_info().move_db().get_move(move_name))
+            self._calc_damages_from_move(current_gen_info().move_db().get_move(move_name))
         finally:
             self._propagate_mimic_update = True
 
@@ -758,15 +761,15 @@ class DamageSummary(ctk.CTkFrame):
         self.attacking_stage_modifiers = attacking_stage_modifiers
         self.defending_stage_modifiers = defending_stage_modifiers
 
-        move = pkmn.current_gen_info().move_db().get_move(move_name)
+        move = current_gen_info().move_db().get_move(move_name)
         if move is None:
             raise ValueError(f"Unknown move: {move_name}")
         if move.name == const.HIDDEN_POWER_MOVE_NAME:
-            hidden_power_type, hidden_power_base_power = pkmn.current_gen_info().get_hidden_power(attacking_mon.dvs)
+            hidden_power_type, hidden_power_base_power = current_gen_info().get_hidden_power(attacking_mon.dvs)
             move_name = f"{move_name} ({hidden_power_type}: {hidden_power_base_power})"
         self.move_name_label.configure(text=move_name)
 
-        custom_data_options = pkmn.current_gen_info().get_move_custom_data(move_name)
+        custom_data_options = current_gen_info().get_move_custom_data(move_name)
         if custom_data_options:
             self.move_has_custom_data = True
         else:
@@ -796,7 +799,7 @@ class DamageSummary(ctk.CTkFrame):
         if self.move_has_custom_data:
             custom_move_data = self.custom_data_dropdown.get()
 
-        single_attack = pkmn.current_gen_info().calculate_damage(
+        single_attack = current_gen_info().calculate_damage(
             self.attacking_mon,
             move,
             self.defending_mon,
@@ -804,7 +807,7 @@ class DamageSummary(ctk.CTkFrame):
             defending_stage_modifiers=self.defending_stage_modifiers,
             custom_move_data=custom_move_data
         )
-        crit_attack = pkmn.current_gen_info().calculate_damage(
+        crit_attack = current_gen_info().calculate_damage(
             self.attacking_mon,
             move,
             self.defending_mon,
@@ -837,7 +840,7 @@ class DamageSummary(ctk.CTkFrame):
             kill_ranges = damage_calc.find_kill(
                 single_attack,
                 crit_attack,
-                pkmn.current_gen_info().get_crit_rate(self.attacking_mon, move),
+                current_gen_info().get_crit_rate(self.attacking_mon, move),
                 self.defending_mon.cur_stats.hp
             )
 

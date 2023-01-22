@@ -324,7 +324,6 @@ class Trainer:
         name:str,
         location:str,
         money:int,
-        route_one_offset:str,
         pkmn:List[str],
         rematch:bool=False
     ):
@@ -332,7 +331,6 @@ class Trainer:
         self.name = name
         self.location = location
         self.money = money
-        self.route_one_offset = route_one_offset
         self.pkmn = pkmn
         self.rematch = rematch
     

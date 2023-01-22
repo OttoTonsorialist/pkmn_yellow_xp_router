@@ -1,7 +1,7 @@
 import math
+from typing import Dict, List
 
 from pkmn import universal_data_objects, damage_calc
-import pkmn
 from pkmn.gen_2.data_objects import GenTwoBadgeList, get_hidden_power_type, get_hidden_power_base_power
 from utils.constants import const
 from pkmn.gen_2.gen_two_constants import gen_two_const
@@ -17,10 +17,15 @@ def get_crit_rate(pkmn:universal_data_objects.EnemyPkmn, move:universal_data_obj
     return (17 / 256)
 
 
-def calculate_damage(
+def calculate_gen_two_damage(
     attacking_pkmn:universal_data_objects.EnemyPkmn,
+    attacking_species:universal_data_objects.PokemonSpecies,
     move:universal_data_objects.Move,
     defending_pkmn:universal_data_objects.EnemyPkmn,
+    defending_species:universal_data_objects.PokemonSpecies,
+    special_types:List[str],
+    type_chart:Dict[str, Dict[str, str]],
+    held_item_boost_table:Dict[str, str],
     attacking_stage_modifiers:universal_data_objects.StageModifiers=None,
     defending_stage_modifiers:universal_data_objects.StageModifiers=None,
     is_crit:bool=False,
@@ -58,12 +63,12 @@ def calculate_damage(
     # during a crit, if the stage modifiers are equal or in favor of the defender, calculate stats without any badge boosts and without any stage modifiers
     ignore_badge_boosts = False
     if is_crit:
-        if move_type in gen_two_const.SPECIAL_TYPES and attacking_stage_modifiers.special_attack_stage <= defending_stage_modifiers.special_defense_stage:
+        if move_type in special_types and attacking_stage_modifiers.special_attack_stage <= defending_stage_modifiers.special_defense_stage:
             # stage modifiers do not favor the attacker for a special move: zero out the stage modifiers
             ignore_badge_boosts = True
             attacking_stage_modifiers = universal_data_objects.StageModifiers()
             defending_stage_modifiers = universal_data_objects.StageModifiers()
-        elif move_type not in gen_two_const.SPECIAL_TYPES and attacking_stage_modifiers.attack_stage <= defending_stage_modifiers.defense_stage:
+        elif move_type not in special_types and attacking_stage_modifiers.attack_stage <= defending_stage_modifiers.defense_stage:
             # stage modifiers do not favor the attacker for a physical move: zero out the stage modifiers
             ignore_badge_boosts = True
             attacking_stage_modifiers = universal_data_objects.StageModifiers()
@@ -78,17 +83,14 @@ def calculate_damage(
         attacking_battle_stats.special_attack *= 2
     elif defending_pkmn.name == gen_two_const.DITTO_NAME and defending_pkmn.held_item == gen_two_const.METAL_POWDER_NAME:
         defending_battle_stats.defense = math.floor(defending_battle_stats.defense * 1.5)
-
-    attacking_species = pkmn.current_gen_info().pkmn_db().get_pkmn(attacking_pkmn.name)
-    defending_species = pkmn.current_gen_info().pkmn_db().get_pkmn(defending_pkmn.name)
     
     if (
-        gen_two_const.TYPE_CHART.get(move_type).get(defending_species.first_type) == const.IMMUNE or 
-        gen_two_const.TYPE_CHART.get(move_type).get(defending_species.second_type) == const.IMMUNE
+        type_chart.get(move_type).get(defending_species.first_type) == const.IMMUNE or 
+        type_chart.get(move_type).get(defending_species.second_type) == const.IMMUNE
     ):
         return None
     
-    if move_type in gen_two_const.SPECIAL_TYPES:
+    if move_type in special_types:
         attacking_stat = attacking_battle_stats.special_attack
         defending_stat = defending_battle_stats.special_defense
         if defender_has_light_screen and not is_crit:
@@ -113,7 +115,7 @@ def calculate_damage(
     if move.name == const.FUTURE_SIGHT_MOVE_NAME:
         is_stab = False
 
-    held_item_boost = gen_two_const.HELD_ITEM_BOOSTS.get(attacking_pkmn.held_item) == move_type
+    held_item_boost = held_item_boost_table.get(attacking_pkmn.held_item) == move_type
 
     badges:GenTwoBadgeList = attacking_pkmn.badges
 
@@ -143,9 +145,11 @@ def calculate_damage(
         badge_type_boost = True
     elif move_type == const.TYPE_GRASS and badges.rainbow:
         badge_type_boost = True
+    elif move_type == const.TYPE_POISON and badges.soul:
+        badge_type_boost = True
     elif move_type == const.TYPE_PSYCHIC and badges.marsh:
         badge_type_boost = True
-    elif move_type == const.TYPE_FIGHTING and badges.volcano:
+    elif move_type == const.TYPE_FIRE and badges.volcano:
         badge_type_boost = True
     elif move_type == const.TYPE_GROUND and badges.earth:
         badge_type_boost = True
@@ -223,9 +227,9 @@ def calculate_damage(
     # this usually doesn't matter, but there's one specific case where it can
     # specifically, if the move is both super effective and not very effective, the effective power will be neutral
     # but you may lose 1 point of power due to rounding if the division happens first
-    for test_type in gen_two_const.TYPE_CHART.get(move_type):
+    for test_type in type_chart.get(move_type):
         if test_type == defending_species.first_type or test_type == defending_species.second_type:
-            effectiveness = gen_two_const.TYPE_CHART.get(move_type).get(test_type)
+            effectiveness = type_chart.get(move_type).get(test_type)
             if effectiveness == const.SUPER_EFFECTIVE:
                 temp *= 2
             elif effectiveness == const.NOT_VERY_EFFECTIVE:

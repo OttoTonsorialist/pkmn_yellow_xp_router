@@ -211,17 +211,12 @@ class CheckboxLabel(ctk.CTkFrame):
     CHECKED_STATE = "checked"
     UNCHECKED_STATE =" unchecked"
 
-    def __init__(self, *args, text="", init_check_state=None, toggle_command=None, flip=False, fg_color=None, **kwargs):
+    def __init__(self, *args, text="", init_check_state=None, toggle_command=None, flip=False, **kwargs):
+        kwargs['bg_color'] = 'transparent'
+        kwargs['fg_color'] = 'transparent'
         super().__init__(*args, **kwargs)
-        bg_color = 'transparent'
-        if 'bg_color' in kwargs:
-            bg_color = kwargs['bg_color']
-
-        if fg_color is None:
-            fg_color = config.DEFAULT_TEXT_COLOR
-
-        self._checkbox = ctk.CTkLabel(self, bg_color=bg_color, fg_color=fg_color)
-        self._text_label = ctk.CTkLabel(self, text=text, bg_color=bg_color, fg_color=fg_color)
+        self._checkbox = ctk.CTkLabel(self, text="")
+        self._text_label = ctk.CTkLabel(self, text=text)
 
         if flip:
             self.columnconfigure(0, weight=1)
@@ -232,8 +227,8 @@ class CheckboxLabel(ctk.CTkFrame):
             self._checkbox.grid(row=0, column=0)
             self._text_label.grid(row=0, column=1)
 
-        self.im_checked = ImageTk.PhotoImage(Image.open(IM_CHECKED), master=self)
-        self.im_unchecked = ImageTk.PhotoImage(Image.open(IM_UNCHECKED), master=self)
+        self.im_checked = ctk.CTkImage(Image.open(IM_CHECKED))
+        self.im_unchecked = ctk.CTkImage(Image.open(IM_UNCHECKED))
 
         self.toggle_command = toggle_command
         if init_check_state is None:
@@ -321,11 +316,11 @@ class AmountEntry(ctk.CTkFrame):
         if init_val is None:
             init_val = "1"
         
-        self._down_button = ctk.CTkButton(self, text="v", command=self._lower_amt)
+        self._down_button = ctk.CTkButton(self, text="v", command=self._lower_amt, width=10)
         self._down_button.grid(row=0, column=0)
-        self._amount = SimpleEntry(self, initial_value=init_val, callback=callback)
+        self._amount = SimpleEntry(self, initial_value=init_val, callback=callback, width=40)
         self._amount.grid(row=0, column=1)
-        self._up_button = ctk.CTkButton(self, text="^", command=self._raise_amt)
+        self._up_button = ctk.CTkButton(self, text="^", command=self._raise_amt, width=10)
         self._up_button.grid(row=0, column=2)
     
     def _lower_amt(self, *args, **kwargs):
@@ -371,6 +366,8 @@ class SimpleButton(ctk.CTkButton):
 
 class AutoClearingLabel(ctk.CTkLabel):
     def __init__(self, *args, clear_timeout=3000, **kwargs):
+        if 'text' not in kwargs:
+            kwargs['text'] = ''
         super().__init__(*args, **kwargs)
         self.clear_timeout = clear_timeout
         self.latest_clear_id = 0

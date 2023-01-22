@@ -11,7 +11,7 @@ from routing.route_events import EventDefinition, InventoryEventDefinition, Lear
 from route_recording.game_recorders.yellow_gamehook_constants import GameHookConstantConverter, gh_gen_one_const
 from pkmn.gen_1.gen_one_constants import gen_one_const
 from utils.constants import const
-import pkmn
+from pkmn.gen_factory import current_gen_info
 
 logger = logging.getLogger(__name__)
 
@@ -78,7 +78,7 @@ class Machine:
             self._move_cache_update(generate_events=False)
             return
 
-        solo_mon = pkmn.current_gen_info().pkmn_db().get_pkmn(self._solo_mon_species)
+        solo_mon = current_gen_info().pkmn_db().get_pkmn(self._solo_mon_species)
         if solo_mon is None:
             self._controller._controller.trigger_exception(f"Identified solo mon was invalid: {mon_name} from GameHook, converted to {self._solo_mon_species}")
             self._solo_mon_species = None
@@ -323,7 +323,7 @@ class Machine:
                         self._controller.game_reset()
                         continue
                     elif None is not cur_event.trainer_def:
-                        trainer = pkmn.current_gen_info().trainer_db().get_trainer(cur_event.trainer_def.trainer_name)
+                        trainer = current_gen_info().trainer_db().get_trainer(cur_event.trainer_def.trainer_name)
                         if trainer is None:
                             msg = f"Failed to find trainer from GameHook: {cur_event.trainer_def.trainer_name}"
                             logger.error(msg)
@@ -336,7 +336,7 @@ class Machine:
                             self._controller.lost_trainer_battle(cur_event.trainer_def.trainer_name)
                             continue
                     elif None is not cur_event.item_event_def:
-                        item = pkmn.current_gen_info().item_db().get_item(cur_event.item_event_def.item_name)
+                        item = current_gen_info().item_db().get_item(cur_event.item_event_def.item_name)
                         if item is None:
                             msg = f"Failed to find item from GameHook: {cur_event.item_event_def.item_name} for event {cur_event}"
                             logger.error(msg)
@@ -350,7 +350,7 @@ class Machine:
                             if (
                                 prev_event is not None and
                                 prev_event.event_definition.trainer_def is not None and
-                                cur_event.item_event_def.item_name == gen_one_const.FIGHT_REWARDS.get(prev_event.event_definition.get_trainer_obj().name)
+                                cur_event.item_event_def.item_name == current_gen_info().get_fight_reward(prev_event.event_definition.get_trainer_obj().name)
                             ):
                                 logger.info(f"Intentionally ignoring item add for battle reward: {cur_event.item_event_def.item_name}")
                                 continue
@@ -358,8 +358,8 @@ class Machine:
                                 logger.info(f"Intentionally ignoring item add for duplicate key item: {cur_event.item_event_def.item_name}")
                                 continue
                     elif None is not cur_event.learn_move:
-                        to_learn = pkmn.current_gen_info().move_db().get_move(cur_event.learn_move.move_to_learn)
-                        to_forget = pkmn.current_gen_info().move_db().get_move(cur_event.learn_move.destination)
+                        to_learn = current_gen_info().move_db().get_move(cur_event.learn_move.move_to_learn)
+                        to_forget = current_gen_info().move_db().get_move(cur_event.learn_move.destination)
                         if to_learn is None:
                             msg = f"Failed to find move from GameHook: {cur_event.learn_move.move_to_learn} for event {cur_event}"
                             logger.error(msg)

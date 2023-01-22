@@ -1,14 +1,18 @@
+from __future__ import annotations
 
 from typing import Dict, Tuple, List
 from pkmn import universal_data_objects
 from pkmn.damage_calc import DamageRange
 from pkmn.pkmn_db import ItemDB, MinBattlesDB, MoveDB, PkmnDB, TrainerDB
-from routing import route_state_objects
+import routing.state_objects
 from route_recording.recorder import RecorderController, RecorderGameHookClient
 
 
 class CurrentGen:
     def version_name(self) -> str:
+        raise NotImplementedError()
+
+    def base_version_name(self) -> str:
         raise NotImplementedError()
     
     def get_generation(self) -> int:
@@ -71,16 +75,13 @@ class CurrentGen:
     def make_badge_list(self) -> universal_data_objects.BadgeList:
         raise NotImplementedError()
     
-    def make_inventory(self) -> route_state_objects.Inventory:
+    def make_inventory(self) -> routing.state_objects.Inventory:
         raise NotImplementedError()
     
     def get_stat_modifer_moves(self) -> List[str]:
         raise NotImplementedError()
     
     def get_fight_reward(self, trainer_name) -> str:
-        raise NotImplementedError()
-
-    def is_minor_fight(self, trainer_name) -> str:
         raise NotImplementedError()
 
     def is_major_fight(self, trainer_name) -> str:
@@ -91,5 +92,19 @@ class CurrentGen:
     
     def get_hidden_power(self, dvs:universal_data_objects.StatBlock) -> Tuple[str, int]:
         raise NotImplementedError()
-
+    
+    def get_stats_boosted_by_vitamin(self, vit_name:str) -> List[str]:
+        raise NotImplementedError()
+    
+    def get_vitamin_amount(self) -> int:
+        raise NotImplementedError()
+    
+    def get_vitamin_cap(self) -> int:
+        raise NotImplementedError()
+    
+    def create_new_custom_gen(self, new_version_name):
+        raise NotImplementedError()
+    
+    def load_custom_gen(self, custom_version_name, root_path) -> CurrentGen:
+        raise NotImplementedError()
 

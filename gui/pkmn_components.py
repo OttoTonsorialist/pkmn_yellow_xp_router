@@ -6,10 +6,9 @@ import logging
 
 from controllers.main_controller import MainController
 from gui import custom_components
-import pkmn as pkmn_gen_info
+from pkmn.gen_factory import current_gen_info
 from pkmn import universal_data_objects
-from routing import route_state_objects
-from routing import route_events
+from routing import state_objects, route_events, full_route_state
 from utils.constants import const
 from utils.config_manager import config
 
@@ -90,13 +89,14 @@ class RouteList(custom_components.CustomGridview):
             
             self.selection_set(new_selection)
         except Exception as e:
-            logger.error(f"Error occurred trying to update eventlist selection:")
-            logger.error(f"event_ids: {event_ids}")
-            logger.exception(e)
-
+            # This *should* only happen in the case that events are selected which are currently hidden by filters
+            # So, just ignore and carry on
+            pass
+    
+    def scroll_to_selected_events(self):
         try:
-            if len(new_selection):
-                self.see(new_selection[-1])
+            if self.selection():
+                self.see(self.selection()[-1])
         except Exception as e:
             # NOTE: this seems to happen when the controller creates a new event and immediately selects it
             # in that case, the controller moves faster than the event list, so the event to select it fires before it exists
@@ -145,6 +145,12 @@ class RouteList(custom_components.CustomGridview):
         for event_idx, event_obj in enumerate(event_list):
             semantic_id = self._get_attr_helper(event_obj, self._semantic_id_attr)
 
+            if not event_obj.do_render(
+                search=self._controller.get_route_search_string(),
+                filter_types=self._controller.get_route_filter_types(),
+            ):
+                continue
+
             if isinstance(event_obj, route_events.EventFolder):
                 is_folder = True
                 force_open = event_obj.expanded
@@ -186,7 +192,7 @@ class InventoryViewer(ctk.CTkFrame):
         super().__init__(*args, **kwargs)
         self.configure(bg_color=config.get_contrast_color(), height=150, width=250)
 
-        self._money_label = ctk.CTkLabel(self, text="Current Money: ", bg_color=config.get_header_color(), fg_color=config.get_text_color())
+        self._money_label = ctk.CTkLabel(self, text="Current Money: ", bg_color=config.get_header_color())
         self._money_label.grid(row=0, column=0, columnspan=2)
 
         self._all_items = []
@@ -195,14 +201,13 @@ class InventoryViewer(ctk.CTkFrame):
         self.max_render_size = 20
         split_point = self.max_render_size // 2
         for i in range(self.max_render_size):
-            cur_item_label = ctk.CTkLabel(self, text=f"# {i:0>2}: ", anchor=tk.W, fg_color=config.get_text_color())
+            cur_item_label = ctk.CTkLabel(self, text=f"# {i:0>2}: ", anchor=tk.W)
             cur_item_label.configure(bg_color=config.get_contrast_color(), width=20)
             cur_item_label.grid(row=(i % split_point) + 1, column=i // split_point, sticky=tk.W)
             self._all_items.append(cur_item_label)
     
-    def set_inventory(self, inventory:route_state_objects.Inventory):
-        self._money_label.configure(text=f"Current Money: {inventory.cur_money}")
-
+    def set_inventory(self, inventory:state_objects.Inventory):
+        self._money_label.config(text=f"Current Money: {inventory.cur_money}")
         idx = -1
         too_many_items = len(inventory.cur_items) > self.max_render_size
 
@@ -231,17 +236,17 @@ class PkmnViewer(ctk.CTkFrame):
         self.stat_width = 4
         self.move_width = 11
 
-        self._name_value = ctk.CTkLabel(self, bg_color=config.get_header_color(), font=font_to_use, fg_color=config.get_text_color())
+        self._name_value = ctk.CTkLabel(self, bg_color=config.get_header_color(), font=font_to_use)
         self._name_value.grid(row=0, column=0, columnspan=2, sticky=tk.EW)
 
-        self._held_item = ctk.CTkLabel(self, bg_color=config.get_header_color(), font=font_to_use, fg_color=config.get_text_color())
+        self._held_item = ctk.CTkLabel(self, bg_color=config.get_header_color(), font=font_to_use)
 
-        self.stat_column = StatColumn(self, bg_color=config.get_secondary_color(), val_width=self.stat_width, num_rows=6, font=font_to_use, fg_color=config.get_text_color())
+        self.stat_column = StatColumn(self, bg_color=config.get_secondary_color(), val_width=self.stat_width, num_rows=6, font=font_to_use)
         self.stat_column.set_labels(["HP:", "Attack:", "Defense:", "Spc Atk:", "Spc Def:", "Speed:"])
         self.stat_column.set_header("")
         self.stat_column.grid(row=2, column=0, sticky=tk.W)
 
-        self.move_column = StatColumn(self, bg_color=config.get_primary_color(), val_width=self.move_width, num_rows=6, font=font_to_use, fg_color=config.get_text_color())
+        self.move_column = StatColumn(self, bg_color=config.get_primary_color(), val_width=self.move_width, num_rows=6, font=font_to_use)
         self.move_column.set_labels(["Lv:", "Exp:", "Move 1:", "Move 2:", "Move 3:", "Move 4:"])
         self.move_column.set_header("")
 
@@ -256,7 +261,7 @@ class PkmnViewer(ctk.CTkFrame):
         self._name_value.configure(text=pkmn.name)
         self._held_item.configure(text=f"Held Item: {pkmn.held_item}")
 
-        if pkmn_gen_info.current_gen_info().get_generation() != 1:
+        if current_gen_info().get_generation() != 1:
             self._held_item.grid(row=1, column=0, columnspan=2, sticky=tk.EW)
         else:
             self._held_item.grid_forget()
@@ -275,9 +280,9 @@ class PkmnViewer(ctk.CTkFrame):
 
         spd_val = str(pkmn.cur_stats.special_defense)
         # TODO: ugly, fix later
-        if pkmn_gen_info.current_gen_info().get_generation() == 2:
+        if current_gen_info().get_generation() == 2:
             if badges is not None and badges.is_special_defense_boosted():
-                unboosted_spa = pkmn.base_stats.calc_level_stats(pkmn.level, pkmn.dvs, pkmn.stat_xp, pkmn_gen_info.current_gen_info().make_badge_list()).special_attack
+                unboosted_spa = pkmn.base_stats.calc_level_stats(pkmn.level, pkmn.dvs, pkmn.stat_xp, current_gen_info().make_badge_list()).special_attack
                 if (
                     (unboosted_spa >= 206 and unboosted_spa <= 432) or
                     (unboosted_spa >= 661 and unboosted_spa <= 999)
@@ -309,7 +314,7 @@ class StateViewer(ctk.CTkFrame):
         self.inventory = InventoryViewer(self)
         self.inventory.grid(row=0, column=2, padx=5, pady=5, sticky=tk.S)
     
-    def set_state(self, cur_state:route_state_objects.RouteState):
+    def set_state(self, cur_state:full_route_state.RouteState):
         self.inventory.set_inventory(cur_state.inventory)
         self.pkmn.set_pkmn(cur_state.solo_pkmn.get_pkmn_obj(cur_state.badges), cur_state.badges)
         self.stat_xp.set_state(cur_state)
@@ -329,7 +334,7 @@ class EnemyPkmnTeam(ctk.CTkFrame):
         self._all_pkmn.append(PkmnViewer(self))
         self._all_pkmn.append(PkmnViewer(self))
 
-    def set_team(self, enemy_pkmn:List[universal_data_objects.EnemyPkmn], cur_state:route_state_objects.RouteState=None):
+    def set_team(self, enemy_pkmn:List[universal_data_objects.EnemyPkmn], cur_state:full_route_state.RouteState=None):
         if enemy_pkmn is None:
             enemy_pkmn = []
 
@@ -360,15 +365,15 @@ class BadgeBoostViewer(ctk.CTkFrame):
         self._info_frame = ctk.CTkFrame(self, bg_color=config.get_background_color())
         self._info_frame.grid(row=0, column=0)
 
-        self._move_selector_label = ctk.CTkLabel(self._info_frame, text="Setup Move: ", bg_color=config.get_background_color(), fg_color=config.get_text_color())
+        self._move_selector_label = ctk.CTkLabel(self._info_frame, text="Setup Move: ", bg_color=config.get_background_color())
         self._move_selector = custom_components.SimpleOptionMenu(self._info_frame, ["N/A"], callback=self._move_selected_callback)
         self._move_selector_label.pack()
         self._move_selector.pack()
 
-        self._badge_summary = ctk.CTkLabel(self._info_frame, bg_color=config.get_background_color(), fg_color=config.get_text_color())
+        self._badge_summary = ctk.CTkLabel(self._info_frame, bg_color=config.get_background_color())
         self._badge_summary.pack(pady=10)
 
-        self._state:route_state_objects.RouteState = None
+        self._state:full_route_state.RouteState = None
 
         # 6 possible badge boosts from a single setup move, plus unmodified summary
         NUM_SUMMARIES = 7
@@ -383,7 +388,7 @@ class BadgeBoostViewer(ctk.CTkFrame):
             cur_frame.grid(row=((idx + 1) // NUM_COLS), column=((idx + 1) % NUM_COLS), padx=3, pady=3)
 
             self._frames.append(cur_frame)
-            self._labels.append(ctk.CTkLabel(cur_frame, bg_color=config.get_background_color(), fg_color=config.get_text_color()))
+            self._labels.append(ctk.CTkLabel(cur_frame, bg_color=config.get_background_color()))
             self._viewers.append(PkmnViewer(cur_frame, stats_only=True))
     
     def _clear_all_summaries(self):
@@ -415,7 +420,7 @@ class BadgeBoostViewer(ctk.CTkFrame):
         prev_mod = universal_data_objects.StageModifiers()
         stage_mod = None
         for idx in range(1, len(self._frames)):
-            stage_mod = prev_mod.apply_stat_mod(pkmn_gen_info.current_gen_info().move_db().get_stat_mod(move))
+            stage_mod = prev_mod.apply_stat_mod(current_gen_info().move_db().get_stat_mod(move))
             if stage_mod == prev_mod:
                 self._labels[idx].pack_forget()
                 self._viewers[idx].pack_forget()
@@ -430,9 +435,9 @@ class BadgeBoostViewer(ctk.CTkFrame):
             self._viewers[idx].pack()
 
     
-    def set_state(self, state:route_state_objects.RouteState):
+    def set_state(self, state:full_route_state.RouteState):
         self._state = state
-        self._move_selector.new_values(pkmn_gen_info.current_gen_info().get_stat_modifer_moves())
+        self._move_selector.new_values(current_gen_info().get_stat_modifer_moves())
 
         # when state changes, update the badge list label
         raw_badge_text = self._state.badges.to_string(verbose=False)
@@ -464,8 +469,6 @@ class StatColumn(ctk.CTkFrame):
         super().__init__(*args, **kwargs)
         if bg_color is None:
             bg_color = config.get_contrast_color()
-        if fg_color is None:
-            fg_color = config.get_text_color()
 
         self.bg_color = bg_color
         self.configure(bg_color=self.bg_color)
@@ -553,17 +556,17 @@ class StatExpViewer(ctk.CTkFrame):
         ] 
 
         self._state = None
-        self._net_gain_column = StatColumn(self, num_rows=len(stat_labels), val_width=3, bg_color=config.get_header_color(), fg_color=config.get_text_color())
+        self._net_gain_column = StatColumn(self, num_rows=len(stat_labels), val_width=3, bg_color=config.get_header_color())
         self._net_gain_column.set_labels(stat_labels)
         self._net_gain_column.set_header("Net Stats\nFrom StatExp")
         self._net_gain_column.grid(row=0, column=0)
 
-        self._realized_stat_xp_column = StatColumn(self, num_rows=len(stat_labels), val_width=5, bg_color=config.get_secondary_color(), fg_color=config.get_text_color())
+        self._realized_stat_xp_column = StatColumn(self, num_rows=len(stat_labels), val_width=5, bg_color=config.get_secondary_color())
         self._realized_stat_xp_column.set_labels(stat_labels)
         self._realized_stat_xp_column.set_header("Realized\nStatExp")
         self._realized_stat_xp_column.grid(row=0, column=1)
 
-        self._total_stat_xp_column = StatColumn(self, num_rows=len(stat_labels), val_width=5, bg_color=config.get_primary_color(), fg_color=config.get_text_color())
+        self._total_stat_xp_column = StatColumn(self, num_rows=len(stat_labels), val_width=5, bg_color=config.get_primary_color())
         self._total_stat_xp_column.set_labels(stat_labels)
         self._total_stat_xp_column.set_header("Total\nStatExp")
         self._total_stat_xp_column.grid(row=0, column=2)
@@ -572,7 +575,7 @@ class StatExpViewer(ctk.CTkFrame):
         # NOTE: re-ordering stats over special
         return [stat_block.hp, stat_block.attack, stat_block.defense, stat_block.special_attack, stat_block.speed]
 
-    def set_state(self, state:route_state_objects.RouteState):
+    def set_state(self, state:full_route_state.RouteState):
         self._state = state
 
         self._net_gain_column.set_values(

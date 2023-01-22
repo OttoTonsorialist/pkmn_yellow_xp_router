@@ -16,13 +16,13 @@ from gui.popups.delete_confirmation_popup import DeleteConfirmation
 from gui.popups.load_route_popup import LoadRouteWindow
 from gui.popups.new_folder_popup import NewFolderWindow
 from gui.popups.new_route_popup import NewRouteWindow
-from gui.popups.route_one_popup import RouteOneWindow
 from gui.popups.transfer_event_popup import TransferEventWindow
+from gui.popups.custom_gen_popup import CustomGenWindow
 from gui.recorder_status import RecorderStatus
+from gui.route_search_component import RouteSearch
 from route_recording.recorder import RecorderController
 from utils.constants import const
 from utils.config_manager import config
-from utils import route_one_utils
 from routing.route_events import EventDefinition, EventFolder, EventGroup, EventItem, TrainerEventDefinition
 import routing.router as router
 
@@ -63,6 +63,7 @@ class MainWindow(ctk.CTk):
         style.map("TNotebook.Tab", bg_color=[("selected", config.get_primary_color())])
 
         self.load_custom_font()
+        ctk.set_appearance_mode("dark")
 
         # menu bar
         self.top_menu_bar = tk.Menu(self)
@@ -75,6 +76,7 @@ class MainWindow(ctk.CTk):
         self.file_menu.add_command(label="Save Route       (Ctrl+S)", command=self.save_route)
         self.file_menu.add_command(label="Export Notes       (Ctrl+Shift+W)", command=self.export_notes)
         self.file_menu.add_command(label="Config Colors       (Ctrl+Shift+D)", command=self.open_config_window)
+        self.file_menu.add_command(label="Custom Gens       (Ctrl+Shift+E)", command=self.open_custom_gens_window)
         self.file_menu.add_command(label="App Config       (Ctrl+Shift+Z)", command=self.open_app_config_window)
 
         self.event_menu = tk.Menu(self.top_menu_bar, tearoff=0)
@@ -88,14 +90,9 @@ class MainWindow(ctk.CTk):
         self.folder_menu.add_command(label="New Folder                   (Ctrl+Q)", command=self.open_new_folder_window)
         self.folder_menu.add_command(label="Rename Cur Folder       (Ctrl+W)", command=self.rename_folder)
 
-        self.export_menu = tk.Menu(self.top_menu_bar, tearoff=0)
-        self.export_menu.add_command(label="Export           (Ctrl+Shift+E)", command=self.open_export_window)
-        self.export_menu.add_command(label="Quick Run    (Ctrl+Shift+R)", command=self.just_export_and_run)
-
         self.top_menu_bar.add_cascade(label="File", menu=self.file_menu)
         self.top_menu_bar.add_cascade(label="Events", menu=self.event_menu)
         self.top_menu_bar.add_cascade(label="Folders", menu=self.folder_menu)
-        self.top_menu_bar.add_cascade(label="RouteOne", menu=self.export_menu)
 
         # main container for everything to sit in... might be unnecessary?
         self.primary_window = ctk.CTkFrame(self)
@@ -113,7 +110,7 @@ class MainWindow(ctk.CTk):
         self.run_status_label = ctk.CTkLabel(self.top_row, text="Run Status: Valid", bg_color=const.VALID_COLOR, anchor=tk.W, padx=10, pady=10)
         self.run_status_label.grid(row=0, column=1, sticky=tk.W)
 
-        self.route_version = ctk.CTkLabel(self.top_row, text="RBY Version", anchor=tk.W, padx=10, pady=10)
+        self.route_version = ctk.CTkLabel(self.top_row, text="RBY Version", anchor=tk.W, padx=10, pady=10, text_color="black")
         self.route_version.grid(row=0, column=2)
 
         self.route_name_label = ctk.CTkLabel(self.top_row, text="Route Name: ")
@@ -121,7 +118,7 @@ class MainWindow(ctk.CTk):
 
         self.route_name = ctk.CTkEntry(self.top_row)
         self.route_name.grid(row=0, column=4)
-        self.route_name.configure(width=30)
+        self.route_name.configure(width=150)
 
         self.message_label = custom_components.AutoClearingLabel(self.top_row, width=100, justify=tk.LEFT, anchor=tk.W)
         self.message_label.grid(row=0, column=5, sticky=tk.E)
@@ -190,8 +187,14 @@ class MainWindow(ctk.CTk):
         self.group_controls.columnconfigure(7, weight=1)
         self.group_controls.columnconfigure(11, weight=1)
 
-        self.event_list = pkmn_components.RouteList(self._controller, self.left_info_panel)
-        self.scroll_bar = ctk.CTkScrollbar(self.left_info_panel, orientation="vertical", command=self.event_list.yview, width=30)
+        self.route_search = RouteSearch(self._controller, self.left_info_panel)
+        self.route_search.pack(fill=tk.X, anchor=tk.CENTER)
+
+        self.frame_for_event_list = ctk.CTkFrame(self.left_info_panel)
+        self.frame_for_event_list.pack(fill=tk.BOTH, anchor=tk.CENTER, expand=True)
+
+        self.event_list = pkmn_components.RouteList(self._controller, self.frame_for_event_list)
+        self.scroll_bar = ctk.CTkScrollbar(self.frame_for_event_list, orientation="vertical", command=self.event_list.yview, width=30)
 
         # intentionally pack event list after scrollbar, so they're ordered correctly
         self.scroll_bar.pack(side="right", fill=tk.BOTH)
@@ -223,10 +226,8 @@ class MainWindow(ctk.CTk):
         # folder actions
         self.bind('<Control-q>', self.open_new_folder_window)
         self.bind('<Control-w>', self.rename_folder)
-        # route One integrations
-        self.bind('<Control-E>', self.open_export_window)
-        self.bind('<Control-R>', self.just_export_and_run)
         # config integrations
+        self.bind('<Control-E>', self.open_custom_gens_window)
         self.bind('<Control-D>', self.open_config_window)
         self.bind('<Control-Z>', self.open_app_config_window)
         # detail update function
@@ -247,6 +248,8 @@ class MainWindow(ctk.CTk):
         self.new_event_window = None
 
     def run(self):
+        # TODO: is this the right place for it?
+        self._controller.load_all_custom_versions()
         self.mainloop()
     
     def _on_close(self, *args, **kwargs):
@@ -343,6 +346,8 @@ class MainWindow(ctk.CTk):
         if all_event_ids != self.event_list.get_all_selected_event_ids():
             self.event_list.set_all_selected_event_ids(all_event_ids)
 
+        self.event_list.scroll_to_selected_events()
+
         # now assign it the value it will have for the rest of the function
         all_event_ids = self.event_list.get_all_selected_event_ids(allow_event_items=False)
         if len(all_event_ids) > 1 or len(all_event_ids) == 0:
@@ -384,6 +389,10 @@ class MainWindow(ctk.CTk):
     def open_app_config_window(self, *args, **kwargs):
         if self._is_active_window():
             self.new_event_window = DataDirConfigWindow(self, self.cancel_and_quit)
+    
+    def open_custom_gens_window(self, *args, **kwargs):
+        if self._is_active_window():
+            self.new_event_window = CustomGenWindow(self, self._controller)
     
     def open_config_window(self, *args, **kwargs):
         if self._is_active_window():
@@ -477,27 +486,6 @@ class MainWindow(ctk.CTk):
                 existing_folder_name,
                 insert_after=all_event_ids[0] if len(all_event_ids) == 1 else None
             )
-
-    def just_export_and_run(self, *args, **kwargs):
-        try:
-            if self._controller.get_init_state() is None:
-                self.message_label.set_message(f"Cannot export when no route is loaded")
-
-            jar_path = config.get_route_one_path()
-            if not jar_path:
-                config_path, _, _ = route_one_utils.export_to_route_one(self._controller.get_raw_route(), self.route_name.get())
-                self.message_label.set_message(f"Could not run RouteOne, jar path not set. Exported RouteOne files: {config_path}")
-            else:
-                config_path, _, out_path = route_one_utils.export_to_route_one(self._controller.get_raw_route(), self.route_name.get())
-                result = route_one_utils.run_route_one(jar_path, config_path)
-                if not result:
-                    self.message_label.set_message(f"Ran RouteOne successfully. Result file: {out_path}")
-        except Exception as e:
-            self.message_label.set_message(f"Exception attempting to export and run: {type(e)}: {e}")
-
-    def open_export_window(self, event=None):
-        if self._is_active_window():
-            self.new_event_window = RouteOneWindow(self, self._controller, self.route_name.get())
 
     def clear_popup(self, *args, **kwargs):
         # hook for when a pop-up cleans up after itself

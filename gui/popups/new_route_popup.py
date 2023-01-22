@@ -10,7 +10,7 @@ from gui import custom_components
 from pkmn.universal_data_objects import StatBlock
 from utils.constants import const
 from utils import io_utils
-import pkmn
+from pkmn.gen_factory import _gen_factory as gen_factory
 
 
 class NewRouteWindow(Popup):
@@ -25,7 +25,7 @@ class NewRouteWindow(Popup):
 
         self.pkmn_version_label = ctk.CTkLabel(self.controls_frame, text="Pokemon Version:")
         self.pkmn_version_label.grid(row=0, column=0, padx=self.padx, pady=self.pady)
-        self.pkmn_version = custom_components.SimpleOptionMenu(self.controls_frame, const.VERSION_LIST, callback=self._pkmn_version_callback)
+        self.pkmn_version = custom_components.SimpleOptionMenu(self.controls_frame, gen_factory.get_gen_names(), callback=self._pkmn_version_callback)
         self.pkmn_version.configure(width=20)
         self.pkmn_version.grid(row=0, column=1, padx=self.padx, pady=self.pady)
 
@@ -110,7 +110,7 @@ class NewRouteWindow(Popup):
     
     def _recalc_hidden_power(self, *args, **kwargs):
         try:
-            hp_type, hp_power = pkmn.specific_gen_info(self.pkmn_version.get()).get_hidden_power(
+            hp_type, hp_power = gen_factory.get_specific_version(self.pkmn_version.get()).get_hidden_power(
                 StatBlock(
                     int(self.custom_dvs_hp.get()),
                     int(self.custom_dvs_atk.get()),
@@ -130,7 +130,7 @@ class NewRouteWindow(Popup):
 
     def _pkmn_version_callback(self, *args, **kwargs):
         # now that we've loaded the right version, repopulate the pkmn selector just in case
-        temp_gen = pkmn.specific_gen_info(self.pkmn_version.get())
+        temp_gen = gen_factory.get_specific_version(self.pkmn_version.get())
         self.solo_selector.new_values(temp_gen.pkmn_db().get_filtered_names(filter_val=self.pkmn_filter.get().strip()))
 
         all_routes = [const.EMPTY_ROUTE_NAME]
@@ -150,7 +150,7 @@ class NewRouteWindow(Popup):
         self._base_route_filter_callback()
 
     def _pkmn_filter_callback(self, *args, **kwargs):
-        self.solo_selector.new_values(pkmn.specific_gen_info(self.pkmn_version.get()).pkmn_db().get_filtered_names(filter_val=self.pkmn_filter.get().strip()))
+        self.solo_selector.new_values(gen_factory.get_specific_version(self.pkmn_version.get()).pkmn_db().get_filtered_names(filter_val=self.pkmn_filter.get().strip()))
 
     def _base_route_filter_callback(self, *args, **kwargs):
         # NOTE: assume the _min_battles_cache is always accurate, and just filter it down as needed
@@ -186,7 +186,7 @@ class NewRouteWindow(Popup):
         if selected_base_route == const.EMPTY_ROUTE_NAME:
             selected_base_route = None
         elif selected_base_route.startswith(const.PRESET_ROUTE_PREFIX):
-            temp_gen = pkmn.specific_gen_info(self.pkmn_version.get())
+            temp_gen = gen_factory.get_specific_version(self.pkmn_version.get())
             selected_base_route = os.path.join(temp_gen.min_battles_db().get_dir(), selected_base_route[len(const.PRESET_ROUTE_PREFIX):] + ".json")
         else:
             selected_base_route = io_utils.get_existing_route_path(selected_base_route)
