@@ -903,6 +903,10 @@ class EventFolder:
         return self.child_errors
     
     def do_render(self, search=None, filter_types=None):
+        # make sure to show empty folders when no filters are set
+        if len(self.children) == 0 and search is None and filter_types is None:
+            return True
+
         for test_event in self.children:
             if test_event.do_render(search=search, filter_types=filter_types):
                 return True

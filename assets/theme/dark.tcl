@@ -561,21 +561,7 @@ namespace eval ttk::theme::azure-dark {
             ] -border 5 -padding {14 4}
 
         # Treeview
-        ttk::style element create Treeview.field image $I(card) \
-            -border 5
-
-        ttk::style element create Treeheading.cell \
-            image [list $I(tree-basic) \
-                pressed $I(tree-pressed)
-            ] -border 5 -padding 4 -sticky ewns
-        
-        ttk::style element create Treeitem.indicator \
-            image [list $I(right) \
-                user2 $I(empty) \
-                user1 $I(down) \
-            ] -width 26 -sticky {}
-
-        ttk::style configure Treeview -background $colors(-bg)
+        ttk::style configure Treeview -background $colors(-bg) -fieldbackground $colors(-bg)
         ttk::style configure Treeview.Item -padding {2 0 0 0}
         ttk::style map Treeview \
             -background [list selected $colors(-selectbg)] \
