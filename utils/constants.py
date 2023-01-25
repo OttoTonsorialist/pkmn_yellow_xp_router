@@ -97,6 +97,7 @@ class Constants:
         self.MONEY = "money"
         self.VERBOSE_KEY = "verbose"
         self.SETUP_MOVES_KEY = "setup_moves"
+        self.ENEMY_SETUP_MOVES_KEY = "enemy_setup_moves"
         self.MIMIC_SELECTION = "mimic_selection"
         self.CUSTOM_MOVE_DATA = "custom_move_data"
         self.PLAYER_KEY = "player"

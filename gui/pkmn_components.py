@@ -194,7 +194,7 @@ class InventoryViewer(ttk.Frame):
         super().__init__(*args, **kwargs)
         self.config(height=150, width=250)
 
-        self._money_label = ttk.Label(self, text="Current Money: ", style=f"Header.TLabel")
+        self._money_label = ttk.Label(self, text="Current Money: ", style=f"Header.TLabel", padding=(0, 2, 0, 2))
         self._money_label.grid(row=0, column=0, columnspan=2, sticky=tk.EW)
 
         self._all_items = []
@@ -238,17 +238,17 @@ class PkmnViewer(ttk.Frame):
         self.stat_width = 4
         self.move_width = 11
 
-        self._name_value = ttk.Label(self, style="Header.TLabel")
+        self._name_value = ttk.Label(self, style="Header.TLabel", font=font_to_use, padding=(0, 2, 0, 2))
         self._name_value.grid(row=0, column=0, columnspan=2, sticky=tk.EW)
 
-        self._held_item = ttk.Label(self, style="Header.TLabel")
+        self._held_item = ttk.Label(self, style="Header.TLabel", font=font_to_use)
 
-        self.stat_column = StatColumn(self, val_width=self.stat_width, num_rows=6, style_prefix="Secondary")
+        self.stat_column = StatColumn(self, val_width=self.stat_width, num_rows=6, style_prefix="Secondary", font=font_to_use)
         self.stat_column.set_labels(["HP:", "Attack:", "Defense:", "Spc Atk:", "Spc Def:", "Speed:"])
         self.stat_column.set_header("")
         self.stat_column.grid(row=2, column=0, sticky=tk.W)
 
-        self.move_column = StatColumn(self, val_width=self.move_width, num_rows=6)
+        self.move_column = StatColumn(self, val_width=self.move_width, num_rows=6, font=font_to_use)
         self.move_column.set_labels(["Lv:", "Exp:", "Move 1:", "Move 2:", "Move 3:", "Move 4:"])
         self.move_column.set_header("")
 
@@ -309,7 +309,7 @@ class PkmnViewer(ttk.Frame):
 class StateViewer(ttk.Frame):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.pkmn = PkmnViewer(self, font_size=10)
+        self.pkmn = PkmnViewer(self, font_size=12)
         self.pkmn.grid(row=0, column=0, padx=5, pady=5, sticky=tk.S)
         self.stat_xp = StatExpViewer(self)
         self.stat_xp.grid(row=0, column=1, padx=5, pady=5, sticky=tk.S)
@@ -328,12 +328,12 @@ class EnemyPkmnTeam(ttk.Frame):
 
         self._all_pkmn:List[PkmnViewer] = []
 
-        self._all_pkmn.append(PkmnViewer(self))
-        self._all_pkmn.append(PkmnViewer(self))
-        self._all_pkmn.append(PkmnViewer(self))
-        self._all_pkmn.append(PkmnViewer(self))
-        self._all_pkmn.append(PkmnViewer(self))
-        self._all_pkmn.append(PkmnViewer(self))
+        self._all_pkmn.append(PkmnViewer(self, font_size=10))
+        self._all_pkmn.append(PkmnViewer(self, font_size=10))
+        self._all_pkmn.append(PkmnViewer(self, font_size=10))
+        self._all_pkmn.append(PkmnViewer(self, font_size=10))
+        self._all_pkmn.append(PkmnViewer(self, font_size=10))
+        self._all_pkmn.append(PkmnViewer(self, font_size=10))
 
     def set_team(self, enemy_pkmn:List[universal_data_objects.EnemyPkmn], cur_state:full_route_state.RouteState=None):
         if enemy_pkmn is None:
@@ -466,7 +466,7 @@ class BadgeBoostViewer(ttk.Frame):
 
 
 class StatColumn(ttk.Frame):
-    def __init__(self, *args, num_rows=4, label_width=None, val_width=None, style_prefix="Primary", **kwargs):
+    def __init__(self, *args, num_rows=4, label_width=None, val_width=None, font=None, style_prefix="Primary", **kwargs):
         kwargs['style'] = f"{style_prefix}.TFrame"
         super().__init__(*args, **kwargs)
 
@@ -481,14 +481,14 @@ class StatColumn(ttk.Frame):
 
         for idx in range(num_rows):
             cur_frame = ttk.Frame(self)
-            cur_frame.pack(fill=tk.X)
+            cur_frame.pack(fill=tk.X, pady=(2, 0))
             self._frames.append(cur_frame)
 
-            cur_label = ttk.Label(cur_frame, anchor=tk.W, style=f"{style_prefix}.TLabel", width=label_width)
+            cur_label = ttk.Label(cur_frame, anchor=tk.W, style=f"{style_prefix}.TLabel", width=label_width, font=font)
             cur_label.grid(row=0, column=0, sticky=tk.EW)
             self._labels.append(cur_label)
 
-            cur_value = ttk.Label(cur_frame, anchor=tk.E, style=f"{style_prefix}.TLabel", width=val_width)
+            cur_value = ttk.Label(cur_frame, anchor=tk.E, style=f"{style_prefix}.TLabel", width=val_width, font=font)
             cur_value.grid(row=0, column=1, sticky=tk.EW)
             self._values.append(cur_value)
 

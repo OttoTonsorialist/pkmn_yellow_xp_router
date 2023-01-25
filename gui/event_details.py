@@ -229,6 +229,7 @@ class EventDetails(ttk.Frame):
                         trainer_def=TrainerEventDefinition(
                             self._cur_trainer_name,
                             setup_moves=self.battle_summary_frame.get_setup_moves(),
+                            enemy_setup_moves=self.battle_summary_frame.get_enemy_setup_moves(),
                             mimic_selection=self.battle_summary_frame.get_mimic_selection(),
                             custom_move_data=self.battle_summary_frame.get_custom_move_data()
                         )

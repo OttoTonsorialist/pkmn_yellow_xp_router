@@ -28,13 +28,16 @@ class BattleSummary(ttk.Frame):
         self._solo_pkmn:List[universal_data_objects.EnemyPkmn] = None
         self._source_state:full_route_state.RouteState = None
         self._source_event_group:route_events.EventGroup = None
-        self._stage_modifiers:universal_data_objects.StageModifiers = universal_data_objects.StageModifiers()
+        self._player_stage_modifiers:universal_data_objects.StageModifiers = universal_data_objects.StageModifiers()
+        self._enemy_stage_modifiers:universal_data_objects.StageModifiers = universal_data_objects.StageModifiers()
         self._mimic_selection = ""
         self._custom_move_data = None
 
         self.setup_moves = SetupMovesSummary(self, callback=self._setup_move_callback)
+        self.enemy_setup_moves = SetupMovesSummary(self, callback=self._setup_move_callback, is_player=False)
         if not self.simple_mode:
-            self.setup_moves.grid(row=0, column=0, sticky=tk.EW)
+            self.setup_moves.grid(row=0, column=0, sticky=tk.EW, pady=(0, 2))
+            self.enemy_setup_moves.grid(row=1, column=0, sticky=tk.EW)
 
         self._mon_pairs:List[MonPairSummary] = []
 
@@ -75,6 +78,9 @@ class BattleSummary(ttk.Frame):
 
     def get_setup_moves(self):
         return self.setup_moves._move_list.copy()
+
+    def get_enemy_setup_moves(self):
+        return self.enemy_setup_moves._move_list.copy()
 
     def get_mimic_selection(self):
         return self._mimic_selection
@@ -137,8 +143,9 @@ class BattleSummary(ttk.Frame):
             if not new_setup_moves:
                 self._mimic_selection = event_group.event_definition.trainer_def.mimic_selection
                 self.setup_moves.set_move_list(event_group.event_definition.trainer_def.setup_moves.copy())
+                self.enemy_setup_moves.set_move_list(event_group.event_definition.trainer_def.enemy_setup_moves.copy())
                 self._custom_move_data = event_group.event_definition.trainer_def.custom_move_data
-            self._stage_modifiers = self.setup_moves.get_stage_modifiers()
+            self._player_stage_modifiers = self.setup_moves.get_stage_modifiers()
             for cur_pkmn in enemy_pkmn:
                 while cur_item_idx < len(event_group.event_items):
                     try:
@@ -149,7 +156,7 @@ class BattleSummary(ttk.Frame):
                             continue
                         if cur_item_pkmn_list[cur_event_item.to_defeat_idx].name == cur_pkmn.name:
                             new_solo_pkmn.append(
-                                cur_event_item.init_state.solo_pkmn.get_pkmn_obj(cur_event_item.init_state.badges, stage_modifiers=self._stage_modifiers)
+                                cur_event_item.init_state.solo_pkmn.get_pkmn_obj(cur_event_item.init_state.badges, stage_modifiers=self._player_stage_modifiers)
                             )
                             break
                         cur_item_idx += 1
@@ -160,10 +167,12 @@ class BattleSummary(ttk.Frame):
             if not new_setup_moves:
                 self._mimic_selection = ""
                 self.setup_moves.set_move_list([])
+                self.enemy_setup_moves.set_move_list([])
                 self._custom_move_data = None
-            self._stage_modifiers = self.setup_moves.get_stage_modifiers()
+            self._player_stage_modifiers = self.setup_moves.get_stage_modifiers()
+            self._enemy_stage_modifiers = self.enemy_setup_moves.get_stage_modifiers()
             for cur_pkmn in enemy_pkmn:
-                new_solo_pkmn.append(cur_state.solo_pkmn.get_pkmn_obj(cur_state.badges, stage_modifiers=self._stage_modifiers))
+                new_solo_pkmn.append(cur_state.solo_pkmn.get_pkmn_obj(cur_state.badges, stage_modifiers=self._player_stage_modifiers))
                 cur_state, _ = cur_state.defeat_pkmn(cur_pkmn)
 
         if enemy_pkmn is not None and len(enemy_pkmn) != len(new_solo_pkmn):
@@ -173,6 +182,7 @@ class BattleSummary(ttk.Frame):
             enemy_pkmn is not None and
             enemy_pkmn == self._enemy_pkmn and
             new_solo_pkmn == self._solo_pkmn and 
+            self.enemy_setup_moves.get_stage_modifiers() == self._enemy_stage_modifiers and
             not recalc_only
         ):
             # if we're being asked to render what's already on-screen (and not forcing a refresh)
@@ -185,6 +195,7 @@ class BattleSummary(ttk.Frame):
             self._source_event_group = event_group
             self._source_state = cur_state
             self._solo_pkmn = new_solo_pkmn
+            self._enemy_stage_modifiers = self.enemy_setup_moves.get_stage_modifiers()
         
         if enemy_pkmn is None or not self.should_calculate:
             enemy_pkmn = []
@@ -202,21 +213,20 @@ class BattleSummary(ttk.Frame):
             all_custom_move_data = self._custom_move_data
 
         idx = -1
-        enemy_stages = universal_data_objects.StageModifiers()
         for idx, cur_pkmn in enumerate(enemy_pkmn):
             self._mon_pairs[idx].set_mons(
                 new_solo_pkmn[idx],
                 cur_pkmn,
-                self._stage_modifiers,
-                enemy_stages,
+                self._player_stage_modifiers,
+                self._enemy_stage_modifiers,
                 mimic_options,
                 all_custom_move_data[idx].get(const.PLAYER_KEY),
                 all_custom_move_data[idx].get(const.ENEMY_KEY),
             )
             if self.simple_mode:
-                self._mon_pairs[idx].grid(row=idx + 1, column=0)
+                self._mon_pairs[idx].grid(row=idx + 2, column=0)
             else:
-                self._mon_pairs[idx].grid(row=idx + 1, column=0, sticky=tk.EW)
+                self._mon_pairs[idx].grid(row=idx + 2, column=0, sticky=tk.EW)
         
         for missing_idx in range(idx+1, 6):
             self._mon_pairs[missing_idx].grid_forget()
@@ -226,25 +236,29 @@ class BattleSummary(ttk.Frame):
 
 
 class SetupMovesSummary(ttk.Frame):
-    def __init__(self, *args, callback=None, **kwargs):
+    def __init__(self, *args, callback=None, is_player=True, **kwargs):
         super().__init__(*args, **kwargs)
 
         self._callback = callback
         self._move_list = []
 
-        self.reset_button = custom_components.SimpleButton(self, text="Reset Setup Moves", command=self._reset)
+        self.reset_button = custom_components.SimpleButton(self, text="Reset Setup", command=self._reset)
         self.reset_button.grid(row=0, column=0, padx=2)
 
-        self.setup_label = ttk.Label(self, text="Move to Add:")
+        self.setup_label = ttk.Label(self, text="Move:")
         self.setup_label.grid(row=0, column=1, padx=2)
 
         self.setup_moves = custom_components.SimpleOptionMenu(self, ["N/A"])
         self.setup_moves.grid(row=0, column=2, padx=2)
 
-        self.add_button = custom_components.SimpleButton(self, text="Add Setup Move", command=self._add_setup_move)
+        self.add_button = custom_components.SimpleButton(self, text="Apply Move", command=self._add_setup_move)
         self.add_button.grid(row=0, column=3, padx=2)
 
-        self.extra_label = ttk.Label(self, text="Current Setup Moves:")
+        if is_player:
+            label_text = "Player Setup:"
+        else:
+            label_text = "Enemy Setup:"
+        self.extra_label = ttk.Label(self, text=label_text)
         self.extra_label.grid(row=0, column=4, padx=2)
 
         self.move_list_label = ttk.Label(self)
