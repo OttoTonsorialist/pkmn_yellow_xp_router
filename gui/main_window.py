@@ -41,7 +41,7 @@ class MainWindow(tk.Tk):
         self.geometry(geometry)
         self.title("Pokemon RBY XP Router")
 
-        self.call("source", os.path.join("assets", "azure.tcl"))
+        self.call("source", os.path.join(const.ASSETS_PATH, "azure.tcl"))
         self.call("set_theme", "dark")
 
         """

@@ -33,10 +33,10 @@ if __name__ == "__main__":
         "main.pyw",
         "--noconfirm",
         "--onefile",
-        "--name",
-        "pkmn_xp_router",
-        "--add-data",
-        "assets\*;assets",
+        "--name", "pkmn_xp_router",
+        "--add-data", "assets\*.tcl;assets",
+        "--add-data", "assets\\theme\\*.tcl;assets\\theme",
+        "--add-data", "assets\\theme\\dark\\*;assets\\theme\\dark",
     ]
 
     root_path = os.path.dirname(os.path.abspath(__file__))
