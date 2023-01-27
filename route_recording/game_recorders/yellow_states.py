@@ -156,13 +156,13 @@ class BattleState(WatchForResetState):
         if new_prop.path == gh_gen_one_const.KEY_PLAYER_MON_EXPPOINTS:
             if self.is_trainer_battle:
                 self._defeated_trainer_mons.append(EventDefinition(wild_pkmn_info=WildPkmnEventDefinition(
-                    self.machine._gamehook_client.get(gh_gen_one_const.KEY_BATTLE_ENEMY_SPECIES).value,
+                    self.machine.gh_converter.pkmn_name_convert(self.machine._gamehook_client.get(gh_gen_one_const.KEY_BATTLE_ENEMY_SPECIES).value),
                     self.machine._gamehook_client.get(gh_gen_one_const.KEY_BATTLE_ENEMY_LEVEL).value,
                     trainer_pkmn=True
                 )))
             else:
                 self.machine._queue_new_event(EventDefinition(wild_pkmn_info=WildPkmnEventDefinition(
-                    self.machine._gamehook_client.get(gh_gen_one_const.KEY_BATTLE_ENEMY_SPECIES).value,
+                    self.machine.gh_converter.pkmn_name_convert(self.machine._gamehook_client.get(gh_gen_one_const.KEY_BATTLE_ENEMY_SPECIES).value),
                     self.machine._gamehook_client.get(gh_gen_one_const.KEY_BATTLE_ENEMY_LEVEL).value,
                 )))
         elif new_prop.path == gh_gen_one_const.KEY_BATTLE_PLAYER_MON_HP:

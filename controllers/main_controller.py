@@ -18,6 +18,8 @@ def handle_exceptions(controller_fn):
         try:
             controller_fn(*args, **kwargs)
         except Exception as e:
+            logger.error(f"Trying to run function: {controller_fn}, got error: {e}")
+            logger.exception(e)
             controller:MainController = args[0]
             controller._on_exception(f"{type(e)}: {e}")
     

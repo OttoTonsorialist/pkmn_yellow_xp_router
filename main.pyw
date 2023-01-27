@@ -5,6 +5,16 @@ import sys
 import threading
 import logging
 
+from utils.constants import const
+from utils import custom_logging
+
+if not os.path.exists(const.GLOBAL_CONFIG_FILE) or not os.path.exists(const.GLOBAL_CONFIG_DIR):
+    # First time setup. Just need to create a few folders
+    # TODO: proper error handling...? Idk man
+    os.makedirs(const.GLOBAL_CONFIG_DIR)
+
+custom_logging.config_logging(const.GLOBAL_CONFIG_DIR)
+
 from tkinter import messagebox
 from controllers.main_controller import MainController
 from gui.auto_upgrade_window import AutoUpgradeGUI
@@ -14,22 +24,14 @@ from pkmn.gen_1 import gen_one_object
 from pkmn.gen_2 import gen_two_object
 from pkmn import gen_factory
 
-from utils.constants import const
 from utils.config_manager import config
 from utils import auto_update, custom_logging
 
 
-if not os.path.exists(const.GLOBAL_CONFIG_FILE) or not os.path.exists(const.GLOBAL_CONFIG_DIR):
-    # First time setup. Just need to create a few folders
-    # TODO: proper error handling...? Idk man
-    os.makedirs(const.GLOBAL_CONFIG_DIR)
-    if not os.path.exists(config.get_user_data_dir()):
-        os.makedirs(config.get_user_data_dir())
-
-
-custom_logging.config_logging(const.GLOBAL_CONFIG_DIR)
 logger = logging.getLogger(__name__)
 flag_to_auto_update = False
+if not os.path.exists(config.get_user_data_dir()):
+    os.makedirs(config.get_user_data_dir())
 
 
 def startup_check_for_upgrade(main_app:MainWindow):
