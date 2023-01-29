@@ -5,8 +5,8 @@ import sys
 
 class Constants:
     def __init__(self):
-        self.APP_VERSION = "v2.4b"
-        self.APP_RELEASE_DATE = "2023-Jan-26"
+        self.APP_VERSION = "v2.4c"
+        self.APP_RELEASE_DATE = "2023-Jan-29"
 
         self.DEBUG_MODE = False
         self.APP_NAME = "pkmn_xp_router"

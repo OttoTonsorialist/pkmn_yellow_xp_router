@@ -12,7 +12,7 @@ class AutoUpgradeGUI(tk.Tk):
         super().__init__()
         self._allow_close = False
 
-        self.auto_update_frame = ttk.Frame(self, width=250, height=150)
+        self.auto_update_frame = tk.Frame(self, width=250, height=150)
         self.auto_update_frame.pack()
         self.auto_update_frame.pack_propagate(False)
 

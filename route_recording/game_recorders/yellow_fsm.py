@@ -217,21 +217,6 @@ class Machine:
                 app_item_name = self.gh_converter.item_name_convert(cur_gained_item)
                 if app_item_name == gh_gen_one_const.OAKS_PARCEL:
                     continue
-
-                if (
-                    app_item_name == gh_gen_one_const.NUGGET and
-                    self._gamehook_client.get(gh_gen_one_const.KEY_OVERWORLD_MAP).value == gh_gen_one_const.ROUTE_24
-                ):
-                    # SUPER DUPER JANK. just ignore nuggets on this Nugget Bridge, because the rocket gives you the nugget _before_ the fight
-                    # which is different from all other rewards that happen _after_ the fight
-                    continue
-                elif (
-                    app_item_name == gh_gen_one_const.DOME_FOSSIL and
-                    str(self._gamehook_client.get(gh_gen_one_const.KEY_OVERWORLD_MAP).value).split("-")[0].strip() == gh_gen_one_const.MT_MOON
-                ):
-                    # edge case: Fight Reward for the fossil only gives you (and therefore checks for) the helix fossil
-                    # special logic to ignore if the user picks up the dome fossil
-                    continue
                 self._queue_new_event(
                     EventDefinition(
                         item_event_def=InventoryEventDefinition(app_item_name, cur_gain_num, True, purchase_expected)

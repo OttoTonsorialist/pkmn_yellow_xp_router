@@ -91,31 +91,34 @@ def _take_vitamin(cur_pkmn:SoloPokemon, vit_name, badges, force=False):
     vit_cap = pkmn.gen_factory.current_gen_info().get_vitamin_cap()
     vit_boost = pkmn.gen_factory.current_gen_info().get_vitamin_amount()
 
+    final_realized_stat_xp = cur_pkmn.unrealized_stat_xp
     for boosted_stat in pkmn.gen_factory.current_gen_info().get_stats_boosted_by_vitamin(vit_name):
         if boosted_stat == const.HP:
             if cur_stat_xp_total.hp >= vit_cap and not force:
                 raise ValueError(f"Ineffective Vitamin: {vit_name} (Already above vitamin cap)")
-            new_unrealized_stat_xp = cur_pkmn.unrealized_stat_xp.add(pkmn.gen_factory.current_gen_info().make_stat_block(vit_boost, 0, 0, 0, 0, 0, is_stat_xp=True))
+            final_realized_stat_xp = final_realized_stat_xp.add(pkmn.gen_factory.current_gen_info().make_stat_block(vit_boost, 0, 0, 0, 0, 0, is_stat_xp=True))
         elif boosted_stat == const.ATK:
             if cur_stat_xp_total.attack >= vit_cap and not force:
                 raise ValueError(f"Ineffective Vitamin: {vit_name} (Already above vitamin cap)")
-            new_unrealized_stat_xp = cur_pkmn.unrealized_stat_xp.add(pkmn.gen_factory.current_gen_info().make_stat_block(0, vit_boost, 0, 0, 0, 0, is_stat_xp=True))
+            final_realized_stat_xp = final_realized_stat_xp.add(pkmn.gen_factory.current_gen_info().make_stat_block(0, vit_boost, 0, 0, 0, 0, is_stat_xp=True))
         elif boosted_stat == const.DEF:
             if cur_stat_xp_total.defense >= vit_cap and not force:
                 raise ValueError(f"Ineffective Vitamin: {vit_name} (Already above vitamin cap)")
-            new_unrealized_stat_xp = cur_pkmn.unrealized_stat_xp.add(pkmn.gen_factory.current_gen_info().make_stat_block(0, 0, vit_boost, 0, 0, 0, is_stat_xp=True))
+            final_realized_stat_xp = final_realized_stat_xp.add(pkmn.gen_factory.current_gen_info().make_stat_block(0, 0, vit_boost, 0, 0, 0, is_stat_xp=True))
         elif boosted_stat == const.SPA:
             if cur_stat_xp_total.special_attack >= vit_cap and not force:
                 raise ValueError(f"Ineffective Vitamin: {vit_name} (Already above vitamin cap)")
-            new_unrealized_stat_xp = cur_pkmn.unrealized_stat_xp.add(pkmn.gen_factory.current_gen_info().make_stat_block(0, 0, 0, vit_boost, 0, 0, is_stat_xp=True))
+            final_realized_stat_xp = final_realized_stat_xp.add(pkmn.gen_factory.current_gen_info().make_stat_block(0, 0, 0, vit_boost, 0, 0, is_stat_xp=True))
         elif boosted_stat == const.SPD:
+            # TODO: how to handle this once we're supporting gen 3?
+            # Note: the comparison against special attack is intentional here, since gens 1 and 2 only actually have one stat exp field for field for special
             if cur_stat_xp_total.special_attack >= vit_cap and not force:
                 raise ValueError(f"Ineffective Vitamin: {vit_name} (Already above vitamin cap)")
-            new_unrealized_stat_xp = cur_pkmn.unrealized_stat_xp.add(pkmn.gen_factory.current_gen_info().make_stat_block(0, 0, 0, 0, vit_boost, 0, is_stat_xp=True))
+            final_realized_stat_xp = final_realized_stat_xp.add(pkmn.gen_factory.current_gen_info().make_stat_block(0, 0, 0, 0, vit_boost, 0, is_stat_xp=True))
         elif boosted_stat == const.SPE:
             if cur_stat_xp_total.speed >= vit_cap and not force:
                 raise ValueError(f"Ineffective Vitamin: {vit_name} (Already above vitamin cap)")
-            new_unrealized_stat_xp = cur_pkmn.unrealized_stat_xp.add(pkmn.gen_factory.current_gen_info().make_stat_block(0, 0, 0, 0, 0, vit_boost, is_stat_xp=True))
+            final_realized_stat_xp = final_realized_stat_xp.add(pkmn.gen_factory.current_gen_info().make_stat_block(0, 0, 0, 0, 0, vit_boost, is_stat_xp=True))
         else:
             raise ValueError(f"Unknown vitamin: {vit_name}")
 
@@ -127,7 +130,7 @@ def _take_vitamin(cur_pkmn:SoloPokemon, vit_name, badges, force=False):
         cur_pkmn._empty_stat_block,
         move_list=cur_pkmn.move_list,
         cur_xp=cur_pkmn.cur_xp,
-        realized_stat_xp=cur_pkmn.realized_stat_xp.add(new_unrealized_stat_xp),
+        realized_stat_xp=cur_pkmn.realized_stat_xp.add(final_realized_stat_xp),
         held_item=cur_pkmn.held_item
     )
 
