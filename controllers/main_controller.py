@@ -348,7 +348,7 @@ class MainController:
         return self._data.pkmn_version
     
     def get_state_after(self, previous_event_id=None):
-        if previous_event_id:
+        if previous_event_id is None:
             return self._data.init_route_state
 
         prev_event = self.get_event_by_id(previous_event_id)

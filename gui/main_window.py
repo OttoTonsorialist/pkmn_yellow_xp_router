@@ -243,6 +243,7 @@ class MainWindow(tk.Tk):
         self.bind(const.ROUTE_LIST_REFRESH_EVENT, self.update_run_status)
         self.bind(const.FORCE_QUIT_EVENT, self.cancel_and_quit)
 
+        self.bind(self._controller.register_event_preview(self), self.trainer_preview)
         self.bind(self._controller.register_event_selection(self), self._handle_new_selection)
         self.bind(self._controller.register_version_change(self), self.update_run_version)
         self.bind(self._controller.register_exception_callback(self), self._on_exception)
@@ -321,7 +322,10 @@ class MainWindow(tk.Tk):
             self.recorder_status.lower()
         self._handle_new_selection()
 
-    def trainer_preview(self):
+    def trainer_preview(self, *args, **kwargs):
+        if self._controller.get_preview_event() is None:
+            return
+
         all_event_ids = self.event_list.get_all_selected_event_ids()
         if len(all_event_ids) > 1:
             return
