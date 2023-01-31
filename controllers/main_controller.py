@@ -272,11 +272,10 @@ class MainController:
         self._on_route_change()
 
     @handle_exceptions
-    def new_event(self, event_def, insert_after=None, dest_folder_name=const.ROOT_FOLDER_NAME, auto_select=False):
+    def new_event(self, event_def, insert_after=None, dest_folder_name=const.ROOT_FOLDER_NAME):
         result = self._data.add_event_object(event_def=event_def, insert_after=insert_after, dest_folder_name=dest_folder_name)
         self._on_route_change()
-        if auto_select:
-            self.select_new_events([result])
+        self.select_new_events([result])
         return result
 
     @handle_exceptions

@@ -6,7 +6,6 @@ from gui.pkmn_components import EnemyPkmnTeam
 from utils.constants import const
 from pkmn.gen_factory import current_gen_info
 from routing.route_events import BlackoutEventDefinition, EventDefinition, HealEventDefinition, HoldItemEventDefinition, InventoryEventDefinition, LearnMoveEventDefinition, RareCandyEventDefinition, SaveEventDefinition, VitaminEventDefinition, WildPkmnEventDefinition
-from utils.config_manager import config
 
 
 class EditorParams:
@@ -167,14 +166,14 @@ class VitaminEditor(EventEditorBase):
 
         self._vitamin_label = ttk.Label(self, text="Vitamin Type:")
         self._vitamin_types = custom_components.SimpleOptionMenu(self, const.VITAMIN_TYPES)
-        self._vitamin_label.grid(row=self._cur_row, column=0)
-        self._vitamin_types.grid(row=self._cur_row, column=1)
+        self._vitamin_label.grid(row=self._cur_row, column=0, pady=2)
+        self._vitamin_types.grid(row=self._cur_row, column=1, pady=2)
         self._cur_row += 1
 
         self._item_amount_label = ttk.Label(self, text="Num Vitamins:")
-        self._item_amount = custom_components.AmountEntry(self, callback=self._amount_update)
-        self._item_amount_label.grid(row=self._cur_row, column=0)
-        self._item_amount.grid(row=self._cur_row, column=1)
+        self._item_amount = custom_components.AmountEntry(self, callback=self._amount_update, width=5)
+        self._item_amount_label.grid(row=self._cur_row, column=0, pady=2)
+        self._item_amount.grid(row=self._cur_row, column=1, pady=2)
         self._cur_row += 1
 
     def _amount_update(self, *args, **kwargs):
@@ -202,7 +201,7 @@ class RareCandyEditor(EventEditorBase):
         super().__init__(*args, **kwargs)
         self.event_button.enable()
         self._item_amount_label = ttk.Label(self, text="Num Rare Candies:")
-        self._item_amount = custom_components.AmountEntry(self, callback=self._amount_update)
+        self._item_amount = custom_components.AmountEntry(self, callback=self._amount_update, width=5)
         self._item_amount_label.grid(row=self._cur_row, column=0)
         self._item_amount.grid(row=self._cur_row, column=1)
         self._cur_row += 1
@@ -230,18 +229,20 @@ class LearnMoveEditor(EventEditorBase):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
+        val_width = 25
+
         self._source_label = ttk.Label(self)
-        self._source_label.grid(row=self._cur_row, column=0, columnspan=2)
+        self._source_label.grid(row=self._cur_row, column=0, columnspan=2, pady=2)
         self._cur_row += 1
 
         self._move_name_label = ttk.Label(self)
-        self._move_name_label.grid(row=self._cur_row, column=0, columnspan=2)
+        self._move_name_label.grid(row=self._cur_row, column=0, columnspan=2, pady=2)
         self._cur_row += 1
 
         self._destination_label = ttk.Label(self, text="Move Destination:")
-        self._destination = custom_components.SimpleOptionMenu(self, [""])
-        self._destination_label.grid(row=self._cur_row, column=0)
-        self._destination.grid(row=self._cur_row, column=1)
+        self._destination = custom_components.SimpleOptionMenu(self, [""], width=val_width)
+        self._destination_label.grid(row=self._cur_row, column=0, pady=2)
+        self._destination.grid(row=self._cur_row, column=1, pady=2)
         self._cur_row += 1
 
         # Not a visual component, but we want a way to be able to pull the current move being referenced
@@ -249,17 +250,17 @@ class LearnMoveEditor(EventEditorBase):
         self._level = const.LEVEL_ANY
 
         self._item_type_label = ttk.Label(self, text="Item Type:")
-        self._item_type_selector = custom_components.SimpleOptionMenu(self, [const.ITEM_TYPE_ALL_ITEMS, const.ITEM_TYPE_BACKPACK_ITEMS, const.ITEM_TYPE_TM], callback=self._item_filter_callback)
+        self._item_type_selector = custom_components.SimpleOptionMenu(self, [const.ITEM_TYPE_ALL_ITEMS, const.ITEM_TYPE_BACKPACK_ITEMS, const.ITEM_TYPE_TM], callback=self._item_filter_callback, width=val_width)
         self._item_type_row = self._cur_row
         self._cur_row += 1
 
         self._item_filter_label = ttk.Label(self, text="Item Name Filter:")
-        self._item_filter = custom_components.SimpleEntry(self, callback=self._item_filter_callback)
+        self._item_filter = custom_components.SimpleEntry(self, callback=self._item_filter_callback, width=val_width)
         self._item_filter_row = self._cur_row
         self._cur_row += 1
 
         self._item_selector_label = ttk.Label(self, text="Move:")
-        self._item_selector = custom_components.SimpleOptionMenu(self, [""], callback=self._move_selected_callback)
+        self._item_selector = custom_components.SimpleOptionMenu(self, [""], callback=self._move_selected_callback, width=val_width)
         self._item_selector_row = self._cur_row
         self._cur_row += 1
 
@@ -329,12 +330,12 @@ class LearnMoveEditor(EventEditorBase):
             self._item_selector.grid_forget()
         else:
             self._source_label.config(text="Source: TM/HM")
-            self._item_type_label.grid(row=self._item_type_row, column=0)
-            self._item_type_selector.grid(row=self._item_type_row, column=1)
-            self._item_filter_label.grid(row=self._item_filter_row, column=1)
-            self._item_filter.grid(row=self._item_filter_row, column=1)
-            self._item_selector_label.grid(row=self._item_selector_row, column=0)
-            self._item_selector.grid(row=self._item_selector_row, column=1)
+            self._item_type_label.grid(row=self._item_type_row, column=0, pady=2)
+            self._item_type_selector.grid(row=self._item_type_row, column=1, pady=2)
+            self._item_filter_label.grid(row=self._item_filter_row, column=1, pady=2)
+            self._item_filter.grid(row=self._item_filter_row, column=1, pady=2)
+            self._item_selector_label.grid(row=self._item_selector_row, column=0, pady=2)
+            self._item_selector.grid(row=self._item_selector_row, column=1, pady=2)
 
         self._item_filter_callback()
     
@@ -377,31 +378,31 @@ class WildPkmnEditor(EventEditorBase):
         super().__init__(*args, **kwargs)
 
         self._pkmn_label = ttk.Label(self, text="Wild Pokemon Type:")
-        self._pkmn_types = custom_components.SimpleOptionMenu(self, current_gen_info().pkmn_db().get_all_names())
-        self._pkmn_label.grid(row=self._cur_row, column=0)
-        self._pkmn_types.grid(row=self._cur_row, column=1)
+        self._pkmn_types = custom_components.SimpleOptionMenu(self, current_gen_info().pkmn_db().get_all_names(), width=15)
+        self._pkmn_label.grid(row=self._cur_row, column=0, pady=2)
+        self._pkmn_types.grid(row=self._cur_row, column=1, pady=2)
         self._cur_row += 1
 
         self._pkmn_filter_label = ttk.Label(self, text="Wild Pokemon Type Filter:")
-        self._pkmn_filter = custom_components.SimpleEntry(self, callback=self._pkmn_filter_callback)
-        self._pkmn_filter_label.grid(row=self._cur_row, column=0)
-        self._pkmn_filter.grid(row=self._cur_row, column=1)
+        self._pkmn_filter = custom_components.SimpleEntry(self, callback=self._pkmn_filter_callback, width=15)
+        self._pkmn_filter_label.grid(row=self._cur_row, column=0, pady=2)
+        self._pkmn_filter.grid(row=self._cur_row, column=1, pady=2)
         self._cur_row += 1
 
         self._pkmn_level_label = ttk.Label(self, text="Wild Pokemon Level:")
-        self._pkmn_level = custom_components.AmountEntry(self, callback=self._update_button_status)
-        self._pkmn_level_label.grid(row=self._cur_row, column=0)
-        self._pkmn_level.grid(row=self._cur_row, column=1)
+        self._pkmn_level = custom_components.AmountEntry(self, callback=self._update_button_status, width=5)
+        self._pkmn_level_label.grid(row=self._cur_row, column=0, pady=2)
+        self._pkmn_level.grid(row=self._cur_row, column=1, pady=2)
         self._cur_row += 1
 
         self._quantity_label = ttk.Label(self, text="Num Pkmn:")
-        self._quantity = custom_components.AmountEntry(self, callback=self._update_button_status)
-        self._quantity_label.grid(row=self._cur_row, column=0)
-        self._quantity.grid(row=self._cur_row, column=1)
+        self._quantity = custom_components.AmountEntry(self, callback=self._update_button_status, width=5)
+        self._quantity_label.grid(row=self._cur_row, column=0, pady=2)
+        self._quantity.grid(row=self._cur_row, column=1, pady=2)
         self._cur_row += 1
 
-        self._pkmn_trainer_flag = custom_components.CheckboxLabel(self, text="Is Trainer Pkmn?")
-        self._pkmn_trainer_flag.grid(row=self._cur_row, column=0, columnspan=2)
+        self._pkmn_trainer_flag = custom_components.CheckboxLabel(self, text="Is Trainer Pkmn?", flip=True)
+        self._pkmn_trainer_flag.grid(row=self._cur_row, column=0, columnspan=2, pady=2)
         self._cur_row += 1
     
     def _update_button_status(self, *args, **kwargs):
@@ -462,28 +463,29 @@ class InventoryEventEditor(EventEditorBase):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
+        val_width = 23
         self._item_type_label = ttk.Label(self, text="Item Type:")
-        self._item_type_selector = custom_components.SimpleOptionMenu(self, const.ITEM_TYPES, callback=self._item_filter_callback)
+        self._item_type_selector = custom_components.SimpleOptionMenu(self, const.ITEM_TYPES, callback=self._item_filter_callback, width=val_width)
         self._item_type_row = self._cur_row
         self._cur_row += 1
 
         self._item_mart_label = ttk.Label(self, text="Mart:")
-        self._item_mart_selector = custom_components.SimpleOptionMenu(self, [const.ITEM_TYPE_ALL_ITEMS] + sorted(list(current_gen_info().item_db().mart_items.keys())), callback=self._item_filter_callback)
+        self._item_mart_selector = custom_components.SimpleOptionMenu(self, [const.ITEM_TYPE_ALL_ITEMS] + sorted(list(current_gen_info().item_db().mart_items.keys())), callback=self._item_filter_callback, width=val_width)
         self._item_mart_row = self._cur_row
         self._cur_row += 1
 
         self._item_filter_label = ttk.Label(self, text="Item Name Filter:")
-        self._item_filter = custom_components.SimpleEntry(self, callback=self._item_filter_callback)
+        self._item_filter = custom_components.SimpleEntry(self, callback=self._item_filter_callback, width=val_width)
         self._item_filter_row = self._cur_row
         self._cur_row += 1
 
         self._item_selector_label = ttk.Label(self, text="Item:")
-        self._item_selector = custom_components.SimpleOptionMenu(self, current_gen_info().item_db().get_filtered_names(), callback=self._item_selector_callback)
+        self._item_selector = custom_components.SimpleOptionMenu(self, current_gen_info().item_db().get_filtered_names(), callback=self._item_selector_callback, width=val_width)
         self._item_selector_row = self._cur_row
         self._cur_row += 1
 
         self._item_amount_label = ttk.Label(self, text="Num Items:")
-        self._item_amount = custom_components.AmountEntry(self, callback=self._item_selector_callback)
+        self._item_amount = custom_components.AmountEntry(self, callback=self._item_selector_callback, width=5)
         self._item_amount_row = self._cur_row
         self._cur_row += 1
 
@@ -505,56 +507,56 @@ class InventoryEventEditor(EventEditorBase):
         self._item_cost_label.grid_remove()
     
     def _show_acquire_item(self):
-        self._item_type_label.grid(row=self._item_type_row, column=0)
-        self._item_type_selector.grid(row=self._item_type_row, column=1)
-        self._item_filter_label.grid(row=self._item_filter_row, column=0)
-        self._item_filter.grid(row=self._item_filter_row, column=1)
-        self._item_selector_label.grid(row=self._item_selector_row, column=0)
-        self._item_selector.grid(row=self._item_selector_row, column=1)
-        self._item_amount_label.grid(row=self._item_amount_row, column=0)
-        self._item_amount.grid(row=self._item_amount_row, column=1)
+        self._item_type_label.grid(row=self._item_type_row, column=0, pady=2)
+        self._item_type_selector.grid(row=self._item_type_row, column=1, pady=2)
+        self._item_filter_label.grid(row=self._item_filter_row, column=0, pady=2)
+        self._item_filter.grid(row=self._item_filter_row, column=1, pady=2)
+        self._item_selector_label.grid(row=self._item_selector_row, column=0, pady=2)
+        self._item_selector.grid(row=self._item_selector_row, column=1, pady=2)
+        self._item_amount_label.grid(row=self._item_amount_row, column=0, pady=2)
+        self._item_amount.grid(row=self._item_amount_row, column=1, pady=2)
 
     def _show_purchase_item(self):
-        self._item_type_label.grid(row=self._item_type_row, column=0)
-        self._item_type_selector.grid(row=self._item_type_row, column=1)
-        self._item_mart_label.grid(row=self._item_mart_row, column=0)
-        self._item_mart_selector.grid(row=self._item_mart_row, column=1)
-        self._item_filter_label.grid(row=self._item_filter_row, column=0)
-        self._item_filter.grid(row=self._item_filter_row, column=1)
-        self._item_selector_label.grid(row=self._item_selector_row, column=0)
-        self._item_selector.grid(row=self._item_selector_row, column=1)
-        self._item_amount_label.grid(row=self._item_amount_row, column=0)
-        self._item_amount.grid(row=self._item_amount_row, column=1)
-        self._item_cost_label.grid(row=self._item_cost_row, column=0, columnspan=2)
+        self._item_type_label.grid(row=self._item_type_row, column=0, pady=2)
+        self._item_type_selector.grid(row=self._item_type_row, column=1, pady=2)
+        self._item_mart_label.grid(row=self._item_mart_row, column=0, pady=2)
+        self._item_mart_selector.grid(row=self._item_mart_row, column=1, pady=2)
+        self._item_filter_label.grid(row=self._item_filter_row, column=0, pady=2)
+        self._item_filter.grid(row=self._item_filter_row, column=1, pady=2)
+        self._item_selector_label.grid(row=self._item_selector_row, column=0, pady=2)
+        self._item_selector.grid(row=self._item_selector_row, column=1, pady=2)
+        self._item_amount_label.grid(row=self._item_amount_row, column=0, pady=2)
+        self._item_amount.grid(row=self._item_amount_row, column=1, pady=2)
+        self._item_cost_label.grid(row=self._item_cost_row, column=0, columnspan=2, pady=2)
     
     def _show_use_item(self):
-        self._item_type_label.grid(row=self._item_type_row, column=0)
-        self._item_type_selector.grid(row=self._item_type_row, column=1)
-        self._item_filter_label.grid(row=self._item_filter_row, column=0)
-        self._item_filter.grid(row=self._item_filter_row, column=1)
-        self._item_selector_label.grid(row=self._item_selector_row, column=0)
-        self._item_selector.grid(row=self._item_selector_row, column=1)
-        self._item_amount_label.grid(row=self._item_amount_row, column=0)
-        self._item_amount.grid(row=self._item_amount_row, column=1)
+        self._item_type_label.grid(row=self._item_type_row, column=0, pady=2)
+        self._item_type_selector.grid(row=self._item_type_row, column=1, pady=2)
+        self._item_filter_label.grid(row=self._item_filter_row, column=0, pady=2)
+        self._item_filter.grid(row=self._item_filter_row, column=1, pady=2)
+        self._item_selector_label.grid(row=self._item_selector_row, column=0, pady=2)
+        self._item_selector.grid(row=self._item_selector_row, column=1, pady=2)
+        self._item_amount_label.grid(row=self._item_amount_row, column=0, pady=2)
+        self._item_amount.grid(row=self._item_amount_row, column=1, pady=2)
 
     def _show_sell_item(self):
-        self._item_type_label.grid(row=self._item_type_row, column=0)
-        self._item_type_selector.grid(row=self._item_type_row, column=1)
-        self._item_filter_label.grid(row=self._item_filter_row, column=0)
-        self._item_filter.grid(row=self._item_filter_row, column=1)
-        self._item_selector_label.grid(row=self._item_selector_row, column=0)
-        self._item_selector.grid(row=self._item_selector_row, column=1)
-        self._item_amount_label.grid(row=self._item_amount_row, column=0)
-        self._item_amount.grid(row=self._item_amount_row, column=1)
-        self._item_cost_label.grid(row=self._item_cost_row, column=0, columnspan=2)
+        self._item_type_label.grid(row=self._item_type_row, column=0, pady=2)
+        self._item_type_selector.grid(row=self._item_type_row, column=1, pady=2)
+        self._item_filter_label.grid(row=self._item_filter_row, column=0, pady=2)
+        self._item_filter.grid(row=self._item_filter_row, column=1, pady=2)
+        self._item_selector_label.grid(row=self._item_selector_row, column=0, pady=2)
+        self._item_selector.grid(row=self._item_selector_row, column=1, pady=2)
+        self._item_amount_label.grid(row=self._item_amount_row, column=0, pady=2)
+        self._item_amount.grid(row=self._item_amount_row, column=1, pady=2)
+        self._item_cost_label.grid(row=self._item_cost_row, column=0, columnspan=2, pady=2)
     
     def _show_hold_item(self):
-        self._item_type_label.grid(row=self._item_type_row, column=0)
-        self._item_type_selector.grid(row=self._item_type_row, column=1)
-        self._item_filter_label.grid(row=self._item_filter_row, column=0)
-        self._item_filter.grid(row=self._item_filter_row, column=1)
-        self._item_selector_label.grid(row=self._item_selector_row, column=0)
-        self._item_selector.grid(row=self._item_selector_row, column=1)
+        self._item_type_label.grid(row=self._item_type_row, column=0, pady=2)
+        self._item_type_selector.grid(row=self._item_type_row, column=1, pady=2)
+        self._item_filter_label.grid(row=self._item_filter_row, column=0, pady=2)
+        self._item_filter.grid(row=self._item_filter_row, column=1, pady=2)
+        self._item_selector_label.grid(row=self._item_selector_row, column=0, pady=2)
+        self._item_selector.grid(row=self._item_selector_row, column=1, pady=2)
 
     def _item_filter_callback(self, *args, **kwargs):
         item_type = self._item_type_selector.get()

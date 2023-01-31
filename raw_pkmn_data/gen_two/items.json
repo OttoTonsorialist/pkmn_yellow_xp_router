@@ -301,8 +301,8 @@
         "pocket": "Item",
         "marts": []
     },
-    "Hp Up": {
-        "name": "Hp Up",
+    "HP Up": {
+        "name": "HP Up",
         "key_item": false,
         "purchase_price": 9800,
         "pocket": "Item",

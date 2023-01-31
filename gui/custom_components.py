@@ -272,6 +272,9 @@ class SimpleOptionMenu(ttk.Combobox):
         return self._val.set(val)
     
     def new_values(self, option_list, default_val=None):
+        if option_list == self.cur_options:
+            return
+
         self.cur_options = option_list
         self.config(values=self.cur_options)
 
@@ -296,7 +299,7 @@ class SimpleEntry(ttk.Entry):
 
 
 class AmountEntry(ttk.Frame):
-    def __init__(self, *args, callback=None, max_val=None, min_val=None, init_val=None, **kwargs):
+    def __init__(self, *args, callback=None, max_val=None, min_val=None, init_val=None, width=None, **kwargs):
         super().__init__(*args, **kwargs)
 
         self.max_val = max_val
@@ -309,6 +312,8 @@ class AmountEntry(ttk.Frame):
         self._down_button.grid(row=0, column=0)
         self._amount = SimpleEntry(self, initial_value=init_val, callback=callback)
         self._amount.grid(row=0, column=1)
+        if width is not None:
+            self._amount.configure(width=width)
         self._up_button = ttk.Button(self, text="^", command=self._raise_amt, width=1)
         self._up_button.grid(row=0, column=2)
     

@@ -199,8 +199,7 @@ class RecorderController:
             logger.error(msg)
             self._controller.new_event(
                 routing.route_events.EventDefinition(notes=msg),
-                dest_folder_name=self._active_folder_name,
-                auto_select=True
+                dest_folder_name=self._active_folder_name
             )
             return
         elif None is not event_def.learn_move:
@@ -212,8 +211,7 @@ class RecorderController:
                     logger.error(msg)
                     self._controller.new_event(
                         routing.route_events.EventDefinition(notes=msg),
-                        dest_folder_name=self._active_folder_name,
-                        auto_select=True
+                        dest_folder_name=self._active_folder_name
                     )
                     return
                 
@@ -253,7 +251,7 @@ class RecorderController:
                 self._controller.update_existing_event(last_event.group_id, event_def)
                 return
 
-        self._controller.new_event(event_def, dest_folder_name=self._active_folder_name, auto_select=True)
+        self._controller.new_event(event_def, dest_folder_name=self._active_folder_name)
 
 
 class RecorderGameHookClient(GameHookClient):

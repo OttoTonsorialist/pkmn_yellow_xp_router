@@ -239,7 +239,10 @@ class EventDetails(ttk.Frame):
             
             new_event.notes = self.trainer_notes.get_event().notes
         except Exception as e:
-            new_event = None
+            logger.error("Exception occurred trying to update current event")
+            logger.exception(e)
+            self._controller.trigger_exception("Exception occurred trying to update current event")
+            return
         
         self._controller.update_existing_event(event_to_update, new_event)
     

@@ -524,7 +524,7 @@ class EventItem:
         elif None is not self.event_definition.vitamin:
             # note: deliberatley ignoring amount here, that's handled at the group level
             # just apply one vitamin at the item level
-            self.final_state, self.error_message = cur_state.vitamin(self.event_definition.vitamin.vitamin)
+            self.final_state, self.error_message = cur_state.vitamin(current_gen_info().item_db().get_item(self.event_definition.vitamin.vitamin).name)
         elif None is not self.event_definition.item_event_def:
             if self.event_definition.item_event_def.is_acquire:
                 self.final_state, self.error_message = cur_state.add_item(
