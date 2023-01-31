@@ -306,10 +306,15 @@ def calculate_gen_two_damage(
                 # Currently forcing "crit" calculations to assume only one crit out of all strikes
                 # So, when calculating full damage, need to get the damage of a single non-crit strike as well
                 # intentionally overwriting custom_move_data to make sure we get the damage of only a single strike
-                other_damage = calculate_damage(
+                other_damage = calculate_gen_two_damage(
                     attacking_pkmn,
+                    attacking_species,
                     move,
                     defending_pkmn,
+                    defending_species,
+                    special_types,
+                    type_chart,
+                    held_item_boost_table,
                     attacking_stage_modifiers,
                     defending_stage_modifiers,
                     defender_has_light_screen=defender_has_light_screen,
