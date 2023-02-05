@@ -353,7 +353,7 @@ class EnemyPkmnTeam(ttk.Frame):
                 speed_style = "Contrast"
 
             self._all_pkmn[idx].set_pkmn(cur_pkmn, speed_style=speed_style)
-            self._all_pkmn[idx].grid(row=idx//3,column=idx%3, padx=5, pady=5)
+            self._all_pkmn[idx].grid(row=idx//3,column=idx%3, padx=5, pady=(5, 10))
         
         for missing_idx in range(idx+1, 6):
             self._all_pkmn[missing_idx].grid_forget()

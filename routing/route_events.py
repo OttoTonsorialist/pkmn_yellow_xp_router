@@ -144,7 +144,7 @@ class LearnMoveEventDefinition:
 
 
 class TrainerEventDefinition:
-    def __init__(self, trainer_name, verbose_export=False, setup_moves=None, mimic_selection="", custom_move_data=None, enemy_setup_moves=None):
+    def __init__(self, trainer_name, verbose_export=False, setup_moves=None, mimic_selection="", custom_move_data=None, enemy_setup_moves=None, exp_split=None):
         self.trainer_name = trainer_name
         self.verbose_export = verbose_export
         if setup_moves is None:
@@ -155,6 +155,9 @@ class TrainerEventDefinition:
         if enemy_setup_moves is None:
             enemy_setup_moves = []
         self.enemy_setup_moves = enemy_setup_moves
+        if exp_split is None:
+            exp_split = []
+        self.exp_split = exp_split
 
     def serialize(self):
         return {
@@ -188,6 +191,7 @@ class TrainerEventDefinition:
             mimic_selection=raw_val[const.MIMIC_SELECTION],
             custom_move_data=raw_val.get(const.CUSTOM_MOVE_DATA),
             enemy_setup_moves=raw_val.get(const.ENEMY_SETUP_MOVES_KEY),
+            exp_split=raw_val.get(const.EXP_SPLIT),
         )
     
     def __str__(self):
@@ -465,7 +469,7 @@ class EventItem:
     """
     This class effectively functions as the conversion layer between EventDefinitions and the RouteState object.
     """
-    def __init__(self, parent, event_definition:EventDefinition, to_defeat_idx=None, cur_state=None):
+    def __init__(self, parent, event_definition:EventDefinition, to_defeat_idx=None, cur_state=None, exp_split_num=1):
         global event_id_counter
         self.group_id = event_id_counter
         event_id_counter += 1
@@ -474,6 +478,7 @@ class EventItem:
         self.parent = parent
         self.name = event_definition.get_item_label()
         self.to_defeat_idx = to_defeat_idx
+        self.exp_split_num = exp_split_num
         self.event_definition:EventDefinition = event_definition
 
         self.init_state = None
@@ -516,7 +521,7 @@ class EventItem:
                     render_trainer_name = "TrainerPkmn" if self.event_definition.wild_pkmn_info.trainer_pkmn else "WildPkmn"
 
                 self.name = f"{render_trainer_name}: {enemy_team[self.to_defeat_idx].name}"
-                self.final_state, self.error_message = cur_state.defeat_pkmn(enemy_team[self.to_defeat_idx], trainer_name=defeated_trainer_name)
+                self.final_state, self.error_message = cur_state.defeat_pkmn(enemy_team[self.to_defeat_idx], trainer_name=defeated_trainer_name, exp_split=self.exp_split_num)
         elif None is not self.event_definition.rare_candy:
             # note: deliberatley ignoring amount here, that's handled at the group level
             # just apply one rare candy at the item level
@@ -652,7 +657,12 @@ class EventGroup:
             pkmn_counter = {}
             pkmn_to_fight = self.event_definition.get_pokemon_list()
             for pkmn_idx, cur_pkmn in enumerate(pkmn_to_fight):
-                self.event_items.append(EventItem(self, self.event_definition, to_defeat_idx=pkmn_idx, cur_state=cur_state))
+                if self.event_definition.wild_pkmn_info is not None or not self.event_definition.trainer_def.exp_split:
+                    exp_split = 1
+                else:
+                    exp_split = self.event_definition.trainer_def.exp_split[pkmn_idx]
+
+                self.event_items.append(EventItem(self, self.event_definition, to_defeat_idx=pkmn_idx, cur_state=cur_state, exp_split_num=exp_split))
                 pkmn_counter[cur_pkmn.name] = pkmn_counter.get(cur_pkmn.name, 0) + 1
                 
                 next_state = self.event_items[-1].final_state
@@ -672,12 +682,6 @@ class EventGroup:
                         self.pkmn_after_levelups.append("after_final_pkmn")
                 cur_state = next_state
         
-        elif self.event_definition.wild_pkmn_info is not None:
-            # assumption: can only have at most one level up per event group of non-trainer battle types
-            # This allows us to simplify the level up move learn checks
-            self.event_items.append(EventItem(self, self.event_definition, to_defeat_idx=0, cur_state=cur_state))
-            if self.level_up_learn_event_defs:
-                self.event_items.append(EventItem(self, EventDefinition(learn_move=self.level_up_learn_event_defs[0]), cur_state=self.event_items[0].final_state))
         elif self.event_definition.rare_candy is not None:
             for _ in range(self.event_definition.rare_candy.amount):
                 self.event_items.append(EventItem(self, self.event_definition, cur_state=cur_state))

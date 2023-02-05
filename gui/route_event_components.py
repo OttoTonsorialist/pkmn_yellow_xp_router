@@ -2,12 +2,15 @@ from __future__ import annotations
 import tkinter as tk
 from tkinter import ttk
 import logging
+from typing import List
 
 from gui import custom_components
-from gui.pkmn_components import EnemyPkmnTeam
+from gui.pkmn_components import EnemyPkmnTeam, PkmnViewer
 from utils.constants import const
 from pkmn.gen_factory import current_gen_info
-from routing.route_events import BlackoutEventDefinition, EventDefinition, HealEventDefinition, HoldItemEventDefinition, InventoryEventDefinition, LearnMoveEventDefinition, RareCandyEventDefinition, SaveEventDefinition, VitaminEventDefinition, WildPkmnEventDefinition
+from pkmn import universal_data_objects
+from routing.route_events import BlackoutEventDefinition, EventDefinition, HealEventDefinition, HoldItemEventDefinition, InventoryEventDefinition, LearnMoveEventDefinition, RareCandyEventDefinition, SaveEventDefinition, TrainerEventDefinition, VitaminEventDefinition, WildPkmnEventDefinition
+from routing import full_route_state
 
 logger = logging.getLogger(__name__)
 
@@ -92,7 +95,6 @@ class NotesEditor(EventEditorBase):
     @ignore_updates
     def configure(self, editor_params, save_callback=None):
         super().configure(editor_params, save_callback=save_callback)
-        self.editor_params = editor_params
     
     @ignore_updates
     def load_event(self, event_def:EventDefinition):
@@ -113,106 +115,63 @@ class NotesEditor(EventEditorBase):
 class TrainerFightEditor(EventEditorBase):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
+        # just holding onto the name for convenience
+        self._cur_trainer = None
+        self._num_pkmn = 0
+        self._all_pkmn = [PkmnViewer(self, font_size=10) for _ in range(6)]
+        self._all_exp_labels = [ttk.Label(self, text="Exp Split:") for _ in range(6)]
+        self._all_exp_splits = [
+            custom_components.SimpleOptionMenu(self, option_list=[1, 2, 3, 4, 5, 6], callback=self._trigger_save) for _ in range(6)
+        ]
 
-        self.cached_defeated_trainers = self.editor_params.cur_defeated_trainers
-
-        self._trainers_by_loc_label = ttk.Label(self, text="Trainer Location Filter:")
-        trainer_locs = [const.ALL_TRAINERS] + sorted(current_gen_info().trainer_db().get_all_locations())
-        self._trainers_by_loc = custom_components.SimpleOptionMenu(self, trainer_locs, callback=self._trainer_filter_callback)
-        self._trainers_by_loc_label.grid(row=self._cur_row, column=0)
-        self._trainers_by_loc.grid(row=self._cur_row, column=1)
-        self._cur_row += 1
-
-        self._trainers_by_class_label = ttk.Label(self, text="Trainer Class Filter:")
-        trainer_classes = [const.ALL_TRAINERS] + sorted(current_gen_info().trainer_db().get_all_classes())
-        self._trainers_by_class = custom_components.SimpleOptionMenu(self, trainer_classes, callback=self._trainer_filter_callback)
-
-        self._trainer_names_label = ttk.Label(self, text="Trainer Name:")
-        self._trainer_names = custom_components.SimpleOptionMenu(self, current_gen_info().trainer_db().get_valid_trainers(), callback=self._trainer_name_callback)
-        self._trainer_team = EnemyPkmnTeam(self)
-
-        self._trainers_by_class_label.grid(row=self._cur_row, column=0)
-        self._trainers_by_class.grid(row=self._cur_row, column=1)
-        self._cur_row += 1
-
-        self._trainer_names_label.grid(row=self._cur_row, column=0)
-        self._trainer_names.grid(row=self._cur_row, column=1)
-        self._cur_row += 1
-
-        self._trainer_team.grid(row=self._cur_row, column=0, columnspan=2)
-        self._cur_row += 1
-
-    def _trainer_filter_callback(self, *args, **kwargs):
-        loc_filter = self._trainers_by_loc.get()
-        class_filter = self._trainers_by_class.get()
-
-        valid_trainers = current_gen_info().trainer_db().get_valid_trainers(
-            trainer_class=class_filter,
-            trainer_loc=loc_filter,
-            defeated_trainers=self.cached_defeated_trainers
-        )
-        if not valid_trainers:
-            valid_trainers.append(const.NO_TRAINERS)
-
-        self._trainer_names.new_values(valid_trainers)
-
-    def _trainer_name_callback(self, *args, **kwargs):
-        if self._trainer_names.get() != const.NO_TRAINERS:
-            self._trainer_team.grid(row=5, column=0, columnspan=2)
-            trainer = current_gen_info().trainer_db().get_trainer(self._trainer_names.get())
-            if trainer is not None:
-                self._trainer_team.set_team(trainer.pkmn, cur_state=self.editor_params.cur_state)
-            else:
-                self._trainer_team.set_team(None)
-        else:
-            self._trainer_team.grid_forget()
-        
-        self._trigger_save()
-    
-    def _trainer_filter_callback(self, *args, **kwargs):
-        loc_filter = self._trainers_by_loc.get()
-        class_filter = self._trainers_by_class.get()
-
-        valid_trainers = current_gen_info().trainer_db().get_valid_trainers(
-            trainer_class=class_filter,
-            trainer_loc=loc_filter,
-            defeated_trainers=self.cached_defeated_trainers
-        )
-        if not valid_trainers:
-            valid_trainers.append(const.NO_TRAINERS)
-
-        self._trainer_names.new_values(valid_trainers)
-    
     @ignore_updates
     def configure(self, editor_params, save_callback=None):
         super().configure(editor_params, save_callback=save_callback)
-        self._trainers_by_loc.set(const.ALL_TRAINERS)
-        self._trainers_by_class.set(const.ALL_TRAINERS)
-        self._trainer_names.set("")
-        self._trainer_filter_callback()
     
     @ignore_updates
     def load_event(self, event_def):
-        super().load_event(event_def)
-        # note, by the current route, the trainer of the even we are loading is guaranteed to be "defeated"
-        # So, we have to manually hide it to the list of all defeated trainers
-        self.cached_defeated_trainers = self.editor_params.cur_defeated_trainers.difference(set(event_def.trainer_def.trainer_name))
-        self._trainers_by_loc.set(const.ALL_TRAINERS)
-        self._trainers_by_class.set(const.ALL_TRAINERS)
-        self._trainer_names.set(event_def.trainer_def.trainer_name)
+        self._cur_trainer = event_def.trainer_def.trainer_name
+        enemy_pkmn = event_def.get_pokemon_list()
+        self._num_pkmn = len(enemy_pkmn)
+        cur_state:full_route_state.RouteState = self.editor_params.cur_state
+
+        idx = -1
+        for idx, cur_pkmn in enumerate(enemy_pkmn):
+            if cur_state is not None:
+                if cur_state.solo_pkmn.cur_stats.speed > cur_pkmn.cur_stats.speed:
+                    speed_style = "Success"
+                elif cur_state.solo_pkmn.cur_stats.speed == cur_pkmn.cur_stats.speed:
+                    speed_style = "Warning"
+                else:
+                    speed_style = "Failure"
+                cur_state = cur_state.defeat_pkmn(cur_pkmn)[0]
+            else:
+                speed_style = "Contrast"
+
+            row_idx = 2 * (idx // 3)
+            col_idx = 2 * (idx % 3)
+
+            self._all_pkmn[idx].set_pkmn(cur_pkmn, speed_style=speed_style)
+            self._all_pkmn[idx].grid(row=row_idx, column=col_idx, columnspan=2, padx=5, pady=5)
+            self._all_exp_labels[idx].grid(row=row_idx + 1, column=col_idx, padx=2, pady=(5, 10))
+            self._all_exp_splits[idx].grid(row=row_idx + 1, column=col_idx + 1, padx=2, pady=(5, 10))
+        
+        for missing_idx in range(idx+1, 6):
+            self._all_pkmn[missing_idx].grid_forget()
+            self._all_exp_labels[missing_idx].grid_forget()
+            self._all_exp_splits[missing_idx].grid_forget()
     
     def get_event(self):
-        return EventDefinition(trainer_def=TrainerFightEditor(self._trainer_names.get()))
+        exp_split = [int(self._all_exp_splits[x].get()) for x in range(self._num_pkmn)]
+        return EventDefinition(trainer_def=TrainerEventDefinition(self._cur_trainer, exp_split=exp_split))
     
     def enable(self):
-        self._trainers_by_loc.disable()
-        self._trainers_by_class.disable()
-        self._trainer_names.disable()
+        for cur_split in self._all_exp_splits:
+            cur_split.enable()
     
     def disable(self):
-        self._trainers_by_loc.enable()
-        self._trainers_by_class.enable()
-        self._trainer_names.enable()
+        for cur_split in self._all_exp_splits:
+            cur_split.disable()
 
 
 class VitaminEditor(EventEditorBase):

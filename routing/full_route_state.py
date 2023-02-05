@@ -1,4 +1,5 @@
 
+import math
 from utils.constants import const
 import pkmn.universal_utils
 import pkmn.universal_data_objects
@@ -23,8 +24,18 @@ def _defeat_trainer(inventory:Inventory, trainer_obj:pkmn.universal_data_objects
     return result
 
 
-def _defeat_pkmn(cur_pkmn:SoloPokemon, enemy_pkmn: pkmn.universal_data_objects.EnemyPkmn, badges:pkmn.universal_data_objects.BadgeList):
+def _defeat_pkmn(cur_pkmn:SoloPokemon, enemy_pkmn: pkmn.universal_data_objects.EnemyPkmn, badges:pkmn.universal_data_objects.BadgeList, exp_split:int):
     # enemy_pkmn is an EnemyPkmn type
+    gained_xp = math.floor(enemy_pkmn.xp / exp_split)
+    gained_stat_xp = pkmn.universal_data_objects.StatBlock(
+        math.floor(enemy_pkmn.base_stats.hp / exp_split),
+        math.floor(enemy_pkmn.base_stats.attack / exp_split),
+        math.floor(enemy_pkmn.base_stats.defense / exp_split),
+        math.floor(enemy_pkmn.base_stats.special_attack / exp_split),
+        math.floor(enemy_pkmn.base_stats.special_defense / exp_split),
+        math.floor(enemy_pkmn.base_stats.speed / exp_split),
+        is_stat_xp=True
+    )
     return SoloPokemon(
         cur_pkmn.name,
         cur_pkmn.species_def,
@@ -35,8 +46,8 @@ def _defeat_pkmn(cur_pkmn:SoloPokemon, enemy_pkmn: pkmn.universal_data_objects.E
         cur_xp=cur_pkmn.cur_xp,
         realized_stat_xp=cur_pkmn.realized_stat_xp,
         unrealized_stat_xp=cur_pkmn.unrealized_stat_xp,
-        gained_xp=enemy_pkmn.xp,
-        gained_stat_xp=enemy_pkmn.base_stats,
+        gained_xp=gained_xp,
+        gained_stat_xp=gained_stat_xp,
         held_item=cur_pkmn.held_item
     )
 
@@ -229,10 +240,10 @@ class RouteState:
             inv
         ), error_message
 
-    def defeat_pkmn(self, enemy_pkmn:pkmn.universal_data_objects.EnemyPkmn, trainer_name=None):
+    def defeat_pkmn(self, enemy_pkmn:pkmn.universal_data_objects.EnemyPkmn, trainer_name=None, exp_split=1):
         new_badges = self.badges.award_badge(trainer_name)
         return RouteState(
-            _defeat_pkmn(self.solo_pkmn, enemy_pkmn, new_badges),
+            _defeat_pkmn(self.solo_pkmn, enemy_pkmn, new_badges, exp_split),
             new_badges,
             _defeat_trainer(self.inventory, pkmn.gen_factory.current_gen_info().trainer_db().get_trainer(trainer_name))
         ), ""

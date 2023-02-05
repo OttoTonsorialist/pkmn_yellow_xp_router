@@ -18,7 +18,6 @@ class EventDetails(ttk.Frame):
         super().__init__(*args, **kwargs, width=self.state_summary_width)
 
         self._controller = controller
-        self._cur_trainer_name = None
         self._prev_selected_tab = None
 
         self.notebook_holder = ttk.Frame(self)
@@ -66,9 +65,6 @@ class EventDetails(ttk.Frame):
         self.event_details_frame = ttk.Frame(self.event_viewer_frame)
         self.event_details_frame.grid(row=0, column=0)
 
-        self.enemy_team_viewer = pkmn_components.EnemyPkmnTeam(self.event_details_frame)
-        self.enemy_team_viewer.pack()
-
         self.event_viewer_frame.rowconfigure(0, weight=1)
         self.event_viewer_frame.columnconfigure(0, weight=1)
 
@@ -94,6 +90,7 @@ class EventDetails(ttk.Frame):
         self.tabbed_states.bind('<<NotebookTabChanged>>', self._tab_changed_callback)
         self.bind(self._controller.register_event_selection(self), self._handle_selection)
         self.bind(self._controller.register_record_mode_change(self), self._handle_selection)
+        self.bind(self._controller.register_route_change(self), self._handle_route_change)
 
         self._tab_changed_callback()
     
@@ -146,6 +143,17 @@ class EventDetails(ttk.Frame):
             self.badge_boost_viewer.grid_forget()
             self.state_pre_viewer.grid(column=1, row=1, padx=10, pady=10, columnspan=2)
     
+    def _handle_route_change(self, *args, **kwargs):
+        event_group = self._controller.get_single_selected_event_obj()
+        if event_group is None:
+            self.state_pre_viewer.set_state(self._controller.get_init_state())
+            self.badge_boost_viewer.set_state(self._controller.get_init_state())
+            self.state_post_viewer.set_state(self._controller.get_final_state())
+        else:
+            self.state_pre_viewer.set_state(event_group.init_state)
+            self.badge_boost_viewer.set_state(event_group.init_state)
+            self.state_post_viewer.set_state(event_group.final_state)
+    
     def _handle_selection(self, *args, **kwargs):
         event_group = self._controller.get_single_selected_event_obj()
 
@@ -171,51 +179,33 @@ class EventDetails(ttk.Frame):
         self.badge_boost_viewer.set_state(init_state)
 
         self.state_post_viewer.set_state(final_state)
-        self._cur_trainer_name = None
 
         if self.current_event_editor is not None:
             self.current_event_editor.pack_forget()
             self.current_event_editor = None
 
         if event_def is None:
-            self.enemy_team_viewer.set_team(None)
             self.trainer_notes.load_event(None)
-            self.enemy_team_viewer.pack_forget()
             self.battle_summary_frame.set_team(None)
             self.simple_battle_summary_frame.set_team(None)
         else:
             self.trainer_notes.load_event(event_def)
-
             if event_def.trainer_def is not None:
-                self._cur_trainer_name = event_def.trainer_def.trainer_name
-                self.enemy_team_viewer.pack()
-                self.enemy_team_viewer.set_team(event_def.get_trainer_obj().pkmn, cur_state=init_state)
                 self.battle_summary_frame.set_team(event_def.get_trainer_obj().pkmn, cur_state=init_state, event_group=event_group)
                 self.simple_battle_summary_frame.set_team(event_def.get_trainer_obj().pkmn, cur_state=init_state, event_group=event_group)
             else:
-                self.enemy_team_viewer.pack_forget()
-                self.enemy_team_viewer.set_team(None)
                 self.battle_summary_frame.set_team(None)
                 self.simple_battle_summary_frame.set_team(None)
 
-                if event_def.get_event_type() != const.TASK_NOTES_ONLY:
-                    # TODO: fix this gross ugly hack
-                    self.current_event_editor = self.event_editor_lookup.get_editor(
-                        route_event_components.EditorParams(event_def.get_event_type(), None, init_state),
-                        save_callback=self.update_existing_event,
-                        is_enabled=allow_updates
-                    )
-                    self.current_event_editor.load_event(event_def)
-                    self.current_event_editor.pack()
-
-            if allow_updates:
-                if self.current_event_editor is not None:
-                    self.current_event_editor.enable()
-            else:
-                # NOTE: intentionally not disabling notes here. User should always be able to update notes
-                # and notes won't change the actual route
-                if self.current_event_editor is not None:
-                    self.current_event_editor.disable()
+            if event_def.get_event_type() != const.TASK_NOTES_ONLY:
+                # TODO: fix this gross ugly hack
+                self.current_event_editor = self.event_editor_lookup.get_editor(
+                    route_event_components.EditorParams(event_def.get_event_type(), None, init_state),
+                    save_callback=self.update_existing_event,
+                    is_enabled=allow_updates
+                )
+                self.current_event_editor.load_event(event_def)
+                self.current_event_editor.pack()
 
     def update_existing_event(self, *args, **kwargs):
         event_to_update = self._controller.get_single_selected_event_id()
@@ -224,20 +214,15 @@ class EventDetails(ttk.Frame):
 
         try:
             if self.current_event_editor is None:
-                if self._cur_trainer_name is None:
-                    new_event = EventDefinition()
-                else:
-                    new_event = EventDefinition(
-                        trainer_def=TrainerEventDefinition(
-                            self._cur_trainer_name,
-                            setup_moves=self.battle_summary_frame.get_setup_moves(),
-                            enemy_setup_moves=self.battle_summary_frame.get_enemy_setup_moves(),
-                            mimic_selection=self.battle_summary_frame.get_mimic_selection(),
-                            custom_move_data=self.battle_summary_frame.get_custom_move_data()
-                        )
-                    )
+                new_event = EventDefinition()
             else:
                 new_event = self.current_event_editor.get_event()
+            
+            if new_event.get_event_type() == const.TASK_TRAINER_BATTLE:
+                new_event.trainer_def.setup_moves = self.battle_summary_frame.get_setup_moves()
+                new_event.trainer_def.enemy_setup_moves = self.battle_summary_frame.get_enemy_setup_moves()
+                new_event.trainer_def.mimic_selection = self.battle_summary_frame.get_mimic_selection()
+                new_event.trainer_def.custom_move_data = self.battle_summary_frame.get_custom_move_data()
             
             new_event.notes = self.trainer_notes.get_event().notes
         except Exception as e:
