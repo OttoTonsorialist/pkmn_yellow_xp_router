@@ -241,6 +241,12 @@ class CheckboxLabel(ttk.Frame):
     def _did_toggle(self, *args, **kwargs):
         if self.toggle_command is not None:
             self.toggle_command()
+    
+    def enable(self):
+        self._checkbox.configure(state="normal")
+    
+    def disable(self):
+        self._checkbox.configure(state="disabled")
 
 class SimpleOptionMenu(ttk.Combobox):
     def __init__(self, root, option_list, callback=None, default_val=None, **kwargs):
@@ -296,6 +302,12 @@ class SimpleEntry(ttk.Entry):
     
     def set(self, value):
         self._value.set(value)
+    
+    def enable(self):
+        self.configure(state="normal")
+    
+    def disable(self):
+        self.configure(state="disabled")
 
 
 class AmountEntry(ttk.Frame):
@@ -306,23 +318,27 @@ class AmountEntry(ttk.Frame):
         self.min_val = min_val
 
         if init_val is None:
-            init_val = "1"
+            if min_val is None:
+                init_val = "1"
+            else:
+                init_val = str(min_val)
         
-        self._down_button = ttk.Button(self, text="v", command=self._lower_amt, width=1)
+        self._down_button = SimpleButton(self, text="v", command=self._lower_amt, width=1)
         self._down_button.grid(row=0, column=0)
         self._amount = SimpleEntry(self, initial_value=init_val, callback=callback)
         self._amount.grid(row=0, column=1)
         if width is not None:
             self._amount.configure(width=width)
-        self._up_button = ttk.Button(self, text="^", command=self._raise_amt, width=1)
+        self._up_button = SimpleButton(self, text="^", command=self._raise_amt, width=1)
         self._up_button.grid(row=0, column=2)
+        self._update_buttons()
     
     def _lower_amt(self, *args, **kwargs):
         try:
             val = int(self._amount.get().strip()) - 1
             if self.min_val is not None:
                 val = max(val, self.min_val)
-            self._amount.set(str(val))
+            self.set(str(val))
         except Exception:
             pass
 
@@ -331,14 +347,25 @@ class AmountEntry(ttk.Frame):
             val = int(self._amount.get().strip()) + 1
             if self.max_val is not None:
                 val = min(val, self.max_val)
-            self._amount.set(str(val))
+            self.set(str(val))
         except Exception:
             pass
     
     def get(self):
         return self._amount.get()
     
-    def set(self, value):
+    def _update_buttons(self):
+        if self.get() == str(self.min_val):
+            self._down_button.disable()
+        else:
+            self._down_button.enable()
+
+        if self.get() == str(self.max_val):
+            self._up_button.disable()
+        else:
+            self._up_button.enable()
+    
+    def set(self, value, update_buttons_only=False):
         try:
             value = int(value)
             if self.min_val is not None:
@@ -346,8 +373,20 @@ class AmountEntry(ttk.Frame):
             if self.max_val is not None:
                 value = min(value, self.max_val)
         except Exception:
-            pass
+            value = self._amount.get()
+        
         self._amount.set(value)
+        self._update_buttons()
+    
+    def enable(self):
+        self._up_button.enable()
+        self._amount.enable()
+        self._down_button.enable()
+    
+    def disable(self):
+        self._up_button.disable()
+        self._amount.disable()
+        self._down_button.disable()
 
 
 class SimpleButton(ttk.Button):
@@ -359,6 +398,31 @@ class SimpleButton(ttk.Button):
 
     def disable(self):
         self["state"] = "disabled"
+
+
+class SimpleText(tk.Text):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+
+        # create a proxy for the underlying widget
+        self._orig = self._w + "_orig"
+        self.tk.call("rename", self._w, self._orig)
+        self.tk.createcommand(self._w, self._proxy)
+
+    def _proxy(self, command, *args):
+        cmd = (self._orig, command) + args
+        result = self.tk.call(cmd)
+
+        if command in ("insert", "delete", "replace"):
+            self.event_generate("<<TextModified>>")
+
+        return result
+
+    def enable(self):
+        self.configure(state="normal")
+
+    def disable(self):
+        self.configure(state="disabled")
 
 
 class AutoClearingLabel(ttk.Label):

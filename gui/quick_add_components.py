@@ -166,14 +166,14 @@ class QuickWildPkmn(ttk.LabelFrame):
         self._cur_row += 1
 
         self._level_label = tk.Label(self._dropdowns, text="Pkmn Level:", justify=tk.LEFT)
-        self._level_val = custom_components.AmountEntry(self._dropdowns, callback=self._update_button_callback_wrapper)
+        self._level_val = custom_components.AmountEntry(self._dropdowns, min_val=2, max_val=100, callback=self._update_button_callback_wrapper)
         self._level_val._amount.configure(width=self.option_menu_width - 15)
         self._level_label.grid(row=self._cur_row, column=0, padx=self.padx, pady=self.pady, sticky=tk.W)
         self._level_val.grid(row=self._cur_row, column=1, padx=self.padx, pady=self.pady, sticky=tk.E)
         self._cur_row += 1
 
         self._quantity_label = tk.Label(self._dropdowns, text="Quantity:", justify=tk.LEFT)
-        self._quantity_val = custom_components.AmountEntry(self._dropdowns, callback=self._update_button_callback_wrapper)
+        self._quantity_val = custom_components.AmountEntry(self._dropdowns, min_val=1, callback=self._update_button_callback_wrapper)
         self._quantity_val._amount.configure(width=self.option_menu_width - 15)
         self._quantity_label.grid(row=self._cur_row, column=0, padx=self.padx, pady=self.pady, sticky=tk.W)
         self._quantity_val.grid(row=self._cur_row, column=1, padx=self.padx, pady=self.pady, sticky=tk.E)
@@ -301,7 +301,7 @@ class QuickItemAdd(ttk.LabelFrame):
         self._cur_row += 1
 
         self._item_amount_label = tk.Label(self._dropdowns, text="Quantity:")
-        self._item_amount = custom_components.AmountEntry(self._dropdowns, callback=self.item_selector_callback)
+        self._item_amount = custom_components.AmountEntry(self._dropdowns, min_val=1, callback=self.item_selector_callback)
         self._item_amount._amount.configure(width=self.option_menu_width - 10)
         self._item_amount_label.grid(row=self._cur_row, column=0, padx=self.padx, pady=self.pady, sticky=tk.W)
         self._item_amount.grid(row=self._cur_row, column=1, padx=self.padx, pady=self.pady, sticky=tk.E)

@@ -17,7 +17,8 @@ logger = logging.getLogger(__name__)
 
 
 class BattleSummary(ttk.Frame):
-    def __init__(self, *args, simple_mode=False, **kwargs):
+    def __init__(self, *args, simple_mode=False, save_callback=None, **kwargs):
+        self._save_callback = save_callback
         super().__init__(*args, **kwargs)
 
         self.columnconfigure(0, weight=1)
@@ -45,7 +46,7 @@ class BattleSummary(ttk.Frame):
             if self.simple_mode:
                 self._mon_pairs.append(SimpleMonPairSummary(self, mimic_callback=self._mimic_callback))
             else:
-                self._mon_pairs.append(MonPairSummary(self, mimic_callback=self._mimic_callback))
+                self._mon_pairs.append(MonPairSummary(self, mimic_callback=self._mimic_callback, save_callback=self._save_callback))
         
         self.error_message = tk.Label(self, text="Select a battle to see damage calculations")
         self.should_calculate = False
@@ -53,8 +54,11 @@ class BattleSummary(ttk.Frame):
     
     def _setup_move_callback(self):
         self.set_team(self._enemy_pkmn, cur_state=self._source_state, event_group=self._source_event_group, new_setup_moves=True)
+        
+        if self._save_callback is not None:
+            self._save_callback()
     
-    def _mimic_callback(self, mimiced_move_name):
+    def _mimic_callback(self, mimiced_move_name, trigger_save=True):
         self._mimic_selection = mimiced_move_name
 
         can_be_mimiced = False
@@ -66,6 +70,9 @@ class BattleSummary(ttk.Frame):
                 cur_pair.recalc_mimic(mimiced_move_name)
             else:
                 cur_pair.recalc_mimic("")
+        
+        if trigger_save and self._save_callback is not None:
+            self._save_callback()
     
     def allow_calculations(self):
         # trigger calculations if they were paused before
@@ -232,7 +239,7 @@ class BattleSummary(ttk.Frame):
             self._mon_pairs[missing_idx].grid_forget()
         
         if len(enemy_pkmn) >= 1:
-            self._mimic_callback(self._mimic_selection)
+            self._mimic_callback(self._mimic_selection, trigger_save=False)
 
 
 class SetupMovesSummary(ttk.Frame):
@@ -296,10 +303,11 @@ class SetupMovesSummary(ttk.Frame):
 
 
 class MonPairSummary(ttk.Frame):
-    def __init__(self, *args, mimic_callback=None, **kwargs):
+    def __init__(self, *args, mimic_callback=None, save_callback=None, **kwargs):
         super().__init__(*args, **kwargs)
 
         self.mimic_callback = mimic_callback
+        self.save_callback = save_callback
 
         self.first_mon:universal_data_objects.EnemyPkmn = None
         self.second_mon:universal_data_objects.EnemyPkmn = None
@@ -391,6 +399,9 @@ class MonPairSummary(ttk.Frame):
     def recalc_best_move(self):
         self._update_best_move()
         self._update_best_move(is_enemy=True)
+
+        if self.save_callback is not None:
+            self.save_callback()
     
     def _update_best_move(self, is_enemy=False):
         cur_best_attack_idx = None
@@ -665,6 +676,7 @@ class DamageSummary(ttk.Frame):
         self.attacking_stage_modifiers = None
         self.defending_stage_modifiers = None
         self._propagate_mimic_update = True
+        self._propagate_custom_data_update = True
         self._outer_mimic_callback = mimic_callback
         self._outer_custom_data_callback = custom_data_callback
         self._allow_edits = allow_edits
@@ -732,7 +744,7 @@ class DamageSummary(ttk.Frame):
                 self._outer_mimic_callback(self.custom_data_dropdown.get())
         else:
             self._calc_damages_from_move(current_gen_info().move_db().get_move(self.move_name))
-            if self._outer_custom_data_callback is not None:
+            if self._propagate_custom_data_update and self._outer_custom_data_callback is not None:
                 self._outer_custom_data_callback()
 
     def new_mimic_move_selected(self, move_name):
@@ -784,11 +796,13 @@ class DamageSummary(ttk.Frame):
                 self.move_has_custom_data = True
 
         if custom_data_options:
+            self._propagate_mimic_update = False
+            self._propagate_custom_data_update = False
             self.move_name_label.grid_forget()
             self.move_name_label.grid(row=0, column=0)
-            self._propagate_mimic_update = False
             self.custom_data_dropdown.grid(row=0, column=1)
             self.custom_data_dropdown.new_values(custom_data_options, default_val=initial_custom_data)
+            self._propagate_custom_data_update = True
             self._propagate_mimic_update = True
         else:
             self.move_name_label.grid_forget()

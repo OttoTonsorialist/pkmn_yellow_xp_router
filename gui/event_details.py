@@ -44,7 +44,7 @@ class EventDetails(ttk.Frame):
         self.state_post_viewer = pkmn_components.StateViewer(self.post_state_frame)
         self.state_post_viewer.grid(column=1, row=1, padx=10, pady=10)
 
-        self.battle_summary_frame = battle_summary.BattleSummary(self.tabbed_states)
+        self.battle_summary_frame = battle_summary.BattleSummary(self.tabbed_states, save_callback=self.update_existing_event)
         self.battle_summary_frame.pack(padx=2, pady=2)
 
         self.simple_battle_summary_frame = battle_summary.BattleSummary(self.tabbed_states, simple_mode=True)
@@ -78,19 +78,16 @@ class EventDetails(ttk.Frame):
         self.footer_button_frame = ttk.Frame(self.footer_frame)
 
         # create this slightly out of order because we need the reference
-        self.event_details_button = custom_components.SimpleButton(self.footer_button_frame, text="Save", command=self.update_existing_event)
-        self.event_editor_lookup = route_event_components.EventEditorFactory(self.event_details_frame, self.event_details_button)
+        self.event_editor_lookup = route_event_components.EventEditorFactory(self.event_details_frame)
         self.current_event_editor = None
 
-        self.trainer_notes = route_event_components.EventEditorFactory(self.footer_frame, self.event_details_button).get_editor(
-            route_event_components.EditorParams(const.TASK_NOTES_ONLY, None, None)
+        self.trainer_notes = route_event_components.EventEditorFactory(self.footer_frame).get_editor(
+            route_event_components.EditorParams(const.TASK_NOTES_ONLY, None, None),
+            save_callback=self.update_existing_event
         )
         self.trainer_notes.grid(row=0, column=0, sticky=tk.EW)
 
         self.footer_button_frame.grid(row=1, column=0, sticky=tk.EW)
-
-        self.event_details_button.grid(row=0, column=0, padx=5, pady=5, sticky=tk.W)
-        self.event_details_button.disable()
 
         self.footer_frame.columnconfigure(0, weight=1)
 
@@ -184,15 +181,9 @@ class EventDetails(ttk.Frame):
             self.enemy_team_viewer.set_team(None)
             self.trainer_notes.load_event(None)
             self.enemy_team_viewer.pack_forget()
-            self.event_details_button.disable()
             self.battle_summary_frame.set_team(None)
             self.simple_battle_summary_frame.set_team(None)
         else:
-            if allow_updates:
-                self.event_details_button.enable()
-            else:
-                self.event_details_button.disable()
-
             self.trainer_notes.load_event(event_def)
 
             if event_def.trainer_def is not None:
@@ -210,10 +201,21 @@ class EventDetails(ttk.Frame):
                 if event_def.get_event_type() != const.TASK_NOTES_ONLY:
                     # TODO: fix this gross ugly hack
                     self.current_event_editor = self.event_editor_lookup.get_editor(
-                        route_event_components.EditorParams(event_def.get_event_type(), None, init_state)
+                        route_event_components.EditorParams(event_def.get_event_type(), None, init_state),
+                        save_callback=self.update_existing_event,
+                        is_enabled=allow_updates
                     )
                     self.current_event_editor.load_event(event_def)
                     self.current_event_editor.pack()
+
+            if allow_updates:
+                if self.current_event_editor is not None:
+                    self.current_event_editor.enable()
+            else:
+                # NOTE: intentionally not disabling notes here. User should always be able to update notes
+                # and notes won't change the actual route
+                if self.current_event_editor is not None:
+                    self.current_event_editor.disable()
 
     def update_existing_event(self, *args, **kwargs):
         event_to_update = self._controller.get_single_selected_event_id()

@@ -1,11 +1,32 @@
+from __future__ import annotations
 import tkinter as tk
 from tkinter import ttk
+import logging
 
 from gui import custom_components
 from gui.pkmn_components import EnemyPkmnTeam
 from utils.constants import const
 from pkmn.gen_factory import current_gen_info
 from routing.route_events import BlackoutEventDefinition, EventDefinition, HealEventDefinition, HoldItemEventDefinition, InventoryEventDefinition, LearnMoveEventDefinition, RareCandyEventDefinition, SaveEventDefinition, VitaminEventDefinition, WildPkmnEventDefinition
+
+logger = logging.getLogger(__name__)
+
+
+def ignore_updates(load_fn):
+    # must wrap an instance method from the EventEditorBase class
+    def wrapper(*args, **kwargs):
+        editor:EventEditorBase = args[0]
+        editor._ignoring_updates = True
+        try:
+            load_fn(*args, **kwargs)
+        except Exception as e:
+            logger.error(f"Trying to run function: {load_fn}, got error: {e}")
+            logger.exception(e)
+            raise e
+        finally:
+            editor._ignoring_updates = False
+    
+    return wrapper
 
 
 class EditorParams:
@@ -16,17 +37,30 @@ class EditorParams:
 
 
 class EventEditorBase(ttk.Frame):
-    def __init__(self, parent, event_button, editor_params: EditorParams, *args, **kwargs):
+    def __init__(self, parent, editor_params: EditorParams, *args, **kwargs):
         super().__init__(parent, *args, **kwargs)
-        self.event_button = event_button
-        self.event_button.disable()
         self.editor_params = editor_params
+        self._save_callback = None
+        self._ignoring_updates = False
 
         self._cur_row = 0
     
-    def configure(self, editor_params):
+    def configure(self, editor_params, save_callback=None):
+        self._save_callback = save_callback
         self.editor_params = editor_params
-        self.event_button.enable()
+    
+    def _trigger_save(self, *args, **kwargs):
+        if self._ignoring_updates:
+            return
+
+        if self._save_callback is not None:
+            self._save_callback()
+    
+    def enable(self):
+        pass
+
+    def disable(self):
+        pass
     
     def load_event(self, event_def:EventDefinition):
         pass
@@ -47,17 +81,20 @@ class NotesEditor(EventEditorBase):
         self._padding_label.grid(row=self._cur_row, column=2, sticky=tk.W, padx=5, pady=5)
         self._cur_row += 1
 
-        self._notes = tk.Text(self, height=8)
+        self._notes = custom_components.SimpleText(self, height=8)
+        self._notes.bind("<<TextModified>>", self._trigger_save)
         self._notes.grid(row=self._cur_row, column=0, columnspan=3, sticky=tk.EW, padx=5, pady=5)
         self._cur_row += 1
 
         self.columnconfigure(0, weight=1, uniform="padding")
         self.columnconfigure(2, weight=1, uniform="padding")
     
-    def configure(self, editor_params):
+    @ignore_updates
+    def configure(self, editor_params, save_callback=None):
+        super().configure(editor_params, save_callback=save_callback)
         self.editor_params = editor_params
-        self.event_button.enable()
     
+    @ignore_updates
     def load_event(self, event_def:EventDefinition):
         self._notes.delete(1.0, tk.END)
         if event_def is not None:
@@ -65,6 +102,12 @@ class NotesEditor(EventEditorBase):
 
     def get_event(self) -> EventDefinition:
         return EventDefinition(notes=self._notes.get(1.0, tk.END).strip())
+    
+    def enable(self):
+        self._notes.enable()
+    
+    def disable(self):
+        self._notes.disable()
 
 
 class TrainerFightEditor(EventEditorBase):
@@ -115,7 +158,6 @@ class TrainerFightEditor(EventEditorBase):
 
     def _trainer_name_callback(self, *args, **kwargs):
         if self._trainer_names.get() != const.NO_TRAINERS:
-            self.event_button.enable()
             self._trainer_team.grid(row=5, column=0, columnspan=2)
             trainer = current_gen_info().trainer_db().get_trainer(self._trainer_names.get())
             if trainer is not None:
@@ -123,8 +165,9 @@ class TrainerFightEditor(EventEditorBase):
             else:
                 self._trainer_team.set_team(None)
         else:
-            self.event_button.disable()
             self._trainer_team.grid_forget()
+        
+        self._trigger_save()
     
     def _trainer_filter_callback(self, *args, **kwargs):
         loc_filter = self._trainers_by_loc.get()
@@ -140,13 +183,15 @@ class TrainerFightEditor(EventEditorBase):
 
         self._trainer_names.new_values(valid_trainers)
     
-    def configure(self, editor_params):
-        super().configure(editor_params)
+    @ignore_updates
+    def configure(self, editor_params, save_callback=None):
+        super().configure(editor_params, save_callback=save_callback)
         self._trainers_by_loc.set(const.ALL_TRAINERS)
         self._trainers_by_class.set(const.ALL_TRAINERS)
         self._trainer_names.set("")
         self._trainer_filter_callback()
     
+    @ignore_updates
     def load_event(self, event_def):
         super().load_event(event_def)
         # note, by the current route, the trainer of the even we are loading is guaranteed to be "defeated"
@@ -158,6 +203,16 @@ class TrainerFightEditor(EventEditorBase):
     
     def get_event(self):
         return EventDefinition(trainer_def=TrainerFightEditor(self._trainer_names.get()))
+    
+    def enable(self):
+        self._trainers_by_loc.disable()
+        self._trainers_by_class.disable()
+        self._trainer_names.disable()
+    
+    def disable(self):
+        self._trainers_by_loc.enable()
+        self._trainers_by_class.enable()
+        self._trainer_names.enable()
 
 
 class VitaminEditor(EventEditorBase):
@@ -165,13 +220,13 @@ class VitaminEditor(EventEditorBase):
         super().__init__(*args, **kwargs)
 
         self._vitamin_label = ttk.Label(self, text="Vitamin Type:")
-        self._vitamin_types = custom_components.SimpleOptionMenu(self, const.VITAMIN_TYPES)
+        self._vitamin_types = custom_components.SimpleOptionMenu(self, const.VITAMIN_TYPES, callback=self._trigger_save)
         self._vitamin_label.grid(row=self._cur_row, column=0, pady=2)
         self._vitamin_types.grid(row=self._cur_row, column=1, pady=2)
         self._cur_row += 1
 
         self._item_amount_label = ttk.Label(self, text="Num Vitamins:")
-        self._item_amount = custom_components.AmountEntry(self, callback=self._amount_update, width=5)
+        self._item_amount = custom_components.AmountEntry(self, min_val=1, callback=self._amount_update, width=5)
         self._item_amount_label.grid(row=self._cur_row, column=0, pady=2)
         self._item_amount.grid(row=self._cur_row, column=1, pady=2)
         self._cur_row += 1
@@ -179,29 +234,33 @@ class VitaminEditor(EventEditorBase):
     def _amount_update(self, *args, **kwargs):
         val = self._item_amount.get()
         try:
-            val = int(val)
-            if val > 0:
-                self.event_button.enable()
-            else:
-                self.event_button.disable()
+            if int(val) > 0:
+                self._trigger_save()
         except Exception as e:
-            self.event_button.disable()
+            pass
     
+    @ignore_updates
     def load_event(self, event_def):
-        super().load_event(event_def)
         self._vitamin_types.set(event_def.vitamin.vitamin)
         self._item_amount.set(str(event_def.vitamin.amount))
 
     def get_event(self):
         return EventDefinition(vitamin=VitaminEventDefinition(self._vitamin_types.get(), int(self._item_amount.get())))
+    
+    def enable(self):
+        self._vitamin_types.enable()
+        self._item_amount.enable()
+    
+    def disable(self):
+        self._vitamin_types.disable()
+        self._item_amount.disable()
 
 
 class RareCandyEditor(EventEditorBase):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.event_button.enable()
         self._item_amount_label = ttk.Label(self, text="Num Rare Candies:")
-        self._item_amount = custom_components.AmountEntry(self, callback=self._amount_update, width=5)
+        self._item_amount = custom_components.AmountEntry(self, min_val=1, callback=self._amount_update, width=5)
         self._item_amount_label.grid(row=self._cur_row, column=0)
         self._item_amount.grid(row=self._cur_row, column=1)
         self._cur_row += 1
@@ -209,20 +268,23 @@ class RareCandyEditor(EventEditorBase):
     def _amount_update(self, *args, **kwargs):
         val = self._item_amount.get()
         try:
-            val = int(val)
-            if val > 0:
-                self.event_button.enable()
-            else:
-                self.event_button.disable()
+            if int(val) > 0:
+                self._trigger_save()
         except Exception as e:
-            self.event_button.disable()
+            pass
     
+    @ignore_updates
     def load_event(self, event_def):
-        super().load_event(event_def)
         self._item_amount.set(str(event_def.rare_candy.amount))
 
     def get_event(self):
         return EventDefinition(rare_candy=RareCandyEventDefinition(int(self._item_amount.get())))
+    
+    def enable(self):
+        self._item_amount.enable()
+    
+    def disable(self):
+        self._item_amount.disable()
 
 
 class LearnMoveEditor(EventEditorBase):
@@ -240,7 +302,7 @@ class LearnMoveEditor(EventEditorBase):
         self._cur_row += 1
 
         self._destination_label = ttk.Label(self, text="Move Destination:")
-        self._destination = custom_components.SimpleOptionMenu(self, [""], width=val_width)
+        self._destination = custom_components.SimpleOptionMenu(self, [""], width=val_width, callback=self._trigger_save)
         self._destination_label.grid(row=self._cur_row, column=0, pady=2)
         self._destination.grid(row=self._cur_row, column=1, pady=2)
         self._cur_row += 1
@@ -296,7 +358,6 @@ class LearnMoveEditor(EventEditorBase):
             self._move_name_label.config(text=f"Move: {self._move}")
         
         if self._move is None:
-            self.event_button.disable()
             return
         
         learn_move_info = self.editor_params.cur_state.solo_pkmn.get_move_destination(self._move, None)
@@ -306,13 +367,14 @@ class LearnMoveEditor(EventEditorBase):
             else:
                 self._destination.set(const.MOVE_SLOT_TEMPLATE.format(learn_move_info[0] + 1, None))
             self._destination.disable()
-            self.event_button.enable()
         else:
             self._destination.enable()
-            self.event_button.enable()
 
-    def configure(self, editor_params):
-        super().configure(editor_params)
+        self._trigger_save()
+
+    @ignore_updates
+    def configure(self, editor_params, save_callback=None):
+        super().configure(editor_params, save_callback=save_callback)
         self._destination.new_values(
             [const.MOVE_DONT_LEARN] +
             [
@@ -338,9 +400,9 @@ class LearnMoveEditor(EventEditorBase):
             self._item_selector.grid(row=self._item_selector_row, column=1, pady=2)
 
         self._item_filter_callback()
-    
+
+    @ignore_updates
     def load_event(self, event_def):
-        super().load_event(event_def)
         if self.editor_params.event_type == const.TASK_LEARN_MOVE_LEVELUP:
             self._move = event_def.learn_move.move_to_learn
             self._move_name_label.config(text=f"Move: {self._move}")
@@ -372,13 +434,30 @@ class LearnMoveEditor(EventEditorBase):
 
         return EventDefinition(learn_move=LearnMoveEventDefinition(self._move, dest, source, level=self._level))
     
+    def enable(self):
+        self._item_type_selector.enable()
+        self._item_filter.enable()
+        self._item_selector.enable()
+
+        # deliberately always set this to enabled first
+        self._destination.enable()
+        # looks weird, but use the decorator to call the move selected callback without saving
+        # this will trigger the logic to update the destination status properly
+        ignore_updates(self._move_selected_callback)(self)
+    
+    def disable(self):
+        self._item_type_selector.disable()
+        self._item_filter.disable()
+        self._item_selector.disable()
+        self._destination.disable()
+    
 
 class WildPkmnEditor(EventEditorBase):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
         self._pkmn_label = ttk.Label(self, text="Wild Pokemon Type:")
-        self._pkmn_types = custom_components.SimpleOptionMenu(self, current_gen_info().pkmn_db().get_all_names(), width=15)
+        self._pkmn_types = custom_components.SimpleOptionMenu(self, current_gen_info().pkmn_db().get_all_names(), width=15, callback=self._trigger_save)
         self._pkmn_label.grid(row=self._cur_row, column=0, pady=2)
         self._pkmn_types.grid(row=self._cur_row, column=1, pady=2)
         self._cur_row += 1
@@ -390,18 +469,18 @@ class WildPkmnEditor(EventEditorBase):
         self._cur_row += 1
 
         self._pkmn_level_label = ttk.Label(self, text="Wild Pokemon Level:")
-        self._pkmn_level = custom_components.AmountEntry(self, callback=self._update_button_status, width=5)
+        self._pkmn_level = custom_components.AmountEntry(self, min_val=2, max_val=100, callback=self._update_button_status, width=5)
         self._pkmn_level_label.grid(row=self._cur_row, column=0, pady=2)
         self._pkmn_level.grid(row=self._cur_row, column=1, pady=2)
         self._cur_row += 1
 
         self._quantity_label = ttk.Label(self, text="Num Pkmn:")
-        self._quantity = custom_components.AmountEntry(self, callback=self._update_button_status, width=5)
+        self._quantity = custom_components.AmountEntry(self, min_val=1, callback=self._update_button_status, width=5)
         self._quantity_label.grid(row=self._cur_row, column=0, pady=2)
         self._quantity.grid(row=self._cur_row, column=1, pady=2)
         self._cur_row += 1
 
-        self._pkmn_trainer_flag = custom_components.CheckboxLabel(self, text="Is Trainer Pkmn?", flip=True)
+        self._pkmn_trainer_flag = custom_components.CheckboxLabel(self, text="Is Trainer Pkmn?", flip=True, toggle_command=self._trigger_save)
         self._pkmn_trainer_flag.grid(row=self._cur_row, column=0, columnspan=2, pady=2)
         self._cur_row += 1
     
@@ -425,23 +504,22 @@ class WildPkmnEditor(EventEditorBase):
             valid = False
         
         if valid:
-            self.event_button.enable()
-        else:
-            self.event_button.disable()
+            self._trigger_save()
 
     def _pkmn_filter_callback(self, *args, **kwargs):
         self._pkmn_types.new_values(current_gen_info().pkmn_db().get_filtered_names(filter_val=self._pkmn_filter.get().strip()))
         self._update_button_status()
 
-    def configure(self, editor_params):
-        super().configure(editor_params)
+    @ignore_updates
+    def configure(self, editor_params, save_callback=None):
+        super().configure(editor_params, save_callback=save_callback)
         self._pkmn_filter.set("")
         self._pkmn_level.set("1")
         self._quantity.set("1")
         self._pkmn_trainer_flag.set_checked(False)
     
+    @ignore_updates
     def load_event(self, event_def):
-        super().load_event(event_def)
         self._pkmn_filter.set("")
         self._pkmn_level.set(str(event_def.wild_pkmn_info.level))
         self._pkmn_types.set(event_def.wild_pkmn_info.name)
@@ -457,6 +535,20 @@ class WildPkmnEditor(EventEditorBase):
                 trainer_pkmn=self._pkmn_trainer_flag.is_checked()
             )
         )
+    
+    def enable(self):
+        self._pkmn_types.enable()
+        self._pkmn_filter.enable()
+        self._pkmn_level.enable()
+        self._quantity.enable()
+        self._pkmn_trainer_flag.enable()
+    
+    def disable(self):
+        self._pkmn_types.disable()
+        self._pkmn_filter.disable()
+        self._pkmn_level.disable()
+        self._quantity.disable()
+        self._pkmn_trainer_flag.disable()
 
 
 class InventoryEventEditor(EventEditorBase):
@@ -470,7 +562,12 @@ class InventoryEventEditor(EventEditorBase):
         self._cur_row += 1
 
         self._item_mart_label = ttk.Label(self, text="Mart:")
-        self._item_mart_selector = custom_components.SimpleOptionMenu(self, [const.ITEM_TYPE_ALL_ITEMS] + sorted(list(current_gen_info().item_db().mart_items.keys())), callback=self._item_filter_callback, width=val_width)
+        self._item_mart_selector = custom_components.SimpleOptionMenu(
+            self,
+            [const.ITEM_TYPE_ALL_ITEMS] + sorted(list(current_gen_info().item_db().mart_items.keys())),
+            callback=self._item_filter_callback,
+            width=val_width
+        )
         self._item_mart_row = self._cur_row
         self._cur_row += 1
 
@@ -485,7 +582,7 @@ class InventoryEventEditor(EventEditorBase):
         self._cur_row += 1
 
         self._item_amount_label = ttk.Label(self, text="Num Items:")
-        self._item_amount = custom_components.AmountEntry(self, callback=self._item_selector_callback, width=5)
+        self._item_amount = custom_components.AmountEntry(self, min_val=1, callback=self._item_selector_callback, width=5)
         self._item_amount_row = self._cur_row
         self._cur_row += 1
 
@@ -600,58 +697,54 @@ class InventoryEventEditor(EventEditorBase):
                 cost *= item_amt
                 self._item_cost_label.config(text=f"Total Profit: {cost}")
 
-            self.event_button.enable()
+            self._trigger_save()
         except Exception as e:
-            self.event_button.disable()
+            pass
     
     def set_event_type(self, event_type):
         if event_type == const.TASK_GET_FREE_ITEM:
             self.event_type = event_type
             self._hide_all_item_obj()
             self._show_acquire_item()
-            self.event_button.enable()
             return True
 
         elif event_type == const.TASK_PURCHASE_ITEM:
             self.event_type = event_type
             self._hide_all_item_obj()
             self._show_purchase_item()
-            self.event_button.enable()
             return True
 
         elif event_type == const.TASK_USE_ITEM:
             self.event_type = event_type
             self._hide_all_item_obj()
             self._show_use_item()
-            self.event_button.enable()
             return True
 
         elif event_type == const.TASK_SELL_ITEM:
             self.event_type = event_type
             self._hide_all_item_obj()
             self._show_sell_item()
-            self.event_button.enable()
             return True
 
         elif event_type == const.TASK_HOLD_ITEM:
             self.event_type = event_type
             self._hide_all_item_obj()
             self._show_hold_item()
-            self.event_button.enable()
             return True
 
         return False
 
-    def configure(self, editor_params):
-        super().configure(editor_params)
+    @ignore_updates
+    def configure(self, editor_params, save_callback=None):
+        super().configure(editor_params, save_callback=save_callback)
         self._item_filter.set("")
         self._item_mart_selector.set(const.ITEM_TYPE_ALL_ITEMS)
         self._item_type_selector.set(const.ITEM_TYPE_ALL_ITEMS)
         self._item_amount.set("1")
         self.set_event_type(self.editor_params.event_type)
 
+    @ignore_updates
     def load_event(self, event_def):
-        super().load_event(event_def)
         self._item_filter.set("")
         self._item_mart_selector.set(const.ITEM_TYPE_ALL_ITEMS)
         self._item_type_selector.set(const.ITEM_TYPE_ALL_ITEMS)
@@ -710,60 +803,89 @@ class InventoryEventEditor(EventEditorBase):
             )
         
         raise ValueError(f"Cannot generate inventory event for event type: {self.editor_params.event_type}")
+    
+    def enable(self):
+        self._item_type_selector.enable()
+        self._item_mart_selector.enable()
+        self._item_filter.enable()
+        self._item_selector.enable()
+        self._item_amount.enable()
+    
+    def disable(self):
+        self._item_type_selector.disable()
+        self._item_mart_selector.disable()
+        self._item_filter.disable()
+        self._item_selector.disable()
+        self._item_amount.disable()
 
 
 class SaveEventEditor(EventEditorBase):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.event_button.enable()
         self._location_label = ttk.Label(self, text="Save Location")
-        self._location_value = custom_components.SimpleEntry(self)
+        self._location_value = custom_components.SimpleEntry(self, callback=self._trigger_save, width=20)
         self._location_label.grid(row=self._cur_row, column=0)
         self._location_value.grid(row=self._cur_row, column=1)
         self._cur_row += 1
     
+    @ignore_updates
     def load_event(self, event_def):
-        super().load_event(event_def)
         self._location_value.set(str(event_def.save.location))
 
     def get_event(self):
         return EventDefinition(save=SaveEventDefinition(location=self._location_value.get()))
+    
+    def enable(self):
+        self._location_value.enable()
+
+    def disable(self):
+        self._location_value.disable()
 
 
 class HealEventEditor(EventEditorBase):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.event_button.enable()
         self._location_label = ttk.Label(self, text="Heal Location")
-        self._location_value = custom_components.SimpleEntry(self)
+        self._location_value = custom_components.SimpleEntry(self, callback=self._trigger_save, width=20)
         self._location_label.grid(row=self._cur_row, column=0)
         self._location_value.grid(row=self._cur_row, column=1)
         self._cur_row += 1
     
+    @ignore_updates
     def load_event(self, event_def):
-        super().load_event(event_def)
         self._location_value.set(str(event_def.heal.location))
 
     def get_event(self):
         return EventDefinition(heal=HealEventDefinition(location=self._location_value.get()))
+    
+    def enable(self):
+        self._location_value.enable()
+
+    def disable(self):
+        self._location_value.disable()
 
 
 class BlackoutEventEditor(EventEditorBase):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.event_button.enable()
         self._location_label = ttk.Label(self, text="Black Out back to:")
-        self._location_value = custom_components.SimpleEntry(self)
+        self._location_value = custom_components.SimpleEntry(self, callback=self._trigger_save, width=20)
         self._location_label.grid(row=self._cur_row, column=0)
         self._location_value.grid(row=self._cur_row, column=1)
         self._cur_row += 1
     
+    @ignore_updates
     def load_event(self, event_def):
-        super().load_event(event_def)
         self._location_value.set(str(event_def.blackout.location))
 
     def get_event(self):
         return EventDefinition(blackout=BlackoutEventDefinition(location=self._location_value.get()))
+    
+    def enable(self):
+        self._location_value.enable()
+
+    def disable(self):
+        self._location_value.disable()
 
 
 class EventEditorFactory:
@@ -787,23 +909,27 @@ class EventEditorFactory:
         const.TASK_NOTES_ONLY: NotesEditor,
     }
 
-    def __init__(self, tk_container, event_button):
+    def __init__(self, tk_container):
         self._lookup = {}
         self._tk_container = tk_container
-        self._event_button = event_button
 
-    def get_editor(self, editor_params:EditorParams) -> EventEditorBase:
+    def get_editor(self, editor_params:EditorParams, save_callback=None, is_enabled=True) -> EventEditorBase:
         if editor_params.event_type in self._lookup:
-            result = self._lookup[editor_params.event_type]
-            result.configure(editor_params)
+            result:EventEditorBase = self._lookup[editor_params.event_type]
+            result.configure(editor_params, save_callback=save_callback)
+            if is_enabled:
+                result.enable()
+            else:
+                result.disable()
+
             return result
 
         editor_type = self.TYPE_MAP.get(editor_params.event_type)
         if editor_type is None:
             raise ValueError(f"Could not find visual editor for event type: {editor_params.event_type}")
 
-        result = editor_type(self._tk_container, self._event_button, editor_params)
-        result.configure(editor_params)
+        result = editor_type(self._tk_container, editor_params)
+        result.configure(editor_params, save_callback=save_callback)
         self._lookup[editor_params.event_type] = result
 
         # dumb hack, but wtv. Use the same editor for all item events
