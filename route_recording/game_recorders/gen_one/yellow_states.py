@@ -1,10 +1,10 @@
 from __future__ import annotations
 import logging
 
-from route_recording.game_recorders.yellow_fsm import Machine, State, StateType
+from route_recording.game_recorders.gen_one.yellow_fsm import Machine, State, StateType
 from route_recording.gamehook_client import GameHookProperty
 from routing.route_events import BlackoutEventDefinition, EventDefinition, HealEventDefinition, InventoryEventDefinition, LearnMoveEventDefinition, RareCandyEventDefinition, SaveEventDefinition, TrainerEventDefinition, VitaminEventDefinition, WildPkmnEventDefinition
-from route_recording.game_recorders.yellow_gamehook_constants import gh_gen_one_const
+from route_recording.game_recorders.gen_one.yellow_gamehook_constants import gh_gen_one_const
 from utils.constants import const
 
 logger = logging.getLogger(__name__)

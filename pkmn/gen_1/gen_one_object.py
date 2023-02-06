@@ -12,7 +12,7 @@ from pkmn.gen_1.data_objects import GenOneBadgeList, GenOneStatBlock
 from pkmn.gen_1.gen_one_constants import gen_one_const
 from pkmn.pkmn_db import ItemDB, MinBattlesDB, PkmnDB, TrainerDB, MoveDB
 from pkmn.pkmn_info import CurrentGen
-from route_recording.game_recorders.yellow_recorder import YellowRecorder, RedBlueRecorder
+from route_recording.game_recorders.gen_one.yellow_recorder import YellowRecorder, RedBlueRecorder
 from route_recording.recorder import RecorderController, RecorderGameHookClient
 from routing import full_route_state
 from utils.constants import const

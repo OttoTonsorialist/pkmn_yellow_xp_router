@@ -8,7 +8,7 @@ from enum import Enum, auto
 import route_recording.recorder
 from route_recording.gamehook_client import GameHookProperty
 from routing.route_events import EventDefinition, InventoryEventDefinition, LearnMoveEventDefinition, RareCandyEventDefinition, VitaminEventDefinition
-from route_recording.game_recorders.yellow_gamehook_constants import GameHookConstantConverter, gh_gen_one_const
+from route_recording.game_recorders.gen_one.yellow_gamehook_constants import GameHookConstantConverter, gh_gen_one_const
 from pkmn.gen_1.gen_one_constants import gen_one_const
 from utils.constants import const
 from pkmn.gen_factory import current_gen_info
