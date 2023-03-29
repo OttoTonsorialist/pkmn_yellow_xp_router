@@ -325,7 +325,8 @@ class Trainer:
         location:str,
         money:int,
         pkmn:List[str],
-        rematch:bool=False
+        rematch:bool=False,
+        trainer_id:int=-1
     ):
         self.trainer_class = trainer_class
         self.name = name
@@ -333,6 +334,7 @@ class Trainer:
         self.money = money
         self.pkmn = pkmn
         self.rematch = rematch
+        self.trainer_id = trainer_id
     
 
 class BaseItem:

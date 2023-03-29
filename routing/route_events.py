@@ -36,17 +36,20 @@ class InventoryEventDefinition:
 
 
 class HoldItemEventDefinition:
-    def __init__(self, item_name):
+    def __init__(self, item_name, consumed=False):
         self.item_name = item_name
+        self.consumed = True
 
     def serialize(self):
-        return [self.item_name]
+        return [self.item_name, self.consumed]
 
     @staticmethod
     def deserialize(raw_val):
         if not raw_val:
             return None
-        return HoldItemEventDefinition(raw_val[0])
+        if len(raw_val) == 1:
+            return HoldItemEventDefinition(raw_val[0])
+        return HoldItemEventDefinition(raw_val[0], consumed=raw_val[1])
     
     def __str__(self):
         return f"Hold {self.item_name}"
@@ -167,6 +170,7 @@ class TrainerEventDefinition:
             const.ENEMY_SETUP_MOVES_KEY: self.enemy_setup_moves,
             const.MIMIC_SELECTION: self.mimic_selection,
             const.CUSTOM_MOVE_DATA: self.custom_move_data,
+            const.EXP_SPLIT: self.exp_split,
         }
     
     @staticmethod
@@ -559,7 +563,8 @@ class EventItem:
             )
         elif None is not self.event_definition.hold_item:
             self.final_state, self.error_message = cur_state.hold_item(
-                self.event_definition.hold_item.item_name
+                self.event_definition.hold_item.item_name,
+                self.event_definition.hold_item.consumed,
             )
         elif None is not self.event_definition.blackout:
             self.final_state, self.error_message = cur_state.blackout()

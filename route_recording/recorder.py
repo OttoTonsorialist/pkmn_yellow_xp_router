@@ -128,13 +128,11 @@ class RecorderController:
     @skip_if_inactive
     def game_reset(self):
         to_delete = []
-        potentially_empty_folders = []
 
         # find the save points
         test_obj:routing.route_events.EventGroup = self._controller.get_previous_event()
         while test_obj is not None and test_obj.event_definition.save is None:
             to_delete.append(test_obj.group_id)
-            potentially_empty_folders.append(test_obj.parent)
             test_obj = self._controller.get_previous_event(test_obj.group_id)
 
         logger.info(f"Cleaning up {len(to_delete)} events for reset")
@@ -150,7 +148,7 @@ class RecorderController:
         self._potential_new_area_name = None
         self._potential_new_folder_name = None
 
-    def _is_trainer_event(self, event_obj:routing.route_events.EventGroup, trainer_name:str):
+    def is_trainer_event(self, event_obj:routing.route_events.EventGroup, trainer_name:str):
         return (
             event_obj is not None and
             event_obj.event_definition.trainer_def is not None and
@@ -165,7 +163,7 @@ class RecorderController:
             logger.error(f"{const.RECORDING_ERROR_FRAGMENT} Lost trainer battle to trainer {trainer_name}, but no matching trainer event was found to remove")
         else:
             last_obj = test_obj = self._controller.get_previous_event()
-            while not self._is_trainer_event(test_obj, trainer_name):
+            while not self.is_trainer_event(test_obj, trainer_name):
                 if test_obj is None:
                     break
                 test_obj = self._controller.get_previous_event(test_obj.group_id)
@@ -192,6 +190,9 @@ class RecorderController:
                 self._potential_new_area_name = None
                 self._potential_new_folder_name = None
                 self._controller.finalize_new_folder(self._active_folder_name)
+        
+        if self._active_folder_name not in self._controller.get_all_folder_names():
+            self._controller.finalize_new_folder(self._active_folder_name)
 
         if event_def.trainer_def is not None and event_def.trainer_def.trainer_name in self._controller.get_defeated_trainers():
             # log any errors for duplicate trainers being defeated

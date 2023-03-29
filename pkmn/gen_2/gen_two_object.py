@@ -13,6 +13,8 @@ from pkmn.gen_2.data_objects import GenTwoBadgeList, GenTwoStatBlock, instantiat
 from pkmn.gen_2.gen_two_constants import gen_two_const
 from pkmn.pkmn_db import ItemDB, MinBattlesDB, PkmnDB, TrainerDB, MoveDB
 from pkmn.pkmn_info import CurrentGen
+from route_recording.game_recorders.gen_two.crystal_recorder import CrystalRecorder
+from route_recording.recorder import RecorderController, RecorderGameHookClient
 from routing import full_route_state
 from utils.constants import const
 from utils import io_utils
@@ -37,7 +39,13 @@ class GenTwo(CurrentGen):
             raise ValueError(f"Failed to load pokemon DB: {e}")
 
         try:
-            self._trainer_db = TrainerDB(_load_trainer_db(trainer_db_path, self._pkmn_db))
+            self._trainer_db = TrainerDB(
+                _load_trainer_db(
+                    trainer_db_path,
+                    self._pkmn_db,
+                    extract_trainer_id=(version_name == const.CRYSTAL_VERSION)
+                )
+            )
         except Exception as e:
             logger.error(f"Error loading trainer DB: {pkmn_db_path}")
             logger.exception(e)
@@ -121,6 +129,16 @@ class GenTwo(CurrentGen):
     
     def min_battles_db(self) -> MinBattlesDB:
         return self._min_battles_db
+
+    def get_recorder_client(self, recorder_controller:RecorderController) -> RecorderGameHookClient:
+        version_name = self._base_version_name
+        if version_name is None:
+            version_name = self._version_name
+
+        if version_name == const.CRYSTAL_VERSION:
+            return CrystalRecorder(recorder_controller, "Pokemon Crystal")
+
+        raise NotImplementedError()
 
     def create_trainer_pkmn(self, pkmn_name, pkmn_level):
         return instantiate_trainer_pokemon(self._pkmn_db.get_pkmn(pkmn_name), pkmn_level)
@@ -287,7 +305,7 @@ def _load_pkmn_db(path):
     return result
 
 
-def _create_trainer(trainer_dict, pkmn_db:PkmnDB) -> universal_data_objects.Trainer:
+def _create_trainer(trainer_dict, pkmn_db:PkmnDB, extract_trainer_id=False) -> universal_data_objects.Trainer:
     enemy_pkmn = []
     for cur_mon in trainer_dict[const.TRAINER_POKEMON]:
         enemy_pkmn.append(
@@ -318,6 +336,14 @@ def _create_trainer(trainer_dict, pkmn_db:PkmnDB) -> universal_data_objects.Trai
                 held_item=cur_mon[const.HELD_ITEM_KEY]
             )
         )
+    
+    if extract_trainer_id:
+        try:
+            trainer_id = trainer_dict[const.TRAINER_ID]
+        except Exception as e:
+            raise KeyError(f"Issue with {trainer_dict[const.TRAINER_NAME]}") from e
+    else:
+        trainer_id = -1
 
     return universal_data_objects.Trainer(
         trainer_dict[const.TRAINER_CLASS],
@@ -325,11 +351,12 @@ def _create_trainer(trainer_dict, pkmn_db:PkmnDB) -> universal_data_objects.Trai
         trainer_dict[const.TRAINER_LOC],
         trainer_dict[const.MONEY],
         enemy_pkmn,
-        rematch=("Rematch" in trainer_dict[const.TRAINER_NAME])
+        rematch=("Rematch" in trainer_dict[const.TRAINER_NAME]),
+        trainer_id=trainer_id,
     )
 
 
-def _load_trainer_db(path, pkmn_db:PkmnDB):
+def _load_trainer_db(path, pkmn_db:PkmnDB, extract_trainer_id=False):
     result = {}
     with open(path, 'r') as f:
         raw_db = json.load(f)
@@ -338,7 +365,7 @@ def _load_trainer_db(path, pkmn_db:PkmnDB):
         # ignoring all unused trainers
         if raw_trainer[const.TRAINER_LOC] == const.UNUSED_TRAINER_LOC:
             continue
-        result[raw_trainer[const.TRAINER_NAME]] = _create_trainer(raw_trainer, pkmn_db)
+        result[raw_trainer[const.TRAINER_NAME]] = _create_trainer(raw_trainer, pkmn_db, extract_trainer_id=extract_trainer_id)
     
     return result
 

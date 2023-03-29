@@ -154,6 +154,10 @@ class TrainerFightEditor(EventEditorBase):
             self._all_pkmn[idx].set_pkmn(cur_pkmn, speed_style=speed_style)
             self._all_pkmn[idx].grid(row=row_idx, column=col_idx, columnspan=2, padx=5, pady=5)
             self._all_exp_labels[idx].grid(row=row_idx + 1, column=col_idx, padx=2, pady=(5, 10))
+            if event_def.trainer_def.exp_split and len(event_def.trainer_def.exp_split) > idx:
+                self._all_exp_splits[idx].set(event_def.trainer_def.exp_split[idx])
+            else:
+                self._all_exp_splits[idx].set(1)
             self._all_exp_splits[idx].grid(row=row_idx + 1, column=col_idx + 1, padx=2, pady=(5, 10))
         
         for missing_idx in range(idx+1, 6):

@@ -270,19 +270,20 @@ class RouteState:
 
         return RouteState(self.solo_pkmn, self.badges, inv), error_message
     
-    def hold_item(self, item_name):
+    def hold_item(self, item_name, consumed):
         error_message = ""
 
         inv = self.inventory
         existing_held = self.solo_pkmn.held_item
-        if existing_held:
+        if existing_held and not consumed:
             inv = inv.add_item(pkmn.gen_factory.current_gen_info().item_db().get_item(existing_held), 1)
         
-        try:
-            inv = inv.remove_item(pkmn.gen_factory.current_gen_info().item_db().get_item(item_name), 1)
-        except Exception as e:
-            error_message = str(e)
-            inv = inv.remove_item(pkmn.gen_factory.current_gen_info().item_db().get_item(item_name), 1, force=True)
+        if item_name is not None:
+            try:
+                inv = inv.remove_item(pkmn.gen_factory.current_gen_info().item_db().get_item(item_name), 1)
+            except Exception as e:
+                error_message = str(e)
+                inv = inv.remove_item(pkmn.gen_factory.current_gen_info().item_db().get_item(item_name), 1, force=True)
         
         return RouteState(
             _hold_item(self.solo_pkmn, item_name, self.badges),
