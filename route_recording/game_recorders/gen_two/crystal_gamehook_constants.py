@@ -203,6 +203,10 @@ class GameHookConstantConverter:
     
     def _name_prettify(self, item_name:str):
         return " ".join([x.capitalize() for x in item_name.lower().split(" ")])
+
+    TUTOR_MOVES = ["Thunderbolt", "Flamethrower", "Ice Beam"]
+    def is_tutor_move(self, gh_move_name):
+        return self._name_prettify(gh_move_name) in self.TUTOR_MOVES
     
     def get_hm_name(self, gh_move_name):
         gh_move_name = self._name_prettify(gh_move_name)

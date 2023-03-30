@@ -23,6 +23,7 @@ class StateType(Enum):
     INVENTORY_CHANGE = auto()
     RARE_CANDY = auto()
     TM = auto()
+    MOVE_DELETE = auto()
     VITAMIN = auto()
 
 
@@ -126,7 +127,7 @@ class Machine:
         self._cached_money = new_cache
         return result
     
-    def _move_cache_update(self, generate_events=True, tm_name=None, hm_expected=False, levelup_source=False):
+    def _move_cache_update(self, generate_events=True, tm_name=None, hm_expected=False, tutor_expected=False, levelup_source=False):
         new_cache = []
         new_cache.append(self.gh_converter.move_name_convert(self._gamehook_client.get(gh_gen_two_const.KEY_PLAYER_MON_MOVE_1).value))
         new_cache.append(self.gh_converter.move_name_convert(self._gamehook_client.get(gh_gen_two_const.KEY_PLAYER_MON_MOVE_2).value))
@@ -154,14 +155,27 @@ class Machine:
                 to_learn_move = list(learned_moves)[0]
             
             if to_learn_move is None and to_delete_move is not None:
-                logger.error(f"Move deleted but no move learned? That seems impossible... from {self._cached_moves} to {new_cache}")
+                self._queue_new_event(
+                    EventDefinition(
+                        learn_move=LearnMoveEventDefinition(
+                            None,
+                            self.gh_converter.move_name_convert(to_delete_move),
+                            const.MOVE_SOURCE_TUTOR,
+                            level=const.LEVEL_ANY
+                        )
+                    )
+                )
             elif to_learn_move is not None:
                 if levelup_source:
                     source = const.MOVE_SOURCE_LEVELUP
                     level = self._gamehook_client.get(gh_gen_two_const.KEY_PLAYER_MON_LEVEL).value
+                elif tutor_expected:
+                    source = const.MOVE_SOURCE_TUTOR
+                    level = const.LEVEL_ANY
+                elif hm_expected:
+                    source = self.gh_converter.get_hm_name(to_learn_move)
+                    level = const.LEVEL_ANY
                 else:
-                    if hm_expected:
-                        tm_name = self.gh_converter.get_hm_name(to_learn_move)
                     source = tm_name
                     level = const.LEVEL_ANY
 
@@ -438,7 +452,7 @@ class Machine:
                     elif None is not cur_event.learn_move:
                         to_learn = current_gen_info().move_db().get_move(cur_event.learn_move.move_to_learn)
                         to_forget = current_gen_info().move_db().get_move(cur_event.learn_move.destination)
-                        if to_learn is None:
+                        if cur_event.learn_move.move_to_learn is not None and to_learn is None:
                             msg = f"Failed to find move from GameHook: {cur_event.learn_move.move_to_learn} for event {cur_event}"
                             logger.error(msg)
                             self._controller.add_event(
@@ -452,7 +466,7 @@ class Machine:
                                 EventDefinition(notes=const.RECORDING_ERROR_FRAGMENT + msg)
                             )
                             continue
-                        if cur_event.learn_move.source != const.MOVE_SOURCE_LEVELUP:
+                        if cur_event.learn_move.source != const.MOVE_SOURCE_LEVELUP and cur_event.learn_move.source != const.MOVE_SOURCE_TUTOR:
                             found = False
                             for test_tm_hm_name in current_gen_info().item_db().get_filtered_names(item_type=const.ITEM_TYPE_TM):
                                 if test_tm_hm_name.startswith(cur_event.learn_move.source):
@@ -507,8 +521,19 @@ class Machine:
                             else:
                                 logger.error(f"expected to be fixing events before a hold item event, but no fix was found: {cur_event}")
 
+                    auto_save = False
+                    if cur_event.heal is not None and cur_event.heal.location == "INDIGO":
+                        prev_event = self._controller._controller.get_previous_event()
+                        if (
+                            prev_event is not None and
+                            prev_event.event_definition.trainer_def is not None and
+                            prev_event.event_definition.trainer_def.trainer_name == "Champion Lance"
+                        ):
+                            auto_save = True
                     logger.info(f"adding new event: {cur_event}")
                     self._controller.add_event(cur_event)
+                    if auto_save:
+                        self._controller.add_event(EventDefinition(save=SaveEventDefinition(location="Post-Champion Autosave")))
                 except Exception as e:
                     logger.error(f"Exception occurred trying to process event: {cur_event}")
                     logger.exception(e)

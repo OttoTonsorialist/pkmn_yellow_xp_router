@@ -187,6 +187,7 @@ class MainController:
             base_route_path = None
 
         self._route_name = ""
+        self._selected_ids = []
         try:
             self._data.new_route(solo_mon, base_route_path, pkmn_version=pkmn_version, custom_dvs=custom_dvs)
         except Exception as e:
@@ -198,6 +199,7 @@ class MainController:
         finally:
             self._on_name_change()
             self._on_version_change()
+            self._on_event_selection()
             self._on_route_change()
     
     @handle_exceptions
@@ -208,6 +210,7 @@ class MainController:
             self._route_name = route_name
 
             self._data.load(full_path_to_route)
+            self._selected_ids = []
         except Exception as e:
             logger.error(f"Exception ocurred trying to load route: {full_path_to_route}")
             logger.exception(e)
@@ -218,6 +221,7 @@ class MainController:
         finally:
             self._on_name_change()
             self._on_version_change()
+            self._on_event_selection()
             self._on_route_change()
 
     @handle_exceptions

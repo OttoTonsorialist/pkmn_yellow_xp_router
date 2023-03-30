@@ -549,14 +549,16 @@ class QuickMiscEvents(ttk.LabelFrame):
         self._buttons.pack(fill=tk.BOTH, anchor=tk.CENTER)
         self._btn_width = 8
 
+        self._btn_move_tutor = custom_components.SimpleButton(self._buttons, text="Tutor Move", command=self.add_move)
+        self._btn_move_tutor.grid(row=0, column=0, padx=self.padx, pady=self.pady + 1, sticky=tk.EW)
         self._btn_add_save = custom_components.SimpleButton(self._buttons, text="Add Save", command=self.add_save)
-        self._btn_add_save.grid(row=0, column=0, padx=self.padx, pady=self.pady + 1, sticky=tk.EW)
+        self._btn_add_save.grid(row=1, column=0, padx=self.padx, pady=self.pady + 1, sticky=tk.EW)
         self._btn_add_heal = custom_components.SimpleButton(self._buttons, text="Add Heal", command=self.add_heal)
-        self._btn_add_heal.grid(row=1, column=0, padx=self.padx, pady=self.pady + 1, sticky=tk.EW)
+        self._btn_add_heal.grid(row=2, column=0, padx=self.padx, pady=self.pady + 1, sticky=tk.EW)
         self._btn_add_black_out = custom_components.SimpleButton(self._buttons, text="Add Black Out", command=self.add_black_out)
-        self._btn_add_black_out.grid(row=2, column=0, padx=self.padx, pady=self.pady + 1, sticky=tk.EW)
+        self._btn_add_black_out.grid(row=3, column=0, padx=self.padx, pady=self.pady + 1, sticky=tk.EW)
         self._btn_add_notes = custom_components.SimpleButton(self._buttons, text="Add Notes", command=self.add_notes)
-        self._btn_add_notes.grid(row=3, column=0, padx=self.padx, pady=self.pady + 1, sticky=tk.EW)
+        self._btn_add_notes.grid(row=4, column=0, padx=self.padx, pady=self.pady + 1, sticky=tk.EW)
 
         self.bind(self._controller.register_event_selection(self), self.update_button_status)
         self.bind(self._controller.register_version_change(self), self.update_pkmn_version)
@@ -564,12 +566,14 @@ class QuickMiscEvents(ttk.LabelFrame):
 
     def update_button_status(self, *args, **kwargs):
         if not self._controller.can_insert_after_current_selection() or self._uninitialized:
+            self._btn_move_tutor.disable()
             self._btn_add_save.disable()
             self._btn_add_heal.disable()
             self._btn_add_black_out.disable()
             self._btn_add_notes.disable()
             return
 
+        self._btn_move_tutor.enable()
         self._btn_add_save.enable()
         self._btn_add_heal.enable()
         self._btn_add_black_out.enable()
@@ -593,6 +597,17 @@ class QuickMiscEvents(ttk.LabelFrame):
     def add_black_out(self, *args, **kwargs):
         self._controller.new_event(
             EventDefinition(blackout=BlackoutEventDefinition()),
+            insert_after=self._controller.get_single_selected_event_id()
+        )
+
+    def add_move(self, *args, **kwargs):
+        cur_state = self._controller.get_active_state()
+        self._controller.new_event(
+            EventDefinition(learn_move=LearnMoveEventDefinition(
+                None,
+                cur_state.solo_pkmn.get_move_destination(None, None)[0],
+                const.MOVE_SOURCE_TUTOR
+            )),
             insert_after=self._controller.get_single_selected_event_id()
         )
 

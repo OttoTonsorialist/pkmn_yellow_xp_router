@@ -38,7 +38,7 @@ class InventoryEventDefinition:
 class HoldItemEventDefinition:
     def __init__(self, item_name, consumed=False):
         self.item_name = item_name
-        self.consumed = True
+        self.consumed = consumed
 
     def serialize(self):
         return [self.item_name, self.consumed]
@@ -138,12 +138,17 @@ class LearnMoveEventDefinition:
         return LearnMoveEventDefinition(raw_val[0], raw_val[1], raw_val[2], level=raw_val[3])
     
     def __str__(self):
-        if self.destination is None:
-            return f"Ignoring {self.move_to_learn}, from {self.source}"
-        elif isinstance(self.destination, int):
-            return f"Learning {self.move_to_learn} in slot #: {self.destination + 1}, from {self.source}"
+        try:
+            if self.destination is None:
+                return f"Ignoring {self.move_to_learn}, from {self.source}"
+            elif self.move_to_learn is None:
+                return f"Forgetting move in slot #: {self.destination + 1}"
+            elif isinstance(self.destination, int):
+                return f"Learning {self.move_to_learn} in slot #: {self.destination + 1}, from {self.source}"
 
-        return f"Learning {self.move_to_learn} over: {self.destination}, from {self.source}"
+            return f"Learning {self.move_to_learn} over: {self.destination}, from {self.source}"
+        except Exception:
+            return f"LearnMove: {self.move_to_learn, self.destination, self.source, self.level}"
 
 
 class TrainerEventDefinition:
@@ -573,10 +578,10 @@ class EventItem:
             # No processing just pass through
             self.final_state = self.init_state
             # Check for recorder errors
-            if self.event_definition.notes and self.event_definition.notes.startswith(const.RECORDING_ERROR_FRAGMENT):
-                self.error_message = self.event_definition.notes
-            else:
-                self.error_message = ""
+        if self.event_definition.notes and self.event_definition.notes.startswith(const.RECORDING_ERROR_FRAGMENT):
+            self.error_message = self.event_definition.notes
+        else:
+            self.error_message = ""
 
 
     def get_pkmn_after_levelups(self):
@@ -715,6 +720,9 @@ class EventGroup:
         self.error_messages = [x.error_message for x in self.event_items if x.error_message]
         if self.error_messages:
             self.name = ", ".join(self.error_messages)
+        else:
+            # hack to get move learn events to update properly when they get modified automatically during processing
+            self.name = self.event_definition.get_label()
         self.final_state = self.event_items[-1].final_state
     
     def contains_id(self, id_val):

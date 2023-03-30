@@ -1,10 +1,13 @@
 
 import math
+import logging
 from utils.constants import const
 import pkmn.universal_utils
 import pkmn.universal_data_objects
 import pkmn.gen_factory
 from routing.state_objects import Inventory, SoloPokemon
+
+logger = logging.getLogger(__name__)
 
 
 def _defeat_trainer(inventory:Inventory, trainer_obj:pkmn.universal_data_objects.Trainer):
@@ -76,6 +79,11 @@ def _learn_move(cur_pkmn:SoloPokemon, move_name, dest, badges):
     if actual_dest is not None:
         new_movelist = [x for x in new_movelist]
         new_movelist[actual_dest] = move_name
+
+        # make sure any empty move slots are always at the bottom
+        new_movelist = [x for x in new_movelist if x is not None]
+        while len(new_movelist) < 4:
+            new_movelist.append(None)
 
     return SoloPokemon(
         cur_pkmn.name,
@@ -185,7 +193,7 @@ class RouteState:
     
     def learn_move(self, move_name, dest, source):
         error_message = ""
-        if source == const.MOVE_SOURCE_LEVELUP:
+        if source == const.MOVE_SOURCE_LEVELUP or source == const.MOVE_SOURCE_TUTOR:
             inv = self.inventory
         else:
             try:

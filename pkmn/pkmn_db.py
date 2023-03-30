@@ -260,6 +260,21 @@ class MoveDB:
         
         return None
     
+    def get_filtered_names(self, filter=None):
+        if filter is None:
+            return list(self._data.keys())
+        
+        result = []
+        filter = filter.lower()
+        for test_name in self._data.keys():
+            if filter in test_name.lower():
+                result.append(test_name)
+        
+        if len(result) == 0:
+            result.append(const.NO_MOVE)
+        
+        return result
+    
     def get_stat_mod(self, move_name) -> List[Tuple[str, int]]:
         return self.stat_mod_moves.get(move_name, [])
 

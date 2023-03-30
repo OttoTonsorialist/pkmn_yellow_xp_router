@@ -256,10 +256,6 @@ class LearnMoveEditor(EventEditorBase):
 
         val_width = 25
 
-        self._source_label = ttk.Label(self)
-        self._source_label.grid(row=self._cur_row, column=0, columnspan=2, pady=2)
-        self._cur_row += 1
-
         self._move_name_label = ttk.Label(self)
         self._move_name_label.grid(row=self._cur_row, column=0, columnspan=2, pady=2)
         self._cur_row += 1
@@ -274,9 +270,10 @@ class LearnMoveEditor(EventEditorBase):
         self._move = None
         self._level = const.LEVEL_ANY
 
-        self._item_type_label = ttk.Label(self, text="Item Type:")
-        self._item_type_selector = custom_components.SimpleOptionMenu(self, [const.ITEM_TYPE_ALL_ITEMS, const.ITEM_TYPE_BACKPACK_ITEMS, const.ITEM_TYPE_TM], callback=self._item_filter_callback, width=val_width)
-        self._item_type_row = self._cur_row
+        self._source_label = ttk.Label(self, text="Move Source")
+        self._source = custom_components.SimpleOptionMenu(self, [""], width=val_width, callback=self._move_source_callback)
+        self._source_label.grid(row=self._cur_row, column=0, pady=2)
+        self._source.grid(row=self._cur_row, column=1, pady=2)
         self._cur_row += 1
 
         self._item_filter_label = ttk.Label(self, text="Item Name Filter:")
@@ -289,19 +286,47 @@ class LearnMoveEditor(EventEditorBase):
         self._item_selector_row = self._cur_row
         self._cur_row += 1
 
-    def _item_filter_callback(self, *args, **kwargs):
-        item_type = self._item_type_selector.get()
-        backpack_filter = False
-        if item_type == const.ITEM_TYPE_BACKPACK_ITEMS:
-            item_type = const.ITEM_TYPE_TM
-            backpack_filter = True
-        
-        new_vals = current_gen_info().item_db().get_filtered_names(item_type=item_type)
+        self._move_filter_label = ttk.Label(self, text="Move Filter:")
+        self._move_filter = custom_components.SimpleEntry(self, callback=self._move_filter_callback, width=val_width)
+        self._move_filter_row = self._cur_row
+        self._cur_row += 1
 
-        if backpack_filter:
-            backpack_items = [x.base_item.name for x in self.editor_params.cur_state.inventory.cur_items]
-            new_vals = [x for x in new_vals if x in backpack_items]
+        self._move_selector_label = ttk.Label(self, text="Move:")
+        self._move_selector = custom_components.SimpleOptionMenu(self, [""], callback=self._move_selected_callback, width=val_width)
+        self._move_selector_row = self._cur_row
+        self._cur_row += 1
+    
+    def _move_source_callback(self, *args, **kwargs):
+        new_source = self._source.get()
+        if new_source == const.MOVE_SOURCE_LEVELUP:
+            return
         
+        if new_source == const.MOVE_SOURCE_TM_HM:
+            self._item_filter_label.grid(row=self._item_filter_row, column=0, pady=2)
+            self._item_filter.grid(row=self._item_filter_row, column=1, pady=2)
+            self._item_selector_label.grid(row=self._item_selector_row, column=0, pady=2)
+            self._item_selector.grid(row=self._item_selector_row, column=1, pady=2)
+            self._move_filter_label.grid_forget()
+            self._move_filter.grid_forget()
+            self._move_selector_label.grid_forget()
+            self._move_selector.grid_forget()
+            self._item_filter_callback()
+        else:
+            self._item_filter_label.grid_forget()
+            self._item_filter.grid_forget()
+            self._item_selector_label.grid_forget()
+            self._item_selector.grid_forget()
+            self._move_filter_label.grid(row=self._move_filter_row, column=0, pady=2)
+            self._move_filter.grid(row=self._move_filter_row, column=1, pady=2)
+            self._move_selector_label.grid(row=self._move_selector_row, column=0, pady=2)
+            self._move_selector.grid(row=self._move_selector_row, column=1, pady=2)
+            self._move_filter_callback()
+        
+        self._trigger_save()
+
+    def _item_filter_callback(self, *args, **kwargs):
+        new_vals = current_gen_info().item_db().get_filtered_names(item_type=const.ITEM_TYPE_TM)
+
         item_filter_val = self._item_filter.get().strip().lower()
         if item_filter_val:
             new_vals = [x for x in new_vals if item_filter_val in x.lower()]
@@ -310,18 +335,28 @@ class LearnMoveEditor(EventEditorBase):
             new_vals = [const.NO_ITEM]
 
         self._item_selector.new_values(new_vals)
+
+    def _move_filter_callback(self, *args, **kwargs):
+        new_vals = current_gen_info().move_db().get_filtered_names(filter=self._move_filter.get())
+        if const.NO_MOVE in new_vals:
+            new_vals = []
+        
+        new_vals.append(const.FORGET_MOVE)
+        self._move_selector.new_values(new_vals)
     
     def _move_selected_callback(self, *args, **kwargs):
-        if self.editor_params.event_type == const.TASK_LEARN_MOVE_TM:
+        if self._source.get() == const.MOVE_SOURCE_TM_HM:
             item_obj = current_gen_info().item_db().get_item(self._item_selector.get())
             if item_obj is not None:
                 self._move = item_obj.move_name
             else:
                 self._move = None
             self._move_name_label.config(text=f"Move: {self._move}")
-        
-        if self._move is None:
-            return
+        elif self._source.get() == const.MOVE_SOURCE_TUTOR:
+            self._move = self._move_selector.get()
+            if self._move == const.FORGET_MOVE:
+                self._move = None
+            self._move_name_label.config(text=f"Move: {self._move}")
         
         learn_move_info = self.editor_params.cur_state.solo_pkmn.get_move_destination(self._move, None)
         if not learn_move_info[1]:
@@ -345,24 +380,23 @@ class LearnMoveEditor(EventEditorBase):
                 enumerate(self.editor_params.cur_state.solo_pkmn.move_list)
             ]
         )
+
+        self._item_filter_label.grid_forget()
+        self._item_filter.grid_forget()
+        self._item_selector_label.grid_forget()
+        self._item_selector.grid_forget()
+        self._move_filter.grid_forget()
+        self._move_selector.grid_forget()
+
         if self.editor_params.event_type == const.TASK_LEARN_MOVE_LEVELUP:
-            self._source_label.config(text="Source: Levelup")
-            self._item_type_label.grid_forget()
-            self._item_type_selector.grid_forget()
-            self._item_filter_label.grid_forget()
-            self._item_filter.grid_forget()
-            self._item_selector_label.grid_forget()
-            self._item_selector.grid_forget()
+            self._source.new_values([const.MOVE_SOURCE_LEVELUP])
+            self._source.disable()
         else:
-            self._source_label.config(text="Source: TM/HM")
-            self._item_type_label.grid(row=self._item_type_row, column=0, pady=2)
-            self._item_type_selector.grid(row=self._item_type_row, column=1, pady=2)
-            self._item_filter_label.grid(row=self._item_filter_row, column=1, pady=2)
-            self._item_filter.grid(row=self._item_filter_row, column=1, pady=2)
-            self._item_selector_label.grid(row=self._item_selector_row, column=0, pady=2)
-            self._item_selector.grid(row=self._item_selector_row, column=1, pady=2)
+            self._source.new_values([const.MOVE_SOURCE_TUTOR, const.MOVE_SOURCE_TM_HM])
+            self._source.enable()
 
         self._item_filter_callback()
+        self._move_selected_callback()
 
     @ignore_updates
     def load_event(self, event_def):
@@ -371,10 +405,19 @@ class LearnMoveEditor(EventEditorBase):
             self._move_name_label.config(text=f"Move: {self._move}")
             self._level = event_def.learn_move.level
         else:
-            self._item_type_selector.set(const.ITEM_TYPE_TM)
-            self._item_filter.set("")
-            self._item_selector.set(event_def.learn_move.source)
-            self._level = const.LEVEL_ANY
+            if event_def.learn_move.source == const.MOVE_SOURCE_TUTOR:
+                self._source.set(const.MOVE_SOURCE_TUTOR)
+                self._move_filter.set("")
+                move = event_def.learn_move.move_to_learn
+                if move is None:
+                    move = const.FORGET_MOVE
+                self._move_selector.set(move)
+                self._level = const.LEVEL_ANY
+            else:
+                self._source.set(const.MOVE_SOURCE_TM_HM)
+                self._item_filter.set("")
+                self._item_selector.set(event_def.learn_move.source)
+                self._level = const.LEVEL_ANY
         
         self._move_selected_callback()
         if event_def.learn_move.destination is None:
@@ -393,14 +436,21 @@ class LearnMoveEditor(EventEditorBase):
             except Exception:
                 raise ValueError(f"Failed to extract slot destination from string '{dest}'")
         
-        source = const.MOVE_SOURCE_LEVELUP if self.editor_params.event_type == const.TASK_LEARN_MOVE_LEVELUP else self._item_selector.get()
+        if self.editor_params.event_type == const.TASK_LEARN_MOVE_LEVELUP:
+            source = const.MOVE_SOURCE_LEVELUP
+        elif self._source.get() == const.MOVE_SOURCE_TUTOR:
+            source = const.MOVE_SOURCE_TUTOR
+        else:
+            logger.info(f"source: {self._source.get()}")
+            source = self._item_selector.get()
 
         return EventDefinition(learn_move=LearnMoveEventDefinition(self._move, dest, source, level=self._level))
     
     def enable(self):
-        self._item_type_selector.enable()
         self._item_filter.enable()
         self._item_selector.enable()
+        self._move_filter.enable()
+        self._move_selector.enable()
 
         # deliberately always set this to enabled first
         self._destination.enable()
@@ -409,9 +459,10 @@ class LearnMoveEditor(EventEditorBase):
         ignore_updates(self._move_selected_callback)(self)
     
     def disable(self):
-        self._item_type_selector.disable()
         self._item_filter.disable()
         self._item_selector.disable()
+        self._move_filter.disable()
+        self._move_selector.disable()
         self._destination.disable()
     
 
@@ -553,6 +604,10 @@ class InventoryEventEditor(EventEditorBase):
         self._item_cost_row = self._cur_row
         self._cur_row += 1
 
+        self._consume_held_item = custom_components.CheckboxLabel(self, text="Consume previously held item?", toggle_command=self._trigger_save, width=15, flip=True)
+        self._consume_held_item_row = self._cur_row
+        self._cur_row += 1
+
     def _hide_all_item_obj(self):
         self._item_type_label.grid_remove()
         self._item_type_selector.grid_remove()
@@ -565,6 +620,7 @@ class InventoryEventEditor(EventEditorBase):
         self._item_amount_label.grid_remove()
         self._item_amount.grid_remove()
         self._item_cost_label.grid_remove()
+        self._consume_held_item.grid_remove()
     
     def _show_acquire_item(self):
         self._item_type_label.grid(row=self._item_type_row, column=0, pady=2)
@@ -617,6 +673,7 @@ class InventoryEventEditor(EventEditorBase):
         self._item_filter.grid(row=self._item_filter_row, column=1, pady=2)
         self._item_selector_label.grid(row=self._item_selector_row, column=0, pady=2)
         self._item_selector.grid(row=self._item_selector_row, column=1, pady=2)
+        self._consume_held_item.grid(row=self._consume_held_item_row, column=0, columnspan=2, pady=2)
 
     def _item_filter_callback(self, *args, **kwargs):
         item_type = self._item_type_selector.get()
@@ -718,6 +775,7 @@ class InventoryEventEditor(EventEditorBase):
             self._item_amount.set(event_def.item_event_def.item_amount)
         else:
             self._item_selector.set(event_def.hold_item.item_name)
+            self._consume_held_item.set_checked(event_def.hold_item.consumed)
 
     def get_event(self):
         if self.event_type == const.TASK_GET_FREE_ITEM:
@@ -762,7 +820,7 @@ class InventoryEventEditor(EventEditorBase):
         
         elif self.event_type == const.TASK_HOLD_ITEM:
             return EventDefinition(
-                hold_item=HoldItemEventDefinition(self._item_selector.get())
+                hold_item=HoldItemEventDefinition(self._item_selector.get(), consumed=self._consume_held_item.is_checked())
             )
         
         raise ValueError(f"Cannot generate inventory event for event type: {self.editor_params.event_type}")

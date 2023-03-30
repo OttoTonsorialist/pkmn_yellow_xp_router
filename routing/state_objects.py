@@ -163,7 +163,7 @@ class SoloPokemon:
                     self.move_list = self.move_list[-4:]
 
             while len(self.move_list) < 4:
-                self.move_list.append("")
+                self.move_list.append(None)
         else:
             self.move_list = move_list
 
@@ -268,6 +268,10 @@ class SoloPokemon:
     def get_move_destination(self, move_name, dest):
         # if one were to attempt to learn a move defined by the params
         # return what would the actual destination would be
+        
+        # if we are forgetting the move, always respect dest
+        if move_name is None:
+            return dest, True
 
         # if we already know the move, ignore dest entirely and just don't learn it
         if move_name in self.move_list:
@@ -276,7 +280,7 @@ class SoloPokemon:
         added = False
         for cur_idx in range(len(self.move_list)):
             # if we're learning the move and we have empty slots, always learn the move
-            if self.move_list[cur_idx] == "":
+            if self.move_list[cur_idx] is None:
                 return cur_idx, False
         
         # if we have 4 moves already, and none of those moves are what we're trying to learn

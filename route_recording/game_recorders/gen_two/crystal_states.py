@@ -3,7 +3,7 @@ import logging
 
 from route_recording.game_recorders.gen_two.crystal_fsm import Machine, State, StateType
 from route_recording.gamehook_client import GameHookProperty
-from routing.route_events import BlackoutEventDefinition, EventDefinition, HealEventDefinition, HoldItemEventDefinition, SaveEventDefinition, TrainerEventDefinition, WildPkmnEventDefinition
+from routing.route_events import BlackoutEventDefinition, EventDefinition, HealEventDefinition, HoldItemEventDefinition, LearnMoveEventDefinition, SaveEventDefinition, TrainerEventDefinition, WildPkmnEventDefinition
 from route_recording.game_recorders.gen_two.crystal_gamehook_constants import gh_gen_two_const
 from utils.constants import const
 
@@ -381,6 +381,32 @@ class UseTMState(WatchForResetState):
         return self.state_type
 
 
+class MoveDeleteState(WatchForResetState):
+    BASE_DELAY = 2
+    def __init__(self, machine: Machine):
+        super().__init__(StateType.MOVE_DELETE, machine)
+        self._cur_delay = self.BASE_DELAY
+
+    def _on_enter(self, prev_state: State):
+        self._cur_delay = self.BASE_DELAY
+    
+    def _on_exit(self, next_state: State):
+        if next_state.state_type != StateType.RESETTING:
+            self.machine._move_cache_update(tutor_expected=True)
+    
+    @auto_reset
+    def transition(self, new_prop:GameHookProperty, prev_prop:GameHookProperty) -> StateType:
+        if new_prop.path == gh_gen_two_const.KEY_GAMETIME_SECONDS:
+            if self._cur_delay <= 0:
+                return StateType.OVERWORLD
+            else:
+                self._cur_delay -= 1
+        elif new_prop.path in gh_gen_two_const.ALL_KEYS_PLAYER_MOVES:
+            self._cur_delay = self.BASE_DELAY
+
+        return self.state_type
+
+
 class UseVitaminState(WatchForResetState):
     def __init__(self, machine: Machine):
         super().__init__(StateType.VITAMIN, machine)
@@ -477,8 +503,18 @@ class OverworldState(WatchForResetState):
                 return StateType.RARE_CANDY
         elif new_prop.path in gh_gen_two_const.ALL_KEYS_PLAYER_MOVES:
             if not self._waiting_for_registration and not self._wrong_mon_in_slot_1:
-                if self.machine.gh_converter.get_hm_name(new_prop.value) is not None:
+                all_cur_moves = []
+                for move_path in gh_gen_two_const.ALL_KEYS_PLAYER_MOVES:
+                    if move_path == prev_prop.path:
+                        all_cur_moves.append(prev_prop.value)
+                    else:
+                        all_cur_moves.append(self.machine._gamehook_client.get(move_path).value)
+                if new_prop.value is None or new_prop.value in all_cur_moves:
+                    return StateType.MOVE_DELETE
+                elif self.machine.gh_converter.get_hm_name(new_prop.value) is not None:
                     self.machine._move_cache_update(hm_expected=True)
+                elif self.machine.gh_converter.is_tutor_move(new_prop.value):
+                    self.machine._move_cache_update(tutor_expected=True)
                 else:
                     return StateType.TM
         elif new_prop.path in gh_gen_two_const.ALL_KEYS_STAT_EXP:

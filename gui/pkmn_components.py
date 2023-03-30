@@ -303,7 +303,11 @@ class PkmnViewer(ttk.Frame):
             style_iterable=[None, None, None, None, None, speed_style]
         )
 
-        self.move_column.set_values([str(pkmn.level), str(pkmn.xp)] + pkmn.move_list)
+        move_list = [x for x in pkmn.move_list]
+        for move_idx in range(len(move_list)):
+            if move_list[move_idx] is None:
+                move_list[move_idx] = ""
+        self.move_column.set_values([str(pkmn.level), str(pkmn.xp)] + move_list)
 
 
 class StateViewer(ttk.Frame):

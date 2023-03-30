@@ -24,6 +24,7 @@ class CrystalRecorder(route_recording.recorder.RecorderGameHookClient):
         self._machine.register(route_recording.game_recorders.gen_two.crystal_states.InventoryChangeState(self._machine))
         self._machine.register(route_recording.game_recorders.gen_two.crystal_states.UseRareCandyState(self._machine))
         self._machine.register(route_recording.game_recorders.gen_two.crystal_states.UseTMState(self._machine))
+        self._machine.register(route_recording.game_recorders.gen_two.crystal_states.MoveDeleteState(self._machine))
         self._machine.register(route_recording.game_recorders.gen_two.crystal_states.UseVitaminState(self._machine))
         self._machine.register(route_recording.game_recorders.gen_two.crystal_states.OverworldState(self._machine))
     

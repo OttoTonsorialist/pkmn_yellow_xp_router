@@ -195,6 +195,7 @@ class Constants:
         self.NO_TRAINERS = "No Valid Trainers"
         self.NO_POKEMON = "No Valid Pokemon"
         self.NO_ITEM = "No Valid Items"
+        self.NO_MOVE = "No Valid Moves"
         self.UNUSED_TRAINER_LOC = "Unused"
         self.EVENTS = "events"
         self.ENABLED_KEY = "Enabled"
@@ -214,7 +215,10 @@ class Constants:
         self.MOVE_SLOT_TEMPLATE = "Move #{} (Over {})"
         self.MOVE_DONT_LEARN = "Don't Learn"
         self.MOVE_SOURCE_LEVELUP = "LevelUp"
+        self.MOVE_SOURCE_TUTOR = "Tutor/Deleter"
+        self.MOVE_SOURCE_TM_HM = "TM/HM"
         self.LEVEL_ANY = "AnyLevel"
+        self.FORGET_MOVE = "Forget Move"
 
         self.SUCCESS_COLOR_KEY = "success_color"
         self.WARNING_COLOR_KEY = "warning_color"
