@@ -80,11 +80,6 @@ def _learn_move(cur_pkmn:SoloPokemon, move_name, dest, badges):
         new_movelist = [x for x in new_movelist]
         new_movelist[actual_dest] = move_name
 
-        # make sure any empty move slots are always at the bottom
-        new_movelist = [x for x in new_movelist if x is not None]
-        while len(new_movelist) < 4:
-            new_movelist.append(None)
-
     return SoloPokemon(
         cur_pkmn.name,
         cur_pkmn.species_def,

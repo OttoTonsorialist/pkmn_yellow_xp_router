@@ -184,7 +184,7 @@ class Machine:
         new_cache = {}
         for i in range(0, 20):
             item_type = self._gamehook_client.get(gh_gen_one_const.ALL_KEYS_ITEM_TYPE[i]).value
-            if item_type == gh_gen_one_const.END_OF_ITEM_LIST:
+            if item_type is None:
                 break
             
             new_cache[item_type] = self._gamehook_client.get(gh_gen_one_const.ALL_KEYS_ITEM_QUANTITY[i]).value

@@ -5,8 +5,8 @@ import sys
 
 class Constants:
     def __init__(self):
-        self.APP_VERSION = "v2.4f"
-        self.APP_RELEASE_DATE = "2023-Feb-05"
+        self.APP_VERSION = "v2.5a"
+        self.APP_RELEASE_DATE = "2023-Apr-01"
 
         self.DEBUG_MODE = False
         self.APP_NAME = "pkmn_xp_router"
@@ -218,7 +218,7 @@ class Constants:
         self.MOVE_SOURCE_TUTOR = "Tutor/Deleter"
         self.MOVE_SOURCE_TM_HM = "TM/HM"
         self.LEVEL_ANY = "AnyLevel"
-        self.FORGET_MOVE = "Forget Move"
+        self.DELETE_MOVE = "Delete Move"
 
         self.SUCCESS_COLOR_KEY = "success_color"
         self.WARNING_COLOR_KEY = "warning_color"

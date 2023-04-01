@@ -260,7 +260,7 @@ class MoveDB:
         
         return None
     
-    def get_filtered_names(self, filter=None):
+    def get_filtered_names(self, filter=None, include_delete_move=False):
         if filter is None:
             return list(self._data.keys())
         
@@ -271,7 +271,13 @@ class MoveDB:
                 result.append(test_name)
         
         if len(result) == 0:
-            result.append(const.NO_MOVE)
+            if include_delete_move:
+                result.append(const.DELETE_MOVE)
+            else:
+                result.append(const.NO_MOVE)
+        elif include_delete_move:
+            if filter in const.DELETE_MOVE.lower():
+                result.append(const.DELETE_MOVE)
         
         return result
     

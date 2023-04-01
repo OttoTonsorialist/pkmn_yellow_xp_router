@@ -337,12 +337,9 @@ class LearnMoveEditor(EventEditorBase):
         self._item_selector.new_values(new_vals)
 
     def _move_filter_callback(self, *args, **kwargs):
-        new_vals = current_gen_info().move_db().get_filtered_names(filter=self._move_filter.get())
-        if const.NO_MOVE in new_vals:
-            new_vals = []
-        
-        new_vals.append(const.FORGET_MOVE)
-        self._move_selector.new_values(new_vals)
+        self._move_selector.new_values(
+            current_gen_info().move_db().get_filtered_names(filter=self._move_filter.get(), include_delete_move=True)
+        )
     
     def _move_selected_callback(self, *args, **kwargs):
         if self._source.get() == const.MOVE_SOURCE_TM_HM:
@@ -354,7 +351,7 @@ class LearnMoveEditor(EventEditorBase):
             self._move_name_label.config(text=f"Move: {self._move}")
         elif self._source.get() == const.MOVE_SOURCE_TUTOR:
             self._move = self._move_selector.get()
-            if self._move == const.FORGET_MOVE:
+            if self._move == const.DELETE_MOVE:
                 self._move = None
             self._move_name_label.config(text=f"Move: {self._move}")
         
@@ -410,7 +407,7 @@ class LearnMoveEditor(EventEditorBase):
                 self._move_filter.set("")
                 move = event_def.learn_move.move_to_learn
                 if move is None:
-                    move = const.FORGET_MOVE
+                    move = const.DELETE_MOVE
                 self._move_selector.set(move)
                 self._level = const.LEVEL_ANY
             else:

@@ -142,7 +142,7 @@ class LearnMoveEventDefinition:
             if self.destination is None:
                 return f"Ignoring {self.move_to_learn}, from {self.source}"
             elif self.move_to_learn is None:
-                return f"Forgetting move in slot #: {self.destination + 1}"
+                return f"Deleting move in slot #: {self.destination + 1}"
             elif isinstance(self.destination, int):
                 return f"Learning {self.move_to_learn} in slot #: {self.destination + 1}, from {self.source}"
 
@@ -577,11 +577,10 @@ class EventItem:
             # Save events, heal events (both of which currently do nothing), or a notes only event
             # No processing just pass through
             self.final_state = self.init_state
-            # Check for recorder errors
+            self.error_message = ""
+        # Check for recorder errors. These will technically overwrite any existing errors, but that should be fine
         if self.event_definition.notes and self.event_definition.notes.startswith(const.RECORDING_ERROR_FRAGMENT):
             self.error_message = self.event_definition.notes
-        else:
-            self.error_message = ""
 
 
     def get_pkmn_after_levelups(self):
