@@ -75,7 +75,7 @@ class DataDirConfigWindow(Popup):
     def _get_new_updates_info(self, *args, **kwargs):
         self._new_app_version, self._new_asset_url = auto_update.get_new_version_info()
         self._latest_version_label.configure(text=f"Newest Version: {self._new_app_version}")
-        if auto_update.is_upgrade_needed(self._new_app_version):
+        if auto_update.is_upgrade_needed(self._new_app_version, const.APP_VERSION):
             self._check_for_updates_button.configure(text="Upgrade")
             self._check_for_updates_button.enable()
     

@@ -25,7 +25,7 @@ class EventDetails(ttk.Frame):
 
         self.pre_state_frame = ttk.Frame(self.tabbed_states)
         self.pre_state_frame.pack(fill=tk.X)
-        self.auto_change_tab_checkbox = custom_components.CheckboxLabel(self.pre_state_frame, text="Switch tabs automatically for Battle events?", flip=True)
+        self.auto_change_tab_checkbox = custom_components.CheckboxLabel(self.pre_state_frame, text="Switch tabs automatically", flip=True)
         self.auto_change_tab_checkbox.grid(column=1, row=0, padx=10, pady=5, columnspan=2)
         self.auto_change_tab_checkbox.set_checked(True)
         self.state_pre_label = tk.Label(self.pre_state_frame, text="Pre-event State Display Mode:")
