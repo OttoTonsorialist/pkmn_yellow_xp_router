@@ -11,7 +11,7 @@ from gui.main_window import MainWindow
 
 from utils.constants import const
 from utils.config_manager import config
-from utils import auto_update, setup
+from utils import auto_update, setup, custom_logging
 
 logger = logging.getLogger(__name__)
 
@@ -22,6 +22,8 @@ if __name__ == '__main__':
     args = parser.parse_args()
     if args.debug:
         const.DEBUG_MODE = True
+
+    custom_logging.config_logging(const.GLOBAL_CONFIG_DIR)
 
     flag_to_auto_update = False
     if not os.path.exists(config.get_user_data_dir()):
