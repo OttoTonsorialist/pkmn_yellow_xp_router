@@ -11142,7 +11142,8 @@
                 ]
             }
         ],
-        "money": 760
+        "money": 760,
+        "refightable": true
     },
     "GruntM 21": {
         "dv": {
@@ -11210,7 +11211,8 @@
                 ]
             }
         ],
-        "money": 720
+        "money": 720,
+        "refightable": true
     },
     "GruntM 22": {
         "dv": {

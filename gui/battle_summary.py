@@ -802,6 +802,7 @@ class DamageSummary(ttk.Frame):
             self.move_name_label.grid(row=0, column=0)
             self.custom_data_dropdown.grid(row=0, column=1)
             self.custom_data_dropdown.new_values(custom_data_options, default_val=initial_custom_data)
+            self._calc_damages_from_move(move)
             self._propagate_custom_data_update = True
             self._propagate_mimic_update = True
         else:

@@ -326,7 +326,8 @@ class Trainer:
         money:int,
         pkmn:List[str],
         rematch:bool=False,
-        trainer_id:int=-1
+        trainer_id:int=-1,
+        refightable=False
     ):
         self.trainer_class = trainer_class
         self.name = name
@@ -335,6 +336,7 @@ class Trainer:
         self.pkmn = pkmn
         self.rematch = rematch
         self.trainer_id = trainer_id
+        self.refightable = refightable
     
 
 class BaseItem:

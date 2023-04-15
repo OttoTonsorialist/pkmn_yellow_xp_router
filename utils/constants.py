@@ -96,6 +96,7 @@ class Constants:
         self.TRAINER_ID = "trainer_id"
         self.TRAINER_LOC = "trainer_location"
         self.TRAINER_POKEMON = "pokemon"
+        self.TRAINER_REFIGHTABLE = "refightable"
         self.SPECIAL_MOVES = "special_moves"
         self.MONEY = "money"
         self.VERBOSE_KEY = "verbose"

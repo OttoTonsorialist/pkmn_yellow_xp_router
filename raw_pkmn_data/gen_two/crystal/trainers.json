@@ -12079,7 +12079,8 @@
             }
         ],
         "money": 760,
-        "trainer_id": 20
+        "trainer_id": 20,
+        "refightable": true
     },
     "GruntM 21": {
         "dv": {
@@ -12148,7 +12149,8 @@
             }
         ],
         "money": 720,
-        "trainer_id": 21
+        "trainer_id": 21,
+        "refightable": true
     },
     "GruntM 22": {
         "dv": {

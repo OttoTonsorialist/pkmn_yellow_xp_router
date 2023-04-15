@@ -197,7 +197,8 @@ class Router:
             self.folder_lookup[new_folder_name] = new_obj
 
         elif event_def is not None:
-            if event_def.trainer_def:
+            if event_def.trainer_def and not current_gen_info().trainer_db().get_trainer(event_def.trainer_def.trainer_name).refightable:
+                logger.info(f"adding defeated trainer: {event_def.trainer_def.trainer_name}, refightable? {current_gen_info().trainer_db().get_trainer(event_def.trainer_def.trainer_name).refightable}")
                 self.defeated_trainers.add(event_def.trainer_def.trainer_name)
             new_obj = route_events.EventGroup(parent_obj, event_def)
         
@@ -323,7 +324,7 @@ class Router:
                 if event_group_obj.event_definition.trainer_def.trainer_name in self.defeated_trainers:
                     self.defeated_trainers.remove(event_group_obj.event_definition.trainer_def.trainer_name)
             
-            if new_event_def.trainer_def is not None:
+            if new_event_def.trainer_def is not None and not current_gen_info().trainer_db().get_trainer(new_event_def.trainer_def.trainer_name).refightable:
                 self.defeated_trainers.add(new_event_def.trainer_def.trainer_name)
             
             event_group_obj.event_definition = new_event_def
