@@ -3,6 +3,9 @@ import logging
 
 
 def config_logging(base_log_dir):
+    if not os.path.exists(base_log_dir):
+        os.makedirs(base_log_dir)
+
     formatter = logging.Formatter('%(asctime)s %(levelname)-8s [%(filename)s:%(lineno)d] %(message)s')
 
     file_handler = logging.FileHandler(os.path.join(base_log_dir, "pkmn_router_logs.log"), encoding="utf-8")

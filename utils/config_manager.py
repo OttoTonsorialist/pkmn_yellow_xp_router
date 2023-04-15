@@ -16,7 +16,11 @@ class Config:
     DEFAULT_BACKGROUND = "#f0f0f0"
     DEFAULT_TEXT_COLOR = "black"
     DEFAULT_FONT_NAME = "Segoe UI"
+
     def __init__(self):
+        self.reload()
+    
+    def reload(self):
         try:
             with open(const.GLOBAL_CONFIG_FILE, 'r') as f:
                 raw = json.load(f)

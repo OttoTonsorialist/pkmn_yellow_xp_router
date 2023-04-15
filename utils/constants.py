@@ -8,6 +8,9 @@ class Constants:
         self.APP_VERSION = "v2.5a"
         self.APP_RELEASE_DATE = "2023-Apr-01"
 
+        self.NUZLOCKE_APP_VERSION = "v0.5a"
+        self.NUZLOCKE_APP_RELEASE_DATE = "2023-Apr-01"
+
         self.DEBUG_MODE = False
         self.APP_NAME = "pkmn_xp_router"
         self.APP_DATA_FOLDER_DEFAULT_NAME = "pkmn_xp_router_data"
@@ -363,6 +366,10 @@ class Constants:
         self.EVENT_RECORDER_STATUS_CHANGE = "<<RecorderStatusChange_{}>>"
         self.EVENT_RECORDER_READY_CHANGE = "<<RecorderReadyChange_{}>>"
         self.EVENT_RECORDER_GAME_STATE_CHANGE = "<<RecorderGameStateChange_{}>>"
+        self.EVENT_MON_CHANGE = "<<MonChange_{}>>"
+        self.EVENT_ACTIVE_MON_CHANGE = "<<ActiveMonChange_{}>>"
+        self.EVENT_BADGE_CHANGE = "<<BadgeChange_{}>>"
+        self.EVENT_TRAINER_CHANGE = "<<TrainerChange_{}>>"
     
     def config_user_data_dir(self, user_data_dir):
         self.SAVED_ROUTES_DIR = os.path.realpath(os.path.join(user_data_dir, self._SAVED_ROUTES_FOLDER_NAME))

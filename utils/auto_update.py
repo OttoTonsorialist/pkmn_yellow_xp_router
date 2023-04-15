@@ -72,11 +72,11 @@ def _get_newer_version(v_one, v_two) -> str:
         return v_two
 
 
-def is_upgrade_needed(new_version):
+def is_upgrade_needed(new_version, old_version):
     return (
         new_version is not None and
         new_version != const.APP_VERSION and 
-        new_version == _get_newer_version(new_version, const.APP_VERSION)
+        new_version == _get_newer_version(new_version, old_version)
     )
 
 
@@ -171,7 +171,7 @@ def extract_and_update_code(zip_url, temp_dir, display_fn=None) -> bool:
         pass
 
 
-def get_new_version_info() -> Tuple[str, str]:
+def get_new_version_info(nuzlocke_path=False) -> Tuple[str, str]:
     # NOTE: automatic updates are currently only supported for windows
 
     # TODO: brittle, and tightly tied to github api not changing. Not sure what to do about it though...
@@ -183,7 +183,10 @@ def get_new_version_info() -> Tuple[str, str]:
             # find the windows zipfile from all assets
             asset_to_download = None
             for test_asset in data["assets"]:
-                if "windows" in test_asset["name"]:
+                if not nuzlocke_path and test_asset["name"].startswith("windows"):
+                    asset_to_download = test_asset["browser_download_url"]
+                    break
+                elif nuzlocke_path and test_asset["name"].startswith("nuzlocke"):
                     asset_to_download = test_asset["browser_download_url"]
                     break
 
