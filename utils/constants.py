@@ -321,6 +321,7 @@ class Constants:
         self.REVERSAL_MOVE_NAME = "Reversal"
         self.FUTURE_SIGHT_MOVE_NAME = "Future Sight"
         self.HIDDEN_POWER_MOVE_NAME = "Hidden Power"
+        self.AMULETY_COIN_ITEM_NAME = "Amulet Coin"
 
         self.TYPE_TYPELESS = "none"
         self.TYPE_NORMAL = "Normal"

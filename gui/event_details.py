@@ -25,12 +25,15 @@ class EventDetails(ttk.Frame):
 
         self.pre_state_frame = ttk.Frame(self.tabbed_states)
         self.pre_state_frame.pack(fill=tk.X)
+        self.auto_change_tab_checkbox = custom_components.CheckboxLabel(self.pre_state_frame, text="Switch tabs automatically for Battle events?", flip=True)
+        self.auto_change_tab_checkbox.grid(column=1, row=0, padx=10, pady=5, columnspan=2)
+        self.auto_change_tab_checkbox.set_checked(True)
         self.state_pre_label = tk.Label(self.pre_state_frame, text="Pre-event State Display Mode:")
-        self.state_pre_label.grid(column=1, row=0, padx=10, pady=10)
+        self.state_pre_label.grid(column=1, row=1, padx=10, pady=5)
         self.pre_state_selector = custom_components.SimpleOptionMenu(self.pre_state_frame, [const.STATE_SUMMARY_LABEL, const.BADGE_BOOST_LABEL], callback=self._pre_state_display_mode_callback, width=25)
-        self.pre_state_selector.grid(column=2, row=0, padx=10, pady=10)
+        self.pre_state_selector.grid(column=2, row=1, padx=10, pady=5)
         self.state_pre_viewer = pkmn_components.StateViewer(self.pre_state_frame)
-        self.state_pre_viewer.grid(column=1, row=1, padx=10, pady=10, columnspan=2)
+        self.state_pre_viewer.grid(column=1, row=2, padx=10, pady=10, columnspan=2)
         self.badge_boost_viewer = pkmn_components.BadgeBoostViewer(self.pre_state_frame)
 
         self.pre_state_frame.columnconfigure(0, weight=1)
@@ -169,6 +172,12 @@ class EventDetails(ttk.Frame):
             trainer_event_group = event_group
             if isinstance(trainer_event_group, EventItem):
                 trainer_event_group = trainer_event_group.parent
+            
+            if self.auto_change_tab_checkbox.is_checked():
+                if trainer_event_group.event_definition.trainer_def is not None:
+                    self.tabbed_states.select(self.battle_summary_tab_index)
+                else:
+                    self.tabbed_states.select(self.pre_state_tab_index)
             self.show_event_details(event_group.event_definition, event_group.init_state, event_group.final_state, do_allow_updates, event_group=trainer_event_group)
     
     def show_event_details(self, event_def:EventDefinition, init_state, final_state, allow_updates=True, event_group:EventGroup=None):

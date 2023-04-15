@@ -286,8 +286,6 @@ class GameHookConstantConverter:
             converted_name = "PoisonPowder"
         elif converted_name == "Thundershock":
             converted_name = "ThunderShock"
-        elif converted_name == "Smokescreen":
-            converted_name = "SmokeScreen"
         elif converted_name == "Conversion2":
             converted_name = "Conversion 2"
         elif converted_name == "Mud-slap":
