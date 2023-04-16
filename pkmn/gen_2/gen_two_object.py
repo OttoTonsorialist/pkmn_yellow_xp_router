@@ -156,7 +156,8 @@ class GenTwo(CurrentGen):
         attacking_stage_modifiers:universal_data_objects.StageModifiers=None,
         defending_stage_modifiers:universal_data_objects.StageModifiers=None,
         is_crit:bool=False,
-        custom_move_data:str=""
+        custom_move_data:str="",
+        weather:str=const.WEATHER_NONE,
     ) -> DamageRange:
         return pkmn_damage_calc.calculate_gen_two_damage(
             attacking_pkmn,
@@ -171,6 +172,7 @@ class GenTwo(CurrentGen):
             defending_stage_modifiers=defending_stage_modifiers,
             is_crit=is_crit,
             custom_move_data=custom_move_data,
+            weather=weather
         )
     
     def make_stat_block(self, hp, attack, defense, special_attack, special_defense, speed, is_stat_xp=False) -> universal_data_objects.StatBlock:
@@ -196,6 +198,9 @@ class GenTwo(CurrentGen):
     
     def get_hidden_power(self, dvs: universal_data_objects.StatBlock) -> Tuple[str, int]:
         return get_hidden_power_type(dvs), get_hidden_power_base_power(dvs)
+
+    def get_valid_weather(self) -> List[str]:
+        return [const.WEATHER_NONE, const.WEATHER_SUN, const.WEATHER_RAIN, const.WEATHER_SANDSTORM]
     
     def get_stats_boosted_by_vitamin(self, vit_name: str) -> List[str]:
         if vit_name == const.HP_UP:

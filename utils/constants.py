@@ -105,6 +105,7 @@ class Constants:
         self.MIMIC_SELECTION = "mimic_selection"
         self.CUSTOM_MOVE_DATA = "custom_move_data"
         self.EXP_SPLIT = "exp_split"
+        self.WEATHER = "weather"
         self.PLAYER_KEY = "player"
         self.ENEMY_KEY = "enemy"
 
@@ -322,6 +323,7 @@ class Constants:
         self.REVERSAL_MOVE_NAME = "Reversal"
         self.FUTURE_SIGHT_MOVE_NAME = "Future Sight"
         self.HIDDEN_POWER_MOVE_NAME = "Hidden Power"
+        self.SOLAR_BEAM_MOVE_NAME = "SolarBeam"
         self.AMULETY_COIN_ITEM_NAME = "Amulet Coin"
 
         self.TYPE_TYPELESS = "none"
@@ -346,6 +348,11 @@ class Constants:
         self.SUPER_EFFECTIVE = "Super Effective"
         self.NOT_VERY_EFFECTIVE = "Not Very Effective"
         self.IMMUNE = "Immune"
+
+        self.WEATHER_NONE = "None"
+        self.WEATHER_RAIN = "Rain"
+        self.WEATHER_SUN = "Harsh Sunlight"
+        self.WEATHER_SANDSTORM = "Sandstorm"
 
         self.GAME_SAVED_FRAGMENT = "Game Saved: "
         self.RECORDING_ERROR_FRAGMENT = "ERROR RECORDING! "
@@ -372,6 +379,9 @@ class Constants:
         self.EVENT_ACTIVE_MON_CHANGE = "<<ActiveMonChange_{}>>"
         self.EVENT_BADGE_CHANGE = "<<BadgeChange_{}>>"
         self.EVENT_TRAINER_CHANGE = "<<TrainerChange_{}>>"
+        self.EVENT_BATTLE_SUMMARY_REFRESH = "<<BattleSummaryRefresh_{}>>"
+        self.EVENT_BATTLE_SUMMARY_NONLOAD_CHANGE = "<<BattleSummaryNonloadChange_{}>>"
+        self.EVENT_BATTLE_SUMMARY_MOVE_UPDATE = "<<BattleSummaryMoveUpdate_{}>>"
     
     def config_user_data_dir(self, user_data_dir):
         self.SAVED_ROUTES_DIR = os.path.realpath(os.path.join(user_data_dir, self._SAVED_ROUTES_FOLDER_NAME))

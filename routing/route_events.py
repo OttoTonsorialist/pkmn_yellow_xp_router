@@ -1,5 +1,5 @@
 
-from typing import List
+from typing import Dict, List
 from utils.constants import const
 from pkmn.gen_factory import current_gen_info
 
@@ -152,20 +152,23 @@ class LearnMoveEventDefinition:
 
 
 class TrainerEventDefinition:
-    def __init__(self, trainer_name, verbose_export=False, setup_moves=None, mimic_selection="", custom_move_data=None, enemy_setup_moves=None, exp_split=None):
+    def __init__(self, trainer_name, verbose_export=False, setup_moves=None, mimic_selection="", custom_move_data=None, enemy_setup_moves=None, exp_split=None, weather=const.WEATHER_NONE):
         self.trainer_name = trainer_name
         self.verbose_export = verbose_export
         if setup_moves is None:
             setup_moves = []
         self.setup_moves = setup_moves
         self.mimic_selection = mimic_selection
-        self.custom_move_data = custom_move_data
+        if custom_move_data is None:
+            custom_move_data = []
+        self.custom_move_data:List[Dict[str, Dict[str, str]]] = custom_move_data
         if enemy_setup_moves is None:
             enemy_setup_moves = []
         self.enemy_setup_moves = enemy_setup_moves
         if exp_split is None:
             exp_split = []
         self.exp_split = exp_split
+        self.weather = weather
 
     def serialize(self):
         return {
@@ -176,6 +179,7 @@ class TrainerEventDefinition:
             const.MIMIC_SELECTION: self.mimic_selection,
             const.CUSTOM_MOVE_DATA: self.custom_move_data,
             const.EXP_SPLIT: self.exp_split,
+            const.WEATHER: self.weather,
         }
     
     @staticmethod
@@ -201,6 +205,7 @@ class TrainerEventDefinition:
             custom_move_data=raw_val.get(const.CUSTOM_MOVE_DATA),
             enemy_setup_moves=raw_val.get(const.ENEMY_SETUP_MOVES_KEY),
             exp_split=raw_val.get(const.EXP_SPLIT),
+            weather=raw_val.get(const.WEATHER, const.WEATHER_NONE),
         )
     
     def __str__(self):

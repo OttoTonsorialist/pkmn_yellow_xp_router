@@ -324,7 +324,7 @@ class Trainer:
         name:str,
         location:str,
         money:int,
-        pkmn:List[str],
+        pkmn:List[EnemyPkmn],
         rematch:bool=False,
         trainer_id:int=-1,
         refightable=False

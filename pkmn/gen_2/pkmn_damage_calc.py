@@ -31,7 +31,8 @@ def calculate_gen_two_damage(
     is_crit:bool=False,
     defender_has_light_screen:bool=False,
     defender_has_reflect:bool=False,
-    custom_move_data:str=""
+    custom_move_data:str="",
+    weather:str=const.WEATHER_NONE,
 ):
     if move.name == const.HIDDEN_POWER_MOVE_NAME:
         move_type = get_hidden_power_type(attacking_pkmn.dvs)
@@ -204,9 +205,18 @@ def calculate_gen_two_damage(
 
     temp += 2
 
-    # TODO: weather check goes here
     weather_boost = False
     weather_penalty = False
+    if weather == const.WEATHER_RAIN:
+        weather_boost = (move_type == const.TYPE_WATER)
+        weather_penalty = (
+            move_type == const.TYPE_FIRE or
+            move.name == const.SOLAR_BEAM_MOVE_NAME
+        )
+    elif weather == const.WEATHER_SUN:
+        weather_boost = (move_type == const.TYPE_FIRE)
+        weather_penalty = (move_type == const.TYPE_WATER)
+
     
     if weather_boost:
         temp = math.floor(temp * 1.5)

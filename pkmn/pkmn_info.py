@@ -6,6 +6,7 @@ from pkmn.damage_calc import DamageRange
 from pkmn.pkmn_db import ItemDB, MinBattlesDB, MoveDB, PkmnDB, TrainerDB
 import routing.state_objects
 from route_recording.recorder import RecorderController, RecorderGameHookClient
+from utils.constants import const
 
 
 class CurrentGen:
@@ -49,7 +50,8 @@ class CurrentGen:
         attacking_stage_modifiers:universal_data_objects.StageModifiers=None,
         defending_stage_modifiers:universal_data_objects.StageModifiers=None,
         is_crit:bool=False,
-        custom_move_data:str=""
+        custom_move_data:str="",
+        weather:str=const.WEATHER_NONE
     ) -> DamageRange:
         raise NotImplementedError()
 
@@ -91,6 +93,9 @@ class CurrentGen:
         raise NotImplementedError()
     
     def get_hidden_power(self, dvs:universal_data_objects.StatBlock) -> Tuple[str, int]:
+        raise NotImplementedError()
+
+    def get_valid_weather(self) -> List[str]:
         raise NotImplementedError()
     
     def get_stats_boosted_by_vitamin(self, vit_name:str) -> List[str]:

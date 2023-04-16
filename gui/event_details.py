@@ -1,12 +1,13 @@
 import tkinter as tk
 from tkinter import ttk
 import logging
+from controllers.battle_summary_controller import BattleSummaryController
 
 from controllers.main_controller import MainController
-from gui import custom_components, route_event_components, pkmn_components, quick_add_components, battle_summary
-from routing.route_events import EventDefinition, EventFolder, EventGroup, EventItem, InventoryEventDefinition, LearnMoveEventDefinition, RareCandyEventDefinition, TrainerEventDefinition, VitaminEventDefinition
+from gui import custom_components, route_event_components, pkmn_components, battle_summary
+from routing.route_events import EventDefinition, EventFolder, EventGroup, EventItem
 from utils.constants import const
-from utils.config_manager import config
+from pkmn.gen_factory import current_gen_info
 
 logger = logging.getLogger(__name__)
 
@@ -18,6 +19,7 @@ class EventDetails(ttk.Frame):
         super().__init__(*args, **kwargs, width=self.state_summary_width)
 
         self._controller = controller
+        self._battle_summary_controller = BattleSummaryController()
         self._prev_selected_tab = None
 
         self.notebook_holder = ttk.Frame(self)
@@ -46,11 +48,8 @@ class EventDetails(ttk.Frame):
         self.state_post_viewer = pkmn_components.StateViewer(self.post_state_frame)
         self.state_post_viewer.grid(column=1, row=1, padx=10, pady=10)
 
-        self.battle_summary_frame = battle_summary.BattleSummary(self.tabbed_states, save_callback=self.update_existing_event)
+        self.battle_summary_frame = battle_summary.BattleSummary(self._battle_summary_controller, self.tabbed_states)
         self.battle_summary_frame.pack(padx=2, pady=2)
-
-        self.simple_battle_summary_frame = battle_summary.BattleSummary(self.tabbed_states, simple_mode=True)
-        self.simple_battle_summary_frame.pack(padx=2, pady=2, expand=True, fill=tk.Y)
 
         self.tabbed_states.add(self.pre_state_frame, text="Pre-event State")
         self.pre_state_tab_index = 0
@@ -58,8 +57,6 @@ class EventDetails(ttk.Frame):
         self.post_state_tab_index = 1
         self.tabbed_states.add(self.battle_summary_frame, text="Battle Summary")
         self.battle_summary_tab_index = 2
-        self.tabbed_states.add(self.simple_battle_summary_frame, text="Simple Battle Summary")
-        self.simple_battle_summary_tab_index = 3
         self.tabbed_states.pack(expand=True, fill=tk.BOTH)
 
         self.event_viewer_frame = ttk.Frame(self)
@@ -94,6 +91,8 @@ class EventDetails(ttk.Frame):
         self.bind(self._controller.register_event_selection(self), self._handle_selection)
         self.bind(self._controller.register_record_mode_change(self), self._handle_selection)
         self.bind(self._controller.register_route_change(self), self._handle_route_change)
+        self.bind(self._controller.register_version_change(self), self._handle_version_change)
+        self.bind(self._battle_summary_controller.register_nonload_change(self), self.update_existing_event)
 
         self._tab_changed_callback()
     
@@ -108,18 +107,14 @@ class EventDetails(ttk.Frame):
         prev_tab = self._prev_selected_tab
         self._prev_selected_tab = selected_tab_index
 
-        if selected_tab_index == self.battle_summary_tab_index or selected_tab_index == self.simple_battle_summary_tab_index:
+        if selected_tab_index == self.battle_summary_tab_index:
             if prev_tab == selected_tab_index:
                 return
 
             if selected_tab_index ==  self.battle_summary_tab_index:
                 self.configure(width=self.battle_summary_width)
-                self.battle_summary_frame.allow_calculations()
-                self.simple_battle_summary_frame.pause_calculations()
             else:
                 self.configure(width=self.state_summary_width)
-                self.battle_summary_frame.pause_calculations()
-                self.simple_battle_summary_frame.allow_calculations()
             self.event_details_frame.grid_forget()
             self.event_viewer_frame.pack_forget()
             self.notebook_holder.pack_forget()
@@ -135,8 +130,6 @@ class EventDetails(ttk.Frame):
             self.event_viewer_frame.pack_forget()
             self.event_viewer_frame.pack(anchor=tk.N, fill=tk.BOTH, expand=True, padx=2, pady=2)
             self.event_details_frame.grid(row=0, column=0)
-            self.battle_summary_frame.pause_calculations()
-            self.simple_battle_summary_frame.pause_calculations()
 
     def _pre_state_display_mode_callback(self, *args, **kwargs):
         if self.pre_state_selector.get() == const.BADGE_BOOST_LABEL:
@@ -145,6 +138,11 @@ class EventDetails(ttk.Frame):
         else:
             self.badge_boost_viewer.grid_forget()
             self.state_pre_viewer.grid(column=1, row=1, padx=10, pady=10, columnspan=2)
+    
+    def _handle_version_change(self, *args, **kwargs):
+        self._battle_summary_controller.load_empty()
+        self.battle_summary_frame.configure_weather(current_gen_info().get_valid_weather())
+        self.battle_summary_frame.configure_setup_moves(current_gen_info().get_stat_modifer_moves())
     
     def _handle_route_change(self, *args, **kwargs):
         event_group = self._controller.get_single_selected_event_obj()
@@ -196,15 +194,12 @@ class EventDetails(ttk.Frame):
         if event_def is None:
             self.trainer_notes.load_event(None)
             self.battle_summary_frame.set_team(None)
-            self.simple_battle_summary_frame.set_team(None)
         else:
             self.trainer_notes.load_event(event_def)
             if event_def.trainer_def is not None:
                 self.battle_summary_frame.set_team(event_def.get_trainer_obj().pkmn, cur_state=init_state, event_group=event_group)
-                self.simple_battle_summary_frame.set_team(event_def.get_trainer_obj().pkmn, cur_state=init_state, event_group=event_group)
             else:
                 self.battle_summary_frame.set_team(None)
-                self.simple_battle_summary_frame.set_team(None)
 
             if event_def.get_event_type() != const.TASK_NOTES_ONLY:
                 # TODO: fix this gross ugly hack
@@ -228,10 +223,11 @@ class EventDetails(ttk.Frame):
                 new_event = self.current_event_editor.get_event()
             
             if new_event.get_event_type() == const.TASK_TRAINER_BATTLE:
-                new_event.trainer_def.setup_moves = self.battle_summary_frame.get_setup_moves()
-                new_event.trainer_def.enemy_setup_moves = self.battle_summary_frame.get_enemy_setup_moves()
-                new_event.trainer_def.mimic_selection = self.battle_summary_frame.get_mimic_selection()
-                new_event.trainer_def.custom_move_data = self.battle_summary_frame.get_custom_move_data()
+                new_trainer_def = self._battle_summary_controller.get_trainer_definition()
+                if new_trainer_def is None:
+                    logger.error(f"Expected to get updated trainer def from battle summary controller, but got None instead")
+                else:
+                    new_event.trainer_def = new_trainer_def
             
             new_event.notes = self.trainer_notes.get_event().notes
         except Exception as e:

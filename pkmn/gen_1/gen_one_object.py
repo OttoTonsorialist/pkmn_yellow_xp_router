@@ -146,7 +146,8 @@ class GenOne(CurrentGen):
         attacking_stage_modifiers:universal_data_objects.StageModifiers=None,
         defending_stage_modifiers:universal_data_objects.StageModifiers=None,
         is_crit:bool=False,
-        custom_move_data:str=""
+        custom_move_data:str="",
+        weather:str=const.WEATHER_NONE,
     ) -> DamageRange:
         return pkmn_damage_calc.calculate_gen_one_damage(
             attacking_pkmn,
@@ -184,10 +185,13 @@ class GenOne(CurrentGen):
         # Gen one moves that require custom data are already handled by the rendering engine
         # Mimc, and all multi-hit moves
         # so, no other moves will need custom data
-        return []
+        return None
     
     def get_hidden_power(self, dvs: universal_data_objects.StatBlock) -> Tuple[str, int]:
         return "", 0
+    
+    def get_valid_weather(self) -> List[str]:
+        return [const.WEATHER_NONE]
     
     def get_stats_boosted_by_vitamin(self, vit_name: str) -> List[str]:
         if vit_name == const.HP_UP:

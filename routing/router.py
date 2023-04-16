@@ -198,7 +198,6 @@ class Router:
 
         elif event_def is not None:
             if event_def.trainer_def and not current_gen_info().trainer_db().get_trainer(event_def.trainer_def.trainer_name).refightable:
-                logger.info(f"adding defeated trainer: {event_def.trainer_def.trainer_name}, refightable? {current_gen_info().trainer_db().get_trainer(event_def.trainer_def.trainer_name).refightable}")
                 self.defeated_trainers.add(event_def.trainer_def.trainer_name)
             new_obj = route_events.EventGroup(parent_obj, event_def)
         
