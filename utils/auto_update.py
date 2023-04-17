@@ -92,7 +92,7 @@ def update(new_version=None, asset_url=None, display_fn=None) -> bool:
     if new_version is None or asset_url is None:
         new_version, asset_url = get_new_version_info()
 
-    if is_upgrade_needed(new_version):
+    if is_upgrade_needed(new_version, const.APP_VERSION):
         return extract_and_update_code(asset_url, config.get_user_data_dir(), display_fn=display_fn)
     
     message = "No upgrade necessary, ignoring request for automatic update"

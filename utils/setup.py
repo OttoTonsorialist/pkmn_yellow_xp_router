@@ -30,16 +30,15 @@ def route_startup_check_for_upgrade(main_app:Tk):
 
     if not auto_update.is_upgrade_needed(new_app_version, const.APP_VERSION):
         logger.info(f"No upgrade needed")
-        return
+        return False
     
     if not messagebox.askyesno("Update?", f"Found new version {new_app_version}\nDo you want to update?"):
         logger.info(f"User rejected auto-update")
-        return
+        return False
     
     logger.info(f"User requested auto-update")
-    global flag_to_auto_update
-    flag_to_auto_update = True
     main_app.event_generate(const.FORCE_QUIT_EVENT)
+    return True
 
 
 def nuzlocke_startup_check_for_upgrade(main_app:Tk):

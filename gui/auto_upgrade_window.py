@@ -1,11 +1,14 @@
 import time
 import threading
+import logging
 
 import tkinter as tk
 
 from gui import custom_components
 from utils.constants import const
 from utils import auto_update
+
+logger = logging.getLogger(__name__)
 
 class AutoUpgradeGUI(tk.Tk):
     def __init__(self, *args, **kwargs):
@@ -60,6 +63,8 @@ class AutoUpgradeGUI(tk.Tk):
         try:
             success = auto_update.update(display_fn=self._display_update_message)
         except Exception as e:
+            logger.error(f"exception encountered attempting to auto-update")
+            logger.exception(e)
             success = False
 
         self._allow_close = True
