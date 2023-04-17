@@ -279,8 +279,9 @@ def calculate_gen_two_damage(
     if double_damage:
         temp *= 2
     
-    if temp == 0:
-        return None
+    if temp <= 0:
+        # damage must be at least 1
+        temp = 1
 
     multi_hit_multiplier = 1
     if const.DOUBLE_HIT_FLAVOR in move.attack_flavor:
