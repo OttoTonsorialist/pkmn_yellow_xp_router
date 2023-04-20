@@ -156,7 +156,7 @@ class MainWindow(tk.Tk):
         button_col_idx = 0
 
         self.show_summary_btn = custom_components.SimpleButton(self.group_controls, text='Summary', command=self.open_summary_window, width=15)
-        self.show_summary_btn.grid(row=0, column=button_col_idx, rowspan=2, padx=5, pady=1)
+        self.show_summary_btn.grid(row=0, column=button_col_idx, rowspan=2, padx=5, pady=1, sticky=tk.NSEW)
         button_col_idx += 1
 
         button_spacing_cols.append(button_col_idx)

@@ -42,7 +42,7 @@ class RouteSummaryWindow(tk.Toplevel):
     
     def _refresh(self, *args, **kwargs):
         for to_remove in self._labels:
-            to_remove.grid_forget()
+            to_remove.pack_forget()
         self._header_frames:List[ttk.Label] = []
 
         for to_remove in self._header_frames:
@@ -74,7 +74,7 @@ class RouteSummaryWindow(tk.Toplevel):
         
         move_display_info:List[List[RenderInfo]] = [[], [], [], []]
         for cur_idx, cur_summary in enumerate(summary_list):
-            header_frame = ttk.Frame(self._main_frame, width=100, height=60)
+            header_frame = ttk.Frame(self._main_frame, width=130, height=60)
             header_frame.grid(row=0, column=cur_idx, padx=2, pady=2)
             header_frame.pack_propagate(0)
 

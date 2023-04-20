@@ -2,6 +2,7 @@ from __future__ import annotations
 import os
 import logging
 from typing import List, Tuple
+import tkinter
 
 from utils.constants import const
 from routing.route_events import EventDefinition, EventFolder, EventGroup, EventItem, LearnMoveEventDefinition, TrainerEventDefinition
@@ -98,41 +99,44 @@ class MainController:
     #####
     # Event callbacks
     #####
+
+    def _safely_generate_events(self, event_list):
+        to_delete = []
+        for cur_idx, (tk_obj, cur_event_name) in enumerate(event_list):
+            try:
+                tk_obj.event_generate(cur_event_name, when="tail")
+            except tkinter.TclError:
+                logger.info(f"Removing the following event due to TclError: {cur_event_name}")
+                to_delete.append(cur_idx)
+        
+        for cur_idx in sorted(to_delete, reverse=True):
+            del event_list[cur_idx]
     
     def _on_name_change(self):
-        for tk_obj, cur_event_name in self._name_change_events:
-            tk_obj.event_generate(cur_event_name, when="tail")
+        self._safely_generate_events(self._name_change_events)
     
     def _on_version_change(self):
-        for tk_obj, cur_event_name in self._version_change_events:
-            tk_obj.event_generate(cur_event_name, when="tail")
+        self._safely_generate_events(self._version_change_events)
     
     def _on_route_change(self):
-        for tk_obj, cur_event_name in self._route_change_events:
-            tk_obj.event_generate(cur_event_name, when="tail")
+        self._safely_generate_events(self._route_change_events)
 
     def _on_event_change(self):
-        for tk_obj, cur_event_name in self._event_change_events:
-            tk_obj.event_generate(cur_event_name, when="tail")
-
+        self._safely_generate_events(self._event_change_events)
         self._on_route_change()
 
     def _on_event_selection(self):
-        for tk_obj, cur_event_name in self._event_selection_events:
-            tk_obj.event_generate(cur_event_name, when="tail")
+        self._safely_generate_events(self._event_selection_events)
 
     def _on_event_preview(self):
-        for tk_obj, cur_event_name in self._event_preview_events:
-            tk_obj.event_generate(cur_event_name, when="tail")
+        self._safely_generate_events(self._event_preview_events)
 
     def _on_record_mode_change(self):
-        for tk_obj, cur_event_name in self._record_mode_change_events:
-            tk_obj.event_generate(cur_event_name, when="tail")
+        self._safely_generate_events(self._record_mode_change_events)
 
     def _on_exception(self, exception_message):
         self._exception_info.append(exception_message)
-        for tk_obj, cur_event_name in self._exception_events:
-            tk_obj.event_generate(cur_event_name, when="tail")
+        self._safely_generate_events(self._exception_events)
 
     ######
     # Methods that induce a state change
