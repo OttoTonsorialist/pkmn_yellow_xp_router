@@ -57,7 +57,7 @@ class BattleSummary(ttk.Frame):
             self._mon_pairs.append(MonPairSummary(self._controller, idx, self))
         
         self.error_message = tk.Label(self, text="Select a battle to see damage calculations")
-        self.should_calculate = False
+        self.should_render = False
         self.bind(self._controller.register_refresh(self), self._on_full_refresh)
         self.set_team(None)
     
@@ -67,6 +67,15 @@ class BattleSummary(ttk.Frame):
     def configure_setup_moves(self, possible_setup_moves):
         self.setup_moves.configure_moves(possible_setup_moves)
         self.enemy_setup_moves.configure_moves(possible_setup_moves)
+    
+    def hide_contents(self):
+        self.should_render = False
+        for cur_mon_pair in self._mon_pairs:
+            cur_mon_pair.grid_forget()
+    
+    def show_contents(self):
+        self.should_render = True
+        self._on_full_refresh()
     
     def _weather_callback(self, *wargs, **kwargs):
         self._controller.update_weather(self.weather_status.get_weather())
@@ -91,6 +100,9 @@ class BattleSummary(ttk.Frame):
             self._controller.load_empty()
 
     def _on_full_refresh(self, *args, **kwargs):
+        if not self.should_render:
+            return
+
         self.weather_status.set_weather(self._controller.get_weather())
         self.setup_moves.set_move_list(self._controller.get_player_setup_moves())
         self.enemy_setup_moves.set_move_list(self._controller.get_enemy_setup_moves())

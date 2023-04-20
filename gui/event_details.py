@@ -111,13 +111,12 @@ class EventDetails(ttk.Frame):
             if prev_tab == selected_tab_index:
                 return
 
-            if selected_tab_index ==  self.battle_summary_tab_index:
-                self.configure(width=self.battle_summary_width)
-            else:
-                self.configure(width=self.state_summary_width)
+            self.configure(width=self.battle_summary_width)
             self.event_details_frame.grid_forget()
             self.event_viewer_frame.pack_forget()
             self.notebook_holder.pack_forget()
+
+            self.battle_summary_frame.show_contents()
             self.notebook_holder.pack(anchor=tk.N, fill=tk.BOTH, expand=True, padx=2, pady=2)
             self.event_viewer_frame.pack(anchor=tk.N, fill=tk.BOTH, expand=False, padx=2, pady=2)
 
@@ -125,19 +124,22 @@ class EventDetails(ttk.Frame):
             if prev_tab == self.pre_state_tab_index or prev_tab == self.post_state_tab_index:
                 return
             self.configure(width=self.state_summary_width)
-            self.notebook_holder.pack_forget()
-            self.notebook_holder.pack(anchor=tk.N, fill=tk.X, padx=2, pady=2)
+            self.battle_summary_frame.hide_contents()
+            self.event_details_frame.grid_forget()
             self.event_viewer_frame.pack_forget()
+            self.notebook_holder.pack_forget()
+
+            self.notebook_holder.pack(anchor=tk.N, fill=tk.X, padx=2, pady=2)
             self.event_viewer_frame.pack(anchor=tk.N, fill=tk.BOTH, expand=True, padx=2, pady=2)
             self.event_details_frame.grid(row=0, column=0)
 
     def _pre_state_display_mode_callback(self, *args, **kwargs):
         if self.pre_state_selector.get() == const.BADGE_BOOST_LABEL:
             self.state_pre_viewer.grid_forget()
-            self.badge_boost_viewer.grid(column=1, row=1, padx=10, pady=10, columnspan=2)
+            self.badge_boost_viewer.grid(column=1, row=2, padx=10, pady=10, columnspan=2)
         else:
             self.badge_boost_viewer.grid_forget()
-            self.state_pre_viewer.grid(column=1, row=1, padx=10, pady=10, columnspan=2)
+            self.state_pre_viewer.grid(column=1, row=2, padx=10, pady=10, columnspan=2)
     
     def _handle_version_change(self, *args, **kwargs):
         self._battle_summary_controller.load_empty()
