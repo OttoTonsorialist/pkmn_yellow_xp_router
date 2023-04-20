@@ -46,7 +46,7 @@ class CheckboxTreeview(ttk.Treeview):
             return prev_state[0]
         return None
 
-    def set_checkbox_state(self, item, state, force=False):
+    def _set_checkbox_state(self, item, state, force=False):
         tags = self.item(item, "tags")
 
         prev_state = [t for t in tags if t in self.ALL_STATES]
@@ -84,23 +84,32 @@ class CheckboxTreeview(ttk.Treeview):
         # need to recalculate what the parent will be with the new state just set on one its children
         parent = self.parent(item)
         if parent:
-            self.set_checkbox_state(parent, self.CHECKED_TAG)
+            self._set_checkbox_state(parent, self.CHECKED_TAG)
 
     def _box_click(self, event):
         x, y, widget = event.x, event.y, event.widget
         elem = widget.identify("element", x, y)
         if "image" in elem:
             # a box was clicked
-            item = self.identify_row(y)
-            if self.tag_has(self.UNCHECKED_TAG, item):
+            self.trigger_checkbox(single_item=self.identify_row(y))
+    
+    def trigger_checkbox(self, single_item=None):
+        if single_item is None:
+            all_items = self.selection()
+            if len(all_items) == 0:
+                return
+        else:
+            all_items = [single_item]
+        
+        for cur_item in all_items:
+            if self.tag_has(self.UNCHECKED_TAG, cur_item):
                 result_state = self.CHECKED_TAG
             else:
                 result_state = self.UNCHECKED_TAG
+            self._set_checkbox_state(cur_item, result_state)
 
-            self.set_checkbox_state(item, result_state)
-
-            if self.checkbox_callback is not None:
-                self.checkbox_callback()
+        if self.checkbox_callback is not None:
+            self.checkbox_callback()
 
 
 class CustomGridview(CheckboxTreeview):

@@ -44,28 +44,6 @@ class MainWindow(tk.Tk):
         self.call("source", os.path.join(const.ASSETS_PATH, "azure.tcl"))
         self.call("set_theme", "dark")
 
-        """
-        # fix tkinter bug
-        style = ttk.Style()
-        style.map("Treeview", foreground=fixed_map("foreground", style), background=fixed_map("background", style))
-
-        style.layout("TNotebook", [])
-        # magic, found here: https://stackoverflow.com/a/29572789
-        style.element_create('Plain.Notebook.tab', "from", 'default')
-        style.layout("TNotebook.Tab",
-            [('Plain.Notebook.tab', {'children':
-                [('Notebook.padding', {'side': 'top', 'children':
-                    [('Notebook.focus', {'side': 'top', 'children':
-                        [('Notebook.label', {'side': 'top', 'sticky': ''})],
-                    'sticky': 'nswe'})],
-                'sticky': 'nswe'})],
-            'sticky': 'nswe'})])
-
-        style.configure("TNotebook", background=config.get_background_color())
-        style.configure("TNotebook.Tab", background=config.get_secondary_color(), borderwidth=1, bordercolor="black")
-        style.map("TNotebook.Tab", background=[("selected", config.get_primary_color())])
-        """
-
         self.load_custom_font()
 
         # menu bar
@@ -85,6 +63,7 @@ class MainWindow(tk.Tk):
         self.event_menu = tk.Menu(self.top_menu_bar, tearoff=0)
         self.event_menu.add_command(label="Move Event Up           (Ctrl+E)", command=self.move_group_up)
         self.event_menu.add_command(label="Move Event Down      (Ctrl+D)", command=self.move_group_down)
+        self.event_menu.add_command(label="Enable/Disable          (Ctrl+C)", command=self.toggle_enable_disable)
         self.event_menu.add_command(label="Toggle Highlight       (Ctrl+V)", command=self.toggle_event_highlight)
         self.event_menu.add_command(label="Transfer Event             (Ctrl+R)", command=self.open_transfer_event_window)
         self.event_menu.add_command(label="Delete Event             (Ctrl+B)", command=self.delete_group)
@@ -175,24 +154,26 @@ class MainWindow(tk.Tk):
         self.move_group_up_button = custom_components.SimpleButton(self.group_controls, text='Move Event Up', command=self.move_group_up, width=15)
         self.move_group_up_button.grid(row=0, column=1, padx=5, pady=1)
         self.move_group_down_button = custom_components.SimpleButton(self.group_controls, text='Move Event Down', command=self.move_group_down, width=15)
-        self.move_group_down_button.grid(row=0, column=2, padx=5, pady=1)
+        self.move_group_down_button.grid(row=1, column=1, padx=5, pady=1)
+        self.highlight_toggle_button = custom_components.SimpleButton(self.group_controls, text='Enable/Disable', command=self.toggle_enable_disable, width=15)
+        self.highlight_toggle_button.grid(row=0, column=2, padx=5, pady=1)
         self.highlight_toggle_button = custom_components.SimpleButton(self.group_controls, text='Toggle Highlight', command=self.toggle_event_highlight, width=15)
-        self.highlight_toggle_button.grid(row=0, column=3, padx=5, pady=1)
-        self.transfer_event_button = custom_components.SimpleButton(self.group_controls, text='Transfer Event', command=self.open_transfer_event_window, width=15)
-        self.transfer_event_button.grid(row=0, column=4, padx=5, pady=1)
+        self.highlight_toggle_button.grid(row=1, column=2, padx=5, pady=1)
 
+        self.transfer_event_button = custom_components.SimpleButton(self.group_controls, text='Transfer Event', command=self.open_transfer_event_window, width=15)
+        self.transfer_event_button.grid(row=0, column=3, padx=5, pady=1)
         self.delete_event_button = custom_components.SimpleButton(self.group_controls, text='Delete Event', command=self.delete_group, width=15)
-        self.delete_event_button.grid(row=0, column=6, padx=5, pady=1)
+        self.delete_event_button.grid(row=1, column=3, padx=5, pady=1)
 
         self.new_folder_button = custom_components.SimpleButton(self.group_controls, text='New Folder', command=self.open_new_folder_window, width=15)
-        self.new_folder_button.grid(row=0, column=8, padx=5, pady=1)
+        self.new_folder_button.grid(row=0, column=5, padx=5, pady=1)
         self.rename_folder_button = custom_components.SimpleButton(self.group_controls, text='Rename Folder', command=self.rename_folder, width=15)
-        self.rename_folder_button.grid(row=0, column=9, padx=5, pady=1)
+        self.rename_folder_button.grid(row=1, column=5, padx=5, pady=1)
 
         self.group_controls.columnconfigure(0, weight=1)
-        self.group_controls.columnconfigure(5, weight=1)
+        self.group_controls.columnconfigure(4, weight=1)
+        self.group_controls.columnconfigure(6, weight=1)
         self.group_controls.columnconfigure(7, weight=1)
-        self.group_controls.columnconfigure(11, weight=1)
 
         self.route_search = RouteSearch(self._controller, self.left_info_panel)
         self.route_search.pack(fill=tk.X, anchor=tk.CENTER)
@@ -226,6 +207,7 @@ class MainWindow(tk.Tk):
         # event actions
         self.bind('<Control-d>', self.move_group_down)
         self.bind('<Control-e>', self.move_group_up)
+        self.bind('<Control-c>', self.toggle_enable_disable)
         self.bind('<Control-v>', self.toggle_event_highlight)
         self.bind('<Control-r>', self.open_transfer_event_window)
         self.bind('<Control-b>', self.delete_group)
@@ -432,6 +414,9 @@ class MainWindow(tk.Tk):
 
     def toggle_event_highlight(self, event=None):
         self._controller.toggle_event_highlight(self.event_list.get_all_selected_event_ids(allow_event_items=False))
+
+    def toggle_enable_disable(self, event=None):
+        self.event_list.trigger_checkbox()
 
     def delete_group(self, event=None):
         all_event_ids = self.event_list.get_all_selected_event_ids(allow_event_items=False)

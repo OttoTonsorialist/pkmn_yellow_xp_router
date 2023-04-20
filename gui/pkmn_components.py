@@ -34,7 +34,7 @@ class RouteList(custom_components.CustomGridview):
             tags_attr='get_tags',
             checkbox_attr='is_enabled',
             req_column_width=325,
-            checkbox_callback=self.general_checkbox_callback_fn,
+            #checkbox_callback=self.general_checkbox_callback_fn,
             checkbox_item_callback=self.checkbox_item_callback_fn,
             **kwargs
         )
@@ -74,6 +74,7 @@ class RouteList(custom_components.CustomGridview):
     def checkbox_item_callback_fn(self, item_id, new_state):
         raw_obj = self._controller.get_event_by_id(self._get_route_id_from_item_id(item_id))
         raw_obj.set_enabled_status(new_state == self.CHECKED_TAG or new_state == self.TRISTATE_TAG)
+        self._controller.update_existing_event(raw_obj.group_id, raw_obj.event_definition)
     
     def _get_route_id_from_item_id(self, iid):
         try:
