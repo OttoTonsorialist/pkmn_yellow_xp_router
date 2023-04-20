@@ -8,6 +8,7 @@ from tkinter import ttk, font, messagebox
 from controllers.main_controller import MainController
 from gui import custom_components, pkmn_components, quick_add_components
 from gui.event_details import EventDetails
+from gui.route_summary_window import RouteSummaryWindow
 from gui.popups.color_config import ConfigWindow
 from gui.popups.custom_dvs_popup import CustomDvsWindow
 from gui.popups.data_dir_config_popup import DataDirConfigWindow
@@ -150,30 +151,52 @@ class MainWindow(tk.Tk):
 
         self.group_controls = ttk.Frame(self.left_info_panel)
         self.group_controls.pack(fill=tk.X, anchor=tk.CENTER)
+
+        button_spacing_cols = []
+        button_col_idx = 0
+
+        self.show_summary_btn = custom_components.SimpleButton(self.group_controls, text='Summary', command=self.open_summary_window, width=15)
+        self.show_summary_btn.grid(row=0, column=button_col_idx, rowspan=2, padx=5, pady=1)
+        button_col_idx += 1
+
+        button_spacing_cols.append(button_col_idx)
+        button_col_idx += 1
         
         self.move_group_up_button = custom_components.SimpleButton(self.group_controls, text='Move Event Up', command=self.move_group_up, width=15)
-        self.move_group_up_button.grid(row=0, column=1, padx=5, pady=1)
+        self.move_group_up_button.grid(row=0, column=button_col_idx, padx=5, pady=1)
         self.move_group_down_button = custom_components.SimpleButton(self.group_controls, text='Move Event Down', command=self.move_group_down, width=15)
-        self.move_group_down_button.grid(row=1, column=1, padx=5, pady=1)
+        self.move_group_down_button.grid(row=1, column=button_col_idx, padx=5, pady=1)
+        button_col_idx += 1
+
         self.highlight_toggle_button = custom_components.SimpleButton(self.group_controls, text='Enable/Disable', command=self.toggle_enable_disable, width=15)
-        self.highlight_toggle_button.grid(row=0, column=2, padx=5, pady=1)
+        self.highlight_toggle_button.grid(row=0, column=button_col_idx, padx=5, pady=1)
         self.highlight_toggle_button = custom_components.SimpleButton(self.group_controls, text='Toggle Highlight', command=self.toggle_event_highlight, width=15)
-        self.highlight_toggle_button.grid(row=1, column=2, padx=5, pady=1)
+        self.highlight_toggle_button.grid(row=1, column=button_col_idx, padx=5, pady=1)
+        button_col_idx += 1
+
+        button_spacing_cols.append(button_col_idx)
+        button_col_idx += 1
 
         self.transfer_event_button = custom_components.SimpleButton(self.group_controls, text='Transfer Event', command=self.open_transfer_event_window, width=15)
-        self.transfer_event_button.grid(row=0, column=3, padx=5, pady=1)
+        self.transfer_event_button.grid(row=0, column=button_col_idx, padx=5, pady=1)
         self.delete_event_button = custom_components.SimpleButton(self.group_controls, text='Delete Event', command=self.delete_group, width=15)
-        self.delete_event_button.grid(row=1, column=3, padx=5, pady=1)
+        self.delete_event_button.grid(row=1, column=button_col_idx, padx=5, pady=1)
+        button_col_idx += 1
+
+        button_spacing_cols.append(button_col_idx)
+        button_col_idx += 1
 
         self.new_folder_button = custom_components.SimpleButton(self.group_controls, text='New Folder', command=self.open_new_folder_window, width=15)
-        self.new_folder_button.grid(row=0, column=5, padx=5, pady=1)
+        self.new_folder_button.grid(row=0, column=button_col_idx, padx=5, pady=1)
         self.rename_folder_button = custom_components.SimpleButton(self.group_controls, text='Rename Folder', command=self.rename_folder, width=15)
-        self.rename_folder_button.grid(row=1, column=5, padx=5, pady=1)
+        self.rename_folder_button.grid(row=1, column=button_col_idx, padx=5, pady=1)
+        button_col_idx += 1
 
-        self.group_controls.columnconfigure(0, weight=1)
-        self.group_controls.columnconfigure(4, weight=1)
-        self.group_controls.columnconfigure(6, weight=1)
-        self.group_controls.columnconfigure(7, weight=1)
+        button_spacing_cols.append(button_col_idx)
+        button_col_idx += 1
+
+        for cur_spacer_idx in button_spacing_cols:
+            self.group_controls.columnconfigure(cur_spacer_idx, weight=1)
 
         self.route_search = RouteSearch(self._controller, self.left_info_panel)
         self.route_search.pack(fill=tk.X, anchor=tk.CENTER)
@@ -236,6 +259,7 @@ class MainWindow(tk.Tk):
 
         self.event_list.refresh()
         self.new_event_window = None
+        self.summary_window = None
 
     def run(self):
         # TODO: is this the right place for it?
@@ -404,6 +428,10 @@ class MainWindow(tk.Tk):
     def open_customize_dvs_window(self, *args, **kwargs):
         if self._is_active_window() and self._controller.get_init_state() is not None:
             self.new_event_window = CustomDvsWindow(self, self._controller, self._controller.get_dvs())
+
+    def open_summary_window(self, *args, **kwargs):
+        if self.summary_window is None or not tk.Toplevel.winfo_exists(self.summary_window):
+            self.summary_window = RouteSummaryWindow(self, self._controller)
 
     def move_group_up(self, event=None):
         self._controller.move_groups_up(self.event_list.get_all_selected_event_ids(allow_event_items=False))

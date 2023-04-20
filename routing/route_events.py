@@ -1,5 +1,6 @@
 
 from typing import Dict, List
+from routing.full_route_state import RouteState
 from utils.constants import const
 from pkmn.gen_factory import current_gen_info
 
@@ -641,8 +642,8 @@ class EventGroup:
         self.parent:EventFolder = parent
         self._enabled = True
         self.name = None
-        self.init_state = None
-        self.final_state = None
+        self.init_state:RouteState = None
+        self.final_state:RouteState = None
         self.event_items:List[EventItem] = []
         self.event_definition = event_definition
         self.pkmn_after_levelups = []

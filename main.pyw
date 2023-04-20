@@ -37,12 +37,12 @@ if __name__ == '__main__':
 
         app.run()
         flag_to_auto_update = background_thread.result()
-        logger.info(f"gottem: {flag_to_auto_update}")
+        logger.info(f"App closed, autoupdate requested? {flag_to_auto_update}")
 
     if flag_to_auto_update:
-        logger.info(f"cleaning up")
+        logger.info(f"Beginning cleanup of old version")
         auto_update.auto_cleanup_old_version()
-        logger.info(f"creating temp gui")
+        logger.info(f"Launching temp gui for AutoUpgrade")
         app_upgrade = AutoUpgradeGUI()
         app_upgrade.mainloop()
 
