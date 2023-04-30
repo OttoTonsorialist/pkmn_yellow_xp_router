@@ -1,10 +1,15 @@
 import math
+import logging
 from typing import Dict, List
 
 from pkmn import universal_data_objects, damage_calc
 from pkmn.gen_2.data_objects import GenTwoBadgeList, get_hidden_power_type, get_hidden_power_base_power
 from utils.constants import const
 from pkmn.gen_2.gen_two_constants import gen_two_const
+
+
+logger = logging.getLogger(__name__)
+
 
 MIN_RANGE = 217
 MAX_RANGE = 255
@@ -45,11 +50,11 @@ def calculate_gen_two_damage(
         return None
     
     # special move interactions
-    if move.attack_flavor == const.FLAVOR_FIXED_DAMAGE:
+    if const.FLAVOR_FIXED_DAMAGE in move.attack_flavor:
         return damage_calc.DamageRange({base_power: 1})
-    elif move.attack_flavor == const.FLAVOR_LEVEL_DAMAGE:
+    elif const.FLAVOR_LEVEL_DAMAGE in move.attack_flavor:
         return damage_calc.DamageRange({attacking_pkmn.level: 1})
-    elif move.attack_flavor == const.FLAVOR_PSYWAVE:
+    elif const.FLAVOR_PSYWAVE in move.attack_flavor:
         psywave_upper_limit = math.floor(attacking_pkmn.level * 1.5)
         return damage_calc.DamageRange({x:1 for x in range(1, psywave_upper_limit)})
     
@@ -185,6 +190,11 @@ def calculate_gen_two_damage(
             base_power = 150
         elif gen_two_const.FLAIL_MIN_HP in custom_move_data:
             base_power = 200
+    elif move.name == gen_two_const.RETURN_MOVE_NAME:
+        try:
+            base_power = int(custom_move_data)
+        except Exception as e:
+            logger.warning(f"Failed to convert return move power to an int: {custom_move_data}")
 
     # begin actual formula
     temp = 2 * attacking_pkmn.level

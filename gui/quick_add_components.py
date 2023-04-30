@@ -22,6 +22,7 @@ class QuickTrainerAdd(ttk.LabelFrame):
         kwargs['padding'] = 5
         super().__init__(*args, **kwargs)
         self._controller = controller
+        self._ignore_preview = False
 
         self.padx = 5
         self.pady = 1
@@ -67,7 +68,7 @@ class QuickTrainerAdd(ttk.LabelFrame):
         self._add_area.grid(row=0, column=1, padx=self.padx, pady=self.pady + 1, sticky=tk.W)
         self.bind(self._controller.register_event_selection(self), self.update_button_status)
         self.bind(self._controller.register_version_change(self), self.update_pkmn_version)
-        self.bind(self._controller.register_route_change(self), self.trainer_filter_callback)
+        self.bind(self._controller.register_route_change(self), self.route_change_callback)
         self.update_button_status()
 
     def update_button_status(self, *args, **kwargs):
@@ -92,11 +93,15 @@ class QuickTrainerAdd(ttk.LabelFrame):
         self._trainers_by_loc.new_values([const.ALL_TRAINERS] + sorted(current_gen_info().trainer_db().get_all_locations()))
         self._trainers_by_class.new_values([const.ALL_TRAINERS] + sorted(current_gen_info().trainer_db().get_all_classes()))
         self._trainer_name_callback()
+    
+    def route_change_callback(self, *args, **kwargs):
+        self.trainer_filter_callback(ignore_trainer_preview=True)
 
-    def trainer_filter_callback(self, *args, **kwargs):
+    def trainer_filter_callback(self, *args, ignore_trainer_preview=False, **kwargs):
         loc_filter = self._trainers_by_loc.get()
         class_filter = self._trainers_by_class.get()
 
+        self._ignore_preview = ignore_trainer_preview
         valid_trainers = current_gen_info().trainer_db().get_valid_trainers(
             trainer_class=class_filter,
             trainer_loc=loc_filter,
@@ -108,6 +113,7 @@ class QuickTrainerAdd(ttk.LabelFrame):
 
         self._trainer_names.new_values(valid_trainers)
         self.update_button_status()
+        self._ignore_preview = False
 
     def _trainer_name_callback(self, *args, **kwargs):
         self.update_button_status()
@@ -115,7 +121,8 @@ class QuickTrainerAdd(ttk.LabelFrame):
         if selected_trainer == const.NO_TRAINERS:
             return
 
-        self._controller.set_preview_trainer(selected_trainer)
+        if not self._ignore_preview:
+            self._controller.set_preview_trainer(selected_trainer)
     
     def add_trainer(self, *args, **kwargs):
         self._controller.new_event(

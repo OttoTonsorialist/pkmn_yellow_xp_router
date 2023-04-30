@@ -43,7 +43,7 @@ class RouteSummaryWindow(tk.Toplevel):
     def _refresh(self, *args, **kwargs):
         for to_remove in self._labels:
             to_remove.pack_forget()
-        self._header_frames:List[ttk.Label] = []
+        self._labels:List[ttk.Label] = []
 
         for to_remove in self._header_frames:
             to_remove.grid_forget()
@@ -74,16 +74,23 @@ class RouteSummaryWindow(tk.Toplevel):
         
         move_display_info:List[List[RenderInfo]] = [[], [], [], []]
         for cur_idx, cur_summary in enumerate(summary_list):
-            header_frame = ttk.Frame(self._main_frame, width=130, height=60)
-            header_frame.grid(row=0, column=cur_idx, padx=2, pady=2)
-            header_frame.pack_propagate(0)
+            header_frame = ttk.Frame(self._main_frame, style="SummaryHeader.TFrame")
+            header_frame.grid(row=0, column=cur_idx, padx=2, pady=2, sticky=tk.NSEW)
 
-            trainer_label = ttk.Label(header_frame, text=cur_summary.trainer_name)
-            trainer_label.pack(pady=2)
+            trainer_name = cur_summary.trainer_name
+            split_name = trainer_name.split(" ")
+            if len(split_name) > 2:
+                first_line = " ".join(split_name[0:2])
+                second_line = " ".join(split_name[2:])
+                trainer_name = first_line + "\n" + second_line
+            elif len(split_name) == 2 and len(split_name[1]) > 1:
+                trainer_name = split_name[0] + "\n" + split_name[1]
+            trainer_label = ttk.Label(header_frame, text=trainer_name, style="SummaryHeader.TLabel", justify="center")
+            trainer_label.pack(pady=(15, 2), padx=5)
             self._labels.append(trainer_label)
 
-            level_label = ttk.Label(header_frame, text=f"Lv: {cur_summary.mon_level}")
-            level_label.pack(pady=2)
+            level_label = ttk.Label(header_frame, text=f"Lv: {cur_summary.mon_level}", style="SummaryHeader.TLabel")
+            level_label.pack(pady=(2, 15), padx=5, side="bottom")
             self._labels.append(level_label)
 
             self._header_frames.append(header_frame)
@@ -110,14 +117,17 @@ class RouteSummaryWindow(tk.Toplevel):
         
         for cur_move_idx, cur_slot_display in enumerate(move_display_info):
             for cur_move_info in cur_slot_display:
-                cur_move_frame = ttk.Frame(self._main_frame)
+                cur_move_frame = ttk.Frame(self._main_frame, style=f"{cur_move_info.move_type}Type.TFrame")
                 cur_move_frame.grid(
                     row=cur_move_idx + 1,
                     column=cur_move_info.start_idx,
-                    columnspan=((cur_move_info.end_idx - cur_move_info.start_idx) + 1)
+                    columnspan=((cur_move_info.end_idx - cur_move_info.start_idx) + 1),
+                    sticky=tk.NSEW,
+                    padx=2, pady=2
                 )
+                self._move_frames[cur_move_idx].append(cur_move_frame)
 
-                move_label = ttk.Label(cur_move_frame, text=cur_move_info.move_name)
+                move_label = ttk.Label(cur_move_frame, text=cur_move_info.move_name, style=f"{cur_move_info.move_type}Type.TLabel")
                 move_label.pack()
                 self._labels.append(move_label)
 

@@ -78,6 +78,7 @@ class GenTwoConstants:
         self.GUST_MOVE_NAME = "Gust"
         self.TWISTER_MOVE_NAME = "Twister"
         self.EARTHQUAKE_MOVE_NAME = "Earthquake"
+        self.RETURN_MOVE_NAME = "Return"
 
         self.CUSTOM_MOVE_DATA = {
             self.MAGNITUDE_MOVE_NAME: [
@@ -115,6 +116,7 @@ class GenTwoConstants:
             self.GUST_MOVE_NAME: [self.NO_BONUS, self.FLY_BONUS],
             self.TWISTER_MOVE_NAME: [self.NO_BONUS, self.FLY_BONUS],
             self.EARTHQUAKE_MOVE_NAME: [self.NO_BONUS, self.DIG_BONUS],
+            self.RETURN_MOVE_NAME: [str(x) for x in range(102, 0, -1)],
         }
 
 

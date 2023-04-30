@@ -5,6 +5,7 @@ from route_recording.game_recorders.gen_two.crystal_fsm import Machine, State, S
 from route_recording.gamehook_client import GameHookProperty
 from routing.route_events import BlackoutEventDefinition, EventDefinition, HealEventDefinition, HoldItemEventDefinition, LearnMoveEventDefinition, SaveEventDefinition, TrainerEventDefinition, WildPkmnEventDefinition
 from route_recording.game_recorders.gen_two.crystal_gamehook_constants import gh_gen_two_const
+from pkmn.gen_2.gen_two_constants import gen_two_const
 from utils.constants import const
 
 logger = logging.getLogger(__name__)
@@ -137,6 +138,7 @@ class BattleState(WatchForResetState):
         self._cached_mon_species = ""
         self._cached_mon_level = 0
         self._exp_split = []
+        self._friendship_data = []
         self._battle_started = False
     
     def _on_enter(self, prev_state: State):
@@ -153,6 +155,7 @@ class BattleState(WatchForResetState):
         self._cached_mon_level = 0
         self._trainer_name = ""
         self._exp_split = []
+        self._friendship_data = []
         self._battle_started = False
 
         if self.is_trainer_battle:
@@ -161,8 +164,19 @@ class BattleState(WatchForResetState):
                 self.machine._gamehook_client.get(gh_gen_two_const.KEY_BATTLE_TRAINER_CLASS).value,
                 self.machine._gamehook_client.get(gh_gen_two_const.KEY_BATTLE_TRAINER_NUMBER).value,
             )
+
+            return_custom_move_data = None
+            if gen_two_const.RETURN_MOVE_NAME in self.machine._cached_moves:
+                return_custom_move_data = []
+                cur_friendship = self.machine._gamehook_client.get(gh_gen_two_const.KEY_PLAYER_MON_FRIENDSHIP).value
+                for _ in range(6):
+                    return_custom_move_data.append({
+                        const.PLAYER_KEY: {gen_two_const.RETURN_MOVE_NAME: str(int(cur_friendship / 2.5))},
+                        const.ENEMY_KEY: {}
+                    })
+
             self.machine._queue_new_event(
-                EventDefinition(trainer_def=TrainerEventDefinition(self._trainer_name))
+                EventDefinition(trainer_def=TrainerEventDefinition(self._trainer_name, custom_move_data=return_custom_move_data))
             )
         
         logger.info(f"Entered battle. With trainer? {self.is_trainer_battle}")
@@ -171,12 +185,22 @@ class BattleState(WatchForResetState):
         if next_state.state_type != StateType.RESETTING:
             if self.is_trainer_battle:
                 final_exp_split = [len(x) for x in self._exp_split]
-                logger.info(f"checking exp split: {final_exp_split}")
-                any_split_exp_detected = any([True for x in final_exp_split if x > 1])
-                if any_split_exp_detected:
+                if not any([True for x in final_exp_split if x > 1]):
+                    final_exp_split = None
+
+                return_custom_move_data = None
+                if gen_two_const.RETURN_MOVE_NAME in self.machine._cached_moves:
+                    return_custom_move_data = []
+                    for cur_friendship in self._friendship_data:
+                        return_custom_move_data.append({
+                            const.PLAYER_KEY: {gen_two_const.RETURN_MOVE_NAME: str(int(cur_friendship / 2.5))},
+                            const.ENEMY_KEY: {}
+                        })
+
+                if final_exp_split is not None or return_custom_move_data is not None:
                     self.machine._queue_new_event(
                         EventDefinition(
-                            trainer_def=TrainerEventDefinition(self._trainer_name, exp_split=final_exp_split),
+                            trainer_def=TrainerEventDefinition(self._trainer_name, exp_split=final_exp_split, custom_move_data=return_custom_move_data),
                             notes=gh_gen_two_const.ROAR_FLAG
                         )
                     )
@@ -225,6 +249,7 @@ class BattleState(WatchForResetState):
             if new_prop.value == 0:
                 self._cached_mon_species = self.machine.gh_converter.pkmn_name_convert(self.machine._gamehook_client.get(gh_gen_two_const.KEY_BATTLE_ENEMY_SPECIES).value)
                 self._cached_mon_level = self.machine._gamehook_client.get(gh_gen_two_const.KEY_BATTLE_ENEMY_LEVEL).value
+                self._friendship_data.append(self.machine._gamehook_client.get(gh_gen_two_const.KEY_PLAYER_MON_FRIENDSHIP).value)
         elif new_prop.path == gh_gen_two_const.KEY_BATTLE_TEXT_BUFFER:
             if self._trainer_name == "" and self.is_trainer_battle:
                 self._trainer_name = self.machine.gh_converter.trainer_name_convert(

@@ -140,7 +140,6 @@ class MainController:
 
     ######
     # Methods that induce a state change
-    # TODO: is it ok that all of the changes (including callbacks) are blocking?
     ######
 
     @handle_exceptions
@@ -479,7 +478,7 @@ class MainController:
         
         return move_idx
     
-    def _walk_events_helper(self, cur_folder:EventFolder, cur_event_id:int, cur_event_found:bool, walk_forward=True) -> Tuple[bool, EventGroup]:
+    def _walk_events_helper(self, cur_folder:EventFolder, cur_event_id:int, cur_event_found:bool, enabled_only:bool, walk_forward=True) -> Tuple[bool, EventGroup]:
         if walk_forward:
             iterable = cur_folder.children
         else:
@@ -487,12 +486,12 @@ class MainController:
 
         for test_obj in iterable:
             if isinstance(test_obj, EventGroup):
-                if cur_event_found:
+                if cur_event_found and test_obj.is_enabled():
                     return cur_event_found, test_obj
                 elif test_obj.group_id == cur_event_id:
                     cur_event_found = True
             elif isinstance(test_obj, EventFolder):
-                cur_event_found, prev_result = self._walk_events_helper(test_obj, cur_event_id, cur_event_found, walk_forward=walk_forward)
+                cur_event_found, prev_result = self._walk_events_helper(test_obj, cur_event_id, cur_event_found, enabled_only, walk_forward=walk_forward)
                 if cur_event_found and prev_result is not None:
                     return cur_event_found, prev_result
             else:
@@ -500,17 +499,19 @@ class MainController:
         
         return cur_event_found, None
             
-    def get_next_event(self, cur_event_id=None) -> EventGroup:
+    def get_next_event(self, cur_event_id=None, enabled_only=False) -> EventGroup:
         return self._walk_events_helper(
             self._data.root_folder,
-            cur_event_id=cur_event_id,
-            cur_event_found=(cur_event_id == None)
+            cur_event_id,
+            cur_event_id == None,
+            True
         )[1]
 
-    def get_previous_event(self, cur_event_id=None) -> EventGroup:
+    def get_previous_event(self, cur_event_id=None, enabled_only=False) -> EventGroup:
         return self._walk_events_helper(
             self._data.root_folder,
-            cur_event_id=cur_event_id,
-            cur_event_found=(cur_event_id == None),
+            cur_event_id,
+            cur_event_id == None,
+            enabled_only,
             walk_forward=False
         )[1]

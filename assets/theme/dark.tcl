@@ -26,6 +26,27 @@ namespace eval ttk::theme::azure-dark {
             -disabledbg     "#737373"
             -selectfg       "#ffffff"
             -selectbg       "#007fff"
+            
+            -normal         "#a8a878"
+            -fighting       "#c03028"
+            -grass          "#78c850"
+            -fire           "#f08030"
+            -water          "#6890f0"
+            -electric       "#f3d230"
+            -ground         "#e0c068"
+            -rock           "#b8a038"
+            -psychic        "#f85888"
+            -poison         "#a040a0"
+            -flying         "#a890f0"
+            -bug            "#a8b820"
+            -ice            "#98d8d8"
+            -ghost          "#705898"
+            -dragon         "#7038f8"
+            -steel          "#b8b8d0"
+            -dark           "#705848"
+            -fairy          "#ee99ac"
+            -curse          "#2e9fa3"
+            -none           "#333333"
 
             -border         "#ffffff"
             -success        "#186136"
@@ -234,11 +255,53 @@ namespace eval ttk::theme::azure-dark {
         ttk::style configure Divider.TLabel -background $colors(-divider) -anchor center
         ttk::style configure Accent.TFrame -background $colors(-selectbg)
         ttk::style configure Accent.TLabel -background $colors(-selectbg) -anchor center
-
-        # Elements
+        ttk::style configure SummaryHeader.TFrame -background $colors(-disabledbg)
+        ttk::style configure SummaryHeader.TLabel -background $colors(-disabledbg) -anchor center -borderwidth 2
+        
+        # Type labels
+        ttk::style configure NormalType.TFrame -background $colors(-normal)
+        ttk::style configure NormalType.TLabel -background $colors(-normal) -anchor center -foreground $colors(-bg)
+        ttk::style configure FightingType.TFrame -background $colors(-fighting)
+        ttk::style configure FightingType.TLabel -background $colors(-fighting) -anchor center -foreground $colors(-bg)
+        ttk::style configure GrassType.TFrame -background $colors(-grass)
+        ttk::style configure GrassType.TLabel -background $colors(-grass) -anchor center -foreground $colors(-bg)
+        ttk::style configure FireType.TFrame -background $colors(-fire)
+        ttk::style configure FireType.TLabel -background $colors(-fire) -anchor center -foreground $colors(-bg)
+        ttk::style configure WaterType.TFrame -background $colors(-water)
+        ttk::style configure WaterType.TLabel -background $colors(-water) -anchor center -foreground $colors(-bg)
+        ttk::style configure ElectricType.TFrame -background $colors(-electric)
+        ttk::style configure ElectricType.TLabel -background $colors(-electric) -anchor center -foreground $colors(-bg)
+        ttk::style configure GroundType.TFrame -background $colors(-ground)
+        ttk::style configure GroundType.TLabel -background $colors(-ground) -anchor center -foreground $colors(-bg)
+        ttk::style configure RockType.TFrame -background $colors(-rock)
+        ttk::style configure RockType.TLabel -background $colors(-rock) -anchor center -foreground $colors(-bg)
+        ttk::style configure PsychicType.TFrame -background $colors(-psychic)
+        ttk::style configure PsychicType.TLabel -background $colors(-psychic) -anchor center -foreground $colors(-bg)
+        ttk::style configure PoisonType.TFrame -background $colors(-poison)
+        ttk::style configure PoisonType.TLabel -background $colors(-poison) -anchor center
+        ttk::style configure FlyingType.TFrame -background $colors(-flying) -sticky nswe
+        ttk::style configure FlyingType.TLabel -background $colors(-flying) -anchor center -sticky nswe -foreground $colors(-bg)
+        ttk::style configure BugType.TFrame -background $colors(-bug)
+        ttk::style configure BugType.TLabel -background $colors(-bug) -anchor center -foreground $colors(-bg)
+        ttk::style configure IceType.TFrame -background $colors(-ice)
+        ttk::style configure IceType.TLabel -background $colors(-ice) -anchor center -foreground $colors(-bg)
+        ttk::style configure GhostType.TFrame -background $colors(-ghost)
+        ttk::style configure GhostType.TLabel -background $colors(-ghost) -anchor center
+        ttk::style configure DragonType.TFrame -background $colors(-dragon)
+        ttk::style configure DragonType.TLabel -background $colors(-dragon) -anchor center -foreground $colors(-bg)
+        ttk::style configure SteelType.TFrame -background $colors(-steel)
+        ttk::style configure SteelType.TLabel -background $colors(-steel) -anchor center -foreground $colors(-bg)
+        ttk::style configure DarkType.TFrame -background $colors(-dark)
+        ttk::style configure DarkType.TLabel -background $colors(-dark) -anchor center
+        ttk::style configure FairyType.TFrame -background $colors(-fairy)
+        ttk::style configure FairyType.TLabel -background $colors(-fairy) -anchor center -foreground $colors(-bg)
+        ttk::style configure CurseType.TFrame -background $colors(-curse)
+        ttk::style configure CurseType.TLabel -background $colors(-curse) -anchor center -foreground $colors(-bg)
+        ttk::style configure NoneType.TFrame -background $colors(-none)
+        ttk::style configure NoneType.TLabel -background $colors(-none) -anchor center -sticky nswe
 
         # Button
-        ttk::style configure TButton -padding {2 1 2 1} -anchor center
+        ttk::style configure TButton -padding {2 1 2 1} -anchor center -justify center
 
         ttk::style element create Button.button image \
             [list $I(rect-basic) \

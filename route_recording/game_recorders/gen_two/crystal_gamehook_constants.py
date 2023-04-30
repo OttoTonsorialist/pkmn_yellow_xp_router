@@ -22,6 +22,7 @@ class Gen2GameHookConstants:
         self.KEY_PLAYER_MON_LEVEL = "player.team.0.level"
         self.KEY_PLAYER_MON_SPECIES = "player.team.0.species"
         self.KEY_PLAYER_MON_HELD_ITEM = "player.team.0.heldItem"
+        self.KEY_PLAYER_MON_FRIENDSHIP = "player.team.0.friendship"
 
         self.KEY_PLAYER_MON_MOVE_1 = "player.team.0.move1"
         self.KEY_PLAYER_MON_MOVE_2 = "player.team.0.move2"

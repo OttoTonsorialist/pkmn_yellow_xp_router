@@ -15494,10 +15494,10 @@
                 "spc": 97,
                 "xp": 1759,
                 "moves": [
-                    "Acid",
                     "Razor Leaf",
                     "Wrap",
-                    "PoisonPowder"
+                    "PoisonPowder",
+                    "Sleep Powder"
                 ]
             }
         ],
