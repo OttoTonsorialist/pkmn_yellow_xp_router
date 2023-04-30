@@ -72,6 +72,17 @@ class RouteSummaryWindow(tk.Toplevel):
             
             cur_event = self._controller.get_next_event(cur_event.group_id)
         
+        if len(summary_list) == 0:
+            header_frame = ttk.Frame(self._main_frame, style="SummaryHeader.TFrame")
+            header_frame.grid(row=0, column=0, padx=2, pady=2, sticky=tk.NSEW)
+            self._header_frames.append(header_frame)
+
+            trainer_label = ttk.Label(header_frame, text="No major fights in route. Please add major fights or highlight other fights to see summary", style="SummaryHeader.TLabel", justify="center")
+            trainer_label.pack(pady=15, padx=15)
+            self._labels.append(trainer_label)
+            return
+
+
         move_display_info:List[List[RenderInfo]] = [[], [], [], []]
         for cur_idx, cur_summary in enumerate(summary_list):
             header_frame = ttk.Frame(self._main_frame, style="SummaryHeader.TFrame")
