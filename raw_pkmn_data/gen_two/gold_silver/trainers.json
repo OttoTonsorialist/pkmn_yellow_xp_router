@@ -1869,7 +1869,8 @@
                 ]
             }
         ],
-        "money": 4200
+        "money": 4200,
+        "refightable": true
     },
     "PkmnTrainer Cal Unused": {
         "dv": {
@@ -2178,7 +2179,8 @@
                 ]
             }
         ],
-        "money": 4600
+        "money": 4600,
+        "refightable": true
     },
     "Elite Four Karen": {
         "dv": {
@@ -2283,7 +2285,8 @@
                 ]
             }
         ],
-        "money": 4700
+        "money": 4700,
+        "refightable": true
     },
     "Elite Four Koga": {
         "dv": {
@@ -2388,7 +2391,8 @@
                 ]
             }
         ],
-        "money": 4400
+        "money": 4400,
+        "refightable": true
     },
     "Champion Lance": {
         "dv": {
@@ -2511,7 +2515,8 @@
                 ]
             }
         ],
-        "money": 5000
+        "money": 5000,
+        "refightable": true
     },
     "Leader Brock": {
         "dv": {

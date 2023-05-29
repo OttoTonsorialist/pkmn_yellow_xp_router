@@ -15859,7 +15859,8 @@
                 ]
             }
         ],
-        "money": 5742
+        "money": 5742,
+        "refightable": true
     },
     "Brock 1": {
         "trainer_class": "Brock",
@@ -17415,7 +17416,8 @@
                 ]
             }
         ],
-        "money": 6435
+        "money": 6435,
+        "refightable": true
     },
     "Rival3 Flareon": {
         "trainer_class": "Rival3",
@@ -17519,7 +17521,8 @@
                 ]
             }
         ],
-        "money": 6435
+        "money": 6435,
+        "refightable": true
     },
     "Rival3 Vaporeon": {
         "trainer_class": "Rival3",
@@ -17623,7 +17626,8 @@
                 ]
             }
         ],
-        "money": 6435
+        "money": 6435,
+        "refightable": true
     },
     "Lorelei 1": {
         "trainer_class": "Lorelei",
@@ -17711,7 +17715,8 @@
                 ]
             }
         ],
-        "money": 5544
+        "money": 5544,
+        "refightable": true
     },
     "Channeler 1": {
         "trainer_class": "Channeler",
@@ -18462,7 +18467,8 @@
                 ]
             }
         ],
-        "money": 5940
+        "money": 5940,
+        "refightable": true
     },
     "Lance 1": {
         "trainer_class": "Lance",
@@ -18550,6 +18556,7 @@
                 ]
             }
         ],
-        "money": 6138
+        "money": 6138,
+        "refightable": true
     }
 }

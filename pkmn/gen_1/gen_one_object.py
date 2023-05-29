@@ -321,7 +321,8 @@ def _create_trainer(trainer_dict, pkmn_db:PkmnDB) -> universal_data_objects.Trai
         trainer_dict[const.TRAINER_NAME],
         trainer_dict[const.TRAINER_LOC],
         trainer_dict[const.MONEY],
-        enemy_pkmn
+        enemy_pkmn,
+        refightable=trainer_dict.get(const.TRAINER_REFIGHTABLE, False)
     )
 
 
