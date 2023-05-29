@@ -216,6 +216,8 @@ class BattleState(WatchForResetState):
                 # if we won a trainer battle, check for special case of beating lance
                 if self._trainer_name.startswith("Champion"):
                     self.machine._queue_new_event(EventDefinition(save=SaveEventDefinition(location="Post-Champion Autosave")))
+            if self._waiting_for_moves:
+                self.machine._move_cache_update(levelup_source=True)
             if self._waiting_for_items:
                 self.machine._item_cache_update()
             if self._held_item_consumed:
