@@ -215,7 +215,7 @@ class ItemDB:
 
 class MoveDB:
     def __init__(self, data:Dict[str, universal_data_objects.Move]):
-        self._data = data
+        self._data = {self.sanitize_move_name(x.name): x for x in data.values()}
         self.stat_mod_moves = {}
 
         # doing some weird stuff to make sure boosting moves appear at the top
@@ -232,9 +232,9 @@ class MoveDB:
 
             if cur_stat_mods:
                 if is_reduction:
-                    self.stat_mod_moves[cur_move.name] = cur_stat_mods
+                    self.stat_mod_moves[self.sanitize_move_name(cur_move.name)] = cur_stat_mods
                 else:
-                    stat_reduction_moves[cur_move.name] = cur_stat_mods
+                    stat_reduction_moves[self.sanitize_move_name(cur_move.name)] = cur_stat_mods
 
         self.stat_mod_moves.update(stat_reduction_moves)
     
@@ -247,7 +247,15 @@ class MoveDB:
         if len(invalid_moves) > 0:
             raise ValueError(f"Detected moves with invalid types: {invalid_moves}")
     
+    @staticmethod
+    def sanitize_move_name(string:str):
+        if not isinstance(string, str):
+            return string
+        return ''.join([x for x in string if x.isalnum()]).lower()
+    
     def get_move(self, move_name):
+        move_name = self.sanitize_move_name(move_name)
+
         if move_name is None:
             return None
 
@@ -262,13 +270,13 @@ class MoveDB:
     
     def get_filtered_names(self, filter=None, include_delete_move=False):
         if filter is None:
-            return list(self._data.keys())
-        
-        result = []
-        filter = filter.lower()
-        for test_name in self._data.keys():
-            if filter in test_name.lower():
-                result.append(test_name)
+            result = list(self._data.keys())
+        else:
+            result = []
+            filter = self.sanitize_move_name(filter)
+            for test_name, test_move in self._data.items():
+                if filter in test_name.lower():
+                    result.append(test_move.name)
         
         if len(result) == 0:
             if include_delete_move:
@@ -276,11 +284,11 @@ class MoveDB:
             else:
                 result.append(const.NO_MOVE)
         elif include_delete_move:
-            if filter in const.DELETE_MOVE.lower():
+            if filter in self.sanitize_move_name(const.DELETE_MOVE):
                 result.append(const.DELETE_MOVE)
         
         return result
     
     def get_stat_mod(self, move_name) -> List[Tuple[str, int]]:
-        return self.stat_mod_moves.get(move_name, [])
+        return self.stat_mod_moves.get(self.sanitize_move_name(move_name), [])
 
