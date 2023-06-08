@@ -271,6 +271,59 @@ class RecorderGameHookClient(GameHookClient):
         else:
             self._controller.set_ready(False)
             self._controller.set_status(const.RECORDING_STATUS_WRONG_MAPPER)
+    
+    def validate_constants(self, constants):
+        real_vals = [x for x in self.properties.keys()]
+        lower_vals = [x.lower() for x in real_vals]
+
+        invalid_props = set()
+        for cur_attr in dir(constants):
+            if 'KEY' not in cur_attr:
+                continue
+
+            cur_val = getattr(constants, cur_attr)
+            if isinstance(cur_val, str):
+                if cur_val in self.properties:
+                    continue
+                if cur_val.lower() in lower_vals:
+                    setattr(constants, cur_attr, real_vals[lower_vals.index(cur_val.lower())])
+                    continue
+                invalid_props.add(cur_val)
+            elif isinstance(cur_val, list):
+                for inner_idx, inner_val in enumerate(cur_val):
+                    if not isinstance(inner_val, str):
+                        continue
+                    if inner_val in self.properties:
+                        continue
+                    if inner_val.lower() in lower_vals:
+                        logger.info(f"replacing element in {cur_attr}: {inner_val}")
+                        cur_val[inner_idx] = real_vals[lower_vals.index(inner_val.lower())]
+                        logger.info(f"new value: {cur_val[inner_idx]}")
+                        continue
+                    invalid_props.add(inner_val)
+            elif isinstance(cur_val, set):
+                replacement_val = set()
+                is_replacement_needed = False
+                for inner_val in cur_val:
+                    if not isinstance(inner_val, str):
+                        replacement_val.add(inner_val)
+                        continue
+                    if inner_val in self.properties:
+                        replacement_val.add(inner_val)
+                        continue
+                    if inner_val.lower() in lower_vals:
+                        replacement_val.add(real_vals[lower_vals.index(inner_val.lower())])
+                        is_replacement_needed = True
+                        continue
+                    invalid_props.add(inner_val)
+                
+                if is_replacement_needed:
+                    setattr(constants, cur_attr, replacement_val)
+        
+        if invalid_props:
+            self._controller._controller.trigger_exception(f"Likely due to mismatching GameHook version, invalid GameHook properties: {list(invalid_props)}")
+        logger.info("Validated GameHook constants successfully")
+
 
     def on_mapper_load_error(self, err):
         self._controller.set_ready(False)

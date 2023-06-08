@@ -214,7 +214,11 @@ class GameHookClient:
         self.properties = {}
 
     def get(self, path):
-        return self.properties.get(path)
+        result = self.properties.get(path)
+        if result is None:
+            logger.warning(f"[GameHook Client]Empty property path: {path}")
+
+        return result
 
     def _edit_property(self, path, freeze, new_bytes=None):
         path = path.replace('.', '/')

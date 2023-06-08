@@ -402,7 +402,7 @@ class UseTMState(WatchForResetState):
     def transition(self, new_prop:GameHookProperty, prev_prop:GameHookProperty) -> StateType:
         if new_prop.path == gh_gen_two_const.KEY_ITEM_COUNT:
             self._item_removal_detected = True
-        elif new_prop.path in gh_gen_two_const.ALL_TMS:
+        elif new_prop.path in gh_gen_two_const.ALL_TM_KEYS:
             return StateType.OVERWORLD
 
         return self.state_type

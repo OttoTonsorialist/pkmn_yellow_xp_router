@@ -220,15 +220,15 @@ class Machine:
             result[item_type] = 1
 
         # load the tms pocket
-        for i in range(len(gh_gen_two_const.ALL_TMS)):
-            tm_count = self._gamehook_client.get(gh_gen_two_const.ALL_TMS[i]).value
+        for i in range(len(gh_gen_two_const.ALL_TM_KEYS)):
+            tm_count = self._gamehook_client.get(gh_gen_two_const.ALL_TM_KEYS[i]).value
             if tm_count > 0:
-                result[self.gh_converter.get_tmhm_name_from_path(gh_gen_two_const.ALL_TMS[i])] = tm_count
+                result[self.gh_converter.get_tmhm_name_from_path(gh_gen_two_const.ALL_TM_KEYS[i])] = tm_count
 
         # load the hms
-        for i in range(len(gh_gen_two_const.ALL_HMS)):
-            if self._gamehook_client.get(gh_gen_two_const.ALL_HMS[i]).value:
-                result[self.gh_converter.get_tmhm_name_from_path(gh_gen_two_const.ALL_HMS[i])] = 1
+        for i in range(len(gh_gen_two_const.ALL_HM_KEYS)):
+            if self._gamehook_client.get(gh_gen_two_const.ALL_HM_KEYS[i]).value:
+                result[self.gh_converter.get_tmhm_name_from_path(gh_gen_two_const.ALL_HM_KEYS[i])] = 1
 
         return result
 

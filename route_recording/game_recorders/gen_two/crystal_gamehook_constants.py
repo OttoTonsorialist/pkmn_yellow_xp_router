@@ -1,6 +1,7 @@
 import logging
 
 from utils.constants import const
+from pkmn.pkmn_db import MoveDB
 
 logger = logging.getLogger(__name__)
 
@@ -78,7 +79,7 @@ class Gen2GameHookConstants:
         self.KEY_KEY_ITEM_COUNT = "player.totalKeyItems"
         self.ALL_KEYS_KEY_ITEMS = [f"player.keyItems.{i}" for i in range(0, 26)]
 
-        self.ALL_TMS = [
+        self.ALL_TM_KEYS = [
             "player.tms.tm01-dynamicpunch",
             "player.tms.tm02-headbutt",
             "player.tms.tm03-curse",
@@ -119,7 +120,7 @@ class Gen2GameHookConstants:
             "player.tms.tm38-fireblast",
             "player.tms.tm39-swift",
             "player.tms.tm40-defensecurl",
-            "player.tms.tm41-thunderpunch",
+            "player.tms.tm41-thunderPunch",
             "player.tms.tm42-dreameater",
             "player.tms.tm43-detect",
             "player.tms.tm44-rest",
@@ -131,7 +132,7 @@ class Gen2GameHookConstants:
             "player.tms.tm50-nightmare",
         ]
 
-        self.ALL_HMS = [
+        self.ALL_HM_KEYS = [
             "player.hms.hm01",
             "player.hms.hm02",
             "player.hms.hm03",
@@ -148,8 +149,8 @@ class Gen2GameHookConstants:
         self.ALL_KEYS_ALL_ITEM_FIELDS.update(self.ALL_KEYS_BALL_TYPE)
         self.ALL_KEYS_ALL_ITEM_FIELDS.update(self.ALL_KEYS_BALL_QUANTITY)
         self.ALL_KEYS_ALL_ITEM_FIELDS.update(self.ALL_KEYS_KEY_ITEMS)
-        self.ALL_KEYS_ALL_ITEM_FIELDS.update(self.ALL_TMS)
-        self.ALL_KEYS_ALL_ITEM_FIELDS.update(self.ALL_HMS)
+        self.ALL_KEYS_ALL_ITEM_FIELDS.update(self.ALL_TM_KEYS)
+        self.ALL_KEYS_ALL_ITEM_FIELDS.update(self.ALL_HM_KEYS)
 
         self.ALL_KEYS_TO_REGISTER = [
             self.KEY_OVERWORLD_MAP,
@@ -185,19 +186,19 @@ class Gen2GameHookConstants:
 class GameHookConstantConverter:
     def __init__(self):
         self._game_vitamins = [
-            "HP UP",
-            "PROTEIN",
-            "IRON",
-            "CARBOS",
-            "CALCIUM",
+            MoveDB.sanitize_move_name("HP UP"),
+            MoveDB.sanitize_move_name("PROTEIN"),
+            MoveDB.sanitize_move_name("IRON"),
+            MoveDB.sanitize_move_name("CARBOS"),
+            MoveDB.sanitize_move_name("CALCIUM"),
         ]
-        self._game_rare_candy = "RARE CANDY"
+        self._game_rare_candy = MoveDB.sanitize_move_name("RARE CANDY")
     
     def is_game_vitamin(self, item_name):
-        return item_name in self._game_vitamins
+        return MoveDB.sanitize_move_name(item_name) in self._game_vitamins
     
     def is_game_rare_candy(self, item_name):
-        return item_name == self._game_rare_candy
+        return MoveDB.sanitize_move_name(item_name) == self._game_rare_candy
     
     def is_game_tm(self, item_name):
         return item_name.startswith("TM")
