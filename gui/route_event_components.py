@@ -565,6 +565,7 @@ class WildPkmnEditor(EventEditorBase):
 class InventoryEventEditor(EventEditorBase):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
+        self._allow_none_item = False
 
         val_width = 23
         self._item_type_label = ttk.Label(self, text="Item Type:")
@@ -693,7 +694,10 @@ class InventoryEventEditor(EventEditorBase):
             new_vals = [x for x in new_vals if item_filter_val in x.lower()]
         
         if not new_vals:
-            new_vals = [const.NO_ITEM]
+            if self._allow_none_item:
+                new_vals = [None]
+            else:
+                new_vals = [const.NO_ITEM]
 
         self._item_selector.new_values(new_vals)
 
@@ -714,6 +718,8 @@ class InventoryEventEditor(EventEditorBase):
                 cost *= item_amt
                 self._item_cost_label.config(text=f"Total Profit: {cost}")
 
+            if cur_item is None:
+                return
             self._trigger_save()
         except Exception as e:
             pass
@@ -721,30 +727,35 @@ class InventoryEventEditor(EventEditorBase):
     def set_event_type(self, event_type):
         if event_type == const.TASK_GET_FREE_ITEM:
             self.event_type = event_type
+            self._allow_none_item = False
             self._hide_all_item_obj()
             self._show_acquire_item()
             return True
 
         elif event_type == const.TASK_PURCHASE_ITEM:
             self.event_type = event_type
+            self._allow_none_item = False
             self._hide_all_item_obj()
             self._show_purchase_item()
             return True
 
         elif event_type == const.TASK_USE_ITEM:
             self.event_type = event_type
+            self._allow_none_item = False
             self._hide_all_item_obj()
             self._show_use_item()
             return True
 
         elif event_type == const.TASK_SELL_ITEM:
             self.event_type = event_type
+            self._allow_none_item = False
             self._hide_all_item_obj()
             self._show_sell_item()
             return True
 
         elif event_type == const.TASK_HOLD_ITEM:
             self.event_type = event_type
+            self._allow_none_item = True
             self._hide_all_item_obj()
             self._show_hold_item()
             return True

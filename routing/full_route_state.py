@@ -283,10 +283,10 @@ class RouteState:
 
         inv = self.inventory
         existing_held = self.solo_pkmn.held_item
-        if existing_held and not consumed:
+        if existing_held is not None and existing_held != "None" and existing_held != const.NO_ITEM and not consumed:
             inv = inv.add_item(pkmn.gen_factory.current_gen_info().item_db().get_item(existing_held), 1)
         
-        if item_name is not None:
+        if item_name is not None and item_name != "None" and item_name != const.NO_ITEM:
             try:
                 inv = inv.remove_item(pkmn.gen_factory.current_gen_info().item_db().get_item(item_name), 1)
             except Exception as e:
