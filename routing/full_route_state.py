@@ -10,17 +10,17 @@ from routing.state_objects import Inventory, SoloPokemon
 logger = logging.getLogger(__name__)
 
 
-def _defeat_trainer(inventory:Inventory, solo_pkmn:SoloPokemon, trainer_obj:pkmn.universal_data_objects.Trainer):
+def _defeat_trainer(inventory:Inventory, solo_pkmn:SoloPokemon, trainer_obj:pkmn.universal_data_objects.Trainer, pay_day_amount):
     if trainer_obj is None:
         return inventory
     
     result = inventory._copy()
 
     reward_money = trainer_obj.money
-    if solo_pkmn.held_item == const.AMULETY_COIN_ITEM_NAME:
+    if solo_pkmn.held_item == const.AMULET_COIN_ITEM_NAME:
         reward_money *= 2
 
-    result.cur_money += reward_money
+    result.cur_money += reward_money + pay_day_amount
 
     fight_reward = pkmn.gen_factory.current_gen_info().get_fight_reward(trainer_obj.name)
     if fight_reward is not None:
@@ -248,12 +248,12 @@ class RouteState:
             inv
         ), error_message
 
-    def defeat_pkmn(self, enemy_pkmn:pkmn.universal_data_objects.EnemyPkmn, trainer_name=None, exp_split=1):
+    def defeat_pkmn(self, enemy_pkmn:pkmn.universal_data_objects.EnemyPkmn, trainer_name=None, exp_split=1, pay_day_amount=0):
         new_badges = self.badges.award_badge(trainer_name)
         return RouteState(
             _defeat_pkmn(self.solo_pkmn, enemy_pkmn, new_badges, exp_split),
             new_badges,
-            _defeat_trainer(self.inventory, self.solo_pkmn, pkmn.gen_factory.current_gen_info().trainer_db().get_trainer(trainer_name))
+            _defeat_trainer(self.inventory, self.solo_pkmn, pkmn.gen_factory.current_gen_info().trainer_db().get_trainer(trainer_name), pay_day_amount)
         ), ""
     
     def add_item(self, item_name, amount, is_purchase):

@@ -229,6 +229,8 @@ class EventDetails(ttk.Frame):
                 if new_trainer_def is None:
                     logger.error(f"Expected to get updated trainer def from battle summary controller, but got None instead")
                 else:
+                    new_trainer_def.exp_split = new_event.trainer_def.exp_split
+                    new_trainer_def.pay_day_amount = new_event.trainer_def.pay_day_amount
                     new_event.trainer_def = new_trainer_def
             
             new_event.notes = self.trainer_notes.get_event().notes

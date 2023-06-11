@@ -140,6 +140,7 @@ class BattleState(WatchForResetState):
         self._exp_split = []
         self._friendship_data = []
         self._battle_started = False
+        self._initial_money = 0
     
     def _on_enter(self, prev_state: State):
         self._defeated_trainer_mons = []
@@ -157,6 +158,12 @@ class BattleState(WatchForResetState):
         self._exp_split = []
         self._friendship_data = []
         self._battle_started = False
+        self._initial_money = self.machine._gamehook_client.get(gh_gen_two_const.KEY_PLAYER_MONEY).value
+        
+        logger.info(f"Entered battle. With trainer initially? {self.is_trainer_battle}")
+    
+
+    def _create_initial_trainer_event(self):
 
         if self.is_trainer_battle:
             self._exp_split = [set([0]) for _ in range(self.machine._gamehook_client.get(gh_gen_two_const.KEY_BATTLE_TRAINER_TOTAL_POKEMON).value)]
@@ -178,8 +185,6 @@ class BattleState(WatchForResetState):
             self.machine._queue_new_event(
                 EventDefinition(trainer_def=TrainerEventDefinition(self._trainer_name, custom_move_data=return_custom_move_data))
             )
-        
-        logger.info(f"Entered battle. With trainer? {self.is_trainer_battle}")
     
     def _on_exit(self, next_state: State):
         if next_state.state_type != StateType.RESETTING:
@@ -197,13 +202,17 @@ class BattleState(WatchForResetState):
                             const.ENEMY_KEY: {}
                         })
 
-                if final_exp_split is not None or return_custom_move_data is not None:
-                    self.machine._queue_new_event(
-                        EventDefinition(
-                            trainer_def=TrainerEventDefinition(self._trainer_name, exp_split=final_exp_split, custom_move_data=return_custom_move_data),
-                            notes=gh_gen_two_const.ROAR_FLAG
-                        )
+                self.machine._queue_new_event(
+                    EventDefinition(
+                        trainer_def=TrainerEventDefinition(
+                            self._trainer_name,
+                            exp_split=final_exp_split,
+                            custom_move_data=return_custom_move_data,
+                            pay_day_amount=self.machine._gamehook_client.get(gh_gen_two_const.KEY_PLAYER_MONEY).value - self._initial_money,
+                        ),
+                        notes=gh_gen_two_const.ROAR_FLAG
                     )
+                )
             if self._loss_detected:
                 if self.is_trainer_battle:
                     self.machine._queue_new_event(
@@ -253,16 +262,14 @@ class BattleState(WatchForResetState):
                 self._cached_mon_level = self.machine._gamehook_client.get(gh_gen_two_const.KEY_BATTLE_ENEMY_LEVEL).value
                 self._friendship_data.append(self.machine._gamehook_client.get(gh_gen_two_const.KEY_PLAYER_MON_FRIENDSHIP).value)
         elif new_prop.path == gh_gen_two_const.KEY_BATTLE_TEXT_BUFFER:
-            if self._trainer_name == "" and self.is_trainer_battle:
-                self._trainer_name = self.machine.gh_converter.trainer_name_convert(
-                    self.machine._gamehook_client.get(gh_gen_two_const.KEY_BATTLE_TRAINER_CLASS).value,
-                    self.machine._gamehook_client.get(gh_gen_two_const.KEY_BATTLE_TEXT_BUFFER).value,
-                    self.machine._gamehook_client.get(gh_gen_two_const.KEY_BATTLE_TRAINER_NUMBER).value,
-                )
-                self.machine._queue_new_event(
-                    EventDefinition(trainer_def=TrainerEventDefinition(self._trainer_name))
-                )
-                self._exp_split = [set([0]) for _ in range(self.machine._gamehook_client.get(gh_gen_two_const.KEY_BATTLE_TRAINER_TOTAL_POKEMON).value)]
+            if self._trainer_name == "":
+                self.is_trainer_battle = self.machine._gamehook_client.get(gh_gen_two_const.KEY_BATTLE_MODE).value == gh_gen_two_const.TRAINER_BATTLE_TYPE
+                logger.info(f"Trainer flag after waiting a bit? {self.is_trainer_battle}")
+                if self.is_trainer_battle:
+                    self._create_initial_trainer_event()
+                else:
+                    # Just fill it with jusnk so we stop querying this
+                    self._trainer_name = "WildMon"
         elif new_prop.path == gh_gen_two_const.KEY_BATTLE_PLAYER_MON_HP:
             player_mon_pos = self.machine._gamehook_client.get(gh_gen_two_const.KEY_BATTLE_PLAYER_MON_PARTY_POS).value
             if player_mon_pos == 0 and new_prop.value <= 0:

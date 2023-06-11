@@ -222,7 +222,8 @@ class Router:
             raise ValueError(f"Cannot remove EventItem objects: {cur_event.name}")
         
         if isinstance(cur_event, route_events.EventGroup) and cur_event.event_definition.trainer_def is not None:
-            self.defeated_trainers.remove(cur_event.event_definition.trainer_def.trainer_name)
+            if cur_event.event_definition.trainer_def.trainer_name in self.defeated_trainers:
+                self.defeated_trainers.remove(cur_event.event_definition.trainer_def.trainer_name)
         
         cur_event.parent.remove_child(cur_event)
         del self.event_lookup[cur_event.group_id]

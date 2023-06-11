@@ -11,7 +11,13 @@ class Gen1GameHookConstants:
     def __init__(self):
         self.RESET_FLAG = const.RECORDING_ERROR_FRAGMENT + "FLAG TO SIGNAL GAME RESET. USER SHOULD NEVER SEE THIS"
         self.TRAINER_LOSS_FLAG = const.RECORDING_ERROR_FRAGMENT + "FLAG TO SIGNAL LOSING TO TRAINER. USER SHOULD NEVER SEE THIS"
+        self.PAY_DAY_FLAG = const.RECORDING_ERROR_FRAGMENT + "FLAG TO HANDLE POTENTIAL PAY DAY REWARDS. USER SHOULD NEVER SEE THIS"
         self.OAKS_PARCEL = "Oak's Parcel"
+        self.VENDING_MACHINE_DRINKS = [
+            "Fresh Water",
+            "Soda Pop",
+            "Lemonade",
+        ]
         self.NUGGET = "Nugget"
         self.ROUTE_24 = "Route 24"
         self.NUGGET_ROCKET = "Rocket 6"

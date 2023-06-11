@@ -217,11 +217,20 @@ class Machine:
                 app_item_name = self.gh_converter.item_name_convert(cur_gained_item)
                 if app_item_name == gh_gen_one_const.OAKS_PARCEL:
                     continue
-                self._queue_new_event(
-                    EventDefinition(
-                        item_event_def=InventoryEventDefinition(app_item_name, cur_gain_num, True, purchase_expected)
+                elif app_item_name in gh_gen_one_const.VENDING_MACHINE_DRINKS:
+                    # vending machines have a dumb delay between giving you the item, and the actual money being given to the player
+                    # Just force any "pickups" of vending machine drinks to be purchases, since the only way to acquire these is by purchasing them
+                    self._queue_new_event(
+                        EventDefinition(
+                            item_event_def=InventoryEventDefinition(app_item_name, cur_gain_num, True, True)
+                        )
                     )
-                )
+                else:
+                    self._queue_new_event(
+                        EventDefinition(
+                            item_event_def=InventoryEventDefinition(app_item_name, cur_gain_num, True, purchase_expected)
+                        )
+                    )
                     
             if len(lost_items) > 0 and purchase_expected:
                 logger.error(f"Lost the following items when expecting to be gain items to purchasing... {lost_items}")
@@ -319,6 +328,22 @@ class Machine:
                         if cur_event.notes == gh_gen_one_const.TRAINER_LOSS_FLAG:
                             logger.info(f"Handling trainer loss: {cur_event.trainer_def.trainer_name}")
                             self._controller.lost_trainer_battle(cur_event.trainer_def.trainer_name)
+                            continue
+                        elif cur_event.notes == gh_gen_one_const.PAY_DAY_FLAG:
+                            test_obj = self._controller._controller.get_previous_event()
+                            while not self._controller.is_trainer_event(test_obj, cur_event.trainer_def.trainer_name):
+                                if test_obj is None:
+                                    break
+                                test_obj = self._controller._controller.get_previous_event(test_obj.group_id)
+                            
+                            if test_obj is None:
+                                logger.error(f"Failed to find trainer fight to update for exp split behavior")
+                            else:
+                                cur_event.notes = ""
+                                cur_event.trainer_def.pay_day_amount -= trainer.money
+                                logger.info(f"Updating pay day for trainer {cur_event.trainer_def.trainer_name} to {cur_event.trainer_def.pay_day_amount}")
+                                self._controller._controller.update_existing_event(test_obj.group_id, cur_event)
+                            
                             continue
                     elif None is not cur_event.item_event_def:
                         item = current_gen_info().item_db().get_item(cur_event.item_event_def.item_name)

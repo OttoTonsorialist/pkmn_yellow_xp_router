@@ -153,7 +153,7 @@ class LearnMoveEventDefinition:
 
 
 class TrainerEventDefinition:
-    def __init__(self, trainer_name, verbose_export=False, setup_moves=None, mimic_selection="", custom_move_data=None, enemy_setup_moves=None, exp_split=None, weather=const.WEATHER_NONE):
+    def __init__(self, trainer_name, verbose_export=False, setup_moves=None, mimic_selection="", custom_move_data=None, enemy_setup_moves=None, exp_split=None, weather=const.WEATHER_NONE, pay_day_amount=0):
         self.trainer_name = trainer_name
         self.verbose_export = verbose_export
         if setup_moves is None:
@@ -170,6 +170,7 @@ class TrainerEventDefinition:
             exp_split = []
         self.exp_split = exp_split
         self.weather = weather
+        self.pay_day_amount = pay_day_amount
 
     def serialize(self):
         return {
@@ -181,6 +182,7 @@ class TrainerEventDefinition:
             const.CUSTOM_MOVE_DATA: self.custom_move_data,
             const.EXP_SPLIT: self.exp_split,
             const.WEATHER: self.weather,
+            const.PAY_DAY_AMOUNT: self.pay_day_amount,
         }
     
     @staticmethod
@@ -207,6 +209,7 @@ class TrainerEventDefinition:
             enemy_setup_moves=raw_val.get(const.ENEMY_SETUP_MOVES_KEY),
             exp_split=raw_val.get(const.EXP_SPLIT),
             weather=raw_val.get(const.WEATHER, const.WEATHER_NONE),
+            pay_day_amount=raw_val.get(const.PAY_DAY_AMOUNT, 0),
         )
     
     def __str__(self):
@@ -484,7 +487,7 @@ class EventItem:
     """
     This class effectively functions as the conversion layer between EventDefinitions and the RouteState object.
     """
-    def __init__(self, parent, event_definition:EventDefinition, to_defeat_idx=None, cur_state=None, exp_split_num=1):
+    def __init__(self, parent, event_definition:EventDefinition, to_defeat_idx=None, cur_state=None, exp_split_num=1, pay_day_amount=0):
         global event_id_counter
         self.group_id = event_id_counter
         event_id_counter += 1
@@ -494,6 +497,7 @@ class EventItem:
         self.name = event_definition.get_item_label()
         self.to_defeat_idx = to_defeat_idx
         self.exp_split_num = exp_split_num
+        self.pay_day_amount = pay_day_amount
         self.event_definition:EventDefinition = event_definition
 
         self.init_state = None
@@ -536,7 +540,7 @@ class EventItem:
                     render_trainer_name = "TrainerPkmn" if self.event_definition.wild_pkmn_info.trainer_pkmn else "WildPkmn"
 
                 self.name = f"{render_trainer_name}: {enemy_team[self.to_defeat_idx].name}"
-                self.final_state, self.error_message = cur_state.defeat_pkmn(enemy_team[self.to_defeat_idx], trainer_name=defeated_trainer_name, exp_split=self.exp_split_num)
+                self.final_state, self.error_message = cur_state.defeat_pkmn(enemy_team[self.to_defeat_idx], trainer_name=defeated_trainer_name, exp_split=self.exp_split_num, pay_day_amount=self.pay_day_amount)
         elif None is not self.event_definition.rare_candy:
             # note: deliberatley ignoring amount here, that's handled at the group level
             # just apply one rare candy at the item level
@@ -677,7 +681,16 @@ class EventGroup:
                 else:
                     exp_split = self.event_definition.trainer_def.exp_split[pkmn_idx]
 
-                self.event_items.append(EventItem(self, self.event_definition, to_defeat_idx=pkmn_idx, cur_state=cur_state, exp_split_num=exp_split))
+                if (
+                    self.event_definition.wild_pkmn_info is not None or
+                    not isinstance(self.event_definition.trainer_def.pay_day_amount, int) or
+                    pkmn_idx != (len(pkmn_to_fight) - 1)
+                ):
+                    pay_day_amount = 0
+                else:
+                    pay_day_amount = self.event_definition.trainer_def.pay_day_amount
+
+                self.event_items.append(EventItem(self, self.event_definition, to_defeat_idx=pkmn_idx, cur_state=cur_state, exp_split_num=exp_split, pay_day_amount=pay_day_amount))
                 pkmn_counter[cur_pkmn.name] = pkmn_counter.get(cur_pkmn.name, 0) + 1
                 
                 next_state = self.event_items[-1].final_state

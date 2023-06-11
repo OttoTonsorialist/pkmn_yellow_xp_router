@@ -106,6 +106,7 @@ class Constants:
         self.CUSTOM_MOVE_DATA = "custom_move_data"
         self.EXP_SPLIT = "exp_split"
         self.WEATHER = "weather"
+        self.PAY_DAY_AMOUNT = "pay_day_amount"
         self.PLAYER_KEY = "player"
         self.ENEMY_KEY = "enemy"
 
@@ -324,7 +325,7 @@ class Constants:
         self.FUTURE_SIGHT_MOVE_NAME = "Future Sight"
         self.HIDDEN_POWER_MOVE_NAME = "Hidden Power"
         self.SOLAR_BEAM_MOVE_NAME = "SolarBeam"
-        self.AMULETY_COIN_ITEM_NAME = "Amulet Coin"
+        self.AMULET_COIN_ITEM_NAME = "Amulet Coin"
 
         self.TYPE_TYPELESS = "none"
         self.TYPE_NORMAL = "Normal"

@@ -118,6 +118,14 @@ class TrainerFightEditor(EventEditorBase):
         # just holding onto the name for convenience
         self._cur_trainer = None
         self._num_pkmn = 0
+        self._pay_day_frame = ttk.Frame(self)
+        self._pay_day_frame.grid(column=0, row=0, columnspan=6, sticky=tk.EW)
+        self._pay_day_label = ttk.Label(self._pay_day_frame, text="Pay Day Amount: ")
+        self._pay_day_label.grid(column=1, row=0)
+        self._pay_day_value = custom_components.SimpleEntry(self._pay_day_frame, callback=self._trigger_save)
+        self._pay_day_value.grid(column=2, row=0)
+        self._pay_day_frame.columnconfigure(0, weight=1, uniform="group")
+        self._pay_day_frame.columnconfigure(3, weight=1, uniform="group")
         self._all_pkmn = [PkmnViewer(self, font_size=10) for _ in range(6)]
         self._all_exp_labels = [ttk.Label(self, text="Exp Split:") for _ in range(6)]
         self._all_exp_splits = [
@@ -131,6 +139,12 @@ class TrainerFightEditor(EventEditorBase):
     @ignore_updates
     def load_event(self, event_def):
         self._cur_trainer = event_def.trainer_def.trainer_name
+        try:
+            pay_day_val = int(event_def.trainer_def.pay_day_amount)
+        except Exception:
+            pay_day_val = 0
+
+        self._pay_day_value.set(pay_day_val)
         enemy_pkmn = event_def.get_pokemon_list()
         self._num_pkmn = len(enemy_pkmn)
         cur_state:full_route_state.RouteState = self.editor_params.cur_state
@@ -148,7 +162,7 @@ class TrainerFightEditor(EventEditorBase):
             else:
                 speed_style = "Contrast"
 
-            row_idx = 2 * (idx // 3)
+            row_idx = (2 * (idx // 3)) + 1
             col_idx = 2 * (idx % 3)
 
             self._all_pkmn[idx].set_pkmn(cur_pkmn, speed_style=speed_style)
@@ -167,13 +181,19 @@ class TrainerFightEditor(EventEditorBase):
     
     def get_event(self):
         exp_split = [int(self._all_exp_splits[x].get()) for x in range(self._num_pkmn)]
-        return EventDefinition(trainer_def=TrainerEventDefinition(self._cur_trainer, exp_split=exp_split))
+        try:
+            pay_day_amount = int(self._pay_day_value.get())
+        except Exception:
+            pay_day_amount = 0
+        return EventDefinition(trainer_def=TrainerEventDefinition(self._cur_trainer, exp_split=exp_split, pay_day_amount=pay_day_amount))
     
     def enable(self):
+        self._pay_day_value.enable()
         for cur_split in self._all_exp_splits:
             cur_split.enable()
     
     def disable(self):
+        self._pay_day_value.disable()
         for cur_split in self._all_exp_splits:
             cur_split.disable()
 
@@ -438,7 +458,6 @@ class LearnMoveEditor(EventEditorBase):
         elif self._source.get() == const.MOVE_SOURCE_TUTOR:
             source = const.MOVE_SOURCE_TUTOR
         else:
-            logger.info(f"source: {self._source.get()}")
             source = self._item_selector.get()
 
         return EventDefinition(learn_move=LearnMoveEventDefinition(self._move, dest, source, level=self._level))

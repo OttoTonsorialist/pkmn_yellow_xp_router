@@ -1,8 +1,10 @@
 
 import math
-import copy
+import logging
 
 from utils.constants import const
+
+logger = logging.getLogger(__name__)
 
 
 STAT_MIN = 1
@@ -63,6 +65,9 @@ class LevelLookup:
         
         if not did_break:
             cur_level = 100
+        
+        if cur_level == 100:
+            return 100, 0
 
         return cur_level, req_exp - cur_xp
 

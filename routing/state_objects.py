@@ -181,6 +181,7 @@ class SoloPokemon:
         if const.DEBUG_MODE:
             logger.info(f"Gaining {gained_xp}, was at {self.cur_xp}, now at {self.cur_xp + gained_xp}. Before gain, needed {self.xp_to_next_level} TNL")
         self.cur_xp += gained_xp
+
         if gained_xp < self.xp_to_next_level:
             # gained xp did not cause a level up
             # just keep collecting unrealized stat xp, and keep track of new XP
@@ -189,23 +190,37 @@ class SoloPokemon:
             if const.DEBUG_MODE:
                 logger.info(f"NO level up ocurred, still need {self.xp_to_next_level} TNL")
         else:
-            # gained xp DID cause a level up
-            # realize ALL stat XP into new stats, reset unrealized stat XP, and then update level metadata
-            self.realized_stat_xp = self.realized_stat_xp.add(self.unrealized_stat_xp).add(gained_stat_xp)
-            self.unrealized_stat_xp = self._empty_stat_block
-
+            # either gained xp caused a level up
+            # or, we're at level 100
             level_info = pkmn.universal_utils.level_lookups[self.species_def.growth_rate].get_level_info(self.cur_xp)
             self.cur_level = level_info[0]
-            self.xp_to_next_level = level_info[1]
-            if const.DEBUG_MODE:
-                logger.info(f"Now level {self.cur_level}, {self.xp_to_next_level} TNL")
+
+            if self.cur_level == 100:
+                # level 100. We aren't technically gaining experience anymore, so just override the xp values
+                # keep track of stat xp, but have to rely on vitamins to "realize" them
+                self.cur_xp = pkmn.universal_utils.level_lookups[self.species_def.growth_rate].get_xp_for_level(100)
+                self.xp_to_next_level = 0
+                self.unrealized_stat_xp = self.unrealized_stat_xp.add(gained_stat_xp)
+                if const.DEBUG_MODE:
+                    logger.info(f"At level 100")
+            else:
+                # gained xp DID cause a level up
+                # realize ALL stat XP into new stats, reset unrealized stat XP, and then update level metadata
+                self.realized_stat_xp = self.realized_stat_xp.add(self.unrealized_stat_xp).add(gained_stat_xp)
+                self.unrealized_stat_xp = self._empty_stat_block
+                self.xp_to_next_level = level_info[1]
+                if const.DEBUG_MODE:
+                    logger.info(f"Now level {self.cur_level}, {self.xp_to_next_level} TNL")
         
         if const.DEBUG_MODE:
             logger.info(f"Realized StatXP {self.realized_stat_xp}")
             logger.info(f"Unrealized StatXP {self.unrealized_stat_xp}")
 
-        last_level_xp = pkmn.universal_utils.level_lookups[self.species_def.growth_rate].get_xp_for_level(self.cur_level)
-        self.percent_xp_to_next_level = f"{int((self.xp_to_next_level / (self.cur_xp + self.xp_to_next_level - last_level_xp)) * 100)} %"
+        if self.xp_to_next_level <= 0:
+            self.percent_xp_to_next_level = f"N/A"
+        else:
+            last_level_xp = pkmn.universal_utils.level_lookups[self.species_def.growth_rate].get_xp_for_level(self.cur_level)
+            self.percent_xp_to_next_level = f"{int((self.xp_to_next_level / (self.cur_xp + self.xp_to_next_level - last_level_xp)) * 100)} %"
         self.cur_stats = self.species_def.stats.calc_level_stats(self.cur_level, self.dvs, self.realized_stat_xp, badges)
     
     def __eq__(self, other):

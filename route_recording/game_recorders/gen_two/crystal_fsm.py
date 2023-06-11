@@ -414,6 +414,11 @@ class Machine:
                                 logger.error(f"Failed to find trainer fight to update for exp split behavior")
                             else:
                                 cur_event.notes = ""
+                                expected_money = trainer.money
+                                logger.info(f"held item: {test_obj.final_state.solo_pkmn.held_item}")
+                                if test_obj.final_state.solo_pkmn.held_item == const.AMULET_COIN_ITEM_NAME:
+                                    expected_money *= 2
+                                cur_event.trainer_def.pay_day_amount = max(0, cur_event.trainer_def.pay_day_amount - expected_money)
                                 self._controller._controller.update_existing_event(test_obj.group_id, cur_event)
                             
                             continue

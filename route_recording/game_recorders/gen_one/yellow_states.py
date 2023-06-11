@@ -113,6 +113,7 @@ class BattleState(WatchForResetState):
         self._waiting_for_items = False
         self._item_update_delay = 0
         self._loss_detected = False
+        self._initial_money = 0
     
     def _on_enter(self, prev_state: State):
         self._defeated_trainer_mons = []
@@ -122,6 +123,7 @@ class BattleState(WatchForResetState):
         self._item_update_delay = 0
         self.is_trainer_battle = self.machine._gamehook_client.get(gh_gen_one_const.KEY_BATTLE_TYPE).value == gh_gen_one_const.TRAINER_BATTLE_TYPE
         self._loss_detected = False
+        self._initial_money = self.machine._gamehook_client.get(gh_gen_one_const.KEY_PLAYER_MONEY).value
 
         if self.is_trainer_battle:
             self._trainer_name = self.machine.gh_converter.trainer_name_convert(
@@ -148,6 +150,16 @@ class BattleState(WatchForResetState):
                 for trainer_mon_event in self._defeated_trainer_mons:
                     self.machine._queue_new_event(trainer_mon_event)
                 self.machine._queue_new_event(EventDefinition(blackout=BlackoutEventDefinition()))
+            elif self._trainer_name:
+                self.machine._queue_new_event(
+                    EventDefinition(
+                        trainer_def=TrainerEventDefinition(
+                            self._trainer_name,
+                            pay_day_amount=self.machine._gamehook_client.get(gh_gen_one_const.KEY_PLAYER_MONEY).value - self._initial_money
+                        ),
+                        notes=gh_gen_one_const.PAY_DAY_FLAG
+                    )
+                )
             if self._waiting_for_items:
                 self.machine._item_cache_update()
 
@@ -236,6 +248,7 @@ class InventoryChangeState(WatchForResetState):
             # stupid hack for vending machines (listening for the rumble)
             # vending machines are the only purchase in the game that deducts your money _after_ the item is added
             # and it does it after that very long sound effect too. wait for the sound effect to finish
+            # NOTE: this doesn't work 100% of the time, so we have helper code in the cache update function too
             if self.machine._gamehook_client.get(gh_gen_one_const.KEY_AUDIO_CHANNEL_7).value != 168:
                 if self._seconds_delay <= 0:
                     return StateType.OVERWORLD
