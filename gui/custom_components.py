@@ -258,8 +258,8 @@ class CheckboxLabel(ttk.Frame):
         self._checkbox.configure(state="disabled")
 
 class SimpleOptionMenu(ttk.Combobox):
-    def __init__(self, root, option_list, callback=None, default_val=None, **kwargs):
-        self._val = tk.StringVar()
+    def __init__(self, root, option_list, callback=None, default_val=None, var_name=None, **kwargs):
+        self._val = tk.StringVar(name=var_name)
         self.cur_options = option_list
 
         if default_val is None:

@@ -107,6 +107,7 @@ class Constants:
         self.EXP_SPLIT = "exp_split"
         self.WEATHER = "weather"
         self.PAY_DAY_AMOUNT = "pay_day_amount"
+        self.MON_ORDER = "mon_order"
         self.PLAYER_KEY = "player"
         self.ENEMY_KEY = "enemy"
 

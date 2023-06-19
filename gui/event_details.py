@@ -231,6 +231,7 @@ class EventDetails(ttk.Frame):
                 else:
                     new_trainer_def.exp_split = new_event.trainer_def.exp_split
                     new_trainer_def.pay_day_amount = new_event.trainer_def.pay_day_amount
+                    new_trainer_def.mon_order = new_event.trainer_def.mon_order
                     new_event.trainer_def = new_trainer_def
             
             new_event.notes = self.trainer_notes.get_event().notes

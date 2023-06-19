@@ -1,8 +1,11 @@
 
+import logging
 from typing import Dict, List
 from routing.full_route_state import RouteState
 from utils.constants import const
 from pkmn.gen_factory import current_gen_info
+
+logger = logging.getLogger(__name__)
 
 event_id_counter = 0
 
@@ -153,7 +156,7 @@ class LearnMoveEventDefinition:
 
 
 class TrainerEventDefinition:
-    def __init__(self, trainer_name, verbose_export=False, setup_moves=None, mimic_selection="", custom_move_data=None, enemy_setup_moves=None, exp_split=None, weather=const.WEATHER_NONE, pay_day_amount=0):
+    def __init__(self, trainer_name, verbose_export=False, setup_moves=None, mimic_selection="", custom_move_data=None, enemy_setup_moves=None, exp_split=None, weather=const.WEATHER_NONE, pay_day_amount=0, mon_order=None):
         self.trainer_name = trainer_name
         self.verbose_export = verbose_export
         if setup_moves is None:
@@ -171,6 +174,9 @@ class TrainerEventDefinition:
         self.exp_split = exp_split
         self.weather = weather
         self.pay_day_amount = pay_day_amount
+        if mon_order is None:
+            mon_order = []
+        self.mon_order = mon_order
 
     def serialize(self):
         return {
@@ -183,6 +189,7 @@ class TrainerEventDefinition:
             const.EXP_SPLIT: self.exp_split,
             const.WEATHER: self.weather,
             const.PAY_DAY_AMOUNT: self.pay_day_amount,
+            const.MON_ORDER: self.mon_order,
         }
     
     @staticmethod
@@ -210,6 +217,7 @@ class TrainerEventDefinition:
             exp_split=raw_val.get(const.EXP_SPLIT),
             weather=raw_val.get(const.WEATHER, const.WEATHER_NONE),
             pay_day_amount=raw_val.get(const.PAY_DAY_AMOUNT, 0),
+            mon_order=raw_val.get(const.MON_ORDER),
         )
     
     def __str__(self):
@@ -317,10 +325,28 @@ class EventDefinition:
             return [wild_pkmn for _ in range(self.wild_pkmn_info.quantity)]
         
         trainer = self.get_trainer_obj()
-        if trainer is not None:
+        if trainer is None:
+            return []
+
+        if self.trainer_def is None or not self.trainer_def.mon_order:
             return trainer.pkmn
+
+        result = []
+        # 1-based, because the values are user-facing
+        order_idx = 1
+        while order_idx <= len(self.trainer_def.mon_order):
+            for lookup_idx, test_idx in enumerate(self.trainer_def.mon_order):
+                if order_idx == test_idx:
+                    result.append(trainer.pkmn[lookup_idx])
+                    break
+            order_idx += 1
         
-        return []
+        if len(result) != len(trainer.pkmn):
+            logger.error(f"Failed to properly reorder mons! Mon list: {trainer.pkmn}")
+            logger.error(f"Desired mon order: {self.trainer_def.mon_order}")
+            logger.error(f"Resulting ordered mons: {result}")
+
+        return result
     
     def get_event_type(self):
         if self.rare_candy is not None:

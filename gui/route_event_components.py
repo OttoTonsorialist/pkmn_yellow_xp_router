@@ -113,6 +113,7 @@ class NotesEditor(EventEditorBase):
 
 
 class TrainerFightEditor(EventEditorBase):
+    VAR_COUNTER = 0
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         # just holding onto the name for convenience
@@ -131,6 +132,17 @@ class TrainerFightEditor(EventEditorBase):
         self._all_exp_splits = [
             custom_components.SimpleOptionMenu(self, option_list=[1, 2, 3, 4, 5, 6], callback=self._trigger_save) for _ in range(6)
         ]
+        self._all_order_labels = [ttk.Label(self, text="Mon Order") for _ in range(6)]
+        self._all_order_menus = [
+            custom_components.SimpleOptionMenu(
+                self,
+                option_list=[1, 2, 3, 4, 5, 6],
+                callback=self._reorder_mons,
+                var_name=f"TRAINER_MON_{self.VAR_COUNTER}_{idx}"
+            ) for idx in range(6)
+        ]
+        self._order_menu_lookup = {x._val._name: x for x in self._all_order_menus}
+        self.VAR_COUNTER += 1
 
     @ignore_updates
     def configure(self, editor_params, save_callback=None):
@@ -149,6 +161,7 @@ class TrainerFightEditor(EventEditorBase):
         self._num_pkmn = len(enemy_pkmn)
         cur_state:full_route_state.RouteState = self.editor_params.cur_state
 
+        order_values = list(range(1, len(enemy_pkmn) + 1))
         idx = -1
         for idx, cur_pkmn in enumerate(enemy_pkmn):
             if cur_state is not None:
@@ -162,40 +175,114 @@ class TrainerFightEditor(EventEditorBase):
             else:
                 speed_style = "Contrast"
 
-            row_idx = (2 * (idx // 3)) + 1
+            row_idx = (3 * (idx // 3)) + 1
             col_idx = 2 * (idx % 3)
 
             self._all_pkmn[idx].set_pkmn(cur_pkmn, speed_style=speed_style)
             self._all_pkmn[idx].grid(row=row_idx, column=col_idx, columnspan=2, padx=5, pady=5)
+
             self._all_exp_labels[idx].grid(row=row_idx + 1, column=col_idx, padx=2, pady=(5, 10))
             if event_def.trainer_def.exp_split and len(event_def.trainer_def.exp_split) > idx:
                 self._all_exp_splits[idx].set(event_def.trainer_def.exp_split[idx])
             else:
                 self._all_exp_splits[idx].set(1)
             self._all_exp_splits[idx].grid(row=row_idx + 1, column=col_idx + 1, padx=2, pady=(5, 10))
+
+            self._all_order_labels[idx].grid(row=row_idx + 2, column=col_idx, padx=2, pady=(5, 10))
+            self._all_order_menus[idx].new_values(order_values)
+            if event_def.trainer_def.mon_order and len(event_def.trainer_def.mon_order) > idx:
+                self._all_order_menus[idx].set(event_def.trainer_def.mon_order[idx])
+            else:
+                self._all_order_menus[idx].set(idx + 1)
+            self._all_order_menus[idx].grid(row=row_idx + 2, column=col_idx + 1, padx=2, pady=(5, 10))
+
         
         for missing_idx in range(idx+1, 6):
             self._all_pkmn[missing_idx].grid_forget()
             self._all_exp_labels[missing_idx].grid_forget()
             self._all_exp_splits[missing_idx].grid_forget()
+            self._all_order_labels[missing_idx].grid_forget()
+            self._all_order_menus[missing_idx].grid_forget()
+    
+    def _reorder_mons(self, updated_name, _, cmd):
+        if self._ignoring_updates:
+            return
+
+        self._ignoring_updates = True
+        try:
+            # the use case for this is that we have one value, changed by the user
+            # every other value is presumed to already be in order
+            # so we should have something like this
+
+            # user adjusted val 4 => 2
+            # other vals: 1, 2, 3, 5, 6
+
+            # so we have two goals. Push every mon after the new target val up
+            # but also push every mon after the original val down
+            # the easiest way to solve this is to acknowledge that the list is already sorted, except for the new value
+            # so we extract the original ordering of the list (sans the user adjusted val)
+            # then we blindly reassign the new ordered val, while skipping over the adjusted val (as it it already correct)
+
+            # collect every other dropdown menu, in order based on the current ordering
+            # remember that all the ordering values are 1-based
+            ordered_elements = []
+            names_ordered = []
+            found_elements = {updated_name}
+            while len(found_elements) < self._num_pkmn:
+                cur_min = self._num_pkmn + 1
+                min_el = None
+                for cur_name, cur_menu in self._order_menu_lookup.items():
+                    if cur_name in found_elements:
+                        continue
+                    test_val = int(cur_menu.get())
+                    if test_val < cur_min:
+                        min_el = cur_name
+                        cur_min = test_val
+            
+                ordered_elements.append(self._order_menu_lookup[min_el])
+                names_ordered.append(min_el)
+                found_elements.add(min_el)
+
+            # figure out the value that the user changed to
+            adjusted_val = int(self._order_menu_lookup[updated_name].get())
+
+            # now that we have every drop down in order, reset every value, starting from 1
+            new_order_idx = 1
+            while new_order_idx < (self._num_pkmn + 1):
+                if new_order_idx == adjusted_val:
+                    new_order_idx += 1
+                    continue
+                
+                ordered_elements.pop(0).set(new_order_idx)
+                new_order_idx += 1
+            
+        finally:
+            self._ignoring_updates = False
+        
+        self._trigger_save()
     
     def get_event(self):
         exp_split = [int(self._all_exp_splits[x].get()) for x in range(self._num_pkmn)]
+        mon_order = [int(self._all_order_menus[x].get()) for x in range(self._num_pkmn)]
         try:
             pay_day_amount = int(self._pay_day_value.get())
         except Exception:
             pay_day_amount = 0
-        return EventDefinition(trainer_def=TrainerEventDefinition(self._cur_trainer, exp_split=exp_split, pay_day_amount=pay_day_amount))
+        return EventDefinition(trainer_def=TrainerEventDefinition(self._cur_trainer, exp_split=exp_split, pay_day_amount=pay_day_amount, mon_order=mon_order))
     
     def enable(self):
         self._pay_day_value.enable()
         for cur_split in self._all_exp_splits:
             cur_split.enable()
+        for cur_order in self._all_order_menus:
+            cur_order.enable()
     
     def disable(self):
         self._pay_day_value.disable()
         for cur_split in self._all_exp_splits:
             cur_split.disable()
+        for cur_order in self._all_order_menus:
+            cur_order.disable()
 
 
 class VitaminEditor(EventEditorBase):
