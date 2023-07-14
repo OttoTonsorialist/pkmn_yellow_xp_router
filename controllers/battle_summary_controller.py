@@ -53,6 +53,7 @@ class BattleSummaryController:
     def __init__(self):
         self._refresh_events = []
         self._nonload_change_events = []
+        self._ignore_accuracy = False
 
         # trainer object data that we don't actually use, but need to hang on to to properly re-create events
         self._trainer_name = None
@@ -115,6 +116,10 @@ class BattleSummaryController:
     ######
     # Methods that induce a state change
     ######
+
+    def update_ignore_accuracy(self, new_value):
+        self._ignore_accuracy = new_value
+        self._full_refresh()
 
     def update_mimic_selection(self, new_value):
         self._mimic_selection = new_value
@@ -334,10 +339,20 @@ class BattleSummaryController:
             weather=self._weather
         )
         if normal_ranges is not None and crit_ranges is not None:
+            if self._ignore_accuracy:
+                accuracy = 100
+            else:
+                accuracy = move.accuracy
+                if accuracy is None:
+                    accuracy = 100
+
+            accuracy = float(accuracy) / 100.0
+
             kill_ranges = find_kill(
                 normal_ranges,
                 crit_ranges,
                 current_gen_info().get_crit_rate(attacking_mon, move),
+                accuracy,
                 defending_mon.cur_stats.hp
             )
         else:
@@ -449,6 +464,9 @@ class BattleSummaryController:
     ######
     # Methods that do not induce a state change
     ######
+
+    def do_ignore_accuracy(self) -> bool:
+        return self._ignore_accuracy
 
     def get_trainer_definition(self) -> TrainerEventDefinition:
         if not self._trainer_name:

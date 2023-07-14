@@ -49,7 +49,10 @@ class BattleSummary(ttk.Frame):
         self.enemy_setup_moves.grid(row=1, column=0, sticky=tk.EW)
 
         self.weather_status = WeatherSummary(self._weather_half, callback=self._weather_callback)
-        self.weather_status.grid(row=0, column=0, sticky=tk.EW, padx=2, pady=2)
+        self.weather_status.grid(row=0, column=0, sticky=tk.EW, padx=2, pady=(0, 2))
+
+        self.ignore_accuracy = custom_components.CheckboxLabel(self._weather_half, text="Ignore Accuracy for Kill %'s", toggle_command=self._ignore_accuracy_callback, flip=True)
+        self.ignore_accuracy.grid(row=1, column=0, sticky=tk.EW, padx=2)
 
         self._mon_pairs:List[MonPairSummary] = []
 
@@ -77,7 +80,10 @@ class BattleSummary(ttk.Frame):
         self.should_render = True
         self._on_full_refresh()
     
-    def _weather_callback(self, *wargs, **kwargs):
+    def _ignore_accuracy_callback(self, *args, **kwargs):
+        self._controller.update_ignore_accuracy(self.ignore_accuracy.is_checked())
+    
+    def _weather_callback(self, *args, **kwargs):
         self._controller.update_weather(self.weather_status.get_weather())
         
     def _player_setup_move_callback(self, *args, **kwargs):

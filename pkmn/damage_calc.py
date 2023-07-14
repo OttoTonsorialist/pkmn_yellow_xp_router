@@ -1,5 +1,8 @@
 import math
+import logging
 from typing import Dict, Tuple
+
+logger = logging.getLogger(__name__)
 
 
 class DamageRange:
@@ -169,28 +172,24 @@ def _percent_rolls_kill_recursive(
     return result
 
 
-def find_kill(damage_range:DamageRange, crit_damage_range:DamageRange, crit_chance:float, target_hp:int, attack_depth:int=8, percent_cutoff:float=0.1):
+def find_kill(damage_range:DamageRange, crit_damage_range:DamageRange, crit_chance:float, accuracy:float, target_hp:int, attack_depth:int=8, percent_cutoff:float=0.1):
     # NOTE: if attack_depth is too deep, (10+ is where I started to notice the issues), you quickly get overflow issues
     result = []
 
-    min_possible_damage = min(damage_range.min_damage, crit_damage_range.min_damage)
     max_possible_damage = max(damage_range.max_damage, crit_damage_range.max_damage)
     highest_found_kill_pct = 0
     memoization = {}
+    hits_to_kill_table = {}
 
     # this is a quick and dirty way to ignore calculating psywave, which has vastly more possible rolls, and thus takes much longer to calculate
     if len(damage_range) <= 200:
         for cur_num_attacks in range(1, attack_depth + 1):
             if (max_possible_damage * cur_num_attacks) < target_hp:
                 continue
-            elif (min_possible_damage * cur_num_attacks) >= target_hp:
-                highest_found_kill_pct = 100
-                result.append((cur_num_attacks, 100))
-                break
 
             # a kill is possible, but not guaranteed
-            # find the exact kill percent
-            cur_total_kill_pct = 0
+            # find the exact kill percent if all swings actually hit
+            all_hits_kill_pct = 0
             for cur_num_crits in range(cur_num_attacks + 1):
                 # get the kill percent for this exact combination of crits + non-crits
                 kill_percent = percent_rolls_kill(
@@ -204,21 +203,34 @@ def find_kill(damage_range:DamageRange, crit_damage_range:DamageRange, crit_chan
 
                 # and multiply that kill percent by the probability of actually getting
                 # this combination of crits + non-crits
-                cur_total_kill_pct += (
+                all_hits_kill_pct += (
                     kill_percent *
                     math.comb(cur_num_attacks, cur_num_crits) *
                     math.pow(crit_chance, cur_num_crits) *
                     math.pow(1 - crit_chance, cur_num_attacks - cur_num_crits)
                 )
             
+            # store this in the lookup table for probability of killing on this many successful hits
+            hits_to_kill_table[cur_num_attacks] = all_hits_kill_pct
+
+            cur_total_kill_pct = 0
+            # now, iterate through all possiblities of getting however many hits
+            for cur_num_hits in range(1, cur_num_attacks + 1):
+                cur_total_kill_pct += (
+                    hits_to_kill_table.get(cur_num_hits, 0) *
+                    math.comb(cur_num_attacks, cur_num_hits) *
+                    math.pow(accuracy, cur_num_hits) *
+                    math.pow(1 - accuracy, cur_num_attacks - cur_num_hits)
+                )
+
             highest_found_kill_pct = cur_total_kill_pct
             if cur_total_kill_pct > percent_cutoff:
                 result.append((cur_num_attacks, cur_total_kill_pct))
-            if cur_total_kill_pct > 99.99:
+            if cur_total_kill_pct > 99:
                 break
     
-    if highest_found_kill_pct < 99:
+    if highest_found_kill_pct < 99 and highest_found_kill_pct < round(accuracy * 100):
         # if we haven't found close enough to a kill, get the guaranteed kill
-        result.append((math.ceil(target_hp / damage_range.min_damage), -1))
+        result.append((math.ceil(target_hp / damage_range.min_damage), round(accuracy * 100)))
     
     return result
