@@ -345,7 +345,7 @@ class MainController:
     def get_preview_event(self):
         return self._current_preview_event
 
-    def get_event_by_id(self, event_id):
+    def get_event_by_id(self, event_id) -> EventGroup:
         return self._data.get_event_obj(event_id)
     
     def has_errors(self):
@@ -412,7 +412,7 @@ class MainController:
 
         return self._selected_ids[0]
     
-    def get_single_selected_event_obj(self, allow_event_items=True):
+    def get_single_selected_event_obj(self, allow_event_items=True) -> EventGroup:
         return self.get_event_by_id(
             self.get_single_selected_event_id(allow_event_items=allow_event_items)
         )

@@ -269,6 +269,10 @@ class EnemyPkmn:
         stat_xp:StatBlock,
         badges:BadgeList,
         held_item:str=None,
+        custom_move_data:Dict[str, Dict[str, str]]=None,
+        exp_split:int=1,
+        mon_order:int=1,
+        definition_order:int=1,
     ):
         self.name = name
         self.level = level
@@ -280,6 +284,10 @@ class EnemyPkmn:
         self.stat_xp = stat_xp
         self.badges = badges
         self.held_item = held_item
+        self.custom_move_data = custom_move_data
+        self.exp_split = exp_split
+        self.mon_order = mon_order
+        self.definition_order = definition_order
 
     def __eq__(self, other):
         if not isinstance(other, EnemyPkmn):

@@ -37,10 +37,10 @@ class CurrentGen:
     def get_recorder_client(self, recorder_controller:RecorderController) -> RecorderGameHookClient:
         raise NotImplementedError()
     
-    def create_trainer_pkmn(self, pkmn_name, pkmn_level):
+    def create_trainer_pkmn(self, pkmn_name, pkmn_level) -> universal_data_objects.EnemyPkmn:
         raise NotImplementedError()
 
-    def create_wild_pkmn(self, pkmn_name, pkmn_level):
+    def create_wild_pkmn(self, pkmn_name, pkmn_level) -> universal_data_objects.EnemyPkmn:
         raise NotImplementedError()
     
     def calculate_damage(self,

@@ -1,6 +1,6 @@
 from __future__ import annotations
 from dataclasses import dataclass
-import os
+import copy
 import logging
 from typing import Dict, List, Tuple
 from pkmn.damage_calc import DamageRange, find_kill
@@ -56,7 +56,6 @@ class BattleSummaryController:
 
         # trainer object data that we don't actually use, but need to hang on to to properly re-create events
         self._trainer_name = None
-        self._exp_split = None
 
         # actual state used to calculate battle stats
         self._original_player_mon_list:List[EnemyPkmn] = []
@@ -67,6 +66,7 @@ class BattleSummaryController:
         self._mimic_options:List[str] = []
         self._player_mimic_selection:str = ""
         self._custom_move_data:List[Dict[str, Dict[str, str]]] = []
+        self._cached_definition_order = []
         self._weather = None
 
         # NOTE: all of the state above this comment is considered the "true" state
@@ -159,7 +159,6 @@ class BattleSummaryController:
 
     def update_weather(self, new_weather):
         self._weather = new_weather
-        logger.info(f"weather is set to: {self._weather}")
         self._full_refresh()
 
     def update_enemy_setup_moves(self, new_setup_moves):
@@ -365,18 +364,19 @@ class BattleSummaryController:
         trainer_obj = event_group.event_definition.get_trainer_obj()
 
         self._trainer_name = trainer_def.trainer_name
-        self._exp_split = trainer_def.exp_split
         self._weather = trainer_def.weather
         self._mimic_selection = trainer_def.mimic_selection
         self._player_setup_move_list = trainer_def.setup_moves.copy()
         self._player_stage_modifier = self._calc_stage_modifier(self._player_setup_move_list)
         self._enemy_setup_move_list = trainer_def.enemy_setup_moves.copy()
         self._enemy_stage_modifier = self._calc_stage_modifier(self._enemy_setup_move_list)
-        self._custom_move_data = trainer_def.custom_move_data.copy()
-        if not self._custom_move_data:
+        self._cached_definition_order = [x.mon_order - 1 for x in event_group.event_definition.get_pokemon_list(definition_order=True)]
+        if not trainer_def.custom_move_data:
             self._custom_move_data = []
             for _ in range(len(trainer_obj.pkmn)):
                 self._custom_move_data.append({const.PLAYER_KEY: {}, const.ENEMY_KEY: {}})
+        else:
+            self._custom_move_data = [copy.deepcopy(x.custom_move_data) for x in event_group.event_definition.get_pokemon_list()]
 
         self._original_player_mon_list = []
         self._original_enemy_mon_list = []
@@ -384,7 +384,7 @@ class BattleSummaryController:
         # NOTE: kind of weird, but basically we want to iterate over all the pokemon we want to fight, and then get the appropriate
         # event item for fighting that pokemon. This allows us to pull learned moves/levelups/etc automatically
         cur_item_idx = 0
-        for cur_pkmn in trainer_obj.pkmn:
+        for cur_pkmn in event_group.event_definition.get_pokemon_list():
             while cur_item_idx < len(event_group.event_items):
                 cur_event_item = event_group.event_items[cur_item_idx]
                 cur_item_pkmn_list = cur_event_item.event_definition.get_pokemon_list()
@@ -413,12 +413,12 @@ class BattleSummaryController:
             return
 
         self._trainer_name = trainer_name
-        self._exp_split = None
         self._weather = const.WEATHER_NONE
         self._mimic_selection = ""
         self._player_setup_move_list = []
         self._enemy_setup_move_list = []
         self._custom_move_data = []
+        self._cached_definition_order = list(range(len(enemy_mons)))
         for _ in range(len(enemy_mons)):
             self._custom_move_data.append({const.PLAYER_KEY: {}, const.ENEMY_KEY: {}})
 
@@ -436,7 +436,6 @@ class BattleSummaryController:
     
     def load_empty(self):
         self._trainer_name = ""
-        self._exp_split = None
         self._weather = const.WEATHER_NONE
         self._mimic_selection = ""
         self._player_setup_move_list = []
@@ -444,6 +443,7 @@ class BattleSummaryController:
         self._custom_move_data = []
         self._original_player_mon_list = []
         self._original_enemy_mon_list = []
+        self._cached_definition_order = []
         self._full_refresh(is_load=True)
 
     ######
@@ -454,11 +454,16 @@ class BattleSummaryController:
         if not self._trainer_name:
             return None
 
-        final_custom_move_data = None
+        is_custom_move_data_present = False
         for cur_test in self._custom_move_data:
             if len(cur_test[const.PLAYER_KEY]) > 0 or len(cur_test[const.ENEMY_KEY]) > 0:
-                final_custom_move_data = self._custom_move_data
+                is_custom_move_data_present = True
                 break
+        
+        if is_custom_move_data_present:
+            final_custom_move_data = [self._custom_move_data[x] for x in self._cached_definition_order]
+        else:
+            final_custom_move_data = None
 
         return TrainerEventDefinition(
             self._trainer_name,
@@ -466,7 +471,6 @@ class BattleSummaryController:
             enemy_setup_moves=self._enemy_setup_move_list,
             mimic_selection=self._mimic_selection,
             custom_move_data=final_custom_move_data,
-            exp_split=self._exp_split,
             weather=self._weather
         )
     

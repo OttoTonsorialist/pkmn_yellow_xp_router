@@ -128,6 +128,7 @@ class TrainerFightEditor(EventEditorBase):
         self._pay_day_frame.columnconfigure(0, weight=1, uniform="group")
         self._pay_day_frame.columnconfigure(3, weight=1, uniform="group")
         self._all_pkmn = [PkmnViewer(self, font_size=10) for _ in range(6)]
+        self._cached_definition_order = []
         self._all_exp_labels = [ttk.Label(self, text="Exp Split:") for _ in range(6)]
         self._all_exp_splits = [
             custom_components.SimpleOptionMenu(self, option_list=[1, 2, 3, 4, 5, 6], callback=self._trigger_save) for _ in range(6)
@@ -157,13 +158,15 @@ class TrainerFightEditor(EventEditorBase):
             pay_day_val = 0
 
         self._pay_day_value.set(pay_day_val)
-        enemy_pkmn = event_def.get_pokemon_list()
-        self._num_pkmn = len(enemy_pkmn)
-        cur_state:full_route_state.RouteState = self.editor_params.cur_state
+        enemy_pkmn_ordered = event_def.get_pokemon_list()
+        self._num_pkmn = len(enemy_pkmn_ordered)
+        order_values = list(range(1, len(enemy_pkmn_ordered) + 1))
 
-        order_values = list(range(1, len(enemy_pkmn) + 1))
+        self._cached_definition_order = [x.mon_order - 1 for x in event_def.get_pokemon_list(definition_order=True)]
+
+        cur_state:full_route_state.RouteState = self.editor_params.cur_state
         idx = -1
-        for idx, cur_pkmn in enumerate(enemy_pkmn):
+        for idx, cur_pkmn in enumerate(enemy_pkmn_ordered):
             if cur_state is not None:
                 if cur_state.solo_pkmn.cur_stats.speed > cur_pkmn.cur_stats.speed:
                     speed_style = "Success"
@@ -182,18 +185,12 @@ class TrainerFightEditor(EventEditorBase):
             self._all_pkmn[idx].grid(row=row_idx, column=col_idx, columnspan=2, padx=5, pady=5)
 
             self._all_exp_labels[idx].grid(row=row_idx + 1, column=col_idx, padx=2, pady=(5, 10))
-            if event_def.trainer_def.exp_split and len(event_def.trainer_def.exp_split) > idx:
-                self._all_exp_splits[idx].set(event_def.trainer_def.exp_split[idx])
-            else:
-                self._all_exp_splits[idx].set(1)
+            self._all_exp_splits[idx].set(cur_pkmn.exp_split)
             self._all_exp_splits[idx].grid(row=row_idx + 1, column=col_idx + 1, padx=2, pady=(5, 10))
 
             self._all_order_labels[idx].grid(row=row_idx + 2, column=col_idx, padx=2, pady=(5, 10))
             self._all_order_menus[idx].new_values(order_values)
-            if event_def.trainer_def.mon_order and len(event_def.trainer_def.mon_order) > idx:
-                self._all_order_menus[idx].set(event_def.trainer_def.mon_order[idx])
-            else:
-                self._all_order_menus[idx].set(idx + 1)
+            self._all_order_menus[idx].set(cur_pkmn.mon_order)
             self._all_order_menus[idx].grid(row=row_idx + 2, column=col_idx + 1, padx=2, pady=(5, 10))
 
         
@@ -203,6 +200,7 @@ class TrainerFightEditor(EventEditorBase):
             self._all_exp_splits[missing_idx].grid_forget()
             self._all_order_labels[missing_idx].grid_forget()
             self._all_order_menus[missing_idx].grid_forget()
+            self._all_order_menus[missing_idx].set(-1)
     
     def _reorder_mons(self, updated_name, _, cmd):
         if self._ignoring_updates:
@@ -235,6 +233,8 @@ class TrainerFightEditor(EventEditorBase):
                     if cur_name in found_elements:
                         continue
                     test_val = int(cur_menu.get())
+                    if test_val == -1:
+                        continue
                     if test_val < cur_min:
                         min_el = cur_name
                         cur_min = test_val
@@ -260,10 +260,12 @@ class TrainerFightEditor(EventEditorBase):
             self._ignoring_updates = False
         
         self._trigger_save()
+        self.load_event(self.get_event())
     
     def get_event(self):
-        exp_split = [int(self._all_exp_splits[x].get()) for x in range(self._num_pkmn)]
-        mon_order = [int(self._all_order_menus[x].get()) for x in range(self._num_pkmn)]
+        exp_split = [int(self._all_exp_splits[x].get()) for x in self._cached_definition_order]
+        mon_order = [int(self._all_order_menus[x].get()) for x in self._cached_definition_order]
+
         try:
             pay_day_amount = int(self._pay_day_value.get())
         except Exception:

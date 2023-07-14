@@ -21,6 +21,7 @@ class EventDetails(ttk.Frame):
         self._controller = controller
         self._battle_summary_controller = BattleSummaryController()
         self._prev_selected_tab = None
+        self._ignore_tab_switching = False
 
         self.notebook_holder = ttk.Frame(self)
         self.tabbed_states = ttk.Notebook(self.notebook_holder)
@@ -152,10 +153,19 @@ class EventDetails(ttk.Frame):
             self.state_pre_viewer.set_state(self._controller.get_init_state())
             self.badge_boost_viewer.set_state(self._controller.get_init_state())
             self.state_post_viewer.set_state(self._controller.get_final_state())
+            self.battle_summary_frame.set_team(None)
         else:
             self.state_pre_viewer.set_state(event_group.init_state)
             self.badge_boost_viewer.set_state(event_group.init_state)
             self.state_post_viewer.set_state(event_group.final_state)
+            if event_group.event_definition.trainer_def is not None:
+                self.battle_summary_frame.set_team(
+                    event_group.event_definition.get_pokemon_list(),
+                    cur_state=event_group.init_state,
+                    event_group=event_group
+                )
+            else:
+                self.battle_summary_frame.set_team(None)
     
     def _handle_selection(self, *args, **kwargs):
         event_group = self._controller.get_single_selected_event_obj()
@@ -173,7 +183,7 @@ class EventDetails(ttk.Frame):
             if isinstance(trainer_event_group, EventItem):
                 trainer_event_group = trainer_event_group.parent
             
-            if self.auto_change_tab_checkbox.is_checked():
+            if self._ignore_tab_switching or self.auto_change_tab_checkbox.is_checked():
                 if trainer_event_group.event_definition.trainer_def is not None:
                     self.tabbed_states.select(self.battle_summary_tab_index)
                 else:
@@ -199,7 +209,7 @@ class EventDetails(ttk.Frame):
         else:
             self.trainer_notes.load_event(event_def)
             if event_def.trainer_def is not None:
-                self.battle_summary_frame.set_team(event_def.get_trainer_obj().pkmn, cur_state=init_state, event_group=event_group)
+                self.battle_summary_frame.set_team(event_def.get_pokemon_list(), cur_state=init_state, event_group=event_group)
             else:
                 self.battle_summary_frame.set_team(None)
 

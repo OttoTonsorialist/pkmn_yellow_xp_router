@@ -1,5 +1,6 @@
 
 import logging
+import copy
 from typing import Dict, List
 from routing.full_route_state import RouteState
 from utils.constants import const
@@ -317,7 +318,7 @@ class EventDefinition:
                 self._wild_pkmn = current_gen_info().create_wild_pkmn(self.wild_pkmn_info.name, self.wild_pkmn_info.level)
         return self._wild_pkmn
     
-    def get_pokemon_list(self):
+    def get_pokemon_list(self, definition_order=False):
         wild_pkmn = self.get_wild_pkmn()
         if wild_pkmn is not None:
             # NOTE: technically bad, it's just multiple references to the same object
@@ -328,23 +329,35 @@ class EventDefinition:
         if trainer is None:
             return []
 
-        if self.trainer_def is None or not self.trainer_def.mon_order:
+        if self.trainer_def is None:
             return trainer.pkmn
+        
+        if not self.trainer_def.mon_order or definition_order:
+            mon_order = list(range(1, len(trainer.pkmn) + 1))
+        else:
+            mon_order = self.trainer_def.mon_order
 
         result = []
         # 1-based, because the values are user-facing
         order_idx = 1
-        while order_idx <= len(self.trainer_def.mon_order):
-            for lookup_idx, test_idx in enumerate(self.trainer_def.mon_order):
+        while order_idx <= len(mon_order):
+            for lookup_idx, test_idx in enumerate(mon_order):
                 if order_idx == test_idx:
-                    result.append(trainer.pkmn[lookup_idx])
+                    cur_result = copy.copy(trainer.pkmn[lookup_idx])
+                    if len(self.trainer_def.custom_move_data) > lookup_idx:
+                        cur_result.custom_move_data = self.trainer_def.custom_move_data[lookup_idx]
+                    if len(self.trainer_def.exp_split) > lookup_idx:
+                        cur_result.exp_split = self.trainer_def.exp_split[lookup_idx]
+
+                    if len(self.trainer_def.mon_order) > lookup_idx:
+                        cur_result.mon_order = self.trainer_def.mon_order[lookup_idx]
+                    else:
+                        cur_result.mon_order = order_idx
+
+                    cur_result.definition_order = lookup_idx
+                    result.append(cur_result)
                     break
             order_idx += 1
-        
-        if len(result) != len(trainer.pkmn):
-            logger.error(f"Failed to properly reorder mons! Mon list: {trainer.pkmn}")
-            logger.error(f"Desired mon order: {self.trainer_def.mon_order}")
-            logger.error(f"Resulting ordered mons: {result}")
 
         return result
     
