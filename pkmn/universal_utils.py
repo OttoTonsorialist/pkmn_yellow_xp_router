@@ -37,6 +37,35 @@ def xp_needed_for_level(target_level, growth_rate):
     elif growth_rate == const.GROWTH_RATE_SLOW:
         result = (5 * (target_level ** 3)) / 4
         return math.floor(result)
+    elif growth_rate == const.GROWTH_RATE_ERRATIC:
+        if target_level < 50:
+            result = ((target_level ** 3) * (100 - target_level)) / 50
+            return math.floor(result)
+        elif target_level < 68:
+            result = ((target_level ** 3) * (150 - target_level)) / 100
+            return math.floor(result)
+        elif target_level < 98:
+            result = target_level ** 3
+            result *= math.floor((1911 - (10 * target_level)) / 3)
+            result /= 500
+            return math.floor(result)
+        else:
+            result = ((target_level ** 3) * (160 - target_level)) / 100
+            return math.floor(result)
+    elif growth_rate == const.GROWTH_RATE_FLUCTUATING:
+        if target_level < 15:
+            result = target_level ** 3
+            partial = math.floor((target_level + 1) / 3)
+            result = (result * (partial + 24)) / 50
+            return math.floor(result)
+        elif target_level < 36:
+            result = ((target_level ** 3) * (target_level + 14)) / 50
+            return math.floor(result)
+        else:
+            result = target_level ** 3
+            partial = math.floor(target_level / 2)
+            result = (result * (partial + 32)) / 50
+            return math.floor(result)
 
     raise ValueError(f"Unknown growth rate: {growth_rate}")
 
@@ -76,4 +105,6 @@ level_lookups = {
     const.GROWTH_RATE_MEDIUM_FAST: LevelLookup(const.GROWTH_RATE_MEDIUM_FAST),
     const.GROWTH_RATE_MEDIUM_SLOW: LevelLookup(const.GROWTH_RATE_MEDIUM_SLOW),
     const.GROWTH_RATE_SLOW: LevelLookup(const.GROWTH_RATE_SLOW),
+    const.GROWTH_RATE_ERRATIC: LevelLookup(const.GROWTH_RATE_ERRATIC),
+    const.GROWTH_RATE_FLUCTUATING: LevelLookup(const.GROWTH_RATE_FLUCTUATING),
 }

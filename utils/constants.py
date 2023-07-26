@@ -122,6 +122,8 @@ class Constants:
         self.GROWTH_RATE_MEDIUM_FAST = "growth_medium_fast"
         self.GROWTH_RATE_MEDIUM_SLOW = "growth_medium_slow"
         self.GROWTH_RATE_SLOW = "growth_slow"
+        self.GROWTH_RATE_ERRATIC = "growth_erratic"
+        self.GROWTH_RATE_FLUCTUATING = "growth_fluctuating"
 
         self.HP_UP = "HP Up"
         self.CARBOS = "Carbos"
