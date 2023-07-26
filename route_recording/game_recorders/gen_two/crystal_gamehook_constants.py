@@ -1,7 +1,7 @@
 import logging
 
 from utils.constants import const
-from pkmn.pkmn_db import MoveDB
+from pkmn.pkmn_db import sanitize_string
 
 logger = logging.getLogger(__name__)
 
@@ -186,19 +186,19 @@ class Gen2GameHookConstants:
 class GameHookConstantConverter:
     def __init__(self):
         self._game_vitamins = [
-            MoveDB.sanitize_move_name("HP UP"),
-            MoveDB.sanitize_move_name("PROTEIN"),
-            MoveDB.sanitize_move_name("IRON"),
-            MoveDB.sanitize_move_name("CARBOS"),
-            MoveDB.sanitize_move_name("CALCIUM"),
+            sanitize_string("HP UP"),
+            sanitize_string("PROTEIN"),
+            sanitize_string("IRON"),
+            sanitize_string("CARBOS"),
+            sanitize_string("CALCIUM"),
         ]
-        self._game_rare_candy = MoveDB.sanitize_move_name("RARE CANDY")
+        self._game_rare_candy = sanitize_string("RARE CANDY")
     
     def is_game_vitamin(self, item_name):
-        return MoveDB.sanitize_move_name(item_name) in self._game_vitamins
+        return sanitize_string(item_name) in self._game_vitamins
     
     def is_game_rare_candy(self, item_name):
-        return MoveDB.sanitize_move_name(item_name) == self._game_rare_candy
+        return sanitize_string(item_name) == self._game_rare_candy
     
     def is_game_tm(self, item_name):
         return item_name.startswith("TM")

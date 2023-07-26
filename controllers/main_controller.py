@@ -3,7 +3,7 @@ import os
 import logging
 from typing import List, Tuple
 import tkinter
-from pkmn.pkmn_db import MoveDB
+from pkmn.pkmn_db import sanitize_string
 
 from utils.constants import const
 from routing.route_events import EventDefinition, EventFolder, EventGroup, EventItem, LearnMoveEventDefinition, TrainerEventDefinition
@@ -472,9 +472,9 @@ class MainController:
             state = self.get_final_state()
         
         move_idx = None
-        move_name = MoveDB.sanitize_move_name(move_name)
+        move_name = sanitize_string(move_name)
         for cur_idx, cur_move in enumerate(state.solo_pkmn.move_list):
-            if MoveDB.sanitize_move_name(cur_move) == move_name:
+            if sanitize_string(cur_move) == move_name:
                 move_idx = cur_idx
                 break
         

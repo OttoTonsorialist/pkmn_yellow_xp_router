@@ -6,6 +6,12 @@ from utils.constants import const
 from pkmn import universal_data_objects
 
 
+def sanitize_string(string:str):
+    if not isinstance(string, str):
+        return string
+    return ''.join([x for x in string if x.isalnum()]).lower()
+
+
 class MinBattlesDB:
     def __init__(self, path):
         self._path = path
@@ -23,7 +29,7 @@ class MinBattlesDB:
 
 class PkmnDB:
     def __init__(self, data:Dict[str, universal_data_objects.PokemonSpecies]):
-        self._data = data
+        self._data = {sanitize_string(x.name): x for x in data.values()}
     
     def validate_moves(self, move_db:MoveDB):
         invalid_mons = []
@@ -53,36 +59,34 @@ class PkmnDB:
             raise ValueError(f"Invalid mons detected with unsupported types: {invalid_mons}")
     
     def get_all_names(self) -> List[str]:
-        return list(self._data.keys())
+        return [x.name for x in self._data.values()]
     
     def get_pkmn(self, name:str) -> universal_data_objects.PokemonSpecies:
+        name = sanitize_string(name)
         if name is None:
             return None
 
         if name in self._data:
             return self._data.get(name)
         
-        for test_name in self.get_all_names():
-            if name.lower() == test_name.lower():
-                return self._data.get(test_name)
-        
         return None
     
     def get_filtered_names(self, filter_val=None) -> List[str]:
+        orig_filter_fal = filter_val
         if filter_val is None:
             return self.get_all_names()
         
-        filter_val = filter_val.lower()
-        result = [x for x in self._data.keys() if filter_val in x.lower()]
+        filter_val = sanitize_string(filter_val)
+        result = [v.name for k, v in self._data.items() if filter_val in k]
         if not result:
-            result = [f"No Match: '{filter_val}'"]
+            result = [f"No Match: '{orig_filter_fal}'"]
         
         return result
 
 
 class TrainerDB:
     def __init__(self, data:Dict[str, universal_data_objects.Trainer]):
-        self._data = data
+        self._data = {sanitize_string(x.name): x for x in data.values()}
         self.loc_oriented_trainers:Dict[str, List[str]] = {}
         self.class_oriented_trainers:Dict[str, List[str]] = {}
 
@@ -111,7 +115,7 @@ class TrainerDB:
             raise ValueError(f"Invalid trainers found with invalid mons/moves: {invalid_trainers}")
     
     def get_trainer(self, trainer_name):
-        return self._data.get(trainer_name)
+        return self._data.get(sanitize_string(trainer_name))
     
     def get_all_locations(self):
         return list(self.loc_oriented_trainers.keys())
@@ -145,7 +149,7 @@ class TrainerDB:
 
 class ItemDB:
     def __init__(self, data:Dict[str, universal_data_objects.BaseItem]):
-        self._data = data
+        self._data = {sanitize_string(x.name): x for x in data.values()}
         self.mart_items = {}
         self.key_items = []
         self.tms = []
@@ -178,6 +182,7 @@ class ItemDB:
             raise ValueError(f"Found TM/HM(s) with invalid moves: {invalid_tms_hms}")
     
     def get_item(self, item_name):
+        item_name = sanitize_string(item_name)
         if item_name is None:
             return None
 
@@ -192,7 +197,7 @@ class ItemDB:
     
     def get_filtered_names(self, item_type=const.ITEM_TYPE_ALL_ITEMS, source_mart=const.ITEM_TYPE_ALL_ITEMS):
         if item_type == const.ITEM_TYPE_ALL_ITEMS and source_mart == const.ITEM_TYPE_ALL_ITEMS:
-            return list(self._data.keys())
+            return [x.name for x in self._data.values()]
         elif item_type == const.ITEM_TYPE_ALL_ITEMS:
             return self.mart_items[source_mart]
         elif source_mart == const.ITEM_TYPE_ALL_ITEMS:
@@ -215,8 +220,8 @@ class ItemDB:
 
 class MoveDB:
     def __init__(self, data:Dict[str, universal_data_objects.Move]):
-        self._data = {self.sanitize_move_name(x.name): x for x in data.values()}
-        self.stat_mod_moves = {}
+        self._data = {sanitize_string(x.name): x for x in data.values()}
+        self.stat_mod_moves:Dict[str, universal_data_objects.Move] = {}
 
         # doing some weird stuff to make sure boosting moves appear at the top
         stat_reduction_moves = {}
@@ -232,9 +237,9 @@ class MoveDB:
 
             if cur_stat_mods:
                 if is_reduction:
-                    self.stat_mod_moves[self.sanitize_move_name(cur_move.name)] = cur_stat_mods
+                    self.stat_mod_moves[sanitize_string(cur_move.name)] = cur_stat_mods
                 else:
-                    stat_reduction_moves[self.sanitize_move_name(cur_move.name)] = cur_stat_mods
+                    stat_reduction_moves[sanitize_string(cur_move.name)] = cur_stat_mods
 
         self.stat_mod_moves.update(stat_reduction_moves)
     
@@ -247,14 +252,8 @@ class MoveDB:
         if len(invalid_moves) > 0:
             raise ValueError(f"Detected moves with invalid types: {invalid_moves}")
     
-    @staticmethod
-    def sanitize_move_name(string:str):
-        if not isinstance(string, str):
-            return string
-        return ''.join([x for x in string if x.isalnum()]).lower()
-    
     def get_move(self, move_name):
-        move_name = self.sanitize_move_name(move_name)
+        move_name = sanitize_string(move_name)
 
         if move_name is None:
             return None
@@ -270,10 +269,10 @@ class MoveDB:
     
     def get_filtered_names(self, filter=None, include_delete_move=False):
         if filter is None:
-            result = list(self._data.keys())
+            result = [x.name for x in self._data.values()]
         else:
             result = []
-            filter = self.sanitize_move_name(filter)
+            filter = sanitize_string(filter)
             for test_name, test_move in self._data.items():
                 if filter in test_name.lower():
                     result.append(test_move.name)
@@ -284,11 +283,11 @@ class MoveDB:
             else:
                 result.append(const.NO_MOVE)
         elif include_delete_move:
-            if filter in self.sanitize_move_name(const.DELETE_MOVE):
+            if filter in sanitize_string(const.DELETE_MOVE):
                 result.append(const.DELETE_MOVE)
         
         return result
     
     def get_stat_mod(self, move_name) -> List[Tuple[str, int]]:
-        return self.stat_mod_moves.get(self.sanitize_move_name(move_name), [])
+        return self.stat_mod_moves.get(sanitize_string(move_name), [])
 
