@@ -16,12 +16,17 @@ logger = logging.getLogger(__name__)
 class GameHookProperty: 
     def __init__(self, client:GameHookClient, data:dict) -> None:
         self._client = client
+        # these values are mandatory, and thus are treated as such
         self.path = data["path"]
-        self.address = data["address"]
-        self.length = data["size"]
         self.value = data["value"]
         self.bytes_value = data["bytes"]
-        self.frozen = data["frozen"]
+
+        # this value is used for additional validation if present, but is not mandatory
+        self.length = data.get("size")
+
+        # these values are potentially useful, but not used at all in the code currently. Fine if they are missing
+        self.address = data.get("address")
+        self.frozen = data.get("frozen")
     
     """
     TODO: though documented in the API, this is not yet supported
@@ -30,7 +35,7 @@ class GameHookProperty:
     """
 
     def set_bytes(self, new_bytes, freeze):
-        if len(new_bytes) != self.length:
+        if self.length is not None and len(new_bytes) != self.length:
             raise ValueError(f"Cannot set bytes for {self.path} with length {len(new_bytes)}. Must be length {self.length}")
         elif not all([isinstance(x, int) for x in new_bytes]):
             raise ValueError(f"Cannot set bytes for {self.path}, when values are not all ints. Value is: {new_bytes}")
