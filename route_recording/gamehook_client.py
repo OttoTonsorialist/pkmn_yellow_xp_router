@@ -16,13 +16,14 @@ logger = logging.getLogger(__name__)
 class GameHookProperty: 
     def __init__(self, client:GameHookClient, data:dict) -> None:
         self._client = client
+
         # these values are mandatory, and thus are treated as such
         self.path = data["path"]
         self.value = data["value"]
-        self.bytes_value = data["bytes"]
+        self.bytes_value = data.get("bytes")
 
         # this value is used for additional validation if present, but is not mandatory
-        self.length = data.get("size")
+        self.length = data.get("size", data.get("length"))
 
         # these values are potentially useful, but not used at all in the code currently. Fine if they are missing
         self.address = data.get("address")

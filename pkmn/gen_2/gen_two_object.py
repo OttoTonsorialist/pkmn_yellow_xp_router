@@ -136,7 +136,7 @@ class GenTwo(CurrentGen):
             version_name = self._version_name
 
         if version_name == const.CRYSTAL_VERSION:
-            return CrystalRecorder(recorder_controller, "Pokemon Crystal")
+            return CrystalRecorder(recorder_controller, ["Pokemon Crystal"])
 
         raise NotImplementedError()
 

@@ -127,8 +127,8 @@ class GenOne(CurrentGen):
             version_name = self._version_name
 
         if version_name == const.YELLOW_VERSION:
-            return YellowRecorder(recorder_controller, "Pokemon Yellow")
-        return RedBlueRecorder(recorder_controller, "Pokemon Red and Blue")
+            return YellowRecorder(recorder_controller, ["Pokemon Yellow"])
+        return RedBlueRecorder(recorder_controller, ["Pokemon Red and Blue", "Pokemon Red/Blue"])
 
     def create_trainer_pkmn(self, pkmn_name, pkmn_level):
         return pkmn_utils.instantiate_trainer_pokemon(self._pkmn_db.get_pkmn(pkmn_name), pkmn_level)

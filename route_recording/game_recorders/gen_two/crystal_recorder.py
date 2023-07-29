@@ -1,5 +1,6 @@
 from __future__ import annotations
 import logging
+from typing import List
 from route_recording.game_recorders.gen_two.crystal_fsm import Machine
 
 import route_recording.recorder
@@ -11,8 +12,8 @@ logger = logging.getLogger(__name__)
 
 
 class CrystalRecorder(route_recording.recorder.RecorderGameHookClient):
-    def __init__(self, controller:route_recording.recorder.RecorderGameHookClient, expected_name:str):
-        super().__init__(controller, expected_name)
+    def __init__(self, controller:route_recording.recorder.RecorderGameHookClient, expected_names:List[str]):
+        super().__init__(controller, expected_names)
 
         self._machine = Machine(controller, self, GameHookConstantConverter())
         """

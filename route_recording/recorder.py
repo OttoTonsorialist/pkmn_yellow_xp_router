@@ -256,16 +256,16 @@ class RecorderController:
 
 
 class RecorderGameHookClient(GameHookClient):
-    def __init__(self, controller:RecorderController, expected_name:str):
+    def __init__(self, controller:RecorderController, expected_names:List[str]):
         # TODO: use a config value for gamehook url so that users can configure if needed
         super().__init__(clear_callbacks_on_load=True)
         self._controller = controller
-        self._expected_name = expected_name
+        self._expected_names = expected_names
     
     def on_mapper_loaded(self):
         game_name = self.meta.get("gameName")
-        logger.info(f"Successfully loaded mapper. Got gameName: {game_name}, to be validated against: {self._expected_name} (result: {game_name == self._expected_name})")
-        if game_name == self._expected_name:
+        logger.info(f"Successfully loaded mapper. Got gameName: {game_name}, to be validated against: {self._expected_names} (result: {game_name in self._expected_names})")
+        if game_name in self._expected_names:
             self._controller.set_ready(True)
             self._controller.set_status(const.RECORDING_STATUS_READY)
         else:
