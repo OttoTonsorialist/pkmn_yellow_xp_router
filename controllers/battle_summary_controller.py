@@ -3,13 +3,14 @@ from dataclasses import dataclass
 import copy
 import logging
 from typing import Dict, List, Tuple
+from controllers.main_controller import MainController
 from pkmn.damage_calc import DamageRange, find_kill
 from pkmn.universal_data_objects import BadgeList, EnemyPkmn, Move, StageModifiers
 from routing.full_route_state import RouteState
 from routing.state_objects import SoloPokemon
 
 from utils.constants import const
-from routing.route_events import EventGroup, TrainerEventDefinition
+from routing.route_events import EventDefinition, EventGroup, RareCandyEventDefinition, TrainerEventDefinition
 from pkmn.gen_factory import current_gen_info
 
 logger = logging.getLogger(__name__)
@@ -50,13 +51,15 @@ class PkmnRenderInfo:
 
 
 class BattleSummaryController:
-    def __init__(self):
+    def __init__(self, main_controller:MainController):
+        self._main_controller = main_controller
         self._refresh_events = []
         self._nonload_change_events = []
         self._ignore_accuracy = False
 
         # trainer object data that we don't actually use, but need to hang on to to properly re-create events
         self._trainer_name = None
+        self._event_group_id = None
 
         # actual state used to calculate battle stats
         self._original_player_mon_list:List[EnemyPkmn] = []
@@ -174,6 +177,28 @@ class BattleSummaryController:
         self._player_setup_move_list = new_setup_moves
         self._full_refresh()
     
+    def update_prefight_candies(self, num_candies):
+        if self._event_group_id is None:
+            return
+        
+        prev_event = self._main_controller.get_previous_event(self._event_group_id, enabled_only=True)
+        if prev_event is None or prev_event.event_definition is None or prev_event.event_definition.rare_candy is None:
+            # If num_candies is 0 and we don't have a number to update, don't create a pointless "use 0 candies" event
+            if num_candies <= 0:
+                return
+            self._main_controller.new_event(
+                EventDefinition(rare_candy=RareCandyEventDefinition(amount=num_candies)),
+                insert_before=self._event_group_id,
+                do_select=False
+            )
+        else:
+            self._main_controller.update_existing_event(
+                prev_event.group_id,
+                EventDefinition(rare_candy=RareCandyEventDefinition(amount=num_candies)),
+            )
+        
+        self._full_refresh()
+    
     def _update_best_move_inplace(self, pkmn_idx, is_player_mon):
         # NOTE: this is a helper function that induces a state change, but does not directly (or indirectly) trigger any events
         # If you call this function, it is your responsibility to properly trigger an appropriate event independently
@@ -263,7 +288,6 @@ class BattleSummaryController:
                 #####
                 self._player_move_data[mon_idx].append(cur_player_move_data)
                 self._enemy_move_data[mon_idx].append(cur_enemy_move_data)
-            
 
             #####
             # Finally out of move data loop. Update best moves
@@ -375,6 +399,7 @@ class BattleSummaryController:
             self.load_empty()
             return
 
+        self._event_group_id = event_group.group_id
         trainer_def = event_group.event_definition.trainer_def
         trainer_obj = event_group.event_definition.get_trainer_obj()
 
@@ -427,6 +452,7 @@ class BattleSummaryController:
             self.load_empty()
             return
 
+        self._event_group_id = None
         self._trainer_name = trainer_name
         self._weather = const.WEATHER_NONE
         self._mimic_selection = ""
@@ -450,6 +476,7 @@ class BattleSummaryController:
         self._full_refresh(is_load=True)
     
     def load_empty(self):
+        self._event_group_id = None
         self._trainer_name = ""
         self._weather = const.WEATHER_NONE
         self._mimic_selection = ""
@@ -554,3 +581,17 @@ class BattleSummaryController:
             result = result.apply_stat_mod(current_gen_info().move_db().get_stat_mod(cur_move))
         
         return result
+    
+    def can_support_prefight_candies(self):
+        return self._event_group_id is not None
+    
+    def get_prefight_candy_count(self):
+        if self._event_group_id is None:
+            return 0
+        
+        prev_event = self._main_controller.get_previous_event(self._event_group_id, enabled_only=True)
+        if prev_event is None or prev_event.event_definition.rare_candy is None:
+            return 0
+        
+        return prev_event.event_definition.rare_candy.amount
+        

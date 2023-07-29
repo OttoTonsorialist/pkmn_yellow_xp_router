@@ -167,7 +167,7 @@ class MainController:
         self._on_event_preview()
 
     @handle_exceptions
-    def update_existing_event(self, event_group_id, new_event):
+    def update_existing_event(self, event_group_id:int, new_event:EventDefinition):
         self._data.replace_event_group(event_group_id, new_event)
         self._on_event_change()
 
@@ -280,10 +280,11 @@ class MainController:
         self._on_route_change()
 
     @handle_exceptions
-    def new_event(self, event_def, insert_after=None, dest_folder_name=const.ROOT_FOLDER_NAME):
-        result = self._data.add_event_object(event_def=event_def, insert_after=insert_after, dest_folder_name=dest_folder_name)
+    def new_event(self, event_def:EventDefinition, insert_after:int=None, insert_before:int=None, dest_folder_name=const.ROOT_FOLDER_NAME, do_select=True):
+        result = self._data.add_event_object(event_def=event_def, insert_after=insert_after, insert_before=insert_before, dest_folder_name=dest_folder_name)
         self._on_route_change()
-        self.select_new_events([result])
+        if do_select:
+            self.select_new_events([result])
         return result
 
     @handle_exceptions

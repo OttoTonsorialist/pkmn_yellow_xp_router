@@ -19,7 +19,7 @@ class EventDetails(ttk.Frame):
         super().__init__(*args, **kwargs, width=self.state_summary_width)
 
         self._controller = controller
-        self._battle_summary_controller = BattleSummaryController()
+        self._battle_summary_controller = BattleSummaryController(self._controller)
         self._prev_selected_tab = None
         self._ignore_tab_switching = False
 

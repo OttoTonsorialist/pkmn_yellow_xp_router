@@ -48,11 +48,14 @@ class BattleSummary(ttk.Frame):
         self.enemy_setup_moves = SetupMovesSummary(self._setup_half, callback=self._enemy_setup_move_callback, is_player=False)
         self.enemy_setup_moves.grid(row=1, column=0, sticky=tk.EW)
 
+        self.candy_summary = PrefightCandySummary(self._weather_half, callback=self._candy_callback)
+        self.candy_summary.grid(row=0, column=0, sticky=tk.EW, padx=10, pady=(0, 2))
+
         self.weather_status = WeatherSummary(self._weather_half, callback=self._weather_callback)
-        self.weather_status.grid(row=0, column=0, sticky=tk.EW, padx=2, pady=(0, 2))
+        self.weather_status.grid(row=0, column=1, sticky=tk.EW, padx=2, pady=(0, 2))
 
         self.ignore_accuracy = custom_components.CheckboxLabel(self._weather_half, text="Ignore Accuracy for Kill %'s", toggle_command=self._ignore_accuracy_callback, flip=True)
-        self.ignore_accuracy.grid(row=1, column=0, sticky=tk.EW, padx=2)
+        self.ignore_accuracy.grid(row=1, column=1, sticky=tk.EW, padx=2)
 
         self._mon_pairs:List[MonPairSummary] = []
 
@@ -86,6 +89,9 @@ class BattleSummary(ttk.Frame):
     def _weather_callback(self, *args, **kwargs):
         self._controller.update_weather(self.weather_status.get_weather())
         
+    def _candy_callback(self, *args, **kwargs):
+        self._controller.update_prefight_candies(self.candy_summary.get_prefight_candy_count())
+        
     def _player_setup_move_callback(self, *args, **kwargs):
         self._controller.update_player_setup_moves(self.setup_moves._move_list.copy())
 
@@ -109,6 +115,11 @@ class BattleSummary(ttk.Frame):
         if not self.should_render:
             return
 
+        self.candy_summary.set_candy_count(self._controller.get_prefight_candy_count())
+        if not self._controller.can_support_prefight_candies():
+            self.candy_summary.disable()
+        else:
+            self.candy_summary.enable()
         self.weather_status.set_weather(self._controller.get_weather())
         self.setup_moves.set_move_list(self._controller.get_player_setup_moves())
         self.enemy_setup_moves.set_move_list(self._controller.get_enemy_setup_moves())
@@ -217,6 +228,43 @@ class WeatherSummary(ttk.Frame):
     
     def get_weather(self):
         return self.weather_dropdown.get()
+
+
+class PrefightCandySummary(ttk.Frame):
+    def __init__(self, *args, callback=None, **kwargs):
+        super().__init__(*args, **kwargs)
+        self._outer_callback = callback
+        self._loading = False
+
+        self.label = ttk.Label(self, text="Prefight Candies:")
+        self.label.grid(row=0, column=0, padx=2)
+
+        self.candy_count = custom_components.AmountEntry(self, min_val=0, init_val=0, callback=self._callback, width=5)
+        self.candy_count.grid(row=0, column=1, padx=2)
+    
+    def _callback(self, *args, **kwargs):
+        if self._loading:
+            return
+        
+        if self._outer_callback is not None:
+            self._outer_callback()
+    
+    def set_candy_count(self, new_amount):
+        self._loading = True
+        self.candy_count.set(new_amount)
+        self._loading = False
+    
+    def get_prefight_candy_count(self):
+        try:
+            return int(self.candy_count.get())
+        except Exception:
+            return 0
+    
+    def disable(self):
+        self.candy_count.disable()
+    
+    def enable(self):
+        self.candy_count.enable()
 
 
 class MonPairSummary(ttk.Frame):

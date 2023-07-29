@@ -750,6 +750,10 @@ class EventGroup:
                 cur_state = next_state
         
         elif self.event_definition.rare_candy is not None:
+            if self.event_definition.rare_candy.amount <= 0:
+                #  if there are no candies, create a dummy empty notes event just to keep things happy
+                self.event_items.append(EventItem(self, EventDefinition(), cur_state=cur_state))
+
             for _ in range(self.event_definition.rare_candy.amount):
                 self.event_items.append(EventItem(self, self.event_definition, cur_state=cur_state))
                 # TODO: duplicated logic for handling level up moves. How can this be unified?
@@ -885,17 +889,24 @@ class EventFolder:
         if force_recalculation:
             self.apply(self.init_state)
     
-    def insert_child_after(self, child_obj, after_obj=None):
-        if after_obj is None:
+    def insert_child_after(self, child_obj, after_obj=None, before_obj=None):
+        if after_obj is None and before_obj is None:
             self.add_child(child_obj=child_obj)
         
-        else:
+        elif after_obj is not None:
             try:
                 insert_idx = self.children.index(after_obj)
                 self.children.insert(insert_idx + 1, child_obj)
                 child_obj.parent = self
             except Exception as e:
-                raise ValueError(f"Could not find object to insert before: {after_obj}")
+                raise ValueError(f"Could not find object to insert after: {after_obj}")
+        else:
+            try:
+                insert_idx = self.children.index(before_obj)
+                self.children.insert(insert_idx, child_obj)
+                child_obj.parent = self
+            except Exception as e:
+                raise ValueError(f"Could not find object to insert before: {before_obj}")
 
     def move_child(self, child_obj, move_up_flag):
         try:

@@ -161,6 +161,7 @@ class Router:
         self,
         event_def:route_events.EventDefinition=None,
         new_folder_name=None,
+        insert_before=None,
         insert_after=None,
         dest_folder_name=const.ROOT_FOLDER_NAME,
         recalc=True,
@@ -178,6 +179,12 @@ class Router:
                 raise ValueError("Cannot insert an object into the middle of a group")
 
             parent_obj = insert_after_obj.parent
+        elif insert_before is not None:
+            insert_before_obj = self.get_event_obj(insert_before)
+            if isinstance(insert_before_obj, route_events.EventItem):
+                raise ValueError("Cannot insert an object into the middle of a group")
+
+            parent_obj = insert_before_obj.parent
         else:
             try:
                 parent_obj = self.folder_lookup[dest_folder_name]
@@ -202,7 +209,7 @@ class Router:
             new_obj = route_events.EventGroup(parent_obj, event_def)
         
         self.event_lookup[new_obj.group_id] = new_obj
-        parent_obj.insert_child_after(new_obj, after_obj=self.get_event_obj(insert_after))
+        parent_obj.insert_child_after(new_obj, after_obj=self.get_event_obj(insert_after), before_obj=self.get_event_obj(insert_before))
         if recalc:
             self._recalc()
         
