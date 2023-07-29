@@ -149,8 +149,9 @@ class BattleState(WatchForResetState):
                     self.machine._queue_new_event(EventDefinition(item_event_def=InventoryEventDefinition(gh_gen_one_const.NUGGET, 1, True, False)))
                 for trainer_mon_event in self._defeated_trainer_mons:
                     self.machine._queue_new_event(trainer_mon_event)
-                # second super special case. If we lose to the rival 1 fight, just skip
-                self.machine._queue_new_event(EventDefinition(blackout=BlackoutEventDefinition()))
+                # second super special case. If we lose to the rival lab fight, the blackout doesn't actually happen
+                if self._trainer_name not in gh_gen_one_const.RIVAL_LAB_FIGHTS:
+                    self.machine._queue_new_event(EventDefinition(blackout=BlackoutEventDefinition()))
             elif self._trainer_name:
                 self.machine._queue_new_event(
                     EventDefinition(

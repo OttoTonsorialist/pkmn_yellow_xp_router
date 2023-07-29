@@ -23,6 +23,12 @@ class Gen1GameHookConstants:
         self.NUGGET_ROCKET = "Rocket 6"
         self.DOME_FOSSIL = "Dome Fossil"
         self.MT_MOON = "Mt Moon"
+        self.RIVAL_LAB_FIGHTS = [
+            "Rival1 1",
+            "Rival1 Charmander 1",
+            "Rival1 Squirtle 1",
+            "Rival1 Bulbasaur 1",
+        ]
 
         self.KEY_OVERWORLD_MAP = "overworld.map"
         self.KEY_AUDIO_CHANNEL_4 = "audio.channel4"
