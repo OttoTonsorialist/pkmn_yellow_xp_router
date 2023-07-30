@@ -80,66 +80,66 @@ class Gen2GameHookConstants:
         self.ALL_KEYS_KEY_ITEMS = [f"player.keyItems.{i}" for i in range(0, 26)]
 
         self.ALL_TM_KEYS = [
-            "player.tms.tm01-dynamicpunch",
-            "player.tms.tm02-headbutt",
-            "player.tms.tm03-curse",
-            "player.tms.tm04-rollout",
-            "player.tms.tm05-roar",
-            "player.tms.tm06-toxic",
-            "player.tms.tm07-zapcannon",
-            "player.tms.tm08-rocksmash",
-            "player.tms.tm09-psychup",
-            "player.tms.tm10-hiddenpower",
-            "player.tms.tm11-sunnyday",
-            "player.tms.tm12-sweetscent",
-            "player.tms.tm13-snore",
-            "player.tms.tm14-blizzard",
-            "player.tms.tm15-hyperbeam",
-            "player.tms.tm16-icywind",
-            "player.tms.tm17-protect",
-            "player.tms.tm18-raindance",
-            "player.tms.tm19-gigadrain",
-            "player.tms.tm20-endure",
-            "player.tms.tm21-frustration",
-            "player.tms.tm22-solarbeam",
-            "player.tms.tm23-irontail",
-            "player.tms.tm24-dragonbreath",
-            "player.tms.tm25-thunder",
-            "player.tms.tm26-earthquake",
-            "player.tms.tm27-return",
-            "player.tms.tm28-dig",
-            "player.tms.tm29-psychic",
-            "player.tms.tm30-shadowball",
-            "player.tms.tm31-mudslap",
-            "player.tms.tm32-doubleteam",
-            "player.tms.tm33-icepunch",
-            "player.tms.tm34-swagger",
-            "player.tms.tm35-sleeptalk",
-            "player.tms.tm36-sludgebomb",
-            "player.tms.tm37-sandstorm",
-            "player.tms.tm38-fireblast",
-            "player.tms.tm39-swift",
-            "player.tms.tm40-defensecurl",
-            "player.tms.tm41-thunderPunch",
-            "player.tms.tm42-dreameater",
-            "player.tms.tm43-detect",
-            "player.tms.tm44-rest",
-            "player.tms.tm45-attract",
-            "player.tms.tm46-thief",
-            "player.tms.tm47-steelwing",
-            "player.tms.tm48-firepunch",
-            "player.tms.tm49-furycutter",
-            "player.tms.tm50-nightmare",
+            "player.tms.TM01-DynamicPunch",
+            "player.tms.TM02-Headbutt",
+            "player.tms.TM03-Curse",
+            "player.tms.TM04-Rollout",
+            "player.tms.TM05-Roar",
+            "player.tms.TM06-Toxic",
+            "player.tms.TM07-Zap Cannon",
+            "player.tms.TM08-Rock Smash",
+            "player.tms.TM09-Psych Up",
+            "player.tms.TM10-Hidden Power",
+            "player.tms.TM11-Sunny Day",
+            "player.tms.TM12-Sweet Scent",
+            "player.tms.TM13-Snore",
+            "player.tms.TM14-Blizzard",
+            "player.tms.TM15-Hyper Beam",
+            "player.tms.TM16-Icy Wind",
+            "player.tms.TM17-Protect",
+            "player.tms.TM18-Rain Dance",
+            "player.tms.TM19-Giga Drain",
+            "player.tms.TM20-Endure",
+            "player.tms.TM21-Frustration",
+            "player.tms.TM22-SolarBeam",
+            "player.tms.TM23-Iron Tail",
+            "player.tms.TM24-Dragonbreath",
+            "player.tms.TM25-Thunder",
+            "player.tms.TM26-Earthquake",
+            "player.tms.TM27-Return",
+            "player.tms.TM28-Dig",
+            "player.tms.TM29-Psychic",
+            "player.tms.TM30-Shadow Ball",
+            "player.tms.TM31-Mud-Slap",
+            "player.tms.TM32-Double Team",
+            "player.tms.TM33-Ice Punch",
+            "player.tms.TM34-Swagger",
+            "player.tms.TM35-Sleep Talk",
+            "player.tms.TM36-Sludge Bomb",
+            "player.tms.TM37-Sandstorm",
+            "player.tms.TM38-Fire Blast",
+            "player.tms.TM39-Swift",
+            "player.tms.TM40-Defense Curl",
+            "player.tms.TM41-ThunderPunch",
+            "player.tms.TM42-Dream Eater",
+            "player.tms.TM43-Detect",
+            "player.tms.TM44-Rest",
+            "player.tms.TM45-Attract",
+            "player.tms.TM46-Thief",
+            "player.tms.TM47-Steel Wing",
+            "player.tms.TM48-Fire Punch",
+            "player.tms.TM49-Fury Cutter",
+            "player.tms.TM50-Nightmare",
         ]
 
         self.ALL_HM_KEYS = [
-            "player.hms.hm01",
-            "player.hms.hm02",
-            "player.hms.hm03",
-            "player.hms.hm04",
-            "player.hms.hm05",
-            "player.hms.hm06",
-            "player.hms.hm07",
+            "player.hms.HM01-Cut",
+            "player.hms.HM02-Fly",
+            "player.hms.HM03-Surf",
+            "player.hms.HM04-Strength",
+            "player.hms.HM05-Flash",
+            "player.hms.HM06-Whirlpool",
+            "player.hms.HM07-Waterfall",
         ]
 
         #self.ALL_KEYS_ALL_ITEM_FIELDS = set([self.KEY_ITEM_COUNT, self.KEY_BALL_COUNT, self.KEY_KEY_ITEM_COUNT])
@@ -262,6 +262,8 @@ class GameHookConstantConverter:
             converted_name = "BlackGlasses"
         elif converted_name == "Up-grade":
             converted_name = "Up Grade"
+        elif converted_name == "Paralyze Heal":
+            converted_name = "Parlyz Heal"
 
         return converted_name
     
@@ -302,6 +304,8 @@ class GameHookConstantConverter:
             converted_name = "ExtremeSpeed"
         elif converted_name == "Ancientpower":
             converted_name = "AncientPower"
+        elif converted_name == "Headbeutt":
+            converted_name = "Headbutt"
 
         return converted_name
     

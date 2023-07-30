@@ -138,6 +138,7 @@ class BattleState(WatchForResetState):
         self._cached_mon_species = ""
         self._cached_mon_level = 0
         self._exp_split = []
+        self._enemy_mon_order = []
         self._friendship_data = []
         self._battle_started = False
         self._initial_money = 0
@@ -156,6 +157,7 @@ class BattleState(WatchForResetState):
         self._cached_mon_level = 0
         self._trainer_name = ""
         self._exp_split = []
+        self._enemy_mon_order = []
         self._friendship_data = []
         self._battle_started = False
         self._initial_money = self.machine._gamehook_client.get(gh_gen_two_const.KEY_PLAYER_MONEY).value
@@ -192,6 +194,8 @@ class BattleState(WatchForResetState):
                 final_exp_split = [len(x) for x in self._exp_split]
                 if not any([True for x in final_exp_split if x > 1]):
                     final_exp_split = None
+                
+                final_mon_order = [self._enemy_mon_order.index(x) for x in sorted(self._enemy_mon_order)]
 
                 return_custom_move_data = None
                 if gen_two_const.RETURN_MOVE_NAME in self.machine._cached_moves:
@@ -207,6 +211,7 @@ class BattleState(WatchForResetState):
                         trainer_def=TrainerEventDefinition(
                             self._trainer_name,
                             exp_split=final_exp_split,
+                            mon_order=final_mon_order,
                             custom_move_data=return_custom_move_data,
                             pay_day_amount=self.machine._gamehook_client.get(gh_gen_two_const.KEY_PLAYER_MONEY).value - self._initial_money,
                         ),
@@ -264,11 +269,10 @@ class BattleState(WatchForResetState):
         elif new_prop.path == gh_gen_two_const.KEY_BATTLE_TEXT_BUFFER:
             if self._trainer_name == "":
                 self.is_trainer_battle = self.machine._gamehook_client.get(gh_gen_two_const.KEY_BATTLE_MODE).value == gh_gen_two_const.TRAINER_BATTLE_TYPE
-                logger.info(f"Trainer flag after waiting a bit? {self.is_trainer_battle}")
                 if self.is_trainer_battle:
                     self._create_initial_trainer_event()
                 else:
-                    # Just fill it with jusnk so we stop querying this
+                    # Just fill it with junk so we stop querying this
                     self._trainer_name = "WildMon"
         elif new_prop.path == gh_gen_two_const.KEY_BATTLE_PLAYER_MON_HP:
             player_mon_pos = self.machine._gamehook_client.get(gh_gen_two_const.KEY_BATTLE_PLAYER_MON_PARTY_POS).value
@@ -311,6 +315,10 @@ class BattleState(WatchForResetState):
         elif new_prop.path == gh_gen_two_const.KEY_BATTLE_ENEMY_MON_PARTY_POS:
             if new_prop.value >= 0 and new_prop.value < len(self._exp_split):
                 self._exp_split[new_prop.value] = set([self.machine._gamehook_client.get(gh_gen_two_const.KEY_BATTLE_PLAYER_MON_PARTY_POS).value])
+            # NOTE: this logic won't perfectly reflect things if the player uses roar/whirlwind
+            # or if the enemy trainer switches pokemon (and doesn't only send out new mons on previous death)
+            if new_prop.value not in self._enemy_mon_order:
+                self._enemy_mon_order.append(new_prop.value)
         elif new_prop.path == gh_gen_two_const.KEY_BATTLE_MODE:
             if new_prop.value is None:
                 return StateType.OVERWORLD
@@ -362,14 +370,17 @@ class InventoryChangeState(WatchForResetState):
 
 
 class UseRareCandyState(WatchForResetState):
+    BASE_DELAY = 2
     def __init__(self, machine: Machine):
         super().__init__(StateType.RARE_CANDY, machine)
         self._move_learned = False
         self._item_removal_detected = False
+        self._cur_delay = self.BASE_DELAY
 
     def _on_enter(self, prev_state: State):
         self._move_learned = False
         self._item_removal_detected = False
+        self._cur_delay = self.BASE_DELAY
     
     def _on_exit(self, next_state: State):
         if next_state.state_type != StateType.RESETTING:
@@ -390,6 +401,12 @@ class UseRareCandyState(WatchForResetState):
         elif new_prop.path in gh_gen_two_const.ALL_KEYS_ITEM_TYPE:
             if new_prop.value is None:
                 return StateType.OVERWORLD
+        elif new_prop.path in gh_gen_two_const.KEY_GAMETIME_SECONDS:
+            if self._item_removal_detected:
+                if self._cur_delay <= 0:
+                    return StateType.OVERWORLD
+                else:
+                    self._cur_delay -= 1
 
         return self.state_type
 
@@ -442,12 +459,15 @@ class MoveDeleteState(WatchForResetState):
 
 
 class UseVitaminState(WatchForResetState):
+    BASE_DELAY = 2
     def __init__(self, machine: Machine):
         super().__init__(StateType.VITAMIN, machine)
         self._item_removal_detected = False
+        self._cur_delay = self.BASE_DELAY
 
     def _on_enter(self, prev_state: State):
         self._item_removal_detected = False
+        self._cur_delay = self.BASE_DELAY
     
     def _on_exit(self, next_state: State):
         if next_state.state_type != StateType.RESETTING:
@@ -463,6 +483,12 @@ class UseVitaminState(WatchForResetState):
         elif new_prop.path in gh_gen_two_const.ALL_KEYS_ITEM_TYPE:
             if new_prop.value is None:
                 return StateType.OVERWORLD
+        elif new_prop.path == gh_gen_two_const.KEY_GAMETIME_SECONDS:
+            if self._item_removal_detected:
+                if self._cur_delay <= 0:
+                    return StateType.OVERWORLD
+                else:
+                    self._cur_delay -= 1
 
         return self.state_type
 

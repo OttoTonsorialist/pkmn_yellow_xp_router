@@ -321,6 +321,7 @@ class RecorderGameHookClient(GameHookClient):
                     setattr(constants, cur_attr, replacement_val)
         
         if invalid_props:
+            logger.error(f"Likely due to mismatching GameHook version, invalid GameHook properties: {list(invalid_props)}")
             self._controller._controller.trigger_exception(f"Likely due to mismatching GameHook version, invalid GameHook properties: {list(invalid_props)}")
         logger.info("Validated GameHook constants successfully")
 

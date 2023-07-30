@@ -525,6 +525,15 @@ class Machine:
                                 self._controller._controller.delete_events(to_delete)
                             else:
                                 logger.error(f"expected to be fixing events before a hold item event, but no fix was found: {cur_event}")
+                    elif None is not cur_event.wild_pkmn_info:
+                        if current_gen_info().pkmn_db().get_pkmn(cur_event.wild_pkmn_info.name) is None:
+                            msg = f"Failed to find wild pokemon from GameHook: {cur_event.wild_pkmn_info.name} for event {cur_event}"
+                            logger.error(msg)
+                            self._controller.add_event(
+                                EventDefinition(notes=const.RECORDING_ERROR_FRAGMENT + msg)
+                            )
+                            continue
+
 
                     auto_save = False
                     if cur_event.heal is not None and cur_event.heal.location == "INDIGO":

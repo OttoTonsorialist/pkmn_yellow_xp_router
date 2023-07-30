@@ -106,6 +106,8 @@ class BattleState(WatchForResetState):
     def __init__(self, machine: Machine):
         super().__init__(StateType.BATTLE, machine)
         self.is_trainer_battle = False
+        self._waiting_for_init = True
+        self._init_delay = 0
         self._trainer_name = ""
         self._defeated_trainer_mons = []
         self._waiting_for_moves = False
@@ -116,15 +118,19 @@ class BattleState(WatchForResetState):
         self._initial_money = 0
     
     def _on_enter(self, prev_state: State):
+        self._waiting_for_init = True
+        self._init_delay = 0
         self._defeated_trainer_mons = []
         self._waiting_for_moves = False
         self._move_update_delay = 0
         self._waiting_for_items = False
         self._item_update_delay = 0
-        self.is_trainer_battle = self.machine._gamehook_client.get(gh_gen_one_const.KEY_BATTLE_TYPE).value == gh_gen_one_const.TRAINER_BATTLE_TYPE
+        self._trainer_name = ""
+        self.is_trainer_battle = False
         self._loss_detected = False
         self._initial_money = self.machine._gamehook_client.get(gh_gen_one_const.KEY_PLAYER_MONEY).value
-
+    
+    def _create_initial_trainer_event(self):
         if self.is_trainer_battle:
             self._trainer_name = self.machine.gh_converter.trainer_name_convert(
                 self.machine._gamehook_client.get(gh_gen_one_const.KEY_BATTLE_TRAINER_CLASS).value,
@@ -134,9 +140,7 @@ class BattleState(WatchForResetState):
             self.machine._queue_new_event(
                 EventDefinition(trainer_def=TrainerEventDefinition(self._trainer_name))
             )
-        else:
-            self._trainer_name = ""
-    
+
     def _on_exit(self, next_state: State):
         if next_state.state_type != StateType.RESETTING:
             if self._loss_detected:
@@ -195,6 +199,14 @@ class BattleState(WatchForResetState):
                 self._item_update_delay = 2
                 self._waiting_for_items = True
         elif new_prop.path == gh_gen_one_const.KEY_GAMETIME_SECONDS:
+            if self._waiting_for_init:
+                if self._init_delay <= 0:
+                    self._waiting_for_init = False
+                    self.is_trainer_battle = self.machine._gamehook_client.get(gh_gen_one_const.KEY_BATTLE_TYPE).value == gh_gen_one_const.TRAINER_BATTLE_TYPE
+                    if self.is_trainer_battle:
+                        self._create_initial_trainer_event()
+                else:
+                    self._init_delay -= 1
             if self._waiting_for_moves:
                 if self._move_update_delay <= 0:
                     self._waiting_for_moves = False
