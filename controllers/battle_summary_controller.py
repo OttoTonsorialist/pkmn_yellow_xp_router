@@ -8,6 +8,7 @@ from pkmn.damage_calc import DamageRange, find_kill
 from pkmn.universal_data_objects import BadgeList, EnemyPkmn, Move, StageModifiers
 from routing.full_route_state import RouteState
 from routing.state_objects import SoloPokemon
+from utils.config_manager import config
 
 from utils.constants import const
 from routing.route_events import EventDefinition, EventGroup, RareCandyEventDefinition, TrainerEventDefinition
@@ -55,7 +56,6 @@ class BattleSummaryController:
         self._main_controller = main_controller
         self._refresh_events = []
         self._nonload_change_events = []
-        self._ignore_accuracy = False
 
         # trainer object data that we don't actually use, but need to hang on to to properly re-create events
         self._trainer_name = None
@@ -119,10 +119,6 @@ class BattleSummaryController:
     ######
     # Methods that induce a state change
     ######
-
-    def update_ignore_accuracy(self, new_value):
-        self._ignore_accuracy = new_value
-        self._full_refresh()
 
     def update_mimic_selection(self, new_value):
         self._mimic_selection = new_value
@@ -199,6 +195,18 @@ class BattleSummaryController:
         
         self._full_refresh()
     
+    def update_player_strategy(self, strat):
+        config.set_player_highlight_strategy(strat)
+        self._full_refresh()
+    
+    def update_enemy_strategy(self, strat):
+        config.set_enemy_highlight_strategy(strat)
+        self._full_refresh()
+    
+    def update_consistent_threshold(self, threshold:int):
+        config.set_consistent_threshold(threshold)
+        self._full_refresh()
+    
     def _update_best_move_inplace(self, pkmn_idx, is_player_mon):
         # NOTE: this is a helper function that induces a state change, but does not directly (or indirectly) trigger any events
         # If you call this function, it is your responsibility to properly trigger an appropriate event independently
@@ -213,7 +221,11 @@ class BattleSummaryController:
             if cur_move is None or cur_move.name == const.STRUGGLE_MOVE_NAME:
                 continue
 
-            if self._is_move_better(cur_move, best_move):
+            if self._is_move_better(
+                cur_move,
+                best_move,
+                config.get_player_highlight_strategy() if is_player_mon else config.get_enemy_highlight_strategy()
+            ):
                 best_move = cur_move
                 best_move_idx = idx
         
@@ -363,7 +375,7 @@ class BattleSummaryController:
             weather=self._weather
         )
         if normal_ranges is not None and crit_ranges is not None:
-            if self._ignore_accuracy:
+            if config.do_ignore_accuracy():
                 accuracy = 100
             else:
                 accuracy = move.accuracy
@@ -377,7 +389,8 @@ class BattleSummaryController:
                 crit_ranges,
                 current_gen_info().get_crit_rate(attacking_mon, move),
                 accuracy,
-                defending_mon.cur_stats.hp
+                defending_mon.cur_stats.hp,
+                attack_depth=config.get_damage_search_depth()
             )
         else:
             kill_ranges = []
@@ -492,9 +505,6 @@ class BattleSummaryController:
     # Methods that do not induce a state change
     ######
 
-    def do_ignore_accuracy(self) -> bool:
-        return self._ignore_accuracy
-
     def get_trainer_definition(self) -> TrainerEventDefinition:
         if not self._trainer_name:
             return None
@@ -551,20 +561,47 @@ class BattleSummaryController:
         return self._enemy_setup_move_list
 
     @staticmethod
-    def _is_move_better(new_move:MoveRenderInfo, prev_move:MoveRenderInfo) -> bool:
-        if new_move is None:
+    def _is_move_better(new_move:MoveRenderInfo, prev_move:MoveRenderInfo, strat:str) -> bool:
+        if (
+            strat is None or
+            not isinstance(strat, str) or
+            strat == const.HIGHLIGHT_NONE or
+            strat not in const.ALL_HIGHLIGHT_STRATS
+        ):
             return False
 
-        if prev_move is None:
+        if new_move is None or new_move.damage_ranges is None:
+            return False
+
+        if prev_move is None or prev_move.damage_ranges is None:
             return True
         
         new_fastest_kill = 1000000
         if len(new_move.kill_ranges) > 0:
-            new_fastest_kill = new_move.kill_ranges[-1][0]
+            if strat == const.HIGHLIGHT_GUARANTEED_KILL:
+                # if the last slot has a -1 % to kill, then that means it was auto-calculated
+                if config.do_ignore_accuracy() or new_move.kill_ranges[-1][1] != -1:
+                    new_fastest_kill = new_move.kill_ranges[-1][0]
+
+            elif strat == const.HIGHLIGHT_FASTEST_KILL:
+                new_fastest_kill = new_move.kill_ranges[0][0]
+            elif strat == const.HIGHLIGHT_CONSISTENT_KILL:
+                for test_kill in new_move.kill_ranges:
+                    if test_kill[1] >= config.get_consistent_threshold():
+                        new_fastest_kill = test_kill[0]
+                        break
         
         prev_fastest_kill = new_fastest_kill + 1
         if len(prev_move.kill_ranges) > 0:
-            prev_fastest_kill = prev_move.kill_ranges[-1][0]
+            if strat == const.HIGHLIGHT_GUARANTEED_KILL:
+                prev_fastest_kill = prev_move.kill_ranges[-1][0]
+            elif strat == const.HIGHLIGHT_FASTEST_KILL:
+                prev_fastest_kill = prev_move.kill_ranges[0][0]
+            elif strat == const.HIGHLIGHT_CONSISTENT_KILL:
+                for test_kill in prev_move.kill_ranges:
+                    if test_kill[1] >= config.get_consistent_threshold():
+                        prev_fastest_kill = test_kill[0]
+                        break
         
         if new_fastest_kill < prev_fastest_kill:
             return True

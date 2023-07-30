@@ -13,6 +13,4 @@ class Popup(tk.Toplevel):
 
     def close(self, event=None):
         self._main_window.attributes('-disabled', False)
-        # TODO: just remove this call??
-        self._main_window.clear_popup()
         self.destroy()

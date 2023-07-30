@@ -6,9 +6,11 @@ import logging
 from controllers.battle_summary_controller import BattleSummaryController, MoveRenderInfo
 
 from gui import custom_components
+from gui.popups.battle_config_popup import BattleConfigWindow
 from pkmn import damage_calc, universal_data_objects
 from routing import full_route_state
 from routing import route_events
+from utils.config_manager import config
 from utils.constants import const
 from pkmn.gen_factory import current_gen_info
 
@@ -48,14 +50,14 @@ class BattleSummary(ttk.Frame):
         self.enemy_setup_moves = SetupMovesSummary(self._setup_half, callback=self._enemy_setup_move_callback, is_player=False)
         self.enemy_setup_moves.grid(row=1, column=0, sticky=tk.EW)
 
-        self.candy_summary = PrefightCandySummary(self._weather_half, callback=self._candy_callback)
-        self.candy_summary.grid(row=0, column=0, sticky=tk.EW, padx=10, pady=(0, 2))
+        self.config_button = custom_components.SimpleButton(self._weather_half, text="Configure/Help", command=self._launch_config_popup)
+        self.config_button.grid(row=0, column=0, sticky=tk.EW, padx=10, pady=(0, 2))
 
         self.weather_status = WeatherSummary(self._weather_half, callback=self._weather_callback)
         self.weather_status.grid(row=0, column=1, sticky=tk.EW, padx=2, pady=(0, 2))
 
-        self.ignore_accuracy = custom_components.CheckboxLabel(self._weather_half, text="Ignore Accuracy for Kill %'s", toggle_command=self._ignore_accuracy_callback, flip=True)
-        self.ignore_accuracy.grid(row=1, column=1, sticky=tk.EW, padx=2)
+        self.candy_summary = PrefightCandySummary(self._weather_half, callback=self._candy_callback)
+        self.candy_summary.grid(row=1, column=1, sticky=tk.EW, padx=2, pady=(0, 2))
 
         self._mon_pairs:List[MonPairSummary] = []
 
@@ -83,8 +85,8 @@ class BattleSummary(ttk.Frame):
         self.should_render = True
         self._on_full_refresh()
     
-    def _ignore_accuracy_callback(self, *args, **kwargs):
-        self._controller.update_ignore_accuracy(self.ignore_accuracy.is_checked())
+    def _launch_config_popup(self, *args, **kwargs):
+        BattleConfigWindow(self.winfo_toplevel(), battle_controller=self._controller)
     
     def _weather_callback(self, *args, **kwargs):
         self._controller.update_weather(self.weather_status.get_weather())
@@ -407,8 +409,13 @@ class DamageSummary(ttk.Frame):
     def format_message(kill_info):
         kill_pct = kill_info[1]
         if kill_pct == -1:
-            kill_pct = 100
-        return f"{kill_info[0]}-hit kill: {kill_pct:.2f} %"
+            if config.do_ignore_accuracy():
+                return f"{kill_info[0]}-hit kill: 100 %"
+            else:
+                return f"{kill_info[0]}-hit kill, IGNORING ACC"
+        if config.do_ignore_accuracy():
+            return f"{kill_info[0]}-hit kill: {kill_pct:.2f} %"
+        return f"{kill_info[0]}-turn kill: {kill_pct:.2f} %"
 
     def update_rendering(self):
         move = self._controller.get_move_info(self._mon_idx, self._move_idx, self._is_player_mon)

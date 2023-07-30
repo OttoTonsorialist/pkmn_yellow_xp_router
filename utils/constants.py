@@ -140,6 +140,18 @@ class Constants:
             self.PROTEIN
         ]
 
+        self.HIGHLIGHT_NONE = "Don't Highlight"
+        self.HIGHLIGHT_GUARANTEED_KILL = "Guaranteed Kill"
+        self.HIGHLIGHT_CONSISTENT_KILL = "Consistent Kill"
+        self.HIGHLIGHT_FASTEST_KILL = "Fastest Kill"
+
+        self.ALL_HIGHLIGHT_STRATS = [
+            self.HIGHLIGHT_GUARANTEED_KILL,
+            self.HIGHLIGHT_CONSISTENT_KILL,
+            self.HIGHLIGHT_FASTEST_KILL,
+            self.HIGHLIGHT_NONE,
+        ]
+
         self.DEFAULT_FOLDER_NAME = "Main"
         self.EVENT_FOLDER_NAME = "Event Folder Name"
         self.INVENTORY_EVENT_DEFINITON = "Inventory Event"
@@ -239,6 +251,11 @@ class Constants:
         self.CONTRAST_COLOR_KEY = "contrast_color"
         self.BACKGROUND_COLOR_KEY = "background_color"
         self.TEXT_COLOR_KEY = "text_color"
+        self.PLAYER_HIGHLIGHT_STRATEGY_KEY = "player_highlight_strategy"
+        self.ENEMY_HIGHLIGHT_STRATEGY_KEY = "enemy_highlight_strategy"
+        self.CONSISTENT_HIGHLIGHT_THRESHOLD = "consistent_highlight_threshold"
+        self.IGNORE_ACCURACY_IN_DAMAGE_CALCS = "ignore_accuracy_in_damage_calcs"
+        self.DAMAGE_SEARCH_DEPTH = "damage_search_depth"
 
         self.CUSTOM_FONT_NAME_KEY = "custom_font_name"
 

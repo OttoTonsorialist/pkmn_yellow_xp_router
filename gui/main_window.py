@@ -406,28 +406,22 @@ class MainWindow(tk.Tk):
             self.new_folder_button.disable()
     
     def open_app_config_window(self, *args, **kwargs):
-        if self._is_active_window():
-            self.new_event_window = DataDirConfigWindow(self, self.cancel_and_quit)
+        DataDirConfigWindow(self, self.cancel_and_quit)
     
     def open_custom_gens_window(self, *args, **kwargs):
-        if self._is_active_window():
-            self.new_event_window = CustomGenWindow(self, self._controller)
+        CustomGenWindow(self, self._controller)
     
     def open_config_window(self, *args, **kwargs):
-        if self._is_active_window():
-            self.new_event_window = ConfigWindow(self)
+        ConfigWindow(self)
     
     def open_new_route_window(self, *args, **kwargs):
-        if self._is_active_window():
-            self.new_event_window = NewRouteWindow(self, self._controller)
+        NewRouteWindow(self, self._controller)
     
     def open_load_route_window(self, *args, **kwargs):
-        if self._is_active_window():
-            self.new_event_window = LoadRouteWindow(self, self._controller)
+        LoadRouteWindow(self, self._controller)
 
     def open_customize_dvs_window(self, *args, **kwargs):
-        if self._is_active_window() and self._controller.get_init_state() is not None:
-            self.new_event_window = CustomDvsWindow(self, self._controller, self._controller.get_dvs())
+        CustomDvsWindow(self, self._controller, self._controller.get_dvs())
 
     def open_summary_window(self, *args, **kwargs):
         if self.summary_window is None or not tk.Toplevel.winfo_exists(self.summary_window):
@@ -461,8 +455,7 @@ class MainWindow(tk.Tk):
             do_prompt = True
         
         if do_prompt:
-            if self._is_active_window():
-                self.new_event_window = DeleteConfirmation(self, self._controller, all_event_ids)
+            DeleteConfirmation(self, self._controller, all_event_ids)
         else:
             # only don't prompt when deleting a single event (or empty folder)
             self._controller.delete_events([all_event_ids[0]])
@@ -470,23 +463,22 @@ class MainWindow(tk.Tk):
             self.trainer_add.trainer_filter_callback()
 
     def open_transfer_event_window(self, event=None):
-        if self._is_active_window():
-            all_event_ids = self.event_list.get_all_selected_event_ids(allow_event_items=False)
-            if len(all_event_ids) == 0:
-                return
+        all_event_ids = self.event_list.get_all_selected_event_ids(allow_event_items=False)
+        if len(all_event_ids) == 0:
+            return
 
-            invalid_folders = set()
-            for cur_event_id in all_event_ids:
-                for cur_invalid in self._controller.get_invalid_folders(cur_event_id):
-                    invalid_folders.add(cur_invalid)
-            
-            self.new_event_window = TransferEventWindow(
-                self,
-                self._controller,
-                self._controller.get_all_folder_names(),
-                [x for x in self._controller.get_all_folder_names() if x not in invalid_folders],
-                all_event_ids
-            )
+        invalid_folders = set()
+        for cur_event_id in all_event_ids:
+            for cur_invalid in self._controller.get_invalid_folders(cur_event_id):
+                invalid_folders.add(cur_invalid)
+        
+        self.new_event_window = TransferEventWindow(
+            self,
+            self._controller,
+            self._controller.get_all_folder_names(),
+            [x for x in self._controller.get_all_folder_names() if x not in invalid_folders],
+            all_event_ids
+        )
 
     def rename_folder(self, *args, **kwargs):
         all_event_ids = self.event_list.get_all_selected_event_ids()
@@ -496,41 +488,24 @@ class MainWindow(tk.Tk):
         self.open_new_folder_window(**{const.EVENT_FOLDER_NAME: self._controller.get_event_by_id(all_event_ids[0]).name})
 
     def open_new_folder_window(self, *args, **kwargs):
-        if self._is_active_window():
-            all_event_ids = self.event_list.get_all_selected_event_ids()
-            if len(all_event_ids) > 1:
-                return
+        all_event_ids = self.event_list.get_all_selected_event_ids()
+        if len(all_event_ids) > 1:
+            return
 
-            if const.EVENT_FOLDER_NAME in kwargs:
-                existing_folder_name = kwargs.get(const.EVENT_FOLDER_NAME)
-            else:
-                existing_folder_name = None
-            self.new_event_window = NewFolderWindow(
-                self,
-                self._controller,
-                self._controller.get_all_folder_names(),
-                existing_folder_name,
-                insert_after=all_event_ids[0] if len(all_event_ids) == 1 else None
-            )
-
-    def clear_popup(self, *args, **kwargs):
-        # hook for when a pop-up cleans up after itself
-        # assumes the pop-up is getting destroyed, and we just want to drop the reference to a (now unused) object
-        # TODO: with new pop-up paradigm, can we drop reference tracking in the main window entirely?
-        if self.new_event_window is not None:
-            self.new_event_window = None
+        if const.EVENT_FOLDER_NAME in kwargs:
+            existing_folder_name = kwargs.get(const.EVENT_FOLDER_NAME)
+        else:
+            existing_folder_name = None
+        self.new_event_window = NewFolderWindow(
+            self,
+            self._controller,
+            self._controller.get_all_folder_names(),
+            existing_folder_name,
+            insert_after=all_event_ids[0] if len(all_event_ids) == 1 else None
+        )
 
     def cancel_and_quit(self, *args, **kwargs):
-        if self.new_event_window is not None:
-            self.new_event_window.close()
-            self.new_event_window = None
         self.destroy()
-    
-    def _is_active_window(self):
-        # returns true if the current window is active (i.e. no sub-windows exist)
-        if self.new_event_window is not None and tk.Toplevel.winfo_exists(self.new_event_window):
-            return False
-        return True
 
 
 def fixed_map(option, style):

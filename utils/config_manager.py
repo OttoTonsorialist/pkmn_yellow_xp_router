@@ -17,6 +17,12 @@ class Config:
     DEFAULT_TEXT_COLOR = "black"
     DEFAULT_FONT_NAME = "Segoe UI"
 
+    DEFAULT_PLAYER_HIGHLIGHT_STRATEGY = const.HIGHLIGHT_CONSISTENT_KILL
+    DEFAULT_ENEMY_HIGHLIGHT_STRATEGY = const.HIGHLIGHT_FASTEST_KILL
+    DEFAULT_CONSISTENT_THRESHOLD = 90
+    DEFAULT_IGNORE_ACCURACY = False
+    DEFAULT_DAMAGE_SEARCH_DEPTH = 10
+
     def __init__(self):
         self.reload()
     
@@ -42,6 +48,12 @@ class Config:
         self._background_color = raw.get(const.BACKGROUND_COLOR_KEY, self.DEFAULT_BACKGROUND)
         self._text_color = raw.get(const.TEXT_COLOR_KEY, self.DEFAULT_TEXT_COLOR)
 
+        self._player_highlight_strategy = raw.get(const.PLAYER_HIGHLIGHT_STRATEGY_KEY, self.DEFAULT_PLAYER_HIGHLIGHT_STRATEGY)
+        self._enemy_highlight_strategy = raw.get(const.ENEMY_HIGHLIGHT_STRATEGY_KEY, self.DEFAULT_ENEMY_HIGHLIGHT_STRATEGY)
+        self._consistent_threshold = raw.get(const.CONSISTENT_HIGHLIGHT_THRESHOLD, self.DEFAULT_CONSISTENT_THRESHOLD)
+        self._ignore_accuracy = raw.get(const.IGNORE_ACCURACY_IN_DAMAGE_CALCS, self.DEFAULT_IGNORE_ACCURACY)
+        self._damage_search_depth = raw.get(const.DAMAGE_SEARCH_DEPTH, self.DEFAULT_DAMAGE_SEARCH_DEPTH)
+
         self._custom_font_name = raw.get(const.CUSTOM_FONT_NAME_KEY, self.DEFAULT_FONT_NAME)
     
     def _save(self):
@@ -63,6 +75,11 @@ class Config:
                 const.BACKGROUND_COLOR_KEY: self._background_color,
                 const.TEXT_COLOR_KEY: self._text_color,
                 const.CUSTOM_FONT_NAME_KEY: self._custom_font_name,
+                const.PLAYER_HIGHLIGHT_STRATEGY_KEY: self._player_highlight_strategy,
+                const.ENEMY_HIGHLIGHT_STRATEGY_KEY: self._enemy_highlight_strategy,
+                const.CONSISTENT_HIGHLIGHT_THRESHOLD: self._consistent_threshold,
+                const.IGNORE_ACCURACY_IN_DAMAGE_CALCS: self._ignore_accuracy,
+                const.DAMAGE_SEARCH_DEPTH: self._damage_search_depth,
             }, f, indent=4)
     
     def set_window_geometry(self, new_geometry):
@@ -121,6 +138,26 @@ class Config:
         self._text_color = new_color
         self._save()
 
+    def set_player_highlight_strategy(self, strat):
+        self._player_highlight_strategy = strat
+        self._save()
+
+    def set_enemy_highlight_strategy(self, strat):
+        self._enemy_highlight_strategy = strat
+        self._save()
+
+    def set_consistent_threshold(self, threshold):
+        self._consistent_threshold = threshold
+        self._save()
+
+    def set_ignore_accuracy(self, do_include):
+        self._ignore_accuracy = do_include
+        self._save()
+
+    def set_damage_search_depth(self, depth):
+        self._damage_search_depth = depth
+        self._save()
+
     def get_success_color(self):
         return self._success_color
 
@@ -150,6 +187,33 @@ class Config:
     
     def get_text_color(self):
         return self._text_color
+    
+    def get_player_highlight_strategy(self):
+        result = self._player_highlight_strategy
+        if result not in const.ALL_HIGHLIGHT_STRATS:
+            result = const.HIGHLIGHT_NONE
+        return result
+    
+    def get_enemy_highlight_strategy(self):
+        result = self._enemy_highlight_strategy
+        if result not in const.ALL_HIGHLIGHT_STRATS:
+            result = const.HIGHLIGHT_NONE
+        return result
+    
+    def get_consistent_threshold(self):
+        result = self._consistent_threshold
+        if not isinstance(result, int) or result < 0 or result > 99:
+            result = self.DEFAULT_CONSISTENT_THRESHOLD
+        return result
+    
+    def get_damage_search_depth(self):
+        result = self._damage_search_depth
+        if not isinstance(result, int) or result < 0:
+            result = self.DEFAULT_DAMAGE_SEARCH_DEPTH
+        return result
+    
+    def do_ignore_accuracy(self):
+        return self._ignore_accuracy
     
     def reset_all_colors(self):
         self._success_color = self.DEFAULT_SUCCESS

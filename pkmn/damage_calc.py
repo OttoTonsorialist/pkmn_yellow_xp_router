@@ -172,7 +172,7 @@ def _percent_rolls_kill_recursive(
     return result
 
 
-def find_kill(damage_range:DamageRange, crit_damage_range:DamageRange, crit_chance:float, accuracy:float, target_hp:int, attack_depth:int=8, percent_cutoff:float=0.1):
+def find_kill(damage_range:DamageRange, crit_damage_range:DamageRange, crit_chance:float, accuracy:float, target_hp:int, attack_depth:int=10, percent_cutoff:float=0.1):
     # NOTE: if attack_depth is too deep, (10+ is where I started to notice the issues), you quickly get overflow issues
     result = []
 
@@ -231,6 +231,6 @@ def find_kill(damage_range:DamageRange, crit_damage_range:DamageRange, crit_chan
     
     if highest_found_kill_pct < 99 and highest_found_kill_pct < round(accuracy * 100):
         # if we haven't found close enough to a kill, get the guaranteed kill
-        result.append((math.ceil(target_hp / damage_range.min_damage), round(accuracy * 100)))
+        result.append((math.ceil(target_hp / damage_range.min_damage), -1))
     
     return result
