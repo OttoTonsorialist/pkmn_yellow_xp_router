@@ -176,13 +176,15 @@ def find_kill(damage_range:DamageRange, crit_damage_range:DamageRange, crit_chan
     # NOTE: if attack_depth is too deep, (10+ is where I started to notice the issues), you quickly get overflow issues
     result = []
 
+    min_possible_damage = min(damage_range.min_damage, crit_damage_range.min_damage)
     max_possible_damage = max(damage_range.max_damage, crit_damage_range.max_damage)
     highest_found_kill_pct = 0
     memoization = {}
     hits_to_kill_table = {}
 
     # this is a quick and dirty way to ignore calculating psywave, which has vastly more possible rolls, and thus takes much longer to calculate
-    if len(damage_range) <= 200:
+    # also, don't endlessly search for a move that can't find a guaranteed kill even if it hits every time
+    if len(damage_range) <= 200 and (min_possible_damage * attack_depth) > target_hp:
         for cur_num_attacks in range(1, attack_depth + 1):
             if (max_possible_damage * cur_num_attacks) < target_hp:
                 continue

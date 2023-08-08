@@ -24,7 +24,7 @@ class BattleConfigWindow(Popup):
 
         self.damage_notes_title = tk.Label(self.damage_notes_frame, text="Battle calcs limitations and edge cases")
         self.damage_notes_title.grid(row=0, column=0, padx=self.padx, pady=(4 * self.pady, self.pady))
-        self.damage_notes = tk.Label(self.damage_notes_frame, text="Possible kills with less than 0.1% chance are not reported.\nFull kill percents are only searched for up, up to a certain # of turns (configurable below).\nFor weaker moves, the maximum number of HITS (not turns) that need to land to guarantee a kill are given instead\nFor the purposes of accuracy calculations, Gen 1 misses are ignored\nThe crit damage ranges for multi-hit moves in gens 2+ assume exactly one of the multi-hits crit\n")
+        self.damage_notes = tk.Label(self.damage_notes_frame, text="Possible kills with less than 0.1% chance are not reported.\nFor each move, a full search for kill percents is done, up to a certain # of turns (configurable below).\nUp to 3 ranges are reported: 2 fastest kills, if applicable. The number required for a guaranteed kill is always given as the last range\nFor weaker moves, the maximum number of HITS (assumes attack lands every time) needed to guarantee a kill are given instead\nWith respect to accuracy calculations, Gen 1 misses are ignored\nThe crit damage ranges for multi-hit moves in Gen 2 assume exactly one of the multi-hits crit\n")
         self.damage_notes.grid(row=1, column=0,padx=self.padx, pady=self.pady)
 
         self.input_frame = ttk.Frame(self)
@@ -34,7 +34,7 @@ class BattleConfigWindow(Popup):
         self.search_depth_label.grid(row=0, column=0, pady=self.pady, padx=self.padx)
         self.search_depth_val = custom_components.AmountEntry(self.input_frame, init_val=config.get_damage_search_depth(), callback=self._update_damage_search_depth, min_val=1, max_val=99)
         self.search_depth_val.grid(row=0, column=1, pady=self.pady, padx=self.padx)
-        self.search_depth_details = ttk.Label(self.input_frame, text="\n# Of turns to search damage ranges to find kill %'s\nLarger gets more accurate guaranteed kills, but may take longer, especially on weaker computers")
+        self.search_depth_details = ttk.Label(self.input_frame, text="\n# Of turns to search damage ranges to find kill %'s\nLarger gets more accurate guaranteed kills, but may take longer, especially on slower computers")
         self.search_depth_details.grid(row=1, column=0, columnspan=2, pady=self.pady, padx=self.padx)
 
         self.accuracy_label = custom_components.CheckboxLabel(self.input_frame, text="Ignore Accuracy in Kill Ranges:", toggle_command=self._toggle_accuracy, flip=True)
