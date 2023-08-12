@@ -12,6 +12,7 @@ class Constants:
         self.NUZLOCKE_APP_RELEASE_DATE = "2023-Apr-01"
 
         self.DEBUG_MODE = False
+        self.DEBUG_RECORDING_MODE = False
         self.APP_NAME = "pkmn_xp_router"
         self.APP_DATA_FOLDER_DEFAULT_NAME = "pkmn_xp_router_data"
         self.USER_LOCATION_DATA_KEY = "user_data_location"

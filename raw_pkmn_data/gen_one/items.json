@@ -1,743 +1,1012 @@
 {
-    "Town Map": {
-        "name": "Town Map",
-        "key_item": true,
-        "purchase_price": 0,
-        "marts": []
-    },
-    "Bicycle": {
-        "name": "Bicycle",
-        "key_item": true,
-        "purchase_price": 0,
-        "marts": []
-    },
-    "Bike Voucher": {
-        "name": "Bike Voucher",
-        "key_item": true,
-        "purchase_price": 0,
-        "marts": []
-    },
-    "Oak's Parcel": {
-        "name": "Oak's Parcel",
-        "key_item": true,
-        "purchase_price": 0,
-        "marts": []
-    },
-    "Old Amber": {
-        "name": "Old Amber",
-        "key_item": true,
-        "purchase_price": 0,
-        "marts": []
-    },
-    "Dome Fossil": {
-        "name": "Dome Fossil",
-        "key_item": true,
-        "purchase_price": 0,
-        "marts": []
-    },
-    "Helix Fossil": {
-        "name": "Helix Fossil",
-        "key_item": true,
-        "purchase_price": 0,
-        "marts": []
-    },
-    "Secret Key": {
-        "name": "Secret Key",
-        "key_item": true,
-        "purchase_price": 0,
-        "marts": []
-    },
-    "Card Key": {
-        "name": "Card Key",
-        "key_item": true,
-        "purchase_price": 0,
-        "marts": []
-    },
-    "Coin Case": {
-        "name": "Coin Case",
-        "key_item": true,
-        "purchase_price": 0,
-        "marts": []
-    },
-    "Gold Teeth": {
-        "name": "Gold Teeth",
-        "key_item": true,
-        "purchase_price": 0,
-        "marts": []
-    },
-    "Itemfinder": {
-        "name": "Itemfinder",
-        "key_item": true,
-        "purchase_price": 0,
-        "marts": []
-    },
-    "Silph Scope": {
-        "name": "Silph Scope",
-        "key_item": true,
-        "purchase_price": 0,
-        "marts": []
-    },
-    "Poke Flute": {
-        "name": "Poke Flute",
-        "key_item": true,
-        "purchase_price": 0,
-        "marts": []
-    },
-    "Lift Key": {
-        "name": "Lift Key",
-        "key_item": true,
-        "purchase_price": 0,
-        "marts": []
-    },
-    "Old Rod": {
-        "name": "Old Rod",
-        "key_item": true,
-        "purchase_price": 0,
-        "marts": []
-    },
-    "Good Rod": {
-        "name": "Good Rod",
-        "key_item": true,
-        "purchase_price": 0,
-        "marts": []
-    },
-    "Super Rod": {
-        "name": "Super Rod",
-        "key_item": true,
-        "purchase_price": 0,
-        "marts": []
-    },
-    "SS Anne Ticket": {
-        "name": "SS Anne Ticket",
-        "key_item": true,
-        "purchase_price": 0,
-        "marts": []
-    },
-
-    "HM01 Cut": {
-        "name": "HM01 Cut",
-        "key_item": true,
-        "purchase_price": 0,
-        "marts": []
-    },
-    "HM02 Fly": {
-        "name": "HM02 Fly",
-        "key_item": true,
-        "purchase_price": 0,
-        "marts": []
-    },
-    "HM03 Surf": {
-        "name": "HM03 Surf",
-        "key_item": true,
-        "purchase_price": 0,
-        "marts": []
-    },
-    "HM04 Strength": {
-        "name": "HM04 Strength",
-        "key_item": true,
-        "purchase_price": 0,
-        "marts": []
-    },
-    "HM05 Flash": {
-        "name": "HM05 Flash",
-        "key_item": true,
-        "purchase_price": 0,
-        "marts": []
-    },
-
-    "TM01 Mega Punch": {
-        "name": "TM01 Mega Punch",
-        "key_item": false,
-        "purchase_price": 3000,
-        "marts": ["Celadon 2F TMs"]
-    },
-    "TM02 Razor Wind": {
-        "name": "TM02 Razor Wind",
-        "key_item": false,
-        "purchase_price": 2000,
-        "marts": ["Celadon 2F TMs"]
-    },
-    "TM03 Swords Dance": {
-        "name": "TM03 Swords Dance",
-        "key_item": false,
-        "purchase_price": 2000,
-        "marts": []
-    },
-    "TM04 Whirlwind": {
-        "name": "TM04 Whirlwind",
-        "key_item": false,
-        "purchase_price": 1000,
-        "marts": []
-    },
-    "TM05 Mega Kick": {
-        "name": "TM05 Mega Kick",
-        "key_item": false,
-        "purchase_price": 3000,
-        "marts": ["Celadon 2F TMs"]
-    },
-    "TM06 Toxic": {
-        "name": "TM06 Toxic",
-        "key_item": false,
-        "purchase_price": 4000,
-        "marts": []
-    },
-    "TM07 Horn Drill": {
-        "name": "TM07 Horn Drill",
-        "key_item": false,
-        "purchase_price": 2000,
-        "marts": ["Celadon 2F TMs"]
-    },
-    "TM08 Body Slam": {
-        "name": "TM08 Body Slam",
-        "key_item": false,
-        "purchase_price": 4000,
-        "marts": []
-    },
-    "TM09 Take Down": {
-        "name": "TM09 Take Down",
-        "key_item": false,
-        "purchase_price": 3000,
-        "marts": ["Celadon 2F TMs"]
-    },
-    "TM10 Double Edge": {
-        "name": "TM10 Double Edge",
-        "key_item": false,
-        "purchase_price": 3000,
-        "marts": []
-    },
-    "TM11 BubbleBeam": {
-        "name": "TM11 BubbleBeam",
-        "key_item": false,
-        "purchase_price": 2000,
-        "marts": []
-    },
-    "TM12 Water Gun": {
-        "name": "TM12 Water Gun",
-        "key_item": false,
-        "purchase_price": 1000,
-        "marts": []
-    },
-    "TM13 Ice Beam": {
-        "name": "TM13 Ice Beam",
-        "key_item": false,
-        "purchase_price": 4000,
-        "marts": []
-    },
-    "TM14 Blizzard": {
-        "name": "TM14 Blizzard",
-        "key_item": false,
-        "purchase_price": 5000,
-        "marts": []
-    },
-    "TM15 Hyper Beam": {
-        "name": "TM15 Hyper Beam",
-        "key_item": false,
-        "purchase_price": 5000,
-        "marts": []
-    },
-    "TM16 Pay Day": {
-        "name": "TM16 Pay Day",
-        "key_item": false,
-        "purchase_price": 5000,
-        "marts": []
-    },
-    "TM17 Submission": {
-        "name": "TM17 Submission",
-        "key_item": false,
-        "purchase_price": 3000,
-        "marts": ["Celadon 2F TMs"]
-    },
-    "TM18 Counter": {
-        "name": "TM18 Counter",
-        "key_item": false,
-        "purchase_price": 2000,
-        "marts": []
-    },
-    "TM19 Seismic Toss": {
-        "name": "TM19 Seismic Toss",
-        "key_item": false,
-        "purchase_price": 3000,
-        "marts": []
-    },
-    "TM20 Rage": {
-        "name": "TM20 Rage",
-        "key_item": false,
-        "purchase_price": 2000,
-        "marts": []
-    },
-    "TM21 Mega Drain": {
-        "name": "TM21 Mega Drain",
-        "key_item": false,
-        "purchase_price": 5000,
-        "marts": []
-    },
-    "TM22 Solar Beam": {
-        "name": "TM22 Solar Beam",
-        "key_item": false,
-        "purchase_price": 5000,
-        "marts": []
-    },
-    "TM23 Dragon Rage": {
-        "name": "TM23 Dragon Rage",
-        "key_item": false,
-        "purchase_price": 5000,
-        "marts": []
-    },
-    "TM24 Thunderbolt": {
-        "name": "TM24 Thunderbolt",
-        "key_item": false,
-        "purchase_price": 2000,
-        "marts": []
-    },
-    "TM25 Thunder": {
-        "name": "TM25 Thunder",
-        "key_item": false,
-        "purchase_price": 5000,
-        "marts": []
-    },
-    "TM26 Earthquake": {
-        "name": "TM26 Earthquake",
-        "key_item": false,
-        "purchase_price": 4000,
-        "marts": []
-    },
-    "TM27 Fissure": {
-        "name": "TM27 Fissure",
-        "key_item": false,
-        "purchase_price": 5000,
-        "marts": []
-    },
-    "TM28 Dig": {
-        "name": "TM28 Dig",
-        "key_item": false,
-        "purchase_price": 2000,
-        "marts": []
-    },
-    "TM29 Psychic": {
-        "name": "TM29 Psychic",
-        "key_item": false,
-        "purchase_price": 4000,
-        "marts": []
-    },
-    "TM30 Teleport": {
-        "name": "TM30 Teleport",
-        "key_item": false,
-        "purchase_price": 1000,
-        "marts": []
-    },
-    "TM31 Mimic": {
-        "name": "TM31 Mimic",
-        "key_item": false,
-        "purchase_price": 2000,
-        "marts": []
-    },
-    "TM32 Double Team": {
-        "name": "TM32 Double Team",
-        "key_item": false,
-        "purchase_price": 1000,
-        "marts": ["Celadon 2F TMs"]
-    },
-    "TM33 Reflect": {
-        "name": "TM33 Reflect",
-        "key_item": false,
-        "purchase_price": 1000,
-        "marts": ["Celadon 2F TMs"]
-    },
-    "TM34 Bide": {
-        "name": "TM34 Bide",
-        "key_item": false,
-        "purchase_price": 2000,
-        "marts": []
-    },
-    "TM35 Metronome": {
-        "name": "TM35 Metronome",
-        "key_item": false,
-        "purchase_price": 4000,
-        "marts": []
-    },
-    "TM36 Selfdestruct": {
-        "name": "TM36 Selfdestruct",
-        "key_item": false,
-        "purchase_price": 2000,
-        "marts": []
-    },
-    "TM37 Egg Bomb": {
-        "name": "TM37 Egg Bomb",
-        "key_item": false,
-        "purchase_price": 2000,
-        "marts": ["Celadon 2F TMs"]
-    },
-    "TM38 Fire Blast": {
-        "name": "TM38 Fire Blast",
-        "key_item": false,
-        "purchase_price": 5000,
-        "marts": []
-    },
-    "TM39 Swift": {
-        "name": "TM39 Swift",
-        "key_item": false,
-        "purchase_price": 2000,
-        "marts": []
-    },
-    "TM40 Skull Bash": {
-        "name": "TM40 Skull Bash",
-        "key_item": false,
-        "purchase_price": 4000,
-        "marts": []
-    },
-    "TM41 Softboiled": {
-        "name": "TM41 Softboiled",
-        "key_item": false,
-        "purchase_price": 2000,
-        "marts": []
-    },
-    "TM42 Dream Eater": {
-        "name": "TM42 Dream Eater",
-        "key_item": false,
-        "purchase_price": 2000,
-        "marts": []
-    },
-    "TM43 Sky Attack": {
-        "name": "TM43 Sky Attack",
-        "key_item": false,
-        "purchase_price": 5000,
-        "marts": []
-    },
-    "TM44 Rest": {
-        "name": "TM44 Rest",
-        "key_item": false,
-        "purchase_price": 2000,
-        "marts": []
-    },
-    "TM45 Thunder Wave": {
-        "name": "TM45 Thunder Wave",
-        "key_item": false,
-        "purchase_price": 2000,
-        "marts": []
-    },
-    "TM46 Psywave": {
-        "name": "TM46 Psywave",
-        "key_item": false,
-        "purchase_price": 4000,
-        "marts": []
-    },
-    "TM47 Explosion": {
-        "name": "TM47 Explosion",
-        "key_item": false,
-        "purchase_price": 3000,
-        "marts": []
-    },
-    "TM48 Rock Slide": {
-        "name": "TM48 Rock Slide",
-        "key_item": false,
-        "purchase_price": 4000,
-        "marts": []
-    },
-    "TM49 Tri Attack": {
-        "name": "TM49 Tri Attack",
-        "key_item": false,
-        "purchase_price": 4000,
-        "marts": []
-    },
-    "TM50 Substitute": {
-        "name": "TM50 Substitute",
-        "key_item": false,
-        "purchase_price": 2000,
-        "marts": []
-    },
-
-    "Master Ball": {
-        "name": "Master Ball",
-        "key_item": false,
-        "purchase_price": 0,
-        "marts": []
-    },
-    "Ultra Ball": {
-        "name": "Ultra Ball",
-        "key_item": false,
-        "purchase_price": 1200,
-        "marts": ["Fuchsia", "Cinnabar", "Indigo"]
-    },
-    "Great Ball": {
-        "name": "Great Ball",
-        "key_item": false,
-        "purchase_price": 600,
-        "marts": ["Lavender", "Celadon 2F Items", "Fuchsia", "Cinnabar", "Saffron", "Indigo"]
-    },
-    "Poke Ball": {
-        "name": "Poke Ball",
-        "key_item": false,
-        "purchase_price": 200,
-        "marts": ["Viridian", "Pewter", "Cerulean", "Vermilion"]
-    },
-    "Antidote": {
-        "name": "Antidote",
-        "key_item": false,
-        "purchase_price": 100,
-        "marts": ["Viridian", "Pewter", "Cerulean", "Lavender", "Celadon 2F Items"]
-    },
-    "Burn Heal": {
-        "name": "Burn Heal",
-        "key_item": false,
-        "purchase_price": 250,
-        "marts": ["Viridian", "Pewter", "Cerulean", "Lavender", "Celadon 2F Items"]
-    },
-    "Ice Heal": {
-        "name": "Ice Heal",
-        "key_item": false,
-        "purchase_price": 250,
-        "marts": ["Vermilion", "Lavender", "Celadon 2F Items"]
-    },
-    "Awakening": {
-        "name": "Awakening",
-        "key_item": false,
-        "purchase_price": 200,
-        "marts": ["Pewter", "Cerulean", "Vermilion", "Celadon 2F Items"]
-    },
-    "Parlyz Heal": {
-        "name": "Parlyz Heal",
-        "key_item": false,
-        "purchase_price": 200,
-        "marts": ["Viridian", "Pewter", "Cerulean", "Vermilion", "Lavender", "Celadon 2F Items"]
-    },
-    "Full Restore": {
-        "name": "Full Restore",
-        "key_item": false,
-        "purchase_price": 3000,
-        "marts": ["Indigo"]
-    },
-    "Max Potion": {
-        "name": "Max Potion",
-        "key_item": false,
-        "purchase_price": 2500,
-        "marts": ["Indigo"]
-    },
-    "Hyper Potion": {
-        "name": "Hyper Potion",
-        "key_item": false,
-        "purchase_price": 1500,
-        "marts": ["Fuchsia", "Cinnabar", "Saffron"]
-    },
-    "Super Potion": {
-        "name": "Super Potion",
-        "key_item": false,
-        "purchase_price": 700,
-        "marts": ["Vermilion", "Lavender", "Celadon 2F Items"]
-    },
-    "Potion": {
-        "name": "Potion",
-        "key_item": false,
-        "purchase_price": 300,
-        "marts": ["Viridian", "Pewter", "Cerulean"]
-    },
-    "Escape Rope": {
-        "name": "Escape Rope",
-        "key_item": false,
-        "purchase_price": 550,
-        "marts": ["Pewter", "Cerulean", "Lavender", "Cinnabar", "Saffron"]
-    },
-    "Repel": {
-        "name": "Repel",
-        "key_item": false,
-        "purchase_price": 350,
-        "marts": ["Pewter", "Cerulean", "Vermilion"]
-    },
-    "Moon Stone": {
-        "name": "Moon Stone",
-        "key_item": false,
-        "purchase_price": 0,
-        "marts": []
-    },
-    "Fire Stone": {
-        "name": "Fire Stone",
-        "key_item": false,
-        "purchase_price": 2100,
-        "marts": ["Celadon 4F"]
-    },
-    "Thunder Stone": {
-        "name": "Thunder Stone",
-        "key_item": false,
-        "purchase_price": 2100,
-        "marts": ["Celadon 4F"]
-    },
-    "Water Stone": {
-        "name": "Water Stone",
-        "key_item": false,
-        "purchase_price": 2100,
-        "marts": ["Celadon 4F"]
-    },
-    "Leaf Stone": {
-        "name": "Leaf Stone",
-        "key_item": false,
-        "purchase_price": 2100,
-        "marts": ["Celadon 4F"]
-    },
-    "HP Up": {
-        "name": "HP Up",
-        "key_item": false,
-        "purchase_price": 9800,
-        "marts": ["Celadon 5F Vitamins"]
-    },
-    "Protein": {
-        "name": "Protein",
-        "key_item": false,
-        "purchase_price": 9800,
-        "marts": ["Celadon 5F Vitamins"]
-    },
-    "Iron": {
-        "name": "Iron",
-        "key_item": false,
-        "purchase_price": 9800,
-        "marts": ["Celadon 5F Vitamins"]
-    },
-    "Carbos": {
-        "name": "Carbos",
-        "key_item": false,
-        "purchase_price": 9800,
-        "marts": ["Celadon 5F Vitamins"]
-    },
-    "Calcium": {
-        "name": "Calcium",
-        "key_item": false,
-        "purchase_price": 9800,
-        "marts": ["Celadon 5F Vitamins"]
-    },
-    "Rare Candy": {
-        "name": "Rare Candy",
-        "key_item": false,
-        "purchase_price": 4800,
-        "marts": []
-    },
-    "Nugget": {
-        "name": "Nugget",
-        "key_item": false,
-        "purchase_price": 10000,
-        "marts": []
-    },
-    "Poke Doll": {
-        "name": "Poke Doll",
-        "key_item": false,
-        "purchase_price": 1000,
-        "marts": ["Celadon 4F"]
-    },
-    "Full Heal": {
-        "name": "Full Heal",
-        "key_item": false,
-        "purchase_price": 600,
-        "marts": ["Fuchsia", "Cinnabar", "Saffron", "Indigo"]
-    },
-    "Revive": {
-        "name": "Revive",
-        "key_item": false,
-        "purchase_price": 1500,
-        "marts": ["Lavender", "Celadon 2F Items", "Fuchsia", "Cinnabar", "Saffron", "Indigo"]
-    },
-    "Max Revive": {
-        "name": "Max Revive",
-        "key_item": false,
-        "purchase_price": 4000,
-        "marts": []
-    },
-    "Guard Spec": {
-        "name": "Guard Spec",
-        "key_item": false,
-        "purchase_price": 700,
-        "marts": ["Celadon 5F Battle Items"]
-    },
-    "Super Repel": {
-        "name": "Super Repel",
-        "key_item": false,
-        "purchase_price": 500,
-        "marts": ["Lavender", "Celadon 2F Items", "Fuchsia"]
-    },
-    "Max Repel": {
-        "name": "Max Repel",
-        "key_item": false,
-        "purchase_price": 700,
-        "marts": ["Saffron", "Indigo"]
-    },
-    "Dire Hit": {
-        "name": "Dire Hit",
-        "key_item": false,
-        "purchase_price": 650,
-        "marts": ["Celadon 5F Battle Items"]
-    },
-    "Fresh Water": {
-        "name": "Fresh Water",
-        "key_item": false,
-        "purchase_price": 200,
-        "marts": ["Celadon Vending Machines"]
-    },
-    "Soda Pop": {
-        "name": "Soda Pop",
-        "key_item": false,
-        "purchase_price": 300,
-        "marts": ["Celadon Vending Machines"]
-    },
-    "Lemonade": {
-        "name": "Lemonade",
-        "key_item": false,
-        "purchase_price": 350,
-        "marts": ["Celadon Vending Machines"]
-    },
-    "X Accuracy": {
-        "name": "X Accuracy",
-        "key_item": false,
-        "purchase_price": 950,
-        "marts": ["Celadon 5F Battle Items"]
-    },
-    "X Attack": {
-        "name": "X Attack",
-        "key_item": false,
-        "purchase_price": 500,
-        "marts": ["Celadon 5F Battle Items"]
-    },
-    "X Defend": {
-        "name": "X Defend",
-        "key_item": false,
-        "purchase_price": 550,
-        "marts": ["Celadon 5F Battle Items"]
-    },
-    "X Speed": {
-        "name": "X Speed",
-        "key_item": false,
-        "purchase_price": 350,
-        "marts": ["Celadon 5F Battle Items"]
-    },
-    "X Special": {
-        "name": "X Special",
-        "key_item": false,
-        "purchase_price": 350,
-        "marts": ["Celadon 5F Battle Items"]
-    },
-    "PP Up": {
-        "name": "PP Up",
-        "key_item": false,
-        "purchase_price": 0,
-        "marts": []
-    },
-    "Ether": {
-        "name": "Ether",
-        "key_item": false,
-        "purchase_price": 0,
-        "marts": []
-    },
-    "Max Ether": {
-        "name": "Max Ether",
-        "key_item": false,
-        "purchase_price": 0,
-        "marts": []
-    },
-    "Elixer": {
-        "name": "Elixer",
-        "key_item": false,
-        "purchase_price": 0,
-        "marts": []
-    },
-    "Max Elixer": {
-        "name": "Max Elixer",
-        "key_item": false,
-        "purchase_price": 0,
-        "marts": []
-    }
+    "items": [
+        {
+            "name": "Town Map",
+            "key_item": true,
+            "purchase_price": 0,
+            "marts": [],
+            "rom_id": 5
+        },
+        {
+            "name": "Bicycle",
+            "key_item": true,
+            "purchase_price": 0,
+            "marts": [],
+            "rom_id": 6
+        },
+        {
+            "name": "Bike Voucher",
+            "key_item": true,
+            "purchase_price": 0,
+            "marts": [],
+            "rom_id": 45
+        },
+        {
+            "name": "Oak's Parcel",
+            "key_item": true,
+            "purchase_price": 0,
+            "marts": [],
+            "rom_id": 70
+        },
+        {
+            "name": "Old Amber",
+            "key_item": true,
+            "purchase_price": 0,
+            "marts": [],
+            "rom_id": 31
+        },
+        {
+            "name": "Dome Fossil",
+            "key_item": true,
+            "purchase_price": 0,
+            "marts": [],
+            "rom_id": 41
+        },
+        {
+            "name": "Helix Fossil",
+            "key_item": true,
+            "purchase_price": 0,
+            "marts": [],
+            "rom_id": 42
+        },
+        {
+            "name": "Secret Key",
+            "key_item": true,
+            "purchase_price": 0,
+            "marts": [],
+            "rom_id": 43
+        },
+        {
+            "name": "Card Key",
+            "key_item": true,
+            "purchase_price": 0,
+            "marts": [],
+            "rom_id": 48
+        },
+        {
+            "name": "Coin Case",
+            "key_item": true,
+            "purchase_price": 0,
+            "marts": [],
+            "rom_id": 69
+        },
+        {
+            "name": "Gold Teeth",
+            "key_item": true,
+            "purchase_price": 0,
+            "marts": [],
+            "rom_id": 64
+        },
+        {
+            "name": "Itemfinder",
+            "key_item": true,
+            "purchase_price": 0,
+            "marts": [],
+            "rom_id": 71
+        },
+        {
+            "name": "Silph Scope",
+            "key_item": true,
+            "purchase_price": 0,
+            "marts": [],
+            "rom_id": 72
+        },
+        {
+            "name": "Poke Flute",
+            "key_item": true,
+            "purchase_price": 0,
+            "marts": [],
+            "rom_id": 73
+        },
+        {
+            "name": "Lift Key",
+            "key_item": true,
+            "purchase_price": 0,
+            "marts": [],
+            "rom_id": 74
+        },
+        {
+            "name": "Old Rod",
+            "key_item": true,
+            "purchase_price": 0,
+            "marts": [],
+            "rom_id": 76
+        },
+        {
+            "name": "Good Rod",
+            "key_item": true,
+            "purchase_price": 0,
+            "marts": [],
+            "rom_id": 77
+        },
+        {
+            "name": "Super Rod",
+            "key_item": true,
+            "purchase_price": 0,
+            "marts": [],
+            "rom_id": 78
+        },
+        {
+            "name": "SS Anne Ticket",
+            "key_item": true,
+            "purchase_price": 0,
+            "marts": [],
+            "rom_id": 63
+        },
+        {
+            "name": "HM01 Cut",
+            "key_item": true,
+            "purchase_price": 0,
+            "marts": [],
+            "rom_id": 196
+        },
+        {
+            "name": "HM02 Fly",
+            "key_item": true,
+            "purchase_price": 0,
+            "marts": [],
+            "rom_id": 197
+        },
+        {
+            "name": "HM03 Surf",
+            "key_item": true,
+            "purchase_price": 0,
+            "marts": [],
+            "rom_id": 198
+        },
+        {
+            "name": "HM04 Strength",
+            "key_item": true,
+            "purchase_price": 0,
+            "marts": [],
+            "rom_id": 199
+        },
+        {
+            "name": "HM05 Flash",
+            "key_item": true,
+            "purchase_price": 0,
+            "marts": [],
+            "rom_id": 200
+        },
+        {
+            "name": "TM01 Mega Punch",
+            "key_item": false,
+            "purchase_price": 3000,
+            "marts": [
+                "Celadon 2F TMs"
+            ],
+            "rom_id": 201
+        },
+        {
+            "name": "TM02 Razor Wind",
+            "key_item": false,
+            "purchase_price": 2000,
+            "marts": [
+                "Celadon 2F TMs"
+            ],
+            "rom_id": 202
+        },
+        {
+            "name": "TM03 Swords Dance",
+            "key_item": false,
+            "purchase_price": 2000,
+            "marts": [],
+            "rom_id": 203
+        },
+        {
+            "name": "TM04 Whirlwind",
+            "key_item": false,
+            "purchase_price": 1000,
+            "marts": [],
+            "rom_id": 204
+        },
+        {
+            "name": "TM05 Mega Kick",
+            "key_item": false,
+            "purchase_price": 3000,
+            "marts": [
+                "Celadon 2F TMs"
+            ],
+            "rom_id": 205
+        },
+        {
+            "name": "TM06 Toxic",
+            "key_item": false,
+            "purchase_price": 4000,
+            "marts": [],
+            "rom_id": 206
+        },
+        {
+            "name": "TM07 Horn Drill",
+            "key_item": false,
+            "purchase_price": 2000,
+            "marts": [
+                "Celadon 2F TMs"
+            ],
+            "rom_id": 207
+        },
+        {
+            "name": "TM08 Body Slam",
+            "key_item": false,
+            "purchase_price": 4000,
+            "marts": [],
+            "rom_id": 208
+        },
+        {
+            "name": "TM09 Take Down",
+            "key_item": false,
+            "purchase_price": 3000,
+            "marts": [
+                "Celadon 2F TMs"
+            ],
+            "rom_id": 209
+        },
+        {
+            "name": "TM10 Double Edge",
+            "key_item": false,
+            "purchase_price": 3000,
+            "marts": [],
+            "rom_id": 210
+        },
+        {
+            "name": "TM11 BubbleBeam",
+            "key_item": false,
+            "purchase_price": 2000,
+            "marts": [],
+            "rom_id": 211
+        },
+        {
+            "name": "TM12 Water Gun",
+            "key_item": false,
+            "purchase_price": 1000,
+            "marts": [],
+            "rom_id": 212
+        },
+        {
+            "name": "TM13 Ice Beam",
+            "key_item": false,
+            "purchase_price": 4000,
+            "marts": [],
+            "rom_id": 213
+        },
+        {
+            "name": "TM14 Blizzard",
+            "key_item": false,
+            "purchase_price": 5000,
+            "marts": [],
+            "rom_id": 214
+        },
+        {
+            "name": "TM15 Hyper Beam",
+            "key_item": false,
+            "purchase_price": 5000,
+            "marts": [],
+            "rom_id": 215
+        },
+        {
+            "name": "TM16 Pay Day",
+            "key_item": false,
+            "purchase_price": 5000,
+            "marts": [],
+            "rom_id": 216
+        },
+        {
+            "name": "TM17 Submission",
+            "key_item": false,
+            "purchase_price": 3000,
+            "marts": [
+                "Celadon 2F TMs"
+            ],
+            "rom_id": 217
+        },
+        {
+            "name": "TM18 Counter",
+            "key_item": false,
+            "purchase_price": 2000,
+            "marts": [],
+            "rom_id": 218
+        },
+        {
+            "name": "TM19 Seismic Toss",
+            "key_item": false,
+            "purchase_price": 3000,
+            "marts": [],
+            "rom_id": 219
+        },
+        {
+            "name": "TM20 Rage",
+            "key_item": false,
+            "purchase_price": 2000,
+            "marts": [],
+            "rom_id": 220
+        },
+        {
+            "name": "TM21 Mega Drain",
+            "key_item": false,
+            "purchase_price": 5000,
+            "marts": [],
+            "rom_id": 221
+        },
+        {
+            "name": "TM22 Solar Beam",
+            "key_item": false,
+            "purchase_price": 5000,
+            "marts": [],
+            "rom_id": 222
+        },
+        {
+            "name": "TM23 Dragon Rage",
+            "key_item": false,
+            "purchase_price": 5000,
+            "marts": [],
+            "rom_id": 223
+        },
+        {
+            "name": "TM24 Thunderbolt",
+            "key_item": false,
+            "purchase_price": 2000,
+            "marts": [],
+            "rom_id": 224
+        },
+        {
+            "name": "TM25 Thunder",
+            "key_item": false,
+            "purchase_price": 5000,
+            "marts": [],
+            "rom_id": 225
+        },
+        {
+            "name": "TM26 Earthquake",
+            "key_item": false,
+            "purchase_price": 4000,
+            "marts": [],
+            "rom_id": 226
+        },
+        {
+            "name": "TM27 Fissure",
+            "key_item": false,
+            "purchase_price": 5000,
+            "marts": [],
+            "rom_id": 227
+        },
+        {
+            "name": "TM28 Dig",
+            "key_item": false,
+            "purchase_price": 2000,
+            "marts": [],
+            "rom_id": 228
+        },
+        {
+            "name": "TM29 Psychic",
+            "key_item": false,
+            "purchase_price": 4000,
+            "marts": [],
+            "rom_id": 229
+        },
+        {
+            "name": "TM30 Teleport",
+            "key_item": false,
+            "purchase_price": 1000,
+            "marts": [],
+            "rom_id": 230
+        },
+        {
+            "name": "TM31 Mimic",
+            "key_item": false,
+            "purchase_price": 2000,
+            "marts": [],
+            "rom_id": 231
+        },
+        {
+            "name": "TM32 Double Team",
+            "key_item": false,
+            "purchase_price": 1000,
+            "marts": [
+                "Celadon 2F TMs"
+            ],
+            "rom_id": 232
+        },
+        {
+            "name": "TM33 Reflect",
+            "key_item": false,
+            "purchase_price": 1000,
+            "marts": [
+                "Celadon 2F TMs"
+            ],
+            "rom_id": 233
+        },
+        {
+            "name": "TM34 Bide",
+            "key_item": false,
+            "purchase_price": 2000,
+            "marts": [],
+            "rom_id": 234
+        },
+        {
+            "name": "TM35 Metronome",
+            "key_item": false,
+            "purchase_price": 4000,
+            "marts": [],
+            "rom_id": 235
+        },
+        {
+            "name": "TM36 Selfdestruct",
+            "key_item": false,
+            "purchase_price": 2000,
+            "marts": [],
+            "rom_id": 236
+        },
+        {
+            "name": "TM37 Egg Bomb",
+            "key_item": false,
+            "purchase_price": 2000,
+            "marts": [
+                "Celadon 2F TMs"
+            ],
+            "rom_id": 237
+        },
+        {
+            "name": "TM38 Fire Blast",
+            "key_item": false,
+            "purchase_price": 5000,
+            "marts": [],
+            "rom_id": 238
+        },
+        {
+            "name": "TM39 Swift",
+            "key_item": false,
+            "purchase_price": 2000,
+            "marts": [],
+            "rom_id": 239
+        },
+        {
+            "name": "TM40 Skull Bash",
+            "key_item": false,
+            "purchase_price": 4000,
+            "marts": [],
+            "rom_id": 240
+        },
+        {
+            "name": "TM41 Softboiled",
+            "key_item": false,
+            "purchase_price": 2000,
+            "marts": [],
+            "rom_id": 241
+        },
+        {
+            "name": "TM42 Dream Eater",
+            "key_item": false,
+            "purchase_price": 2000,
+            "marts": [],
+            "rom_id": 242
+        },
+        {
+            "name": "TM43 Sky Attack",
+            "key_item": false,
+            "purchase_price": 5000,
+            "marts": [],
+            "rom_id": 243
+        },
+        {
+            "name": "TM44 Rest",
+            "key_item": false,
+            "purchase_price": 2000,
+            "marts": [],
+            "rom_id": 244
+        },
+        {
+            "name": "TM45 Thunder Wave",
+            "key_item": false,
+            "purchase_price": 2000,
+            "marts": [],
+            "rom_id": 245
+        },
+        {
+            "name": "TM46 Psywave",
+            "key_item": false,
+            "purchase_price": 4000,
+            "marts": [],
+            "rom_id": 246
+        },
+        {
+            "name": "TM47 Explosion",
+            "key_item": false,
+            "purchase_price": 3000,
+            "marts": [],
+            "rom_id": 247
+        },
+        {
+            "name": "TM48 Rock Slide",
+            "key_item": false,
+            "purchase_price": 4000,
+            "marts": [],
+            "rom_id": 248
+        },
+        {
+            "name": "TM49 Tri Attack",
+            "key_item": false,
+            "purchase_price": 4000,
+            "marts": [],
+            "rom_id": 249
+        },
+        {
+            "name": "TM50 Substitute",
+            "key_item": false,
+            "purchase_price": 2000,
+            "marts": [],
+            "rom_id": 250
+        },
+        {
+            "name": "Master Ball",
+            "key_item": false,
+            "purchase_price": 0,
+            "marts": [],
+            "rom_id": 1
+        },
+        {
+            "name": "Ultra Ball",
+            "key_item": false,
+            "purchase_price": 1200,
+            "marts": [
+                "Fuchsia",
+                "Cinnabar",
+                "Indigo"
+            ],
+            "rom_id": 2
+        },
+        {
+            "name": "Great Ball",
+            "key_item": false,
+            "purchase_price": 600,
+            "marts": [
+                "Lavender",
+                "Celadon 2F Items",
+                "Fuchsia",
+                "Cinnabar",
+                "Saffron",
+                "Indigo"
+            ],
+            "rom_id": 3
+        },
+        {
+            "name": "Poke Ball",
+            "key_item": false,
+            "purchase_price": 200,
+            "marts": [
+                "Viridian",
+                "Pewter",
+                "Cerulean",
+                "Vermilion"
+            ],
+            "rom_id": 4
+        },
+        {
+            "name": "Antidote",
+            "key_item": false,
+            "purchase_price": 100,
+            "marts": [
+                "Viridian",
+                "Pewter",
+                "Cerulean",
+                "Lavender",
+                "Celadon 2F Items"
+            ],
+            "rom_id": 11
+        },
+        {
+            "name": "Burn Heal",
+            "key_item": false,
+            "purchase_price": 250,
+            "marts": [
+                "Viridian",
+                "Pewter",
+                "Cerulean",
+                "Lavender",
+                "Celadon 2F Items"
+            ],
+            "rom_id": 12
+        },
+        {
+            "name": "Ice Heal",
+            "key_item": false,
+            "purchase_price": 250,
+            "marts": [
+                "Vermilion",
+                "Lavender",
+                "Celadon 2F Items"
+            ],
+            "rom_id": 13
+        },
+        {
+            "name": "Awakening",
+            "key_item": false,
+            "purchase_price": 200,
+            "marts": [
+                "Pewter",
+                "Cerulean",
+                "Vermilion",
+                "Celadon 2F Items"
+            ],
+            "rom_id": 14
+        },
+        {
+            "name": "Parlyz Heal",
+            "key_item": false,
+            "purchase_price": 200,
+            "marts": [
+                "Viridian",
+                "Pewter",
+                "Cerulean",
+                "Vermilion",
+                "Lavender",
+                "Celadon 2F Items"
+            ],
+            "rom_id": 15
+        },
+        {
+            "name": "Full Restore",
+            "key_item": false,
+            "purchase_price": 3000,
+            "marts": [
+                "Indigo"
+            ],
+            "rom_id": 16
+        },
+        {
+            "name": "Max Potion",
+            "key_item": false,
+            "purchase_price": 2500,
+            "marts": [
+                "Indigo"
+            ],
+            "rom_id": 17
+        },
+        {
+            "name": "Hyper Potion",
+            "key_item": false,
+            "purchase_price": 1500,
+            "marts": [
+                "Fuchsia",
+                "Cinnabar",
+                "Saffron"
+            ],
+            "rom_id": 18
+        },
+        {
+            "name": "Super Potion",
+            "key_item": false,
+            "purchase_price": 700,
+            "marts": [
+                "Vermilion",
+                "Lavender",
+                "Celadon 2F Items"
+            ],
+            "rom_id": 19
+        },
+        {
+            "name": "Potion",
+            "key_item": false,
+            "purchase_price": 300,
+            "marts": [
+                "Viridian",
+                "Pewter",
+                "Cerulean"
+            ],
+            "rom_id": 20
+        },
+        {
+            "name": "Escape Rope",
+            "key_item": false,
+            "purchase_price": 550,
+            "marts": [
+                "Pewter",
+                "Cerulean",
+                "Lavender",
+                "Cinnabar",
+                "Saffron"
+            ],
+            "rom_id": 29
+        },
+        {
+            "name": "Repel",
+            "key_item": false,
+            "purchase_price": 350,
+            "marts": [
+                "Pewter",
+                "Cerulean",
+                "Vermilion"
+            ],
+            "rom_id": 30
+        },
+        {
+            "name": "Moon Stone",
+            "key_item": false,
+            "purchase_price": 0,
+            "marts": [],
+            "rom_id": 10
+        },
+        {
+            "name": "Fire Stone",
+            "key_item": false,
+            "purchase_price": 2100,
+            "marts": [
+                "Celadon 4F"
+            ],
+            "rom_id": 32
+        },
+        {
+            "name": "Thunder Stone",
+            "key_item": false,
+            "purchase_price": 2100,
+            "marts": [
+                "Celadon 4F"
+            ],
+            "rom_id": 33
+        },
+        {
+            "name": "Water Stone",
+            "key_item": false,
+            "purchase_price": 2100,
+            "marts": [
+                "Celadon 4F"
+            ],
+            "rom_id": 34
+        },
+        {
+            "name": "Leaf Stone",
+            "key_item": false,
+            "purchase_price": 2100,
+            "marts": [
+                "Celadon 4F"
+            ],
+            "rom_id": 47
+        },
+        {
+            "name": "HP Up",
+            "key_item": false,
+            "purchase_price": 9800,
+            "marts": [
+                "Celadon 5F Vitamins"
+            ],
+            "rom_id": 35
+        },
+        {
+            "name": "Protein",
+            "key_item": false,
+            "purchase_price": 9800,
+            "marts": [
+                "Celadon 5F Vitamins"
+            ],
+            "rom_id": 36
+        },
+        {
+            "name": "Iron",
+            "key_item": false,
+            "purchase_price": 9800,
+            "marts": [
+                "Celadon 5F Vitamins"
+            ],
+            "rom_id": 37
+        },
+        {
+            "name": "Carbos",
+            "key_item": false,
+            "purchase_price": 9800,
+            "marts": [
+                "Celadon 5F Vitamins"
+            ],
+            "rom_id": 38
+        },
+        {
+            "name": "Calcium",
+            "key_item": false,
+            "purchase_price": 9800,
+            "marts": [
+                "Celadon 5F Vitamins"
+            ],
+            "rom_id": 39
+        },
+        {
+            "name": "Rare Candy",
+            "key_item": false,
+            "purchase_price": 4800,
+            "marts": [],
+            "rom_id": 40
+        },
+        {
+            "name": "Nugget",
+            "key_item": false,
+            "purchase_price": 10000,
+            "marts": [],
+            "rom_id": 49
+        },
+        {
+            "name": "Poke Doll",
+            "key_item": false,
+            "purchase_price": 1000,
+            "marts": [
+                "Celadon 4F"
+            ],
+            "rom_id": 51
+        },
+        {
+            "name": "Full Heal",
+            "key_item": false,
+            "purchase_price": 600,
+            "marts": [
+                "Fuchsia",
+                "Cinnabar",
+                "Saffron",
+                "Indigo"
+            ],
+            "rom_id": 52
+        },
+        {
+            "name": "Revive",
+            "key_item": false,
+            "purchase_price": 1500,
+            "marts": [
+                "Lavender",
+                "Celadon 2F Items",
+                "Fuchsia",
+                "Cinnabar",
+                "Saffron",
+                "Indigo"
+            ],
+            "rom_id": 53
+        },
+        {
+            "name": "Max Revive",
+            "key_item": false,
+            "purchase_price": 4000,
+            "marts": [],
+            "rom_id": 54
+        },
+        {
+            "name": "Guard Spec",
+            "key_item": false,
+            "purchase_price": 700,
+            "marts": [
+                "Celadon 5F Battle Items"
+            ],
+            "rom_id": 55
+        },
+        {
+            "name": "Super Repel",
+            "key_item": false,
+            "purchase_price": 500,
+            "marts": [
+                "Lavender",
+                "Celadon 2F Items",
+                "Fuchsia"
+            ],
+            "rom_id": 56
+        },
+        {
+            "name": "Max Repel",
+            "key_item": false,
+            "purchase_price": 700,
+            "marts": [
+                "Saffron",
+                "Indigo"
+            ],
+            "rom_id": 57
+        },
+        {
+            "name": "Dire Hit",
+            "key_item": false,
+            "purchase_price": 650,
+            "marts": [
+                "Celadon 5F Battle Items"
+            ],
+            "rom_id": 58
+        },
+        {
+            "name": "Fresh Water",
+            "key_item": false,
+            "purchase_price": 200,
+            "marts": [
+                "Celadon Vending Machines"
+            ],
+            "rom_id": 60
+        },
+        {
+            "name": "Soda Pop",
+            "key_item": false,
+            "purchase_price": 300,
+            "marts": [
+                "Celadon Vending Machines"
+            ],
+            "rom_id": 61
+        },
+        {
+            "name": "Lemonade",
+            "key_item": false,
+            "purchase_price": 350,
+            "marts": [
+                "Celadon Vending Machines"
+            ],
+            "rom_id": 62
+        },
+        {
+            "name": "X Accuracy",
+            "key_item": false,
+            "purchase_price": 950,
+            "marts": [
+                "Celadon 5F Battle Items"
+            ],
+            "rom_id": 46
+        },
+        {
+            "name": "X Attack",
+            "key_item": false,
+            "purchase_price": 500,
+            "marts": [
+                "Celadon 5F Battle Items"
+            ],
+            "rom_id": 65
+        },
+        {
+            "name": "X Defend",
+            "key_item": false,
+            "purchase_price": 550,
+            "marts": [
+                "Celadon 5F Battle Items"
+            ],
+            "rom_id": 66
+        },
+        {
+            "name": "X Speed",
+            "key_item": false,
+            "purchase_price": 350,
+            "marts": [
+                "Celadon 5F Battle Items"
+            ],
+            "rom_id": 67
+        },
+        {
+            "name": "X Special",
+            "key_item": false,
+            "purchase_price": 350,
+            "marts": [
+                "Celadon 5F Battle Items"
+            ],
+            "rom_id": 68
+        },
+        {
+            "name": "PP Up",
+            "key_item": false,
+            "purchase_price": 0,
+            "marts": [],
+            "rom_id": 79
+        },
+        {
+            "name": "Ether",
+            "key_item": false,
+            "purchase_price": 0,
+            "marts": [],
+            "rom_id": 80
+        },
+        {
+            "name": "Max Ether",
+            "key_item": false,
+            "purchase_price": 0,
+            "marts": [],
+            "rom_id": 81
+        },
+        {
+            "name": "Elixer",
+            "key_item": false,
+            "purchase_price": 0,
+            "marts": [],
+            "rom_id": 82
+        },
+        {
+            "name": "Max Elixer",
+            "key_item": false,
+            "purchase_price": 0,
+            "marts": [],
+            "rom_id": 83
+        }
+    ]
 }

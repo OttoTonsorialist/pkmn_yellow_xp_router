@@ -47,7 +47,7 @@ class Machine:
         self._controller = controller
         self._gamehook_client = gamehook_client
         self.gh_converter = gh_converter
-        self.debug_mode = False
+        self.debug_mode = const.DEBUG_RECORDING_MODE
 
         self._player_id = None
         self._solo_mon_species = None

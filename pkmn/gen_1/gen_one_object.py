@@ -267,7 +267,8 @@ def _load_pkmn_db(path):
     with open(path, 'r') as f:
         raw_pkmn_db = json.load(f)
 
-    for cur_pkmn in raw_pkmn_db.values():
+    all_pkmn = raw_pkmn_db.get("pokemon", raw_pkmn_db.values())
+    for cur_pkmn in all_pkmn:
         result[cur_pkmn[const.NAME_KEY]] = universal_data_objects.PokemonSpecies(
             cur_pkmn[const.NAME_KEY],
             cur_pkmn[const.GROWTH_RATE_KEY],
@@ -331,7 +332,8 @@ def _load_trainer_db(path, pkmn_db:PkmnDB):
     with open(path, 'r') as f:
         raw_db = json.load(f)
 
-    for raw_trainer in raw_db.values():
+    all_trainers = raw_db.get("trainers", raw_db.values())
+    for raw_trainer in all_trainers:
         # ignoring all unused trainers
         if raw_trainer[const.TRAINER_LOC] == const.UNUSED_TRAINER_LOC:
             continue
@@ -346,7 +348,8 @@ def _load_item_db(path):
     with open(path, 'r') as f:
         raw_db = json.load(f)
 
-    for raw_item in raw_db.values():
+    all_items = raw_db.get("items", raw_db.values())
+    for raw_item in all_items:
         item_name:str = raw_item[const.NAME_KEY]
         move_name = None
         if item_name.startswith("TM") or item_name.startswith("HM"):
@@ -368,7 +371,16 @@ def _load_move_db(path):
     with open(path, 'r') as f:
         raw_db = json.load(f)
 
-    for raw_move in raw_db.values():
+    all_moves = raw_db.get("moves", raw_db.values())
+    for raw_move in all_moves:
+        flavor = raw_move[const.MOVE_FLAVOR]
+        if not isinstance(flavor, list):
+            # NOTE: for backwards compatibility with older custom gens
+            # be able to handle parsing flavors that aren't lists
+            if flavor is None:
+                flavor = []
+            else:
+                flavor = [flavor]
         result[raw_move[const.NAME_KEY]] = universal_data_objects.Move(
             raw_move[const.NAME_KEY],
             raw_move[const.MOVE_ACCURACY],
@@ -376,8 +388,7 @@ def _load_move_db(path):
             raw_move[const.BASE_POWER],
             raw_move[const.MOVE_TYPE],
             raw_move[const.MOVE_EFFECTS],
-            # TODO: update underlying data to actually store with lists, instead of forcing it here
-            [raw_move[const.MOVE_FLAVOR]],
+            flavor,
         )
     
     return result
