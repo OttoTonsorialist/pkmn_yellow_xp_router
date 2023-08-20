@@ -1,0 +1,4993 @@
+{
+    "encounter_tables": [
+        {
+            "map_name": "PALLET_TOWN",
+            "map_id": 0,
+            "old_rod": {
+                "base_rate": 50,
+                "encounters": [
+                    {
+                        "pkmn": "Magikarp",
+                        "level": 5,
+                        "rate": 100
+                    }
+                ]
+            },
+            "good_rod": {
+                "base_rate": 50,
+                "encounters": [
+                    {
+                        "pkmn": "Goldeen",
+                        "level": 10,
+                        "rate": 50
+                    },
+                    {
+                        "pkmn": "Poliwag",
+                        "level": 10,
+                        "rate": 50
+                    }
+                ]
+            },
+            "super_rod": {
+                "base_rate": 50,
+                "encounters": [
+                    {
+                        "pkmn": "Tentacool",
+                        "level": 15,
+                        "rate": 50
+                    },
+                    {
+                        "pkmn": "Poliwag",
+                        "level": 15,
+                        "rate": 50
+                    }
+                ]
+            }
+        },
+        {
+            "map_name": "VIRIDIAN_CITY",
+            "map_id": 1,
+            "old_rod": {
+                "base_rate": 50,
+                "encounters": [
+                    {
+                        "pkmn": "Magikarp",
+                        "level": 5,
+                        "rate": 100
+                    }
+                ]
+            },
+            "good_rod": {
+                "base_rate": 50,
+                "encounters": [
+                    {
+                        "pkmn": "Goldeen",
+                        "level": 10,
+                        "rate": 50
+                    },
+                    {
+                        "pkmn": "Poliwag",
+                        "level": 10,
+                        "rate": 50
+                    }
+                ]
+            },
+            "super_rod": {
+                "base_rate": 50,
+                "encounters": [
+                    {
+                        "pkmn": "Tentacool",
+                        "level": 15,
+                        "rate": 50
+                    },
+                    {
+                        "pkmn": "Poliwag",
+                        "level": 15,
+                        "rate": 50
+                    }
+                ]
+            }
+        },
+        {
+            "map_name": "CERULEAN_CITY",
+            "map_id": 3,
+            "old_rod": {
+                "base_rate": 50,
+                "encounters": [
+                    {
+                        "pkmn": "Magikarp",
+                        "level": 5,
+                        "rate": 100
+                    }
+                ]
+            },
+            "good_rod": {
+                "base_rate": 50,
+                "encounters": [
+                    {
+                        "pkmn": "Goldeen",
+                        "level": 10,
+                        "rate": 50
+                    },
+                    {
+                        "pkmn": "Poliwag",
+                        "level": 10,
+                        "rate": 50
+                    }
+                ]
+            },
+            "super_rod": {
+                "base_rate": 50,
+                "encounters": [
+                    {
+                        "pkmn": "Psyduck",
+                        "level": 15,
+                        "rate": 33
+                    },
+                    {
+                        "pkmn": "Goldeen",
+                        "level": 15,
+                        "rate": 33
+                    },
+                    {
+                        "pkmn": "Krabby",
+                        "level": 15,
+                        "rate": 33
+                    }
+                ]
+            }
+        },
+        {
+            "map_name": "VERMILION_CITY",
+            "map_id": 5,
+            "old_rod": {
+                "base_rate": 50,
+                "encounters": [
+                    {
+                        "pkmn": "Magikarp",
+                        "level": 5,
+                        "rate": 100
+                    }
+                ]
+            },
+            "good_rod": {
+                "base_rate": 50,
+                "encounters": [
+                    {
+                        "pkmn": "Goldeen",
+                        "level": 10,
+                        "rate": 50
+                    },
+                    {
+                        "pkmn": "Poliwag",
+                        "level": 10,
+                        "rate": 50
+                    }
+                ]
+            },
+            "super_rod": {
+                "base_rate": 50,
+                "encounters": [
+                    {
+                        "pkmn": "Krabby",
+                        "level": 15,
+                        "rate": 50
+                    },
+                    {
+                        "pkmn": "Shellder",
+                        "level": 15,
+                        "rate": 50
+                    }
+                ]
+            }
+        },
+        {
+            "map_name": "CELADON_CITY",
+            "map_id": 6,
+            "old_rod": {
+                "base_rate": 50,
+                "encounters": [
+                    {
+                        "pkmn": "Magikarp",
+                        "level": 5,
+                        "rate": 100
+                    }
+                ]
+            },
+            "good_rod": {
+                "base_rate": 50,
+                "encounters": [
+                    {
+                        "pkmn": "Goldeen",
+                        "level": 10,
+                        "rate": 50
+                    },
+                    {
+                        "pkmn": "Poliwag",
+                        "level": 10,
+                        "rate": 50
+                    }
+                ]
+            },
+            "super_rod": {
+                "base_rate": 50,
+                "encounters": [
+                    {
+                        "pkmn": "Poliwhirl",
+                        "level": 23,
+                        "rate": 50
+                    },
+                    {
+                        "pkmn": "Slowpoke",
+                        "level": 15,
+                        "rate": 50
+                    }
+                ]
+            }
+        },
+        {
+            "map_name": "FUCHSIA_CITY",
+            "map_id": 7,
+            "old_rod": {
+                "base_rate": 50,
+                "encounters": [
+                    {
+                        "pkmn": "Magikarp",
+                        "level": 5,
+                        "rate": 100
+                    }
+                ]
+            },
+            "good_rod": {
+                "base_rate": 50,
+                "encounters": [
+                    {
+                        "pkmn": "Goldeen",
+                        "level": 10,
+                        "rate": 50
+                    },
+                    {
+                        "pkmn": "Poliwag",
+                        "level": 10,
+                        "rate": 50
+                    }
+                ]
+            },
+            "super_rod": {
+                "base_rate": 50,
+                "encounters": [
+                    {
+                        "pkmn": "Seaking",
+                        "level": 23,
+                        "rate": 25
+                    },
+                    {
+                        "pkmn": "Krabby",
+                        "level": 15,
+                        "rate": 25
+                    },
+                    {
+                        "pkmn": "Goldeen",
+                        "level": 15,
+                        "rate": 25
+                    },
+                    {
+                        "pkmn": "Magikarp",
+                        "level": 15,
+                        "rate": 25
+                    }
+                ]
+            }
+        },
+        {
+            "map_name": "CINNABAR_ISLAND",
+            "map_id": 8,
+            "old_rod": {
+                "base_rate": 50,
+                "encounters": [
+                    {
+                        "pkmn": "Magikarp",
+                        "level": 5,
+                        "rate": 100
+                    }
+                ]
+            },
+            "good_rod": {
+                "base_rate": 50,
+                "encounters": [
+                    {
+                        "pkmn": "Goldeen",
+                        "level": 10,
+                        "rate": 50
+                    },
+                    {
+                        "pkmn": "Poliwag",
+                        "level": 10,
+                        "rate": 50
+                    }
+                ]
+            },
+            "super_rod": {
+                "base_rate": 50,
+                "encounters": [
+                    {
+                        "pkmn": "Staryu",
+                        "level": 15,
+                        "rate": 25
+                    },
+                    {
+                        "pkmn": "Horsea",
+                        "level": 15,
+                        "rate": 25
+                    },
+                    {
+                        "pkmn": "Shellder",
+                        "level": 15,
+                        "rate": 25
+                    },
+                    {
+                        "pkmn": "Goldeen",
+                        "level": 15,
+                        "rate": 25
+                    }
+                ]
+            }
+        },
+        {
+            "map_name": "ROUTE_1",
+            "map_id": 12,
+            "grass_cave": {
+                "base_rate": 25,
+                "encounters": [
+                    {
+                        "pkmn": "Pidgey",
+                        "level": 3,
+                        "rate": 20
+                    },
+                    {
+                        "pkmn": "Rattata",
+                        "level": 3,
+                        "rate": 20
+                    },
+                    {
+                        "pkmn": "Rattata",
+                        "level": 3,
+                        "rate": 15
+                    },
+                    {
+                        "pkmn": "Rattata",
+                        "level": 2,
+                        "rate": 10
+                    },
+                    {
+                        "pkmn": "Pidgey",
+                        "level": 2,
+                        "rate": 10
+                    },
+                    {
+                        "pkmn": "Pidgey",
+                        "level": 3,
+                        "rate": 10
+                    },
+                    {
+                        "pkmn": "Pidgey",
+                        "level": 3,
+                        "rate": 5
+                    },
+                    {
+                        "pkmn": "Rattata",
+                        "level": 4,
+                        "rate": 5
+                    },
+                    {
+                        "pkmn": "Pidgey",
+                        "level": 4,
+                        "rate": 4
+                    },
+                    {
+                        "pkmn": "Pidgey",
+                        "level": 5,
+                        "rate": 1
+                    }
+                ]
+            }
+        },
+        {
+            "map_name": "ROUTE_2",
+            "map_id": 13,
+            "grass_cave": {
+                "base_rate": 25,
+                "encounters": [
+                    {
+                        "pkmn": "Rattata",
+                        "level": 3,
+                        "rate": 20
+                    },
+                    {
+                        "pkmn": "Pidgey",
+                        "level": 3,
+                        "rate": 20
+                    },
+                    {
+                        "pkmn": "Pidgey",
+                        "level": 4,
+                        "rate": 15
+                    },
+                    {
+                        "pkmn": "Rattata",
+                        "level": 4,
+                        "rate": 10
+                    },
+                    {
+                        "pkmn": "Pidgey",
+                        "level": 5,
+                        "rate": 10
+                    },
+                    {
+                        "pkmn": "Caterpie",
+                        "level": 3,
+                        "rate": 10
+                    },
+                    {
+                        "pkmn": "Rattata",
+                        "level": 2,
+                        "rate": 5
+                    },
+                    {
+                        "pkmn": "Rattata",
+                        "level": 5,
+                        "rate": 5
+                    },
+                    {
+                        "pkmn": "Caterpie",
+                        "level": 4,
+                        "rate": 4
+                    },
+                    {
+                        "pkmn": "Caterpie",
+                        "level": 5,
+                        "rate": 1
+                    }
+                ]
+            }
+        },
+        {
+            "map_name": "ROUTE_3",
+            "map_id": 14,
+            "grass_cave": {
+                "base_rate": 20,
+                "encounters": [
+                    {
+                        "pkmn": "Pidgey",
+                        "level": 6,
+                        "rate": 20
+                    },
+                    {
+                        "pkmn": "Spearow",
+                        "level": 5,
+                        "rate": 20
+                    },
+                    {
+                        "pkmn": "Pidgey",
+                        "level": 7,
+                        "rate": 15
+                    },
+                    {
+                        "pkmn": "Spearow",
+                        "level": 6,
+                        "rate": 10
+                    },
+                    {
+                        "pkmn": "Spearow",
+                        "level": 7,
+                        "rate": 10
+                    },
+                    {
+                        "pkmn": "Pidgey",
+                        "level": 8,
+                        "rate": 10
+                    },
+                    {
+                        "pkmn": "Spearow",
+                        "level": 8,
+                        "rate": 5
+                    },
+                    {
+                        "pkmn": "Jigglypuff",
+                        "level": 3,
+                        "rate": 5
+                    },
+                    {
+                        "pkmn": "Jigglypuff",
+                        "level": 5,
+                        "rate": 4
+                    },
+                    {
+                        "pkmn": "Jigglypuff",
+                        "level": 7,
+                        "rate": 1
+                    }
+                ]
+            }
+        },
+        {
+            "map_name": "ROUTE_4",
+            "map_id": 15,
+            "old_rod": {
+                "base_rate": 50,
+                "encounters": [
+                    {
+                        "pkmn": "Magikarp",
+                        "level": 5,
+                        "rate": 100
+                    }
+                ]
+            },
+            "good_rod": {
+                "base_rate": 50,
+                "encounters": [
+                    {
+                        "pkmn": "Goldeen",
+                        "level": 10,
+                        "rate": 50
+                    },
+                    {
+                        "pkmn": "Poliwag",
+                        "level": 10,
+                        "rate": 50
+                    }
+                ]
+            },
+            "super_rod": {
+                "base_rate": 50,
+                "encounters": [
+                    {
+                        "pkmn": "Psyduck",
+                        "level": 15,
+                        "rate": 33
+                    },
+                    {
+                        "pkmn": "Goldeen",
+                        "level": 15,
+                        "rate": 33
+                    },
+                    {
+                        "pkmn": "Krabby",
+                        "level": 15,
+                        "rate": 33
+                    }
+                ]
+            },
+            "grass_cave": {
+                "base_rate": 20,
+                "encounters": [
+                    {
+                        "pkmn": "Rattata",
+                        "level": 10,
+                        "rate": 20
+                    },
+                    {
+                        "pkmn": "Spearow",
+                        "level": 10,
+                        "rate": 20
+                    },
+                    {
+                        "pkmn": "Rattata",
+                        "level": 8,
+                        "rate": 15
+                    },
+                    {
+                        "pkmn": "Sandshrew",
+                        "level": 6,
+                        "rate": 10
+                    },
+                    {
+                        "pkmn": "Spearow",
+                        "level": 8,
+                        "rate": 10
+                    },
+                    {
+                        "pkmn": "Sandshrew",
+                        "level": 10,
+                        "rate": 10
+                    },
+                    {
+                        "pkmn": "Rattata",
+                        "level": 12,
+                        "rate": 5
+                    },
+                    {
+                        "pkmn": "Spearow",
+                        "level": 12,
+                        "rate": 5
+                    },
+                    {
+                        "pkmn": "Sandshrew",
+                        "level": 8,
+                        "rate": 4
+                    },
+                    {
+                        "pkmn": "Sandshrew",
+                        "level": 12,
+                        "rate": 1
+                    }
+                ]
+            }
+        },
+        {
+            "map_name": "ROUTE_5",
+            "map_id": 16,
+            "grass_cave": {
+                "base_rate": 15,
+                "encounters": [
+                    {
+                        "pkmn": "Bellsprout",
+                        "level": 13,
+                        "rate": 20
+                    },
+                    {
+                        "pkmn": "Pidgey",
+                        "level": 13,
+                        "rate": 20
+                    },
+                    {
+                        "pkmn": "Pidgey",
+                        "level": 15,
+                        "rate": 15
+                    },
+                    {
+                        "pkmn": "Meowth",
+                        "level": 10,
+                        "rate": 10
+                    },
+                    {
+                        "pkmn": "Meowth",
+                        "level": 12,
+                        "rate": 10
+                    },
+                    {
+                        "pkmn": "Bellsprout",
+                        "level": 15,
+                        "rate": 10
+                    },
+                    {
+                        "pkmn": "Bellsprout",
+                        "level": 16,
+                        "rate": 5
+                    },
+                    {
+                        "pkmn": "Pidgey",
+                        "level": 16,
+                        "rate": 5
+                    },
+                    {
+                        "pkmn": "Meowth",
+                        "level": 14,
+                        "rate": 4
+                    },
+                    {
+                        "pkmn": "Meowth",
+                        "level": 16,
+                        "rate": 1
+                    }
+                ]
+            }
+        },
+        {
+            "map_name": "ROUTE_6",
+            "map_id": 17,
+            "old_rod": {
+                "base_rate": 50,
+                "encounters": [
+                    {
+                        "pkmn": "Magikarp",
+                        "level": 5,
+                        "rate": 100
+                    }
+                ]
+            },
+            "good_rod": {
+                "base_rate": 50,
+                "encounters": [
+                    {
+                        "pkmn": "Goldeen",
+                        "level": 10,
+                        "rate": 50
+                    },
+                    {
+                        "pkmn": "Poliwag",
+                        "level": 10,
+                        "rate": 50
+                    }
+                ]
+            },
+            "super_rod": {
+                "base_rate": 50,
+                "encounters": [
+                    {
+                        "pkmn": "Krabby",
+                        "level": 15,
+                        "rate": 50
+                    },
+                    {
+                        "pkmn": "Shellder",
+                        "level": 15,
+                        "rate": 50
+                    }
+                ]
+            },
+            "grass_cave": {
+                "base_rate": 15,
+                "encounters": [
+                    {
+                        "pkmn": "Bellsprout",
+                        "level": 13,
+                        "rate": 20
+                    },
+                    {
+                        "pkmn": "Pidgey",
+                        "level": 13,
+                        "rate": 20
+                    },
+                    {
+                        "pkmn": "Pidgey",
+                        "level": 15,
+                        "rate": 15
+                    },
+                    {
+                        "pkmn": "Meowth",
+                        "level": 10,
+                        "rate": 10
+                    },
+                    {
+                        "pkmn": "Meowth",
+                        "level": 12,
+                        "rate": 10
+                    },
+                    {
+                        "pkmn": "Bellsprout",
+                        "level": 15,
+                        "rate": 10
+                    },
+                    {
+                        "pkmn": "Bellsprout",
+                        "level": 16,
+                        "rate": 5
+                    },
+                    {
+                        "pkmn": "Pidgey",
+                        "level": 16,
+                        "rate": 5
+                    },
+                    {
+                        "pkmn": "Meowth",
+                        "level": 14,
+                        "rate": 4
+                    },
+                    {
+                        "pkmn": "Meowth",
+                        "level": 16,
+                        "rate": 1
+                    }
+                ]
+            }
+        },
+        {
+            "map_name": "ROUTE_7",
+            "map_id": 18,
+            "grass_cave": {
+                "base_rate": 15,
+                "encounters": [
+                    {
+                        "pkmn": "Pidgey",
+                        "level": 19,
+                        "rate": 20
+                    },
+                    {
+                        "pkmn": "Bellsprout",
+                        "level": 19,
+                        "rate": 20
+                    },
+                    {
+                        "pkmn": "Meowth",
+                        "level": 17,
+                        "rate": 15
+                    },
+                    {
+                        "pkmn": "Bellsprout",
+                        "level": 22,
+                        "rate": 10
+                    },
+                    {
+                        "pkmn": "Pidgey",
+                        "level": 22,
+                        "rate": 10
+                    },
+                    {
+                        "pkmn": "Meowth",
+                        "level": 18,
+                        "rate": 10
+                    },
+                    {
+                        "pkmn": "Vulpix",
+                        "level": 18,
+                        "rate": 5
+                    },
+                    {
+                        "pkmn": "Vulpix",
+                        "level": 20,
+                        "rate": 5
+                    },
+                    {
+                        "pkmn": "Meowth",
+                        "level": 19,
+                        "rate": 4
+                    },
+                    {
+                        "pkmn": "Meowth",
+                        "level": 20,
+                        "rate": 1
+                    }
+                ]
+            }
+        },
+        {
+            "map_name": "ROUTE_8",
+            "map_id": 19,
+            "grass_cave": {
+                "base_rate": 15,
+                "encounters": [
+                    {
+                        "pkmn": "Pidgey",
+                        "level": 18,
+                        "rate": 20
+                    },
+                    {
+                        "pkmn": "Meowth",
+                        "level": 18,
+                        "rate": 20
+                    },
+                    {
+                        "pkmn": "Sandshrew",
+                        "level": 17,
+                        "rate": 15
+                    },
+                    {
+                        "pkmn": "Vulpix",
+                        "level": 16,
+                        "rate": 10
+                    },
+                    {
+                        "pkmn": "Pidgey",
+                        "level": 20,
+                        "rate": 10
+                    },
+                    {
+                        "pkmn": "Meowth",
+                        "level": 20,
+                        "rate": 10
+                    },
+                    {
+                        "pkmn": "Sandshrew",
+                        "level": 19,
+                        "rate": 5
+                    },
+                    {
+                        "pkmn": "Vulpix",
+                        "level": 17,
+                        "rate": 5
+                    },
+                    {
+                        "pkmn": "Vulpix",
+                        "level": 15,
+                        "rate": 4
+                    },
+                    {
+                        "pkmn": "Vulpix",
+                        "level": 18,
+                        "rate": 1
+                    }
+                ]
+            }
+        },
+        {
+            "map_name": "ROUTE_9",
+            "map_id": 20,
+            "grass_cave": {
+                "base_rate": 15,
+                "encounters": [
+                    {
+                        "pkmn": "Rattata",
+                        "level": 16,
+                        "rate": 20
+                    },
+                    {
+                        "pkmn": "Spearow",
+                        "level": 16,
+                        "rate": 20
+                    },
+                    {
+                        "pkmn": "Rattata",
+                        "level": 14,
+                        "rate": 15
+                    },
+                    {
+                        "pkmn": "Sandshrew",
+                        "level": 11,
+                        "rate": 10
+                    },
+                    {
+                        "pkmn": "Spearow",
+                        "level": 13,
+                        "rate": 10
+                    },
+                    {
+                        "pkmn": "Sandshrew",
+                        "level": 15,
+                        "rate": 10
+                    },
+                    {
+                        "pkmn": "Rattata",
+                        "level": 17,
+                        "rate": 5
+                    },
+                    {
+                        "pkmn": "Spearow",
+                        "level": 17,
+                        "rate": 5
+                    },
+                    {
+                        "pkmn": "Sandshrew",
+                        "level": 13,
+                        "rate": 4
+                    },
+                    {
+                        "pkmn": "Sandshrew",
+                        "level": 17,
+                        "rate": 1
+                    }
+                ]
+            }
+        },
+        {
+            "map_name": "ROUTE_10",
+            "map_id": 21,
+            "old_rod": {
+                "base_rate": 50,
+                "encounters": [
+                    {
+                        "pkmn": "Magikarp",
+                        "level": 5,
+                        "rate": 100
+                    }
+                ]
+            },
+            "good_rod": {
+                "base_rate": 50,
+                "encounters": [
+                    {
+                        "pkmn": "Goldeen",
+                        "level": 10,
+                        "rate": 50
+                    },
+                    {
+                        "pkmn": "Poliwag",
+                        "level": 10,
+                        "rate": 50
+                    }
+                ]
+            },
+            "super_rod": {
+                "base_rate": 50,
+                "encounters": [
+                    {
+                        "pkmn": "Poliwhirl",
+                        "level": 23,
+                        "rate": 50
+                    },
+                    {
+                        "pkmn": "Slowpoke",
+                        "level": 15,
+                        "rate": 50
+                    }
+                ]
+            },
+            "grass_cave": {
+                "base_rate": 15,
+                "encounters": [
+                    {
+                        "pkmn": "Voltorb",
+                        "level": 16,
+                        "rate": 20
+                    },
+                    {
+                        "pkmn": "Spearow",
+                        "level": 16,
+                        "rate": 20
+                    },
+                    {
+                        "pkmn": "Voltorb",
+                        "level": 14,
+                        "rate": 15
+                    },
+                    {
+                        "pkmn": "Sandshrew",
+                        "level": 11,
+                        "rate": 10
+                    },
+                    {
+                        "pkmn": "Spearow",
+                        "level": 13,
+                        "rate": 10
+                    },
+                    {
+                        "pkmn": "Sandshrew",
+                        "level": 15,
+                        "rate": 10
+                    },
+                    {
+                        "pkmn": "Voltorb",
+                        "level": 17,
+                        "rate": 5
+                    },
+                    {
+                        "pkmn": "Spearow",
+                        "level": 17,
+                        "rate": 5
+                    },
+                    {
+                        "pkmn": "Sandshrew",
+                        "level": 13,
+                        "rate": 4
+                    },
+                    {
+                        "pkmn": "Sandshrew",
+                        "level": 17,
+                        "rate": 1
+                    }
+                ]
+            }
+        },
+        {
+            "map_name": "ROUTE_11",
+            "map_id": 22,
+            "old_rod": {
+                "base_rate": 50,
+                "encounters": [
+                    {
+                        "pkmn": "Magikarp",
+                        "level": 5,
+                        "rate": 100
+                    }
+                ]
+            },
+            "good_rod": {
+                "base_rate": 50,
+                "encounters": [
+                    {
+                        "pkmn": "Goldeen",
+                        "level": 10,
+                        "rate": 50
+                    },
+                    {
+                        "pkmn": "Poliwag",
+                        "level": 10,
+                        "rate": 50
+                    }
+                ]
+            },
+            "super_rod": {
+                "base_rate": 50,
+                "encounters": [
+                    {
+                        "pkmn": "Krabby",
+                        "level": 15,
+                        "rate": 50
+                    },
+                    {
+                        "pkmn": "Shellder",
+                        "level": 15,
+                        "rate": 50
+                    }
+                ]
+            },
+            "grass_cave": {
+                "base_rate": 15,
+                "encounters": [
+                    {
+                        "pkmn": "Sandshrew",
+                        "level": 14,
+                        "rate": 20
+                    },
+                    {
+                        "pkmn": "Spearow",
+                        "level": 15,
+                        "rate": 20
+                    },
+                    {
+                        "pkmn": "Sandshrew",
+                        "level": 12,
+                        "rate": 15
+                    },
+                    {
+                        "pkmn": "Drowzee",
+                        "level": 9,
+                        "rate": 10
+                    },
+                    {
+                        "pkmn": "Spearow",
+                        "level": 13,
+                        "rate": 10
+                    },
+                    {
+                        "pkmn": "Drowzee",
+                        "level": 13,
+                        "rate": 10
+                    },
+                    {
+                        "pkmn": "Sandshrew",
+                        "level": 15,
+                        "rate": 5
+                    },
+                    {
+                        "pkmn": "Spearow",
+                        "level": 17,
+                        "rate": 5
+                    },
+                    {
+                        "pkmn": "Drowzee",
+                        "level": 11,
+                        "rate": 4
+                    },
+                    {
+                        "pkmn": "Drowzee",
+                        "level": 15,
+                        "rate": 1
+                    }
+                ]
+            }
+        },
+        {
+            "map_name": "ROUTE_12",
+            "map_id": 23,
+            "old_rod": {
+                "base_rate": 50,
+                "encounters": [
+                    {
+                        "pkmn": "Magikarp",
+                        "level": 5,
+                        "rate": 100
+                    }
+                ]
+            },
+            "good_rod": {
+                "base_rate": 50,
+                "encounters": [
+                    {
+                        "pkmn": "Goldeen",
+                        "level": 10,
+                        "rate": 50
+                    },
+                    {
+                        "pkmn": "Poliwag",
+                        "level": 10,
+                        "rate": 50
+                    }
+                ]
+            },
+            "super_rod": {
+                "base_rate": 50,
+                "encounters": [
+                    {
+                        "pkmn": "Tentacool",
+                        "level": 5,
+                        "rate": 25
+                    },
+                    {
+                        "pkmn": "Krabby",
+                        "level": 15,
+                        "rate": 25
+                    },
+                    {
+                        "pkmn": "Goldeen",
+                        "level": 15,
+                        "rate": 25
+                    },
+                    {
+                        "pkmn": "Magikarp",
+                        "level": 15,
+                        "rate": 25
+                    }
+                ]
+            },
+            "grass_cave": {
+                "base_rate": 15,
+                "encounters": [
+                    {
+                        "pkmn": "Bellsprout",
+                        "level": 24,
+                        "rate": 20
+                    },
+                    {
+                        "pkmn": "Pidgey",
+                        "level": 25,
+                        "rate": 20
+                    },
+                    {
+                        "pkmn": "Pidgey",
+                        "level": 23,
+                        "rate": 15
+                    },
+                    {
+                        "pkmn": "Venonat",
+                        "level": 24,
+                        "rate": 10
+                    },
+                    {
+                        "pkmn": "Bellsprout",
+                        "level": 22,
+                        "rate": 10
+                    },
+                    {
+                        "pkmn": "Venonat",
+                        "level": 26,
+                        "rate": 10
+                    },
+                    {
+                        "pkmn": "Bellsprout",
+                        "level": 26,
+                        "rate": 5
+                    },
+                    {
+                        "pkmn": "Pidgey",
+                        "level": 27,
+                        "rate": 5
+                    },
+                    {
+                        "pkmn": "Weepinbell",
+                        "level": 28,
+                        "rate": 4
+                    },
+                    {
+                        "pkmn": "Weepinbell",
+                        "level": 30,
+                        "rate": 1
+                    }
+                ]
+            }
+        },
+        {
+            "map_name": "ROUTE_13",
+            "map_id": 24,
+            "old_rod": {
+                "base_rate": 50,
+                "encounters": [
+                    {
+                        "pkmn": "Magikarp",
+                        "level": 5,
+                        "rate": 100
+                    }
+                ]
+            },
+            "good_rod": {
+                "base_rate": 50,
+                "encounters": [
+                    {
+                        "pkmn": "Goldeen",
+                        "level": 10,
+                        "rate": 50
+                    },
+                    {
+                        "pkmn": "Poliwag",
+                        "level": 10,
+                        "rate": 50
+                    }
+                ]
+            },
+            "super_rod": {
+                "base_rate": 50,
+                "encounters": [
+                    {
+                        "pkmn": "Tentacool",
+                        "level": 5,
+                        "rate": 25
+                    },
+                    {
+                        "pkmn": "Krabby",
+                        "level": 15,
+                        "rate": 25
+                    },
+                    {
+                        "pkmn": "Goldeen",
+                        "level": 15,
+                        "rate": 25
+                    },
+                    {
+                        "pkmn": "Magikarp",
+                        "level": 15,
+                        "rate": 25
+                    }
+                ]
+            },
+            "grass_cave": {
+                "base_rate": 20,
+                "encounters": [
+                    {
+                        "pkmn": "Bellsprout",
+                        "level": 24,
+                        "rate": 20
+                    },
+                    {
+                        "pkmn": "Pidgey",
+                        "level": 25,
+                        "rate": 20
+                    },
+                    {
+                        "pkmn": "Pidgey",
+                        "level": 27,
+                        "rate": 15
+                    },
+                    {
+                        "pkmn": "Venonat",
+                        "level": 24,
+                        "rate": 10
+                    },
+                    {
+                        "pkmn": "Bellsprout",
+                        "level": 22,
+                        "rate": 10
+                    },
+                    {
+                        "pkmn": "Venonat",
+                        "level": 26,
+                        "rate": 10
+                    },
+                    {
+                        "pkmn": "Bellsprout",
+                        "level": 26,
+                        "rate": 5
+                    },
+                    {
+                        "pkmn": "Ditto",
+                        "level": 25,
+                        "rate": 5
+                    },
+                    {
+                        "pkmn": "Weepinbell",
+                        "level": 28,
+                        "rate": 4
+                    },
+                    {
+                        "pkmn": "Weepinbell",
+                        "level": 30,
+                        "rate": 1
+                    }
+                ]
+            }
+        },
+        {
+            "map_name": "ROUTE_14",
+            "map_id": 25,
+            "grass_cave": {
+                "base_rate": 15,
+                "encounters": [
+                    {
+                        "pkmn": "Bellsprout",
+                        "level": 24,
+                        "rate": 20
+                    },
+                    {
+                        "pkmn": "Pidgey",
+                        "level": 26,
+                        "rate": 20
+                    },
+                    {
+                        "pkmn": "Ditto",
+                        "level": 23,
+                        "rate": 15
+                    },
+                    {
+                        "pkmn": "Venonat",
+                        "level": 24,
+                        "rate": 10
+                    },
+                    {
+                        "pkmn": "Bellsprout",
+                        "level": 22,
+                        "rate": 10
+                    },
+                    {
+                        "pkmn": "Venonat",
+                        "level": 26,
+                        "rate": 10
+                    },
+                    {
+                        "pkmn": "Bellsprout",
+                        "level": 26,
+                        "rate": 5
+                    },
+                    {
+                        "pkmn": "Weepinbell",
+                        "level": 30,
+                        "rate": 5
+                    },
+                    {
+                        "pkmn": "Pidgeotto",
+                        "level": 28,
+                        "rate": 4
+                    },
+                    {
+                        "pkmn": "Pidgeotto",
+                        "level": 30,
+                        "rate": 1
+                    }
+                ]
+            }
+        },
+        {
+            "map_name": "ROUTE_15",
+            "map_id": 26,
+            "grass_cave": {
+                "base_rate": 15,
+                "encounters": [
+                    {
+                        "pkmn": "Bellsprout",
+                        "level": 24,
+                        "rate": 20
+                    },
+                    {
+                        "pkmn": "Ditto",
+                        "level": 26,
+                        "rate": 20
+                    },
+                    {
+                        "pkmn": "Pidgey",
+                        "level": 23,
+                        "rate": 15
+                    },
+                    {
+                        "pkmn": "Venonat",
+                        "level": 26,
+                        "rate": 10
+                    },
+                    {
+                        "pkmn": "Bellsprout",
+                        "level": 22,
+                        "rate": 10
+                    },
+                    {
+                        "pkmn": "Venonat",
+                        "level": 28,
+                        "rate": 10
+                    },
+                    {
+                        "pkmn": "Bellsprout",
+                        "level": 26,
+                        "rate": 5
+                    },
+                    {
+                        "pkmn": "Weepinbell",
+                        "level": 30,
+                        "rate": 5
+                    },
+                    {
+                        "pkmn": "Pidgeotto",
+                        "level": 28,
+                        "rate": 4
+                    },
+                    {
+                        "pkmn": "Pidgeotto",
+                        "level": 30,
+                        "rate": 1
+                    }
+                ]
+            }
+        },
+        {
+            "map_name": "ROUTE_16",
+            "map_id": 27,
+            "grass_cave": {
+                "base_rate": 25,
+                "encounters": [
+                    {
+                        "pkmn": "Spearow",
+                        "level": 20,
+                        "rate": 20
+                    },
+                    {
+                        "pkmn": "Spearow",
+                        "level": 22,
+                        "rate": 20
+                    },
+                    {
+                        "pkmn": "Rattata",
+                        "level": 18,
+                        "rate": 15
+                    },
+                    {
+                        "pkmn": "Doduo",
+                        "level": 20,
+                        "rate": 10
+                    },
+                    {
+                        "pkmn": "Rattata",
+                        "level": 20,
+                        "rate": 10
+                    },
+                    {
+                        "pkmn": "Doduo",
+                        "level": 18,
+                        "rate": 10
+                    },
+                    {
+                        "pkmn": "Doduo",
+                        "level": 22,
+                        "rate": 5
+                    },
+                    {
+                        "pkmn": "Rattata",
+                        "level": 22,
+                        "rate": 5
+                    },
+                    {
+                        "pkmn": "Raticate",
+                        "level": 23,
+                        "rate": 4
+                    },
+                    {
+                        "pkmn": "Raticate",
+                        "level": 25,
+                        "rate": 1
+                    }
+                ]
+            }
+        },
+        {
+            "map_name": "ROUTE_17",
+            "map_id": 28,
+            "old_rod": {
+                "base_rate": 50,
+                "encounters": [
+                    {
+                        "pkmn": "Magikarp",
+                        "level": 5,
+                        "rate": 100
+                    }
+                ]
+            },
+            "good_rod": {
+                "base_rate": 50,
+                "encounters": [
+                    {
+                        "pkmn": "Goldeen",
+                        "level": 10,
+                        "rate": 50
+                    },
+                    {
+                        "pkmn": "Poliwag",
+                        "level": 10,
+                        "rate": 50
+                    }
+                ]
+            },
+            "super_rod": {
+                "base_rate": 50,
+                "encounters": [
+                    {
+                        "pkmn": "Tentacool",
+                        "level": 5,
+                        "rate": 25
+                    },
+                    {
+                        "pkmn": "Krabby",
+                        "level": 15,
+                        "rate": 25
+                    },
+                    {
+                        "pkmn": "Goldeen",
+                        "level": 15,
+                        "rate": 25
+                    },
+                    {
+                        "pkmn": "Magikarp",
+                        "level": 15,
+                        "rate": 25
+                    }
+                ]
+            },
+            "grass_cave": {
+                "base_rate": 25,
+                "encounters": [
+                    {
+                        "pkmn": "Spearow",
+                        "level": 20,
+                        "rate": 20
+                    },
+                    {
+                        "pkmn": "Spearow",
+                        "level": 22,
+                        "rate": 20
+                    },
+                    {
+                        "pkmn": "Raticate",
+                        "level": 25,
+                        "rate": 15
+                    },
+                    {
+                        "pkmn": "Doduo",
+                        "level": 24,
+                        "rate": 10
+                    },
+                    {
+                        "pkmn": "Raticate",
+                        "level": 27,
+                        "rate": 10
+                    },
+                    {
+                        "pkmn": "Doduo",
+                        "level": 26,
+                        "rate": 10
+                    },
+                    {
+                        "pkmn": "Doduo",
+                        "level": 28,
+                        "rate": 5
+                    },
+                    {
+                        "pkmn": "Raticate",
+                        "level": 29,
+                        "rate": 5
+                    },
+                    {
+                        "pkmn": "Fearow",
+                        "level": 25,
+                        "rate": 4
+                    },
+                    {
+                        "pkmn": "Fearow",
+                        "level": 27,
+                        "rate": 1
+                    }
+                ]
+            }
+        },
+        {
+            "map_name": "ROUTE_18",
+            "map_id": 29,
+            "old_rod": {
+                "base_rate": 50,
+                "encounters": [
+                    {
+                        "pkmn": "Magikarp",
+                        "level": 5,
+                        "rate": 100
+                    }
+                ]
+            },
+            "good_rod": {
+                "base_rate": 50,
+                "encounters": [
+                    {
+                        "pkmn": "Goldeen",
+                        "level": 10,
+                        "rate": 50
+                    },
+                    {
+                        "pkmn": "Poliwag",
+                        "level": 10,
+                        "rate": 50
+                    }
+                ]
+            },
+            "super_rod": {
+                "base_rate": 50,
+                "encounters": [
+                    {
+                        "pkmn": "Tentacool",
+                        "level": 5,
+                        "rate": 25
+                    },
+                    {
+                        "pkmn": "Krabby",
+                        "level": 15,
+                        "rate": 25
+                    },
+                    {
+                        "pkmn": "Goldeen",
+                        "level": 15,
+                        "rate": 25
+                    },
+                    {
+                        "pkmn": "Magikarp",
+                        "level": 15,
+                        "rate": 25
+                    }
+                ]
+            },
+            "grass_cave": {
+                "base_rate": 25,
+                "encounters": [
+                    {
+                        "pkmn": "Spearow",
+                        "level": 20,
+                        "rate": 20
+                    },
+                    {
+                        "pkmn": "Spearow",
+                        "level": 22,
+                        "rate": 20
+                    },
+                    {
+                        "pkmn": "Raticate",
+                        "level": 25,
+                        "rate": 15
+                    },
+                    {
+                        "pkmn": "Doduo",
+                        "level": 24,
+                        "rate": 10
+                    },
+                    {
+                        "pkmn": "Fearow",
+                        "level": 25,
+                        "rate": 10
+                    },
+                    {
+                        "pkmn": "Doduo",
+                        "level": 26,
+                        "rate": 10
+                    },
+                    {
+                        "pkmn": "Doduo",
+                        "level": 28,
+                        "rate": 5
+                    },
+                    {
+                        "pkmn": "Raticate",
+                        "level": 29,
+                        "rate": 5
+                    },
+                    {
+                        "pkmn": "Fearow",
+                        "level": 27,
+                        "rate": 4
+                    },
+                    {
+                        "pkmn": "Fearow",
+                        "level": 29,
+                        "rate": 1
+                    }
+                ]
+            }
+        },
+        {
+            "map_name": "ROUTE_19",
+            "map_id": 30,
+            "old_rod": {
+                "base_rate": 50,
+                "encounters": [
+                    {
+                        "pkmn": "Magikarp",
+                        "level": 5,
+                        "rate": 100
+                    }
+                ]
+            },
+            "good_rod": {
+                "base_rate": 50,
+                "encounters": [
+                    {
+                        "pkmn": "Goldeen",
+                        "level": 10,
+                        "rate": 50
+                    },
+                    {
+                        "pkmn": "Poliwag",
+                        "level": 10,
+                        "rate": 50
+                    }
+                ]
+            },
+            "super_rod": {
+                "base_rate": 50,
+                "encounters": [
+                    {
+                        "pkmn": "Staryu",
+                        "level": 15,
+                        "rate": 25
+                    },
+                    {
+                        "pkmn": "Horsea",
+                        "level": 15,
+                        "rate": 25
+                    },
+                    {
+                        "pkmn": "Shellder",
+                        "level": 15,
+                        "rate": 25
+                    },
+                    {
+                        "pkmn": "Goldeen",
+                        "level": 15,
+                        "rate": 25
+                    }
+                ]
+            },
+            "surfing": {
+                "base_rate": 5,
+                "encounters": [
+                    {
+                        "pkmn": "Tentacool",
+                        "level": 5,
+                        "rate": 20
+                    },
+                    {
+                        "pkmn": "Tentacool",
+                        "level": 10,
+                        "rate": 20
+                    },
+                    {
+                        "pkmn": "Tentacool",
+                        "level": 15,
+                        "rate": 15
+                    },
+                    {
+                        "pkmn": "Tentacool",
+                        "level": 5,
+                        "rate": 10
+                    },
+                    {
+                        "pkmn": "Tentacool",
+                        "level": 10,
+                        "rate": 10
+                    },
+                    {
+                        "pkmn": "Tentacool",
+                        "level": 15,
+                        "rate": 10
+                    },
+                    {
+                        "pkmn": "Tentacool",
+                        "level": 20,
+                        "rate": 5
+                    },
+                    {
+                        "pkmn": "Tentacool",
+                        "level": 30,
+                        "rate": 5
+                    },
+                    {
+                        "pkmn": "Tentacool",
+                        "level": 35,
+                        "rate": 4
+                    },
+                    {
+                        "pkmn": "Tentacool",
+                        "level": 40,
+                        "rate": 1
+                    }
+                ]
+            }
+        },
+        {
+            "map_name": "ROUTE_20",
+            "map_id": 31,
+            "old_rod": {
+                "base_rate": 50,
+                "encounters": [
+                    {
+                        "pkmn": "Magikarp",
+                        "level": 5,
+                        "rate": 100
+                    }
+                ]
+            },
+            "good_rod": {
+                "base_rate": 50,
+                "encounters": [
+                    {
+                        "pkmn": "Goldeen",
+                        "level": 10,
+                        "rate": 50
+                    },
+                    {
+                        "pkmn": "Poliwag",
+                        "level": 10,
+                        "rate": 50
+                    }
+                ]
+            },
+            "super_rod": {
+                "base_rate": 50,
+                "encounters": [
+                    {
+                        "pkmn": "Staryu",
+                        "level": 15,
+                        "rate": 25
+                    },
+                    {
+                        "pkmn": "Horsea",
+                        "level": 15,
+                        "rate": 25
+                    },
+                    {
+                        "pkmn": "Shellder",
+                        "level": 15,
+                        "rate": 25
+                    },
+                    {
+                        "pkmn": "Goldeen",
+                        "level": 15,
+                        "rate": 25
+                    }
+                ]
+            },
+            "surfing": {
+                "base_rate": 5,
+                "encounters": [
+                    {
+                        "pkmn": "Tentacool",
+                        "level": 5,
+                        "rate": 20
+                    },
+                    {
+                        "pkmn": "Tentacool",
+                        "level": 10,
+                        "rate": 20
+                    },
+                    {
+                        "pkmn": "Tentacool",
+                        "level": 15,
+                        "rate": 15
+                    },
+                    {
+                        "pkmn": "Tentacool",
+                        "level": 5,
+                        "rate": 10
+                    },
+                    {
+                        "pkmn": "Tentacool",
+                        "level": 10,
+                        "rate": 10
+                    },
+                    {
+                        "pkmn": "Tentacool",
+                        "level": 15,
+                        "rate": 10
+                    },
+                    {
+                        "pkmn": "Tentacool",
+                        "level": 20,
+                        "rate": 5
+                    },
+                    {
+                        "pkmn": "Tentacool",
+                        "level": 30,
+                        "rate": 5
+                    },
+                    {
+                        "pkmn": "Tentacool",
+                        "level": 35,
+                        "rate": 4
+                    },
+                    {
+                        "pkmn": "Tentacool",
+                        "level": 40,
+                        "rate": 1
+                    }
+                ]
+            }
+        },
+        {
+            "map_name": "ROUTE_21",
+            "map_id": 32,
+            "old_rod": {
+                "base_rate": 50,
+                "encounters": [
+                    {
+                        "pkmn": "Magikarp",
+                        "level": 5,
+                        "rate": 100
+                    }
+                ]
+            },
+            "good_rod": {
+                "base_rate": 50,
+                "encounters": [
+                    {
+                        "pkmn": "Goldeen",
+                        "level": 10,
+                        "rate": 50
+                    },
+                    {
+                        "pkmn": "Poliwag",
+                        "level": 10,
+                        "rate": 50
+                    }
+                ]
+            },
+            "super_rod": {
+                "base_rate": 50,
+                "encounters": [
+                    {
+                        "pkmn": "Staryu",
+                        "level": 15,
+                        "rate": 25
+                    },
+                    {
+                        "pkmn": "Horsea",
+                        "level": 15,
+                        "rate": 25
+                    },
+                    {
+                        "pkmn": "Shellder",
+                        "level": 15,
+                        "rate": 25
+                    },
+                    {
+                        "pkmn": "Goldeen",
+                        "level": 15,
+                        "rate": 25
+                    }
+                ]
+            },
+            "surfing": {
+                "base_rate": 5,
+                "encounters": [
+                    {
+                        "pkmn": "Tentacool",
+                        "level": 5,
+                        "rate": 20
+                    },
+                    {
+                        "pkmn": "Tentacool",
+                        "level": 10,
+                        "rate": 20
+                    },
+                    {
+                        "pkmn": "Tentacool",
+                        "level": 15,
+                        "rate": 15
+                    },
+                    {
+                        "pkmn": "Tentacool",
+                        "level": 5,
+                        "rate": 10
+                    },
+                    {
+                        "pkmn": "Tentacool",
+                        "level": 10,
+                        "rate": 10
+                    },
+                    {
+                        "pkmn": "Tentacool",
+                        "level": 15,
+                        "rate": 10
+                    },
+                    {
+                        "pkmn": "Tentacool",
+                        "level": 20,
+                        "rate": 5
+                    },
+                    {
+                        "pkmn": "Tentacool",
+                        "level": 30,
+                        "rate": 5
+                    },
+                    {
+                        "pkmn": "Tentacool",
+                        "level": 35,
+                        "rate": 4
+                    },
+                    {
+                        "pkmn": "Tentacool",
+                        "level": 40,
+                        "rate": 1
+                    }
+                ]
+            },
+            "grass_cave": {
+                "base_rate": 25,
+                "encounters": [
+                    {
+                        "pkmn": "Rattata",
+                        "level": 21,
+                        "rate": 20
+                    },
+                    {
+                        "pkmn": "Pidgey",
+                        "level": 23,
+                        "rate": 20
+                    },
+                    {
+                        "pkmn": "Raticate",
+                        "level": 30,
+                        "rate": 15
+                    },
+                    {
+                        "pkmn": "Rattata",
+                        "level": 23,
+                        "rate": 10
+                    },
+                    {
+                        "pkmn": "Pidgey",
+                        "level": 21,
+                        "rate": 10
+                    },
+                    {
+                        "pkmn": "Pidgeotto",
+                        "level": 30,
+                        "rate": 10
+                    },
+                    {
+                        "pkmn": "Pidgeotto",
+                        "level": 32,
+                        "rate": 5
+                    },
+                    {
+                        "pkmn": "Tangela",
+                        "level": 28,
+                        "rate": 5
+                    },
+                    {
+                        "pkmn": "Tangela",
+                        "level": 30,
+                        "rate": 4
+                    },
+                    {
+                        "pkmn": "Tangela",
+                        "level": 32,
+                        "rate": 1
+                    }
+                ]
+            }
+        },
+        {
+            "map_name": "ROUTE_22",
+            "map_id": 33,
+            "old_rod": {
+                "base_rate": 50,
+                "encounters": [
+                    {
+                        "pkmn": "Magikarp",
+                        "level": 5,
+                        "rate": 100
+                    }
+                ]
+            },
+            "good_rod": {
+                "base_rate": 50,
+                "encounters": [
+                    {
+                        "pkmn": "Goldeen",
+                        "level": 10,
+                        "rate": 50
+                    },
+                    {
+                        "pkmn": "Poliwag",
+                        "level": 10,
+                        "rate": 50
+                    }
+                ]
+            },
+            "super_rod": {
+                "base_rate": 50,
+                "encounters": [
+                    {
+                        "pkmn": "Goldeen",
+                        "level": 15,
+                        "rate": 50
+                    },
+                    {
+                        "pkmn": "Poliwag",
+                        "level": 15,
+                        "rate": 50
+                    }
+                ]
+            },
+            "grass_cave": {
+                "base_rate": 25,
+                "encounters": [
+                    {
+                        "pkmn": "Rattata",
+                        "level": 3,
+                        "rate": 20
+                    },
+                    {
+                        "pkmn": "Nidoran_F",
+                        "level": 3,
+                        "rate": 20
+                    },
+                    {
+                        "pkmn": "Rattata",
+                        "level": 4,
+                        "rate": 15
+                    },
+                    {
+                        "pkmn": "Nidoran_F",
+                        "level": 4,
+                        "rate": 10
+                    },
+                    {
+                        "pkmn": "Rattata",
+                        "level": 2,
+                        "rate": 10
+                    },
+                    {
+                        "pkmn": "Nidoran_F",
+                        "level": 2,
+                        "rate": 10
+                    },
+                    {
+                        "pkmn": "Spearow",
+                        "level": 3,
+                        "rate": 5
+                    },
+                    {
+                        "pkmn": "Spearow",
+                        "level": 5,
+                        "rate": 5
+                    },
+                    {
+                        "pkmn": "Nidoran_M",
+                        "level": 3,
+                        "rate": 4
+                    },
+                    {
+                        "pkmn": "Nidoran_M",
+                        "level": 4,
+                        "rate": 1
+                    }
+                ]
+            }
+        },
+        {
+            "map_name": "ROUTE_23",
+            "map_id": 34,
+            "old_rod": {
+                "base_rate": 50,
+                "encounters": [
+                    {
+                        "pkmn": "Magikarp",
+                        "level": 5,
+                        "rate": 100
+                    }
+                ]
+            },
+            "good_rod": {
+                "base_rate": 50,
+                "encounters": [
+                    {
+                        "pkmn": "Goldeen",
+                        "level": 10,
+                        "rate": 50
+                    },
+                    {
+                        "pkmn": "Poliwag",
+                        "level": 10,
+                        "rate": 50
+                    }
+                ]
+            },
+            "super_rod": {
+                "base_rate": 50,
+                "encounters": [
+                    {
+                        "pkmn": "Slowbro",
+                        "level": 23,
+                        "rate": 25
+                    },
+                    {
+                        "pkmn": "Seaking",
+                        "level": 23,
+                        "rate": 25
+                    },
+                    {
+                        "pkmn": "Kingler",
+                        "level": 23,
+                        "rate": 25
+                    },
+                    {
+                        "pkmn": "Seadra",
+                        "level": 23,
+                        "rate": 25
+                    }
+                ]
+            },
+            "grass_cave": {
+                "base_rate": 10,
+                "encounters": [
+                    {
+                        "pkmn": "Sandshrew",
+                        "level": 26,
+                        "rate": 20
+                    },
+                    {
+                        "pkmn": "Ditto",
+                        "level": 33,
+                        "rate": 20
+                    },
+                    {
+                        "pkmn": "Spearow",
+                        "level": 26,
+                        "rate": 15
+                    },
+                    {
+                        "pkmn": "Fearow",
+                        "level": 38,
+                        "rate": 10
+                    },
+                    {
+                        "pkmn": "Ditto",
+                        "level": 38,
+                        "rate": 10
+                    },
+                    {
+                        "pkmn": "Fearow",
+                        "level": 38,
+                        "rate": 10
+                    },
+                    {
+                        "pkmn": "Sandslash",
+                        "level": 41,
+                        "rate": 5
+                    },
+                    {
+                        "pkmn": "Ditto",
+                        "level": 43,
+                        "rate": 5
+                    },
+                    {
+                        "pkmn": "Fearow",
+                        "level": 41,
+                        "rate": 4
+                    },
+                    {
+                        "pkmn": "Fearow",
+                        "level": 43,
+                        "rate": 1
+                    }
+                ]
+            }
+        },
+        {
+            "map_name": "ROUTE_24",
+            "map_id": 35,
+            "old_rod": {
+                "base_rate": 50,
+                "encounters": [
+                    {
+                        "pkmn": "Magikarp",
+                        "level": 5,
+                        "rate": 100
+                    }
+                ]
+            },
+            "good_rod": {
+                "base_rate": 50,
+                "encounters": [
+                    {
+                        "pkmn": "Goldeen",
+                        "level": 10,
+                        "rate": 50
+                    },
+                    {
+                        "pkmn": "Poliwag",
+                        "level": 10,
+                        "rate": 50
+                    }
+                ]
+            },
+            "super_rod": {
+                "base_rate": 50,
+                "encounters": [
+                    {
+                        "pkmn": "Psyduck",
+                        "level": 15,
+                        "rate": 33
+                    },
+                    {
+                        "pkmn": "Goldeen",
+                        "level": 15,
+                        "rate": 33
+                    },
+                    {
+                        "pkmn": "Krabby",
+                        "level": 15,
+                        "rate": 33
+                    }
+                ]
+            },
+            "grass_cave": {
+                "base_rate": 25,
+                "encounters": [
+                    {
+                        "pkmn": "Caterpie",
+                        "level": 7,
+                        "rate": 20
+                    },
+                    {
+                        "pkmn": "Metapod",
+                        "level": 8,
+                        "rate": 20
+                    },
+                    {
+                        "pkmn": "Pidgey",
+                        "level": 12,
+                        "rate": 15
+                    },
+                    {
+                        "pkmn": "Bellsprout",
+                        "level": 12,
+                        "rate": 10
+                    },
+                    {
+                        "pkmn": "Bellsprout",
+                        "level": 13,
+                        "rate": 10
+                    },
+                    {
+                        "pkmn": "Abra",
+                        "level": 10,
+                        "rate": 10
+                    },
+                    {
+                        "pkmn": "Bellsprout",
+                        "level": 14,
+                        "rate": 5
+                    },
+                    {
+                        "pkmn": "Pidgey",
+                        "level": 13,
+                        "rate": 5
+                    },
+                    {
+                        "pkmn": "Abra",
+                        "level": 8,
+                        "rate": 4
+                    },
+                    {
+                        "pkmn": "Abra",
+                        "level": 12,
+                        "rate": 1
+                    }
+                ]
+            }
+        },
+        {
+            "map_name": "ROUTE_25",
+            "map_id": 36,
+            "old_rod": {
+                "base_rate": 50,
+                "encounters": [
+                    {
+                        "pkmn": "Magikarp",
+                        "level": 5,
+                        "rate": 100
+                    }
+                ]
+            },
+            "good_rod": {
+                "base_rate": 50,
+                "encounters": [
+                    {
+                        "pkmn": "Goldeen",
+                        "level": 10,
+                        "rate": 50
+                    },
+                    {
+                        "pkmn": "Poliwag",
+                        "level": 10,
+                        "rate": 50
+                    }
+                ]
+            },
+            "super_rod": {
+                "base_rate": 50,
+                "encounters": [
+                    {
+                        "pkmn": "Psyduck",
+                        "level": 15,
+                        "rate": 33
+                    },
+                    {
+                        "pkmn": "Goldeen",
+                        "level": 15,
+                        "rate": 33
+                    },
+                    {
+                        "pkmn": "Krabby",
+                        "level": 15,
+                        "rate": 33
+                    }
+                ]
+            },
+            "grass_cave": {
+                "base_rate": 15,
+                "encounters": [
+                    {
+                        "pkmn": "Caterpie",
+                        "level": 8,
+                        "rate": 20
+                    },
+                    {
+                        "pkmn": "Metapod",
+                        "level": 9,
+                        "rate": 20
+                    },
+                    {
+                        "pkmn": "Pidgey",
+                        "level": 13,
+                        "rate": 15
+                    },
+                    {
+                        "pkmn": "Bellsprout",
+                        "level": 12,
+                        "rate": 10
+                    },
+                    {
+                        "pkmn": "Bellsprout",
+                        "level": 13,
+                        "rate": 10
+                    },
+                    {
+                        "pkmn": "Abra",
+                        "level": 12,
+                        "rate": 10
+                    },
+                    {
+                        "pkmn": "Bellsprout",
+                        "level": 14,
+                        "rate": 5
+                    },
+                    {
+                        "pkmn": "Abra",
+                        "level": 10,
+                        "rate": 5
+                    },
+                    {
+                        "pkmn": "Kakuna",
+                        "level": 7,
+                        "rate": 4
+                    },
+                    {
+                        "pkmn": "Weedle",
+                        "level": 8,
+                        "rate": 1
+                    }
+                ]
+            }
+        },
+        {
+            "map_name": "VIRIDIAN_FOREST",
+            "map_id": 51,
+            "grass_cave": {
+                "base_rate": 8,
+                "encounters": [
+                    {
+                        "pkmn": "Caterpie",
+                        "level": 4,
+                        "rate": 20
+                    },
+                    {
+                        "pkmn": "Metapod",
+                        "level": 5,
+                        "rate": 20
+                    },
+                    {
+                        "pkmn": "Caterpie",
+                        "level": 3,
+                        "rate": 15
+                    },
+                    {
+                        "pkmn": "Caterpie",
+                        "level": 5,
+                        "rate": 10
+                    },
+                    {
+                        "pkmn": "Metapod",
+                        "level": 4,
+                        "rate": 10
+                    },
+                    {
+                        "pkmn": "Metapod",
+                        "level": 6,
+                        "rate": 10
+                    },
+                    {
+                        "pkmn": "Kakuna",
+                        "level": 4,
+                        "rate": 5
+                    },
+                    {
+                        "pkmn": "Weedle",
+                        "level": 3,
+                        "rate": 5
+                    },
+                    {
+                        "pkmn": "Pikachu",
+                        "level": 3,
+                        "rate": 4
+                    },
+                    {
+                        "pkmn": "Pikachu",
+                        "level": 5,
+                        "rate": 1
+                    }
+                ]
+            }
+        },
+        {
+            "map_name": "MT_MOON_1F",
+            "map_id": 59,
+            "grass_cave": {
+                "base_rate": 10,
+                "encounters": [
+                    {
+                        "pkmn": "Zubat",
+                        "level": 8,
+                        "rate": 20
+                    },
+                    {
+                        "pkmn": "Zubat",
+                        "level": 7,
+                        "rate": 20
+                    },
+                    {
+                        "pkmn": "Zubat",
+                        "level": 9,
+                        "rate": 15
+                    },
+                    {
+                        "pkmn": "Geodude",
+                        "level": 8,
+                        "rate": 10
+                    },
+                    {
+                        "pkmn": "Zubat",
+                        "level": 6,
+                        "rate": 10
+                    },
+                    {
+                        "pkmn": "Zubat",
+                        "level": 10,
+                        "rate": 10
+                    },
+                    {
+                        "pkmn": "Geodude",
+                        "level": 10,
+                        "rate": 5
+                    },
+                    {
+                        "pkmn": "Paras",
+                        "level": 8,
+                        "rate": 5
+                    },
+                    {
+                        "pkmn": "Zubat",
+                        "level": 11,
+                        "rate": 4
+                    },
+                    {
+                        "pkmn": "Clefairy",
+                        "level": 8,
+                        "rate": 1
+                    }
+                ]
+            }
+        },
+        {
+            "map_name": "MT_MOON_B1F",
+            "map_id": 60,
+            "grass_cave": {
+                "base_rate": 10,
+                "encounters": [
+                    {
+                        "pkmn": "Zubat",
+                        "level": 8,
+                        "rate": 20
+                    },
+                    {
+                        "pkmn": "Zubat",
+                        "level": 7,
+                        "rate": 20
+                    },
+                    {
+                        "pkmn": "Geodude",
+                        "level": 7,
+                        "rate": 15
+                    },
+                    {
+                        "pkmn": "Geodude",
+                        "level": 8,
+                        "rate": 10
+                    },
+                    {
+                        "pkmn": "Zubat",
+                        "level": 9,
+                        "rate": 10
+                    },
+                    {
+                        "pkmn": "Paras",
+                        "level": 10,
+                        "rate": 10
+                    },
+                    {
+                        "pkmn": "Zubat",
+                        "level": 10,
+                        "rate": 5
+                    },
+                    {
+                        "pkmn": "Zubat",
+                        "level": 11,
+                        "rate": 5
+                    },
+                    {
+                        "pkmn": "Clefairy",
+                        "level": 9,
+                        "rate": 4
+                    },
+                    {
+                        "pkmn": "Geodude",
+                        "level": 9,
+                        "rate": 1
+                    }
+                ]
+            }
+        },
+        {
+            "map_name": "MT_MOON_B2F",
+            "map_id": 61,
+            "grass_cave": {
+                "base_rate": 10,
+                "encounters": [
+                    {
+                        "pkmn": "Zubat",
+                        "level": 9,
+                        "rate": 20
+                    },
+                    {
+                        "pkmn": "Geodude",
+                        "level": 9,
+                        "rate": 20
+                    },
+                    {
+                        "pkmn": "Zubat",
+                        "level": 10,
+                        "rate": 15
+                    },
+                    {
+                        "pkmn": "Geodude",
+                        "level": 10,
+                        "rate": 10
+                    },
+                    {
+                        "pkmn": "Zubat",
+                        "level": 11,
+                        "rate": 10
+                    },
+                    {
+                        "pkmn": "Paras",
+                        "level": 10,
+                        "rate": 10
+                    },
+                    {
+                        "pkmn": "Paras",
+                        "level": 12,
+                        "rate": 5
+                    },
+                    {
+                        "pkmn": "Clefairy",
+                        "level": 10,
+                        "rate": 5
+                    },
+                    {
+                        "pkmn": "Zubat",
+                        "level": 12,
+                        "rate": 4
+                    },
+                    {
+                        "pkmn": "Clefairy",
+                        "level": 12,
+                        "rate": 1
+                    }
+                ]
+            }
+        },
+        {
+            "map_name": "CERULEAN_GYM",
+            "map_id": 65,
+            "old_rod": {
+                "base_rate": 50,
+                "encounters": [
+                    {
+                        "pkmn": "Magikarp",
+                        "level": 5,
+                        "rate": 100
+                    }
+                ]
+            },
+            "good_rod": {
+                "base_rate": 50,
+                "encounters": [
+                    {
+                        "pkmn": "Goldeen",
+                        "level": 10,
+                        "rate": 50
+                    },
+                    {
+                        "pkmn": "Poliwag",
+                        "level": 10,
+                        "rate": 50
+                    }
+                ]
+            },
+            "super_rod": {
+                "base_rate": 50,
+                "encounters": [
+                    {
+                        "pkmn": "Psyduck",
+                        "level": 15,
+                        "rate": 33
+                    },
+                    {
+                        "pkmn": "Goldeen",
+                        "level": 15,
+                        "rate": 33
+                    },
+                    {
+                        "pkmn": "Krabby",
+                        "level": 15,
+                        "rate": 33
+                    }
+                ]
+            }
+        },
+        {
+            "map_name": "ROCK_TUNNEL_1F",
+            "map_id": 82,
+            "grass_cave": {
+                "base_rate": 15,
+                "encounters": [
+                    {
+                        "pkmn": "Zubat",
+                        "level": 16,
+                        "rate": 20
+                    },
+                    {
+                        "pkmn": "Zubat",
+                        "level": 17,
+                        "rate": 20
+                    },
+                    {
+                        "pkmn": "Geodude",
+                        "level": 17,
+                        "rate": 15
+                    },
+                    {
+                        "pkmn": "Machop",
+                        "level": 15,
+                        "rate": 10
+                    },
+                    {
+                        "pkmn": "Geodude",
+                        "level": 16,
+                        "rate": 10
+                    },
+                    {
+                        "pkmn": "Zubat",
+                        "level": 18,
+                        "rate": 10
+                    },
+                    {
+                        "pkmn": "Zubat",
+                        "level": 15,
+                        "rate": 5
+                    },
+                    {
+                        "pkmn": "Machop",
+                        "level": 17,
+                        "rate": 5
+                    },
+                    {
+                        "pkmn": "Onix",
+                        "level": 13,
+                        "rate": 4
+                    },
+                    {
+                        "pkmn": "Onix",
+                        "level": 15,
+                        "rate": 1
+                    }
+                ]
+            }
+        },
+        {
+            "map_name": "POWER_PLANT",
+            "map_id": 83,
+            "grass_cave": {
+                "base_rate": 10,
+                "encounters": [
+                    {
+                        "pkmn": "Voltorb",
+                        "level": 21,
+                        "rate": 20
+                    },
+                    {
+                        "pkmn": "Magnemite",
+                        "level": 21,
+                        "rate": 20
+                    },
+                    {
+                        "pkmn": "Pikachu",
+                        "level": 20,
+                        "rate": 15
+                    },
+                    {
+                        "pkmn": "Pikachu",
+                        "level": 24,
+                        "rate": 10
+                    },
+                    {
+                        "pkmn": "Magnemite",
+                        "level": 23,
+                        "rate": 10
+                    },
+                    {
+                        "pkmn": "Voltorb",
+                        "level": 23,
+                        "rate": 10
+                    },
+                    {
+                        "pkmn": "Magneton",
+                        "level": 32,
+                        "rate": 5
+                    },
+                    {
+                        "pkmn": "Magneton",
+                        "level": 35,
+                        "rate": 5
+                    },
+                    {
+                        "pkmn": "Raichu",
+                        "level": 33,
+                        "rate": 4
+                    },
+                    {
+                        "pkmn": "Raichu",
+                        "level": 36,
+                        "rate": 1
+                    }
+                ]
+            }
+        },
+        {
+            "map_name": "VERMILION_DOCK",
+            "map_id": 94,
+            "old_rod": {
+                "base_rate": 50,
+                "encounters": [
+                    {
+                        "pkmn": "Magikarp",
+                        "level": 5,
+                        "rate": 100
+                    }
+                ]
+            },
+            "good_rod": {
+                "base_rate": 50,
+                "encounters": [
+                    {
+                        "pkmn": "Goldeen",
+                        "level": 10,
+                        "rate": 50
+                    },
+                    {
+                        "pkmn": "Poliwag",
+                        "level": 10,
+                        "rate": 50
+                    }
+                ]
+            },
+            "super_rod": {
+                "base_rate": 50,
+                "encounters": [
+                    {
+                        "pkmn": "Krabby",
+                        "level": 15,
+                        "rate": 50
+                    },
+                    {
+                        "pkmn": "Shellder",
+                        "level": 15,
+                        "rate": 50
+                    }
+                ]
+            }
+        },
+        {
+            "map_name": "VICTORY_ROAD_1F",
+            "map_id": 108,
+            "grass_cave": {
+                "base_rate": 15,
+                "encounters": [
+                    {
+                        "pkmn": "Machop",
+                        "level": 24,
+                        "rate": 20
+                    },
+                    {
+                        "pkmn": "Geodude",
+                        "level": 26,
+                        "rate": 20
+                    },
+                    {
+                        "pkmn": "Zubat",
+                        "level": 22,
+                        "rate": 15
+                    },
+                    {
+                        "pkmn": "Onix",
+                        "level": 36,
+                        "rate": 10
+                    },
+                    {
+                        "pkmn": "Onix",
+                        "level": 39,
+                        "rate": 10
+                    },
+                    {
+                        "pkmn": "Onix",
+                        "level": 42,
+                        "rate": 10
+                    },
+                    {
+                        "pkmn": "Graveler",
+                        "level": 41,
+                        "rate": 5
+                    },
+                    {
+                        "pkmn": "Golbat",
+                        "level": 41,
+                        "rate": 5
+                    },
+                    {
+                        "pkmn": "Machoke",
+                        "level": 42,
+                        "rate": 4
+                    },
+                    {
+                        "pkmn": "Marowak",
+                        "level": 43,
+                        "rate": 1
+                    }
+                ]
+            }
+        },
+        {
+            "map_name": "POKEMON_TOWER_3F",
+            "map_id": 144,
+            "grass_cave": {
+                "base_rate": 10,
+                "encounters": [
+                    {
+                        "pkmn": "Gastly",
+                        "level": 20,
+                        "rate": 20
+                    },
+                    {
+                        "pkmn": "Gastly",
+                        "level": 21,
+                        "rate": 20
+                    },
+                    {
+                        "pkmn": "Gastly",
+                        "level": 22,
+                        "rate": 15
+                    },
+                    {
+                        "pkmn": "Gastly",
+                        "level": 23,
+                        "rate": 10
+                    },
+                    {
+                        "pkmn": "Gastly",
+                        "level": 19,
+                        "rate": 10
+                    },
+                    {
+                        "pkmn": "Gastly",
+                        "level": 18,
+                        "rate": 10
+                    },
+                    {
+                        "pkmn": "Gastly",
+                        "level": 24,
+                        "rate": 5
+                    },
+                    {
+                        "pkmn": "Cubone",
+                        "level": 20,
+                        "rate": 5
+                    },
+                    {
+                        "pkmn": "Cubone",
+                        "level": 22,
+                        "rate": 4
+                    },
+                    {
+                        "pkmn": "Haunter",
+                        "level": 25,
+                        "rate": 1
+                    }
+                ]
+            }
+        },
+        {
+            "map_name": "POKEMON_TOWER_4F",
+            "map_id": 145,
+            "grass_cave": {
+                "base_rate": 10,
+                "encounters": [
+                    {
+                        "pkmn": "Gastly",
+                        "level": 20,
+                        "rate": 20
+                    },
+                    {
+                        "pkmn": "Gastly",
+                        "level": 21,
+                        "rate": 20
+                    },
+                    {
+                        "pkmn": "Gastly",
+                        "level": 22,
+                        "rate": 15
+                    },
+                    {
+                        "pkmn": "Gastly",
+                        "level": 23,
+                        "rate": 10
+                    },
+                    {
+                        "pkmn": "Gastly",
+                        "level": 19,
+                        "rate": 10
+                    },
+                    {
+                        "pkmn": "Gastly",
+                        "level": 18,
+                        "rate": 10
+                    },
+                    {
+                        "pkmn": "Haunter",
+                        "level": 25,
+                        "rate": 5
+                    },
+                    {
+                        "pkmn": "Cubone",
+                        "level": 20,
+                        "rate": 5
+                    },
+                    {
+                        "pkmn": "Cubone",
+                        "level": 22,
+                        "rate": 4
+                    },
+                    {
+                        "pkmn": "Gastly",
+                        "level": 24,
+                        "rate": 1
+                    }
+                ]
+            }
+        },
+        {
+            "map_name": "POKEMON_TOWER_5F",
+            "map_id": 146,
+            "grass_cave": {
+                "base_rate": 10,
+                "encounters": [
+                    {
+                        "pkmn": "Gastly",
+                        "level": 20,
+                        "rate": 20
+                    },
+                    {
+                        "pkmn": "Gastly",
+                        "level": 21,
+                        "rate": 20
+                    },
+                    {
+                        "pkmn": "Gastly",
+                        "level": 22,
+                        "rate": 15
+                    },
+                    {
+                        "pkmn": "Gastly",
+                        "level": 23,
+                        "rate": 10
+                    },
+                    {
+                        "pkmn": "Gastly",
+                        "level": 19,
+                        "rate": 10
+                    },
+                    {
+                        "pkmn": "Gastly",
+                        "level": 18,
+                        "rate": 10
+                    },
+                    {
+                        "pkmn": "Haunter",
+                        "level": 25,
+                        "rate": 5
+                    },
+                    {
+                        "pkmn": "Cubone",
+                        "level": 20,
+                        "rate": 5
+                    },
+                    {
+                        "pkmn": "Cubone",
+                        "level": 22,
+                        "rate": 4
+                    },
+                    {
+                        "pkmn": "Gastly",
+                        "level": 24,
+                        "rate": 1
+                    }
+                ]
+            }
+        },
+        {
+            "map_name": "POKEMON_TOWER_6F",
+            "map_id": 147,
+            "grass_cave": {
+                "base_rate": 15,
+                "encounters": [
+                    {
+                        "pkmn": "Gastly",
+                        "level": 21,
+                        "rate": 20
+                    },
+                    {
+                        "pkmn": "Gastly",
+                        "level": 22,
+                        "rate": 20
+                    },
+                    {
+                        "pkmn": "Gastly",
+                        "level": 23,
+                        "rate": 15
+                    },
+                    {
+                        "pkmn": "Gastly",
+                        "level": 24,
+                        "rate": 10
+                    },
+                    {
+                        "pkmn": "Gastly",
+                        "level": 20,
+                        "rate": 10
+                    },
+                    {
+                        "pkmn": "Gastly",
+                        "level": 19,
+                        "rate": 10
+                    },
+                    {
+                        "pkmn": "Haunter",
+                        "level": 26,
+                        "rate": 5
+                    },
+                    {
+                        "pkmn": "Cubone",
+                        "level": 22,
+                        "rate": 5
+                    },
+                    {
+                        "pkmn": "Cubone",
+                        "level": 24,
+                        "rate": 4
+                    },
+                    {
+                        "pkmn": "Haunter",
+                        "level": 28,
+                        "rate": 1
+                    }
+                ]
+            }
+        },
+        {
+            "map_name": "POKEMON_TOWER_7F",
+            "map_id": 148,
+            "grass_cave": {
+                "base_rate": 15,
+                "encounters": [
+                    {
+                        "pkmn": "Gastly",
+                        "level": 21,
+                        "rate": 20
+                    },
+                    {
+                        "pkmn": "Gastly",
+                        "level": 22,
+                        "rate": 20
+                    },
+                    {
+                        "pkmn": "Gastly",
+                        "level": 23,
+                        "rate": 15
+                    },
+                    {
+                        "pkmn": "Gastly",
+                        "level": 24,
+                        "rate": 10
+                    },
+                    {
+                        "pkmn": "Gastly",
+                        "level": 20,
+                        "rate": 10
+                    },
+                    {
+                        "pkmn": "Haunter",
+                        "level": 28,
+                        "rate": 10
+                    },
+                    {
+                        "pkmn": "Cubone",
+                        "level": 22,
+                        "rate": 5
+                    },
+                    {
+                        "pkmn": "Cubone",
+                        "level": 24,
+                        "rate": 5
+                    },
+                    {
+                        "pkmn": "Haunter",
+                        "level": 28,
+                        "rate": 4
+                    },
+                    {
+                        "pkmn": "Haunter",
+                        "level": 30,
+                        "rate": 1
+                    }
+                ]
+            }
+        },
+        {
+            "map_name": "SEAFOAM_ISLANDS_B1F",
+            "map_id": 159,
+            "grass_cave": {
+                "base_rate": 10,
+                "encounters": [
+                    {
+                        "pkmn": "Shellder",
+                        "level": 30,
+                        "rate": 20
+                    },
+                    {
+                        "pkmn": "Krabby",
+                        "level": 30,
+                        "rate": 20
+                    },
+                    {
+                        "pkmn": "Staryu",
+                        "level": 32,
+                        "rate": 15
+                    },
+                    {
+                        "pkmn": "Krabby",
+                        "level": 32,
+                        "rate": 10
+                    },
+                    {
+                        "pkmn": "Psyduck",
+                        "level": 28,
+                        "rate": 10
+                    },
+                    {
+                        "pkmn": "Seel",
+                        "level": 30,
+                        "rate": 10
+                    },
+                    {
+                        "pkmn": "Psyduck",
+                        "level": 30,
+                        "rate": 5
+                    },
+                    {
+                        "pkmn": "Seel",
+                        "level": 28,
+                        "rate": 5
+                    },
+                    {
+                        "pkmn": "Dewgong",
+                        "level": 38,
+                        "rate": 4
+                    },
+                    {
+                        "pkmn": "Kingler",
+                        "level": 37,
+                        "rate": 1
+                    }
+                ]
+            }
+        },
+        {
+            "map_name": "SEAFOAM_ISLANDS_B2F",
+            "map_id": 160,
+            "grass_cave": {
+                "base_rate": 10,
+                "encounters": [
+                    {
+                        "pkmn": "Seel",
+                        "level": 30,
+                        "rate": 20
+                    },
+                    {
+                        "pkmn": "Psyduck",
+                        "level": 30,
+                        "rate": 20
+                    },
+                    {
+                        "pkmn": "Seel",
+                        "level": 32,
+                        "rate": 15
+                    },
+                    {
+                        "pkmn": "Psyduck",
+                        "level": 32,
+                        "rate": 10
+                    },
+                    {
+                        "pkmn": "Krabby",
+                        "level": 28,
+                        "rate": 10
+                    },
+                    {
+                        "pkmn": "Shellder",
+                        "level": 30,
+                        "rate": 10
+                    },
+                    {
+                        "pkmn": "Krabby",
+                        "level": 30,
+                        "rate": 5
+                    },
+                    {
+                        "pkmn": "Staryu",
+                        "level": 28,
+                        "rate": 5
+                    },
+                    {
+                        "pkmn": "Golbat",
+                        "level": 30,
+                        "rate": 4
+                    },
+                    {
+                        "pkmn": "Golduck",
+                        "level": 37,
+                        "rate": 1
+                    }
+                ]
+            }
+        },
+        {
+            "map_name": "SEAFOAM_ISLANDS_B3F",
+            "map_id": 161,
+            "old_rod": {
+                "base_rate": 50,
+                "encounters": [
+                    {
+                        "pkmn": "Magikarp",
+                        "level": 5,
+                        "rate": 100
+                    }
+                ]
+            },
+            "good_rod": {
+                "base_rate": 50,
+                "encounters": [
+                    {
+                        "pkmn": "Goldeen",
+                        "level": 10,
+                        "rate": 50
+                    },
+                    {
+                        "pkmn": "Poliwag",
+                        "level": 10,
+                        "rate": 50
+                    }
+                ]
+            },
+            "super_rod": {
+                "base_rate": 50,
+                "encounters": [
+                    {
+                        "pkmn": "Staryu",
+                        "level": 15,
+                        "rate": 25
+                    },
+                    {
+                        "pkmn": "Horsea",
+                        "level": 15,
+                        "rate": 25
+                    },
+                    {
+                        "pkmn": "Shellder",
+                        "level": 15,
+                        "rate": 25
+                    },
+                    {
+                        "pkmn": "Goldeen",
+                        "level": 15,
+                        "rate": 25
+                    }
+                ]
+            },
+            "grass_cave": {
+                "base_rate": 10,
+                "encounters": [
+                    {
+                        "pkmn": "Psyduck",
+                        "level": 31,
+                        "rate": 20
+                    },
+                    {
+                        "pkmn": "Seel",
+                        "level": 31,
+                        "rate": 20
+                    },
+                    {
+                        "pkmn": "Psyduck",
+                        "level": 33,
+                        "rate": 15
+                    },
+                    {
+                        "pkmn": "Seel",
+                        "level": 33,
+                        "rate": 10
+                    },
+                    {
+                        "pkmn": "Krabby",
+                        "level": 29,
+                        "rate": 10
+                    },
+                    {
+                        "pkmn": "Staryu",
+                        "level": 31,
+                        "rate": 10
+                    },
+                    {
+                        "pkmn": "Krabby",
+                        "level": 31,
+                        "rate": 5
+                    },
+                    {
+                        "pkmn": "Staryu",
+                        "level": 29,
+                        "rate": 5
+                    },
+                    {
+                        "pkmn": "Kingler",
+                        "level": 39,
+                        "rate": 4
+                    },
+                    {
+                        "pkmn": "Dewgong",
+                        "level": 37,
+                        "rate": 1
+                    }
+                ]
+            }
+        },
+        {
+            "map_name": "SEAFOAM_ISLANDS_B4F",
+            "map_id": 162,
+            "old_rod": {
+                "base_rate": 50,
+                "encounters": [
+                    {
+                        "pkmn": "Magikarp",
+                        "level": 5,
+                        "rate": 100
+                    }
+                ]
+            },
+            "good_rod": {
+                "base_rate": 50,
+                "encounters": [
+                    {
+                        "pkmn": "Goldeen",
+                        "level": 10,
+                        "rate": 50
+                    },
+                    {
+                        "pkmn": "Poliwag",
+                        "level": 10,
+                        "rate": 50
+                    }
+                ]
+            },
+            "super_rod": {
+                "base_rate": 50,
+                "encounters": [
+                    {
+                        "pkmn": "Staryu",
+                        "level": 15,
+                        "rate": 25
+                    },
+                    {
+                        "pkmn": "Horsea",
+                        "level": 15,
+                        "rate": 25
+                    },
+                    {
+                        "pkmn": "Shellder",
+                        "level": 15,
+                        "rate": 25
+                    },
+                    {
+                        "pkmn": "Goldeen",
+                        "level": 15,
+                        "rate": 25
+                    }
+                ]
+            },
+            "grass_cave": {
+                "base_rate": 10,
+                "encounters": [
+                    {
+                        "pkmn": "Krabby",
+                        "level": 31,
+                        "rate": 20
+                    },
+                    {
+                        "pkmn": "Staryu",
+                        "level": 31,
+                        "rate": 20
+                    },
+                    {
+                        "pkmn": "Krabby",
+                        "level": 33,
+                        "rate": 15
+                    },
+                    {
+                        "pkmn": "Staryu",
+                        "level": 33,
+                        "rate": 10
+                    },
+                    {
+                        "pkmn": "Psyduck",
+                        "level": 29,
+                        "rate": 10
+                    },
+                    {
+                        "pkmn": "Seel",
+                        "level": 31,
+                        "rate": 10
+                    },
+                    {
+                        "pkmn": "Psyduck",
+                        "level": 31,
+                        "rate": 5
+                    },
+                    {
+                        "pkmn": "Seel",
+                        "level": 29,
+                        "rate": 5
+                    },
+                    {
+                        "pkmn": "Golduck",
+                        "level": 39,
+                        "rate": 4
+                    },
+                    {
+                        "pkmn": "Golbat",
+                        "level": 32,
+                        "rate": 1
+                    }
+                ]
+            }
+        },
+        {
+            "map_name": "POKEMON_MANSION_1F",
+            "map_id": 165,
+            "grass_cave": {
+                "base_rate": 10,
+                "encounters": [
+                    {
+                        "pkmn": "Grimer",
+                        "level": 32,
+                        "rate": 20
+                    },
+                    {
+                        "pkmn": "Grimer",
+                        "level": 30,
+                        "rate": 20
+                    },
+                    {
+                        "pkmn": "Ponyta",
+                        "level": 34,
+                        "rate": 15
+                    },
+                    {
+                        "pkmn": "Ponyta",
+                        "level": 30,
+                        "rate": 10
+                    },
+                    {
+                        "pkmn": "Vulpix",
+                        "level": 34,
+                        "rate": 10
+                    },
+                    {
+                        "pkmn": "Ponyta",
+                        "level": 32,
+                        "rate": 10
+                    },
+                    {
+                        "pkmn": "Koffing",
+                        "level": 30,
+                        "rate": 5
+                    },
+                    {
+                        "pkmn": "Ponyta",
+                        "level": 28,
+                        "rate": 5
+                    },
+                    {
+                        "pkmn": "Muk",
+                        "level": 37,
+                        "rate": 4
+                    },
+                    {
+                        "pkmn": "Weezing",
+                        "level": 39,
+                        "rate": 1
+                    }
+                ]
+            }
+        },
+        {
+            "map_name": "SEAFOAM_ISLANDS_1F",
+            "map_id": 192,
+            "grass_cave": {
+                "base_rate": 15,
+                "encounters": [
+                    {
+                        "pkmn": "Seel",
+                        "level": 30,
+                        "rate": 20
+                    },
+                    {
+                        "pkmn": "Psyduck",
+                        "level": 30,
+                        "rate": 20
+                    },
+                    {
+                        "pkmn": "Staryu",
+                        "level": 30,
+                        "rate": 15
+                    },
+                    {
+                        "pkmn": "Krabby",
+                        "level": 30,
+                        "rate": 10
+                    },
+                    {
+                        "pkmn": "Krabby",
+                        "level": 28,
+                        "rate": 10
+                    },
+                    {
+                        "pkmn": "Zubat",
+                        "level": 21,
+                        "rate": 10
+                    },
+                    {
+                        "pkmn": "Golbat",
+                        "level": 29,
+                        "rate": 5
+                    },
+                    {
+                        "pkmn": "Slowpoke",
+                        "level": 28,
+                        "rate": 5
+                    },
+                    {
+                        "pkmn": "Staryu",
+                        "level": 28,
+                        "rate": 4
+                    },
+                    {
+                        "pkmn": "Slowbro",
+                        "level": 38,
+                        "rate": 1
+                    }
+                ]
+            }
+        },
+        {
+            "map_name": "VICTORY_ROAD_2F",
+            "map_id": 194,
+            "grass_cave": {
+                "base_rate": 10,
+                "encounters": [
+                    {
+                        "pkmn": "Machop",
+                        "level": 22,
+                        "rate": 20
+                    },
+                    {
+                        "pkmn": "Geodude",
+                        "level": 24,
+                        "rate": 20
+                    },
+                    {
+                        "pkmn": "Zubat",
+                        "level": 26,
+                        "rate": 15
+                    },
+                    {
+                        "pkmn": "Onix",
+                        "level": 36,
+                        "rate": 10
+                    },
+                    {
+                        "pkmn": "Onix",
+                        "level": 39,
+                        "rate": 10
+                    },
+                    {
+                        "pkmn": "Onix",
+                        "level": 42,
+                        "rate": 10
+                    },
+                    {
+                        "pkmn": "Machoke",
+                        "level": 41,
+                        "rate": 5
+                    },
+                    {
+                        "pkmn": "Golbat",
+                        "level": 40,
+                        "rate": 5
+                    },
+                    {
+                        "pkmn": "Marowak",
+                        "level": 40,
+                        "rate": 4
+                    },
+                    {
+                        "pkmn": "Graveler",
+                        "level": 43,
+                        "rate": 1
+                    }
+                ]
+            }
+        },
+        {
+            "map_name": "DIGLETTS_CAVE",
+            "map_id": 197,
+            "grass_cave": {
+                "base_rate": 20,
+                "encounters": [
+                    {
+                        "pkmn": "Diglett",
+                        "level": 18,
+                        "rate": 20
+                    },
+                    {
+                        "pkmn": "Diglett",
+                        "level": 19,
+                        "rate": 20
+                    },
+                    {
+                        "pkmn": "Diglett",
+                        "level": 17,
+                        "rate": 15
+                    },
+                    {
+                        "pkmn": "Diglett",
+                        "level": 20,
+                        "rate": 10
+                    },
+                    {
+                        "pkmn": "Diglett",
+                        "level": 16,
+                        "rate": 10
+                    },
+                    {
+                        "pkmn": "Diglett",
+                        "level": 15,
+                        "rate": 10
+                    },
+                    {
+                        "pkmn": "Diglett",
+                        "level": 21,
+                        "rate": 5
+                    },
+                    {
+                        "pkmn": "Diglett",
+                        "level": 22,
+                        "rate": 5
+                    },
+                    {
+                        "pkmn": "Dugtrio",
+                        "level": 29,
+                        "rate": 4
+                    },
+                    {
+                        "pkmn": "Dugtrio",
+                        "level": 31,
+                        "rate": 1
+                    }
+                ]
+            }
+        },
+        {
+            "map_name": "VICTORY_ROAD_3F",
+            "map_id": 198,
+            "grass_cave": {
+                "base_rate": 15,
+                "encounters": [
+                    {
+                        "pkmn": "Machop",
+                        "level": 24,
+                        "rate": 20
+                    },
+                    {
+                        "pkmn": "Geodude",
+                        "level": 26,
+                        "rate": 20
+                    },
+                    {
+                        "pkmn": "Zubat",
+                        "level": 22,
+                        "rate": 15
+                    },
+                    {
+                        "pkmn": "Onix",
+                        "level": 42,
+                        "rate": 10
+                    },
+                    {
+                        "pkmn": "Venomoth",
+                        "level": 40,
+                        "rate": 10
+                    },
+                    {
+                        "pkmn": "Onix",
+                        "level": 45,
+                        "rate": 10
+                    },
+                    {
+                        "pkmn": "Graveler",
+                        "level": 43,
+                        "rate": 5
+                    },
+                    {
+                        "pkmn": "Golbat",
+                        "level": 41,
+                        "rate": 5
+                    },
+                    {
+                        "pkmn": "Machoke",
+                        "level": 42,
+                        "rate": 4
+                    },
+                    {
+                        "pkmn": "Machoke",
+                        "level": 45,
+                        "rate": 1
+                    }
+                ]
+            }
+        },
+        {
+            "map_name": "POKEMON_MANSION_2F",
+            "map_id": 214,
+            "grass_cave": {
+                "base_rate": 10,
+                "encounters": [
+                    {
+                        "pkmn": "Vulpix",
+                        "level": 32,
+                        "rate": 20
+                    },
+                    {
+                        "pkmn": "Grimer",
+                        "level": 34,
+                        "rate": 20
+                    },
+                    {
+                        "pkmn": "Grimer",
+                        "level": 34,
+                        "rate": 15
+                    },
+                    {
+                        "pkmn": "Ponyta",
+                        "level": 30,
+                        "rate": 10
+                    },
+                    {
+                        "pkmn": "Grimer",
+                        "level": 30,
+                        "rate": 10
+                    },
+                    {
+                        "pkmn": "Ponyta",
+                        "level": 32,
+                        "rate": 10
+                    },
+                    {
+                        "pkmn": "Koffing",
+                        "level": 30,
+                        "rate": 5
+                    },
+                    {
+                        "pkmn": "Ponyta",
+                        "level": 28,
+                        "rate": 5
+                    },
+                    {
+                        "pkmn": "Muk",
+                        "level": 39,
+                        "rate": 4
+                    },
+                    {
+                        "pkmn": "Weezing",
+                        "level": 37,
+                        "rate": 1
+                    }
+                ]
+            }
+        },
+        {
+            "map_name": "POKEMON_MANSION_3F",
+            "map_id": 215,
+            "grass_cave": {
+                "base_rate": 10,
+                "encounters": [
+                    {
+                        "pkmn": "Grimer",
+                        "level": 31,
+                        "rate": 20
+                    },
+                    {
+                        "pkmn": "Vulpix",
+                        "level": 33,
+                        "rate": 20
+                    },
+                    {
+                        "pkmn": "Grimer",
+                        "level": 35,
+                        "rate": 15
+                    },
+                    {
+                        "pkmn": "Ponyta",
+                        "level": 32,
+                        "rate": 10
+                    },
+                    {
+                        "pkmn": "Magmar",
+                        "level": 34,
+                        "rate": 10
+                    },
+                    {
+                        "pkmn": "Muk",
+                        "level": 40,
+                        "rate": 10
+                    },
+                    {
+                        "pkmn": "Koffing",
+                        "level": 34,
+                        "rate": 5
+                    },
+                    {
+                        "pkmn": "Muk",
+                        "level": 38,
+                        "rate": 5
+                    },
+                    {
+                        "pkmn": "Ponyta",
+                        "level": 36,
+                        "rate": 4
+                    },
+                    {
+                        "pkmn": "Weezing",
+                        "level": 42,
+                        "rate": 1
+                    }
+                ]
+            }
+        },
+        {
+            "map_name": "POKEMON_MANSION_B1F",
+            "map_id": 216,
+            "grass_cave": {
+                "base_rate": 10,
+                "encounters": [
+                    {
+                        "pkmn": "Grimer",
+                        "level": 33,
+                        "rate": 20
+                    },
+                    {
+                        "pkmn": "Grimer",
+                        "level": 31,
+                        "rate": 20
+                    },
+                    {
+                        "pkmn": "Vulpix",
+                        "level": 35,
+                        "rate": 15
+                    },
+                    {
+                        "pkmn": "Ponyta",
+                        "level": 32,
+                        "rate": 10
+                    },
+                    {
+                        "pkmn": "Grimer",
+                        "level": 31,
+                        "rate": 10
+                    },
+                    {
+                        "pkmn": "Muk",
+                        "level": 40,
+                        "rate": 10
+                    },
+                    {
+                        "pkmn": "Ponyta",
+                        "level": 34,
+                        "rate": 5
+                    },
+                    {
+                        "pkmn": "Koffing",
+                        "level": 35,
+                        "rate": 5
+                    },
+                    {
+                        "pkmn": "Magmar",
+                        "level": 38,
+                        "rate": 4
+                    },
+                    {
+                        "pkmn": "Weezing",
+                        "level": 42,
+                        "rate": 1
+                    }
+                ]
+            }
+        },
+        {
+            "map_name": "SAFARI_ZONE_EAST",
+            "map_id": 217,
+            "old_rod": {
+                "base_rate": 50,
+                "encounters": [
+                    {
+                        "pkmn": "Magikarp",
+                        "level": 5,
+                        "rate": 100
+                    }
+                ]
+            },
+            "good_rod": {
+                "base_rate": 50,
+                "encounters": [
+                    {
+                        "pkmn": "Goldeen",
+                        "level": 10,
+                        "rate": 50
+                    },
+                    {
+                        "pkmn": "Poliwag",
+                        "level": 10,
+                        "rate": 50
+                    }
+                ]
+            },
+            "super_rod": {
+                "base_rate": 50,
+                "encounters": [
+                    {
+                        "pkmn": "Dratini",
+                        "level": 15,
+                        "rate": 25
+                    },
+                    {
+                        "pkmn": "Krabby",
+                        "level": 15,
+                        "rate": 25
+                    },
+                    {
+                        "pkmn": "Psyduck",
+                        "level": 15,
+                        "rate": 25
+                    },
+                    {
+                        "pkmn": "Slowpoke",
+                        "level": 15,
+                        "rate": 25
+                    }
+                ]
+            },
+            "grass_cave": {
+                "base_rate": 30,
+                "encounters": [
+                    {
+                        "pkmn": "Nidoran_F",
+                        "level": 24,
+                        "rate": 20
+                    },
+                    {
+                        "pkmn": "Doduo",
+                        "level": 26,
+                        "rate": 20
+                    },
+                    {
+                        "pkmn": "Paras",
+                        "level": 22,
+                        "rate": 15
+                    },
+                    {
+                        "pkmn": "Exeggcute",
+                        "level": 25,
+                        "rate": 10
+                    },
+                    {
+                        "pkmn": "Nidorina",
+                        "level": 33,
+                        "rate": 10
+                    },
+                    {
+                        "pkmn": "Exeggcute",
+                        "level": 23,
+                        "rate": 10
+                    },
+                    {
+                        "pkmn": "Nidoran_M",
+                        "level": 24,
+                        "rate": 5
+                    },
+                    {
+                        "pkmn": "Parasect",
+                        "level": 25,
+                        "rate": 5
+                    },
+                    {
+                        "pkmn": "Kangaskhan",
+                        "level": 25,
+                        "rate": 4
+                    },
+                    {
+                        "pkmn": "Pinsir",
+                        "level": 28,
+                        "rate": 1
+                    }
+                ]
+            }
+        },
+        {
+            "map_name": "SAFARI_ZONE_NORTH",
+            "map_id": 218,
+            "old_rod": {
+                "base_rate": 50,
+                "encounters": [
+                    {
+                        "pkmn": "Magikarp",
+                        "level": 5,
+                        "rate": 100
+                    }
+                ]
+            },
+            "good_rod": {
+                "base_rate": 50,
+                "encounters": [
+                    {
+                        "pkmn": "Goldeen",
+                        "level": 10,
+                        "rate": 50
+                    },
+                    {
+                        "pkmn": "Poliwag",
+                        "level": 10,
+                        "rate": 50
+                    }
+                ]
+            },
+            "super_rod": {
+                "base_rate": 50,
+                "encounters": [
+                    {
+                        "pkmn": "Dratini",
+                        "level": 15,
+                        "rate": 25
+                    },
+                    {
+                        "pkmn": "Krabby",
+                        "level": 15,
+                        "rate": 25
+                    },
+                    {
+                        "pkmn": "Psyduck",
+                        "level": 15,
+                        "rate": 25
+                    },
+                    {
+                        "pkmn": "Slowpoke",
+                        "level": 15,
+                        "rate": 25
+                    }
+                ]
+            },
+            "grass_cave": {
+                "base_rate": 30,
+                "encounters": [
+                    {
+                        "pkmn": "Nidoran_F",
+                        "level": 22,
+                        "rate": 20
+                    },
+                    {
+                        "pkmn": "Rhyhorn",
+                        "level": 26,
+                        "rate": 20
+                    },
+                    {
+                        "pkmn": "Paras",
+                        "level": 23,
+                        "rate": 15
+                    },
+                    {
+                        "pkmn": "Exeggcute",
+                        "level": 25,
+                        "rate": 10
+                    },
+                    {
+                        "pkmn": "Nidorina",
+                        "level": 30,
+                        "rate": 10
+                    },
+                    {
+                        "pkmn": "Exeggcute",
+                        "level": 27,
+                        "rate": 10
+                    },
+                    {
+                        "pkmn": "Nidorino",
+                        "level": 30,
+                        "rate": 5
+                    },
+                    {
+                        "pkmn": "Venomoth",
+                        "level": 32,
+                        "rate": 5
+                    },
+                    {
+                        "pkmn": "Chansey",
+                        "level": 26,
+                        "rate": 4
+                    },
+                    {
+                        "pkmn": "Tauros",
+                        "level": 28,
+                        "rate": 1
+                    }
+                ]
+            }
+        },
+        {
+            "map_name": "SAFARI_ZONE_WEST",
+            "map_id": 219,
+            "old_rod": {
+                "base_rate": 50,
+                "encounters": [
+                    {
+                        "pkmn": "Magikarp",
+                        "level": 5,
+                        "rate": 100
+                    }
+                ]
+            },
+            "good_rod": {
+                "base_rate": 50,
+                "encounters": [
+                    {
+                        "pkmn": "Goldeen",
+                        "level": 10,
+                        "rate": 50
+                    },
+                    {
+                        "pkmn": "Poliwag",
+                        "level": 10,
+                        "rate": 50
+                    }
+                ]
+            },
+            "super_rod": {
+                "base_rate": 50,
+                "encounters": [
+                    {
+                        "pkmn": "Dratini",
+                        "level": 15,
+                        "rate": 25
+                    },
+                    {
+                        "pkmn": "Krabby",
+                        "level": 15,
+                        "rate": 25
+                    },
+                    {
+                        "pkmn": "Psyduck",
+                        "level": 15,
+                        "rate": 25
+                    },
+                    {
+                        "pkmn": "Slowpoke",
+                        "level": 15,
+                        "rate": 25
+                    }
+                ]
+            },
+            "grass_cave": {
+                "base_rate": 30,
+                "encounters": [
+                    {
+                        "pkmn": "Nidoran_F",
+                        "level": 25,
+                        "rate": 20
+                    },
+                    {
+                        "pkmn": "Doduo",
+                        "level": 26,
+                        "rate": 20
+                    },
+                    {
+                        "pkmn": "Venonat",
+                        "level": 23,
+                        "rate": 15
+                    },
+                    {
+                        "pkmn": "Exeggcute",
+                        "level": 24,
+                        "rate": 10
+                    },
+                    {
+                        "pkmn": "Nidorina",
+                        "level": 33,
+                        "rate": 10
+                    },
+                    {
+                        "pkmn": "Exeggcute",
+                        "level": 26,
+                        "rate": 10
+                    },
+                    {
+                        "pkmn": "Nidoran_M",
+                        "level": 25,
+                        "rate": 5
+                    },
+                    {
+                        "pkmn": "Venomoth",
+                        "level": 31,
+                        "rate": 5
+                    },
+                    {
+                        "pkmn": "Tauros",
+                        "level": 26,
+                        "rate": 4
+                    },
+                    {
+                        "pkmn": "Kangaskhan",
+                        "level": 28,
+                        "rate": 1
+                    }
+                ]
+            }
+        },
+        {
+            "map_name": "SAFARI_ZONE_CENTER",
+            "map_id": 220,
+            "old_rod": {
+                "base_rate": 50,
+                "encounters": [
+                    {
+                        "pkmn": "Magikarp",
+                        "level": 5,
+                        "rate": 100
+                    }
+                ]
+            },
+            "good_rod": {
+                "base_rate": 50,
+                "encounters": [
+                    {
+                        "pkmn": "Goldeen",
+                        "level": 10,
+                        "rate": 50
+                    },
+                    {
+                        "pkmn": "Poliwag",
+                        "level": 10,
+                        "rate": 50
+                    }
+                ]
+            },
+            "super_rod": {
+                "base_rate": 50,
+                "encounters": [
+                    {
+                        "pkmn": "Dratini",
+                        "level": 15,
+                        "rate": 25
+                    },
+                    {
+                        "pkmn": "Krabby",
+                        "level": 15,
+                        "rate": 25
+                    },
+                    {
+                        "pkmn": "Psyduck",
+                        "level": 15,
+                        "rate": 25
+                    },
+                    {
+                        "pkmn": "Slowpoke",
+                        "level": 15,
+                        "rate": 25
+                    }
+                ]
+            },
+            "grass_cave": {
+                "base_rate": 30,
+                "encounters": [
+                    {
+                        "pkmn": "Nidoran_F",
+                        "level": 22,
+                        "rate": 20
+                    },
+                    {
+                        "pkmn": "Rhyhorn",
+                        "level": 25,
+                        "rate": 20
+                    },
+                    {
+                        "pkmn": "Venonat",
+                        "level": 22,
+                        "rate": 15
+                    },
+                    {
+                        "pkmn": "Exeggcute",
+                        "level": 24,
+                        "rate": 10
+                    },
+                    {
+                        "pkmn": "Nidorina",
+                        "level": 31,
+                        "rate": 10
+                    },
+                    {
+                        "pkmn": "Exeggcute",
+                        "level": 25,
+                        "rate": 10
+                    },
+                    {
+                        "pkmn": "Nidorino",
+                        "level": 31,
+                        "rate": 5
+                    },
+                    {
+                        "pkmn": "Parasect",
+                        "level": 30,
+                        "rate": 5
+                    },
+                    {
+                        "pkmn": "Pinsir",
+                        "level": 23,
+                        "rate": 4
+                    },
+                    {
+                        "pkmn": "Chansey",
+                        "level": 23,
+                        "rate": 1
+                    }
+                ]
+            }
+        },
+        {
+            "map_name": "CERULEAN_CAVE_2F",
+            "map_id": 226,
+            "old_rod": {
+                "base_rate": 50,
+                "encounters": [
+                    {
+                        "pkmn": "Magikarp",
+                        "level": 5,
+                        "rate": 100
+                    }
+                ]
+            },
+            "good_rod": {
+                "base_rate": 50,
+                "encounters": [
+                    {
+                        "pkmn": "Goldeen",
+                        "level": 10,
+                        "rate": 50
+                    },
+                    {
+                        "pkmn": "Poliwag",
+                        "level": 10,
+                        "rate": 50
+                    }
+                ]
+            },
+            "super_rod": {
+                "base_rate": 50,
+                "encounters": [
+                    {
+                        "pkmn": "Slowbro",
+                        "level": 23,
+                        "rate": 25
+                    },
+                    {
+                        "pkmn": "Seaking",
+                        "level": 23,
+                        "rate": 25
+                    },
+                    {
+                        "pkmn": "Kingler",
+                        "level": 23,
+                        "rate": 25
+                    },
+                    {
+                        "pkmn": "Seadra",
+                        "level": 23,
+                        "rate": 25
+                    }
+                ]
+            },
+            "grass_cave": {
+                "base_rate": 15,
+                "encounters": [
+                    {
+                        "pkmn": "Dodrio",
+                        "level": 51,
+                        "rate": 20
+                    },
+                    {
+                        "pkmn": "Venomoth",
+                        "level": 51,
+                        "rate": 20
+                    },
+                    {
+                        "pkmn": "Kadabra",
+                        "level": 51,
+                        "rate": 15
+                    },
+                    {
+                        "pkmn": "Rhydon",
+                        "level": 52,
+                        "rate": 10
+                    },
+                    {
+                        "pkmn": "Marowak",
+                        "level": 52,
+                        "rate": 10
+                    },
+                    {
+                        "pkmn": "Electrode",
+                        "level": 52,
+                        "rate": 10
+                    },
+                    {
+                        "pkmn": "Chansey",
+                        "level": 56,
+                        "rate": 5
+                    },
+                    {
+                        "pkmn": "Wigglytuff",
+                        "level": 54,
+                        "rate": 5
+                    },
+                    {
+                        "pkmn": "Ditto",
+                        "level": 55,
+                        "rate": 4
+                    },
+                    {
+                        "pkmn": "Ditto",
+                        "level": 60,
+                        "rate": 1
+                    }
+                ]
+            }
+        },
+        {
+            "map_name": "CERULEAN_CAVE_B1F",
+            "map_id": 227,
+            "old_rod": {
+                "base_rate": 50,
+                "encounters": [
+                    {
+                        "pkmn": "Magikarp",
+                        "level": 5,
+                        "rate": 100
+                    }
+                ]
+            },
+            "good_rod": {
+                "base_rate": 50,
+                "encounters": [
+                    {
+                        "pkmn": "Goldeen",
+                        "level": 10,
+                        "rate": 50
+                    },
+                    {
+                        "pkmn": "Poliwag",
+                        "level": 10,
+                        "rate": 50
+                    }
+                ]
+            },
+            "super_rod": {
+                "base_rate": 50,
+                "encounters": [
+                    {
+                        "pkmn": "Slowbro",
+                        "level": 23,
+                        "rate": 25
+                    },
+                    {
+                        "pkmn": "Seaking",
+                        "level": 23,
+                        "rate": 25
+                    },
+                    {
+                        "pkmn": "Kingler",
+                        "level": 23,
+                        "rate": 25
+                    },
+                    {
+                        "pkmn": "Seadra",
+                        "level": 23,
+                        "rate": 25
+                    }
+                ]
+            },
+            "grass_cave": {
+                "base_rate": 25,
+                "encounters": [
+                    {
+                        "pkmn": "Rhydon",
+                        "level": 55,
+                        "rate": 20
+                    },
+                    {
+                        "pkmn": "Marowak",
+                        "level": 55,
+                        "rate": 20
+                    },
+                    {
+                        "pkmn": "Electrode",
+                        "level": 55,
+                        "rate": 15
+                    },
+                    {
+                        "pkmn": "Chansey",
+                        "level": 64,
+                        "rate": 10
+                    },
+                    {
+                        "pkmn": "Parasect",
+                        "level": 64,
+                        "rate": 10
+                    },
+                    {
+                        "pkmn": "Raichu",
+                        "level": 64,
+                        "rate": 10
+                    },
+                    {
+                        "pkmn": "Sandslash",
+                        "level": 57,
+                        "rate": 5
+                    },
+                    {
+                        "pkmn": "Ditto",
+                        "level": 65,
+                        "rate": 5
+                    },
+                    {
+                        "pkmn": "Ditto",
+                        "level": 63,
+                        "rate": 4
+                    },
+                    {
+                        "pkmn": "Ditto",
+                        "level": 67,
+                        "rate": 1
+                    }
+                ]
+            }
+        },
+        {
+            "map_name": "CERULEAN_CAVE_1F",
+            "map_id": 228,
+            "old_rod": {
+                "base_rate": 50,
+                "encounters": [
+                    {
+                        "pkmn": "Magikarp",
+                        "level": 5,
+                        "rate": 100
+                    }
+                ]
+            },
+            "good_rod": {
+                "base_rate": 50,
+                "encounters": [
+                    {
+                        "pkmn": "Goldeen",
+                        "level": 10,
+                        "rate": 50
+                    },
+                    {
+                        "pkmn": "Poliwag",
+                        "level": 10,
+                        "rate": 50
+                    }
+                ]
+            },
+            "super_rod": {
+                "base_rate": 50,
+                "encounters": [
+                    {
+                        "pkmn": "Slowbro",
+                        "level": 23,
+                        "rate": 25
+                    },
+                    {
+                        "pkmn": "Seaking",
+                        "level": 23,
+                        "rate": 25
+                    },
+                    {
+                        "pkmn": "Kingler",
+                        "level": 23,
+                        "rate": 25
+                    },
+                    {
+                        "pkmn": "Seadra",
+                        "level": 23,
+                        "rate": 25
+                    }
+                ]
+            },
+            "grass_cave": {
+                "base_rate": 10,
+                "encounters": [
+                    {
+                        "pkmn": "Golbat",
+                        "level": 46,
+                        "rate": 20
+                    },
+                    {
+                        "pkmn": "Hypno",
+                        "level": 46,
+                        "rate": 20
+                    },
+                    {
+                        "pkmn": "Magneton",
+                        "level": 46,
+                        "rate": 15
+                    },
+                    {
+                        "pkmn": "Dodrio",
+                        "level": 49,
+                        "rate": 10
+                    },
+                    {
+                        "pkmn": "Venomoth",
+                        "level": 49,
+                        "rate": 10
+                    },
+                    {
+                        "pkmn": "Sandslash",
+                        "level": 52,
+                        "rate": 10
+                    },
+                    {
+                        "pkmn": "Kadabra",
+                        "level": 49,
+                        "rate": 5
+                    },
+                    {
+                        "pkmn": "Parasect",
+                        "level": 52,
+                        "rate": 5
+                    },
+                    {
+                        "pkmn": "Raichu",
+                        "level": 53,
+                        "rate": 4
+                    },
+                    {
+                        "pkmn": "Ditto",
+                        "level": 53,
+                        "rate": 1
+                    }
+                ]
+            }
+        },
+        {
+            "map_name": "ROCK_TUNNEL_B1F",
+            "map_id": 232,
+            "grass_cave": {
+                "base_rate": 15,
+                "encounters": [
+                    {
+                        "pkmn": "Zubat",
+                        "level": 16,
+                        "rate": 20
+                    },
+                    {
+                        "pkmn": "Zubat",
+                        "level": 17,
+                        "rate": 20
+                    },
+                    {
+                        "pkmn": "Geodude",
+                        "level": 17,
+                        "rate": 15
+                    },
+                    {
+                        "pkmn": "Machop",
+                        "level": 15,
+                        "rate": 10
+                    },
+                    {
+                        "pkmn": "Geodude",
+                        "level": 16,
+                        "rate": 10
+                    },
+                    {
+                        "pkmn": "Zubat",
+                        "level": 18,
+                        "rate": 10
+                    },
+                    {
+                        "pkmn": "Machop",
+                        "level": 17,
+                        "rate": 5
+                    },
+                    {
+                        "pkmn": "Onix",
+                        "level": 17,
+                        "rate": 5
+                    },
+                    {
+                        "pkmn": "Onix",
+                        "level": 13,
+                        "rate": 4
+                    },
+                    {
+                        "pkmn": "Geodude",
+                        "level": 18,
+                        "rate": 1
+                    }
+                ]
+            }
+        }
+    ]
+}
