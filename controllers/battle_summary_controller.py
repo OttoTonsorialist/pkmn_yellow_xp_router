@@ -20,6 +20,7 @@ logger = logging.getLogger(__name__)
 @dataclass
 class MoveRenderInfo:
     name:str
+    attack_flavor:List[str]
     damage_ranges:DamageRange
     crit_damage_ranges:DamageRange
     defending_mon_hp:int
@@ -212,8 +213,10 @@ class BattleSummaryController:
         # If you call this function, it is your responsibility to properly trigger an appropriate event independently
         if is_player_mon:
             move_data = self._player_move_data
+            mon_data = self._player_pkmn_matchup_data[pkmn_idx]
         else:
             move_data = self._enemy_move_data
+            mon_data = self._enemy_pkmn_matchup_data[pkmn_idx]
 
         best_move = None
         best_move_idx = None
@@ -224,7 +227,8 @@ class BattleSummaryController:
             if self._is_move_better(
                 cur_move,
                 best_move,
-                config.get_player_highlight_strategy() if is_player_mon else config.get_enemy_highlight_strategy()
+                config.get_player_highlight_strategy() if is_player_mon else config.get_enemy_highlight_strategy(),
+                mon_data
             ):
                 best_move = cur_move
                 best_move_idx = idx
@@ -397,6 +401,7 @@ class BattleSummaryController:
 
         return MoveRenderInfo(
             move_display_name,
+            move.attack_flavor,
             normal_ranges,
             crit_ranges,
             defending_mon.cur_stats.hp,
@@ -561,7 +566,7 @@ class BattleSummaryController:
         return self._enemy_setup_move_list
 
     @staticmethod
-    def _is_move_better(new_move:MoveRenderInfo, prev_move:MoveRenderInfo, strat:str) -> bool:
+    def _is_move_better(new_move:MoveRenderInfo, prev_move:MoveRenderInfo, strat:str, other_mon:PkmnRenderInfo) -> bool:
         if (
             strat is None or
             not isinstance(strat, str) or
@@ -575,39 +580,71 @@ class BattleSummaryController:
 
         if prev_move is None or prev_move.damage_ranges is None:
             return True
+
+        # special case for recharge moves (e.g. Hyper Beam)
+        # If a one-hit is not possible without a crit, always prefer other damage dealing moves
+        if const.FLAVOR_RECHARGE in new_move.attack_flavor and new_move.damage_ranges.max_damage < other_mon.defending_mon_hp:
+            return False
+        elif const.FLAVOR_RECHARGE in prev_move.attack_flavor and prev_move.damage_ranges.max_damage < other_mon.defending_mon_hp:
+            return True
         
         new_fastest_kill = 1000000
+        new_accuracy = -2
         if len(new_move.kill_ranges) > 0:
             if strat == const.HIGHLIGHT_GUARANTEED_KILL:
                 # if the last slot has a -1 % to kill, then that means it was auto-calculated
                 if config.do_ignore_accuracy() or new_move.kill_ranges[-1][1] != -1:
-                    new_fastest_kill = new_move.kill_ranges[-1][0]
+                    new_fastest_kill, new_accuracy = new_move.kill_ranges[-1]
 
             elif strat == const.HIGHLIGHT_FASTEST_KILL:
-                new_fastest_kill = new_move.kill_ranges[0][0]
+                new_fastest_kill, new_accuracy = new_move.kill_ranges[0]
             elif strat == const.HIGHLIGHT_CONSISTENT_KILL:
                 for test_kill in new_move.kill_ranges:
                     if test_kill[1] >= config.get_consistent_threshold():
-                        new_fastest_kill = test_kill[0]
+                        new_fastest_kill, new_accuracy = test_kill
                         break
         
         prev_fastest_kill = new_fastest_kill + 1
+        prev_accuracy = -2
         if len(prev_move.kill_ranges) > 0:
             if strat == const.HIGHLIGHT_GUARANTEED_KILL:
-                prev_fastest_kill = prev_move.kill_ranges[-1][0]
+                prev_fastest_kill, prev_accuracy = prev_move.kill_ranges[-1]
             elif strat == const.HIGHLIGHT_FASTEST_KILL:
-                prev_fastest_kill = prev_move.kill_ranges[0][0]
+                prev_fastest_kill, prev_accuracy = prev_move.kill_ranges[0]
             elif strat == const.HIGHLIGHT_CONSISTENT_KILL:
                 for test_kill in prev_move.kill_ranges:
                     if test_kill[1] >= config.get_consistent_threshold():
-                        prev_fastest_kill = test_kill[0]
+                        prev_fastest_kill, prev_accuracy = test_kill
                         break
+
         
+        # always prefer lower number of turns
         if new_fastest_kill < prev_fastest_kill:
             return True
         elif prev_fastest_kill < new_fastest_kill:
             return False
         
+        # if number of turns is tied, then prefer higher accuracy
+        # note that accuracy might be "-1" in the case of auto-calculated kills
+        # but that's fine, because we want higher accuracy, so it will always "lose", which is desirable
+        if new_accuracy > prev_accuracy:
+            return True
+        elif prev_accuracy > new_accuracy:
+            return False
+
+        # if number of turns and accuracy is tied, punish moves that take more than one turn
+        if (
+            const.FLAVOR_TWO_TURN in prev_move.attack_flavor or
+            const.FLAVOR_TWO_TURN_INVULN in prev_move.attack_flavor
+        ):
+            return True
+        elif (
+            const.FLAVOR_TWO_TURN in new_move.attack_flavor or
+            const.FLAVOR_TWO_TURN_INVULN in new_move.attack_flavor
+        ):
+            return False
+        
+        # Only rely on damage for tie breakers
         return new_move.damage_ranges.max_damage > prev_move.damage_ranges.max_damage
 
     @staticmethod

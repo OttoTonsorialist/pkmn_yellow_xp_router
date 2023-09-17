@@ -6,6 +6,7 @@ from typing import Dict, Tuple
 from utils.constants import const
 from pkmn import universal_data_objects
 from pkmn.gen_factory import current_gen_info, change_version
+from pkmn.pkmn_db import sanitize_string
 from utils import io_utils
 from routing import route_events
 from routing import full_route_state
@@ -73,12 +74,12 @@ class Router:
 
         if level_up_moves is None:
             self.level_up_move_defs = {
-                (x[1], int(x[0])): route_events.LearnMoveEventDefinition(x[1], None, const.MOVE_SOURCE_LEVELUP, level=int(x[0]))
+                (sanitize_string(x[1]), int(x[0])): route_events.LearnMoveEventDefinition(x[1], None, const.MOVE_SOURCE_LEVELUP, level=int(x[0]))
                 for x in pkmn_base.levelup_moves
             }
         else:
             # TODO: should double check loaded moves against expected moves from DB, and complain if something doesn't match
-            self.level_up_move_defs = {(x.move_to_learn, x.level): x for x in level_up_moves}
+            self.level_up_move_defs = {(sanitize_string(x.move_to_learn), x.level): x for x in level_up_moves}
 
         self._recalc()
     
@@ -339,7 +340,7 @@ class Router:
         self._recalc()
     
     def replace_levelup_move_event(self, new_event_def:route_events.LearnMoveEventDefinition):
-        self.level_up_move_defs[(new_event_def.move_to_learn, new_event_def.level)] = new_event_def
+        self.level_up_move_defs[(sanitize_string(new_event_def.move_to_learn), new_event_def.level)] = new_event_def
         self._recalc()
 
     def rename_event_folder(self, cur_name, new_name):

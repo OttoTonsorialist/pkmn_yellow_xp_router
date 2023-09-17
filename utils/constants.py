@@ -5,8 +5,8 @@ import sys
 
 class Constants:
     def __init__(self):
-        self.APP_VERSION = "v2.5f"
-        self.APP_RELEASE_DATE = "2023-Aug-08"
+        self.APP_VERSION = "v2.5g"
+        self.APP_RELEASE_DATE = "2023-Sept-17"
 
         self.NUZLOCKE_APP_VERSION = "v0.5a"
         self.NUZLOCKE_APP_RELEASE_DATE = "2023-Apr-01"
@@ -336,6 +336,9 @@ class Constants:
         self.FLAVOR_FIXED_DAMAGE = "fixed_damage"
         self.FLAVOR_LEVEL_DAMAGE = "level_damage"
         self.FLAVOR_PSYWAVE = "psywave"
+        self.FLAVOR_RECHARGE = "recharge"
+        self.FLAVOR_TWO_TURN_INVULN = "two_turn_semi_invlunerable"
+        self.FLAVOR_TWO_TURN = "two_turn"
 
         self.STRUGGLE_MOVE_NAME = "Struggle"
         self.MIMIC_MOVE_NAME = "Mimic"

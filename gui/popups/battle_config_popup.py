@@ -77,8 +77,11 @@ class BattleConfigWindow(Popup):
         self.guaranteed_kill_explanation = tk.Label(self.explanation_frame, text="This will highlight the move that has the lowest number of turns for a kill that has at least a chance above the consistency threshold.\nThis can be configured to suit your preferences")
         self.guaranteed_kill_explanation.grid(row=6, column=0, padx=self.padx, pady=self.pady - 4)
 
-        self.ties_explanation = tk.Label(self.explanation_frame, text="In all cases, if a tie occurs in the number of turns required for a kill, the move that deals more non-crit damage will be highlighted.")
-        self.ties_explanation.grid(row=7, column=0, padx=self.padx, pady=(6 * self.pady, self.pady - 4))
+        self.ties_explanation = tk.Label(self.explanation_frame, text="Regardless of the strategy, ties between moves with the same # of turns will be broken with successive checks for the following stats: Highest Accuracy, Punish 2 turn moves (dig/fly), Highest damage")
+        self.ties_explanation.grid(row=7, column=0, padx=self.padx, pady=(4 * self.pady, self.pady - 4))
+
+        self.hyper_beam_explanation = tk.Label(self.explanation_frame, text="Hyper Beam is also special cased to not be highlighted if it cannot kill with a single non-crit hit, due to the need to recharge")
+        self.hyper_beam_explanation.grid(row=8, column=0, padx=self.padx, pady=(6 * self.pady, self.pady - 4))
 
         self.close_button = custom_components.SimpleButton(self, text="Close", command=self._final_cleanup)
         self.close_button.pack(padx=self.padx, pady=self.pady)
