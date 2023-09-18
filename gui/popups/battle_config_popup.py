@@ -37,6 +37,10 @@ class BattleConfigWindow(Popup):
         self.search_depth_details = ttk.Label(self.input_frame, text="\n# Of turns to search damage ranges to find kill %'s\nLarger gets more accurate guaranteed kills, but may take longer, especially on slower computers")
         self.search_depth_details.grid(row=1, column=0, columnspan=2, pady=self.pady, padx=self.padx)
 
+        self.force_full_search_label = custom_components.CheckboxLabel(self.input_frame, text="Fully calculate psywave (Not recommended):", toggle_command=self._toggle_force_full_search, flip=True)
+        self.force_full_search_label.grid(row=10, column=0, columnspan=2, pady=self.pady, padx=self.padx)
+        self.force_full_search_label.set_checked(config.do_force_full_search())
+
         self.accuracy_label = custom_components.CheckboxLabel(self.input_frame, text="Ignore Accuracy in Kill Ranges:", toggle_command=self._toggle_accuracy, flip=True)
         self.accuracy_label.grid(row=11, column=0, columnspan=2, pady=self.pady, padx=self.padx)
         self.accuracy_label.set_checked(config.do_ignore_accuracy())
@@ -96,6 +100,9 @@ class BattleConfigWindow(Popup):
     
     def _toggle_accuracy(self, *args, **kwargs):
         config.set_ignore_accuracy(self.accuracy_label.is_checked())
+
+    def _toggle_force_full_search(self, *args, **kwargs):
+        config.set_force_full_search(self.force_full_search_label.is_checked())
     
     def _update_player_strat(self, *args, **kwargs):
         config.set_player_highlight_strategy(self.player_strat_val.get())

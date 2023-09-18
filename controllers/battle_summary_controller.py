@@ -394,7 +394,8 @@ class BattleSummaryController:
                 current_gen_info().get_crit_rate(attacking_mon, move),
                 accuracy,
                 defending_mon.cur_stats.hp,
-                attack_depth=config.get_damage_search_depth()
+                attack_depth=config.get_damage_search_depth(),
+                force_full_search=config.do_force_full_search()
             )
         else:
             kill_ranges = []

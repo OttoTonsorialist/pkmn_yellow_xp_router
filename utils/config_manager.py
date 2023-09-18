@@ -21,6 +21,7 @@ class Config:
     DEFAULT_ENEMY_HIGHLIGHT_STRATEGY = const.HIGHLIGHT_FASTEST_KILL
     DEFAULT_CONSISTENT_THRESHOLD = 90
     DEFAULT_IGNORE_ACCURACY = False
+    DEFAULT_FORCE_FULL_SEARCH = False
     DEFAULT_DAMAGE_SEARCH_DEPTH = 20
 
     def __init__(self):
@@ -53,6 +54,7 @@ class Config:
         self._consistent_threshold = raw.get(const.CONSISTENT_HIGHLIGHT_THRESHOLD, self.DEFAULT_CONSISTENT_THRESHOLD)
         self._ignore_accuracy = raw.get(const.IGNORE_ACCURACY_IN_DAMAGE_CALCS, self.DEFAULT_IGNORE_ACCURACY)
         self._damage_search_depth = raw.get(const.DAMAGE_SEARCH_DEPTH, self.DEFAULT_DAMAGE_SEARCH_DEPTH)
+        self._force_full_search = raw.get(const.FORCE_FULL_SEARCH, self.DEFAULT_FORCE_FULL_SEARCH)
 
         self._custom_font_name = raw.get(const.CUSTOM_FONT_NAME_KEY, self.DEFAULT_FONT_NAME)
     
@@ -80,6 +82,7 @@ class Config:
                 const.CONSISTENT_HIGHLIGHT_THRESHOLD: self._consistent_threshold,
                 const.IGNORE_ACCURACY_IN_DAMAGE_CALCS: self._ignore_accuracy,
                 const.DAMAGE_SEARCH_DEPTH: self._damage_search_depth,
+                const.FORCE_FULL_SEARCH: self._force_full_search,
             }, f, indent=4)
     
     def set_window_geometry(self, new_geometry):
@@ -158,6 +161,10 @@ class Config:
         self._damage_search_depth = depth
         self._save()
 
+    def set_force_full_search(self, do_force):
+        self._force_full_search = do_force
+        self._save()
+
     def get_success_color(self):
         return self._success_color
 
@@ -211,6 +218,9 @@ class Config:
         if not isinstance(result, int) or result < 0:
             result = self.DEFAULT_DAMAGE_SEARCH_DEPTH
         return result
+    
+    def do_force_full_search(self):
+        return self._force_full_search
     
     def do_ignore_accuracy(self):
         return self._ignore_accuracy

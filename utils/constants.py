@@ -5,7 +5,7 @@ import sys
 
 class Constants:
     def __init__(self):
-        self.APP_VERSION = "v2.6a"
+        self.APP_VERSION = "v2.6b"
         self.APP_RELEASE_DATE = "2023-Sept-17"
 
         self.NUZLOCKE_APP_VERSION = "v0.5a"
@@ -262,6 +262,7 @@ class Constants:
         self.CONSISTENT_HIGHLIGHT_THRESHOLD = "consistent_highlight_threshold"
         self.IGNORE_ACCURACY_IN_DAMAGE_CALCS = "ignore_accuracy_in_damage_calcs"
         self.DAMAGE_SEARCH_DEPTH = "damage_search_depth"
+        self.FORCE_FULL_SEARCH = "force_full_search"
 
         self.CUSTOM_FONT_NAME_KEY = "custom_font_name"
 

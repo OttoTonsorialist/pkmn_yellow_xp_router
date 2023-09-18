@@ -172,7 +172,7 @@ def _percent_rolls_kill_recursive(
     return result
 
 
-def find_kill(damage_range:DamageRange, crit_damage_range:DamageRange, crit_chance:float, accuracy:float, target_hp:int, attack_depth:int=10, percent_cutoff:float=0.1):
+def find_kill(damage_range:DamageRange, crit_damage_range:DamageRange, crit_chance:float, accuracy:float, target_hp:int, attack_depth:int=10, percent_cutoff:float=0.1, force_full_search=False):
     # NOTE: if attack_depth is too deep, (10+ is where I started to notice the issues), you quickly get overflow issues
     result = []
 
@@ -184,7 +184,10 @@ def find_kill(damage_range:DamageRange, crit_damage_range:DamageRange, crit_chan
 
     # this is a quick and dirty way to ignore calculating psywave, which has vastly more possible rolls, and thus takes much longer to calculate
     # also, don't endlessly search for a move that can't find a guaranteed kill even if it hits every time
-    if len(damage_range) <= 200 and (min_possible_damage * attack_depth) > target_hp:
+    if (
+        (len(damage_range) <= 200 and (min_possible_damage * attack_depth) > target_hp) or
+        force_full_search
+    ):
         for cur_num_attacks in range(1, attack_depth + 1):
             if (max_possible_damage * cur_num_attacks) < target_hp:
                 continue
