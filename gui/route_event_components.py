@@ -114,19 +114,22 @@ class NotesEditor(EventEditorBase):
 
 class TrainerFightEditor(EventEditorBase):
     VAR_COUNTER = 0
+    EXP_PER_SEC_TEXT = "Optimal exp per second (4x speed): "
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         # just holding onto the name for convenience
         self._cur_trainer = None
         self._num_pkmn = 0
-        self._pay_day_frame = ttk.Frame(self)
-        self._pay_day_frame.grid(column=0, row=0, columnspan=6, sticky=tk.EW)
-        self._pay_day_label = ttk.Label(self._pay_day_frame, text="Pay Day Amount: ")
-        self._pay_day_label.grid(column=1, row=0)
-        self._pay_day_value = custom_components.SimpleEntry(self._pay_day_frame, callback=self._trigger_save)
-        self._pay_day_value.grid(column=2, row=0)
-        self._pay_day_frame.columnconfigure(0, weight=1, uniform="group")
-        self._pay_day_frame.columnconfigure(3, weight=1, uniform="group")
+        self._header_frame = ttk.Frame(self)
+        self._header_frame.grid(column=0, row=0, columnspan=6, sticky=tk.EW)
+        self._exp_per_sec_label = ttk.Label(self._header_frame, text=self.EXP_PER_SEC_TEXT)
+        self._exp_per_sec_label.grid(column=1, row=0, columnspan=2)
+        self._pay_day_label = ttk.Label(self._header_frame, text="Pay Day Amount: ")
+        self._pay_day_label.grid(column=1, row=1)
+        self._pay_day_value = custom_components.SimpleEntry(self._header_frame, callback=self._trigger_save)
+        self._pay_day_value.grid(column=2, row=1)
+        self._header_frame.columnconfigure(0, weight=1, uniform="group")
+        self._header_frame.columnconfigure(3, weight=1, uniform="group")
         self._all_pkmn = [PkmnViewer(self, font_size=10) for _ in range(6)]
         self._cached_definition_order = []
         self._all_exp_labels = [ttk.Label(self, text="Exp Split:") for _ in range(6)]
@@ -157,6 +160,7 @@ class TrainerFightEditor(EventEditorBase):
         except Exception:
             pay_day_val = 0
 
+        self._exp_per_sec_label.configure(text=f"{self.EXP_PER_SEC_TEXT} {event_def.experience_per_second()}")
         self._pay_day_value.set(pay_day_val)
         enemy_pkmn_ordered = event_def.get_pokemon_list()
         self._num_pkmn = len(enemy_pkmn_ordered)

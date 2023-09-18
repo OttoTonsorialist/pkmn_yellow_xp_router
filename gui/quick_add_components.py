@@ -5,6 +5,8 @@ from tkinter import ttk
 from controllers.main_controller import MainController
 
 from gui import custom_components
+from pkmn.universal_data_objects import Trainer
+from pkmn import universal_utils
 from routing.route_events import \
     EventDefinition, EventItem, HoldItemEventDefinition, InventoryEventDefinition, LearnMoveEventDefinition, \
     RareCandyEventDefinition, TrainerEventDefinition, VitaminEventDefinition, WildPkmnEventDefinition, \
@@ -26,7 +28,7 @@ class QuickTrainerAdd(ttk.LabelFrame):
 
         self.padx = 5
         self.pady = 1
-        self.option_menu_width = 20
+        self.option_menu_width = 27
 
         self._dropdowns = ttk.Frame(self)
         self._dropdowns.pack()
@@ -77,7 +79,7 @@ class QuickTrainerAdd(ttk.LabelFrame):
             self._add_area.disable()
             return
         
-        selected_trainer = self._trainer_names.get() 
+        selected_trainer = self._get_trainer_name()
         if selected_trainer == const.NO_TRAINERS:
             self._add_trainer.disable()
             self._add_area.disable()
@@ -96,6 +98,19 @@ class QuickTrainerAdd(ttk.LabelFrame):
     
     def route_change_callback(self, *args, **kwargs):
         self.trainer_filter_callback(ignore_trainer_preview=True)
+    
+    @staticmethod
+    def _custom_trainer_name(trainer_obj:Trainer):
+        # custom name to inject exp per sec into name results
+        return f"({universal_utils.experience_per_second(current_gen_info().get_trainer_timing_info(), trainer_obj)}) {trainer_obj.name}"
+        return f"{trainer_obj.name} ({universal_utils.experience_per_second(current_gen_info().get_trainer_timing_info(), trainer_obj)})"
+    
+    def _get_trainer_name(self):
+        # extract raw trainer name from value in list that has exp per sec
+        # basically undoing the function above
+        name_with_exp_per_sec = self._trainer_names.get()
+        return name_with_exp_per_sec[name_with_exp_per_sec.find(')') + 1:].strip()
+        return name_with_exp_per_sec[:name_with_exp_per_sec.rfind('(')].strip()
 
     def trainer_filter_callback(self, *args, ignore_trainer_preview=False, **kwargs):
         loc_filter = self._trainers_by_loc.get()
@@ -106,7 +121,8 @@ class QuickTrainerAdd(ttk.LabelFrame):
             trainer_class=class_filter,
             trainer_loc=loc_filter,
             defeated_trainers=self._controller.get_defeated_trainers(),
-            show_rematches=self._rematches_label.is_checked()
+            show_rematches=self._rematches_label.is_checked(),
+            custom_name_fn=self._custom_trainer_name
         )
         if not valid_trainers:
             valid_trainers.append(const.NO_TRAINERS)
@@ -117,7 +133,7 @@ class QuickTrainerAdd(ttk.LabelFrame):
 
     def _trainer_name_callback(self, *args, **kwargs):
         self.update_button_status()
-        selected_trainer = self._trainer_names.get() 
+        selected_trainer = self._get_trainer_name()
         if selected_trainer == const.NO_TRAINERS:
             return
 
@@ -126,7 +142,7 @@ class QuickTrainerAdd(ttk.LabelFrame):
     
     def add_trainer(self, *args, **kwargs):
         self._controller.new_event(
-            EventDefinition(trainer_def=TrainerEventDefinition(self._trainer_names.get())),
+            EventDefinition(trainer_def=TrainerEventDefinition(self._get_trainer_name())),
             insert_after=self._controller.get_single_selected_event_id()
         )
     

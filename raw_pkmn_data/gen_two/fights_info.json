@@ -73,5 +73,11 @@
         "Leader Clair": "TM24 DragonBreath",
         "Leader Erika": "TM19 Giga Drain",
         "Leader Janine": "TM06 Toxic"
+    },
+    "trainer_timing_info": {
+        "intro_time": 4.69,
+        "outro_time": 1.195,
+        "ko_time": 1.84,
+        "send_out_time": 0.75
     }
 }

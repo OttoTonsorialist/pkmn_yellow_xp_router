@@ -73,5 +73,11 @@
         "Blaine 1": "TM38 Fire Blast",
         "Giovanni 3": "TM27 Fissure",
         "Rocket 5": "TM28 Dig"
+    },
+    "trainer_timing_info": {
+        "intro_time": 4.69,
+        "outro_time": 1.195,
+        "ko_time": 1.84,
+        "send_out_time": 0.75
     }
 }

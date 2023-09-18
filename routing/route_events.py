@@ -5,6 +5,7 @@ from typing import Dict, List
 from routing.full_route_state import RouteState
 from utils.constants import const
 from pkmn.gen_factory import current_gen_info
+from pkmn import universal_utils
 
 logger = logging.getLogger(__name__)
 
@@ -447,6 +448,16 @@ class EventDefinition:
     def is_highlighted(self):
         return const.HIGHLIGHT_LABEL in self.tags
     
+    def experience_per_second(self):
+        if self.trainer_def is None:
+            return ""
+        
+        return universal_utils.experience_per_second(
+            current_gen_info().get_trainer_timing_info(),
+            self.get_trainer_obj()
+        )
+        
+    
     def do_render(self, search=None, filter_types=None):
         if filter_types is not None:
             if self.get_event_type() not in filter_types:
@@ -653,12 +664,16 @@ class EventItem:
     def xp_gain(self):
         if not self.is_enabled():
             return ""
-        return self.final_state.solo_pkmn.cur_xp - self.init_state.solo_pkmn.cur_xp
+        result = self.final_state.solo_pkmn.cur_xp - self.init_state.solo_pkmn.cur_xp
+        return result if result else ""
 
     def total_xp(self):
         if not self.is_enabled():
             return ""
         return self.final_state.solo_pkmn.cur_xp
+
+    def experience_per_second(self):
+        return ""
 
     def has_errors(self):
         return len(self.error_message) != 0
@@ -813,12 +828,18 @@ class EventGroup:
     def xp_gain(self):
         if not self.is_enabled():
             return ""
-        return self.final_state.solo_pkmn.cur_xp - self.init_state.solo_pkmn.cur_xp
+        result = self.final_state.solo_pkmn.cur_xp - self.init_state.solo_pkmn.cur_xp
+        return result if result else ""
 
     def total_xp(self):
         if not self.is_enabled():
             return ""
         return self.final_state.solo_pkmn.cur_xp
+
+    def experience_per_second(self):
+        if not self.is_enabled():
+            return ""
+        return self.event_definition.experience_per_second()
 
     def serialize(self):
         return self.event_definition.serialize()
@@ -971,6 +992,9 @@ class EventFolder:
         return ""
 
     def total_xp(self):
+        return ""
+
+    def experience_per_second(self):
         return ""
 
     def serialize(self):

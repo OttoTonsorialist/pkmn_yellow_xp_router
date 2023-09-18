@@ -112,4 +112,7 @@ class CurrentGen:
     
     def load_custom_gen(self, custom_version_name, root_path) -> CurrentGen:
         raise NotImplementedError()
+    
+    def get_trainer_timing_info(self) -> universal_data_objects.TrainerTimingStats:
+        raise NotImplementedError()
 

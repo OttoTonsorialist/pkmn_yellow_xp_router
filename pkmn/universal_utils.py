@@ -1,6 +1,7 @@
 
 import math
 import logging
+from pkmn.universal_data_objects import Trainer, TrainerTimingStats
 
 from utils.constants import const
 
@@ -108,3 +109,12 @@ level_lookups = {
     const.GROWTH_RATE_ERRATIC: LevelLookup(const.GROWTH_RATE_ERRATIC),
     const.GROWTH_RATE_FLUCTUATING: LevelLookup(const.GROWTH_RATE_FLUCTUATING),
 }
+
+
+def experience_per_second(timing_obj:TrainerTimingStats ,trainer_obj:Trainer):
+    result = timing_obj.get_optimal_exp_per_second(
+        len(trainer_obj.pkmn),
+        sum([x.xp for x in trainer_obj.pkmn])
+    )
+    result = round(result)
+    return str(result)

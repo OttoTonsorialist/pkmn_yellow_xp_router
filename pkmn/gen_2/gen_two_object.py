@@ -91,6 +91,14 @@ class GenTwo(CurrentGen):
             self._badge_rewards:Dict[str, str] = fight_info[const.BADGE_REWARDS_KEY]
             self._major_fights:List[str] = fight_info[const.MAJOR_FIGHTS_KEY]
             self._fight_rewards:Dict[str, str] = fight_info[const.FIGHT_REWARDS_KEY]
+
+            timing_info = fight_info.get(const.TRAINER_TIMING_INFO_KEY, {})
+            self._trainer_timing_info = universal_data_objects.TrainerTimingStats(
+                timing_info.get(const.INTRO_TIME_KEY, const.DEFAULT_INTRO_TIME),
+                timing_info.get(const.OUTRO_TIME_KEY, const.DEFAULT_OUTRO_TIME),
+                timing_info.get(const.KO_TIME_KEY, const.DEFAULT_KO_TIME),
+                timing_info.get(const.SEND_OUT_TIME_KEY, const.DEFAULT_SEND_OUT_TIME)
+            )
         except Exception as e:
             logger.error(f"Error loading fight info: {pkmn_db_path}")
             logger.exception(e)
@@ -251,6 +259,10 @@ class GenTwo(CurrentGen):
             custom_version_name,
             base_version_name=self._version_name
         )
+    
+    def get_trainer_timing_info(self) -> universal_data_objects.TrainerTimingStats:
+        return self._trainer_timing_info
+    
     
     def _validate_special_types(self, supported_types):
         invalid_types = []

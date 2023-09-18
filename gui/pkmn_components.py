@@ -24,6 +24,7 @@ class RouteList(custom_components.CustomGridview):
                 custom_components.CustomGridview.CustomColumn('LevelUpsInto', 'get_pkmn_after_levelups', width=220),
                 custom_components.CustomGridview.CustomColumn('Level', 'pkmn_level', width=50),
                 custom_components.CustomGridview.CustomColumn('Total Exp', 'total_xp', width=80),
+                custom_components.CustomGridview.CustomColumn('Exp per sec', 'experience_per_second', width=80),
                 custom_components.CustomGridview.CustomColumn('Exp Gain', 'xp_gain', width=80),
                 custom_components.CustomGridview.CustomColumn('ToNextLevel', 'xp_to_next_level', width=80),
                 custom_components.CustomGridview.CustomColumn('% TNL', 'percent_xp_to_next_level', width=80),

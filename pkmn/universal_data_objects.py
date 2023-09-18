@@ -382,3 +382,41 @@ class Move:
         self.move_type = move_type
         self.effects = effects
         self.attack_flavor = attack_flavor
+
+
+class TrainerTimingStats:
+    def __init__(
+        self,
+        intro_time:float,
+        outro_time:float,
+        ko_time:float,
+        send_out_time:float,
+    ):
+        # for all these comments, let N be the # of pokemon an enemy trainer has
+        # all times should be duration, in seconds, when played at 4x game speed
+
+        # includes overworld dialogue, battle start animation, and time to send out both pokemon
+        # this will always happen 1 time per battle
+        self.intro_time = intro_time
+
+        # includes trainer defeat dialogue, and transition back to overworld
+        # this will always happen 1 time per battle
+        self.outro_time = outro_time
+
+        # time required to select a move, ohko the enemy and watch their health drain, and collect experience
+        # this will happen N times
+        self.ko_time = ko_time
+
+        # time required for a new enemy mon to come out after lost mon was killed
+        # this will happen N-1 times, as the first mon's "send out" is baked in to the intro_time
+        self.send_out_time = send_out_time
+    
+    def get_optimal_exp_per_second(self, num_pokemon, total_exp):
+        return (
+            total_exp / (
+                self.intro_time +
+                self.outro_time +
+                (self.ko_time * num_pokemon) + 
+                (self.send_out_time * (num_pokemon - 1))
+            )
+        )

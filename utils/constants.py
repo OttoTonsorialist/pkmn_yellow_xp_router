@@ -44,6 +44,11 @@ class Constants:
         self.TYPE_CHART_KEY = "type_chart"
         self.SPECIAL_TYPES_KEY = "special_types"
         self.HELD_ITEM_BOOSTS_KEY = "held_item_boosts"
+        self.TRAINER_TIMING_INFO_KEY = "trainer_timing_info"
+        self.INTRO_TIME_KEY = "intro_time"
+        self.OUTRO_TIME_KEY = "outro_time"
+        self.KO_TIME_KEY = "ko_time"
+        self.SEND_OUT_TIME_KEY = "send_out_time"
 
         # file names (without full paths)
         self.ITEM_DB_FILE_NAME = "items.json"
@@ -378,6 +383,12 @@ class Constants:
         self.WEATHER_RAIN = "Rain"
         self.WEATHER_SUN = "Harsh Sunlight"
         self.WEATHER_SANDSTORM = "Sandstorm"
+
+        # timing defaults
+        self.DEFAULT_INTRO_TIME = 4.69
+        self.DEFAULT_OUTRO_TIME = 1.195
+        self.DEFAULT_KO_TIME = 1.84
+        self.DEFAULT_SEND_OUT_TIME = 0.75
 
         self.GAME_SAVED_FRAGMENT = "Game Saved: "
         self.RECORDING_ERROR_FRAGMENT = "ERROR RECORDING! "
