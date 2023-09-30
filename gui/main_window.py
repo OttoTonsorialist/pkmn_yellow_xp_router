@@ -1,6 +1,7 @@
 import os
 import threading
 import logging
+import time
 
 import tkinter as tk
 from tkinter import ttk, font, messagebox
@@ -23,6 +24,7 @@ from gui.route_search_component import RouteSearch
 from route_recording.recorder import RecorderController
 from utils.constants import const
 from utils.config_manager import config
+from utils import io_utils
 from routing.route_events import EventDefinition, EventFolder, EventGroup, EventItem, TrainerEventDefinition
 import routing.router as router
 
@@ -52,26 +54,28 @@ class MainWindow(tk.Tk):
         self.config(menu=self.top_menu_bar)
 
         self.file_menu = tk.Menu(self.top_menu_bar, tearoff=0)
-        self.file_menu.add_command(label="Customize DVs     (Ctrl+X)", command=self.open_customize_dvs_window)
-        self.file_menu.add_command(label="New Route       (Ctrl+N)", command=self.open_new_route_window)
-        self.file_menu.add_command(label="Load Route      (Ctrl+L)", command=self.open_load_route_window)
-        self.file_menu.add_command(label="Save Route       (Ctrl+S)", command=self.save_route)
-        self.file_menu.add_command(label="Export Notes       (Ctrl+Shift+W)", command=self.export_notes)
-        self.file_menu.add_command(label="Config Font       (Ctrl+Shift+D)", command=self.open_config_window)
-        self.file_menu.add_command(label="Custom Gens       (Ctrl+Shift+E)", command=self.open_custom_gens_window)
-        self.file_menu.add_command(label="App Config       (Ctrl+Shift+Z)", command=self.open_app_config_window)
+        self.file_menu.add_command(label="Customize DVs", accelerator="Ctrl+X", command=self.open_customize_dvs_window)
+        self.file_menu.add_command(label="New Route", accelerator="Ctrl+N", command=self.open_new_route_window)
+        self.file_menu.add_command(label="Load Route", accelerator="Ctrl+L", command=self.open_load_route_window)
+        self.file_menu.add_command(label="Save Route", accelerator="Ctrl+S", command=self.save_route)
+        self.file_menu.add_command(label="Export Notes", accelerator="Ctrl+Shift+W", command=self.export_notes)
+        self.file_menu.add_command(label="Screenshot Battle Summary", accelerator="Ctrl+P", command=self.screenshot_battle_summary)
+        self.file_menu.add_command(label="Config Font", accelerator="Ctrl+Shift+D", command=self.open_config_window)
+        self.file_menu.add_command(label="Custom Gens", accelerator="Ctrl+Shift+E", command=self.open_custom_gens_window)
+        self.file_menu.add_command(label="App Config", accelerator="Ctrl+Shift+Z", command=self.open_app_config_window)
+        self.file_menu.add_command(label="Open Data Folder", accelerator="Ctrl+Shift+O", command=self.open_data_location)
 
         self.event_menu = tk.Menu(self.top_menu_bar, tearoff=0)
-        self.event_menu.add_command(label="Move Event Up           (Ctrl+E)", command=self.move_group_up)
-        self.event_menu.add_command(label="Move Event Down      (Ctrl+D)", command=self.move_group_down)
-        self.event_menu.add_command(label="Enable/Disable          (Ctrl+C)", command=self.toggle_enable_disable)
-        self.event_menu.add_command(label="Toggle Highlight       (Ctrl+V)", command=self.toggle_event_highlight)
-        self.event_menu.add_command(label="Transfer Event             (Ctrl+R)", command=self.open_transfer_event_window)
-        self.event_menu.add_command(label="Delete Event             (Ctrl+B)", command=self.delete_group)
+        self.event_menu.add_command(label="Move Event Up", accelerator="Ctrl+E", command=self.move_group_up)
+        self.event_menu.add_command(label="Move Event Down", accelerator="Ctrl+D", command=self.move_group_down)
+        self.event_menu.add_command(label="Enable/Disable", accelerator="Ctrl+C", command=self.toggle_enable_disable)
+        self.event_menu.add_command(label="Toggle Highlight", accelerator="Ctrl+V", command=self.toggle_event_highlight)
+        self.event_menu.add_command(label="Transfer Event", accelerator="Ctrl+R", command=self.open_transfer_event_window)
+        self.event_menu.add_command(label="Delete Event", accelerator="Ctrl+B", command=self.delete_group)
 
         self.folder_menu = tk.Menu(self.top_menu_bar, tearoff=0)
-        self.folder_menu.add_command(label="New Folder                   (Ctrl+Q)", command=self.open_new_folder_window)
-        self.folder_menu.add_command(label="Rename Cur Folder       (Ctrl+W)", command=self.rename_folder)
+        self.folder_menu.add_command(label="New Folder", accelerator="Ctrl+Q", command=self.open_new_folder_window)
+        self.folder_menu.add_command(label="Rename Cur Folder", accelerator="Ctrl+W", command=self.rename_folder)
 
         self.top_menu_bar.add_cascade(label="File", menu=self.file_menu)
         self.top_menu_bar.add_cascade(label="Events", menu=self.event_menu)
@@ -242,9 +246,13 @@ class MainWindow(tk.Tk):
         self.bind('<Control-E>', self.open_custom_gens_window)
         self.bind('<Control-D>', self.open_config_window)
         self.bind('<Control-Z>', self.open_app_config_window)
+        self.bind('<Control-R>', self.open_summary_window)
+        self.bind('<Control-O>', self.open_data_location)
+        self.bind('<Control-p>', self.screenshot_battle_summary)
         # detail update function
         self.protocol("WM_DELETE_WINDOW", self._on_close)
         self.bind("<<TreeviewSelect>>", self._report_new_selection)
+        self.bind("<Configure>", self._on_configure)
         self.bind(const.ROUTE_LIST_REFRESH_EVENT, self.update_run_status)
         self.bind(const.FORCE_QUIT_EVENT, self.cancel_and_quit)
 
@@ -254,6 +262,7 @@ class MainWindow(tk.Tk):
         self.bind(self._controller.register_exception_callback(self), self._on_exception)
         self.bind(self._controller.register_name_change(self), self._on_name_change)
         self.bind(self._controller.register_record_mode_change(self), self._on_record_mode_changed)
+        self.bind(self._controller.register_message_callback(self), self._on_route_message)
         # TODO: should this be moved directly to the event list class?
         self.bind(self._controller.register_route_change(self), self.event_list.refresh)
 
@@ -265,6 +274,10 @@ class MainWindow(tk.Tk):
         # TODO: is this the right place for it?
         self._controller.load_all_custom_versions()
         self.mainloop()
+
+    def _on_configure(self, e):
+        if e.widget == self:
+            time.sleep(0.015)
     
     def _on_close(self, *args, **kwargs):
         # just need to save window geometry before closing
@@ -284,14 +297,19 @@ class MainWindow(tk.Tk):
     def _on_name_change(self, *args, **kwargs):
         self.route_name.delete(0, tk.END)
         self.route_name.insert(0, self._controller.get_current_route_name())
+    
+    def _on_route_message(self, *args, **kwargs):
+        self.message_label.set_message(self._controller.get_next_message_info())
 
     def save_route(self, *args, **kwargs):
         route_name = self.route_name.get()
         self._controller.save_route(route_name)
-        self.message_label.set_message(f"Successfully saved route: {route_name}")
     
     def export_notes(self, *args, **kwargs):
-        self.message_label.set_message(f"Exported notes to: {self._controller.export_notes(self.route_name.get())}")
+        self._controller.export_notes(self.route_name.get())
+    
+    def screenshot_battle_summary(self, *args, **kwargs):
+        self.event_details.take_battle_summary_screenshot()
 
     def load_custom_font(self):
         if config.get_custom_font_name() in font.families():
@@ -423,9 +441,13 @@ class MainWindow(tk.Tk):
     def open_customize_dvs_window(self, *args, **kwargs):
         CustomDvsWindow(self, self._controller, self._controller.get_dvs())
 
+    def open_data_location(self, *args, **kwargs):
+        io_utils.open_explorer(config.get_user_data_dir())
+
     def open_summary_window(self, *args, **kwargs):
         if self.summary_window is None or not tk.Toplevel.winfo_exists(self.summary_window):
             self.summary_window = RouteSummaryWindow(self, self._controller)
+        self.summary_window.focus()
 
     def move_group_up(self, event=None):
         self._controller.move_groups_up(self.event_list.get_all_selected_event_ids(allow_event_items=False))

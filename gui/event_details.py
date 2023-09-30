@@ -7,6 +7,7 @@ from controllers.main_controller import MainController
 from gui import custom_components, route_event_components, pkmn_components, battle_summary
 from routing.route_events import EventDefinition, EventFolder, EventGroup, EventItem
 from utils.constants import const
+from utils import tk_utils
 from pkmn.gen_factory import current_gen_info
 
 logger = logging.getLogger(__name__)
@@ -252,4 +253,13 @@ class EventDetails(ttk.Frame):
             return
         
         self._controller.update_existing_event(event_to_update, new_event)
+    
+    def take_battle_summary_screenshot(self, *args, **kwargs):
+        logger.info(f"trying to take battle summary screenshot with index: {self.tabbed_states.index(self.tabbed_states.select())} (looking for index: {self.battle_summary_tab_index})")
+        if self.tabbed_states.index(self.tabbed_states.select()) == self.battle_summary_tab_index:
+            logger.info(f"on the right tab")
+            self._battle_summary_controller.take_screenshot(
+                tk_utils.get_bounding_box(self.battle_summary_frame)
+            )
+            
     

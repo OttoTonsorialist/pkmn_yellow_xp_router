@@ -25,10 +25,12 @@ class Constants:
 
         # internal constants for configurable locations
         self._SAVED_ROUTES_FOLDER_NAME = "saved_routes"
+        self._SAVED_IMAGES_FOLDER_NAME = "images"
         self._OUTDATED_ROUTES_FOLDER_NAME = "outdated_routes"
         self._CUSTOM_GENS_FOLDER_NAME = "custom_gens"
         # locations that change based on user data dir
         self.SAVED_ROUTES_DIR = None
+        self.SAVED_IMAGES_DIR = None
         self.OUTDATED_ROUTES_DIR = None
         self.CUSTOM_GENS_DIR = None
         self.ALL_USER_DATA_PATHS = []
@@ -409,6 +411,7 @@ class Constants:
         self.EVENT_PREVIEW_CHANGE = "<<PreviewChange_{}>>"
         self.EVENT_RECORD_MODE_CHANGE = "<<RecordModeChange_{}>>"
         self.EVENT_EXCEPTION = "<<RouteException_{}>>"
+        self.MESSAGE_EXCEPTION = "<<RouteMessage_{}>>"
         self.EVENT_RECORDER_STATUS_CHANGE = "<<RecorderStatusChange_{}>>"
         self.EVENT_RECORDER_READY_CHANGE = "<<RecorderReadyChange_{}>>"
         self.EVENT_RECORDER_GAME_STATE_CHANGE = "<<RecorderGameStateChange_{}>>"
@@ -422,11 +425,13 @@ class Constants:
     
     def config_user_data_dir(self, user_data_dir):
         self.SAVED_ROUTES_DIR = os.path.realpath(os.path.join(user_data_dir, self._SAVED_ROUTES_FOLDER_NAME))
+        self.SAVED_IMAGES_DIR = os.path.realpath(os.path.join(user_data_dir, self._SAVED_IMAGES_FOLDER_NAME))
         self.OUTDATED_ROUTES_DIR = os.path.realpath(os.path.join(user_data_dir, self._OUTDATED_ROUTES_FOLDER_NAME))
         self.CUSTOM_GENS_DIR = os.path.realpath(os.path.join(user_data_dir, self._CUSTOM_GENS_FOLDER_NAME))
 
         self.ALL_USER_DATA_PATHS = [
             self.SAVED_ROUTES_DIR,
+            self.SAVED_IMAGES_DIR,
             self.OUTDATED_ROUTES_DIR,
             self.CUSTOM_GENS_DIR
         ]
@@ -434,6 +439,7 @@ class Constants:
     def get_potential_user_data_dirs(self, potential_user_data_dir):
         return [
             (self.SAVED_ROUTES_DIR, os.path.realpath(os.path.join(potential_user_data_dir, self._SAVED_ROUTES_FOLDER_NAME))),
+            (self.SAVED_IMAGES_DIR, os.path.realpath(os.path.join(potential_user_data_dir, self._SAVED_IMAGES_FOLDER_NAME))),
             (self.OUTDATED_ROUTES_DIR, os.path.realpath(os.path.join(potential_user_data_dir, self._OUTDATED_ROUTES_FOLDER_NAME))),
             (self.CUSTOM_GENS_DIR, os.path.realpath(os.path.join(potential_user_data_dir, self._CUSTOM_GENS_FOLDER_NAME))),
         ]

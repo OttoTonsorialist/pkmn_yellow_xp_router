@@ -3,9 +3,11 @@ import os
 import logging
 from typing import List, Tuple
 import tkinter
-from pkmn.pkmn_db import sanitize_string
+from PIL import ImageGrab
 
+from pkmn.pkmn_db import sanitize_string
 from utils.constants import const
+from utils import io_utils
 from routing.route_events import EventDefinition, EventFolder, EventGroup, EventItem, LearnMoveEventDefinition, TrainerEventDefinition
 import routing.router
 from pkmn import gen_factory
@@ -36,6 +38,7 @@ class MainController:
         self._selected_ids = []
         self._is_record_mode_active = False
         self._exception_info = []
+        self._message_info = []
         self._route_filter_types = []
         self._route_search = ""
 
@@ -46,12 +49,19 @@ class MainController:
         self._event_selection_events = []
         self._event_preview_events = []
         self._record_mode_change_events = []
+        self._message_events = []
         self._exception_events = []
     
     def get_next_exception_info(self):
         if not len(self._exception_info):
             return None
         return self._exception_info.pop(0)
+
+    def get_next_message_info(self):
+        if not len(self._message_info):
+            return None
+        return self._message_info.pop(0)
+
 
     #####
     # Registration methods
@@ -90,6 +100,11 @@ class MainController:
     def register_record_mode_change(self, tk_obj):
         new_event_name = const.EVENT_RECORD_MODE_CHANGE.format(len(self._record_mode_change_events))
         self._record_mode_change_events.append((tk_obj, new_event_name))
+        return new_event_name
+
+    def register_message_callback(self, tk_obj):
+        new_event_name = const.MESSAGE_EXCEPTION.format(len(self._message_events))
+        self._message_events.append((tk_obj, new_event_name))
         return new_event_name
 
     def register_exception_callback(self, tk_obj):
@@ -134,6 +149,10 @@ class MainController:
 
     def _on_record_mode_change(self):
         self._safely_generate_events(self._record_mode_change_events)
+
+    def _on_info_message(self, info_message):
+        self._message_info.append(info_message)
+        self._safely_generate_events(self._message_events)
 
     def _on_exception(self, exception_message):
         self._exception_info.append(exception_message)
@@ -330,6 +349,9 @@ class MainController:
     def create_custom_version(self, base_version, custom_version):
         gen_factory._gen_factory.get_specific_version(base_version).create_new_custom_gen(custom_version)
     
+    def send_message(self, message):
+        self._on_info_message(message)
+
     def trigger_exception(self, exception_message):
         self._on_exception(exception_message)
 
@@ -451,9 +473,22 @@ class MainController:
 
     def save_route(self, route_name):
         self._data.save(route_name)
+        self.send_message(f"Successfully saved route: {route_name}")
     
     def export_notes(self, route_name):
-        self._data.export_notes(route_name)
+        out_path = self._data.export_notes(route_name)
+        self.send_message(f"Exported notes to: {out_path}")
+    
+    def take_screenshot(self, image_name, bbox):
+        if self.is_empty():
+            return
+        full_dir = os.path.join(const.SAVED_IMAGES_DIR, self.get_current_route_name())
+        if not os.path.exists(full_dir):
+            os.makedirs(full_dir)
+        
+        out_path = io_utils.get_safe_path_no_collision(full_dir, image_name, ext=".png")
+        ImageGrab.grab(bbox=bbox).save(out_path)
+        self.send_message(f"Saved screenshot to: {out_path}")
 
     def is_record_mode_active(self):
         return self._is_record_mode_active

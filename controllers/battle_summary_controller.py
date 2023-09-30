@@ -669,4 +669,15 @@ class BattleSummaryController:
             return 0
         
         return prev_event.event_definition.rare_candy.amount
+    
+    def take_screenshot(self, bbox):
+        logger.info(f"trainer name for screenshot: '{self._trainer_name}'")
+        if not self._trainer_name:
+            self._main_controller.send_message(f"No active battle to screenshot")
+            return
+        
+        self._main_controller.take_screenshot(
+            self._trainer_name.replace(" ", "_"),
+            bbox
+        )
         

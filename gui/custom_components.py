@@ -443,6 +443,8 @@ class AutoClearingLabel(ttk.Label):
         self.latest_clear_id = 0
     
     def set_message(self, value):
+        if value is None:
+            value = ""
         self.config(text=value)
         self.latest_clear_id += 1
         self.after(self.clear_timeout, self._clear_id_curry(self.latest_clear_id))

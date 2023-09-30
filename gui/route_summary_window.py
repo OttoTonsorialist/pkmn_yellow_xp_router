@@ -7,6 +7,7 @@ import logging
 from controllers.main_controller import MainController
 from pkmn.gen_factory import current_gen_info
 from utils.constants import const
+from utils import tk_utils
 
 logger = logging.getLogger(__name__)
 
@@ -29,6 +30,11 @@ class RenderInfo:
 class RouteSummaryWindow(tk.Toplevel):
     def __init__(self, main_window, controller:MainController, *args, **kwargs):
         super().__init__(main_window, *args, **kwargs)
+
+        self._top_menu_bar = tk.Menu(self)
+        self._top_menu_bar.add_command(label="Export Screenshot (Ctrl+P)", accelerator="Ctrl+P", command=self._export_screen_shot)
+        self.config(menu=self._top_menu_bar)
+
         self._controller = controller
         self._cur_data = []
     
@@ -45,7 +51,11 @@ class RouteSummaryWindow(tk.Toplevel):
         self._row_idx_moves_init = 2
 
         self.bind(self._controller.register_route_change(self), self._refresh)
+        self.bind('<Control-p>', self._export_screen_shot)
         self._refresh()
+    
+    def _export_screen_shot(self, *args, **kwargs):
+        self._controller.take_screenshot("run_summary", tk_utils.get_bounding_box(self))
     
     def _refresh(self, *args, **kwargs):
         for to_remove in self._labels:

@@ -15,14 +15,14 @@ def get_path_safe_string(raw_string):
     return value
 
 
-def get_safe_path_no_collision(base_folder, name):
+def get_safe_path_no_collision(base_folder, name, ext=""):
     name = get_path_safe_string(name)
-    result = os.path.join(base_folder, name)
+    result = os.path.join(base_folder, name) + ext
     if os.path.exists(result):
         counter = 0
         while os.path.exists(result):
             counter += 1
-            result = os.path.join(base_folder, f"{name}_{counter}")
+            result = os.path.join(base_folder, f"{name}_{counter}") + ext
     
     return result
 
