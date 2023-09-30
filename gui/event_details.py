@@ -2,6 +2,7 @@ import tkinter as tk
 from tkinter import ttk
 import logging
 from controllers.battle_summary_controller import BattleSummaryController
+import time
 
 from controllers.main_controller import MainController
 from gui import custom_components, route_event_components, pkmn_components, battle_summary
@@ -17,12 +18,15 @@ class EventDetails(ttk.Frame):
     def __init__(self, controller:MainController, *args, **kwargs):
         self.state_summary_width = 900
         self.battle_summary_width = 1400
+        self.save_delay = 2
         super().__init__(*args, **kwargs, width=self.state_summary_width)
 
         self._controller = controller
         self._battle_summary_controller = BattleSummaryController(self._controller)
         self._prev_selected_tab = None
         self._ignore_tab_switching = False
+        self._cur_delayed_event_id = None
+        self._cur_delayed_event_start = None
 
         self.notebook_holder = ttk.Frame(self)
         self.tabbed_states = ttk.Notebook(self.notebook_holder)
@@ -81,7 +85,8 @@ class EventDetails(ttk.Frame):
 
         self.trainer_notes = route_event_components.EventEditorFactory(self.footer_frame).get_editor(
             route_event_components.EditorParams(const.TASK_NOTES_ONLY, None, None),
-            save_callback=self.update_existing_event
+            save_callback=self.update_existing_event,
+            delayed_save_callback=self.update_existing_event_after_delay
         )
         self.trainer_notes.grid(row=0, column=0, sticky=tk.EW)
 
@@ -177,8 +182,8 @@ class EventDetails(ttk.Frame):
             self.show_event_details(event_group.event_definition, event_group.init_state, event_group.final_state)
         else:
             do_allow_updates = (
-                 isinstance(event_group, EventGroup) or 
-                 event_group.event_definition.get_event_type() == const.TASK_LEARN_MOVE_LEVELUP
+                isinstance(event_group, EventGroup) or 
+                event_group.event_definition.get_event_type() == const.TASK_LEARN_MOVE_LEVELUP
             )
             trainer_event_group = event_group
             if isinstance(trainer_event_group, EventItem):
@@ -192,6 +197,7 @@ class EventDetails(ttk.Frame):
             self.show_event_details(event_group.event_definition, event_group.init_state, event_group.final_state, do_allow_updates, event_group=trainer_event_group)
     
     def show_event_details(self, event_def:EventDefinition, init_state, final_state, allow_updates=True, event_group:EventGroup=None):
+        self.force_and_clear_event_update()
         if self._controller.is_record_mode_active():
             allow_updates = False
 
@@ -219,16 +225,49 @@ class EventDetails(ttk.Frame):
                 self.current_event_editor = self.event_editor_lookup.get_editor(
                     route_event_components.EditorParams(event_def.get_event_type(), None, init_state),
                     save_callback=self.update_existing_event,
+                    delayed_save_callback=self.update_existing_event_after_delay,
                     is_enabled=allow_updates
                 )
                 self.current_event_editor.load_event(event_def)
                 self.current_event_editor.pack()
 
     def update_existing_event(self, *args, **kwargs):
-        event_to_update = self._controller.get_single_selected_event_id()
+        self._event_update_helper(self._controller.get_single_selected_event_id())
+
+    def update_existing_event_after_delay(self, *args, **kwargs):
+        to_save = self._controller.get_single_selected_event_id()
+        if self._cur_delayed_event_id is not None and self._cur_delayed_event_id != to_save:
+            logger.error(f"Unexpected switch of event id from {self._cur_delayed_event_id} to {to_save}, something has gone wrong")
+
+        self._cur_delayed_event_id = to_save
+        self._cur_delayed_event_start = time.time() + self.save_delay
+        self.after(int(self.save_delay * 1000), self._delayed_event_update)
+    
+    def force_and_clear_event_update(self, *args, **kwargs):
+        if self._cur_delayed_event_id is None:
+            return
+        
+        self._event_update_helper(self._cur_delayed_event_id)
+
+    def _delayed_event_update(self, *args, **kwargs):
+        if self._cur_delayed_event_id is None or self._cur_delayed_event_start is None:
+            # if the save has already occurred, silently exit
+            return
+        
+        if self._cur_delayed_event_start - time.time() > 0:
+            return
+
+        self._event_update_helper(self._cur_delayed_event_id)
+
+    def _event_update_helper(self, event_to_update):
         if event_to_update is None:
             return
 
+        if self._cur_delayed_event_id is not None and self._cur_delayed_event_id != event_to_update:
+            logger.error(f"Found delayed update for: {self._cur_delayed_event_id} which is different from the current update occuring for {event_to_update}")
+        
+        self._cur_delayed_event_id = None
+        self._cur_delayed_event_start = None
         try:
             if self.current_event_editor is None:
                 new_event = EventDefinition()
@@ -255,9 +294,7 @@ class EventDetails(ttk.Frame):
         self._controller.update_existing_event(event_to_update, new_event)
     
     def take_battle_summary_screenshot(self, *args, **kwargs):
-        logger.info(f"trying to take battle summary screenshot with index: {self.tabbed_states.index(self.tabbed_states.select())} (looking for index: {self.battle_summary_tab_index})")
         if self.tabbed_states.index(self.tabbed_states.select()) == self.battle_summary_tab_index:
-            logger.info(f"on the right tab")
             self._battle_summary_controller.take_screenshot(
                 tk_utils.get_bounding_box(self.battle_summary_frame)
             )

@@ -44,12 +44,14 @@ class EventEditorBase(ttk.Frame):
         super().__init__(parent, *args, **kwargs)
         self.editor_params = editor_params
         self._save_callback = None
+        self._delayed_save_callback = None
         self._ignoring_updates = False
 
         self._cur_row = 0
     
-    def configure(self, editor_params, save_callback=None):
+    def configure(self, editor_params, save_callback=None, delayed_save_callback=None):
         self._save_callback = save_callback
+        self._delayed_save_callback = delayed_save_callback
         self.editor_params = editor_params
     
     def _trigger_save(self, *args, **kwargs):
@@ -58,6 +60,14 @@ class EventEditorBase(ttk.Frame):
 
         if self._save_callback is not None:
             self._save_callback()
+    
+    def _trigger_delayed_save(self, *args, **kwargs):
+        if self._ignoring_updates:
+            return
+
+        logger.info(f"trying to do delayed save with: {self._delayed_save_callback}")
+        if self._delayed_save_callback is not None:
+            self._delayed_save_callback()
     
     def enable(self):
         pass
@@ -85,7 +95,7 @@ class NotesEditor(EventEditorBase):
         self._cur_row += 1
 
         self._notes = custom_components.SimpleText(self, height=8)
-        self._notes.bind("<<TextModified>>", self._trigger_save)
+        self._notes.bind("<<TextModified>>", self._trigger_delayed_save)
         self._notes.grid(row=self._cur_row, column=0, columnspan=3, sticky=tk.EW, padx=5, pady=5)
         self._cur_row += 1
 
@@ -93,8 +103,8 @@ class NotesEditor(EventEditorBase):
         self.columnconfigure(2, weight=1, uniform="padding")
     
     @ignore_updates
-    def configure(self, editor_params, save_callback=None):
-        super().configure(editor_params, save_callback=save_callback)
+    def configure(self, editor_params, save_callback=None, delayed_save_callback=None):
+        super().configure(editor_params, save_callback=save_callback, delayed_save_callback=delayed_save_callback)
     
     @ignore_updates
     def load_event(self, event_def:EventDefinition):
@@ -149,8 +159,8 @@ class TrainerFightEditor(EventEditorBase):
         self.VAR_COUNTER += 1
 
     @ignore_updates
-    def configure(self, editor_params, save_callback=None):
-        super().configure(editor_params, save_callback=save_callback)
+    def configure(self, editor_params, save_callback=None, delayed_save_callback=None):
+        super().configure(editor_params, save_callback=save_callback, delayed_save_callback=delayed_save_callback)
     
     @ignore_updates
     def load_event(self, event_def):
@@ -481,8 +491,8 @@ class LearnMoveEditor(EventEditorBase):
         self._trigger_save()
 
     @ignore_updates
-    def configure(self, editor_params, save_callback=None):
-        super().configure(editor_params, save_callback=save_callback)
+    def configure(self, editor_params, save_callback=None, delayed_save_callback=None):
+        super().configure(editor_params, save_callback=save_callback, delayed_save_callback=delayed_save_callback)
         self._destination.new_values(
             [const.MOVE_DONT_LEARN] +
             [
@@ -634,8 +644,8 @@ class WildPkmnEditor(EventEditorBase):
         self._update_button_status()
 
     @ignore_updates
-    def configure(self, editor_params, save_callback=None):
-        super().configure(editor_params, save_callback=save_callback)
+    def configure(self, editor_params, save_callback=None, delayed_save_callback=None):
+        super().configure(editor_params, save_callback=save_callback, delayed_save_callback=delayed_save_callback)
         self._pkmn_filter.set("")
         self._pkmn_level.set("1")
         self._quantity.set("1")
@@ -875,8 +885,8 @@ class InventoryEventEditor(EventEditorBase):
         return False
 
     @ignore_updates
-    def configure(self, editor_params, save_callback=None):
-        super().configure(editor_params, save_callback=save_callback)
+    def configure(self, editor_params, save_callback=None, delayed_save_callback=None):
+        super().configure(editor_params, save_callback=save_callback, delayed_save_callback=delayed_save_callback)
         self._item_filter.set("")
         self._item_mart_selector.set(const.ITEM_TYPE_ALL_ITEMS)
         self._item_type_selector.set(const.ITEM_TYPE_ALL_ITEMS)
@@ -964,7 +974,7 @@ class SaveEventEditor(EventEditorBase):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self._location_label = ttk.Label(self, text="Save Location")
-        self._location_value = custom_components.SimpleEntry(self, callback=self._trigger_save, width=20)
+        self._location_value = custom_components.SimpleEntry(self, callback=self._trigger_delayed_save, width=20)
         self._location_label.grid(row=self._cur_row, column=0)
         self._location_value.grid(row=self._cur_row, column=1)
         self._cur_row += 1
@@ -987,7 +997,7 @@ class HealEventEditor(EventEditorBase):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self._location_label = ttk.Label(self, text="Heal Location")
-        self._location_value = custom_components.SimpleEntry(self, callback=self._trigger_save, width=20)
+        self._location_value = custom_components.SimpleEntry(self, callback=self._trigger_delayed_save, width=20)
         self._location_label.grid(row=self._cur_row, column=0)
         self._location_value.grid(row=self._cur_row, column=1)
         self._cur_row += 1
@@ -1010,7 +1020,7 @@ class BlackoutEventEditor(EventEditorBase):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self._location_label = ttk.Label(self, text="Black Out back to:")
-        self._location_value = custom_components.SimpleEntry(self, callback=self._trigger_save, width=20)
+        self._location_value = custom_components.SimpleEntry(self, callback=self._trigger_delayed_save, width=20)
         self._location_label.grid(row=self._cur_row, column=0)
         self._location_value.grid(row=self._cur_row, column=1)
         self._cur_row += 1
@@ -1054,10 +1064,10 @@ class EventEditorFactory:
         self._lookup = {}
         self._tk_container = tk_container
 
-    def get_editor(self, editor_params:EditorParams, save_callback=None, is_enabled=True) -> EventEditorBase:
+    def get_editor(self, editor_params:EditorParams, save_callback=None, delayed_save_callback=None, is_enabled=True) -> EventEditorBase:
         if editor_params.event_type in self._lookup:
             result:EventEditorBase = self._lookup[editor_params.event_type]
-            result.configure(editor_params, save_callback=save_callback)
+            result.configure(editor_params, save_callback=save_callback, delayed_save_callback=delayed_save_callback)
             if is_enabled:
                 result.enable()
             else:
@@ -1070,7 +1080,7 @@ class EventEditorFactory:
             raise ValueError(f"Could not find visual editor for event type: {editor_params.event_type}")
 
         result = editor_type(self._tk_container, editor_params)
-        result.configure(editor_params, save_callback=save_callback)
+        result.configure(editor_params, save_callback=save_callback, delayed_save_callback=delayed_save_callback)
         self._lookup[editor_params.event_type] = result
 
         # dumb hack, but wtv. Use the same editor for all item events
