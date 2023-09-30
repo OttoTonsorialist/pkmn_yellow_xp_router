@@ -65,7 +65,6 @@ class EventEditorBase(ttk.Frame):
         if self._ignoring_updates:
             return
 
-        logger.info(f"trying to do delayed save with: {self._delayed_save_callback}")
         if self._delayed_save_callback is not None:
             self._delayed_save_callback()
     

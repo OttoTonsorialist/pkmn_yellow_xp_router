@@ -51,6 +51,8 @@ class MainController:
         self._record_mode_change_events = []
         self._message_events = []
         self._exception_events = []
+
+        self._pre_save_hooks = []
     
     def get_next_exception_info(self):
         if not len(self._exception_info):
@@ -111,6 +113,9 @@ class MainController:
         new_event_name = const.EVENT_EXCEPTION.format(len(self._exception_events))
         self._exception_events.append((tk_obj, new_event_name))
         return new_event_name
+
+    def register_pre_save_hook(self, fn_obj):
+        self._pre_save_hooks.append(fn_obj)
     
     #####
     # Event callbacks
@@ -157,6 +162,13 @@ class MainController:
     def _on_exception(self, exception_message):
         self._exception_info.append(exception_message)
         self._safely_generate_events(self._exception_events)
+    
+    def _fire_pre_save_hooks(self):
+        for cur_hook in self._pre_save_hooks:
+            try:
+                cur_hook()
+            except Exception:
+                logger.exception(f"Failed to run pre-save hook: {cur_hook}")
 
     ######
     # Methods that induce a state change
@@ -472,6 +484,7 @@ class MainController:
         return not isinstance(cur_obj, EventItem)
 
     def save_route(self, route_name):
+        self._fire_pre_save_hooks()
         self._data.save(route_name)
         self.send_message(f"Successfully saved route: {route_name}")
     
