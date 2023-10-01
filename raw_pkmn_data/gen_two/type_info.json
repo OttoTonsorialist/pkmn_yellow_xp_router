@@ -12,7 +12,7 @@
     "held_item_boosts": {
         "Black Belt": "Fighting",
         "BlackGlasses": "Dark",
-        "Charcoal": "Fighting",
+        "Charcoal": "Fire",
         "Dragon Scale": "Dragon",
         "Hard Stone": "Rock",
         "Magnet": "Electric",
@@ -26,6 +26,7 @@
         "SilverPowder": "Bug",
         "Soft Sand": "Ground",
         "Spell Tag": "Ghost",
+        "Nevermeltice": "Ice",
         "TwistedSpoon": "Psychic"
     },
     "type_chart": {
