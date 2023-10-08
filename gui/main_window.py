@@ -280,8 +280,12 @@ class MainWindow(tk.Tk):
             time.sleep(0.015)
     
     def _on_close(self, *args, **kwargs):
-        # just need to save window geometry before closing
         config.set_window_geometry(self.geometry())
+
+        if self._controller.has_unsaved_changes():
+            if not messagebox.askyesno("Quit?", "Route has unsaved changes. Quit without saving?"):
+                return
+
         self.destroy()
     
     def _on_exception(self, *args, **kwargs):

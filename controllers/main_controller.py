@@ -41,6 +41,7 @@ class MainController:
         self._message_info = []
         self._route_filter_types = []
         self._route_search = ""
+        self._unsaved_changes = False
 
         self._name_change_events = []
         self._version_change_events = []
@@ -140,6 +141,7 @@ class MainController:
         self._safely_generate_events(self._version_change_events)
     
     def _on_route_change(self):
+        self._unsaved_changes = True
         self._safely_generate_events(self._route_change_events)
 
     def _on_event_change(self):
@@ -258,6 +260,7 @@ class MainController:
             self._on_version_change()
             self._on_event_selection()
             self._on_route_change()
+            self._unsaved_changes = False
 
     @handle_exceptions
     def customize_dvs(self, new_dvs):
@@ -433,6 +436,9 @@ class MainController:
     
     def is_empty(self):
         return len(self._data.root_folder.children) == 0
+
+    def has_unsaved_changes(self) -> routing.router.Router:
+        return self._unsaved_changes
     
     def get_all_selected_ids(self, allow_event_items=True):
         if allow_event_items:
@@ -492,6 +498,7 @@ class MainController:
             self._fire_pre_save_hooks()
             self._data.save(route_name)
             self.send_message(f"Successfully saved route: {route_name}")
+            self._unsaved_changes = False
         except Exception as e:
             self.trigger_exception(f"Couldn't save route due to exception! {type(e)}: {e}")
     
