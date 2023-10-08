@@ -367,6 +367,10 @@ class MainController:
     def trigger_exception(self, exception_message):
         self._on_exception(exception_message)
 
+    def set_current_route_name(self, new_name) -> str:
+        self._route_name = new_name
+        self._on_name_change()
+
     ######
     # Methods that do not induce a state change
     ######
@@ -484,24 +488,30 @@ class MainController:
         return not isinstance(cur_obj, EventItem)
 
     def save_route(self, route_name):
-        self._fire_pre_save_hooks()
-        self._data.save(route_name)
-        self.send_message(f"Successfully saved route: {route_name}")
+        try:
+            self._fire_pre_save_hooks()
+            self._data.save(route_name)
+            self.send_message(f"Successfully saved route: {route_name}")
+        except Exception as e:
+            self.trigger_exception(f"Couldn't save route due to exception! {type(e)}: {e}")
     
     def export_notes(self, route_name):
         out_path = self._data.export_notes(route_name)
         self.send_message(f"Exported notes to: {out_path}")
     
     def take_screenshot(self, image_name, bbox):
-        if self.is_empty():
-            return
-        full_dir = os.path.join(const.SAVED_IMAGES_DIR, self.get_current_route_name())
-        if not os.path.exists(full_dir):
-            os.makedirs(full_dir)
-        
-        out_path = io_utils.get_safe_path_no_collision(full_dir, image_name, ext=".png")
-        ImageGrab.grab(bbox=bbox).save(out_path)
-        self.send_message(f"Saved screenshot to: {out_path}")
+        try:
+            if self.is_empty():
+                return
+            full_dir = os.path.join(const.SAVED_IMAGES_DIR, self.get_current_route_name())
+            if not os.path.exists(full_dir):
+                os.makedirs(full_dir)
+            
+            out_path = io_utils.get_safe_path_no_collision(full_dir, image_name, ext=".png")
+            ImageGrab.grab(bbox=bbox).save(out_path)
+            self.send_message(f"Saved screenshot to: {out_path}")
+        except Exception as e:
+            self.trigger_exception(f"Couldn't save screenshot due to exception! {type(e)}: {e}")
 
     def is_record_mode_active(self):
         return self._is_record_mode_active

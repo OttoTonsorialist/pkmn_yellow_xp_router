@@ -25,8 +25,7 @@ from route_recording.recorder import RecorderController
 from utils.constants import const
 from utils.config_manager import config
 from utils import io_utils
-from routing.route_events import EventDefinition, EventFolder, EventGroup, EventItem, TrainerEventDefinition
-import routing.router as router
+from routing.route_events import EventFolder
 
 logger = logging.getLogger(__name__)
 flag_to_auto_update = False
@@ -107,7 +106,8 @@ class MainWindow(tk.Tk):
         self.route_name_label = ttk.Label(self.top_row, text="Route Name: ")
         self.route_name_label.grid(row=0, column=3)
 
-        self.route_name = ttk.Entry(self.top_row)
+        self._loading_route_name = False
+        self.route_name = custom_components.SimpleEntry(self.top_row, callback=self._user_set_route_name)
         self.route_name.grid(row=0, column=4)
         self.route_name.config(width=30)
 
@@ -295,8 +295,16 @@ class MainWindow(tk.Tk):
             exception_message = self._controller.get_next_exception_info()
     
     def _on_name_change(self, *args, **kwargs):
+        if self.route_name.get() == self._controller.get_current_route_name():
+            return
+        self._loading_route_name = True
         self.route_name.delete(0, tk.END)
         self.route_name.insert(0, self._controller.get_current_route_name())
+        self._loading_route_name = False
+
+    def _user_set_route_name(self, *args, **kwargs):
+        if not self._loading_route_name:
+            self._controller.set_current_route_name(self.route_name.get())
     
     def _on_route_message(self, *args, **kwargs):
         self.message_label.set_message(self._controller.get_next_message_info())
