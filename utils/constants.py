@@ -5,8 +5,8 @@ import sys
 
 class Constants:
     def __init__(self):
-        self.APP_VERSION = "v2.6c"
-        self.APP_RELEASE_DATE = "2023-Sept-17"
+        self.APP_VERSION = "v2.6d"
+        self.APP_RELEASE_DATE = "2023-Oct-08"
 
         self.NUZLOCKE_APP_VERSION = "v0.5a"
         self.NUZLOCKE_APP_RELEASE_DATE = "2023-Apr-01"
