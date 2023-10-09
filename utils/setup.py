@@ -32,6 +32,10 @@ def route_startup_check_for_upgrade(main_app:Tk):
         logger.info(f"No upgrade needed")
         return False
     
+    if not auto_update.is_upgrade_possible():
+        logger.info(f"Cannot upgrade this deployment")
+        return False
+    
     if not messagebox.askyesno("Update?", f"Found new version {new_app_version}\nDo you want to update?"):
         logger.info(f"User rejected auto-update")
         return False

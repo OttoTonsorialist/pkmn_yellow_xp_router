@@ -80,9 +80,16 @@ def is_upgrade_needed(new_version, old_version):
     )
 
 
+def is_upgrade_possible():
+    return (
+        getattr(sys, 'frozen', False) and
+        sys.platform == "win32"
+    )
+
+
 def update(new_version=None, asset_url=None, display_fn=None) -> bool:
     # NOTE: automatic updates are currently only supported for windows
-    if sys.platform != "win32":
+    if is_upgrade_possible():
         message = "Rejecting automatic update due to non-windows platform"
         if display_fn is not None:
             display_fn(message)
@@ -103,7 +110,7 @@ def update(new_version=None, asset_url=None, display_fn=None) -> bool:
 
 
 def extract_and_update_code(zip_url, temp_dir, display_fn=None) -> bool:
-    if not getattr(sys, 'frozen', False):
+    if not is_upgrade_possible():
         raise ValueError("Cannot update automatically unless running from an exe on windows")
 
     temp_zip_loc = os.path.join(temp_dir, "temp.zip")
