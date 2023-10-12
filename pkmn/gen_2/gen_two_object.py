@@ -43,7 +43,10 @@ class GenTwo(CurrentGen):
                 _load_trainer_db(
                     trainer_db_path,
                     self._pkmn_db,
-                    extract_trainer_id=(version_name == const.CRYSTAL_VERSION)
+                    extract_trainer_id=(
+                        version_name == const.CRYSTAL_VERSION or
+                        base_version_name == const.CRYSTAL_VERSION
+                    )
                 )
             )
         except Exception as e:
