@@ -214,6 +214,9 @@ class GenOne(CurrentGen):
             return [const.SPE]
 
         raise ValueError(f"Unknown vitamin: {vit_name}")
+
+    def get_valid_vitamins(self) -> List[str]:
+        return [const.HP_UP, const.CARBOS, const.IRON, const.CALCIUM, const.PROTEIN]
     
     def get_vitamin_amount(self) -> int:
         return pkmn_utils.VIT_AMT

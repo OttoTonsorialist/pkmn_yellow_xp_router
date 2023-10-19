@@ -1,0 +1,2937 @@
+{
+    "items": [
+        {
+            "name": "Master Ball",
+            "key_item": false,
+            "purchase_price": 0,
+            "pocket": "Poke Balls",
+            "marts": [],
+            "rom_id": 0
+        },
+        {
+            "name": "Ultra Ball",
+            "key_item": false,
+            "purchase_price": 1200,
+            "pocket": "Poke Balls",
+            "marts": [
+                "SootopolisCity",
+                "MossdeepCity",
+                "FortreeCity",
+                "LilycoveCity 2F",
+                "EverGrandeCity",
+                "BattleFrontier",
+                "FuchsiaCity",
+                "SixIsland",
+                "IndigoPlateau",
+                "ThreeIsland",
+                "TrainerTower",
+                "SevenIsland",
+                "CinnabarIsland",
+                "FourIsland",
+                "TwoIsland"
+            ],
+            "rom_id": 1
+        },
+        {
+            "name": "Great Ball",
+            "key_item": false,
+            "purchase_price": 600,
+            "pocket": "Poke Balls",
+            "marts": [
+                "MauvilleCity",
+                "VerdanturfTown",
+                "LavaridgeTown",
+                "FortreeCity",
+                "SlateportCity",
+                "LilycoveCity 2F",
+                "PetalburgCity",
+                "FallarborTown",
+                "FuchsiaCity",
+                "IndigoPlateau",
+                "LavenderTown",
+                "SaffronCity",
+                "TrainerTower",
+                "SevenIsland",
+                "CeladonCity 2F",
+                "CinnabarIsland",
+                "TwoIsland"
+            ],
+            "rom_id": 2
+        },
+        {
+            "name": "Poke Ball",
+            "key_item": false,
+            "purchase_price": 200,
+            "pocket": "Poke Balls",
+            "marts": [
+                "MauvilleCity",
+                "SlateportCity",
+                "LilycoveCity 2F",
+                "RustboroCity",
+                "OldaleTown",
+                "PetalburgCity",
+                "CeruleanCity",
+                "ViridianCity",
+                "VermilionCity",
+                "PewterCity"
+            ],
+            "rom_id": 3
+        },
+        {
+            "name": "Safari Ball",
+            "key_item": false,
+            "purchase_price": 0,
+            "pocket": "Poke Balls",
+            "marts": [],
+            "rom_id": 4
+        },
+        {
+            "name": "Net Ball",
+            "key_item": false,
+            "purchase_price": 1000,
+            "pocket": "Poke Balls",
+            "marts": [
+                "MossdeepCity"
+            ],
+            "rom_id": 5
+        },
+        {
+            "name": "Dive Ball",
+            "key_item": false,
+            "purchase_price": 1000,
+            "pocket": "Poke Balls",
+            "marts": [
+                "MossdeepCity"
+            ],
+            "rom_id": 6
+        },
+        {
+            "name": "Nest Ball",
+            "key_item": false,
+            "purchase_price": 1000,
+            "pocket": "Poke Balls",
+            "marts": [
+                "VerdanturfTown"
+            ],
+            "rom_id": 7
+        },
+        {
+            "name": "Repeat Ball",
+            "key_item": false,
+            "purchase_price": 1000,
+            "pocket": "Poke Balls",
+            "marts": [
+                "RustboroCity",
+                "TwoIsland"
+            ],
+            "rom_id": 8
+        },
+        {
+            "name": "Timer Ball",
+            "key_item": false,
+            "purchase_price": 1000,
+            "pocket": "Poke Balls",
+            "marts": [
+                "RustboroCity",
+                "TwoIsland"
+            ],
+            "rom_id": 9
+        },
+        {
+            "name": "Luxury Ball",
+            "key_item": false,
+            "purchase_price": 1000,
+            "pocket": "Poke Balls",
+            "marts": [],
+            "rom_id": 10
+        },
+        {
+            "name": "Premier Ball",
+            "key_item": false,
+            "purchase_price": 200,
+            "pocket": "Poke Balls",
+            "marts": [],
+            "rom_id": 11
+        },
+        {
+            "name": "Potion",
+            "key_item": false,
+            "purchase_price": 300,
+            "pocket": "Items",
+            "marts": [
+                "SlateportCity",
+                "LilycoveCity 2F",
+                "RustboroCity",
+                "OldaleTown",
+                "PetalburgCity",
+                "CeruleanCity",
+                "ViridianCity",
+                "PewterCity"
+            ],
+            "rom_id": 12
+        },
+        {
+            "name": "Antidote",
+            "key_item": false,
+            "purchase_price": 100,
+            "pocket": "Items",
+            "marts": [
+                "MauvilleCity",
+                "VerdanturfTown",
+                "LavaridgeTown",
+                "FortreeCity",
+                "SlateportCity",
+                "LilycoveCity 2F",
+                "RustboroCity",
+                "OldaleTown",
+                "PetalburgCity",
+                "FallarborTown",
+                "TrainerHill",
+                "CeruleanCity",
+                "LavenderTown",
+                "ViridianCity",
+                "VermilionCity",
+                "CeladonCity 2F",
+                "PewterCity"
+            ],
+            "rom_id": 13
+        },
+        {
+            "name": "Burn Heal",
+            "key_item": false,
+            "purchase_price": 250,
+            "pocket": "Items",
+            "marts": [
+                "VerdanturfTown",
+                "LavaridgeTown",
+                "LilycoveCity 2F",
+                "CeruleanCity",
+                "LavenderTown",
+                "CeladonCity 2F",
+                "PewterCity"
+            ],
+            "rom_id": 14
+        },
+        {
+            "name": "Ice Heal",
+            "key_item": false,
+            "purchase_price": 250,
+            "pocket": "Items",
+            "marts": [
+                "VerdanturfTown",
+                "LilycoveCity 2F",
+                "LavenderTown",
+                "VermilionCity",
+                "CeladonCity 2F",
+                "FourIsland"
+            ],
+            "rom_id": 15
+        },
+        {
+            "name": "Awakening",
+            "key_item": false,
+            "purchase_price": 250,
+            "pocket": "Items",
+            "marts": [
+                "MauvilleCity",
+                "VerdanturfTown",
+                "LavaridgeTown",
+                "FortreeCity",
+                "LilycoveCity 2F",
+                "OldaleTown",
+                "PetalburgCity",
+                "TrainerHill",
+                "CeruleanCity",
+                "VermilionCity",
+                "CeladonCity 2F",
+                "PewterCity"
+            ],
+            "rom_id": 16
+        },
+        {
+            "name": "Parlyz Heal",
+            "key_item": false,
+            "purchase_price": 200,
+            "pocket": "Items",
+            "marts": [
+                "MauvilleCity",
+                "VerdanturfTown",
+                "LavaridgeTown",
+                "FortreeCity",
+                "SlateportCity",
+                "LilycoveCity 2F",
+                "RustboroCity",
+                "OldaleTown",
+                "PetalburgCity",
+                "FallarborTown",
+                "TrainerHill",
+                "CeruleanCity",
+                "LavenderTown",
+                "ViridianCity",
+                "VermilionCity",
+                "CeladonCity 2F",
+                "PewterCity"
+            ],
+            "rom_id": 17
+        },
+        {
+            "name": "Full Restore",
+            "key_item": false,
+            "purchase_price": 3000,
+            "pocket": "Items",
+            "marts": [
+                "PrettyPetalFlowerShop",
+                "EverGrandeCity",
+                "TrainerHill",
+                "BattleFrontier",
+                "SixIsland",
+                "IndigoPlateau",
+                "TrainerTower",
+                "SevenIsland",
+                "FourIsland"
+            ],
+            "rom_id": 18
+        },
+        {
+            "name": "Max Potion",
+            "key_item": false,
+            "purchase_price": 2500,
+            "pocket": "Items",
+            "marts": [
+                "SootopolisCity",
+                "LilycoveCity 2F",
+                "PrettyPetalFlowerShop",
+                "EverGrandeCity",
+                "TrainerHill",
+                "BattleFrontier",
+                "SixIsland",
+                "IndigoPlateau",
+                "TrainerTower",
+                "SevenIsland",
+                "FourIsland"
+            ],
+            "rom_id": 19
+        },
+        {
+            "name": "Hyper Potion",
+            "key_item": false,
+            "purchase_price": 1200,
+            "pocket": "Items",
+            "marts": [
+                "SootopolisCity",
+                "MossdeepCity",
+                "FortreeCity",
+                "LilycoveCity 2F",
+                "PrettyPetalFlowerShop",
+                "EverGrandeCity",
+                "TrainerHill",
+                "BattleFrontier",
+                "SaffronCity",
+                "ThreeIsland",
+                "TrainerTower",
+                "SevenIsland",
+                "CinnabarIsland"
+            ],
+            "rom_id": 20
+        },
+        {
+            "name": "Super Potion",
+            "key_item": false,
+            "purchase_price": 700,
+            "pocket": "Items",
+            "marts": [
+                "MauvilleCity",
+                "VerdanturfTown",
+                "LavaridgeTown",
+                "FortreeCity",
+                "SlateportCity",
+                "LilycoveCity 2F",
+                "RustboroCity",
+                "PrettyPetalFlowerShop",
+                "PetalburgCity",
+                "FallarborTown",
+                "TrainerHill",
+                "FuchsiaCity",
+                "CeruleanCity",
+                "LavenderTown",
+                "VermilionCity",
+                "CeladonCity 2F"
+            ],
+            "rom_id": 21
+        },
+        {
+            "name": "Full Heal",
+            "key_item": false,
+            "purchase_price": 600,
+            "pocket": "Items",
+            "marts": [
+                "SootopolisCity",
+                "MossdeepCity",
+                "LilycoveCity 2F",
+                "PrettyPetalFlowerShop",
+                "EverGrandeCity",
+                "TrainerHill",
+                "BattleFrontier",
+                "FuchsiaCity",
+                "SixIsland",
+                "IndigoPlateau",
+                "SaffronCity",
+                "ThreeIsland",
+                "TrainerTower",
+                "SevenIsland",
+                "CinnabarIsland",
+                "FourIsland"
+            ],
+            "rom_id": 22
+        },
+        {
+            "name": "Revive",
+            "key_item": false,
+            "purchase_price": 1500,
+            "pocket": "Items",
+            "marts": [
+                "SootopolisCity",
+                "MossdeepCity",
+                "LavaridgeTown",
+                "FortreeCity",
+                "LilycoveCity 2F",
+                "PrettyPetalFlowerShop",
+                "EverGrandeCity",
+                "TrainerHill",
+                "BattleFrontier",
+                "FuchsiaCity",
+                "SixIsland",
+                "IndigoPlateau",
+                "LavenderTown",
+                "SaffronCity",
+                "ThreeIsland",
+                "TrainerTower",
+                "SevenIsland",
+                "CeladonCity 2F",
+                "CinnabarIsland",
+                "FourIsland"
+            ],
+            "rom_id": 23
+        },
+        {
+            "name": "Max Revive",
+            "key_item": false,
+            "purchase_price": 4000,
+            "pocket": "Items",
+            "marts": [],
+            "rom_id": 24
+        },
+        {
+            "name": "Fresh Water",
+            "key_item": false,
+            "purchase_price": 200,
+            "pocket": "Items",
+            "marts": [
+                "TwoIsland"
+            ],
+            "rom_id": 25
+        },
+        {
+            "name": "Soda Pop",
+            "key_item": false,
+            "purchase_price": 300,
+            "pocket": "Items",
+            "marts": [
+                "TwoIsland"
+            ],
+            "rom_id": 26
+        },
+        {
+            "name": "Lemonade",
+            "key_item": false,
+            "purchase_price": 350,
+            "pocket": "Items",
+            "marts": [
+                "TwoIsland"
+            ],
+            "rom_id": 27
+        },
+        {
+            "name": "Moomoo Milk",
+            "key_item": false,
+            "purchase_price": 500,
+            "pocket": "Items",
+            "marts": [
+                "TwoIsland"
+            ],
+            "rom_id": 28
+        },
+        {
+            "name": "Energypowder",
+            "key_item": false,
+            "purchase_price": 500,
+            "pocket": "Items",
+            "marts": [
+                "HerbShop"
+            ],
+            "rom_id": 29
+        },
+        {
+            "name": "Energy Root",
+            "key_item": false,
+            "purchase_price": 800,
+            "pocket": "Items",
+            "marts": [
+                "HerbShop"
+            ],
+            "rom_id": 30
+        },
+        {
+            "name": "Heal Powder",
+            "key_item": false,
+            "purchase_price": 450,
+            "pocket": "Items",
+            "marts": [
+                "HerbShop"
+            ],
+            "rom_id": 31
+        },
+        {
+            "name": "Revival Herb",
+            "key_item": false,
+            "purchase_price": 2800,
+            "pocket": "Items",
+            "marts": [
+                "HerbShop"
+            ],
+            "rom_id": 32
+        },
+        {
+            "name": "Ether",
+            "key_item": false,
+            "purchase_price": 1200,
+            "pocket": "Items",
+            "marts": [],
+            "rom_id": 33
+        },
+        {
+            "name": "Max Ether",
+            "key_item": false,
+            "purchase_price": 2000,
+            "pocket": "Items",
+            "marts": [],
+            "rom_id": 34
+        },
+        {
+            "name": "Elixir",
+            "key_item": false,
+            "purchase_price": 3000,
+            "pocket": "Items",
+            "marts": [],
+            "rom_id": 35
+        },
+        {
+            "name": "Max Elixir",
+            "key_item": false,
+            "purchase_price": 4500,
+            "pocket": "Items",
+            "marts": [],
+            "rom_id": 36
+        },
+        {
+            "name": "Lava Cookie",
+            "key_item": false,
+            "purchase_price": 200,
+            "pocket": "Items",
+            "marts": [
+                "TwoIsland"
+            ],
+            "rom_id": 37
+        },
+        {
+            "name": "Blue Flute",
+            "key_item": false,
+            "purchase_price": 100,
+            "pocket": "Items",
+            "marts": [],
+            "rom_id": 38
+        },
+        {
+            "name": "Yellow Flute",
+            "key_item": false,
+            "purchase_price": 200,
+            "pocket": "Items",
+            "marts": [],
+            "rom_id": 39
+        },
+        {
+            "name": "Red Flute",
+            "key_item": false,
+            "purchase_price": 300,
+            "pocket": "Items",
+            "marts": [],
+            "rom_id": 40
+        },
+        {
+            "name": "Black Flute",
+            "key_item": false,
+            "purchase_price": 400,
+            "pocket": "Items",
+            "marts": [],
+            "rom_id": 41
+        },
+        {
+            "name": "White Flute",
+            "key_item": false,
+            "purchase_price": 500,
+            "pocket": "Items",
+            "marts": [],
+            "rom_id": 42
+        },
+        {
+            "name": "Berry Juice",
+            "key_item": false,
+            "purchase_price": 100,
+            "pocket": "Items",
+            "marts": [],
+            "rom_id": 43
+        },
+        {
+            "name": "Sacred Ash",
+            "key_item": false,
+            "purchase_price": 200,
+            "pocket": "Items",
+            "marts": [],
+            "rom_id": 44
+        },
+        {
+            "name": "Shoal Salt",
+            "key_item": false,
+            "purchase_price": 20,
+            "pocket": "Items",
+            "marts": [],
+            "rom_id": 45
+        },
+        {
+            "name": "Shoal Shell",
+            "key_item": false,
+            "purchase_price": 20,
+            "pocket": "Items",
+            "marts": [],
+            "rom_id": 46
+        },
+        {
+            "name": "Red Shard",
+            "key_item": false,
+            "purchase_price": 200,
+            "pocket": "Items",
+            "marts": [
+                "LilycoveCity 5F"
+            ],
+            "rom_id": 47
+        },
+        {
+            "name": "Blue Shard",
+            "key_item": false,
+            "purchase_price": 200,
+            "pocket": "Items",
+            "marts": [
+                "LilycoveCity 5F"
+            ],
+            "rom_id": 48
+        },
+        {
+            "name": "Yellow Shard",
+            "key_item": false,
+            "purchase_price": 200,
+            "pocket": "Items",
+            "marts": [
+                "LilycoveCity 5F"
+            ],
+            "rom_id": 49
+        },
+        {
+            "name": "Green Shard",
+            "key_item": false,
+            "purchase_price": 200,
+            "pocket": "Items",
+            "marts": [],
+            "rom_id": 50
+        },
+        {
+            "name": "HP Up",
+            "key_item": false,
+            "purchase_price": 9800,
+            "pocket": "Items",
+            "marts": [
+                "LilycoveCity 5F",
+                "LilycoveCity 3F",
+                "SlateportCity",
+                "BattleFrontier",
+                "CeladonCity 5F"
+            ],
+            "rom_id": 62
+        },
+        {
+            "name": "Protein",
+            "key_item": false,
+            "purchase_price": 9800,
+            "pocket": "Items",
+            "marts": [
+                "LilycoveCity 5F",
+                "LilycoveCity 3F",
+                "SlateportCity",
+                "BattleFrontier",
+                "CeladonCity 5F"
+            ],
+            "rom_id": 63
+        },
+        {
+            "name": "Iron",
+            "key_item": false,
+            "purchase_price": 9800,
+            "pocket": "Items",
+            "marts": [
+                "LilycoveCity 5F",
+                "LilycoveCity 3F",
+                "SlateportCity",
+                "BattleFrontier",
+                "CeladonCity 5F"
+            ],
+            "rom_id": 64
+        },
+        {
+            "name": "Carbos",
+            "key_item": false,
+            "purchase_price": 9800,
+            "pocket": "Items",
+            "marts": [
+                "LilycoveCity 5F",
+                "LilycoveCity 3F",
+                "SlateportCity",
+                "BattleFrontier",
+                "CeladonCity 5F"
+            ],
+            "rom_id": 65
+        },
+        {
+            "name": "Calcium",
+            "key_item": false,
+            "purchase_price": 9800,
+            "pocket": "Items",
+            "marts": [
+                "LilycoveCity 5F",
+                "LilycoveCity 3F",
+                "SlateportCity",
+                "BattleFrontier",
+                "CeladonCity 5F"
+            ],
+            "rom_id": 66
+        },
+        {
+            "name": "Rare Candy",
+            "key_item": false,
+            "purchase_price": 4800,
+            "pocket": "Items",
+            "marts": [
+                "LilycoveCity 5F"
+            ],
+            "rom_id": 67
+        },
+        {
+            "name": "PP Up",
+            "key_item": false,
+            "purchase_price": 9800,
+            "pocket": "Items",
+            "marts": [
+                "LilycoveCity 5F"
+            ],
+            "rom_id": 68
+        },
+        {
+            "name": "Zinc",
+            "key_item": false,
+            "purchase_price": 9800,
+            "pocket": "Items",
+            "marts": [
+                "LilycoveCity 5F",
+                "LilycoveCity 3F",
+                "SlateportCity",
+                "BattleFrontier",
+                "CeladonCity 5F"
+            ],
+            "rom_id": 69
+        },
+        {
+            "name": "PP Max",
+            "key_item": false,
+            "purchase_price": 9800,
+            "pocket": "Items",
+            "marts": [
+                "LilycoveCity 5F"
+            ],
+            "rom_id": 70
+        },
+        {
+            "name": "Guard Spec.",
+            "key_item": false,
+            "purchase_price": 700,
+            "pocket": "Items",
+            "marts": [
+                "MauvilleCity",
+                "LilycoveCity 5F",
+                "LilycoveCity 3F",
+                "FallarborTown",
+                "TrainerHill",
+                "CeladonCity 5F"
+            ],
+            "rom_id": 72
+        },
+        {
+            "name": "Dire Hit",
+            "key_item": false,
+            "purchase_price": 650,
+            "pocket": "Items",
+            "marts": [
+                "MauvilleCity",
+                "LilycoveCity 5F",
+                "LilycoveCity 3F",
+                "FallarborTown",
+                "TrainerHill",
+                "CeladonCity 5F"
+            ],
+            "rom_id": 73
+        },
+        {
+            "name": "X Attack",
+            "key_item": false,
+            "purchase_price": 500,
+            "pocket": "Items",
+            "marts": [
+                "MauvilleCity",
+                "SootopolisCity",
+                "MossdeepCity",
+                "RustboroCity",
+                "PetalburgCity",
+                "LilycoveCity 3F",
+                "FallarborTown",
+                "TrainerHill",
+                "CeladonCity 5F"
+            ],
+            "rom_id": 74
+        },
+        {
+            "name": "X Defend",
+            "key_item": false,
+            "purchase_price": 550,
+            "pocket": "Items",
+            "marts": [
+                "MauvilleCity",
+                "SootopolisCity",
+                "MossdeepCity",
+                "LilycoveCity 5F",
+                "RustboroCity",
+                "PetalburgCity",
+                "LilycoveCity 3F",
+                "FallarborTown",
+                "TrainerHill",
+                "CeladonCity 5F"
+            ],
+            "rom_id": 75
+        },
+        {
+            "name": "X Speed",
+            "key_item": false,
+            "purchase_price": 350,
+            "pocket": "Items",
+            "marts": [
+                "MauvilleCity",
+                "LavaridgeTown",
+                "LilycoveCity 5F",
+                "RustboroCity",
+                "PetalburgCity",
+                "LilycoveCity 3F",
+                "FallarborTown",
+                "TrainerHill",
+                "CeladonCity 5F"
+            ],
+            "rom_id": 76
+        },
+        {
+            "name": "X Accuracy",
+            "key_item": false,
+            "purchase_price": 950,
+            "pocket": "Items",
+            "marts": [
+                "MauvilleCity",
+                "LilycoveCity 5F",
+                "LilycoveCity 3F",
+                "TrainerHill",
+                "CeladonCity 5F"
+            ],
+            "rom_id": 77
+        },
+        {
+            "name": "X Special",
+            "key_item": false,
+            "purchase_price": 350,
+            "pocket": "Items",
+            "marts": [
+                "VerdanturfTown",
+                "LilycoveCity 3F",
+                "FallarborTown",
+                "TrainerHill",
+                "CeladonCity 5F"
+            ],
+            "rom_id": 78
+        },
+        {
+            "name": "Poke Doll",
+            "key_item": false,
+            "purchase_price": 1000,
+            "pocket": "Items",
+            "marts": [
+                "CeladonCity 4F"
+            ],
+            "rom_id": 79
+        },
+        {
+            "name": "Fluffy Tail",
+            "key_item": false,
+            "purchase_price": 1000,
+            "pocket": "Items",
+            "marts": [
+                "VerdanturfTown",
+                "LilycoveCity 2F"
+            ],
+            "rom_id": 80
+        },
+        {
+            "name": "Super Repel",
+            "key_item": false,
+            "purchase_price": 500,
+            "pocket": "Items",
+            "marts": [
+                "LavaridgeTown",
+                "FortreeCity",
+                "LilycoveCity 5F",
+                "LilycoveCity 2F",
+                "FallarborTown",
+                "LavenderTown",
+                "CeladonCity 2F"
+            ],
+            "rom_id": 82
+        },
+        {
+            "name": "Max Repel",
+            "key_item": false,
+            "purchase_price": 700,
+            "pocket": "Items",
+            "marts": [
+                "SootopolisCity",
+                "MossdeepCity",
+                "LilycoveCity 2F",
+                "EverGrandeCity",
+                "BattleFrontier",
+                "FuchsiaCity",
+                "SixIsland",
+                "IndigoPlateau",
+                "SaffronCity",
+                "ThreeIsland",
+                "TrainerTower",
+                "SevenIsland",
+                "CinnabarIsland",
+                "FourIsland"
+            ],
+            "rom_id": 83
+        },
+        {
+            "name": "Escape Rope",
+            "key_item": false,
+            "purchase_price": 550,
+            "pocket": "Items",
+            "marts": [
+                "SlateportCity",
+                "LilycoveCity 2F",
+                "RustboroCity",
+                "PetalburgCity",
+                "FallarborTown",
+                "SixIsland",
+                "CeruleanCity",
+                "LavenderTown",
+                "SaffronCity",
+                "ThreeIsland",
+                "TrainerTower",
+                "SevenIsland",
+                "PewterCity",
+                "CinnabarIsland",
+                "FourIsland"
+            ],
+            "rom_id": 84
+        },
+        {
+            "name": "Repel",
+            "key_item": false,
+            "purchase_price": 350,
+            "pocket": "Items",
+            "marts": [
+                "VerdanturfTown",
+                "SlateportCity",
+                "LilycoveCity 2F",
+                "RustboroCity",
+                "PetalburgCity",
+                "CeruleanCity",
+                "VermilionCity",
+                "PewterCity"
+            ],
+            "rom_id": 85
+        },
+        {
+            "name": "Sun Stone",
+            "key_item": false,
+            "purchase_price": 2100,
+            "pocket": "Items",
+            "marts": [
+                "LilycoveCity 5F"
+            ],
+            "rom_id": 92
+        },
+        {
+            "name": "Moon Stone",
+            "key_item": false,
+            "purchase_price": 0,
+            "pocket": "Items",
+            "marts": [
+                "LilycoveCity 5F"
+            ],
+            "rom_id": 93
+        },
+        {
+            "name": "Fire Stone",
+            "key_item": false,
+            "purchase_price": 2100,
+            "pocket": "Items",
+            "marts": [
+                "LilycoveCity 5F",
+                "CeladonCity 4F"
+            ],
+            "rom_id": 94
+        },
+        {
+            "name": "Thunderstone",
+            "key_item": false,
+            "purchase_price": 2100,
+            "pocket": "Items",
+            "marts": [
+                "LilycoveCity 5F",
+                "CeladonCity 4F"
+            ],
+            "rom_id": 95
+        },
+        {
+            "name": "Water Stone",
+            "key_item": false,
+            "purchase_price": 2100,
+            "pocket": "Items",
+            "marts": [
+                "LilycoveCity 5F",
+                "CeladonCity 4F"
+            ],
+            "rom_id": 96
+        },
+        {
+            "name": "Leaf Stone",
+            "key_item": false,
+            "purchase_price": 2100,
+            "pocket": "Items",
+            "marts": [
+                "LilycoveCity 5F",
+                "CeladonCity 4F"
+            ],
+            "rom_id": 97
+        },
+        {
+            "name": "Tinymushroom",
+            "key_item": false,
+            "purchase_price": 500,
+            "pocket": "Items",
+            "marts": [],
+            "rom_id": 102
+        },
+        {
+            "name": "Big Mushroom",
+            "key_item": false,
+            "purchase_price": 5000,
+            "pocket": "Items",
+            "marts": [
+                "LilycoveCity 5F"
+            ],
+            "rom_id": 103
+        },
+        {
+            "name": "Pearl",
+            "key_item": false,
+            "purchase_price": 1400,
+            "pocket": "Items",
+            "marts": [
+                "LilycoveCity 5F"
+            ],
+            "rom_id": 105
+        },
+        {
+            "name": "Big Pearl",
+            "key_item": false,
+            "purchase_price": 7500,
+            "pocket": "Items",
+            "marts": [
+                "LilycoveCity 5F"
+            ],
+            "rom_id": 106
+        },
+        {
+            "name": "Stardust",
+            "key_item": false,
+            "purchase_price": 2000,
+            "pocket": "Items",
+            "marts": [
+                "LilycoveCity 5F"
+            ],
+            "rom_id": 107
+        },
+        {
+            "name": "Star Piece",
+            "key_item": false,
+            "purchase_price": 9800,
+            "pocket": "Items",
+            "marts": [
+                "LilycoveCity 5F"
+            ],
+            "rom_id": 108
+        },
+        {
+            "name": "Nugget",
+            "key_item": false,
+            "purchase_price": 10000,
+            "pocket": "Items",
+            "marts": [
+                "LilycoveCity 5F"
+            ],
+            "rom_id": 109
+        },
+        {
+            "name": "Heart Scale",
+            "key_item": false,
+            "purchase_price": 100,
+            "pocket": "Items",
+            "marts": [],
+            "rom_id": 110
+        },
+        {
+            "name": "Orange Mail",
+            "key_item": false,
+            "purchase_price": 50,
+            "pocket": "Items",
+            "marts": [
+                "PetalburgCity"
+            ],
+            "rom_id": 120
+        },
+        {
+            "name": "Harbor Mail",
+            "key_item": false,
+            "purchase_price": 50,
+            "pocket": "Items",
+            "marts": [
+                "SlateportCity"
+            ],
+            "rom_id": 121
+        },
+        {
+            "name": "Glitter Mail",
+            "key_item": false,
+            "purchase_price": 50,
+            "pocket": "Items",
+            "marts": [],
+            "rom_id": 122
+        },
+        {
+            "name": "Mech Mail",
+            "key_item": false,
+            "purchase_price": 50,
+            "pocket": "Items",
+            "marts": [
+                "LilycoveCity 2F"
+            ],
+            "rom_id": 123
+        },
+        {
+            "name": "Wood Mail",
+            "key_item": false,
+            "purchase_price": 50,
+            "pocket": "Items",
+            "marts": [
+                "FortreeCity"
+            ],
+            "rom_id": 124
+        },
+        {
+            "name": "Wave Mail",
+            "key_item": false,
+            "purchase_price": 50,
+            "pocket": "Items",
+            "marts": [
+                "LilycoveCity 2F"
+            ],
+            "rom_id": 125
+        },
+        {
+            "name": "Bead Mail",
+            "key_item": false,
+            "purchase_price": 50,
+            "pocket": "Items",
+            "marts": [],
+            "rom_id": 126
+        },
+        {
+            "name": "Shadow Mail",
+            "key_item": false,
+            "purchase_price": 50,
+            "pocket": "Items",
+            "marts": [
+                "SootopolisCity"
+            ],
+            "rom_id": 127
+        },
+        {
+            "name": "Tropic Mail",
+            "key_item": false,
+            "purchase_price": 50,
+            "pocket": "Items",
+            "marts": [],
+            "rom_id": 128
+        },
+        {
+            "name": "Dream Mail",
+            "key_item": false,
+            "purchase_price": 50,
+            "pocket": "Items",
+            "marts": [
+                "SixIsland"
+            ],
+            "rom_id": 129
+        },
+        {
+            "name": "Fab Mail",
+            "key_item": false,
+            "purchase_price": 50,
+            "pocket": "Items",
+            "marts": [],
+            "rom_id": 130
+        },
+        {
+            "name": "Retro Mail",
+            "key_item": false,
+            "purchase_price": 0,
+            "pocket": "Items",
+            "marts": [
+                "CeladonCity 4F"
+            ],
+            "rom_id": 131
+        },
+        {
+            "name": "Cheri Berry",
+            "key_item": false,
+            "purchase_price": 20,
+            "pocket": "Berries",
+            "marts": [],
+            "rom_id": 132
+        },
+        {
+            "name": "Chesto Berry",
+            "key_item": false,
+            "purchase_price": 20,
+            "pocket": "Berries",
+            "marts": [],
+            "rom_id": 133
+        },
+        {
+            "name": "Pecha Berry",
+            "key_item": false,
+            "purchase_price": 20,
+            "pocket": "Berries",
+            "marts": [],
+            "rom_id": 134
+        },
+        {
+            "name": "Rawst Berry",
+            "key_item": false,
+            "purchase_price": 20,
+            "pocket": "Berries",
+            "marts": [],
+            "rom_id": 135
+        },
+        {
+            "name": "Aspear Berry",
+            "key_item": false,
+            "purchase_price": 20,
+            "pocket": "Berries",
+            "marts": [],
+            "rom_id": 136
+        },
+        {
+            "name": "Leppa Berry",
+            "key_item": false,
+            "purchase_price": 20,
+            "pocket": "Berries",
+            "marts": [],
+            "rom_id": 137
+        },
+        {
+            "name": "Oran Berry",
+            "key_item": false,
+            "purchase_price": 20,
+            "pocket": "Berries",
+            "marts": [],
+            "rom_id": 138
+        },
+        {
+            "name": "Persim Berry",
+            "key_item": false,
+            "purchase_price": 20,
+            "pocket": "Berries",
+            "marts": [],
+            "rom_id": 139
+        },
+        {
+            "name": "Lum Berry",
+            "key_item": false,
+            "purchase_price": 20,
+            "pocket": "Berries",
+            "marts": [],
+            "rom_id": 140
+        },
+        {
+            "name": "Sitrus Berry",
+            "key_item": false,
+            "purchase_price": 20,
+            "pocket": "Berries",
+            "marts": [],
+            "rom_id": 141
+        },
+        {
+            "name": "Figy Berry",
+            "key_item": false,
+            "purchase_price": 20,
+            "pocket": "Berries",
+            "marts": [],
+            "rom_id": 142
+        },
+        {
+            "name": "Wiki Berry",
+            "key_item": false,
+            "purchase_price": 20,
+            "pocket": "Berries",
+            "marts": [],
+            "rom_id": 143
+        },
+        {
+            "name": "Mago Berry",
+            "key_item": false,
+            "purchase_price": 20,
+            "pocket": "Berries",
+            "marts": [],
+            "rom_id": 144
+        },
+        {
+            "name": "Aguav Berry",
+            "key_item": false,
+            "purchase_price": 20,
+            "pocket": "Berries",
+            "marts": [],
+            "rom_id": 145
+        },
+        {
+            "name": "Iapapa Berry",
+            "key_item": false,
+            "purchase_price": 20,
+            "pocket": "Berries",
+            "marts": [],
+            "rom_id": 146
+        },
+        {
+            "name": "Razz Berry",
+            "key_item": false,
+            "purchase_price": 20,
+            "pocket": "Berries",
+            "marts": [],
+            "rom_id": 147
+        },
+        {
+            "name": "Bluk Berry",
+            "key_item": false,
+            "purchase_price": 20,
+            "pocket": "Berries",
+            "marts": [],
+            "rom_id": 148
+        },
+        {
+            "name": "Nanab Berry",
+            "key_item": false,
+            "purchase_price": 20,
+            "pocket": "Berries",
+            "marts": [],
+            "rom_id": 149
+        },
+        {
+            "name": "Wepear Berry",
+            "key_item": false,
+            "purchase_price": 20,
+            "pocket": "Berries",
+            "marts": [],
+            "rom_id": 150
+        },
+        {
+            "name": "Pinap Berry",
+            "key_item": false,
+            "purchase_price": 20,
+            "pocket": "Berries",
+            "marts": [],
+            "rom_id": 151
+        },
+        {
+            "name": "Pomeg Berry",
+            "key_item": false,
+            "purchase_price": 20,
+            "pocket": "Berries",
+            "marts": [],
+            "rom_id": 152
+        },
+        {
+            "name": "Kelpsy Berry",
+            "key_item": false,
+            "purchase_price": 20,
+            "pocket": "Berries",
+            "marts": [],
+            "rom_id": 153
+        },
+        {
+            "name": "Qualot Berry",
+            "key_item": false,
+            "purchase_price": 20,
+            "pocket": "Berries",
+            "marts": [],
+            "rom_id": 154
+        },
+        {
+            "name": "Hondew Berry",
+            "key_item": false,
+            "purchase_price": 20,
+            "pocket": "Berries",
+            "marts": [],
+            "rom_id": 155
+        },
+        {
+            "name": "Grepa Berry",
+            "key_item": false,
+            "purchase_price": 20,
+            "pocket": "Berries",
+            "marts": [],
+            "rom_id": 156
+        },
+        {
+            "name": "Tamato Berry",
+            "key_item": false,
+            "purchase_price": 20,
+            "pocket": "Berries",
+            "marts": [],
+            "rom_id": 157
+        },
+        {
+            "name": "Cornn Berry",
+            "key_item": false,
+            "purchase_price": 20,
+            "pocket": "Berries",
+            "marts": [],
+            "rom_id": 158
+        },
+        {
+            "name": "Magost Berry",
+            "key_item": false,
+            "purchase_price": 20,
+            "pocket": "Berries",
+            "marts": [],
+            "rom_id": 159
+        },
+        {
+            "name": "Rabuta Berry",
+            "key_item": false,
+            "purchase_price": 20,
+            "pocket": "Berries",
+            "marts": [],
+            "rom_id": 160
+        },
+        {
+            "name": "Nomel Berry",
+            "key_item": false,
+            "purchase_price": 20,
+            "pocket": "Berries",
+            "marts": [],
+            "rom_id": 161
+        },
+        {
+            "name": "Spelon Berry",
+            "key_item": false,
+            "purchase_price": 20,
+            "pocket": "Berries",
+            "marts": [],
+            "rom_id": 162
+        },
+        {
+            "name": "Pamtre Berry",
+            "key_item": false,
+            "purchase_price": 20,
+            "pocket": "Berries",
+            "marts": [],
+            "rom_id": 163
+        },
+        {
+            "name": "Watmel Berry",
+            "key_item": false,
+            "purchase_price": 20,
+            "pocket": "Berries",
+            "marts": [],
+            "rom_id": 164
+        },
+        {
+            "name": "Durin Berry",
+            "key_item": false,
+            "purchase_price": 20,
+            "pocket": "Berries",
+            "marts": [],
+            "rom_id": 165
+        },
+        {
+            "name": "Belue Berry",
+            "key_item": false,
+            "purchase_price": 20,
+            "pocket": "Berries",
+            "marts": [],
+            "rom_id": 166
+        },
+        {
+            "name": "Liechi Berry",
+            "key_item": false,
+            "purchase_price": 20,
+            "pocket": "Berries",
+            "marts": [],
+            "rom_id": 167
+        },
+        {
+            "name": "Ganlon Berry",
+            "key_item": false,
+            "purchase_price": 20,
+            "pocket": "Berries",
+            "marts": [],
+            "rom_id": 168
+        },
+        {
+            "name": "Salac Berry",
+            "key_item": false,
+            "purchase_price": 20,
+            "pocket": "Berries",
+            "marts": [],
+            "rom_id": 169
+        },
+        {
+            "name": "Petaya Berry",
+            "key_item": false,
+            "purchase_price": 20,
+            "pocket": "Berries",
+            "marts": [],
+            "rom_id": 170
+        },
+        {
+            "name": "Apicot Berry",
+            "key_item": false,
+            "purchase_price": 20,
+            "pocket": "Berries",
+            "marts": [],
+            "rom_id": 171
+        },
+        {
+            "name": "Lansat Berry",
+            "key_item": false,
+            "purchase_price": 20,
+            "pocket": "Berries",
+            "marts": [],
+            "rom_id": 172
+        },
+        {
+            "name": "Starf Berry",
+            "key_item": false,
+            "purchase_price": 20,
+            "pocket": "Berries",
+            "marts": [],
+            "rom_id": 173
+        },
+        {
+            "name": "Enigma Berry",
+            "key_item": false,
+            "purchase_price": 20,
+            "pocket": "Berries",
+            "marts": [],
+            "rom_id": 174
+        },
+        {
+            "name": "Brightpowder",
+            "key_item": false,
+            "purchase_price": 10,
+            "pocket": "Items",
+            "marts": [],
+            "rom_id": 178
+        },
+        {
+            "name": "White Herb",
+            "key_item": false,
+            "purchase_price": 100,
+            "pocket": "Items",
+            "marts": [],
+            "rom_id": 179
+        },
+        {
+            "name": "Macho Brace",
+            "key_item": false,
+            "purchase_price": 3000,
+            "pocket": "Items",
+            "marts": [],
+            "rom_id": 180
+        },
+        {
+            "name": "Exp. Share",
+            "key_item": false,
+            "purchase_price": 3000,
+            "pocket": "Items",
+            "marts": [],
+            "rom_id": 181
+        },
+        {
+            "name": "Quick Claw",
+            "key_item": false,
+            "purchase_price": 100,
+            "pocket": "Items",
+            "marts": [],
+            "rom_id": 182
+        },
+        {
+            "name": "Soothe Bell",
+            "key_item": false,
+            "purchase_price": 100,
+            "pocket": "Items",
+            "marts": [],
+            "rom_id": 183
+        },
+        {
+            "name": "Mental Herb",
+            "key_item": false,
+            "purchase_price": 100,
+            "pocket": "Items",
+            "marts": [],
+            "rom_id": 184
+        },
+        {
+            "name": "Choice Band",
+            "key_item": false,
+            "purchase_price": 100,
+            "pocket": "Items",
+            "marts": [],
+            "rom_id": 185
+        },
+        {
+            "name": "King's Rock",
+            "key_item": false,
+            "purchase_price": 100,
+            "pocket": "Items",
+            "marts": [],
+            "rom_id": 186
+        },
+        {
+            "name": "Silverpowder",
+            "key_item": false,
+            "purchase_price": 100,
+            "pocket": "Items",
+            "marts": [],
+            "rom_id": 187
+        },
+        {
+            "name": "Amulet Coin",
+            "key_item": false,
+            "purchase_price": 100,
+            "pocket": "Items",
+            "marts": [],
+            "rom_id": 188
+        },
+        {
+            "name": "Cleanse Tag",
+            "key_item": false,
+            "purchase_price": 200,
+            "pocket": "Items",
+            "marts": [],
+            "rom_id": 189
+        },
+        {
+            "name": "Soul Dew",
+            "key_item": false,
+            "purchase_price": 200,
+            "pocket": "Items",
+            "marts": [],
+            "rom_id": 190
+        },
+        {
+            "name": "Deepseatooth",
+            "key_item": false,
+            "purchase_price": 200,
+            "pocket": "Items",
+            "marts": [],
+            "rom_id": 191
+        },
+        {
+            "name": "Deepseascale",
+            "key_item": false,
+            "purchase_price": 200,
+            "pocket": "Items",
+            "marts": [],
+            "rom_id": 192
+        },
+        {
+            "name": "Smoke Ball",
+            "key_item": false,
+            "purchase_price": 200,
+            "pocket": "Items",
+            "marts": [],
+            "rom_id": 193
+        },
+        {
+            "name": "Everstone",
+            "key_item": false,
+            "purchase_price": 200,
+            "pocket": "Items",
+            "marts": [],
+            "rom_id": 194
+        },
+        {
+            "name": "Focus Band",
+            "key_item": false,
+            "purchase_price": 200,
+            "pocket": "Items",
+            "marts": [],
+            "rom_id": 195
+        },
+        {
+            "name": "Lucky Egg",
+            "key_item": false,
+            "purchase_price": 200,
+            "pocket": "Items",
+            "marts": [],
+            "rom_id": 196
+        },
+        {
+            "name": "Scope Lens",
+            "key_item": false,
+            "purchase_price": 200,
+            "pocket": "Items",
+            "marts": [],
+            "rom_id": 197
+        },
+        {
+            "name": "Metal Coat",
+            "key_item": false,
+            "purchase_price": 100,
+            "pocket": "Items",
+            "marts": [],
+            "rom_id": 198
+        },
+        {
+            "name": "Leftovers",
+            "key_item": false,
+            "purchase_price": 200,
+            "pocket": "Items",
+            "marts": [],
+            "rom_id": 199
+        },
+        {
+            "name": "Dragon Scale",
+            "key_item": false,
+            "purchase_price": 2100,
+            "pocket": "Items",
+            "marts": [],
+            "rom_id": 200
+        },
+        {
+            "name": "Light Ball",
+            "key_item": false,
+            "purchase_price": 100,
+            "pocket": "Items",
+            "marts": [],
+            "rom_id": 201
+        },
+        {
+            "name": "Soft Sand",
+            "key_item": false,
+            "purchase_price": 100,
+            "pocket": "Items",
+            "marts": [],
+            "rom_id": 202
+        },
+        {
+            "name": "Hard Stone",
+            "key_item": false,
+            "purchase_price": 100,
+            "pocket": "Items",
+            "marts": [],
+            "rom_id": 203
+        },
+        {
+            "name": "Miracle Seed",
+            "key_item": false,
+            "purchase_price": 100,
+            "pocket": "Items",
+            "marts": [],
+            "rom_id": 204
+        },
+        {
+            "name": "Blackglasses",
+            "key_item": false,
+            "purchase_price": 100,
+            "pocket": "Items",
+            "marts": [],
+            "rom_id": 205
+        },
+        {
+            "name": "Black Belt",
+            "key_item": false,
+            "purchase_price": 100,
+            "pocket": "Items",
+            "marts": [],
+            "rom_id": 206
+        },
+        {
+            "name": "Magnet",
+            "key_item": false,
+            "purchase_price": 100,
+            "pocket": "Items",
+            "marts": [],
+            "rom_id": 207
+        },
+        {
+            "name": "Mystic Water",
+            "key_item": false,
+            "purchase_price": 100,
+            "pocket": "Items",
+            "marts": [],
+            "rom_id": 208
+        },
+        {
+            "name": "Sharp Beak",
+            "key_item": false,
+            "purchase_price": 100,
+            "pocket": "Items",
+            "marts": [],
+            "rom_id": 209
+        },
+        {
+            "name": "Poison Barb",
+            "key_item": false,
+            "purchase_price": 100,
+            "pocket": "Items",
+            "marts": [],
+            "rom_id": 210
+        },
+        {
+            "name": "Nevermeltice",
+            "key_item": false,
+            "purchase_price": 100,
+            "pocket": "Items",
+            "marts": [],
+            "rom_id": 211
+        },
+        {
+            "name": "Spell Tag",
+            "key_item": false,
+            "purchase_price": 100,
+            "pocket": "Items",
+            "marts": [],
+            "rom_id": 212
+        },
+        {
+            "name": "Twistedspoon",
+            "key_item": false,
+            "purchase_price": 100,
+            "pocket": "Items",
+            "marts": [],
+            "rom_id": 213
+        },
+        {
+            "name": "Charcoal",
+            "key_item": false,
+            "purchase_price": 9800,
+            "pocket": "Items",
+            "marts": [],
+            "rom_id": 214
+        },
+        {
+            "name": "Dragon Fang",
+            "key_item": false,
+            "purchase_price": 100,
+            "pocket": "Items",
+            "marts": [],
+            "rom_id": 215
+        },
+        {
+            "name": "Silk Scarf",
+            "key_item": false,
+            "purchase_price": 100,
+            "pocket": "Items",
+            "marts": [],
+            "rom_id": 216
+        },
+        {
+            "name": "Up-grade",
+            "key_item": false,
+            "purchase_price": 2100,
+            "pocket": "Items",
+            "marts": [],
+            "rom_id": 217
+        },
+        {
+            "name": "Shell Bell",
+            "key_item": false,
+            "purchase_price": 200,
+            "pocket": "Items",
+            "marts": [],
+            "rom_id": 218
+        },
+        {
+            "name": "Sea Incense",
+            "key_item": false,
+            "purchase_price": 9600,
+            "pocket": "Items",
+            "marts": [],
+            "rom_id": 219
+        },
+        {
+            "name": "Lax Incense",
+            "key_item": false,
+            "purchase_price": 9600,
+            "pocket": "Items",
+            "marts": [],
+            "rom_id": 220
+        },
+        {
+            "name": "Lucky Punch",
+            "key_item": false,
+            "purchase_price": 10,
+            "pocket": "Items",
+            "marts": [],
+            "rom_id": 221
+        },
+        {
+            "name": "Metal Powder",
+            "key_item": false,
+            "purchase_price": 10,
+            "pocket": "Items",
+            "marts": [],
+            "rom_id": 222
+        },
+        {
+            "name": "Thick Club",
+            "key_item": false,
+            "purchase_price": 500,
+            "pocket": "Items",
+            "marts": [],
+            "rom_id": 223
+        },
+        {
+            "name": "Stick",
+            "key_item": false,
+            "purchase_price": 200,
+            "pocket": "Items",
+            "marts": [],
+            "rom_id": 224
+        },
+        {
+            "name": "Red Scarf",
+            "key_item": false,
+            "purchase_price": 100,
+            "pocket": "Items",
+            "marts": [],
+            "rom_id": 253
+        },
+        {
+            "name": "Blue Scarf",
+            "key_item": false,
+            "purchase_price": 100,
+            "pocket": "Items",
+            "marts": [],
+            "rom_id": 254
+        },
+        {
+            "name": "Pink Scarf",
+            "key_item": false,
+            "purchase_price": 100,
+            "pocket": "Items",
+            "marts": [],
+            "rom_id": 255
+        },
+        {
+            "name": "Green Scarf",
+            "key_item": false,
+            "purchase_price": 100,
+            "pocket": "Items",
+            "marts": [],
+            "rom_id": 256
+        },
+        {
+            "name": "Yellow Scarf",
+            "key_item": false,
+            "purchase_price": 100,
+            "pocket": "Items",
+            "marts": [],
+            "rom_id": 257
+        },
+        {
+            "name": "Mach Bike",
+            "key_item": false,
+            "purchase_price": 0,
+            "pocket": "Key Items",
+            "marts": [],
+            "rom_id": 258
+        },
+        {
+            "name": "Coin Case",
+            "key_item": false,
+            "purchase_price": 0,
+            "pocket": "Key Items",
+            "marts": [],
+            "rom_id": 259
+        },
+        {
+            "name": "Itemfinder",
+            "key_item": false,
+            "purchase_price": 0,
+            "pocket": "Key Items",
+            "marts": [],
+            "rom_id": 260
+        },
+        {
+            "name": "Old Rod",
+            "key_item": false,
+            "purchase_price": 0,
+            "pocket": "Key Items",
+            "marts": [],
+            "rom_id": 261
+        },
+        {
+            "name": "Good Rod",
+            "key_item": false,
+            "purchase_price": 0,
+            "pocket": "Key Items",
+            "marts": [],
+            "rom_id": 262
+        },
+        {
+            "name": "Super Rod",
+            "key_item": false,
+            "purchase_price": 0,
+            "pocket": "Key Items",
+            "marts": [],
+            "rom_id": 263
+        },
+        {
+            "name": "S.s. Ticket",
+            "key_item": false,
+            "purchase_price": 0,
+            "pocket": "Key Items",
+            "marts": [],
+            "rom_id": 264
+        },
+        {
+            "name": "Contest Pass",
+            "key_item": false,
+            "purchase_price": 0,
+            "pocket": "Key Items",
+            "marts": [],
+            "rom_id": 265
+        },
+        {
+            "name": "Wailmer Pail",
+            "key_item": false,
+            "purchase_price": 0,
+            "pocket": "Key Items",
+            "marts": [],
+            "rom_id": 267
+        },
+        {
+            "name": "Devon Goods",
+            "key_item": false,
+            "purchase_price": 0,
+            "pocket": "Key Items",
+            "marts": [],
+            "rom_id": 268
+        },
+        {
+            "name": "Soot Sack",
+            "key_item": false,
+            "purchase_price": 0,
+            "pocket": "Key Items",
+            "marts": [],
+            "rom_id": 269
+        },
+        {
+            "name": "Basement Key",
+            "key_item": false,
+            "purchase_price": 0,
+            "pocket": "Key Items",
+            "marts": [],
+            "rom_id": 270
+        },
+        {
+            "name": "Acro Bike",
+            "key_item": false,
+            "purchase_price": 0,
+            "pocket": "Key Items",
+            "marts": [],
+            "rom_id": 271
+        },
+        {
+            "name": "{pokeblock} Case",
+            "key_item": false,
+            "purchase_price": 0,
+            "pocket": "Key Items",
+            "marts": [],
+            "rom_id": 272
+        },
+        {
+            "name": "Letter",
+            "key_item": false,
+            "purchase_price": 0,
+            "pocket": "Key Items",
+            "marts": [],
+            "rom_id": 273
+        },
+        {
+            "name": "Eon Ticket",
+            "key_item": false,
+            "purchase_price": 0,
+            "pocket": "Key Items",
+            "marts": [],
+            "rom_id": 274
+        },
+        {
+            "name": "Red Orb",
+            "key_item": false,
+            "purchase_price": 0,
+            "pocket": "Key Items",
+            "marts": [],
+            "rom_id": 275
+        },
+        {
+            "name": "Blue Orb",
+            "key_item": false,
+            "purchase_price": 0,
+            "pocket": "Key Items",
+            "marts": [],
+            "rom_id": 276
+        },
+        {
+            "name": "Scanner",
+            "key_item": false,
+            "purchase_price": 0,
+            "pocket": "Key Items",
+            "marts": [],
+            "rom_id": 277
+        },
+        {
+            "name": "Go-goggles",
+            "key_item": false,
+            "purchase_price": 0,
+            "pocket": "Key Items",
+            "marts": [],
+            "rom_id": 278
+        },
+        {
+            "name": "Meteorite",
+            "key_item": false,
+            "purchase_price": 0,
+            "pocket": "Key Items",
+            "marts": [],
+            "rom_id": 279
+        },
+        {
+            "name": "Rm. 1 Key",
+            "key_item": false,
+            "purchase_price": 0,
+            "pocket": "Key Items",
+            "marts": [],
+            "rom_id": 280
+        },
+        {
+            "name": "Rm. 2 Key",
+            "key_item": false,
+            "purchase_price": 0,
+            "pocket": "Key Items",
+            "marts": [],
+            "rom_id": 281
+        },
+        {
+            "name": "Rm. 4 Key",
+            "key_item": false,
+            "purchase_price": 0,
+            "pocket": "Key Items",
+            "marts": [],
+            "rom_id": 282
+        },
+        {
+            "name": "Rm. 6 Key",
+            "key_item": false,
+            "purchase_price": 0,
+            "pocket": "Key Items",
+            "marts": [],
+            "rom_id": 283
+        },
+        {
+            "name": "Storage Key",
+            "key_item": false,
+            "purchase_price": 0,
+            "pocket": "Key Items",
+            "marts": [],
+            "rom_id": 284
+        },
+        {
+            "name": "Root Fossil",
+            "key_item": false,
+            "purchase_price": 0,
+            "pocket": "Key Items",
+            "marts": [],
+            "rom_id": 285
+        },
+        {
+            "name": "Claw Fossil",
+            "key_item": false,
+            "purchase_price": 0,
+            "pocket": "Key Items",
+            "marts": [],
+            "rom_id": 286
+        },
+        {
+            "name": "Devon Scope",
+            "key_item": false,
+            "purchase_price": 0,
+            "pocket": "Key Items",
+            "marts": [],
+            "rom_id": 287
+        },
+        {
+            "name": "TM01 Focus Punch",
+            "key_item": false,
+            "purchase_price": 3000,
+            "pocket": "Tm Hm",
+            "marts": [],
+            "rom_id": 288
+        },
+        {
+            "name": "TM02 Dragon Claw",
+            "key_item": false,
+            "purchase_price": 3000,
+            "pocket": "Tm Hm",
+            "marts": [],
+            "rom_id": 289
+        },
+        {
+            "name": "TM03 Water Pulse",
+            "key_item": false,
+            "purchase_price": 3000,
+            "pocket": "Tm Hm",
+            "marts": [],
+            "rom_id": 290
+        },
+        {
+            "name": "TM04 Calm Mind",
+            "key_item": false,
+            "purchase_price": 3000,
+            "pocket": "Tm Hm",
+            "marts": [],
+            "rom_id": 291
+        },
+        {
+            "name": "TM05 Roar",
+            "key_item": false,
+            "purchase_price": 1000,
+            "pocket": "Tm Hm",
+            "marts": [],
+            "rom_id": 292
+        },
+        {
+            "name": "TM06 Toxic",
+            "key_item": false,
+            "purchase_price": 3000,
+            "pocket": "Tm Hm",
+            "marts": [],
+            "rom_id": 293
+        },
+        {
+            "name": "TM07 Hail",
+            "key_item": false,
+            "purchase_price": 3000,
+            "pocket": "Tm Hm",
+            "marts": [],
+            "rom_id": 294
+        },
+        {
+            "name": "TM08 Bulk Up",
+            "key_item": false,
+            "purchase_price": 3000,
+            "pocket": "Tm Hm",
+            "marts": [],
+            "rom_id": 295
+        },
+        {
+            "name": "TM09 Bullet Seed",
+            "key_item": false,
+            "purchase_price": 3000,
+            "pocket": "Tm Hm",
+            "marts": [],
+            "rom_id": 296
+        },
+        {
+            "name": "TM10 Hidden Power",
+            "key_item": false,
+            "purchase_price": 3000,
+            "pocket": "Tm Hm",
+            "marts": [
+                "SlateportCity"
+            ],
+            "rom_id": 297
+        },
+        {
+            "name": "TM11 Sunny Day",
+            "key_item": false,
+            "purchase_price": 2000,
+            "pocket": "Tm Hm",
+            "marts": [],
+            "rom_id": 298
+        },
+        {
+            "name": "TM12 Taunt",
+            "key_item": false,
+            "purchase_price": 3000,
+            "pocket": "Tm Hm",
+            "marts": [],
+            "rom_id": 299
+        },
+        {
+            "name": "TM13 Ice Beam",
+            "key_item": false,
+            "purchase_price": 3000,
+            "pocket": "Tm Hm",
+            "marts": [],
+            "rom_id": 300
+        },
+        {
+            "name": "TM14 Blizzard",
+            "key_item": false,
+            "purchase_price": 5500,
+            "pocket": "Tm Hm",
+            "marts": [
+                "LilycoveCity 4F"
+            ],
+            "rom_id": 301
+        },
+        {
+            "name": "TM15 Hyper Beam",
+            "key_item": false,
+            "purchase_price": 7500,
+            "pocket": "Tm Hm",
+            "marts": [
+                "LilycoveCity 4F"
+            ],
+            "rom_id": 302
+        },
+        {
+            "name": "TM16 Light Screen",
+            "key_item": false,
+            "purchase_price": 3000,
+            "pocket": "Tm Hm",
+            "marts": [
+                "LilycoveCity 4F"
+            ],
+            "rom_id": 303
+        },
+        {
+            "name": "TM17 Protect",
+            "key_item": false,
+            "purchase_price": 3000,
+            "pocket": "Tm Hm",
+            "marts": [
+                "LilycoveCity 4F"
+            ],
+            "rom_id": 304
+        },
+        {
+            "name": "TM18 Rain Dance",
+            "key_item": false,
+            "purchase_price": 2000,
+            "pocket": "Tm Hm",
+            "marts": [],
+            "rom_id": 305
+        },
+        {
+            "name": "TM19 Giga Drain",
+            "key_item": false,
+            "purchase_price": 3000,
+            "pocket": "Tm Hm",
+            "marts": [],
+            "rom_id": 306
+        },
+        {
+            "name": "TM20 Safeguard",
+            "key_item": false,
+            "purchase_price": 3000,
+            "pocket": "Tm Hm",
+            "marts": [
+                "LilycoveCity 4F"
+            ],
+            "rom_id": 307
+        },
+        {
+            "name": "TM21 Frustration",
+            "key_item": false,
+            "purchase_price": 1000,
+            "pocket": "Tm Hm",
+            "marts": [],
+            "rom_id": 308
+        },
+        {
+            "name": "TM22 SolarBeam",
+            "key_item": false,
+            "purchase_price": 3000,
+            "pocket": "Tm Hm",
+            "marts": [],
+            "rom_id": 309
+        },
+        {
+            "name": "TM23 Iron Tail",
+            "key_item": false,
+            "purchase_price": 3000,
+            "pocket": "Tm Hm",
+            "marts": [],
+            "rom_id": 310
+        },
+        {
+            "name": "TM24 Thunderbolt",
+            "key_item": false,
+            "purchase_price": 3000,
+            "pocket": "Tm Hm",
+            "marts": [],
+            "rom_id": 311
+        },
+        {
+            "name": "TM25 Thunder",
+            "key_item": false,
+            "purchase_price": 5500,
+            "pocket": "Tm Hm",
+            "marts": [
+                "LilycoveCity 4F"
+            ],
+            "rom_id": 312
+        },
+        {
+            "name": "TM26 Earthquake",
+            "key_item": false,
+            "purchase_price": 3000,
+            "pocket": "Tm Hm",
+            "marts": [],
+            "rom_id": 313
+        },
+        {
+            "name": "TM27 Return",
+            "key_item": false,
+            "purchase_price": 1000,
+            "pocket": "Tm Hm",
+            "marts": [],
+            "rom_id": 314
+        },
+        {
+            "name": "TM28 Dig",
+            "key_item": false,
+            "purchase_price": 2000,
+            "pocket": "Tm Hm",
+            "marts": [],
+            "rom_id": 315
+        },
+        {
+            "name": "TM29 Psychic",
+            "key_item": false,
+            "purchase_price": 2000,
+            "pocket": "Tm Hm",
+            "marts": [],
+            "rom_id": 316
+        },
+        {
+            "name": "TM30 Shadow Ball",
+            "key_item": false,
+            "purchase_price": 3000,
+            "pocket": "Tm Hm",
+            "marts": [],
+            "rom_id": 317
+        },
+        {
+            "name": "TM31 Brick Break",
+            "key_item": false,
+            "purchase_price": 3000,
+            "pocket": "Tm Hm",
+            "marts": [],
+            "rom_id": 318
+        },
+        {
+            "name": "TM32 Double Team",
+            "key_item": false,
+            "purchase_price": 2000,
+            "pocket": "Tm Hm",
+            "marts": [],
+            "rom_id": 319
+        },
+        {
+            "name": "TM33 Reflect",
+            "key_item": false,
+            "purchase_price": 3000,
+            "pocket": "Tm Hm",
+            "marts": [
+                "LilycoveCity 4F"
+            ],
+            "rom_id": 320
+        },
+        {
+            "name": "TM34 Shock Wave",
+            "key_item": false,
+            "purchase_price": 3000,
+            "pocket": "Tm Hm",
+            "marts": [],
+            "rom_id": 321
+        },
+        {
+            "name": "TM35 Flamethrower",
+            "key_item": false,
+            "purchase_price": 3000,
+            "pocket": "Tm Hm",
+            "marts": [],
+            "rom_id": 322
+        },
+        {
+            "name": "TM36 Sludge Bomb",
+            "key_item": false,
+            "purchase_price": 1000,
+            "pocket": "Tm Hm",
+            "marts": [],
+            "rom_id": 323
+        },
+        {
+            "name": "TM37 Sandstorm",
+            "key_item": false,
+            "purchase_price": 2000,
+            "pocket": "Tm Hm",
+            "marts": [],
+            "rom_id": 324
+        },
+        {
+            "name": "TM38 Fire Blast",
+            "key_item": false,
+            "purchase_price": 5500,
+            "pocket": "Tm Hm",
+            "marts": [
+                "LilycoveCity 4F"
+            ],
+            "rom_id": 325
+        },
+        {
+            "name": "TM39 Rock Tomb",
+            "key_item": false,
+            "purchase_price": 3000,
+            "pocket": "Tm Hm",
+            "marts": [],
+            "rom_id": 326
+        },
+        {
+            "name": "TM40 Aerial Ace",
+            "key_item": false,
+            "purchase_price": 3000,
+            "pocket": "Tm Hm",
+            "marts": [],
+            "rom_id": 327
+        },
+        {
+            "name": "TM41 Torment",
+            "key_item": false,
+            "purchase_price": 3000,
+            "pocket": "Tm Hm",
+            "marts": [],
+            "rom_id": 328
+        },
+        {
+            "name": "TM42 Facade",
+            "key_item": false,
+            "purchase_price": 3000,
+            "pocket": "Tm Hm",
+            "marts": [],
+            "rom_id": 329
+        },
+        {
+            "name": "TM43 Secret Power",
+            "key_item": false,
+            "purchase_price": 3000,
+            "pocket": "Tm Hm",
+            "marts": [
+                "SlateportCity"
+            ],
+            "rom_id": 330
+        },
+        {
+            "name": "TM44 Rest",
+            "key_item": false,
+            "purchase_price": 3000,
+            "pocket": "Tm Hm",
+            "marts": [],
+            "rom_id": 331
+        },
+        {
+            "name": "TM45 Attract",
+            "key_item": false,
+            "purchase_price": 3000,
+            "pocket": "Tm Hm",
+            "marts": [],
+            "rom_id": 332
+        },
+        {
+            "name": "TM46 Thief",
+            "key_item": false,
+            "purchase_price": 3000,
+            "pocket": "Tm Hm",
+            "marts": [],
+            "rom_id": 333
+        },
+        {
+            "name": "TM47 Steel Wing",
+            "key_item": false,
+            "purchase_price": 3000,
+            "pocket": "Tm Hm",
+            "marts": [],
+            "rom_id": 334
+        },
+        {
+            "name": "TM48 Skill Swap",
+            "key_item": false,
+            "purchase_price": 3000,
+            "pocket": "Tm Hm",
+            "marts": [],
+            "rom_id": 335
+        },
+        {
+            "name": "TM49 Snatch",
+            "key_item": false,
+            "purchase_price": 3000,
+            "pocket": "Tm Hm",
+            "marts": [],
+            "rom_id": 336
+        },
+        {
+            "name": "TM50 Overheat",
+            "key_item": false,
+            "purchase_price": 3000,
+            "pocket": "Tm Hm",
+            "marts": [],
+            "rom_id": 337
+        },
+        {
+            "name": "HM01 Cut",
+            "key_item": true,
+            "purchase_price": 0,
+            "pocket": "Tm Hm",
+            "marts": [],
+            "rom_id": 338
+        },
+        {
+            "name": "HM02 Fly",
+            "key_item": true,
+            "purchase_price": 0,
+            "pocket": "Tm Hm",
+            "marts": [],
+            "rom_id": 339
+        },
+        {
+            "name": "HM03 Surf",
+            "key_item": true,
+            "purchase_price": 0,
+            "pocket": "Tm Hm",
+            "marts": [],
+            "rom_id": 340
+        },
+        {
+            "name": "HM04 Strength",
+            "key_item": true,
+            "purchase_price": 0,
+            "pocket": "Tm Hm",
+            "marts": [],
+            "rom_id": 341
+        },
+        {
+            "name": "HM05 Flash",
+            "key_item": true,
+            "purchase_price": 0,
+            "pocket": "Tm Hm",
+            "marts": [],
+            "rom_id": 342
+        },
+        {
+            "name": "HM06 Rock Smash",
+            "key_item": true,
+            "purchase_price": 0,
+            "pocket": "Tm Hm",
+            "marts": [],
+            "rom_id": 343
+        },
+        {
+            "name": "HM07 Waterfall",
+            "key_item": true,
+            "purchase_price": 0,
+            "pocket": "Tm Hm",
+            "marts": [],
+            "rom_id": 344
+        },
+        {
+            "name": "HM08 Dive",
+            "key_item": true,
+            "purchase_price": 0,
+            "pocket": "Tm Hm",
+            "marts": [],
+            "rom_id": 345
+        },
+        {
+            "name": "Oak's Parcel",
+            "key_item": false,
+            "purchase_price": 0,
+            "pocket": "Key Items",
+            "marts": [],
+            "rom_id": 348
+        },
+        {
+            "name": "Poke Flute",
+            "key_item": false,
+            "purchase_price": 0,
+            "pocket": "Key Items",
+            "marts": [],
+            "rom_id": 349
+        },
+        {
+            "name": "Secret Key",
+            "key_item": false,
+            "purchase_price": 0,
+            "pocket": "Key Items",
+            "marts": [],
+            "rom_id": 350
+        },
+        {
+            "name": "Bike Voucher",
+            "key_item": false,
+            "purchase_price": 0,
+            "pocket": "Key Items",
+            "marts": [],
+            "rom_id": 351
+        },
+        {
+            "name": "Gold Teeth",
+            "key_item": false,
+            "purchase_price": 0,
+            "pocket": "Key Items",
+            "marts": [],
+            "rom_id": 352
+        },
+        {
+            "name": "Old Amber",
+            "key_item": false,
+            "purchase_price": 0,
+            "pocket": "Key Items",
+            "marts": [],
+            "rom_id": 353
+        },
+        {
+            "name": "Card Key",
+            "key_item": false,
+            "purchase_price": 0,
+            "pocket": "Key Items",
+            "marts": [],
+            "rom_id": 354
+        },
+        {
+            "name": "Lift Key",
+            "key_item": false,
+            "purchase_price": 0,
+            "pocket": "Key Items",
+            "marts": [],
+            "rom_id": 355
+        },
+        {
+            "name": "Helix Fossil",
+            "key_item": false,
+            "purchase_price": 0,
+            "pocket": "Key Items",
+            "marts": [],
+            "rom_id": 356
+        },
+        {
+            "name": "Dome Fossil",
+            "key_item": false,
+            "purchase_price": 0,
+            "pocket": "Key Items",
+            "marts": [],
+            "rom_id": 357
+        },
+        {
+            "name": "Silph Scope",
+            "key_item": false,
+            "purchase_price": 0,
+            "pocket": "Key Items",
+            "marts": [],
+            "rom_id": 358
+        },
+        {
+            "name": "Bicycle",
+            "key_item": false,
+            "purchase_price": 0,
+            "pocket": "Key Items",
+            "marts": [],
+            "rom_id": 359
+        },
+        {
+            "name": "Town Map",
+            "key_item": false,
+            "purchase_price": 0,
+            "pocket": "Key Items",
+            "marts": [],
+            "rom_id": 360
+        },
+        {
+            "name": "Vs Seeker",
+            "key_item": false,
+            "purchase_price": 0,
+            "pocket": "Key Items",
+            "marts": [],
+            "rom_id": 361
+        },
+        {
+            "name": "Fame Checker",
+            "key_item": false,
+            "purchase_price": 0,
+            "pocket": "Key Items",
+            "marts": [],
+            "rom_id": 362
+        },
+        {
+            "name": "Tm Case",
+            "key_item": false,
+            "purchase_price": 0,
+            "pocket": "Key Items",
+            "marts": [],
+            "rom_id": 363
+        },
+        {
+            "name": "Berry Pouch",
+            "key_item": false,
+            "purchase_price": 0,
+            "pocket": "Key Items",
+            "marts": [],
+            "rom_id": 364
+        },
+        {
+            "name": "Teachy Tv",
+            "key_item": false,
+            "purchase_price": 0,
+            "pocket": "Key Items",
+            "marts": [],
+            "rom_id": 365
+        },
+        {
+            "name": "Tri-pass",
+            "key_item": false,
+            "purchase_price": 0,
+            "pocket": "Key Items",
+            "marts": [],
+            "rom_id": 366
+        },
+        {
+            "name": "Rainbow Pass",
+            "key_item": false,
+            "purchase_price": 0,
+            "pocket": "Key Items",
+            "marts": [],
+            "rom_id": 367
+        },
+        {
+            "name": "Tea",
+            "key_item": false,
+            "purchase_price": 0,
+            "pocket": "Key Items",
+            "marts": [],
+            "rom_id": 368
+        },
+        {
+            "name": "Mysticticket",
+            "key_item": false,
+            "purchase_price": 0,
+            "pocket": "Key Items",
+            "marts": [],
+            "rom_id": 369
+        },
+        {
+            "name": "Auroraticket",
+            "key_item": false,
+            "purchase_price": 0,
+            "pocket": "Key Items",
+            "marts": [],
+            "rom_id": 370
+        },
+        {
+            "name": "Powder Jar",
+            "key_item": false,
+            "purchase_price": 0,
+            "pocket": "Key Items",
+            "marts": [],
+            "rom_id": 371
+        },
+        {
+            "name": "Ruby",
+            "key_item": false,
+            "purchase_price": 0,
+            "pocket": "Key Items",
+            "marts": [],
+            "rom_id": 372
+        },
+        {
+            "name": "Sapphire",
+            "key_item": false,
+            "purchase_price": 0,
+            "pocket": "Key Items",
+            "marts": [],
+            "rom_id": 373
+        },
+        {
+            "name": "Magma Emblem",
+            "key_item": false,
+            "purchase_price": 0,
+            "pocket": "Key Items",
+            "marts": [],
+            "rom_id": 374
+        },
+        {
+            "name": "Old Sea Map",
+            "key_item": false,
+            "purchase_price": 0,
+            "pocket": "Key Items",
+            "marts": [],
+            "rom_id": 375
+        }
+    ]
+}

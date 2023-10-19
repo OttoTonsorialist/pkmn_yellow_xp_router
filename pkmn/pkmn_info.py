@@ -101,6 +101,9 @@ class CurrentGen:
     def get_stats_boosted_by_vitamin(self, vit_name:str) -> List[str]:
         raise NotImplementedError()
     
+    def get_valid_vitamins(self) -> List[str]:
+        raise NotImplementedError()
+    
     def get_vitamin_amount(self) -> int:
         raise NotImplementedError()
     

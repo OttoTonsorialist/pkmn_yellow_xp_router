@@ -1,8 +1,68 @@
 from __future__ import annotations
 import copy
 from typing import Dict, List, Tuple
+from enum import Enum
 
 from utils.constants import const
+
+
+_NEUTRAL_NATURES = [0, 6, 12, 18, 24]
+class Nature(Enum):
+    HARDY = 0
+    LONELY = 1
+    BRAVE = 2
+    ADAMANT = 3
+    NAUGHTY = 4
+    BOLD = 5
+    DOCILE = 6
+    RELAXED = 7
+    IMPISH = 8
+    LAX = 9
+    TIMID = 10
+    HASTY = 11
+    SERIOUS = 12
+    JOLLY = 13
+    NAIVE = 14
+    MODEST = 15
+    MILD = 16
+    QUIET = 17
+    BASHFUL = 18
+    RASH = 19
+    CALM = 20
+    GENTLE = 21
+    SASSY = 22
+    CAREFUL = 23
+    QUIRKY = 24
+
+    def is_stat_raised(self, stat_name):
+        if self.value in _NEUTRAL_NATURES:
+            return False
+        elif self.value <= 4:
+            return stat_name == const.ATTACK
+        elif self.value <= 9:
+            return stat_name == const.DEFENSE
+        elif self.value <= 14:
+            return stat_name == const.SPEED
+        elif self.value <= 19:
+            return stat_name == const.SPECIAL_ATTACK
+        elif self.value <= 23:
+            return stat_name == const.SPECIAL_DEFENSE
+        return False
+
+    def is_stat_lowered(self, stat_name):
+        if self.value in _NEUTRAL_NATURES:
+            return False
+        elif self.value == 1 or self.value == 11 or self.value == 16 or self.value == 21:
+            return stat_name == const.DEFENSE
+        elif self.value == 2 or self.value == 7 or self.value == 17 or self.value == 22:
+            return stat_name == const.SPEED
+        elif self.value == 3 or self.value == 8 or self.value == 13 or self.value == 23:
+            return stat_name == const.SPECIAL_ATTACK
+        elif self.value == 4 or self.value == 9 or self.value == 14 or self.value == 19:
+            return stat_name == const.SPECIAL_DEFENSE
+        elif self.value == 5 or self.value == 10 or self.value == 15 or self.value == 20:
+            return stat_name == const.ATTACK
+        return False
 
 
 class BadgeList:
@@ -225,10 +285,10 @@ class StatBlock:
     def __repr__(self):
         return f"hp: {self.hp}, atk: {self.attack}, def: {self.defense}, spa: {self.special_attack}, spd: {self.special_defense}, spe: {self.speed}"
     
-    def calc_level_stats(self, level:int, dvs:StatBlock, stat_xp:StatBlock, badges:BadgeList) -> StatBlock:
+    def calc_level_stats(self, level:int, dvs:StatBlock, stat_xp:StatBlock, badges:BadgeList, nature:Nature) -> StatBlock:
         raise NotImplementedError()
     
-    def calc_battle_stats(self, level:int, dvs:StatBlock, stat_xp:StatBlock, stage_modifiers:StageModifiers, badges:BadgeList, is_crit=False) -> StatBlock:
+    def calc_battle_stats(self, level:int, dvs:StatBlock, stat_xp:StatBlock, stage_modifiers:StageModifiers, badges:BadgeList, nature:Nature, is_crit=False) -> StatBlock:
         raise NotImplementedError()
 
 
@@ -273,6 +333,7 @@ class EnemyPkmn:
         exp_split:int=1,
         mon_order:int=1,
         definition_order:int=1,
+        nature:Nature=Nature.HARDY
     ):
         self.name = name
         self.level = level
@@ -288,6 +349,7 @@ class EnemyPkmn:
         self.exp_split = exp_split
         self.mon_order = mon_order
         self.definition_order = definition_order
+        self.nature = nature
 
     def __eq__(self, other):
         if not isinstance(other, EnemyPkmn):
@@ -303,7 +365,8 @@ class EnemyPkmn:
             self.dvs == other.dvs and
             self.stat_xp == other.stat_xp and
             self.badges == other.badges and
-            self.held_item == other.held_item
+            self.held_item == other.held_item and
+            self.nature == other.nature
         )
     
     def __repr__(self):
@@ -311,7 +374,7 @@ class EnemyPkmn:
 
     def to_string(self, verbose=False):
         if verbose:
-            return f"Lv {self.level}: {self.name} (Held: {self.held_item}) ({self.cur_stats.hp}, {self.cur_stats.attack}, {self.cur_stats.defense}, {self.cur_stats.special_attack}, {self.cur_stats.special_defense}, {self.cur_stats.speed}), ({self.move_list})"
+            return f"Lv {self.level}: {self.name} (Held: {self.held_item}, Nature: {self.nature}) ({self.cur_stats.hp}, {self.cur_stats.attack}, {self.cur_stats.defense}, {self.cur_stats.special_attack}, {self.cur_stats.special_defense}, {self.cur_stats.speed}), ({self.move_list})"
         return f"Lv {self.level}: {self.name}"
 
     def get_battle_stats(self, stages:StageModifiers, is_crit:bool=False) -> StatBlock:
@@ -321,6 +384,7 @@ class EnemyPkmn:
             self.stat_xp,
             stages,
             self.badges,
+            self.nature,
             is_crit
         )
 

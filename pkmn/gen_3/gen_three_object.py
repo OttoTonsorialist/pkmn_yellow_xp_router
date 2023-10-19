@@ -7,10 +7,10 @@ from typing import List, Tuple
 import logging
 
 from pkmn import universal_data_objects
-from pkmn.gen_2 import pkmn_damage_calc
+from pkmn.gen_3 import pkmn_damage_calc
 from pkmn.damage_calc import DamageRange
-from pkmn.gen_2.data_objects import GenTwoBadgeList, GenTwoStatBlock, instantiate_trainer_pokemon, instantiate_wild_pokemon, get_hidden_power_base_power, get_hidden_power_type, VIT_AMT, VIT_CAP
-from pkmn.gen_2.gen_two_constants import gen_two_const
+from pkmn.gen_3.data_objects import GenThreeBadgeList, GenThreeStatBlock, instantiate_trainer_pokemon, instantiate_wild_pokemon, get_hidden_power_base_power, get_hidden_power_type, VIT_AMT, VIT_CAP
+from pkmn.gen_3.gen_three_constants import gen_three_const
 from pkmn.pkmn_db import ItemDB, MinBattlesDB, PkmnDB, TrainerDB, MoveDB
 from pkmn.pkmn_info import CurrentGen
 from route_recording.game_recorders.gen_two.crystal_recorder import CrystalRecorder
@@ -22,7 +22,7 @@ from utils import io_utils
 logger = logging.getLogger(__name__)
 
 
-class GenTwo(CurrentGen):
+class GenThree(CurrentGen):
     def __init__(self, pkmn_db_path, trainer_db_path, item_path, move_path, type_info_path, fight_info_path, min_battles_path, version_name, base_version_name=None):
         self._version_name = version_name
         self._base_version_name = base_version_name
@@ -39,39 +39,30 @@ class GenTwo(CurrentGen):
             raise ValueError(f"Failed to load pokemon DB: {e}")
 
         try:
-            self._trainer_db = TrainerDB(
-                _load_trainer_db(
-                    trainer_db_path,
-                    self._pkmn_db,
-                    extract_trainer_id=(
-                        version_name == const.CRYSTAL_VERSION or
-                        base_version_name == const.CRYSTAL_VERSION
-                    )
-                )
-            )
+            self._trainer_db = TrainerDB(_load_trainer_db(trainer_db_path, self._pkmn_db))
         except Exception as e:
-            logger.error(f"Error loading trainer DB: {pkmn_db_path}")
+            logger.error(f"Error loading trainer DB: {trainer_db_path}")
             logger.exception(e)
             raise ValueError(f"Failed to load trainer DB: {e}")
 
         try:
             self._item_db = ItemDB(_load_item_db(item_path))
         except Exception as e:
-            logger.error(f"Error loading item DB: {pkmn_db_path}")
+            logger.error(f"Error loading item DB: {item_path}")
             logger.exception(e)
             raise ValueError(f"Failed to load item DB: {e}")
         
         try:
             self._move_db = MoveDB(_load_move_db(move_path))
         except Exception as e:
-            logger.error(f"Error loading move DB: {pkmn_db_path}")
+            logger.error(f"Error loading move DB: {move_path}")
             logger.exception(e)
             raise ValueError(f"Failed to load move DB: {e}")
 
         try:
             self._min_battles_db = MinBattlesDB(min_battles_path)
         except Exception as e:
-            logger.error(f"Error loading min battles DB: {pkmn_db_path}")
+            logger.error(f"Error loading min battles DB: {min_battles_path}")
             logger.exception(e)
             raise ValueError(f"Failed to load min battles DB: {e}")
 
@@ -124,7 +115,7 @@ class GenTwo(CurrentGen):
         return self._base_version_name
     
     def get_generation(self) -> int:
-        return 2
+        return 3
 
     def pkmn_db(self) -> PkmnDB:
         return self._pkmn_db
@@ -142,13 +133,6 @@ class GenTwo(CurrentGen):
         return self._min_battles_db
 
     def get_recorder_client(self, recorder_controller:RecorderController) -> RecorderGameHookClient:
-        version_name = self._base_version_name
-        if version_name is None:
-            version_name = self._version_name
-
-        if version_name == const.CRYSTAL_VERSION:
-            return CrystalRecorder(recorder_controller, ["Pokemon Crystal"])
-
         raise NotImplementedError()
 
     def create_trainer_pkmn(self, pkmn_name, pkmn_level):
@@ -170,7 +154,7 @@ class GenTwo(CurrentGen):
         custom_move_data:str="",
         weather:str=const.WEATHER_NONE,
     ) -> DamageRange:
-        return pkmn_damage_calc.calculate_gen_two_damage(
+        return pkmn_damage_calc.calculate_gen_three_damage(
             attacking_pkmn,
             self.pkmn_db().get_pkmn(attacking_pkmn.name),
             move,
@@ -187,10 +171,10 @@ class GenTwo(CurrentGen):
         )
     
     def make_stat_block(self, hp, attack, defense, special_attack, special_defense, speed, is_stat_xp=False) -> universal_data_objects.StatBlock:
-        return GenTwoStatBlock(hp, attack, defense, special_attack, special_defense, speed, is_stat_xp=is_stat_xp)
+        return GenThreeStatBlock(hp, attack, defense, special_attack, special_defense, speed, is_stat_xp=is_stat_xp)
     
     def make_badge_list(self) -> universal_data_objects.BadgeList:
-        return GenTwoBadgeList(self._badge_rewards)
+        return GenThreeBadgeList(self._badge_rewards)
     
     def make_inventory(self) -> full_route_state.Inventory:
         return full_route_state.Inventory()
@@ -205,13 +189,13 @@ class GenTwo(CurrentGen):
         return trainer_name in self._major_fights
     
     def get_move_custom_data(self, move_name) -> List[str]:
-        return gen_two_const.CUSTOM_MOVE_DATA.get(move_name)
+        return gen_three_const.CUSTOM_MOVE_DATA.get(move_name)
     
     def get_hidden_power(self, dvs: universal_data_objects.StatBlock) -> Tuple[str, int]:
         return get_hidden_power_type(dvs), get_hidden_power_base_power(dvs)
 
     def get_valid_weather(self) -> List[str]:
-        return [const.WEATHER_NONE, const.WEATHER_SUN, const.WEATHER_RAIN, const.WEATHER_SANDSTORM]
+        return [const.WEATHER_NONE, const.WEATHER_SUN, const.WEATHER_RAIN, const.WEATHER_SANDSTORM, const.WEATHER_HAIL]
     
     def get_stats_boosted_by_vitamin(self, vit_name: str) -> List[str]:
         if vit_name == const.HP_UP:
@@ -221,14 +205,16 @@ class GenTwo(CurrentGen):
         elif vit_name == const.IRON:
             return [const.DEF]
         elif vit_name == const.CALCIUM:
-            return [const.SPA, const.SPD]
+            return [const.SPA]
+        elif vit_name == const.ZINC:
+            return [const.SPD]
         elif vit_name == const.CARBOS:
             return [const.SPE]
 
         raise ValueError(f"Unknown vitamin: {vit_name}")
 
     def get_valid_vitamins(self) -> List[str]:
-        return [const.HP_UP, const.CARBOS, const.IRON, const.CALCIUM, const.PROTEIN]
+        return [const.HP_UP, const.CARBOS, const.IRON, const.CALCIUM, const.ZINC, const.PROTEIN]
     
     def get_vitamin_amount(self) -> int:
         return VIT_AMT
@@ -254,7 +240,7 @@ class GenTwo(CurrentGen):
             )
     
     def load_custom_gen(self, custom_version_name, root_path) -> CurrentGen:
-        return GenTwo(
+        return GenThree(
             os.path.join(root_path, const.POKEMON_DB_FILE_NAME),
             os.path.join(root_path, const.TRAINERS_DB_FILE_NAME),
             os.path.join(root_path, const.ITEM_DB_FILE_NAME),
@@ -268,7 +254,6 @@ class GenTwo(CurrentGen):
     
     def get_trainer_timing_info(self) -> universal_data_objects.TrainerTimingStats:
         return self._trainer_timing_info
-    
     
     def _validate_special_types(self, supported_types):
         invalid_types = []
@@ -313,7 +298,7 @@ def _load_pkmn_db(path):
             cur_pkmn[const.BASE_XP_KEY],
             cur_pkmn[const.FIRST_TYPE_KEY],
             cur_pkmn[const.SECOND_TYPE_KEY],
-            GenTwoStatBlock(
+            GenThreeStatBlock(
                 cur_pkmn[const.BASE_HP_KEY],
                 cur_pkmn[const.BASE_ATK_KEY],
                 cur_pkmn[const.BASE_DEF_KEY],
@@ -337,8 +322,8 @@ def _create_trainer(trainer_dict, pkmn_db:PkmnDB, extract_trainer_id=False) -> u
                 cur_mon[const.NAME_KEY],
                 cur_mon[const.LEVEL],
                 cur_mon[const.XP],
-                copy.copy(cur_mon[const.MOVES]),
-                GenTwoStatBlock(
+                cur_mon[const.MOVES],
+                GenThreeStatBlock(
                     cur_mon[const.HP],
                     cur_mon[const.ATK],
                     cur_mon[const.DEF],
@@ -347,15 +332,15 @@ def _create_trainer(trainer_dict, pkmn_db:PkmnDB, extract_trainer_id=False) -> u
                     cur_mon[const.SPE],
                 ),
                 pkmn_db.get_pkmn(cur_mon[const.NAME_KEY]).stats,
-                GenTwoStatBlock(
-                    trainer_dict[const.DVS_KEY][const.HP],
-                    trainer_dict[const.DVS_KEY][const.ATK],
-                    trainer_dict[const.DVS_KEY][const.DEF],
-                    trainer_dict[const.DVS_KEY][const.SPA],
-                    trainer_dict[const.DVS_KEY][const.SPA],
-                    trainer_dict[const.DVS_KEY][const.SPE]
+                GenThreeStatBlock(
+                    cur_mon[const.IVS_KEY],
+                    cur_mon[const.IVS_KEY],
+                    cur_mon[const.IVS_KEY],
+                    cur_mon[const.IVS_KEY],
+                    cur_mon[const.IVS_KEY],
+                    cur_mon[const.IVS_KEY],
                 ),
-                GenTwoStatBlock(0, 0, 0, 0, 0, 0),
+                GenThreeStatBlock(0, 0, 0, 0, 0, 0),
                 None,
                 held_item=cur_mon[const.HELD_ITEM_KEY]
             )
@@ -372,7 +357,7 @@ def _create_trainer(trainer_dict, pkmn_db:PkmnDB, extract_trainer_id=False) -> u
     return universal_data_objects.Trainer(
         trainer_dict[const.TRAINER_CLASS],
         trainer_dict[const.TRAINER_NAME],
-        trainer_dict[const.TRAINER_LOC],
+        trainer_dict[const.TRAINER_LOC] if trainer_dict[const.TRAINER_LOC] else "",
         trainer_dict[const.MONEY],
         enemy_pkmn,
         rematch=("Rematch" in trainer_dict[const.TRAINER_NAME]),
@@ -440,36 +425,61 @@ def _load_move_db(path):
     return result
 
 
-gen_two_crystal = GenTwo(
-    gen_two_const.CRYSTAL_POKEMON_PATH,
-    gen_two_const.CRYSTAL_TRAINER_DB_PATH,
-    gen_two_const.ITEM_DB_PATH,
-    gen_two_const.MOVE_DB_PATH,
-    gen_two_const.TYPE_INFO_PATH,
-    gen_two_const.FIGHTS_INFO_PATH,
-    gen_two_const.CRYSTAL_MIN_BATTLES_DIR,
-    const.CRYSTAL_VERSION
+gen_three_ruby = GenThree(
+    gen_three_const.RUBY_SAPPHIRE_POKEMON_PATH,
+    gen_three_const.RUBY_TRAINER_DB_PATH,
+    gen_three_const.ITEM_DB_PATH,
+    gen_three_const.MOVE_DB_PATH,
+    gen_three_const.TYPE_INFO_PATH,
+    gen_three_const.FIGHTS_INFO_PATH,
+    "",
+    const.RUBY_VERSION
 )
 
 
-gen_two_gold = GenTwo(
-    gen_two_const.GS_POKEMON_PATH,
-    gen_two_const.GS_TRAINER_DB_PATH,
-    gen_two_const.ITEM_DB_PATH,
-    gen_two_const.MOVE_DB_PATH,
-    gen_two_const.TYPE_INFO_PATH,
-    gen_two_const.FIGHTS_INFO_PATH,
-    gen_two_const.GS_MIN_BATTLES_DIR,
-    const.GOLD_VERSION
+gen_three_sapphire = GenThree(
+    gen_three_const.RUBY_SAPPHIRE_POKEMON_PATH,
+    gen_three_const.SAPPHIRE_TRAINER_DB_PATH,
+    gen_three_const.ITEM_DB_PATH,
+    gen_three_const.MOVE_DB_PATH,
+    gen_three_const.TYPE_INFO_PATH,
+    gen_three_const.FIGHTS_INFO_PATH,
+    "",
+    const.SAPPHIRE_VERSION
 )
 
-gen_two_silver = GenTwo(
-    gen_two_const.GS_POKEMON_PATH,
-    gen_two_const.GS_TRAINER_DB_PATH,
-    gen_two_const.ITEM_DB_PATH,
-    gen_two_const.MOVE_DB_PATH,
-    gen_two_const.TYPE_INFO_PATH,
-    gen_two_const.FIGHTS_INFO_PATH,
-    gen_two_const.GS_MIN_BATTLES_DIR,
-    const.SILVER_VERSION
+
+gen_three_emerald = GenThree(
+    gen_three_const.EMERALD_POKEMON_PATH,
+    gen_three_const.EMERALD_TRAINER_DB_PATH,
+    gen_three_const.ITEM_DB_PATH,
+    gen_three_const.MOVE_DB_PATH,
+    gen_three_const.TYPE_INFO_PATH,
+    gen_three_const.FIGHTS_INFO_PATH,
+    "",
+    const.EMERALD_VERSION
+)
+
+
+gen_three_fire_red = GenThree(
+    gen_three_const.FIRE_RED_LEAF_GREEN_POKEMON_PATH,
+    gen_three_const.FIRE_RED_LEAF_GREEN_TRAINER_DB_PATH,
+    gen_three_const.ITEM_DB_PATH,
+    gen_three_const.MOVE_DB_PATH,
+    gen_three_const.TYPE_INFO_PATH,
+    gen_three_const.FIGHTS_INFO_PATH,
+    "",
+    const.FIRE_RED_VERSION
+)
+
+
+gen_three_leaf_green = GenThree(
+    gen_three_const.FIRE_RED_LEAF_GREEN_POKEMON_PATH,
+    gen_three_const.FIRE_RED_LEAF_GREEN_TRAINER_DB_PATH,
+    gen_three_const.ITEM_DB_PATH,
+    gen_three_const.MOVE_DB_PATH,
+    gen_three_const.TYPE_INFO_PATH,
+    gen_three_const.FIGHTS_INFO_PATH,
+    "",
+    const.LEAF_GREEN_VERSION
 )

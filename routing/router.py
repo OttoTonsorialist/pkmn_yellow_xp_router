@@ -67,7 +67,14 @@ class Router:
         
         new_badge_list = current_gen_info().make_badge_list()
         self.init_route_state = full_route_state.RouteState(
-            full_route_state.SoloPokemon(pkmn_name, pkmn_base, custom_dvs, new_badge_list, current_gen_info().make_stat_block(0, 0, 0, 0, 0, 0, is_stat_xp=True)),
+            full_route_state.SoloPokemon(
+                pkmn_name,
+                pkmn_base,
+                custom_dvs,
+                new_badge_list,
+                current_gen_info().make_stat_block(0, 0, 0, 0, 0, 0, is_stat_xp=True),
+                universal_data_objects.Nature.HARDY
+            ),
             new_badge_list,
             current_gen_info().make_inventory()
         )
@@ -86,7 +93,14 @@ class Router:
     def change_current_dvs(self, new_dvs:universal_data_objects.StatBlock):
         cur_mon = self.init_route_state.solo_pkmn
         self.init_route_state = full_route_state.RouteState(
-            full_route_state.SoloPokemon(cur_mon.name, cur_mon.species_def, new_dvs, self.init_route_state.badges, current_gen_info().make_stat_block(0, 0, 0, 0, 0, 0, is_stat_xp=True)),
+            full_route_state.SoloPokemon(
+                cur_mon.name,
+                cur_mon.species_def,
+                new_dvs,
+                self.init_route_state.badges,
+                current_gen_info().make_stat_block(0, 0, 0, 0, 0, 0, is_stat_xp=True),
+                universal_data_objects.Nature.HARDY
+            ),
             self.init_route_state.badges,
             self.init_route_state.inventory
         )

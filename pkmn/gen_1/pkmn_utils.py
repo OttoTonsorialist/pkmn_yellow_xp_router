@@ -62,29 +62,6 @@ def modify_stat_by_stage(raw_stat, stage):
     return int(math.floor((raw_stat * cur_stage[0]) / cur_stage[1]))
 
 
-def get_to_hit(base_acc, ev_stage, acc_stage):
-    """
-    Returns the number (1-255) to check a random number against
-
-    NOTE: This is the "Normal" case ONLY!  Assuming immunities, fly/dig invlun status, and guaranteed misses/hits
-    have already been handled already. Also does not handle special AI status failure chance
-    """
-    # base_acc is a number, 0-100, of the percent accuracy
-    result = math.floor((base_acc * 255) / 100)
-
-    # first, penalize for lowered accuracy (accuracy must have a negative stage, but it just uses the same boost table as other stats)
-    result = modify_stat_by_stage(result, acc_stage)
-
-    # reverse evasion to a penalty (evasion must have a positive stage, but it just uses the same boost table as other stats)
-    result = modify_stat_by_stage(result, -1 * ev_stage)
-
-    # clamp to valid values, just in case
-    result = min(result, 255)
-    result = max(result, 1)
-
-    return result
-
-
 def calc_unboosted_stat(base_val, level, dv, stat_xp, is_hp=False):
     temp = (base_val + dv) * 2
     temp += math.floor(math.ceil(math.sqrt(stat_xp)) / 4)
@@ -152,7 +129,7 @@ def instantiate_trainer_pokemon(pkmn_data:PokemonSpecies, target_level, special_
         ),
         pkmn_data.stats,
         GenOneStatBlock(8, 9, 8, 8, 8, 8),
-        GenOneStatBlock(0, 0, 0, 0, 0, 0),
+        GenOneStatBlock(0, 0, 0, 0, 0, 0, is_stat_xp=True),
         None
     )
 
@@ -174,6 +151,6 @@ def instantiate_wild_pokemon(pkmn_data:PokemonSpecies, target_level) -> EnemyPkm
         ),
         pkmn_data.stats,
         GenOneStatBlock(15, 15, 15, 15, 15, 15),
-        GenOneStatBlock(0, 0, 0, 0, 0, 0),
+        GenOneStatBlock(0, 0, 0, 0, 0, 0, is_stat_xp=True),
         None
     )

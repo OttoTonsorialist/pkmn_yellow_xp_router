@@ -135,7 +135,8 @@ class GenOneStatBlock(universal_data_objects.StatBlock):
         level:int,
         stat_dv:GenOneStatBlock,
         stat_xp:GenOneStatBlock,
-        badges:GenOneBadgeList
+        badges:GenOneBadgeList,
+        nature:universal_data_objects.Nature
     ) -> GenOneStatBlock:
         # assume self is base stats, level is target level, stat_xp is StatBlock of stat_xp vals, badges is a BadgeList
         special = pkmn_utils.calc_stat(self.special_attack, level, stat_dv.special_attack, stat_xp.special_attack, is_badge_bosted=badges.volcano)
@@ -155,6 +156,7 @@ class GenOneStatBlock(universal_data_objects.StatBlock):
         stat_xp:GenOneStatBlock,
         stage_modifiers:universal_data_objects.StageModifiers,
         badges:GenOneBadgeList,
+        nature:universal_data_objects.Nature,
         is_crit=False
     ) -> GenOneStatBlock:
         # TODO: this does not properly replicate any of the jank regarding para/burn/full heal/etc.

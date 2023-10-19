@@ -305,7 +305,7 @@ class VitaminEditor(EventEditorBase):
         super().__init__(*args, **kwargs)
 
         self._vitamin_label = ttk.Label(self, text="Vitamin Type:")
-        self._vitamin_types = custom_components.SimpleOptionMenu(self, const.VITAMIN_TYPES, callback=self._trigger_save)
+        self._vitamin_types = custom_components.SimpleOptionMenu(self, [const.NO_ITEM], callback=self._trigger_save)
         self._vitamin_label.grid(row=self._cur_row, column=0, pady=2)
         self._vitamin_types.grid(row=self._cur_row, column=1, pady=2)
         self._cur_row += 1
@@ -323,6 +323,11 @@ class VitaminEditor(EventEditorBase):
                 self._trigger_save()
         except Exception as e:
             pass
+    
+    @ignore_updates
+    def configure(self, editor_params, save_callback=None, delayed_save_callback=None):
+        self._vitamin_types.new_values(current_gen_info().get_valid_vitamins())
+        return super().configure(editor_params, save_callback, delayed_save_callback)
     
     @ignore_updates
     def load_event(self, event_def):

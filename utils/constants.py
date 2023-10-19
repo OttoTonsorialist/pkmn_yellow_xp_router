@@ -60,6 +60,7 @@ class Constants:
         self.TYPE_INFO_FILE_NAME = "type_info.json"
         self.FIGHTS_INFO_FILE_NAME = "fights_info.json"
 
+        self.SPECIES_KEY = "species"
         self.NAME_KEY = "name"
         self.BASE_HP_KEY = "base_hp"
         self.BASE_ATK_KEY = "base_atk"
@@ -78,6 +79,7 @@ class Constants:
         self.GROWTH_RATE_KEY = "growth_rate"
         self.TM_HM_LEARNSET_KEY = "tm_hm_learnset"
         self.DVS_KEY = "dv"
+        self.IVS_KEY = "iv"
         self.HELD_ITEM_KEY = "held_item"
         self.STAT_KEY = "stat"
         self.MODIFIER_KEY = "modifier"
@@ -98,6 +100,12 @@ class Constants:
         # less common, still stats
         self.EV = "ev"
         self.ACC = "acc"
+
+        self.ATTACK = "attack"
+        self.DEFENSE = "defense"
+        self.SPEED = "speed"
+        self.SPECIAL_ATTACK = "special_attack"
+        self.SPECIAL_DEFENSE = "special_defense"
 
         self.TRAINER_NAME = "trainer_name"
         self.TRAINER_CLASS = "trainer_class"
@@ -137,16 +145,9 @@ class Constants:
         self.CARBOS = "Carbos"
         self.IRON = "Iron"
         self.CALCIUM = "Calcium"
+        self.ZINC = "Zinc"
         self.PROTEIN = "Protein"
         self.RARE_CANDY = "Rare Candy"
-
-        self.VITAMIN_TYPES = [
-            self.HP_UP,
-            self.CARBOS,
-            self.IRON,
-            self.CALCIUM,
-            self.PROTEIN
-        ]
 
         self.HIGHLIGHT_NONE = "Don't Highlight"
         self.HIGHLIGHT_GUARANTEED_KILL = "Guaranteed Kill"
@@ -301,6 +302,13 @@ class Constants:
         self.SILVER_VERSION = "Silver"
         self.CRYSTAL_VERSION = "Crystal"
 
+        self.RUBY_VERSION = "Ruby"
+        self.SAPPHIRE_VERSION = "Sapphire"
+        self.EMERALD_VERSION = "Emerald"
+
+        self.FIRE_RED_VERSION = "FireRed"
+        self.LEAF_GREEN_VERSION = "LeafGreen"
+
         self.VERSION_LIST = [
             self.YELLOW_VERSION,
             self.RED_VERSION,
@@ -308,16 +316,28 @@ class Constants:
             self.GOLD_VERSION,
             self.SILVER_VERSION,
             self.CRYSTAL_VERSION,
+            self.RUBY_VERSION,
+            self.SAPPHIRE_VERSION,
+            self.EMERALD_VERSION,
+            self.FIRE_RED_VERSION,
+            self.LEAF_GREEN_VERSION,
         ]
         # not configurable, just for the version indicator
         self.VERSION_COLORS = {
-            self.RED_VERSION: "#ff8888",
-            self.BLUE_VERSION: "#88b4ff",
-            self.YELLOW_VERSION: "yellow",
+            self.RED_VERSION: "#ff1111",
+            self.BLUE_VERSION: "#1111ff",
+            self.YELLOW_VERSION: "#ffd733",
 
-            self.GOLD_VERSION: "#aa9c66",
-            self.SILVER_VERSION: "#bbc3c8",
-            self.CRYSTAL_VERSION: "#4d96b9",
+            self.GOLD_VERSION: "#daa520",
+            self.SILVER_VERSION: "#c0c0c0",
+            self.CRYSTAL_VERSION: "#00a000",
+
+            self.RUBY_VERSION: "#a00000",
+            self.SAPPHIRE_VERSION: "#0000a0",
+            self.EMERALD_VERSION: "#00a000",
+
+            self.FIRE_RED_VERSION: "#ff7327",
+            self.LEAF_GREEN_VERSION: "#00dd00",
         }
 
         self.NO_SAVED_ROUTES = "No Saved Routes"
@@ -386,6 +406,7 @@ class Constants:
         self.WEATHER_RAIN = "Rain"
         self.WEATHER_SUN = "Harsh Sunlight"
         self.WEATHER_SANDSTORM = "Sandstorm"
+        self.WEATHER_HAIL = "Hail"
 
         # timing defaults
         self.DEFAULT_INTRO_TIME = 4.69

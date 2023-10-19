@@ -1,0 +1,178 @@
+{
+    "special_types": [
+        "Water",
+        "Grass",
+        "Fire",
+        "Ice",
+        "Electric",
+        "Psychic",
+        "Dragon",
+        "Dark"
+    ],
+    "held_item_boosts": {
+        "Black Belt": "Fighting",
+        "BlackGlasses": "Dark",
+        "Charcoal": "Fire",
+        "Dragon Scale": "Dragon",
+        "Hard Stone": "Rock",
+        "Magnet": "Electric",
+        "Metal Coat": "Steel",
+        "Miracle Seed": "Grass",
+        "Mystic Water": "Water",
+        "Silk Scarf": "Normal",
+        "Poison Barb": "Poison",
+        "Sharp Beak": "Flying",
+        "SilverPowder": "Bug",
+        "Soft Sand": "Ground",
+        "Spell Tag": "Ghost",
+        "Nevermeltice": "Ice",
+        "TwistedSpoon": "Psychic"
+    },
+    "type_chart": {
+        "none": {},
+        "Normal": {
+            "Ghost": "Immune",
+            "Rock": "Not Very Effective",
+            "Steel": "Not Very Effective"
+        },
+        "Fighting": {
+            "Ghost": "Immune",
+            "Normal": "Super Effective",
+            "Ice": "Super Effective",
+            "Poison": "Not Very Effective",
+            "Flying": "Not Very Effective",
+            "Psychic": "Not Very Effective",
+            "Bug": "Not Very Effective",
+            "Rock": "Super Effective",
+            "Dark": "Super Effective",
+            "Steel": "Super Effective"
+        },
+        "Flying": {
+            "Electric": "Not Very Effective",
+            "Grass": "Super Effective",
+            "Fighting": "Super Effective",
+            "Bug": "Super Effective",
+            "Rock": "Not Very Effective",
+            "Steel": "Not Very Effective"
+        },
+        "Poison": {
+            "Grass": "Super Effective",
+            "Poison": "Not Very Effective",
+            "Ground": "Not Very Effective",
+            "Rock": "Not Very Effective",
+            "Ghost": "Not Very Effective",
+            "Steel": "Immune"
+        },
+        "Ground": {
+            "Fire": "Super Effective",
+            "Electric": "Super Effective",
+            "Grass": "Not Very Effective",
+            "Poison": "Super Effective",
+            "Flying": "Immune",
+            "Bug": "Not Very Effective",
+            "Rock": "Super Effective",
+            "Steel": "Super Effective"
+        },
+        "Rock": {
+            "Fire": "Super Effective",
+            "Ice": "Super Effective",
+            "Fighting": "Not Very Effective",
+            "Ground": "Not Very Effective",
+            "Flying": "Super Effective",
+            "Bug": "Super Effective",
+            "Steel": "Not Very Effective"
+        },
+        "Bug": {
+            "Fire": "Not Very Effective",
+            "Grass": "Super Effective",
+            "Fighting": "Not Very Effective",
+            "Poison": "Not Very Effective",
+            "Flying": "Not Very Effective",
+            "Psychic": "Super Effective",
+            "Ghost": "Not Very Effective",
+            "Dark": "Super Effective",
+            "Steel": "Not Very Effective"
+        },
+        "Ghost": {
+            "Normal": "Immune",
+            "Psychic": "Super Effective",
+            "Dark": "Not Very Effective",
+            "Steel": "Not Very Effective",
+            "Ghost": "Super Effective"
+        },
+        "Steel": {
+            "Fire": "Not Very Effective",
+            "Water": "Not Very Effective",
+            "Electric": "Not Very Effective",
+            "Ice": "Super Effective",
+            "Rock": "Super Effective",
+            "Steel": "Not Very Effective"
+        },
+        "Fire": {
+            "Fire": "Not Very Effective",
+            "Water": "Not Very Effective",
+            "Grass": "Super Effective",
+            "Ice": "Super Effective",
+            "Bug": "Super Effective",
+            "Rock": "Not Very Effective",
+            "Dragon": "Not Very Effective",
+            "Steel": "Super Effective"
+        },
+        "Water": {
+            "Fire": "Super Effective",
+            "Water": "Not Very Effective",
+            "Grass": "Not Very Effective",
+            "Ground": "Super Effective",
+            "Rock": "Super Effective",
+            "Dragon": "Not Very Effective"
+        },
+        "Grass": {
+            "Fire": "Not Very Effective",
+            "Water": "Super Effective",
+            "Grass": "Not Very Effective",
+            "Poison": "Not Very Effective",
+            "Ground": "Super Effective",
+            "Flying": "Not Very Effective",
+            "Bug": "Not Very Effective",
+            "Rock": "Super Effective",
+            "Steel": "Not Very Effective",
+            "Dragon": "Not Very Effective"
+        },
+        "Electric": {
+            "Water": "Super Effective",
+            "Electric": "Not Very Effective",
+            "Grass": "Not Very Effective",
+            "Ground": "Immune",
+            "Flying": "Super Effective",
+            "Dragon": "Not Very Effective"
+        },
+        "Psychic": {
+            "Fighting": "Super Effective",
+            "Poison": "Super Effective",
+            "Psychic": "Not Very Effective",
+            "Dark": "Immune",
+            "Steel": "Not Very Effective"
+        },
+        "Ice": {
+            "Water": "Not Very Effective",
+            "Grass": "Super Effective",
+            "Ice": "Not Very Effective",
+            "Ground": "Super Effective",
+            "Flying": "Super Effective",
+            "Dragon": "Super Effective",
+            "Steel": "Not Very Effective",
+            "Fire": "Not Very Effective"
+        },
+        "Dragon": {
+            "Dragon": "Super Effective",
+            "Steel": "Not Very Effective"
+        },
+        "Dark": {
+            "Fighting": "Not Very Effective",
+            "Psychic": "Super Effective",
+            "Ghost": "Super Effective",
+            "Dark": "Not Very Effective",
+            "Steel": "Not Very Effective"
+        }
+    }
+}

@@ -286,7 +286,7 @@ class PkmnViewer(ttk.Frame):
         # TODO: ugly, fix later
         if current_gen_info().get_generation() == 2:
             if badges is not None and badges.is_special_defense_boosted():
-                unboosted_spa = pkmn.base_stats.calc_level_stats(pkmn.level, pkmn.dvs, pkmn.stat_xp, current_gen_info().make_badge_list()).special_attack
+                unboosted_spa = pkmn.base_stats.calc_level_stats(pkmn.level, pkmn.dvs, pkmn.stat_xp, current_gen_info().make_badge_list(), pkmn.nature).special_attack
                 if (
                     (unboosted_spa >= 206 and unboosted_spa <= 432) or
                     (unboosted_spa >= 661 and unboosted_spa <= 999)

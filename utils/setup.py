@@ -11,6 +11,7 @@ from tkinter import Tk, messagebox
 
 from pkmn.gen_1 import gen_one_object
 from pkmn.gen_2 import gen_two_object
+from pkmn.gen_3 import gen_three_object
 from pkmn import gen_factory
 
 from utils.config_manager import config
@@ -76,5 +77,11 @@ def init_base_generations():
     gen_factory._gen_factory.register_gen(gen_two_object.gen_two_gold, const.GOLD_VERSION)
     gen_factory._gen_factory.register_gen(gen_two_object.gen_two_silver, const.SILVER_VERSION)
     gen_factory._gen_factory.register_gen(gen_two_object.gen_two_crystal, const.CRYSTAL_VERSION)
+
+    gen_factory._gen_factory.register_gen(gen_three_object.gen_three_ruby, const.RUBY_VERSION)
+    gen_factory._gen_factory.register_gen(gen_three_object.gen_three_sapphire, const.SAPPHIRE_VERSION)
+    gen_factory._gen_factory.register_gen(gen_three_object.gen_three_emerald, const.EMERALD_VERSION)
+    gen_factory._gen_factory.register_gen(gen_three_object.gen_three_fire_red, const.FIRE_RED_VERSION)
+    gen_factory._gen_factory.register_gen(gen_three_object.gen_three_leaf_green, const.LEAF_GREEN_VERSION)
 
     gen_factory.change_version(const.YELLOW_VERSION)

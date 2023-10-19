@@ -125,6 +125,7 @@ class SoloPokemon:
             dvs:pkmn.universal_data_objects.StatBlock,
             badges:pkmn.universal_data_objects.BadgeList,
             empty_stat_block:pkmn.universal_data_objects.StatBlock,
+            nature:pkmn.universal_data_objects.Nature,
             move_list:list=None,
             cur_xp:int=0,
             realized_stat_xp:pkmn.universal_data_objects.StatBlock=None,
@@ -138,6 +139,7 @@ class SoloPokemon:
         self.dvs = dvs
         self.badges = badges
         self.held_item = held_item
+        self.nature = nature
         # just need to hold on to a reference for a few places
         self._empty_stat_block = empty_stat_block
 
@@ -221,7 +223,7 @@ class SoloPokemon:
         else:
             last_level_xp = pkmn.universal_utils.level_lookups[self.species_def.growth_rate].get_xp_for_level(self.cur_level)
             self.percent_xp_to_next_level = f"{int((self.xp_to_next_level / (self.cur_xp + self.xp_to_next_level - last_level_xp)) * 100)} %"
-        self.cur_stats = self.species_def.stats.calc_level_stats(self.cur_level, self.dvs, self.realized_stat_xp, badges)
+        self.cur_stats = self.species_def.stats.calc_level_stats(self.cur_level, self.dvs, self.realized_stat_xp, badges, nature)
     
     def __eq__(self, other):
         if not isinstance(other, SoloPokemon):
@@ -255,7 +257,8 @@ class SoloPokemon:
             self.cur_level,
             self.dvs,
             self._empty_stat_block,
-            badges
+            badges,
+            self.nature
         )
 
         return self.cur_stats.subtract(temp)
@@ -265,7 +268,7 @@ class SoloPokemon:
         if stage_modifiers is None:
             stage_modifiers = pkmn.universal_data_objects.StageModifiers()
         
-        battle_stats = self.species_def.stats.calc_battle_stats(self.cur_level, self.dvs, self.realized_stat_xp, stage_modifiers, badges)
+        battle_stats = self.species_def.stats.calc_battle_stats(self.cur_level, self.dvs, self.realized_stat_xp, stage_modifiers, badges, self.nature)
 
         return pkmn.universal_data_objects.EnemyPkmn(
             self.name,

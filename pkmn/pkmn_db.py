@@ -91,9 +91,10 @@ class TrainerDB:
         self.class_oriented_trainers:Dict[str, List[str]] = {}
 
         for trainer_obj in self._data.values():
-            if trainer_obj.location not in self.loc_oriented_trainers:
-                self.loc_oriented_trainers[trainer_obj.location] = []
-            self.loc_oriented_trainers[trainer_obj.location].append(trainer_obj.name)
+            if trainer_obj.location:
+                if trainer_obj.location not in self.loc_oriented_trainers:
+                    self.loc_oriented_trainers[trainer_obj.location] = []
+                self.loc_oriented_trainers[trainer_obj.location].append(trainer_obj.name)
 
             if trainer_obj.trainer_class not in self.class_oriented_trainers:
                 self.class_oriented_trainers[trainer_obj.trainer_class] = []
