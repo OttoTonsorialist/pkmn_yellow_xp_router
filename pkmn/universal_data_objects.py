@@ -237,7 +237,7 @@ class StatBlock:
     def add(self, other:StatBlock) -> StatBlock:
         if not isinstance(other, StatBlock):
             raise ValueError(f"Cannot add type: {type(other)} to StatBlock")
-        return StatBlock(
+        return type(self)(
             self.hp + other.hp,
             self.attack + other.attack,
             self.defense + other.defense,
@@ -250,7 +250,7 @@ class StatBlock:
     def subtract(self, other:StatBlock) -> StatBlock:
         if not isinstance(other, StatBlock):
             raise ValueError(f"Cannot subtract type: {type(other)} from StatBlock")
-        return StatBlock(
+        return type(self)(
             self.hp - other.hp,
             self.attack - other.attack,
             self.defense - other.defense,
@@ -273,17 +273,18 @@ class StatBlock:
             self.special_defense == other.special_defense
         )
     
-    def serialize(self):
+    def serialize(self, gen):
         return {
             const.HP: self.hp,
-            const.ATK: self.attack,
-            const.DEF: self.defense,
-            const.SPD: self.speed,
-            const.SPC: self.special_attack,
+            const.ATTACK: self.attack,
+            const.DEFENSE: self.defense,
+            const.SPEED: self.speed,
+            const.SPECIAL_ATTACK: self.special_attack,
+            const.SPECIAL_DEFENSE: self.special_defense,
         }
     
     def __repr__(self):
-        return f"hp: {self.hp}, atk: {self.attack}, def: {self.defense}, spa: {self.special_attack}, spd: {self.special_defense}, spe: {self.speed}"
+        return f"HP: {self.hp}, attack: {self.attack}, defense: {self.defense}, special attack: {self.special_attack}, special_defense: {self.special_defense}, speed: {self.speed}"
     
     def calc_level_stats(self, level:int, dvs:StatBlock, stat_xp:StatBlock, badges:BadgeList, nature:Nature) -> StatBlock:
         raise NotImplementedError()
@@ -303,7 +304,8 @@ class PokemonSpecies:
         stats:StatBlock,
         initial_moves:List[str],
         levelup_moves:List[Tuple[int, str]],
-        tmhm_moves:List[str]
+        tmhm_moves:List[str],
+        stat_xp_yield:StatBlock
     ):
         self.name = name
         self.growth_rate = growth_rate
@@ -314,6 +316,7 @@ class PokemonSpecies:
         self.initial_moves = initial_moves
         self.levelup_moves = levelup_moves
         self.tmhm_moves = tmhm_moves
+        self.stat_xp_yield = stat_xp_yield
 
 
 class EnemyPkmn:

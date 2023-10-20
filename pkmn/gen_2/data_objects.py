@@ -222,7 +222,7 @@ class GenTwoStatBlock(universal_data_objects.StatBlock):
             self.special_attack = min(special_attack, STAT_XP_CAP)
             self.special_defense = min(special_defense, STAT_XP_CAP)
     
-    def _should_ignore_spd_badge_boost(self, unboosted_spa):
+    def should_ignore_spd_badge_boost(self, unboosted_spa):
         if (
             (unboosted_spa >= 0 and unboosted_spa <= 205) or
             (unboosted_spa >= 433 and unboosted_spa <= 660)
@@ -240,7 +240,7 @@ class GenTwoStatBlock(universal_data_objects.StatBlock):
     ) -> GenTwoStatBlock:
         # assume self is base stats, level is target level, stat_xp is StatBlock of stat_xp vals, badges is a BadgeList
         unboosted_spa = calc_stat(self.special_attack, level, stat_dv.special_attack, stat_xp.special_attack, is_badge_boosted=False)
-        if self._should_ignore_spd_badge_boost(unboosted_spa):
+        if self.should_ignore_spd_badge_boost(unboosted_spa):
             final_spd = calc_stat(self.special_defense, level, stat_dv.special_attack, stat_xp.special_attack, is_badge_boosted=False)
         else:
             final_spd = calc_stat(self.special_defense, level, stat_dv.special_attack, stat_xp.special_attack, is_badge_boosted=badges.glacier)
@@ -328,7 +328,7 @@ class GenTwoStatBlock(universal_data_objects.StatBlock):
             is_badge_boosted=False
         )
 
-        if self._should_ignore_spd_badge_boost(unboosted_spa):
+        if self.should_ignore_spd_badge_boost(unboosted_spa):
             result.special_defense = calc_battle_stat(
                 self.special_defense,
                 level,

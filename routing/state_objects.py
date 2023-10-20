@@ -1,5 +1,6 @@
 import logging
 from typing import List
+from copy import copy
 
 from utils.constants import const
 import pkmn.universal_utils
@@ -170,15 +171,17 @@ class SoloPokemon:
             self.move_list = move_list
 
         if realized_stat_xp is None:
-            realized_stat_xp = self._empty_stat_block
+            realized_stat_xp = copy(self._empty_stat_block)
+            realized_stat_xp._is_stat_xp = True
         self.realized_stat_xp = realized_stat_xp
 
         if unrealized_stat_xp is None:
-            unrealized_stat_xp = self._empty_stat_block
+            unrealized_stat_xp = copy(self._empty_stat_block)
+            unrealized_stat_xp._is_stat_xp = True
         self.unrealized_stat_xp = unrealized_stat_xp
 
         if gained_stat_xp is None:
-            gained_stat_xp = self._empty_stat_block
+            gained_stat_xp = copy(self._empty_stat_block)
         
         if const.DEBUG_MODE:
             logger.info(f"Gaining {gained_xp}, was at {self.cur_xp}, now at {self.cur_xp + gained_xp}. Before gain, needed {self.xp_to_next_level} TNL")

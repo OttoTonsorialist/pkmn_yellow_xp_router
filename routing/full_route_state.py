@@ -35,15 +35,6 @@ def _defeat_trainer(inventory:Inventory, solo_pkmn:SoloPokemon, trainer_obj:pkmn
 def _defeat_pkmn(cur_pkmn:SoloPokemon, enemy_pkmn: pkmn.universal_data_objects.EnemyPkmn, badges:pkmn.universal_data_objects.BadgeList, exp_split:int):
     # enemy_pkmn is an EnemyPkmn type
     gained_xp = math.floor(enemy_pkmn.xp / exp_split)
-    gained_stat_xp = pkmn.universal_data_objects.StatBlock(
-        math.floor(enemy_pkmn.base_stats.hp / exp_split),
-        math.floor(enemy_pkmn.base_stats.attack / exp_split),
-        math.floor(enemy_pkmn.base_stats.defense / exp_split),
-        math.floor(enemy_pkmn.base_stats.special_attack / exp_split),
-        math.floor(enemy_pkmn.base_stats.special_defense / exp_split),
-        math.floor(enemy_pkmn.base_stats.speed / exp_split),
-        is_stat_xp=True
-    )
     return SoloPokemon(
         cur_pkmn.name,
         cur_pkmn.species_def,
@@ -56,7 +47,7 @@ def _defeat_pkmn(cur_pkmn:SoloPokemon, enemy_pkmn: pkmn.universal_data_objects.E
         realized_stat_xp=cur_pkmn.realized_stat_xp,
         unrealized_stat_xp=cur_pkmn.unrealized_stat_xp,
         gained_xp=gained_xp,
-        gained_stat_xp=gained_stat_xp,
+        gained_stat_xp=pkmn.gen_factory.current_gen_info().get_stat_xp_yeild(enemy_pkmn.name, exp_split),
         held_item=cur_pkmn.held_item
     )
 
@@ -132,9 +123,7 @@ def _take_vitamin(cur_pkmn:SoloPokemon, vit_name, badges, force=False):
                 raise ValueError(f"Ineffective Vitamin: {vit_name} (Already above vitamin cap)")
             final_realized_stat_xp = final_realized_stat_xp.add(pkmn.gen_factory.current_gen_info().make_stat_block(0, 0, 0, vit_boost, 0, 0, is_stat_xp=True))
         elif boosted_stat == const.SPD:
-            # TODO: how to handle this once we're supporting gen 3?
-            # Note: the comparison against special attack is intentional here, since gens 1 and 2 only actually have one stat exp field for field for special
-            if cur_stat_xp_total.special_attack >= vit_cap and not force:
+            if cur_stat_xp_total.special_defense >= vit_cap and not force:
                 raise ValueError(f"Ineffective Vitamin: {vit_name} (Already above vitamin cap)")
             final_realized_stat_xp = final_realized_stat_xp.add(pkmn.gen_factory.current_gen_info().make_stat_block(0, 0, 0, 0, vit_boost, 0, is_stat_xp=True))
         elif boosted_stat == const.SPE:

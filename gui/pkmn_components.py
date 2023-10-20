@@ -1,7 +1,7 @@
 import tkinter as tk
 from tkinter import ttk
 import tkinter.font
-from typing import List
+from typing import List, Tuple
 from controllers.main_controller import MainController
 import logging
 
@@ -283,17 +283,18 @@ class PkmnViewer(ttk.Frame):
             spa_val = "*" + spa_val
 
         spd_val = str(pkmn.cur_stats.special_defense)
-        # TODO: ugly, fix later
-        if current_gen_info().get_generation() == 2:
-            if badges is not None and badges.is_special_defense_boosted():
-                unboosted_spa = pkmn.base_stats.calc_level_stats(pkmn.level, pkmn.dvs, pkmn.stat_xp, current_gen_info().make_badge_list(), pkmn.nature).special_attack
-                if (
-                    (unboosted_spa >= 206 and unboosted_spa <= 432) or
-                    (unboosted_spa >= 661 and unboosted_spa <= 999)
-                ) and badges is not None and badges.is_special_defense_boosted():
+        if badges is not None and badges.is_special_defense_boosted():
+            if current_gen_info().get_generation() == 2:
+                unboosted_spa = pkmn.base_stats.calc_level_stats(
+                    pkmn.level,
+                    pkmn.dvs,
+                    pkmn.stat_xp,
+                    current_gen_info().make_badge_list(),
+                    pkmn.nature
+                ).special_attack
+                if not pkmn.cur_stats.should_ignore_spd_badge_boost(unboosted_spa):
                     spd_val = "*" + spd_val
-        else:
-            if badges is not None and badges.is_special_defense_boosted():
+            else:
                 spd_val = "*" + spd_val
 
         speed_val = str(pkmn.cur_stats.speed)
@@ -541,35 +542,53 @@ class StatExpViewer(ttk.Frame):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.config(height=150, width=250)
-        stat_labels =[
-            "HP:",
-            "Attack:",
-            "Defense:",
-            "Special:",
-            "Speed:",
-        ] 
-
+        self._net_gain_column: StatColumn = None
+        self._realized_stat_xp_column: StatColumn = None
+        self._total_stat_xp_column: StatColumn = None
         self._state = None
-        self._net_gain_column = StatColumn(self, num_rows=len(stat_labels), val_width=3, style_prefix="Header")
-        self._net_gain_column.set_labels(stat_labels)
+        self._stat_labels: List[str] = [] 
+        self._config_for_gen()
+
+    def _config_for_gen(self) -> Tuple[List[str]]:
+        if current_gen_info().get_generation() >= 2:
+            new_labels = ["HP:", "Attack:", "Defense:", "Spc Atk:", "Spc Def:", "Speed:"]
+        else:
+            new_labels =["HP:", "Attack:", "Defense:", "Special:", "Speed:"]
+
+        if len(new_labels) == len(self._stat_labels):
+            return
+        
+        self._stat_labels = new_labels
+        
+        if self._net_gain_column is not None:
+            self._net_gain_column.grid_forget()
+        self._net_gain_column = StatColumn(self, num_rows=len(self._stat_labels), val_width=3, style_prefix="Header")
+        self._net_gain_column.set_labels(self._stat_labels)
         self._net_gain_column.set_header("Net Stats\nFrom StatExp")
         self._net_gain_column.grid(row=0, column=0)
 
-        self._realized_stat_xp_column = StatColumn(self, num_rows=len(stat_labels), val_width=5, style_prefix="Secondary")
-        self._realized_stat_xp_column.set_labels(stat_labels)
+        if self._realized_stat_xp_column is not None:
+            self._realized_stat_xp_column.grid_forget()
+        self._realized_stat_xp_column = StatColumn(self, num_rows=len(self._stat_labels), val_width=5, style_prefix="Secondary")
+        self._realized_stat_xp_column.set_labels(self._stat_labels)
         self._realized_stat_xp_column.set_header("Realized\nStatExp")
         self._realized_stat_xp_column.grid(row=0, column=1)
 
-        self._total_stat_xp_column = StatColumn(self, num_rows=len(stat_labels), val_width=5)
-        self._total_stat_xp_column.set_labels(stat_labels)
+        if self._total_stat_xp_column is not None:
+            self._total_stat_xp_column.grid_forget()
+        self._total_stat_xp_column = StatColumn(self, num_rows=len(self._stat_labels), val_width=5)
+        self._total_stat_xp_column.set_labels(self._stat_labels)
         self._total_stat_xp_column.set_header("Total\nStatExp")
         self._total_stat_xp_column.grid(row=0, column=2)
-    
+
     def _vals_from_stat_block(self, stat_block:universal_data_objects.StatBlock):
-        # NOTE: re-ordering stats over special
-        return [stat_block.hp, stat_block.attack, stat_block.defense, stat_block.special_attack, stat_block.speed]
+        if current_gen_info().get_generation() >= 2:
+            return [stat_block.hp, stat_block.attack, stat_block.defense, stat_block.special_attack, stat_block.special_defense, stat_block.speed]
+        else:
+            return [stat_block.hp, stat_block.attack, stat_block.defense, stat_block.special_attack, stat_block.speed]
 
     def set_state(self, state:full_route_state.RouteState):
+        self._config_for_gen()
         self._state = state
 
         self._net_gain_column.set_values(

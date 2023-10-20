@@ -54,16 +54,29 @@ class Router:
         if custom_dvs is not None:
             # when setting custom DVs, should expect a dict of all values
             # Convert that to a StatBlock here when appropriate
-            custom_dvs = current_gen_info().make_stat_block(
-                custom_dvs[const.HP],
-                custom_dvs[const.ATK],
-                custom_dvs[const.DEF],
-                custom_dvs[const.SPC],
-                custom_dvs[const.SPC],
-                custom_dvs[const.SPD]
-            )
+            try:
+                custom_dvs = current_gen_info().make_stat_block(
+                    custom_dvs[const.HP],
+                    custom_dvs[const.ATTACK],
+                    custom_dvs[const.DEFENSE],
+                    custom_dvs[const.SPECIAL_ATTACK],
+                    custom_dvs[const.SPECIAL_DEFENSE],
+                    custom_dvs[const.SPEED]
+                )
+            except Exception:
+                custom_dvs = current_gen_info().make_stat_block(
+                    custom_dvs[const.HP],
+                    custom_dvs[const.ATK],
+                    custom_dvs[const.DEF],
+                    custom_dvs[const.SPC],
+                    custom_dvs[const.SPC],
+                    custom_dvs[const.SPD]
+                )
         else:
-            custom_dvs = current_gen_info().make_stat_block(15, 15, 15, 15, 15, 15)
+            if current_gen_info().get_generation() <= 2:
+                custom_dvs = current_gen_info().make_stat_block(15, 15, 15, 15, 15, 15)
+            else:
+                custom_dvs = current_gen_info().make_stat_block(31, 31, 31, 31, 31, 31)
         
         new_badge_list = current_gen_info().make_badge_list()
         self.init_route_state = full_route_state.RouteState(

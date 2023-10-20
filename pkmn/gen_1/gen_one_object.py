@@ -1,5 +1,6 @@
 import json
 import copy
+import math
 from typing import Dict, List, Tuple
 import os
 import shutil
@@ -257,6 +258,18 @@ class GenOne(CurrentGen):
     def get_trainer_timing_info(self) -> universal_data_objects.TrainerTimingStats:
         return self._trainer_timing_info
     
+    def get_stat_xp_yeild(self, pkmn_name:str, exp_split:int) -> universal_data_objects.StatBlock:
+        stat_xp_yield = self.pkmn_db().get_pkmn(pkmn_name).stat_xp_yield
+        return GenOneStatBlock(
+            math.floor(stat_xp_yield.hp / exp_split),
+            math.floor(stat_xp_yield.attack / exp_split),
+            math.floor(stat_xp_yield.defense / exp_split),
+            math.floor(stat_xp_yield.special_attack / exp_split),
+            math.floor(stat_xp_yield.special_defense / exp_split),
+            math.floor(stat_xp_yield.speed / exp_split),
+            is_stat_xp=True
+        )
+    
     def _validate_special_types(self, supported_types):
         invalid_types = []
         for cur_type in self._special_types:
@@ -299,7 +312,15 @@ def _load_pkmn_db(path):
             ),
             cur_pkmn[const.INITIAL_MOVESET_KEY],
             cur_pkmn[const.LEARNED_MOVESET_KEY],
-            cur_pkmn[const.TM_HM_LEARNSET_KEY]
+            cur_pkmn[const.TM_HM_LEARNSET_KEY],
+            GenOneStatBlock(
+                cur_pkmn[const.BASE_HP_KEY],
+                cur_pkmn[const.BASE_ATK_KEY],
+                cur_pkmn[const.BASE_DEF_KEY],
+                cur_pkmn[const.BASE_SPC_KEY],
+                cur_pkmn[const.BASE_SPC_KEY],
+                cur_pkmn[const.OLD_BASE_SPD_KEY],
+            ),
         )
 
     return result

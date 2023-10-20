@@ -2,12 +2,14 @@ from __future__ import annotations
 import math
 import copy
 from typing import Dict
+import logging
 from pkmn.universal_data_objects import Nature, StatBlock
 
 from utils.constants import const
 from pkmn.gen_3.gen_three_constants import gen_three_const
 from pkmn import universal_data_objects, universal_utils
 
+logger = logging.getLogger(__name__)
 
 VIT_AMT = 10
 VIT_CAP = 100
@@ -210,7 +212,7 @@ class GenThreeBadgeList(universal_data_objects.BadgeList):
 
 class GenThreeStatBlock(universal_data_objects.StatBlock):
     def __init__(self, hp, attack, defense, special_attack, special_defense, speed, is_stat_xp=False):
-        super().__init__(hp, attack, defense, special_attack, special_defense, speed, is_stat_xp=False)
+        super().__init__(hp, attack, defense, special_attack, special_defense, speed, is_stat_xp=is_stat_xp)
 
         # NOTE: Although GenTwo introduces special attack and special defense as separate stats,
         # GenTwo only has one DV/StatXP val for both special stats, using special_attack for both of them
@@ -359,8 +361,8 @@ class GenThreeStatBlock(universal_data_objects.StatBlock):
         result.special_defense = calc_battle_stat(
             self.special_defense,
             level,
-            stat_dv.special_attack,
-            stat_xp.special_attack,
+            stat_dv.special_defense,
+            stat_xp.special_defense,
             stage_modifiers.special_defense_stage,
             is_badge_boosted=(badges is not None and badges.is_special_defense_boosted()),
             nature_raised=nature.is_stat_raised(const.SPECIAL_DEFENSE),
@@ -388,7 +390,7 @@ class GenThreeStatBlock(universal_data_objects.StatBlock):
         addable_special_attack, cur_ev_total = self._get_actual_addable_evs(self.special_attack, other.special_attack, cur_ev_total)
         addable_special_defense, _ = self._get_actual_addable_evs(self.special_defense, other.special_defense, cur_ev_total)
 
-        return StatBlock(
+        return GenThreeStatBlock(
             self.hp + addable_hp,
             self.attack + addable_attack,
             self.defense + addable_defense,
@@ -400,7 +402,7 @@ class GenThreeStatBlock(universal_data_objects.StatBlock):
 
     @staticmethod
     def _get_actual_addable_evs(cur_stat_ev, new_stat_ev, cur_total_ev):
-        actual_new_ev = min(cur_stat_ev + new_stat_ev, SINGLE_STAT_EV_CAP) - new_stat_ev
+        actual_new_ev = min(cur_stat_ev + new_stat_ev, SINGLE_STAT_EV_CAP) - cur_stat_ev
         actual_new_ev = max(actual_new_ev, 0)
         actual_new_ev = min(cur_total_ev + actual_new_ev, TOTAL_EV_CAP) - cur_total_ev
         actual_new_ev = max(actual_new_ev, 0)

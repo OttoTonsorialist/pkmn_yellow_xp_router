@@ -1,6 +1,7 @@
 from ast import Dict
 import json
 import copy
+import math
 import os
 import shutil
 from typing import List, Tuple
@@ -255,6 +256,9 @@ class GenThree(CurrentGen):
     def get_trainer_timing_info(self) -> universal_data_objects.TrainerTimingStats:
         return self._trainer_timing_info
     
+    def get_stat_xp_yeild(self, pkmn_name:str, exp_split:int) -> universal_data_objects.StatBlock:
+        return self.pkmn_db().get_pkmn(pkmn_name).stat_xp_yield
+    
     def _validate_special_types(self, supported_types):
         invalid_types = []
         for cur_type in self._special_types:
@@ -308,7 +312,15 @@ def _load_pkmn_db(path):
             ),
             [],
             cur_pkmn[const.LEARNED_MOVESET_KEY],
-            cur_pkmn[const.TM_HM_LEARNSET_KEY]
+            cur_pkmn[const.TM_HM_LEARNSET_KEY],
+            GenThreeStatBlock(
+                cur_pkmn[const.EV_YIELD_HP_KEY],
+                cur_pkmn[const.EV_YIELD_ATK_KEY],
+                cur_pkmn[const.EV_YIELD_DEF_KEY],
+                cur_pkmn[const.EV_YIELD_SPC_ATK_KEY],
+                cur_pkmn[const.EV_YIELD_SPC_DEF_KEY],
+                cur_pkmn[const.EV_YIELD_SPD_KEY],
+            ),
         )
 
     return result
