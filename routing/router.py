@@ -383,14 +383,16 @@ class Router:
         final_path = os.path.join(const.SAVED_ROUTES_DIR, f"{name}.json")
         io_utils.backup_file_if_exists(final_path)
 
+        out_obj = {
+            const.NAME_KEY: self.init_route_state.solo_pkmn.name,
+            const.DVS_KEY: self.init_route_state.solo_pkmn.dvs.serialize(current_gen_info().get_generation()),
+            const.PKMN_VERSION_KEY: self.pkmn_version,
+            const.TASK_LEARN_MOVE_LEVELUP: [x.serialize() for x in self.level_up_move_defs.values()],
+            const.EVENTS: [self.root_folder.serialize()]
+        }
+
         with open(final_path, 'w') as f:
-            json.dump({
-                const.NAME_KEY: self.init_route_state.solo_pkmn.name,
-                const.DVS_KEY: self.init_route_state.solo_pkmn.dvs.serialize(),
-                const.PKMN_VERSION_KEY: self.pkmn_version,
-                const.TASK_LEARN_MOVE_LEVELUP: [x.serialize() for x in self.level_up_move_defs.values()],
-                const.EVENTS: [self.root_folder.serialize()]
-            }, f, indent=4)
+            json.dump(out_obj, f, indent=4)
     
     def new_route(self, solo_mon, base_route_path=None, pkmn_version=const.YELLOW_VERSION, custom_dvs=None):
         self._change_version(pkmn_version)

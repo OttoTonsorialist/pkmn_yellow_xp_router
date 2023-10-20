@@ -38,6 +38,7 @@ def calculate_gen_three_damage(
     defender_has_reflect:bool=False,
     custom_move_data:str="",
     weather:str=const.WEATHER_NONE,
+    two_enemy_mons_alive:bool=False
 ):
     if move.name == const.HIDDEN_POWER_MOVE_NAME:
         move_type = get_hidden_power_type(attacking_pkmn.dvs)
@@ -47,6 +48,12 @@ def calculate_gen_three_damage(
         base_power = move.base_power
 
     if base_power is None or base_power == 0:
+        return None
+    
+    if (
+        type_chart.get(move_type).get(defending_species.first_type) == const.IMMUNE or
+        type_chart.get(move_type).get(defending_species.second_type) == const.IMMUNE
+    ):
         return None
     
     # special move interactions
@@ -63,56 +70,62 @@ def calculate_gen_three_damage(
     if defending_stage_modifiers is None:
         defending_stage_modifiers = universal_data_objects.StageModifiers()
 
-    # for gen two, the "is_crit" flag in the upcoming get_battle_stats call is effectively a flag to ignore badge boosts
-    # always calculate badge boosts during a non crit
-    # during a crit, if the stage modifiers are in favor of the attack, calculate badge boosts and stage modifiers
-    # during a crit, if the stage modifiers are equal or in favor of the defender, calculate stats without any badge boosts and without any stage modifiers
-    ignore_badge_boosts = False
+    # TODO: how are badge boosts affected by each of these?
+    # when a crit occurs, always ignore negative modifiers for the attacking pokemon, and always ignore positive modifiers for the defensive pokemon
     if is_crit:
-        if move_type in special_types and attacking_stage_modifiers.special_attack_stage <= defending_stage_modifiers.special_defense_stage:
-            # stage modifiers do not favor the attacker for a special move: zero out the stage modifiers
-            ignore_badge_boosts = True
-            attacking_stage_modifiers = universal_data_objects.StageModifiers()
-            defending_stage_modifiers = universal_data_objects.StageModifiers()
-        elif move_type not in special_types and attacking_stage_modifiers.attack_stage <= defending_stage_modifiers.defense_stage:
-            # stage modifiers do not favor the attacker for a physical move: zero out the stage modifiers
-            ignore_badge_boosts = True
-            attacking_stage_modifiers = universal_data_objects.StageModifiers()
-            defending_stage_modifiers = universal_data_objects.StageModifiers()
+        if move_type in special_types:
+            if attacking_stage_modifiers.special_attack_stage < 0:
+                attacking_stage_modifiers = universal_data_objects.StageModifiers()
+            if defending_stage_modifiers.special_defense_stage > 0:
+                defending_stage_modifiers = universal_data_objects.StageModifiers()
+        else:
+            if attacking_stage_modifiers.attack_stage < 0:
+                attacking_stage_modifiers = universal_data_objects.StageModifiers()
+            if defending_stage_modifiers.defense_stage > 0:
+                defending_stage_modifiers = universal_data_objects.StageModifiers()
 
-    attacking_battle_stats = attacking_pkmn.get_battle_stats(attacking_stage_modifiers, is_crit=ignore_badge_boosts)
-    defending_battle_stats = defending_pkmn.get_battle_stats(defending_stage_modifiers, is_crit=ignore_badge_boosts)
+    attacking_battle_stats = attacking_pkmn.get_battle_stats(attacking_stage_modifiers)
+    defending_battle_stats = defending_pkmn.get_battle_stats(defending_stage_modifiers)
 
     if attacking_pkmn.name == gen_three_const.MAROWAK_NAME and attacking_pkmn.held_item == gen_three_const.THICK_CLUB_NAME:
         attacking_battle_stats.attack *= 2
     elif attacking_pkmn.name == gen_three_const.PIKACHU_NAME and attacking_pkmn.held_item == gen_three_const.LIGHT_BALL_NAME:
         attacking_battle_stats.special_attack *= 2
-    elif defending_pkmn.name == gen_three_const.DITTO_NAME and defending_pkmn.held_item == gen_three_const.METAL_POWDER_NAME:
-        defending_battle_stats.defense = math.floor(defending_battle_stats.defense * 1.5)
-    
-    if (
-        type_chart.get(move_type).get(defending_species.first_type) == const.IMMUNE or 
-        type_chart.get(move_type).get(defending_species.second_type) == const.IMMUNE
+    elif attacking_pkmn.name == gen_three_const.CLAMPERL_NAME and attacking_pkmn.held_item == gen_three_const.DEEP_SEA_TOOTH_NAME:
+        attacking_battle_stats.special_attack *= 2
+    elif attacking_pkmn.name == gen_three_const.CLAMPERL_NAME and attacking_pkmn.held_item == gen_three_const.DEEP_SEA_SCALE_NAME:
+        attacking_battle_stats.special_defense *= 2
+    elif (
+        (attacking_pkmn.name == gen_three_const.LATIOS_NAME or attacking_pkmn.name == gen_three_const.LATIAS_NAME) and
+        attacking_pkmn.held_item == gen_three_const.DEEP_SEA_SCALE_NAME
     ):
-        return None
+        attacking_battle_stats.special_attack = math.floor(attacking_battle_stats.special_attack * 1.5)
+        attacking_battle_stats.special_defense = math.floor(attacking_battle_stats.special_defense * 1.5)
+
+    if (
+        (defending_pkmn.name == gen_three_const.LATIOS_NAME or defending_pkmn.name == gen_three_const.LATIAS_NAME) and
+        defending_pkmn.held_item == gen_three_const.DEEP_SEA_SCALE_NAME
+    ):
+        defending_battle_stats.special_attack = math.floor(defending_battle_stats.special_attack * 1.5)
+        defending_battle_stats.special_defense = math.floor(defending_battle_stats.special_defense * 1.5)
+    elif defending_pkmn.name == gen_three_const.DITTO_NAME and defending_pkmn.held_item == gen_three_const.METAL_POWDER_NAME:
+        # this should only apply while transformed... but also like, we don't support transforming in the app rn lmao
+        defending_battle_stats.defense *= 2
     
     if move_type in special_types:
         attacking_stat = attacking_battle_stats.special_attack
         defending_stat = defending_battle_stats.special_defense
         if defender_has_light_screen and not is_crit:
-            doubled_def = True
+            screen_active = True
         else:
-            doubled_def = False
+            screen_active = False
     else:
         attacking_stat = attacking_battle_stats.attack
         defending_stat = defending_battle_stats.defense
         if defender_has_reflect and not is_crit:
-            doubled_def = True
+            screen_active = True
         else:
-            doubled_def = False
-    
-    if doubled_def:
-        defending_stat *= 2
+            screen_active = False
     
     if  move.name == const.EXPLOSION_MOVE_NAME or move.name == const.SELFDESTRUCT_MOVE_NAME:
         defending_stat = max(math.floor(defending_stat / 2), 1)
@@ -167,32 +180,52 @@ def calculate_gen_three_damage(
 
     temp = math.floor(temp / 50)
 
+    # start accounting for multipliers
+    if screen_active:
+        temp = math.floor(temp / 2)
+    
+    if two_enemy_mons_alive and move.targeting == const.TARGETING_BOTH_ENEMIES:
+        temp = math.floor(temp / 2)
+
+    # TODO: is this the right place for the multiplier? who fucking knows?
     if held_item_boost:
         temp = math.floor(temp * 1.1)
 
-    # forcibly prevent crits for Flail, Reversal, and Future sight
-    if is_crit and move.name not in [const.FLAIL_MOVE_NAME, const.REVERSAL_MOVE_NAME, const.FUTURE_SIGHT_MOVE_NAME]:
-        temp *= 2
-
-    temp += 2
-
     weather_boost = False
     weather_penalty = False
-    if weather == const.WEATHER_RAIN:
-        weather_boost = (move_type == const.TYPE_WATER)
-        weather_penalty = (
-            move_type == const.TYPE_FIRE or
-            move.name == const.SOLAR_BEAM_MOVE_NAME
+    # TODO: technically inaccurate data if in a doubles battle, and either of the other mons outside the equation have these abilities. Wtv
+    # It doesn't actually ever happen in vanilla games, so we're just fully ignoring it
+    if (
+        defending_pkmn.ability not in [gen_three_const.AIR_LOCK_ABILITY, gen_three_const.CLOUD_NINE_ABILITY] and
+        attacking_pkmn.ability not in [gen_three_const.AIR_LOCK_ABILITY, gen_three_const.CLOUD_NINE_ABILITY]
+    ):
+        if weather == const.WEATHER_RAIN:
+            weather_boost = (move_type == const.TYPE_WATER)
+            weather_penalty = (
+                move_type == const.TYPE_FIRE or
+                move.name == const.SOLAR_BEAM_MOVE_NAME
+            )
+        elif weather == const.WEATHER_SUN:
+            weather_boost = (move_type == const.TYPE_FIRE)
+            weather_penalty = (move_type == const.TYPE_WATER)
+        elif weather != const.WEATHER_NONE:
+            weather_penalty = (
+                move.name == const.SOLAR_BEAM_MOVE_NAME
         )
-    elif weather == const.WEATHER_SUN:
-        weather_boost = (move_type == const.TYPE_FIRE)
-        weather_penalty = (move_type == const.TYPE_WATER)
 
-    
     if weather_boost:
         temp = math.floor(temp * 1.5)
     elif weather_penalty:
         temp = math.floor(temp * 0.5)
+
+    if (
+        is_crit and 
+        move.name not in [const.SPIT_UP_MOVE_NAME, const.DOOM_DESIRE_MOVE_NAME, const.FUTURE_SIGHT_MOVE_NAME] and
+        defending_pkmn.ability not in [gen_three_const.BATTLE_ARMOR_ABILITY, gen_three_const.SHELL_ARMOR_ABILITY]
+    ):
+        temp *= 2
+
+    temp += 2
     
     stab_bonus = 0
     if is_stab:

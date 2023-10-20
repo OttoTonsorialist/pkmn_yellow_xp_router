@@ -45,6 +45,19 @@ class GenThreeConstants:
         self.DITTO_NAME = "Ditto"
         self.METAL_POWDER_NAME = "Metal Powder"
 
+        self.CLAMPERL_NAME = "Clamperl"
+        self.DEEP_SEA_TOOTH_NAME = "DeepSeaTooth"
+        self.DEEP_SEA_SCALE_NAME = "DeepSeaScale"
+
+        self.LATIOS_NAME = "Latios"
+        self.LATIAS_NAME = "Latias"
+        self.SOULD_DEW_NAME = "Soul Dew"
+
+        self.BATTLE_ARMOR_ABILITY = "Battle Armor"
+        self.SHELL_ARMOR_ABILITY = "Shell Armor"
+        self.CLOUD_NINE_ABILITY = "Cloud Nine"
+        self.AIR_LOCK_ABILITY = "Air Lock"
+
         self.NO_BONUS = "No Bonus"
         self.DIG_BONUS = "Dig Bonus"
         self.FLY_BONUS = "Fly Bonus"

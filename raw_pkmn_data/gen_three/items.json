@@ -1682,7 +1682,7 @@
             "rom_id": 190
         },
         {
-            "name": "Deepseatooth",
+            "name": "DeepSeaTooth",
             "key_item": false,
             "purchase_price": 200,
             "pocket": "Items",
@@ -1690,7 +1690,7 @@
             "rom_id": 191
         },
         {
-            "name": "Deepseascale",
+            "name": "DeepSeaScale",
             "key_item": false,
             "purchase_price": 200,
             "pocket": "Items",

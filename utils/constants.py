@@ -87,6 +87,8 @@ class Constants:
         self.DVS_KEY = "dv"
         self.IVS_KEY = "iv"
         self.HELD_ITEM_KEY = "held_item"
+        self.ABILITY_KEY = "ability"
+        self.ABILITY_LIST_KEY = "abilities"
         self.STAT_KEY = "stat"
         self.MODIFIER_KEY = "modifier"
         self.TARGET_KEY = "target"
@@ -140,6 +142,7 @@ class Constants:
         self.MOVE_ACCURACY = "accuracy"
         self.MOVE_EFFECTS = "effects"
         self.MOVE_FLAVOR = "attack_flavor"
+        self.MOVE_TARGET = "target"
 
         self.GROWTH_RATE_FAST = "growth_fast"
         self.GROWTH_RATE_MEDIUM_FAST = "growth_medium_fast"
@@ -382,9 +385,13 @@ class Constants:
         self.FLAIL_MOVE_NAME = "Flail"
         self.REVERSAL_MOVE_NAME = "Reversal"
         self.FUTURE_SIGHT_MOVE_NAME = "Future Sight"
+        self.DOOM_DESIRE_MOVE_NAME = "Doom Desire"
+        self.SPIT_UP_MOVE_NAME = "Spit Up"
         self.HIDDEN_POWER_MOVE_NAME = "Hidden Power"
         self.SOLAR_BEAM_MOVE_NAME = "SolarBeam"
         self.AMULET_COIN_ITEM_NAME = "Amulet Coin"
+
+        self.TARGETING_BOTH_ENEMIES = "target_both_enemies"
 
         self.TYPE_TYPELESS = "none"
         self.TYPE_NORMAL = "Normal"

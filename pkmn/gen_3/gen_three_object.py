@@ -355,6 +355,7 @@ def _create_trainer(trainer_dict, pkmn_db:PkmnDB, extract_trainer_id=False) -> u
                 GenThreeStatBlock(0, 0, 0, 0, 0, 0),
                 None,
                 held_item=cur_mon[const.HELD_ITEM_KEY],
+                ability=cur_mon[const.ABILITY_KEY],
                 nature=universal_data_objects.Nature(cur_mon[const.NATURE_KEY])
             )
         )
@@ -433,6 +434,7 @@ def _load_move_db(path):
             raw_move[const.MOVE_TYPE],
             raw_move[const.MOVE_EFFECTS],
             raw_move[const.MOVE_FLAVOR],
+            targeting=raw_move[const.MOVE_TARGET]
         )
     
     return result

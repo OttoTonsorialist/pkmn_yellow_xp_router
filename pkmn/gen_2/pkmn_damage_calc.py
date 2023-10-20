@@ -49,6 +49,12 @@ def calculate_gen_two_damage(
     if base_power is None or base_power == 0:
         return None
     
+    if (
+        type_chart.get(move_type).get(defending_species.first_type) == const.IMMUNE or
+        type_chart.get(move_type).get(defending_species.second_type) == const.IMMUNE
+    ):
+        return None
+    
     # special move interactions
     if const.FLAVOR_FIXED_DAMAGE in move.attack_flavor:
         return damage_calc.DamageRange({base_power: 1})
@@ -87,14 +93,9 @@ def calculate_gen_two_damage(
         attacking_battle_stats.attack *= 2
     elif attacking_pkmn.name == gen_two_const.PIKACHU_NAME and attacking_pkmn.held_item == gen_two_const.LIGHT_BALL_NAME:
         attacking_battle_stats.special_attack *= 2
-    elif defending_pkmn.name == gen_two_const.DITTO_NAME and defending_pkmn.held_item == gen_two_const.METAL_POWDER_NAME:
+
+    if defending_pkmn.name == gen_two_const.DITTO_NAME and defending_pkmn.held_item == gen_two_const.METAL_POWDER_NAME:
         defending_battle_stats.defense = math.floor(defending_battle_stats.defense * 1.5)
-    
-    if (
-        type_chart.get(move_type).get(defending_species.first_type) == const.IMMUNE or 
-        type_chart.get(move_type).get(defending_species.second_type) == const.IMMUNE
-    ):
-        return None
     
     if move_type in special_types:
         attacking_stat = attacking_battle_stats.special_attack

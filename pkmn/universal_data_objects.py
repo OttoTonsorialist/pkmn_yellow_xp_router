@@ -339,6 +339,7 @@ class EnemyPkmn:
         exp_split:int=1,
         mon_order:int=1,
         definition_order:int=1,
+        ability:str="",
         nature:Nature=Nature.HARDY
     ):
         self.name = name
@@ -355,6 +356,7 @@ class EnemyPkmn:
         self.exp_split = exp_split
         self.mon_order = mon_order
         self.definition_order = definition_order
+        self.ability = ability
         self.nature = nature
 
     def __eq__(self, other):
@@ -443,7 +445,8 @@ class Move:
         base_power:int,
         move_type:str,
         effects,
-        attack_flavor:List[str]
+        attack_flavor:List[str],
+        targeting:str=""
     ):
         self.name = name
         self.accuracy = accuracy
@@ -452,6 +455,7 @@ class Move:
         self.move_type = move_type
         self.effects = effects
         self.attack_flavor = attack_flavor
+        self.targeting = targeting
 
 
 class TrainerTimingStats:

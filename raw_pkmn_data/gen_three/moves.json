@@ -7,7 +7,7 @@
             "base_power": 40,
             "priority": 0,
             "type": "Normal",
-            "target": "Target Selected",
+            "target": "taget_single_enemy",
             "effects": [],
             "attack_flavor": [],
             "contact": true,
@@ -25,7 +25,7 @@
             "base_power": 50,
             "priority": 0,
             "type": "Fighting",
-            "target": "Target Selected",
+            "target": "taget_single_enemy",
             "effects": [],
             "attack_flavor": [
                 "high_crit"
@@ -45,7 +45,7 @@
             "base_power": 15,
             "priority": 0,
             "type": "Normal",
-            "target": "Target Selected",
+            "target": "taget_single_enemy",
             "effects": [],
             "attack_flavor": [
                 "multi_hit"
@@ -65,7 +65,7 @@
             "base_power": 18,
             "priority": 0,
             "type": "Normal",
-            "target": "Target Selected",
+            "target": "taget_single_enemy",
             "effects": [],
             "attack_flavor": [
                 "multi_hit"
@@ -85,7 +85,7 @@
             "base_power": 80,
             "priority": 0,
             "type": "Normal",
-            "target": "Target Selected",
+            "target": "taget_single_enemy",
             "effects": [],
             "attack_flavor": [],
             "contact": true,
@@ -103,7 +103,7 @@
             "base_power": 40,
             "priority": 0,
             "type": "Normal",
-            "target": "Target Selected",
+            "target": "taget_single_enemy",
             "effects": [],
             "attack_flavor": [
                 "scatter_coins"
@@ -123,7 +123,7 @@
             "base_power": 75,
             "priority": 0,
             "type": "Fire",
-            "target": "Target Selected",
+            "target": "taget_single_enemy",
             "effects": [
                 {
                     "status": "Burn",
@@ -146,7 +146,7 @@
             "base_power": 75,
             "priority": 0,
             "type": "Ice",
-            "target": "Target Selected",
+            "target": "taget_single_enemy",
             "effects": [
                 {
                     "status": "Freeze",
@@ -169,7 +169,7 @@
             "base_power": 75,
             "priority": 0,
             "type": "Electric",
-            "target": "Target Selected",
+            "target": "taget_single_enemy",
             "effects": [
                 {
                     "status": "Paralysis",
@@ -192,7 +192,7 @@
             "base_power": 40,
             "priority": 0,
             "type": "Normal",
-            "target": "Target Selected",
+            "target": "taget_single_enemy",
             "effects": [],
             "attack_flavor": [],
             "contact": true,
@@ -210,7 +210,7 @@
             "base_power": 55,
             "priority": 0,
             "type": "Normal",
-            "target": "Target Selected",
+            "target": "taget_single_enemy",
             "effects": [],
             "attack_flavor": [],
             "contact": true,
@@ -228,7 +228,7 @@
             "base_power": 1,
             "priority": 0,
             "type": "Normal",
-            "target": "Target Selected",
+            "target": "taget_single_enemy",
             "effects": [],
             "attack_flavor": [
                 "one_hit_ko"
@@ -248,7 +248,7 @@
             "base_power": 80,
             "priority": 0,
             "type": "Normal",
-            "target": "Target Both",
+            "target": "target_both_enemies",
             "effects": [],
             "attack_flavor": [
                 "two_turn"
@@ -268,7 +268,7 @@
             "base_power": 0,
             "priority": 0,
             "type": "Normal",
-            "target": "Target User",
+            "target": "target_self",
             "effects": [
                 {
                     "chance": 100,
@@ -293,7 +293,7 @@
             "base_power": 50,
             "priority": 0,
             "type": "Normal",
-            "target": "Target Selected",
+            "target": "taget_single_enemy",
             "effects": [],
             "attack_flavor": [],
             "contact": true,
@@ -311,7 +311,7 @@
             "base_power": 40,
             "priority": 0,
             "type": "Flying",
-            "target": "Target Selected",
+            "target": "taget_single_enemy",
             "effects": [],
             "attack_flavor": [
                 "bonus_fly_damage"
@@ -331,7 +331,7 @@
             "base_power": 60,
             "priority": 0,
             "type": "Flying",
-            "target": "Target Selected",
+            "target": "taget_single_enemy",
             "effects": [],
             "attack_flavor": [],
             "contact": true,
@@ -349,7 +349,7 @@
             "base_power": 0,
             "priority": -6,
             "type": "Normal",
-            "target": "Target Selected",
+            "target": "taget_single_enemy",
             "effects": [],
             "attack_flavor": [
                 "force_switch"
@@ -369,7 +369,7 @@
             "base_power": 70,
             "priority": 0,
             "type": "Flying",
-            "target": "Target Selected",
+            "target": "taget_single_enemy",
             "effects": [],
             "attack_flavor": [
                 "two_turn_semi_invulnerable"
@@ -389,7 +389,7 @@
             "base_power": 15,
             "priority": 0,
             "type": "Normal",
-            "target": "Target Selected",
+            "target": "taget_single_enemy",
             "effects": [],
             "attack_flavor": [
                 "trap"
@@ -409,7 +409,7 @@
             "base_power": 80,
             "priority": 0,
             "type": "Normal",
-            "target": "Target Selected",
+            "target": "taget_single_enemy",
             "effects": [],
             "attack_flavor": [],
             "contact": true,
@@ -427,7 +427,7 @@
             "base_power": 35,
             "priority": 0,
             "type": "Grass",
-            "target": "Target Selected",
+            "target": "taget_single_enemy",
             "effects": [],
             "attack_flavor": [],
             "contact": true,
@@ -445,7 +445,7 @@
             "base_power": 65,
             "priority": 0,
             "type": "Normal",
-            "target": "Target Selected",
+            "target": "taget_single_enemy",
             "effects": [
                 {
                     "chance": 30,
@@ -470,7 +470,7 @@
             "base_power": 30,
             "priority": 0,
             "type": "Fighting",
-            "target": "Target Selected",
+            "target": "taget_single_enemy",
             "effects": [],
             "attack_flavor": [
                 "two_hit"
@@ -490,7 +490,7 @@
             "base_power": 120,
             "priority": 0,
             "type": "Normal",
-            "target": "Target Selected",
+            "target": "taget_single_enemy",
             "effects": [],
             "attack_flavor": [],
             "contact": true,
@@ -508,7 +508,7 @@
             "base_power": 70,
             "priority": 0,
             "type": "Fighting",
-            "target": "Target Selected",
+            "target": "taget_single_enemy",
             "effects": [],
             "attack_flavor": [
                 "miss_recoil_damage"
@@ -528,7 +528,7 @@
             "base_power": 60,
             "priority": 0,
             "type": "Fighting",
-            "target": "Target Selected",
+            "target": "taget_single_enemy",
             "effects": [
                 {
                     "flinch": true,
@@ -551,7 +551,7 @@
             "base_power": 0,
             "priority": 0,
             "type": "Ground",
-            "target": "Target Selected",
+            "target": "taget_single_enemy",
             "effects": [
                 {
                     "chance": 100,
@@ -576,7 +576,7 @@
             "base_power": 70,
             "priority": 0,
             "type": "Normal",
-            "target": "Target Selected",
+            "target": "taget_single_enemy",
             "effects": [
                 {
                     "flinch": true,
@@ -599,7 +599,7 @@
             "base_power": 65,
             "priority": 0,
             "type": "Normal",
-            "target": "Target Selected",
+            "target": "taget_single_enemy",
             "effects": [],
             "attack_flavor": [],
             "contact": true,
@@ -617,7 +617,7 @@
             "base_power": 15,
             "priority": 0,
             "type": "Normal",
-            "target": "Target Selected",
+            "target": "taget_single_enemy",
             "effects": [],
             "attack_flavor": [
                 "multi_hit"
@@ -637,7 +637,7 @@
             "base_power": 1,
             "priority": 0,
             "type": "Normal",
-            "target": "Target Selected",
+            "target": "taget_single_enemy",
             "effects": [],
             "attack_flavor": [
                 "one_hit_ko"
@@ -657,7 +657,7 @@
             "base_power": 35,
             "priority": 0,
             "type": "Normal",
-            "target": "Target Selected",
+            "target": "taget_single_enemy",
             "effects": [],
             "attack_flavor": [],
             "contact": true,
@@ -675,7 +675,7 @@
             "base_power": 85,
             "priority": 0,
             "type": "Normal",
-            "target": "Target Selected",
+            "target": "taget_single_enemy",
             "effects": [
                 {
                     "status": "Paralysis",
@@ -698,7 +698,7 @@
             "base_power": 15,
             "priority": 0,
             "type": "Normal",
-            "target": "Target Selected",
+            "target": "taget_single_enemy",
             "effects": [],
             "attack_flavor": [
                 "trap"
@@ -718,7 +718,7 @@
             "base_power": 90,
             "priority": 0,
             "type": "Normal",
-            "target": "Target Selected",
+            "target": "taget_single_enemy",
             "effects": [],
             "attack_flavor": [
                 "quarter_recoil"
@@ -738,7 +738,7 @@
             "base_power": 90,
             "priority": 0,
             "type": "Normal",
-            "target": "Target Random",
+            "target": "target_random_enemy",
             "effects": [],
             "attack_flavor": [
                 "rampage"
@@ -758,7 +758,7 @@
             "base_power": 120,
             "priority": 0,
             "type": "Normal",
-            "target": "Target Selected",
+            "target": "taget_single_enemy",
             "effects": [],
             "attack_flavor": [
                 "third_recoil"
@@ -778,7 +778,7 @@
             "base_power": 0,
             "priority": 0,
             "type": "Normal",
-            "target": "Target Both",
+            "target": "target_both_enemies",
             "effects": [
                 {
                     "chance": 100,
@@ -803,7 +803,7 @@
             "base_power": 15,
             "priority": 0,
             "type": "Poison",
-            "target": "Target Selected",
+            "target": "taget_single_enemy",
             "effects": [
                 {
                     "status": "Poison",
@@ -826,7 +826,7 @@
             "base_power": 25,
             "priority": 0,
             "type": "Bug",
-            "target": "Target Selected",
+            "target": "taget_single_enemy",
             "effects": [
                 {
                     "status": "Poison",
@@ -851,7 +851,7 @@
             "base_power": 14,
             "priority": 0,
             "type": "Bug",
-            "target": "Target Selected",
+            "target": "taget_single_enemy",
             "effects": [],
             "attack_flavor": [
                 "multi_hit"
@@ -871,7 +871,7 @@
             "base_power": 0,
             "priority": 0,
             "type": "Normal",
-            "target": "Target Both",
+            "target": "target_both_enemies",
             "effects": [
                 {
                     "chance": 100,
@@ -896,7 +896,7 @@
             "base_power": 60,
             "priority": 0,
             "type": "Dark",
-            "target": "Target Selected",
+            "target": "taget_single_enemy",
             "effects": [
                 {
                     "flinch": true,
@@ -919,7 +919,7 @@
             "base_power": 0,
             "priority": 0,
             "type": "Normal",
-            "target": "Target Both",
+            "target": "target_both_enemies",
             "effects": [
                 {
                     "chance": 100,
@@ -944,7 +944,7 @@
             "base_power": 0,
             "priority": -6,
             "type": "Normal",
-            "target": "Target Selected",
+            "target": "taget_single_enemy",
             "effects": [],
             "attack_flavor": [
                 "force_switch"
@@ -964,7 +964,7 @@
             "base_power": 0,
             "priority": 0,
             "type": "Normal",
-            "target": "Target Selected",
+            "target": "taget_single_enemy",
             "effects": [
                 {
                     "status": "Sleep",
@@ -987,7 +987,7 @@
             "base_power": 0,
             "priority": 0,
             "type": "Normal",
-            "target": "Target Selected",
+            "target": "taget_single_enemy",
             "effects": [
                 {
                     "status": "Confusion",
@@ -1010,7 +1010,7 @@
             "base_power": 1,
             "priority": 0,
             "type": "Normal",
-            "target": "Target Selected",
+            "target": "taget_single_enemy",
             "effects": [],
             "attack_flavor": [
                 "fixed_damage"
@@ -1030,7 +1030,7 @@
             "base_power": 0,
             "priority": 0,
             "type": "Normal",
-            "target": "Target Selected",
+            "target": "taget_single_enemy",
             "effects": [
                 {
                     "status": "Disable",
@@ -1053,7 +1053,7 @@
             "base_power": 40,
             "priority": 0,
             "type": "Poison",
-            "target": "Target Both",
+            "target": "target_both_enemies",
             "effects": [
                 {
                     "chance": 10,
@@ -1078,7 +1078,7 @@
             "base_power": 40,
             "priority": 0,
             "type": "Fire",
-            "target": "Target Selected",
+            "target": "taget_single_enemy",
             "effects": [
                 {
                     "status": "Burn",
@@ -1101,7 +1101,7 @@
             "base_power": 95,
             "priority": 0,
             "type": "Fire",
-            "target": "Target Selected",
+            "target": "taget_single_enemy",
             "effects": [
                 {
                     "status": "Burn",
@@ -1124,7 +1124,7 @@
             "base_power": 0,
             "priority": 0,
             "type": "Ice",
-            "target": "Target User",
+            "target": "target_self",
             "effects": [],
             "attack_flavor": [
                 "stat_protection"
@@ -1144,7 +1144,7 @@
             "base_power": 40,
             "priority": 0,
             "type": "Water",
-            "target": "Target Selected",
+            "target": "taget_single_enemy",
             "effects": [],
             "attack_flavor": [],
             "contact": false,
@@ -1162,7 +1162,7 @@
             "base_power": 120,
             "priority": 0,
             "type": "Water",
-            "target": "Target Selected",
+            "target": "taget_single_enemy",
             "effects": [],
             "attack_flavor": [],
             "contact": false,
@@ -1180,7 +1180,7 @@
             "base_power": 95,
             "priority": 0,
             "type": "Water",
-            "target": "Target Both",
+            "target": "target_both_enemies",
             "effects": [],
             "attack_flavor": [],
             "contact": false,
@@ -1198,7 +1198,7 @@
             "base_power": 95,
             "priority": 0,
             "type": "Ice",
-            "target": "Target Selected",
+            "target": "taget_single_enemy",
             "effects": [
                 {
                     "status": "Freeze",
@@ -1221,7 +1221,7 @@
             "base_power": 120,
             "priority": 0,
             "type": "Ice",
-            "target": "Target Both",
+            "target": "target_both_enemies",
             "effects": [
                 {
                     "status": "Freeze",
@@ -1244,7 +1244,7 @@
             "base_power": 65,
             "priority": 0,
             "type": "Psychic",
-            "target": "Target Selected",
+            "target": "taget_single_enemy",
             "effects": [
                 {
                     "status": "Confusion",
@@ -1267,7 +1267,7 @@
             "base_power": 65,
             "priority": 0,
             "type": "Water",
-            "target": "Target Selected",
+            "target": "taget_single_enemy",
             "effects": [
                 {
                     "chance": 10,
@@ -1292,7 +1292,7 @@
             "base_power": 65,
             "priority": 0,
             "type": "Ice",
-            "target": "Target Selected",
+            "target": "taget_single_enemy",
             "effects": [
                 {
                     "chance": 10,
@@ -1317,7 +1317,7 @@
             "base_power": 150,
             "priority": 0,
             "type": "Normal",
-            "target": "Target Selected",
+            "target": "taget_single_enemy",
             "effects": [],
             "attack_flavor": [
                 "recharge"
@@ -1337,7 +1337,7 @@
             "base_power": 35,
             "priority": 0,
             "type": "Flying",
-            "target": "Target Selected",
+            "target": "taget_single_enemy",
             "effects": [],
             "attack_flavor": [],
             "contact": true,
@@ -1355,7 +1355,7 @@
             "base_power": 80,
             "priority": 0,
             "type": "Flying",
-            "target": "Target Selected",
+            "target": "taget_single_enemy",
             "effects": [],
             "attack_flavor": [],
             "contact": true,
@@ -1373,7 +1373,7 @@
             "base_power": 80,
             "priority": 0,
             "type": "Fighting",
-            "target": "Target Selected",
+            "target": "taget_single_enemy",
             "effects": [],
             "attack_flavor": [
                 "quarter_recoil"
@@ -1393,7 +1393,7 @@
             "base_power": 1,
             "priority": 0,
             "type": "Fighting",
-            "target": "Target Selected",
+            "target": "taget_single_enemy",
             "effects": [],
             "attack_flavor": [
                 "weight_damage"
@@ -1413,7 +1413,7 @@
             "base_power": 1,
             "priority": -5,
             "type": "Fighting",
-            "target": "Target Depends",
+            "target": "target_depends",
             "effects": [],
             "attack_flavor": [
                 "counter"
@@ -1433,7 +1433,7 @@
             "base_power": 1,
             "priority": 0,
             "type": "Fighting",
-            "target": "Target Selected",
+            "target": "taget_single_enemy",
             "effects": [],
             "attack_flavor": [
                 "level_damage"
@@ -1453,7 +1453,7 @@
             "base_power": 80,
             "priority": 0,
             "type": "Normal",
-            "target": "Target Selected",
+            "target": "taget_single_enemy",
             "effects": [],
             "attack_flavor": [],
             "contact": true,
@@ -1471,7 +1471,7 @@
             "base_power": 20,
             "priority": 0,
             "type": "Grass",
-            "target": "Target Selected",
+            "target": "taget_single_enemy",
             "effects": [],
             "attack_flavor": [
                 "drain_hp"
@@ -1491,7 +1491,7 @@
             "base_power": 40,
             "priority": 0,
             "type": "Grass",
-            "target": "Target Selected",
+            "target": "taget_single_enemy",
             "effects": [],
             "attack_flavor": [
                 "drain_hp"
@@ -1511,7 +1511,7 @@
             "base_power": 0,
             "priority": 0,
             "type": "Grass",
-            "target": "Target Selected",
+            "target": "taget_single_enemy",
             "effects": [
                 {
                     "status": "Leech Seed",
@@ -1534,7 +1534,7 @@
             "base_power": 0,
             "priority": 0,
             "type": "Normal",
-            "target": "Target User",
+            "target": "target_self",
             "effects": [
                 {
                     "chance": 100,
@@ -1559,7 +1559,7 @@
             "base_power": 55,
             "priority": 0,
             "type": "Grass",
-            "target": "Target Both",
+            "target": "target_both_enemies",
             "effects": [],
             "attack_flavor": [
                 "high_crit"
@@ -1579,7 +1579,7 @@
             "base_power": 120,
             "priority": 0,
             "type": "Grass",
-            "target": "Target Selected",
+            "target": "taget_single_enemy",
             "effects": [],
             "attack_flavor": [
                 "two_turn"
@@ -1599,7 +1599,7 @@
             "base_power": 0,
             "priority": 0,
             "type": "Poison",
-            "target": "Target Selected",
+            "target": "taget_single_enemy",
             "effects": [
                 {
                     "status": "Poison",
@@ -1622,7 +1622,7 @@
             "base_power": 0,
             "priority": 0,
             "type": "Grass",
-            "target": "Target Selected",
+            "target": "taget_single_enemy",
             "effects": [
                 {
                     "status": "Paralysis",
@@ -1645,7 +1645,7 @@
             "base_power": 0,
             "priority": 0,
             "type": "Grass",
-            "target": "Target Selected",
+            "target": "taget_single_enemy",
             "effects": [
                 {
                     "status": "Sleep",
@@ -1668,7 +1668,7 @@
             "base_power": 70,
             "priority": 0,
             "type": "Grass",
-            "target": "Target Random",
+            "target": "target_random_enemy",
             "effects": [],
             "attack_flavor": [
                 "rampage"
@@ -1688,7 +1688,7 @@
             "base_power": 0,
             "priority": 0,
             "type": "Bug",
-            "target": "Target Both",
+            "target": "target_both_enemies",
             "effects": [
                 {
                     "chance": 100,
@@ -1713,7 +1713,7 @@
             "base_power": 40,
             "priority": 0,
             "type": "Dragon",
-            "target": "Target Selected",
+            "target": "taget_single_enemy",
             "effects": [],
             "attack_flavor": [
                 "fixed_damage"
@@ -1733,7 +1733,7 @@
             "base_power": 15,
             "priority": 0,
             "type": "Fire",
-            "target": "Target Selected",
+            "target": "taget_single_enemy",
             "effects": [],
             "attack_flavor": [
                 "trap"
@@ -1753,7 +1753,7 @@
             "base_power": 40,
             "priority": 0,
             "type": "Electric",
-            "target": "Target Selected",
+            "target": "taget_single_enemy",
             "effects": [
                 {
                     "status": "Paralysis",
@@ -1776,7 +1776,7 @@
             "base_power": 95,
             "priority": 0,
             "type": "Electric",
-            "target": "Target Selected",
+            "target": "taget_single_enemy",
             "effects": [
                 {
                     "status": "Paralysis",
@@ -1799,7 +1799,7 @@
             "base_power": 0,
             "priority": 0,
             "type": "Electric",
-            "target": "Target Selected",
+            "target": "taget_single_enemy",
             "effects": [
                 {
                     "status": "Paralysis",
@@ -1822,7 +1822,7 @@
             "base_power": 120,
             "priority": 0,
             "type": "Electric",
-            "target": "Target Selected",
+            "target": "taget_single_enemy",
             "effects": [
                 {
                     "status": "Paralysis",
@@ -1847,7 +1847,7 @@
             "base_power": 50,
             "priority": 0,
             "type": "Rock",
-            "target": "Target Selected",
+            "target": "taget_single_enemy",
             "effects": [],
             "attack_flavor": [],
             "contact": false,
@@ -1865,7 +1865,7 @@
             "base_power": 100,
             "priority": 0,
             "type": "Ground",
-            "target": "Target Foes And Ally",
+            "target": "target_all",
             "effects": [],
             "attack_flavor": [
                 "bonus_dig_damage"
@@ -1885,7 +1885,7 @@
             "base_power": 1,
             "priority": 0,
             "type": "Ground",
-            "target": "Target Selected",
+            "target": "taget_single_enemy",
             "effects": [],
             "attack_flavor": [
                 "one_hit_ko"
@@ -1905,7 +1905,7 @@
             "base_power": 60,
             "priority": 0,
             "type": "Ground",
-            "target": "Target Selected",
+            "target": "taget_single_enemy",
             "effects": [],
             "attack_flavor": [
                 "two_turn_semi_invulnerable"
@@ -1925,7 +1925,7 @@
             "base_power": 0,
             "priority": 0,
             "type": "Poison",
-            "target": "Target Selected",
+            "target": "taget_single_enemy",
             "effects": [
                 {
                     "status": "Toxic",
@@ -1948,7 +1948,7 @@
             "base_power": 50,
             "priority": 0,
             "type": "Psychic",
-            "target": "Target Selected",
+            "target": "taget_single_enemy",
             "effects": [
                 {
                     "status": "Confusion",
@@ -1971,7 +1971,7 @@
             "base_power": 90,
             "priority": 0,
             "type": "Psychic",
-            "target": "Target Selected",
+            "target": "taget_single_enemy",
             "effects": [
                 {
                     "chance": 10,
@@ -1996,7 +1996,7 @@
             "base_power": 0,
             "priority": 0,
             "type": "Psychic",
-            "target": "Target Selected",
+            "target": "taget_single_enemy",
             "effects": [
                 {
                     "status": "Sleep",
@@ -2019,7 +2019,7 @@
             "base_power": 0,
             "priority": 0,
             "type": "Psychic",
-            "target": "Target User",
+            "target": "target_self",
             "effects": [
                 {
                     "chance": 100,
@@ -2044,7 +2044,7 @@
             "base_power": 0,
             "priority": 0,
             "type": "Psychic",
-            "target": "Target User",
+            "target": "target_self",
             "effects": [
                 {
                     "chance": 100,
@@ -2069,7 +2069,7 @@
             "base_power": 40,
             "priority": 1,
             "type": "Normal",
-            "target": "Target Selected",
+            "target": "taget_single_enemy",
             "effects": [],
             "attack_flavor": [],
             "contact": true,
@@ -2087,7 +2087,7 @@
             "base_power": 20,
             "priority": 0,
             "type": "Normal",
-            "target": "Target Selected",
+            "target": "taget_single_enemy",
             "effects": [],
             "attack_flavor": [
                 "rage"
@@ -2107,7 +2107,7 @@
             "base_power": 0,
             "priority": 0,
             "type": "Psychic",
-            "target": "Target User",
+            "target": "target_self",
             "effects": [],
             "attack_flavor": [
                 "end_wild_battle"
@@ -2127,7 +2127,7 @@
             "base_power": 1,
             "priority": 0,
             "type": "Ghost",
-            "target": "Target Selected",
+            "target": "taget_single_enemy",
             "effects": [],
             "attack_flavor": [
                 "level_damage"
@@ -2147,7 +2147,7 @@
             "base_power": 0,
             "priority": 0,
             "type": "Normal",
-            "target": "Target Selected",
+            "target": "taget_single_enemy",
             "effects": [],
             "attack_flavor": [
                 "mimic"
@@ -2167,7 +2167,7 @@
             "base_power": 0,
             "priority": 0,
             "type": "Normal",
-            "target": "Target Selected",
+            "target": "taget_single_enemy",
             "effects": [
                 {
                     "chance": 100,
@@ -2192,7 +2192,7 @@
             "base_power": 0,
             "priority": 0,
             "type": "Normal",
-            "target": "Target User",
+            "target": "target_self",
             "effects": [
                 {
                     "chance": 100,
@@ -2217,7 +2217,7 @@
             "base_power": 0,
             "priority": 0,
             "type": "Normal",
-            "target": "Target User",
+            "target": "target_self",
             "effects": [],
             "attack_flavor": [
                 "recover"
@@ -2237,7 +2237,7 @@
             "base_power": 0,
             "priority": 0,
             "type": "Normal",
-            "target": "Target User",
+            "target": "target_self",
             "effects": [
                 {
                     "chance": 100,
@@ -2262,7 +2262,7 @@
             "base_power": 0,
             "priority": 0,
             "type": "Normal",
-            "target": "Target User",
+            "target": "target_self",
             "effects": [
                 {
                     "chance": 100,
@@ -2289,7 +2289,7 @@
             "base_power": 0,
             "priority": 0,
             "type": "Normal",
-            "target": "Target Selected",
+            "target": "taget_single_enemy",
             "effects": [
                 {
                     "chance": 100,
@@ -2314,7 +2314,7 @@
             "base_power": 0,
             "priority": 0,
             "type": "Ghost",
-            "target": "Target Selected",
+            "target": "taget_single_enemy",
             "effects": [
                 {
                     "status": "Confusion",
@@ -2337,7 +2337,7 @@
             "base_power": 0,
             "priority": 0,
             "type": "Water",
-            "target": "Target User",
+            "target": "target_self",
             "effects": [
                 {
                     "chance": 100,
@@ -2362,7 +2362,7 @@
             "base_power": 0,
             "priority": 0,
             "type": "Normal",
-            "target": "Target User",
+            "target": "target_self",
             "effects": [
                 {
                     "chance": 100,
@@ -2389,7 +2389,7 @@
             "base_power": 0,
             "priority": 0,
             "type": "Psychic",
-            "target": "Target User",
+            "target": "target_self",
             "effects": [
                 {
                     "chance": 100,
@@ -2414,7 +2414,7 @@
             "base_power": 0,
             "priority": 0,
             "type": "Psychic",
-            "target": "Target User",
+            "target": "target_self",
             "effects": [
                 {
                     "status": "Light Screen",
@@ -2437,7 +2437,7 @@
             "base_power": 0,
             "priority": 0,
             "type": "Ice",
-            "target": "Target User",
+            "target": "target_self",
             "effects": [],
             "attack_flavor": [
                 "haze"
@@ -2457,7 +2457,7 @@
             "base_power": 0,
             "priority": 0,
             "type": "Psychic",
-            "target": "Target User",
+            "target": "target_self",
             "effects": [
                 {
                     "status": "Reflect",
@@ -2480,7 +2480,7 @@
             "base_power": 0,
             "priority": 0,
             "type": "Normal",
-            "target": "Target User",
+            "target": "target_self",
             "effects": [],
             "attack_flavor": [
                 "focus_energy"
@@ -2500,7 +2500,7 @@
             "base_power": 1,
             "priority": 0,
             "type": "Normal",
-            "target": "Target User",
+            "target": "target_self",
             "effects": [],
             "attack_flavor": [
                 "bide"
@@ -2520,7 +2520,7 @@
             "base_power": 0,
             "priority": 0,
             "type": "Normal",
-            "target": "Target Depends",
+            "target": "target_depends",
             "effects": [],
             "attack_flavor": [
                 "metronome"
@@ -2540,7 +2540,7 @@
             "base_power": 0,
             "priority": 0,
             "type": "Flying",
-            "target": "Target Depends",
+            "target": "target_depends",
             "effects": [],
             "attack_flavor": [
                 "mirror_move"
@@ -2560,7 +2560,7 @@
             "base_power": 200,
             "priority": 0,
             "type": "Normal",
-            "target": "Target Foes And Ally",
+            "target": "target_all",
             "effects": [],
             "attack_flavor": [
                 "self_destruct_explosion"
@@ -2580,7 +2580,7 @@
             "base_power": 100,
             "priority": 0,
             "type": "Normal",
-            "target": "Target Selected",
+            "target": "taget_single_enemy",
             "effects": [],
             "attack_flavor": [],
             "contact": false,
@@ -2598,7 +2598,7 @@
             "base_power": 20,
             "priority": 0,
             "type": "Ghost",
-            "target": "Target Selected",
+            "target": "taget_single_enemy",
             "effects": [
                 {
                     "status": "Paralysis",
@@ -2621,7 +2621,7 @@
             "base_power": 20,
             "priority": 0,
             "type": "Poison",
-            "target": "Target Selected",
+            "target": "taget_single_enemy",
             "effects": [
                 {
                     "status": "Poison",
@@ -2644,7 +2644,7 @@
             "base_power": 65,
             "priority": 0,
             "type": "Poison",
-            "target": "Target Selected",
+            "target": "taget_single_enemy",
             "effects": [
                 {
                     "status": "Poison",
@@ -2667,7 +2667,7 @@
             "base_power": 65,
             "priority": 0,
             "type": "Ground",
-            "target": "Target Selected",
+            "target": "taget_single_enemy",
             "effects": [
                 {
                     "flinch": true,
@@ -2690,7 +2690,7 @@
             "base_power": 120,
             "priority": 0,
             "type": "Fire",
-            "target": "Target Selected",
+            "target": "taget_single_enemy",
             "effects": [
                 {
                     "status": "Burn",
@@ -2713,7 +2713,7 @@
             "base_power": 80,
             "priority": 0,
             "type": "Water",
-            "target": "Target Selected",
+            "target": "taget_single_enemy",
             "effects": [],
             "attack_flavor": [],
             "contact": true,
@@ -2731,7 +2731,7 @@
             "base_power": 35,
             "priority": 0,
             "type": "Water",
-            "target": "Target Selected",
+            "target": "taget_single_enemy",
             "effects": [],
             "attack_flavor": [
                 "trap"
@@ -2751,7 +2751,7 @@
             "base_power": 60,
             "priority": 0,
             "type": "Normal",
-            "target": "Target Both",
+            "target": "target_both_enemies",
             "effects": [],
             "attack_flavor": [
                 "always_hit"
@@ -2771,7 +2771,7 @@
             "base_power": 100,
             "priority": 0,
             "type": "Normal",
-            "target": "Target Selected",
+            "target": "taget_single_enemy",
             "effects": [
                 {
                     "chance": 100,
@@ -2798,7 +2798,7 @@
             "base_power": 20,
             "priority": 0,
             "type": "Normal",
-            "target": "Target Selected",
+            "target": "taget_single_enemy",
             "effects": [],
             "attack_flavor": [
                 "multi_hit"
@@ -2818,7 +2818,7 @@
             "base_power": 10,
             "priority": 0,
             "type": "Normal",
-            "target": "Target Selected",
+            "target": "taget_single_enemy",
             "effects": [
                 {
                     "chance": 10,
@@ -2843,7 +2843,7 @@
             "base_power": 0,
             "priority": 0,
             "type": "Psychic",
-            "target": "Target User",
+            "target": "target_self",
             "effects": [
                 {
                     "chance": 100,
@@ -2868,7 +2868,7 @@
             "base_power": 0,
             "priority": 0,
             "type": "Psychic",
-            "target": "Target Selected",
+            "target": "taget_single_enemy",
             "effects": [
                 {
                     "chance": 100,
@@ -2893,7 +2893,7 @@
             "base_power": 0,
             "priority": 0,
             "type": "Normal",
-            "target": "Target User",
+            "target": "target_self",
             "effects": [],
             "attack_flavor": [
                 "recover"
@@ -2913,7 +2913,7 @@
             "base_power": 85,
             "priority": 0,
             "type": "Fighting",
-            "target": "Target Selected",
+            "target": "taget_single_enemy",
             "effects": [],
             "attack_flavor": [
                 "miss_recoil_damage"
@@ -2933,7 +2933,7 @@
             "base_power": 0,
             "priority": 0,
             "type": "Normal",
-            "target": "Target Selected",
+            "target": "taget_single_enemy",
             "effects": [
                 {
                     "status": "Paralysis",
@@ -2956,7 +2956,7 @@
             "base_power": 100,
             "priority": 0,
             "type": "Psychic",
-            "target": "Target Selected",
+            "target": "taget_single_enemy",
             "effects": [],
             "attack_flavor": [
                 "dream_eater",
@@ -2977,7 +2977,7 @@
             "base_power": 0,
             "priority": 0,
             "type": "Poison",
-            "target": "Target Selected",
+            "target": "taget_single_enemy",
             "effects": [
                 {
                     "status": "Poison",
@@ -3000,7 +3000,7 @@
             "base_power": 15,
             "priority": 0,
             "type": "Normal",
-            "target": "Target Selected",
+            "target": "taget_single_enemy",
             "effects": [],
             "attack_flavor": [
                 "multi_hit"
@@ -3020,7 +3020,7 @@
             "base_power": 20,
             "priority": 0,
             "type": "Bug",
-            "target": "Target Selected",
+            "target": "taget_single_enemy",
             "effects": [],
             "attack_flavor": [
                 "drain_hp"
@@ -3040,7 +3040,7 @@
             "base_power": 0,
             "priority": 0,
             "type": "Normal",
-            "target": "Target Selected",
+            "target": "taget_single_enemy",
             "effects": [
                 {
                     "status": "Sleep",
@@ -3063,7 +3063,7 @@
             "base_power": 140,
             "priority": 0,
             "type": "Flying",
-            "target": "Target Selected",
+            "target": "taget_single_enemy",
             "effects": [
                 {
                     "flinch": true,
@@ -3089,7 +3089,7 @@
             "base_power": 0,
             "priority": 0,
             "type": "Normal",
-            "target": "Target Selected",
+            "target": "taget_single_enemy",
             "effects": [],
             "attack_flavor": [
                 "transform"
@@ -3109,7 +3109,7 @@
             "base_power": 20,
             "priority": 0,
             "type": "Water",
-            "target": "Target Both",
+            "target": "target_both_enemies",
             "effects": [
                 {
                     "chance": 10,
@@ -3134,7 +3134,7 @@
             "base_power": 70,
             "priority": 0,
             "type": "Normal",
-            "target": "Target Selected",
+            "target": "taget_single_enemy",
             "effects": [
                 {
                     "status": "Confusion",
@@ -3157,7 +3157,7 @@
             "base_power": 0,
             "priority": 0,
             "type": "Grass",
-            "target": "Target Selected",
+            "target": "taget_single_enemy",
             "effects": [
                 {
                     "status": "Sleep",
@@ -3180,7 +3180,7 @@
             "base_power": 0,
             "priority": 0,
             "type": "Normal",
-            "target": "Target Selected",
+            "target": "taget_single_enemy",
             "effects": [
                 {
                     "chance": 100,
@@ -3205,7 +3205,7 @@
             "base_power": 1,
             "priority": 0,
             "type": "Psychic",
-            "target": "Target Selected",
+            "target": "taget_single_enemy",
             "effects": [],
             "attack_flavor": [
                 "psywave"
@@ -3225,7 +3225,7 @@
             "base_power": 0,
             "priority": 0,
             "type": "Normal",
-            "target": "Target User",
+            "target": "target_self",
             "effects": [],
             "attack_flavor": [],
             "contact": false,
@@ -3243,7 +3243,7 @@
             "base_power": 0,
             "priority": 0,
             "type": "Poison",
-            "target": "Target User",
+            "target": "target_self",
             "effects": [
                 {
                     "chance": 100,
@@ -3268,7 +3268,7 @@
             "base_power": 90,
             "priority": 0,
             "type": "Water",
-            "target": "Target Selected",
+            "target": "taget_single_enemy",
             "effects": [],
             "attack_flavor": [
                 "high_crit"
@@ -3288,7 +3288,7 @@
             "base_power": 250,
             "priority": 0,
             "type": "Normal",
-            "target": "Target Foes And Ally",
+            "target": "target_all",
             "effects": [],
             "attack_flavor": [
                 "self_destruct_explosion"
@@ -3308,7 +3308,7 @@
             "base_power": 18,
             "priority": 0,
             "type": "Normal",
-            "target": "Target Selected",
+            "target": "taget_single_enemy",
             "effects": [],
             "attack_flavor": [
                 "multi_hit"
@@ -3328,7 +3328,7 @@
             "base_power": 50,
             "priority": 0,
             "type": "Ground",
-            "target": "Target Selected",
+            "target": "taget_single_enemy",
             "effects": [],
             "attack_flavor": [
                 "two_hit"
@@ -3348,7 +3348,7 @@
             "base_power": 0,
             "priority": 0,
             "type": "Psychic",
-            "target": "Target User",
+            "target": "target_self",
             "effects": [],
             "attack_flavor": [
                 "rest"
@@ -3368,7 +3368,7 @@
             "base_power": 75,
             "priority": 0,
             "type": "Rock",
-            "target": "Target Both",
+            "target": "target_both_enemies",
             "effects": [
                 {
                     "flinch": true,
@@ -3391,7 +3391,7 @@
             "base_power": 80,
             "priority": 0,
             "type": "Normal",
-            "target": "Target Selected",
+            "target": "taget_single_enemy",
             "effects": [
                 {
                     "flinch": true,
@@ -3414,7 +3414,7 @@
             "base_power": 0,
             "priority": 0,
             "type": "Normal",
-            "target": "Target User",
+            "target": "target_self",
             "effects": [
                 {
                     "chance": 100,
@@ -3439,7 +3439,7 @@
             "base_power": 0,
             "priority": 0,
             "type": "Normal",
-            "target": "Target User",
+            "target": "target_self",
             "effects": [],
             "attack_flavor": [
                 "conversion"
@@ -3459,7 +3459,7 @@
             "base_power": 80,
             "priority": 0,
             "type": "Normal",
-            "target": "Target Selected",
+            "target": "taget_single_enemy",
             "effects": [
                 {
                     "status": "Freeze",
@@ -3492,7 +3492,7 @@
             "base_power": 1,
             "priority": 0,
             "type": "Normal",
-            "target": "Target Selected",
+            "target": "taget_single_enemy",
             "effects": [],
             "attack_flavor": [
                 "super_fang"
@@ -3512,7 +3512,7 @@
             "base_power": 70,
             "priority": 0,
             "type": "Normal",
-            "target": "Target Selected",
+            "target": "taget_single_enemy",
             "effects": [],
             "attack_flavor": [
                 "high_crit"
@@ -3532,7 +3532,7 @@
             "base_power": 0,
             "priority": 0,
             "type": "Normal",
-            "target": "Target User",
+            "target": "target_self",
             "effects": [],
             "attack_flavor": [
                 "substitute"
@@ -3552,7 +3552,7 @@
             "base_power": 50,
             "priority": 0,
             "type": "Normal",
-            "target": "Target Selected",
+            "target": "taget_single_enemy",
             "effects": [],
             "attack_flavor": [
                 "quarter_recoil"
@@ -3572,7 +3572,7 @@
             "base_power": 0,
             "priority": 0,
             "type": "Normal",
-            "target": "Target Selected",
+            "target": "taget_single_enemy",
             "effects": [],
             "attack_flavor": [
                 "sketch"
@@ -3592,7 +3592,7 @@
             "base_power": 10,
             "priority": 0,
             "type": "Fighting",
-            "target": "Target Selected",
+            "target": "taget_single_enemy",
             "effects": [],
             "attack_flavor": [
                 "triple_kick"
@@ -3612,7 +3612,7 @@
             "base_power": 40,
             "priority": 0,
             "type": "Dark",
-            "target": "Target Selected",
+            "target": "taget_single_enemy",
             "effects": [],
             "attack_flavor": [
                 "thief"
@@ -3632,7 +3632,7 @@
             "base_power": 0,
             "priority": 0,
             "type": "Bug",
-            "target": "Target Selected",
+            "target": "taget_single_enemy",
             "effects": [],
             "attack_flavor": [
                 "mean_look"
@@ -3652,7 +3652,7 @@
             "base_power": 0,
             "priority": 0,
             "type": "Normal",
-            "target": "Target Selected",
+            "target": "taget_single_enemy",
             "effects": [],
             "attack_flavor": [
                 "lock_on"
@@ -3672,7 +3672,7 @@
             "base_power": 0,
             "priority": 0,
             "type": "Ghost",
-            "target": "Target Selected",
+            "target": "taget_single_enemy",
             "effects": [],
             "attack_flavor": [
                 "nightmare"
@@ -3692,7 +3692,7 @@
             "base_power": 60,
             "priority": 0,
             "type": "Fire",
-            "target": "Target Selected",
+            "target": "taget_single_enemy",
             "effects": [],
             "attack_flavor": [
                 "self_thaw"
@@ -3712,7 +3712,7 @@
             "base_power": 40,
             "priority": 0,
             "type": "Normal",
-            "target": "Target Selected",
+            "target": "taget_single_enemy",
             "effects": [
                 {
                     "flinch": true,
@@ -3737,7 +3737,7 @@
             "base_power": 0,
             "priority": 0,
             "type": "Ghost",
-            "target": "Target Selected",
+            "target": "taget_single_enemy",
             "effects": [
                 {
                     "chance": 100,
@@ -3776,7 +3776,7 @@
             "base_power": 1,
             "priority": 0,
             "type": "Normal",
-            "target": "Target Selected",
+            "target": "taget_single_enemy",
             "effects": [],
             "attack_flavor": [
                 "reversal"
@@ -3796,7 +3796,7 @@
             "base_power": 0,
             "priority": 0,
             "type": "Normal",
-            "target": "Target User",
+            "target": "target_self",
             "effects": [],
             "attack_flavor": [
                 "conversion_2"
@@ -3816,7 +3816,7 @@
             "base_power": 100,
             "priority": 0,
             "type": "Flying",
-            "target": "Target Selected",
+            "target": "taget_single_enemy",
             "effects": [],
             "attack_flavor": [
                 "high_crit"
@@ -3836,7 +3836,7 @@
             "base_power": 0,
             "priority": 0,
             "type": "Grass",
-            "target": "Target Selected",
+            "target": "taget_single_enemy",
             "effects": [
                 {
                     "chance": 100,
@@ -3861,7 +3861,7 @@
             "base_power": 1,
             "priority": 0,
             "type": "Fighting",
-            "target": "Target Selected",
+            "target": "taget_single_enemy",
             "effects": [],
             "attack_flavor": [
                 "reversal"
@@ -3881,7 +3881,7 @@
             "base_power": 0,
             "priority": 0,
             "type": "Ghost",
-            "target": "Target Selected",
+            "target": "taget_single_enemy",
             "effects": [],
             "attack_flavor": [
                 "spite"
@@ -3901,7 +3901,7 @@
             "base_power": 40,
             "priority": 0,
             "type": "Ice",
-            "target": "Target Both",
+            "target": "target_both_enemies",
             "effects": [
                 {
                     "status": "Freeze",
@@ -3924,7 +3924,7 @@
             "base_power": 0,
             "priority": 3,
             "type": "Normal",
-            "target": "Target User",
+            "target": "target_self",
             "effects": [],
             "attack_flavor": [
                 "protect"
@@ -3944,7 +3944,7 @@
             "base_power": 40,
             "priority": 1,
             "type": "Fighting",
-            "target": "Target Selected",
+            "target": "taget_single_enemy",
             "effects": [],
             "attack_flavor": [],
             "contact": true,
@@ -3962,7 +3962,7 @@
             "base_power": 0,
             "priority": 0,
             "type": "Normal",
-            "target": "Target Selected",
+            "target": "taget_single_enemy",
             "effects": [
                 {
                     "chance": 100,
@@ -3987,7 +3987,7 @@
             "base_power": 60,
             "priority": 0,
             "type": "Dark",
-            "target": "Target Selected",
+            "target": "taget_single_enemy",
             "effects": [],
             "attack_flavor": [
                 "always_hit"
@@ -4007,7 +4007,7 @@
             "base_power": 0,
             "priority": 0,
             "type": "Normal",
-            "target": "Target Selected",
+            "target": "taget_single_enemy",
             "effects": [
                 {
                     "status": "Confusion",
@@ -4030,7 +4030,7 @@
             "base_power": 0,
             "priority": 0,
             "type": "Normal",
-            "target": "Target User",
+            "target": "target_self",
             "effects": [
                 {
                     "chance": 100,
@@ -4057,7 +4057,7 @@
             "base_power": 90,
             "priority": 0,
             "type": "Poison",
-            "target": "Target Selected",
+            "target": "taget_single_enemy",
             "effects": [
                 {
                     "status": "Poison",
@@ -4080,7 +4080,7 @@
             "base_power": 20,
             "priority": 0,
             "type": "Ground",
-            "target": "Target Selected",
+            "target": "taget_single_enemy",
             "effects": [
                 {
                     "chance": 100,
@@ -4105,7 +4105,7 @@
             "base_power": 65,
             "priority": 0,
             "type": "Water",
-            "target": "Target Selected",
+            "target": "taget_single_enemy",
             "effects": [
                 {
                     "chance": 50,
@@ -4130,7 +4130,7 @@
             "base_power": 0,
             "priority": 0,
             "type": "Ground",
-            "target": "Target Opponents Field",
+            "target": "target_enemy_field",
             "effects": [],
             "attack_flavor": [
                 "spikes"
@@ -4150,7 +4150,7 @@
             "base_power": 100,
             "priority": 0,
             "type": "Electric",
-            "target": "Target Selected",
+            "target": "taget_single_enemy",
             "effects": [
                 {
                     "status": "Paralysis",
@@ -4173,7 +4173,7 @@
             "base_power": 0,
             "priority": 0,
             "type": "Normal",
-            "target": "Target Selected",
+            "target": "taget_single_enemy",
             "effects": [],
             "attack_flavor": [
                 "foresight"
@@ -4193,7 +4193,7 @@
             "base_power": 0,
             "priority": 0,
             "type": "Ghost",
-            "target": "Target User",
+            "target": "target_self",
             "effects": [],
             "attack_flavor": [
                 "destiny_bond"
@@ -4213,7 +4213,7 @@
             "base_power": 0,
             "priority": 0,
             "type": "Normal",
-            "target": "Target User",
+            "target": "target_self",
             "effects": [],
             "attack_flavor": [
                 "perish_song"
@@ -4233,7 +4233,7 @@
             "base_power": 55,
             "priority": 0,
             "type": "Ice",
-            "target": "Target Both",
+            "target": "target_both_enemies",
             "effects": [
                 {
                     "chance": 100,
@@ -4258,7 +4258,7 @@
             "base_power": 0,
             "priority": 3,
             "type": "Fighting",
-            "target": "Target User",
+            "target": "target_self",
             "effects": [],
             "attack_flavor": [
                 "protect"
@@ -4278,7 +4278,7 @@
             "base_power": 25,
             "priority": 0,
             "type": "Ground",
-            "target": "Target Selected",
+            "target": "taget_single_enemy",
             "effects": [],
             "attack_flavor": [
                 "multi_hit"
@@ -4298,7 +4298,7 @@
             "base_power": 0,
             "priority": 0,
             "type": "Normal",
-            "target": "Target Selected",
+            "target": "taget_single_enemy",
             "effects": [],
             "attack_flavor": [
                 "lock_on"
@@ -4318,7 +4318,7 @@
             "base_power": 90,
             "priority": 0,
             "type": "Dragon",
-            "target": "Target Random",
+            "target": "target_random_enemy",
             "effects": [],
             "attack_flavor": [
                 "rampage"
@@ -4338,7 +4338,7 @@
             "base_power": 0,
             "priority": 0,
             "type": "Rock",
-            "target": "Target User",
+            "target": "target_self",
             "effects": [],
             "attack_flavor": [
                 "sandstorm"
@@ -4358,7 +4358,7 @@
             "base_power": 60,
             "priority": 0,
             "type": "Grass",
-            "target": "Target Selected",
+            "target": "taget_single_enemy",
             "effects": [],
             "attack_flavor": [
                 "drain_hp"
@@ -4378,7 +4378,7 @@
             "base_power": 0,
             "priority": 3,
             "type": "Normal",
-            "target": "Target User",
+            "target": "target_self",
             "effects": [],
             "attack_flavor": [
                 "endure"
@@ -4398,7 +4398,7 @@
             "base_power": 0,
             "priority": 0,
             "type": "Normal",
-            "target": "Target Selected",
+            "target": "taget_single_enemy",
             "effects": [
                 {
                     "chance": 100,
@@ -4423,7 +4423,7 @@
             "base_power": 30,
             "priority": 0,
             "type": "Rock",
-            "target": "Target Selected",
+            "target": "taget_single_enemy",
             "effects": [],
             "attack_flavor": [
                 "rollout"
@@ -4443,7 +4443,7 @@
             "base_power": 40,
             "priority": 0,
             "type": "Normal",
-            "target": "Target Selected",
+            "target": "taget_single_enemy",
             "effects": [],
             "attack_flavor": [
                 "false_swipe"
@@ -4463,7 +4463,7 @@
             "base_power": 0,
             "priority": 0,
             "type": "Normal",
-            "target": "Target Selected",
+            "target": "taget_single_enemy",
             "effects": [
                 {
                     "status": "Confusion",
@@ -4492,7 +4492,7 @@
             "base_power": 0,
             "priority": 0,
             "type": "Normal",
-            "target": "Target User",
+            "target": "target_self",
             "effects": [],
             "attack_flavor": [
                 "recover"
@@ -4512,7 +4512,7 @@
             "base_power": 65,
             "priority": 0,
             "type": "Electric",
-            "target": "Target Selected",
+            "target": "taget_single_enemy",
             "effects": [
                 {
                     "status": "Paralysis",
@@ -4535,7 +4535,7 @@
             "base_power": 10,
             "priority": 0,
             "type": "Bug",
-            "target": "Target Selected",
+            "target": "taget_single_enemy",
             "effects": [],
             "attack_flavor": [
                 "fury_cutter"
@@ -4555,7 +4555,7 @@
             "base_power": 70,
             "priority": 0,
             "type": "Steel",
-            "target": "Target Selected",
+            "target": "taget_single_enemy",
             "effects": [
                 {
                     "chance": 10,
@@ -4580,7 +4580,7 @@
             "base_power": 0,
             "priority": 0,
             "type": "Normal",
-            "target": "Target Selected",
+            "target": "taget_single_enemy",
             "effects": [],
             "attack_flavor": [
                 "mean_look"
@@ -4600,7 +4600,7 @@
             "base_power": 0,
             "priority": 0,
             "type": "Normal",
-            "target": "Target Selected",
+            "target": "taget_single_enemy",
             "effects": [],
             "attack_flavor": [
                 "attract"
@@ -4620,7 +4620,7 @@
             "base_power": 0,
             "priority": 0,
             "type": "Normal",
-            "target": "Target Depends",
+            "target": "target_depends",
             "effects": [],
             "attack_flavor": [
                 "sleep_talk"
@@ -4640,7 +4640,7 @@
             "base_power": 0,
             "priority": 0,
             "type": "Normal",
-            "target": "Target User",
+            "target": "target_self",
             "effects": [],
             "attack_flavor": [
                 "heal_bell"
@@ -4660,7 +4660,7 @@
             "base_power": 1,
             "priority": 0,
             "type": "Normal",
-            "target": "Target Selected",
+            "target": "taget_single_enemy",
             "effects": [],
             "attack_flavor": [
                 "return"
@@ -4680,7 +4680,7 @@
             "base_power": 1,
             "priority": 0,
             "type": "Normal",
-            "target": "Target Selected",
+            "target": "taget_single_enemy",
             "effects": [],
             "attack_flavor": [
                 "present"
@@ -4700,7 +4700,7 @@
             "base_power": 1,
             "priority": 0,
             "type": "Normal",
-            "target": "Target Selected",
+            "target": "taget_single_enemy",
             "effects": [],
             "attack_flavor": [
                 "frustration"
@@ -4720,7 +4720,7 @@
             "base_power": 0,
             "priority": 0,
             "type": "Normal",
-            "target": "Target User",
+            "target": "target_self",
             "effects": [],
             "attack_flavor": [
                 "safeguard"
@@ -4740,7 +4740,7 @@
             "base_power": 0,
             "priority": 0,
             "type": "Normal",
-            "target": "Target Selected",
+            "target": "taget_single_enemy",
             "effects": [],
             "attack_flavor": [
                 "pain_split"
@@ -4760,7 +4760,7 @@
             "base_power": 100,
             "priority": 0,
             "type": "Fire",
-            "target": "Target Selected",
+            "target": "taget_single_enemy",
             "effects": [
                 {
                     "chance": 50,
@@ -4785,7 +4785,7 @@
             "base_power": 1,
             "priority": 0,
             "type": "Ground",
-            "target": "Target Foes And Ally",
+            "target": "target_all",
             "effects": [],
             "attack_flavor": [
                 "bonus_dig_damage",
@@ -4806,7 +4806,7 @@
             "base_power": 100,
             "priority": 0,
             "type": "Fighting",
-            "target": "Target Selected",
+            "target": "taget_single_enemy",
             "effects": [
                 {
                     "status": "Confusion",
@@ -4829,7 +4829,7 @@
             "base_power": 120,
             "priority": 0,
             "type": "Bug",
-            "target": "Target Selected",
+            "target": "taget_single_enemy",
             "effects": [],
             "attack_flavor": [],
             "contact": true,
@@ -4847,7 +4847,7 @@
             "base_power": 60,
             "priority": 0,
             "type": "Dragon",
-            "target": "Target Selected",
+            "target": "taget_single_enemy",
             "effects": [
                 {
                     "status": "Paralysis",
@@ -4870,7 +4870,7 @@
             "base_power": 0,
             "priority": 0,
             "type": "Normal",
-            "target": "Target User",
+            "target": "target_self",
             "effects": [],
             "attack_flavor": [
                 "baton_pass"
@@ -4890,7 +4890,7 @@
             "base_power": 0,
             "priority": 0,
             "type": "Normal",
-            "target": "Target Selected",
+            "target": "taget_single_enemy",
             "effects": [],
             "attack_flavor": [
                 "encore"
@@ -4910,7 +4910,7 @@
             "base_power": 40,
             "priority": 0,
             "type": "Dark",
-            "target": "Target Selected",
+            "target": "taget_single_enemy",
             "effects": [],
             "attack_flavor": [
                 "pursuit"
@@ -4930,7 +4930,7 @@
             "base_power": 20,
             "priority": 0,
             "type": "Normal",
-            "target": "Target Selected",
+            "target": "taget_single_enemy",
             "effects": [],
             "attack_flavor": [
                 "rapid_spin"
@@ -4950,7 +4950,7 @@
             "base_power": 0,
             "priority": 0,
             "type": "Normal",
-            "target": "Target Both",
+            "target": "target_both_enemies",
             "effects": [
                 {
                     "chance": 100,
@@ -4975,7 +4975,7 @@
             "base_power": 100,
             "priority": 0,
             "type": "Steel",
-            "target": "Target Selected",
+            "target": "taget_single_enemy",
             "effects": [
                 {
                     "chance": 30,
@@ -5000,7 +5000,7 @@
             "base_power": 50,
             "priority": 0,
             "type": "Steel",
-            "target": "Target Selected",
+            "target": "taget_single_enemy",
             "effects": [
                 {
                     "chance": 10,
@@ -5025,7 +5025,7 @@
             "base_power": 70,
             "priority": -1,
             "type": "Fighting",
-            "target": "Target Selected",
+            "target": "taget_single_enemy",
             "effects": [],
             "attack_flavor": [
                 "always_hit"
@@ -5045,7 +5045,7 @@
             "base_power": 0,
             "priority": 0,
             "type": "Normal",
-            "target": "Target User",
+            "target": "target_self",
             "effects": [],
             "attack_flavor": [
                 "morning_weather_heal"
@@ -5065,7 +5065,7 @@
             "base_power": 0,
             "priority": 0,
             "type": "Grass",
-            "target": "Target User",
+            "target": "target_self",
             "effects": [],
             "attack_flavor": [
                 "day_weather_heal"
@@ -5085,7 +5085,7 @@
             "base_power": 0,
             "priority": 0,
             "type": "Normal",
-            "target": "Target User",
+            "target": "target_self",
             "effects": [],
             "attack_flavor": [
                 "night_weather_heal"
@@ -5105,7 +5105,7 @@
             "base_power": 1,
             "priority": 0,
             "type": "Normal",
-            "target": "Target Selected",
+            "target": "taget_single_enemy",
             "effects": [],
             "attack_flavor": [
                 "hidden_power"
@@ -5125,7 +5125,7 @@
             "base_power": 100,
             "priority": 0,
             "type": "Fighting",
-            "target": "Target Selected",
+            "target": "taget_single_enemy",
             "effects": [],
             "attack_flavor": [
                 "high_crit"
@@ -5145,7 +5145,7 @@
             "base_power": 40,
             "priority": 0,
             "type": "Dragon",
-            "target": "Target Both",
+            "target": "target_both_enemies",
             "effects": [
                 {
                     "flinch": true,
@@ -5170,7 +5170,7 @@
             "base_power": 0,
             "priority": 0,
             "type": "Water",
-            "target": "Target User",
+            "target": "target_self",
             "effects": [],
             "attack_flavor": [
                 "rain_dance"
@@ -5190,7 +5190,7 @@
             "base_power": 0,
             "priority": 0,
             "type": "Fire",
-            "target": "Target User",
+            "target": "target_self",
             "effects": [],
             "attack_flavor": [
                 "sunny_day"
@@ -5210,7 +5210,7 @@
             "base_power": 80,
             "priority": 0,
             "type": "Dark",
-            "target": "Target Selected",
+            "target": "taget_single_enemy",
             "effects": [
                 {
                     "chance": 20,
@@ -5235,7 +5235,7 @@
             "base_power": 1,
             "priority": -5,
             "type": "Psychic",
-            "target": "Target Depends",
+            "target": "target_depends",
             "effects": [],
             "attack_flavor": [
                 "mirror_coat"
@@ -5255,7 +5255,7 @@
             "base_power": 0,
             "priority": 0,
             "type": "Normal",
-            "target": "Target Selected",
+            "target": "taget_single_enemy",
             "effects": [],
             "attack_flavor": [
                 "psych_up"
@@ -5275,7 +5275,7 @@
             "base_power": 80,
             "priority": 1,
             "type": "Normal",
-            "target": "Target Selected",
+            "target": "taget_single_enemy",
             "effects": [],
             "attack_flavor": [],
             "contact": true,
@@ -5293,7 +5293,7 @@
             "base_power": 60,
             "priority": 0,
             "type": "Rock",
-            "target": "Target Selected",
+            "target": "taget_single_enemy",
             "effects": [
                 {
                     "chance": 10,
@@ -5318,7 +5318,7 @@
             "base_power": 80,
             "priority": 0,
             "type": "Ghost",
-            "target": "Target Selected",
+            "target": "taget_single_enemy",
             "effects": [
                 {
                     "chance": 20,
@@ -5343,7 +5343,7 @@
             "base_power": 80,
             "priority": 0,
             "type": "Psychic",
-            "target": "Target Selected",
+            "target": "taget_single_enemy",
             "effects": [],
             "attack_flavor": [
                 "future_sight"
@@ -5363,7 +5363,7 @@
             "base_power": 20,
             "priority": 0,
             "type": "Fighting",
-            "target": "Target Selected",
+            "target": "taget_single_enemy",
             "effects": [
                 {
                     "chance": 50,
@@ -5388,7 +5388,7 @@
             "base_power": 15,
             "priority": 0,
             "type": "Water",
-            "target": "Target Selected",
+            "target": "taget_single_enemy",
             "effects": [],
             "attack_flavor": [
                 "trap"
@@ -5408,7 +5408,7 @@
             "base_power": 10,
             "priority": 0,
             "type": "Dark",
-            "target": "Target Selected",
+            "target": "taget_single_enemy",
             "effects": [],
             "attack_flavor": [
                 "beat_up"
@@ -5428,7 +5428,7 @@
             "base_power": 40,
             "priority": 1,
             "type": "Normal",
-            "target": "Target Selected",
+            "target": "taget_single_enemy",
             "effects": [],
             "attack_flavor": [
                 "fake_out"
@@ -5448,7 +5448,7 @@
             "base_power": 50,
             "priority": 0,
             "type": "Normal",
-            "target": "Target Random",
+            "target": "target_random_enemy",
             "effects": [],
             "attack_flavor": [
                 "uproar"
@@ -5468,7 +5468,7 @@
             "base_power": 0,
             "priority": 0,
             "type": "Normal",
-            "target": "Target User",
+            "target": "target_self",
             "effects": [],
             "attack_flavor": [
                 "stockpile"
@@ -5488,7 +5488,7 @@
             "base_power": 100,
             "priority": 0,
             "type": "Normal",
-            "target": "Target Selected",
+            "target": "taget_single_enemy",
             "effects": [],
             "attack_flavor": [
                 "spit_up"
@@ -5508,7 +5508,7 @@
             "base_power": 0,
             "priority": 0,
             "type": "Normal",
-            "target": "Target User",
+            "target": "target_self",
             "effects": [],
             "attack_flavor": [
                 "swallow"
@@ -5528,7 +5528,7 @@
             "base_power": 100,
             "priority": 0,
             "type": "Fire",
-            "target": "Target Both",
+            "target": "target_both_enemies",
             "effects": [
                 {
                     "status": "Burn",
@@ -5551,7 +5551,7 @@
             "base_power": 0,
             "priority": 0,
             "type": "Ice",
-            "target": "Target User",
+            "target": "target_self",
             "effects": [],
             "attack_flavor": [
                 "hail"
@@ -5571,7 +5571,7 @@
             "base_power": 0,
             "priority": 0,
             "type": "Dark",
-            "target": "Target Selected",
+            "target": "taget_single_enemy",
             "effects": [],
             "attack_flavor": [
                 "torment"
@@ -5591,7 +5591,7 @@
             "base_power": 0,
             "priority": 0,
             "type": "Dark",
-            "target": "Target Selected",
+            "target": "taget_single_enemy",
             "effects": [
                 {
                     "status": "Confusion",
@@ -5620,7 +5620,7 @@
             "base_power": 0,
             "priority": 0,
             "type": "Fire",
-            "target": "Target Selected",
+            "target": "taget_single_enemy",
             "effects": [
                 {
                     "status": "Burn",
@@ -5643,7 +5643,7 @@
             "base_power": 0,
             "priority": 0,
             "type": "Dark",
-            "target": "Target Selected",
+            "target": "taget_single_enemy",
             "effects": [
                 {
                     "chance": 100,
@@ -5676,7 +5676,7 @@
             "base_power": 70,
             "priority": 0,
             "type": "Normal",
-            "target": "Target Selected",
+            "target": "taget_single_enemy",
             "effects": [],
             "attack_flavor": [
                 "facade"
@@ -5696,7 +5696,7 @@
             "base_power": 150,
             "priority": -3,
             "type": "Fighting",
-            "target": "Target Selected",
+            "target": "taget_single_enemy",
             "effects": [],
             "attack_flavor": [
                 "focus_punch"
@@ -5716,7 +5716,7 @@
             "base_power": 60,
             "priority": 0,
             "type": "Normal",
-            "target": "Target Selected",
+            "target": "taget_single_enemy",
             "effects": [],
             "attack_flavor": [
                 "smelling_salt"
@@ -5736,7 +5736,7 @@
             "base_power": 0,
             "priority": 3,
             "type": "Normal",
-            "target": "Target User",
+            "target": "target_self",
             "effects": [],
             "attack_flavor": [
                 "follow_me"
@@ -5756,7 +5756,7 @@
             "base_power": 0,
             "priority": 0,
             "type": "Normal",
-            "target": "Target Depends",
+            "target": "target_depends",
             "effects": [],
             "attack_flavor": [
                 "nature_power"
@@ -5776,7 +5776,7 @@
             "base_power": 0,
             "priority": 0,
             "type": "Electric",
-            "target": "Target User",
+            "target": "target_self",
             "effects": [],
             "attack_flavor": [
                 "charge"
@@ -5796,7 +5796,7 @@
             "base_power": 0,
             "priority": 0,
             "type": "Dark",
-            "target": "Target Selected",
+            "target": "taget_single_enemy",
             "effects": [
                 {
                     "status": "Taunt",
@@ -5819,7 +5819,7 @@
             "base_power": 0,
             "priority": 5,
             "type": "Normal",
-            "target": "Target User",
+            "target": "target_self",
             "effects": [],
             "attack_flavor": [
                 "helping_hand"
@@ -5839,7 +5839,7 @@
             "base_power": 0,
             "priority": 0,
             "type": "Psychic",
-            "target": "Target Selected",
+            "target": "taget_single_enemy",
             "effects": [],
             "attack_flavor": [
                 "trick"
@@ -5859,7 +5859,7 @@
             "base_power": 0,
             "priority": 0,
             "type": "Psychic",
-            "target": "Target Selected",
+            "target": "taget_single_enemy",
             "effects": [],
             "attack_flavor": [
                 "role_play"
@@ -5879,7 +5879,7 @@
             "base_power": 0,
             "priority": 0,
             "type": "Normal",
-            "target": "Target User",
+            "target": "target_self",
             "effects": [],
             "attack_flavor": [
                 "wish"
@@ -5899,7 +5899,7 @@
             "base_power": 0,
             "priority": 0,
             "type": "Normal",
-            "target": "Target Depends",
+            "target": "target_depends",
             "effects": [],
             "attack_flavor": [
                 "assist"
@@ -5919,7 +5919,7 @@
             "base_power": 0,
             "priority": 0,
             "type": "Grass",
-            "target": "Target User",
+            "target": "target_self",
             "effects": [
                 {
                     "status": "Ingrain",
@@ -5942,7 +5942,7 @@
             "base_power": 120,
             "priority": 0,
             "type": "Fighting",
-            "target": "Target Selected",
+            "target": "taget_single_enemy",
             "effects": [
                 {
                     "chance": 100,
@@ -5973,7 +5973,7 @@
             "base_power": 0,
             "priority": 4,
             "type": "Psychic",
-            "target": "Target Depends",
+            "target": "target_depends",
             "effects": [],
             "attack_flavor": [
                 "magic_coat"
@@ -5993,7 +5993,7 @@
             "base_power": 0,
             "priority": 0,
             "type": "Normal",
-            "target": "Target User",
+            "target": "target_self",
             "effects": [],
             "attack_flavor": [
                 "recycle"
@@ -6013,7 +6013,7 @@
             "base_power": 60,
             "priority": -4,
             "type": "Fighting",
-            "target": "Target Selected",
+            "target": "taget_single_enemy",
             "effects": [],
             "attack_flavor": [
                 "revenge"
@@ -6033,7 +6033,7 @@
             "base_power": 75,
             "priority": 0,
             "type": "Fighting",
-            "target": "Target Selected",
+            "target": "taget_single_enemy",
             "effects": [],
             "attack_flavor": [
                 "brick_break"
@@ -6053,7 +6053,7 @@
             "base_power": 0,
             "priority": 0,
             "type": "Normal",
-            "target": "Target Selected",
+            "target": "taget_single_enemy",
             "effects": [
                 {
                     "status": "Yawn",
@@ -6076,7 +6076,7 @@
             "base_power": 20,
             "priority": 0,
             "type": "Dark",
-            "target": "Target Selected",
+            "target": "taget_single_enemy",
             "effects": [],
             "attack_flavor": [
                 "knock_off"
@@ -6096,7 +6096,7 @@
             "base_power": 1,
             "priority": 0,
             "type": "Normal",
-            "target": "Target Selected",
+            "target": "taget_single_enemy",
             "effects": [],
             "attack_flavor": [
                 "endeavor"
@@ -6116,7 +6116,7 @@
             "base_power": 150,
             "priority": 0,
             "type": "Fire",
-            "target": "Target Both",
+            "target": "target_both_enemies",
             "effects": [],
             "attack_flavor": [
                 "eruption"
@@ -6136,7 +6136,7 @@
             "base_power": 0,
             "priority": 0,
             "type": "Psychic",
-            "target": "Target Selected",
+            "target": "taget_single_enemy",
             "effects": [],
             "attack_flavor": [
                 "skill_swap"
@@ -6156,7 +6156,7 @@
             "base_power": 0,
             "priority": 0,
             "type": "Psychic",
-            "target": "Target User",
+            "target": "target_self",
             "effects": [],
             "attack_flavor": [
                 "imprison"
@@ -6176,7 +6176,7 @@
             "base_power": 0,
             "priority": 0,
             "type": "Normal",
-            "target": "Target User",
+            "target": "target_self",
             "effects": [],
             "attack_flavor": [
                 "refresh"
@@ -6196,7 +6196,7 @@
             "base_power": 0,
             "priority": 0,
             "type": "Ghost",
-            "target": "Target User",
+            "target": "target_self",
             "effects": [],
             "attack_flavor": [
                 "grudge"
@@ -6216,7 +6216,7 @@
             "base_power": 0,
             "priority": 4,
             "type": "Dark",
-            "target": "Target Depends",
+            "target": "target_depends",
             "effects": [],
             "attack_flavor": [
                 "snatch"
@@ -6236,7 +6236,7 @@
             "base_power": 70,
             "priority": 0,
             "type": "Normal",
-            "target": "Target Selected",
+            "target": "taget_single_enemy",
             "effects": [
                 {
                     "status": "Secret Power",
@@ -6259,7 +6259,7 @@
             "base_power": 60,
             "priority": 0,
             "type": "Water",
-            "target": "Target Selected",
+            "target": "taget_single_enemy",
             "effects": [],
             "attack_flavor": [
                 "two_turn_semi_invulnerable"
@@ -6279,7 +6279,7 @@
             "base_power": 15,
             "priority": 0,
             "type": "Fighting",
-            "target": "Target Selected",
+            "target": "taget_single_enemy",
             "effects": [],
             "attack_flavor": [
                 "multi_hit"
@@ -6299,7 +6299,7 @@
             "base_power": 0,
             "priority": 0,
             "type": "Normal",
-            "target": "Target User",
+            "target": "target_self",
             "effects": [],
             "attack_flavor": [
                 "camouflage"
@@ -6319,7 +6319,7 @@
             "base_power": 0,
             "priority": 0,
             "type": "Bug",
-            "target": "Target User",
+            "target": "target_self",
             "effects": [
                 {
                     "chance": 100,
@@ -6344,7 +6344,7 @@
             "base_power": 70,
             "priority": 0,
             "type": "Psychic",
-            "target": "Target Selected",
+            "target": "taget_single_enemy",
             "effects": [
                 {
                     "chance": 50,
@@ -6369,7 +6369,7 @@
             "base_power": 70,
             "priority": 0,
             "type": "Psychic",
-            "target": "Target Selected",
+            "target": "taget_single_enemy",
             "effects": [
                 {
                     "chance": 50,
@@ -6394,7 +6394,7 @@
             "base_power": 0,
             "priority": 0,
             "type": "Flying",
-            "target": "Target Selected",
+            "target": "taget_single_enemy",
             "effects": [
                 {
                     "chance": 100,
@@ -6419,7 +6419,7 @@
             "base_power": 0,
             "priority": 0,
             "type": "Normal",
-            "target": "Target Foes And Ally",
+            "target": "target_all",
             "effects": [
                 {
                     "status": "Confusion",
@@ -6444,7 +6444,7 @@
             "base_power": 85,
             "priority": 0,
             "type": "Fire",
-            "target": "Target Selected",
+            "target": "taget_single_enemy",
             "effects": [
                 {
                     "status": "Burn",
@@ -6469,7 +6469,7 @@
             "base_power": 0,
             "priority": 0,
             "type": "Ground",
-            "target": "Target User",
+            "target": "target_self",
             "effects": [
                 {
                     "status": "Mud Sport",
@@ -6492,7 +6492,7 @@
             "base_power": 30,
             "priority": 0,
             "type": "Ice",
-            "target": "Target Selected",
+            "target": "taget_single_enemy",
             "effects": [],
             "attack_flavor": [
                 "rollout"
@@ -6512,7 +6512,7 @@
             "base_power": 60,
             "priority": 0,
             "type": "Grass",
-            "target": "Target Selected",
+            "target": "taget_single_enemy",
             "effects": [
                 {
                     "chance": 30,
@@ -6537,7 +6537,7 @@
             "base_power": 0,
             "priority": 0,
             "type": "Normal",
-            "target": "Target User",
+            "target": "target_self",
             "effects": [],
             "attack_flavor": [
                 "recover"
@@ -6557,7 +6557,7 @@
             "base_power": 90,
             "priority": 0,
             "type": "Normal",
-            "target": "Target Both",
+            "target": "target_both_enemies",
             "effects": [],
             "attack_flavor": [],
             "contact": false,
@@ -6575,7 +6575,7 @@
             "base_power": 50,
             "priority": 0,
             "type": "Poison",
-            "target": "Target Selected",
+            "target": "taget_single_enemy",
             "effects": [
                 {
                     "status": "Toxic",
@@ -6598,7 +6598,7 @@
             "base_power": 75,
             "priority": 0,
             "type": "Normal",
-            "target": "Target Selected",
+            "target": "taget_single_enemy",
             "effects": [
                 {
                     "chance": 50,
@@ -6623,7 +6623,7 @@
             "base_power": 150,
             "priority": 0,
             "type": "Fire",
-            "target": "Target Selected",
+            "target": "taget_single_enemy",
             "effects": [],
             "attack_flavor": [
                 "recharge"
@@ -6643,7 +6643,7 @@
             "base_power": 150,
             "priority": 0,
             "type": "Water",
-            "target": "Target Selected",
+            "target": "taget_single_enemy",
             "effects": [],
             "attack_flavor": [
                 "recharge"
@@ -6663,7 +6663,7 @@
             "base_power": 100,
             "priority": 0,
             "type": "Steel",
-            "target": "Target Selected",
+            "target": "taget_single_enemy",
             "effects": [
                 {
                     "chance": 20,
@@ -6688,7 +6688,7 @@
             "base_power": 30,
             "priority": 0,
             "type": "Ghost",
-            "target": "Target Selected",
+            "target": "taget_single_enemy",
             "effects": [
                 {
                     "chance": 30,
@@ -6713,7 +6713,7 @@
             "base_power": 50,
             "priority": 0,
             "type": "Normal",
-            "target": "Target Selected",
+            "target": "taget_single_enemy",
             "effects": [],
             "attack_flavor": [
                 "weather_ball"
@@ -6733,7 +6733,7 @@
             "base_power": 0,
             "priority": 0,
             "type": "Grass",
-            "target": "Target User",
+            "target": "target_self",
             "effects": [],
             "attack_flavor": [
                 "heal_bell"
@@ -6753,7 +6753,7 @@
             "base_power": 0,
             "priority": 0,
             "type": "Dark",
-            "target": "Target Selected",
+            "target": "taget_single_enemy",
             "effects": [
                 {
                     "chance": 100,
@@ -6778,7 +6778,7 @@
             "base_power": 55,
             "priority": 0,
             "type": "Flying",
-            "target": "Target Both",
+            "target": "target_both_enemies",
             "effects": [],
             "attack_flavor": [
                 "high_crit"
@@ -6798,7 +6798,7 @@
             "base_power": 140,
             "priority": 0,
             "type": "Fire",
-            "target": "Target Selected",
+            "target": "taget_single_enemy",
             "effects": [
                 {
                     "chance": 100,
@@ -6823,7 +6823,7 @@
             "base_power": 0,
             "priority": 0,
             "type": "Normal",
-            "target": "Target Selected",
+            "target": "taget_single_enemy",
             "effects": [],
             "attack_flavor": [
                 "foresight"
@@ -6843,7 +6843,7 @@
             "base_power": 50,
             "priority": 0,
             "type": "Rock",
-            "target": "Target Selected",
+            "target": "taget_single_enemy",
             "effects": [
                 {
                     "chance": 100,
@@ -6868,7 +6868,7 @@
             "base_power": 60,
             "priority": 0,
             "type": "Bug",
-            "target": "Target Selected",
+            "target": "taget_single_enemy",
             "effects": [
                 {
                     "chance": 10,
@@ -6893,7 +6893,7 @@
             "base_power": 0,
             "priority": 0,
             "type": "Steel",
-            "target": "Target Selected",
+            "target": "taget_single_enemy",
             "effects": [
                 {
                     "chance": 100,
@@ -6918,7 +6918,7 @@
             "base_power": 0,
             "priority": 0,
             "type": "Grass",
-            "target": "Target Selected",
+            "target": "taget_single_enemy",
             "effects": [
                 {
                     "status": "Sleep",
@@ -6941,7 +6941,7 @@
             "base_power": 0,
             "priority": 0,
             "type": "Normal",
-            "target": "Target Selected",
+            "target": "taget_single_enemy",
             "effects": [
                 {
                     "chance": 100,
@@ -6972,7 +6972,7 @@
             "base_power": 0,
             "priority": 0,
             "type": "Psychic",
-            "target": "Target User",
+            "target": "target_self",
             "effects": [
                 {
                     "chance": 100,
@@ -7003,7 +7003,7 @@
             "base_power": 150,
             "priority": 0,
             "type": "Water",
-            "target": "Target Both",
+            "target": "target_both_enemies",
             "effects": [],
             "attack_flavor": [
                 "eruption"
@@ -7023,7 +7023,7 @@
             "base_power": 75,
             "priority": 0,
             "type": "Bug",
-            "target": "Target Selected",
+            "target": "taget_single_enemy",
             "effects": [
                 {
                     "status": "Confusion",
@@ -7046,7 +7046,7 @@
             "base_power": 60,
             "priority": 0,
             "type": "Ghost",
-            "target": "Target Selected",
+            "target": "taget_single_enemy",
             "effects": [],
             "attack_flavor": [
                 "always_hit"
@@ -7066,7 +7066,7 @@
             "base_power": 80,
             "priority": 0,
             "type": "Psychic",
-            "target": "Target Selected",
+            "target": "taget_single_enemy",
             "effects": [
                 {
                     "chance": 10,
@@ -7091,7 +7091,7 @@
             "base_power": 85,
             "priority": 0,
             "type": "Fighting",
-            "target": "Target Selected",
+            "target": "taget_single_enemy",
             "effects": [],
             "attack_flavor": [
                 "hits_air_semi_invulnerable"
@@ -7111,7 +7111,7 @@
             "base_power": 15,
             "priority": 0,
             "type": "Ground",
-            "target": "Target Selected",
+            "target": "taget_single_enemy",
             "effects": [],
             "attack_flavor": [
                 "trap"
@@ -7131,7 +7131,7 @@
             "base_power": 1,
             "priority": 0,
             "type": "Ice",
-            "target": "Target Selected",
+            "target": "taget_single_enemy",
             "effects": [],
             "attack_flavor": [
                 "one_hit_ko"
@@ -7151,7 +7151,7 @@
             "base_power": 95,
             "priority": 0,
             "type": "Water",
-            "target": "Target Both",
+            "target": "target_both_enemies",
             "effects": [
                 {
                     "chance": 30,
@@ -7176,7 +7176,7 @@
             "base_power": 10,
             "priority": 0,
             "type": "Grass",
-            "target": "Target Selected",
+            "target": "taget_single_enemy",
             "effects": [],
             "attack_flavor": [
                 "multi_hit"
@@ -7196,7 +7196,7 @@
             "base_power": 60,
             "priority": 0,
             "type": "Flying",
-            "target": "Target Selected",
+            "target": "taget_single_enemy",
             "effects": [],
             "attack_flavor": [
                 "always_hit"
@@ -7216,7 +7216,7 @@
             "base_power": 10,
             "priority": 0,
             "type": "Ice",
-            "target": "Target Selected",
+            "target": "taget_single_enemy",
             "effects": [],
             "attack_flavor": [
                 "multi_hit"
@@ -7236,7 +7236,7 @@
             "base_power": 0,
             "priority": 0,
             "type": "Steel",
-            "target": "Target User",
+            "target": "target_self",
             "effects": [
                 {
                     "chance": 100,
@@ -7261,7 +7261,7 @@
             "base_power": 0,
             "priority": 0,
             "type": "Normal",
-            "target": "Target Selected",
+            "target": "taget_single_enemy",
             "effects": [],
             "attack_flavor": [
                 "mean_look"
@@ -7281,7 +7281,7 @@
             "base_power": 0,
             "priority": 0,
             "type": "Normal",
-            "target": "Target User",
+            "target": "target_self",
             "effects": [
                 {
                     "chance": 100,
@@ -7306,7 +7306,7 @@
             "base_power": 80,
             "priority": 0,
             "type": "Dragon",
-            "target": "Target Selected",
+            "target": "taget_single_enemy",
             "effects": [],
             "attack_flavor": [],
             "contact": true,
@@ -7324,7 +7324,7 @@
             "base_power": 150,
             "priority": 0,
             "type": "Grass",
-            "target": "Target Selected",
+            "target": "taget_single_enemy",
             "effects": [],
             "attack_flavor": [
                 "recharge"
@@ -7344,7 +7344,7 @@
             "base_power": 0,
             "priority": 0,
             "type": "Fighting",
-            "target": "Target User",
+            "target": "target_self",
             "effects": [
                 {
                     "chance": 100,
@@ -7375,7 +7375,7 @@
             "base_power": 85,
             "priority": 0,
             "type": "Flying",
-            "target": "Target Selected",
+            "target": "taget_single_enemy",
             "effects": [
                 {
                     "chance": 30,
@@ -7400,7 +7400,7 @@
             "base_power": 55,
             "priority": 0,
             "type": "Ground",
-            "target": "Target Selected",
+            "target": "taget_single_enemy",
             "effects": [
                 {
                     "chance": 100,
@@ -7425,7 +7425,7 @@
             "base_power": 50,
             "priority": 0,
             "type": "Poison",
-            "target": "Target Selected",
+            "target": "taget_single_enemy",
             "effects": [
                 {
                     "status": "Poison",
@@ -7450,7 +7450,7 @@
             "base_power": 40,
             "priority": 0,
             "type": "Normal",
-            "target": "Target Selected",
+            "target": "taget_single_enemy",
             "effects": [],
             "attack_flavor": [
                 "thief"
@@ -7470,7 +7470,7 @@
             "base_power": 120,
             "priority": 0,
             "type": "Electric",
-            "target": "Target Selected",
+            "target": "taget_single_enemy",
             "effects": [],
             "attack_flavor": [
                 "third_recoil"
@@ -7490,7 +7490,7 @@
             "base_power": 60,
             "priority": 0,
             "type": "Grass",
-            "target": "Target Selected",
+            "target": "taget_single_enemy",
             "effects": [],
             "attack_flavor": [
                 "always_hit"
@@ -7510,7 +7510,7 @@
             "base_power": 0,
             "priority": 0,
             "type": "Water",
-            "target": "Target User",
+            "target": "target_self",
             "effects": [
                 {
                     "status": "Water Sport",
@@ -7533,7 +7533,7 @@
             "base_power": 0,
             "priority": 0,
             "type": "Psychic",
-            "target": "Target User",
+            "target": "target_self",
             "effects": [
                 {
                     "chance": 100,
@@ -7564,7 +7564,7 @@
             "base_power": 70,
             "priority": 0,
             "type": "Grass",
-            "target": "Target Selected",
+            "target": "taget_single_enemy",
             "effects": [],
             "attack_flavor": [
                 "high_crit"
@@ -7584,7 +7584,7 @@
             "base_power": 0,
             "priority": 0,
             "type": "Dragon",
-            "target": "Target User",
+            "target": "target_self",
             "effects": [
                 {
                     "chance": 100,
@@ -7615,7 +7615,7 @@
             "base_power": 25,
             "priority": 0,
             "type": "Rock",
-            "target": "Target Selected",
+            "target": "taget_single_enemy",
             "effects": [],
             "attack_flavor": [
                 "multi_hit"
@@ -7635,7 +7635,7 @@
             "base_power": 60,
             "priority": 0,
             "type": "Electric",
-            "target": "Target Selected",
+            "target": "taget_single_enemy",
             "effects": [],
             "attack_flavor": [
                 "always_hit"
@@ -7655,7 +7655,7 @@
             "base_power": 60,
             "priority": 0,
             "type": "Water",
-            "target": "Target Selected",
+            "target": "taget_single_enemy",
             "effects": [
                 {
                     "status": "Confusion",
@@ -7678,7 +7678,7 @@
             "base_power": 120,
             "priority": 0,
             "type": "Steel",
-            "target": "Target Selected",
+            "target": "taget_single_enemy",
             "effects": [],
             "attack_flavor": [
                 "future_sight"
@@ -7698,7 +7698,7 @@
             "base_power": 140,
             "priority": 0,
             "type": "Psychic",
-            "target": "Target Selected",
+            "target": "taget_single_enemy",
             "effects": [
                 {
                     "chance": 100,
