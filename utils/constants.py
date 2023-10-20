@@ -90,6 +90,7 @@ class Constants:
         self.STAT_KEY = "stat"
         self.MODIFIER_KEY = "modifier"
         self.TARGET_KEY = "target"
+        self.NATURE_KEY = "nature"
 
         self.LEVEL = "level"
         self.HP = "hp"

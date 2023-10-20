@@ -354,7 +354,8 @@ def _create_trainer(trainer_dict, pkmn_db:PkmnDB, extract_trainer_id=False) -> u
                 ),
                 GenThreeStatBlock(0, 0, 0, 0, 0, 0),
                 None,
-                held_item=cur_mon[const.HELD_ITEM_KEY]
+                held_item=cur_mon[const.HELD_ITEM_KEY],
+                nature=universal_data_objects.Nature(cur_mon[const.NATURE_KEY])
             )
         )
     

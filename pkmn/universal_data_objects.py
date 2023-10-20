@@ -63,6 +63,9 @@ class Nature(Enum):
         elif self.value == 5 or self.value == 10 or self.value == 15 or self.value == 20:
             return stat_name == const.ATTACK
         return False
+    
+    def __str__(self):
+        return self.name.capitalize()
 
 
 class BadgeList:
