@@ -451,7 +451,9 @@ class MainWindow(tk.Tk):
         LoadRouteWindow(self, self._controller)
 
     def open_customize_dvs_window(self, *args, **kwargs):
-        CustomDvsWindow(self, self._controller, self._controller.get_dvs())
+        if self._controller.is_empty():
+            return
+        CustomDvsWindow(self, self._controller, self._controller.get_dvs(), self._controller.get_ability(), self._controller.get_nature())
 
     def open_data_location(self, *args, **kwargs):
         io_utils.open_explorer(config.get_user_data_dir())

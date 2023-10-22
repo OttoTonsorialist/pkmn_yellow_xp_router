@@ -263,8 +263,8 @@ class MainController:
             self._unsaved_changes = False
 
     @handle_exceptions
-    def customize_dvs(self, new_dvs):
-        self._data.change_current_dvs(new_dvs)
+    def customize_innate_stats(self, new_dvs, new_ability, new_nature):
+        self._data.change_current_innate_stats(new_dvs, new_ability, new_nature)
         self._on_route_change()
 
     @handle_exceptions
@@ -420,6 +420,12 @@ class MainController:
     
     def get_dvs(self):
         return self._data.init_route_state.solo_pkmn.dvs
+    
+    def get_ability(self):
+        return self._data.init_route_state.solo_pkmn.ability
+    
+    def get_nature(self):
+        return self._data.init_route_state.solo_pkmn.nature
     
     def get_defeated_trainers(self):
         return self._data.defeated_trainers

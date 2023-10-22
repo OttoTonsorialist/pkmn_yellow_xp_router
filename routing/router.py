@@ -46,10 +46,18 @@ class Router:
             return self.root_folder.final_state
         return self.init_route_state
     
-    def set_solo_pkmn(self, pkmn_name, level_up_moves=None, custom_dvs=None):
+    def set_solo_pkmn(self, pkmn_name, level_up_moves=None, custom_dvs=None, custom_ability=None, custom_nature=None):
         pkmn_base = current_gen_info().pkmn_db().get_pkmn(pkmn_name)
         if pkmn_base is None:
             raise ValueError(f"Could not find base stats for Pokemon: {pkmn_name}")
+        
+        if custom_ability is None:
+            custom_ability = pkmn_base.abilitiies[0]
+        
+        if custom_nature is None:
+            custom_nature = universal_data_objects.Nature.HARDY
+        elif not isinstance(custom_nature, universal_data_objects.Nature):
+            custom_nature = universal_data_objects.Nature(custom_nature)
         
         if custom_dvs is not None:
             # when setting custom DVs, should expect a dict of all values
@@ -86,7 +94,8 @@ class Router:
                 custom_dvs,
                 new_badge_list,
                 current_gen_info().make_stat_block(0, 0, 0, 0, 0, 0, is_stat_xp=True),
-                universal_data_objects.Nature.HARDY
+                custom_ability,
+                custom_nature,
             ),
             new_badge_list,
             current_gen_info().make_inventory()
@@ -103,7 +112,7 @@ class Router:
 
         self._recalc()
     
-    def change_current_dvs(self, new_dvs:universal_data_objects.StatBlock):
+    def change_current_innate_stats(self, new_dvs:universal_data_objects.StatBlock, new_ability:str, new_nature:universal_data_objects.Nature):
         cur_mon = self.init_route_state.solo_pkmn
         self.init_route_state = full_route_state.RouteState(
             full_route_state.SoloPokemon(
@@ -112,7 +121,8 @@ class Router:
                 new_dvs,
                 self.init_route_state.badges,
                 current_gen_info().make_stat_block(0, 0, 0, 0, 0, 0, is_stat_xp=True),
-                universal_data_objects.Nature.HARDY
+                new_ability,
+                new_nature,
             ),
             self.init_route_state.badges,
             self.init_route_state.inventory
@@ -386,6 +396,8 @@ class Router:
         out_obj = {
             const.NAME_KEY: self.init_route_state.solo_pkmn.name,
             const.DVS_KEY: self.init_route_state.solo_pkmn.dvs.serialize(current_gen_info().get_generation()),
+            const.ABILITY_KEY: self.init_route_state.solo_pkmn.ability,
+            const.NATURE_KEY: self.init_route_state.solo_pkmn.nature.value,
             const.PKMN_VERSION_KEY: self.pkmn_version,
             const.TASK_LEARN_MOVE_LEVELUP: [x.serialize() for x in self.level_up_move_defs.values()],
             const.EVENTS: [self.root_folder.serialize()]
@@ -418,7 +430,13 @@ class Router:
             else:
                 level_up_moves = None
             
-            self.set_solo_pkmn(result[const.NAME_KEY], level_up_moves=level_up_moves, custom_dvs=result.get(const.DVS_KEY))
+            self.set_solo_pkmn(
+                result[const.NAME_KEY],
+                level_up_moves=level_up_moves,
+                custom_dvs=result.get(const.DVS_KEY),
+                custom_ability=result.get(const.ABILITY_KEY),
+                custom_nature=result.get(const.NATURE_KEY),
+            )
         
         if len(result[const.EVENTS]) > 0:
             self._load_events_recursive(self.root_folder, result[const.EVENTS][0])

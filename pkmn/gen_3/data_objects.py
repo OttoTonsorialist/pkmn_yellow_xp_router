@@ -562,14 +562,15 @@ _HIDDEN_POWER_TABLE = [
 ]
 def get_hidden_power_type(dvs:universal_data_objects.StatBlock) -> str:
     result_idx = dvs.hp % 2
-    result_idx += (dvs.attack % 2)
-    result_idx += (dvs.defense % 4)
-    result_idx += (dvs.speed % 8)
-    result_idx += (dvs.special_attack % 16)
-    result_idx += (dvs.special_defense % 32)
+    result_idx += (dvs.attack % 2) * 2
+    result_idx += (dvs.defense % 2) * 4
+    result_idx += (dvs.speed % 2) * 8
+    result_idx += (dvs.special_attack % 2) * 16
+    result_idx += (dvs.special_defense % 2) * 32
 
     result_idx *= 15
     result_idx = math.floor(result_idx / 63)
+    logger.info(f"got hidden power type: {_HIDDEN_POWER_TABLE[result_idx]}")
     return _HIDDEN_POWER_TABLE[result_idx]
 
 
@@ -585,8 +586,9 @@ def get_hidden_power_base_power(dvs:universal_data_objects.StatBlock) -> int:
     result += _get_power_bit(dvs.defense) * 4
     result += _get_power_bit(dvs.speed) * 8
     result += _get_power_bit(dvs.special_attack) * 16
-    result += _get_power_bit(dvs.special_defense) * 16
+    result += _get_power_bit(dvs.special_defense) * 32
 
     result *= 40
     result = math.floor(result / 63)
+    logger.info(f"got hidden power base power: {result + 30}")
     return result + 30

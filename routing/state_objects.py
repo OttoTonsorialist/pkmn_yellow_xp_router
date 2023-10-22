@@ -126,6 +126,7 @@ class SoloPokemon:
             dvs:pkmn.universal_data_objects.StatBlock,
             badges:pkmn.universal_data_objects.BadgeList,
             empty_stat_block:pkmn.universal_data_objects.StatBlock,
+            ability:str,
             nature:pkmn.universal_data_objects.Nature,
             move_list:list=None,
             cur_xp:int=0,
@@ -140,6 +141,7 @@ class SoloPokemon:
         self.dvs = dvs
         self.badges = badges
         self.held_item = held_item
+        self.ability = ability
         self.nature = nature
         # just need to hold on to a reference for a few places
         self._empty_stat_block = empty_stat_block
@@ -283,7 +285,9 @@ class SoloPokemon:
             self.dvs,
             stat_xp=self.realized_stat_xp,
             badges=badges,
-            held_item=self.held_item
+            held_item=self.held_item,
+            ability=self.ability,
+            nature=self.nature
         )
 
     def get_move_destination(self, move_name, dest):

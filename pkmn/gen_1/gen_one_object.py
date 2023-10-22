@@ -321,6 +321,7 @@ def _load_pkmn_db(path):
                 cur_pkmn[const.BASE_SPC_KEY],
                 cur_pkmn[const.OLD_BASE_SPD_KEY],
             ),
+            [""]
         )
 
     return result
