@@ -245,18 +245,19 @@ class PkmnViewer(ttk.Frame):
 
         self._held_item = ttk.Label(self, style="Header.TLabel", font=font_to_use)
         self._nature = ttk.Label(self, style="Header.TLabel", font=font_to_use)
+        self._ability = ttk.Label(self, style="Header.TLabel", font=font_to_use)
 
         self.stat_column = StatColumn(self, val_width=self.stat_width, num_rows=6, style_prefix="Secondary", font=font_to_use)
         self.stat_column.set_labels(["HP:", "Attack:", "Defense:", "Spc Atk:", "Spc Def:", "Speed:"])
         self.stat_column.set_header("")
-        self.stat_column.grid(row=3, column=0, sticky=tk.W)
+        self.stat_column.grid(row=5, column=0, sticky=tk.W)
 
         self.move_column = StatColumn(self, val_width=self.move_width, num_rows=6, font=font_to_use)
         self.move_column.set_labels(["Lv:", "Exp:", "Move 1:", "Move 2:", "Move 3:", "Move 4:"])
         self.move_column.set_header("")
 
         if not self.stats_only:
-            self.move_column.grid(row=3, column=1, sticky=tk.E)
+            self.move_column.grid(row=5, column=1, sticky=tk.E)
 
 
     def set_pkmn(self, pkmn:universal_data_objects.EnemyPkmn, badges:universal_data_objects.BadgeList=None, speed_style=None):
@@ -264,18 +265,25 @@ class PkmnViewer(ttk.Frame):
             speed_style = "Secondary"
         
         self._name_value.config(text=pkmn.name)
-        self._held_item.config(text=f"Held Item: {pkmn.held_item}")
-
-        if current_gen_info().get_generation() >= 2:
-            self._held_item.grid(row=1, column=0, columnspan=2, sticky=tk.EW)
-        else:
-            self._held_item.grid_forget()
 
         self._nature.config(text=f"Nature: {pkmn.nature}")
         if current_gen_info().get_generation() >= 3:
-            self._nature.grid(row=2, column=0, columnspan=2, sticky=tk.EW)
+            self._nature.grid(row=1, column=0, columnspan=2, sticky=tk.EW)
         else:
             self._nature.grid_forget()
+
+        self._ability.config(text=f"Ability: {pkmn.ability}")
+        if current_gen_info().get_generation() >= 3:
+            self._ability.grid(row=2, column=0, columnspan=2, sticky=tk.EW)
+        else:
+            self._ability.grid_forget()
+
+        self._held_item.config(text=f"Held Item: {pkmn.held_item}")
+
+        if current_gen_info().get_generation() >= 2:
+            self._held_item.grid(row=3, column=0, columnspan=2, sticky=tk.EW)
+        else:
+            self._held_item.grid_forget()
 
         attack_val = str(pkmn.cur_stats.attack)
         if badges is not None and badges.is_attack_boosted():
