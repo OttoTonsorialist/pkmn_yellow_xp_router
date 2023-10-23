@@ -463,13 +463,13 @@ class DamageSummary(ttk.Frame):
             
             else:
                 self.damage_range.configure(text=f"{move.damage_ranges.min_damage} - {move.damage_ranges.max_damage}")
-                pct_min_damage = f"{move.damage_ranges.min_damage / move.defending_mon_hp * 100:.2f}%"
-                pct_max_damage = f"{move.damage_ranges.max_damage / move.defending_mon_hp * 100:.2f}%"
+                pct_min_damage = f"{round(move.damage_ranges.min_damage / move.defending_mon_hp * 100)}%"
+                pct_max_damage = f"{round(move.damage_ranges.max_damage / move.defending_mon_hp * 100)}%"
                 self.pct_damage_range.configure(text=f"{pct_min_damage} - {pct_max_damage}")
 
                 self.crit_damage_range.configure(text=f"{move.crit_damage_ranges.min_damage} - {move.crit_damage_ranges.max_damage}")
-                crit_pct_min_damage = f"{move.crit_damage_ranges.min_damage / move.defending_mon_hp * 100:.2f}%"
-                crit_pct_max_damage = f"{move.crit_damage_ranges.max_damage / move.defending_mon_hp * 100:.2f}%"
+                crit_pct_min_damage = f"{round(move.crit_damage_ranges.min_damage / move.defending_mon_hp * 100)}%"
+                crit_pct_max_damage = f"{round(move.crit_damage_ranges.max_damage / move.defending_mon_hp * 100)}%"
                 self.crit_pct_damage_range.configure(text=f"{crit_pct_min_damage} - {crit_pct_max_damage}")
 
             
