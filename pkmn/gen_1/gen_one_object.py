@@ -145,8 +145,11 @@ class GenOne(CurrentGen):
     def create_wild_pkmn(self, pkmn_name, pkmn_level):
         return pkmn_utils.instantiate_wild_pokemon(self._pkmn_db.get_pkmn(pkmn_name), pkmn_level)
     
-    def get_crit_rate(self, pkmn, move):
+    def get_crit_rate(self, pkmn, move, custom_move_data):
         return pkmn_damage_calc.get_crit_rate(pkmn, move)
+    
+    def get_move_accuracy(self, pkmn, move, custom_move_data):
+        return move.accuracy
 
     def calculate_damage(self,
         attacking_pkmn:universal_data_objects.EnemyPkmn,

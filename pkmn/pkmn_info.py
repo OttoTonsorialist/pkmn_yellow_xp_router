@@ -58,8 +58,17 @@ class CurrentGen:
     def get_crit_rate(
         self,
         pkmn:universal_data_objects.EnemyPkmn,
-        move:universal_data_objects.Move
+        move:universal_data_objects.Move,
+        custom_move_data:str
     ) -> float:
+        raise NotImplementedError()
+
+    def get_move_accuracy(
+        self,
+        pkmn:universal_data_objects.EnemyPkmn,
+        move:universal_data_objects.Move,
+        custom_move_data:str
+    ) -> int:
         raise NotImplementedError()
     
     def make_stat_block(

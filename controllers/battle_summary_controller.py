@@ -382,7 +382,7 @@ class BattleSummaryController:
             if config.do_ignore_accuracy():
                 accuracy = 100
             else:
-                accuracy = move.accuracy
+                accuracy = current_gen_info().get_move_accuracy(attacking_mon, move, custom_data_selection)
                 if accuracy is None:
                     accuracy = 100
 
@@ -391,7 +391,7 @@ class BattleSummaryController:
             kill_ranges = find_kill(
                 normal_ranges,
                 crit_ranges,
-                current_gen_info().get_crit_rate(attacking_mon, move),
+                current_gen_info().get_crit_rate(attacking_mon, move, custom_data_selection),
                 accuracy,
                 defending_mon.cur_stats.hp,
                 attack_depth=config.get_damage_search_depth(),

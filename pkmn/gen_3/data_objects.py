@@ -414,12 +414,10 @@ def calc_battle_stat(base_val, level, dv, stat_xp, stage, is_badge_boosted=False
     and needs to be recalculated
     """
     result = calc_unboosted_stat(base_val, level, dv, stat_xp, nature_raised=nature_raised, nature_lowered=nature_lowered)
-    result = modify_stat_by_stage(result, stage)
-
     if is_badge_boosted:
         result = badge_boost_single_stat(result)
-    
-    return result
+
+    return modify_stat_by_stage(result, stage)
 
 
 def modify_stat_by_stage(raw_stat, stage):

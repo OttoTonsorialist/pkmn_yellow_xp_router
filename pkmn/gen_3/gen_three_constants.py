@@ -48,6 +48,7 @@ class GenThreeConstants:
         self.CLAMPERL_NAME = "Clamperl"
         self.DEEP_SEA_TOOTH_NAME = "DeepSeaTooth"
         self.DEEP_SEA_SCALE_NAME = "DeepSeaScale"
+        self.CHOICE_BAND_NAME = "Choice Band"
 
         self.LATIOS_NAME = "Latios"
         self.LATIAS_NAME = "Latias"
@@ -57,12 +58,34 @@ class GenThreeConstants:
         self.SHELL_ARMOR_ABILITY = "Shell Armor"
         self.CLOUD_NINE_ABILITY = "Cloud Nine"
         self.AIR_LOCK_ABILITY = "Air Lock"
+        self.HUSTLE_ABILITY = "Hustle"
+        self.THICK_FAT_ABILITY = "Thick Fat"
+        self.MARVEL_SCALE_ABILITY = "Marvel Scale"
+        self.GUTS_ABILITY = "Guts"
+        self.OVERGROW_ABILITY = "Overgrow"
+        self.BLAZE_ABILITY = "Blaze"
+        self.TORRENT_ABILITY = "Torrent"
+        self.SWARM_ABILITY = "Swarm"
 
         self.NO_BONUS = "No Bonus"
         self.DIG_BONUS = "Dig Bonus"
-        self.FLY_BONUS = "Fly Bonus"
+        self.DIVE_BONUS = "Dive Bonus"
+        self.FLY_BONUS = "Fly/Bounce Bonus"
         self.SWITCH_BONUS = "Switch Bonus"
         self.MINIMIZE_BONUS = "Minimize Bonus"
+        self.STATUS_BONUS = "Status Bonus"
+        self.PARALYSIS_BONUS = "Paralysis Bonus"
+        self.DAMAGED_BONUS = "Damaged Bonus"
+
+        self.PLAIN_TERRAIN = "Plain"
+        self.SAND_TERRAIN = "Sand"
+        self.CAVE_TERRAIN = "Cave"
+        self.ROCK_TERRAIN = "Rock"
+        self.TALL_GRASS_TERRAIN = "Tall Grass"
+        self.LONG_GRASS_TERRAIN = "Long Grass"
+        self.POND_WATER_TERRAIN = "Pond Water"
+        self.SEA_WATER_TERRAIN = "Sea Water"
+        self.UNDERWATER_TERRAIN = "Underwater"
 
         self.MAGNITUDE_MOVE_NAME = "Magnitude"
         self.MAGNITUDE_4 = "Mag 4"
@@ -82,15 +105,29 @@ class GenThreeConstants:
 
         self.FURY_CUTTER_MOVE_NAME = "Fury Cutter"
         self.ROLLOUT_MOVE_NAME = "Rollout"
+        self.ICE_BALL_MOVE_NAME = "Ice Ball"
         self.TRIPLE_KICK_MOVE_NAME = "Triple Kick"
         self.RAGE_MOVE_NAME = "Rage"
-
+        self.SPIT_UP_MOVE_NAME = "Spit Up"
+        self.WEATHER_BALL_MOVE_NAME = "Weather Ball"
         self.PURSUIT_MOVE_NAME = "Pursuit"
         self.STOMP_MOVE_NAME = "Stomp"
         self.GUST_MOVE_NAME = "Gust"
         self.TWISTER_MOVE_NAME = "Twister"
+        self.SURF_MOVE_NAME = "Surf"
+        self.WHIRLPOOL_MOVE_NAME = "Whirlpool"
         self.EARTHQUAKE_MOVE_NAME = "Earthquake"
         self.RETURN_MOVE_NAME = "Return"
+        self.FACADE_MOVE_NAME = "Facade"
+        self.NEEDLE_ARM_MOVE_NAME = "Needle Arm"
+        self.ASTONISH_MOVE_NAME = "Astonish"
+        self.EXTRASENSORY_MOVE_NAME = "Extrasensory"
+        self.SMELLING_SALT_MOVE_NAME = "SmellingSalt"
+        self.REVENGE_MOVE_NAME = "Revenge"
+        self.NATURE_POWER_MOVE_NAME = "Nature Power"
+        self.BRICK_BREAK_MOVE_NAME = "Brick Break"
+        self.ERUPTION_MOVE_NAME = "Eruption"
+        self.WATER_SPOUT_MOVE_NAME = "Water Spout"
 
         self.CUSTOM_MOVE_DATA = {
             self.MAGNITUDE_MOVE_NAME: [
@@ -118,17 +155,40 @@ class GenThreeConstants:
                 self.FLAIL_FIVE_PERCENT_HP,
                 self.FLAIL_MIN_HP,
             ],
+            self.NATURE_POWER_MOVE_NAME: [
+                self.PLAIN_TERRAIN,
+                self.SAND_TERRAIN,
+                self.CAVE_TERRAIN,
+                self.ROCK_TERRAIN,
+                self.TALL_GRASS_TERRAIN,
+                self.LONG_GRASS_TERRAIN,
+                self.POND_WATER_TERRAIN,
+                self.SEA_WATER_TERRAIN,
+                self.UNDERWATER_TERRAIN,
+            ],
             self.FURY_CUTTER_MOVE_NAME: ["1", "2", "3", "4", "5", "6"],
             self.ROLLOUT_MOVE_NAME: ["1", "2", "3", "4", "5", "5 + DefenseCurl"],
+            self.ICE_BALL_MOVE_NAME: ["1", "2", "3", "4", "5", "5 + DefenseCurl"],
             self.TRIPLE_KICK_MOVE_NAME: ["1", "2", "3"],
             self.RAGE_MOVE_NAME: ["1", "2", "3", "4", "5", "6"],
 
             self.PURSUIT_MOVE_NAME: [self.NO_BONUS, self.SWITCH_BONUS],
             self.STOMP_MOVE_NAME: [self.NO_BONUS, self.MINIMIZE_BONUS],
+            self.ASTONISH_MOVE_NAME: [self.NO_BONUS, self.MINIMIZE_BONUS],
+            self.NEEDLE_ARM_MOVE_NAME: [self.NO_BONUS, self.MINIMIZE_BONUS],
+            self.EXTRASENSORY_MOVE_NAME: [self.NO_BONUS, self.MINIMIZE_BONUS],
             self.GUST_MOVE_NAME: [self.NO_BONUS, self.FLY_BONUS],
             self.TWISTER_MOVE_NAME: [self.NO_BONUS, self.FLY_BONUS],
             self.EARTHQUAKE_MOVE_NAME: [self.NO_BONUS, self.DIG_BONUS],
+            self.SURF_MOVE_NAME: [self.NO_BONUS, self.DIVE_BONUS],
+            self.WHIRLPOOL_MOVE_NAME: [self.NO_BONUS, self.DIVE_BONUS],
+            self.FACADE_MOVE_NAME: [self.NO_BONUS, self.STATUS_BONUS],
+            self.SMELLING_SALT_MOVE_NAME: [self.NO_BONUS, self.PARALYSIS_BONUS],
+            self.REVENGE_MOVE_NAME: [self.NO_BONUS, self.DAMAGED_BONUS],
             self.RETURN_MOVE_NAME: [str(x) for x in range(102, 0, -1)],
+            self.ERUPTION_MOVE_NAME: [str(x) for x in range(100, 0, -1)],
+            self.WATER_SPOUT_MOVE_NAME: [str(x) for x in range(100, 0, -1)],
+            self.SPIT_UP_MOVE_NAME: [str(x) for x in range(1, 4)],
         }
 
 
