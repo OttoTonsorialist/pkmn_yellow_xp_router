@@ -8,7 +8,7 @@ from enum import Enum, auto
 import route_recording.recorder
 from route_recording.gamehook_client import GameHookProperty
 from routing.route_events import EventDefinition, HoldItemEventDefinition, InventoryEventDefinition, LearnMoveEventDefinition, RareCandyEventDefinition, SaveEventDefinition, VitaminEventDefinition
-from route_recording.game_recorders.gen_two.crystal_gamehook_constants import GameHookConstantConverter, gh_gen_two_const
+from route_recording.game_recorders.gen_three.emerald_gamehook_constants import GameHookConstantConverter, gh_gen_three_const
 from utils.constants import const
 from pkmn.gen_factory import current_gen_info
 
@@ -66,7 +66,7 @@ class Machine:
     
     def register_solo_mon(self, mon_name=None):
         if mon_name is None:
-            mon_name = self._gamehook_client.get(gh_gen_two_const.KEY_PLAYER_MON_SPECIES).value
+            mon_name = self._gamehook_client.get(gh_gen_three_const.KEY_PLAYER_MON_SPECIES).value
 
         logger.info(f"Registering solo mon: {mon_name}")
         if self._solo_mon_species is not None:
@@ -108,8 +108,7 @@ class Machine:
         self._item_cache_update(generate_events=False)
         self._money_cache_update()
         self._controller.entered_new_area(
-            f"{self._gamehook_client.get(gh_gen_two_const.KEY_OVERWORLD_MAP).value} Map "
-            f"{self._gamehook_client.get(gh_gen_two_const.KEY_OVERWORLD_MAP_NUM).value}"
+            f"{self._gamehook_client.get(gh_gen_three_const.KEY_OVERWORLD_MAP).value}"
         )
     
     def _solo_mon_levelup(self, new_level):
@@ -119,7 +118,7 @@ class Machine:
             )
     
     def _money_cache_update(self):
-        new_cache = self._gamehook_client.get(gh_gen_two_const.KEY_PLAYER_MONEY).value
+        new_cache = self._gamehook_client.get(gh_gen_three_const.KEY_PLAYER_MONEY).value
         if new_cache == self._cached_money:
             return None
         
@@ -129,10 +128,10 @@ class Machine:
     
     def _move_cache_update(self, generate_events=True, tm_name=None, hm_expected=False, tutor_expected=False, levelup_source=False):
         new_cache = []
-        new_cache.append(self.gh_converter.move_name_convert(self._gamehook_client.get(gh_gen_two_const.KEY_PLAYER_MON_MOVE_1).value))
-        new_cache.append(self.gh_converter.move_name_convert(self._gamehook_client.get(gh_gen_two_const.KEY_PLAYER_MON_MOVE_2).value))
-        new_cache.append(self.gh_converter.move_name_convert(self._gamehook_client.get(gh_gen_two_const.KEY_PLAYER_MON_MOVE_3).value))
-        new_cache.append(self.gh_converter.move_name_convert(self._gamehook_client.get(gh_gen_two_const.KEY_PLAYER_MON_MOVE_4).value))
+        new_cache.append(self.gh_converter.move_name_convert(self._gamehook_client.get(gh_gen_three_const.KEY_PLAYER_MON_MOVE_1).value))
+        new_cache.append(self.gh_converter.move_name_convert(self._gamehook_client.get(gh_gen_three_const.KEY_PLAYER_MON_MOVE_2).value))
+        new_cache.append(self.gh_converter.move_name_convert(self._gamehook_client.get(gh_gen_three_const.KEY_PLAYER_MON_MOVE_3).value))
+        new_cache.append(self.gh_converter.move_name_convert(self._gamehook_client.get(gh_gen_three_const.KEY_PLAYER_MON_MOVE_4).value))
 
         if generate_events:
             old_moves = set([x for x in self._cached_moves if x is not None])
@@ -168,7 +167,7 @@ class Machine:
             elif to_learn_move is not None:
                 if levelup_source:
                     source = const.MOVE_SOURCE_LEVELUP
-                    level = self._gamehook_client.get(gh_gen_two_const.KEY_PLAYER_MON_LEVEL).value
+                    level = self._gamehook_client.get(gh_gen_three_const.KEY_PLAYER_MON_LEVEL).value
                 elif tutor_expected:
                     source = const.MOVE_SOURCE_TUTOR
                     level = const.LEVEL_ANY
@@ -196,39 +195,39 @@ class Machine:
         result = {}
 
         # start with the normal pocket
-        for i in range(len(gh_gen_two_const.ALL_KEYS_ITEM_TYPE)):
-            item_type = self._gamehook_client.get(gh_gen_two_const.ALL_KEYS_ITEM_TYPE[i]).value
+        for i in range(len(gh_gen_three_const.ALL_KEYS_ITEM_TYPE)):
+            item_type = self._gamehook_client.get(gh_gen_three_const.ALL_KEYS_ITEM_TYPE[i]).value
             if item_type is None:
                 break
             
-            result[item_type] = self._gamehook_client.get(gh_gen_two_const.ALL_KEYS_ITEM_QUANTITY[i]).value
+            result[item_type] = self._gamehook_client.get(gh_gen_three_const.ALL_KEYS_ITEM_QUANTITY[i]).value
         
         # load the ball pocket
-        for i in range(len(gh_gen_two_const.ALL_KEYS_BALL_TYPE)):
-            item_type = self._gamehook_client.get(gh_gen_two_const.ALL_KEYS_BALL_TYPE[i]).value
+        for i in range(len(gh_gen_three_const.ALL_KEYS_BALL_TYPE)):
+            item_type = self._gamehook_client.get(gh_gen_three_const.ALL_KEYS_BALL_TYPE[i]).value
             if item_type is None:
                 break
             
-            result[item_type] = self._gamehook_client.get(gh_gen_two_const.ALL_KEYS_BALL_QUANTITY[i]).value
+            result[item_type] = self._gamehook_client.get(gh_gen_three_const.ALL_KEYS_BALL_QUANTITY[i]).value
 
         # load the key items pocket
-        for i in range(len(gh_gen_two_const.ALL_KEYS_KEY_ITEMS)):
-            item_type = self._gamehook_client.get(gh_gen_two_const.ALL_KEYS_KEY_ITEMS[i]).value
+        for i in range(len(gh_gen_three_const.ALL_KEYS_KEY_ITEMS)):
+            item_type = self._gamehook_client.get(gh_gen_three_const.ALL_KEYS_KEY_ITEMS[i]).value
             if item_type is None:
                 break
             
             result[item_type] = 1
 
         # load the tms pocket
-        for i in range(len(gh_gen_two_const.ALL_TM_KEYS)):
-            tm_count = self._gamehook_client.get(gh_gen_two_const.ALL_TM_KEYS[i]).value
+        for i in range(len(gh_gen_three_const.ALL_TM_KEYS)):
+            tm_count = self._gamehook_client.get(gh_gen_three_const.ALL_TM_KEYS[i]).value
             if tm_count > 0:
-                result[self.gh_converter.get_tmhm_name_from_path(gh_gen_two_const.ALL_TM_KEYS[i])] = tm_count
+                result[self.gh_converter.get_tmhm_name_from_path(gh_gen_three_const.ALL_TM_KEYS[i])] = tm_count
 
         # load the hms
-        for i in range(len(gh_gen_two_const.ALL_HM_KEYS)):
-            if self._gamehook_client.get(gh_gen_two_const.ALL_HM_KEYS[i]).value:
-                result[self.gh_converter.get_tmhm_name_from_path(gh_gen_two_const.ALL_HM_KEYS[i])] = 1
+        for i in range(len(gh_gen_three_const.ALL_HM_KEYS)):
+            if self._gamehook_client.get(gh_gen_three_const.ALL_HM_KEYS[i]).value:
+                result[self.gh_converter.get_tmhm_name_from_path(gh_gen_three_const.ALL_HM_KEYS[i])] = 1
 
         return result
 
@@ -336,7 +335,7 @@ class Machine:
     def handle_event(self, new_prop:GameHookProperty, prev_prop:GameHookProperty):
         if (
             self.debug_mode and
-            new_prop.path != gh_gen_two_const.KEY_GAMETIME_SECONDS
+            new_prop.path != gh_gen_three_const.KEY_GAMETIME_SECONDS
         ):
             logger.info(f"Change of {new_prop.path} from {prev_prop.value} to {new_prop.value} for state {self._cur_state.state_type}")
         result = self._cur_state.transition(new_prop, prev_prop)
@@ -361,7 +360,7 @@ class Machine:
         self._events_to_generate.append(event_def)
     
     def _get_trainer_obj(self, converted_trainer_name):
-        # coupled with gh_gen_two_const.trainer_name_convert 
+        # coupled with gh_gen_three_const.trainer_name_convert 
         if ":" not in converted_trainer_name:
             return current_gen_info().trainer_db().get_trainer(converted_trainer_name)
 
@@ -383,7 +382,7 @@ class Machine:
             if len(self._events_to_generate) != 0:
                 cur_event = self._events_to_generate.pop(0)
                 try:
-                    if cur_event.notes == gh_gen_two_const.RESET_FLAG:
+                    if cur_event.notes == gh_gen_three_const.RESET_FLAG:
                         logger.info(f"Resetting to last save...")
                         self._controller.game_reset()
                         continue
@@ -397,11 +396,11 @@ class Machine:
                             )
                             continue
                         cur_event.trainer_def.trainer_name = trainer.name
-                        if cur_event.notes == gh_gen_two_const.TRAINER_LOSS_FLAG:
+                        if cur_event.notes == gh_gen_three_const.TRAINER_LOSS_FLAG:
                             logger.info(f"Handling trainer loss: {cur_event.trainer_def.trainer_name}")
                             self._controller.lost_trainer_battle(cur_event.trainer_def.trainer_name)
                             continue
-                        elif cur_event.notes == gh_gen_two_const.ROAR_FLAG:
+                        elif cur_event.notes == gh_gen_three_const.ROAR_FLAG:
                             logger.info(f"Updating split exp for trainer {cur_event.trainer_def.trainer_name} to {cur_event.trainer_def.exp_split}")
 
                             test_obj = self._controller._controller.get_previous_event()
@@ -487,7 +486,7 @@ class Machine:
                             logger.info("Giving player initial berry that mon starts with")
                             self._controller.add_event(EventDefinition(item_event_def=InventoryEventDefinition("Berry", 1, True, False)))
 
-                        if cur_event.notes == gh_gen_two_const.HELD_CHECK_FLAG:
+                        if cur_event.notes == gh_gen_three_const.HELD_CHECK_FLAG:
                             cur_event.notes = ""
                             list_of_prev_events = [self._controller._controller.get_previous_event()]
                             if list_of_prev_events[0] is not None:

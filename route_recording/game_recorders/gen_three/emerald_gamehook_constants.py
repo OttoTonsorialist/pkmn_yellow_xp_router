@@ -15,20 +15,24 @@ class Gen3GameHookConstants:
         self.ROAR_FLAG = const.RECORDING_ERROR_FRAGMENT + "FLAG TO SIGNAL ROARS NEED TO BE HANDLED. USER SHOULD NEVER SEE THIS"
         self.HELD_CHECK_FLAG = const.RECORDING_ERROR_FRAGMENT + "FLAG TO SIGNAL FOR DEEPER HELD ITEM CHECKING. USER SHOULD NEVER SEE THIS"
 
-        self.KEY_OVERWORLD_MAP = "overworld.mapGroup"
-        self.KEY_OVERWORLD_MAP_NUM = "overworld.mapNumber"
+        self.KEY_DMA_A = "apointers.dma1"
+        self.KEY_DMA_B = "apointers.dma2"
+        self.KEY_DMA_C = "apointers.dma3"
+        self.KEY_STATE_1 = "apointers.callback1"
+        self.KEY_STATE_2 = "apointers.callback2"
+        self.KEY_OVERWORLD_MAP = "overworld.mapName"
         self.KEY_PLAYER_PLAYERID = "player.playerId"
         self.KEY_PLAYER_MONEY = "player.money"
         self.KEY_PLAYER_MON_EXPPOINTS = "player.team.0.expPoints"
         self.KEY_PLAYER_MON_LEVEL = "player.team.0.level"
         self.KEY_PLAYER_MON_SPECIES = "player.team.0.species"
-        self.KEY_PLAYER_MON_HELD_ITEM = "player.team.0.heldItem"
+        self.KEY_PLAYER_MON_HELD_ITEM = "player.team.0.itemHeld"
         self.KEY_PLAYER_MON_FRIENDSHIP = "player.team.0.friendship"
 
-        self.KEY_PLAYER_MON_MOVE_1 = "player.team.0.move1"
-        self.KEY_PLAYER_MON_MOVE_2 = "player.team.0.move2"
-        self.KEY_PLAYER_MON_MOVE_3 = "player.team.0.move3"
-        self.KEY_PLAYER_MON_MOVE_4 = "player.team.0.move4"
+        self.KEY_PLAYER_MON_MOVE_1 = "player.team.0.moves.0.move"
+        self.KEY_PLAYER_MON_MOVE_2 = "player.team.0.moves.1.move"
+        self.KEY_PLAYER_MON_MOVE_3 = "player.team.0.moves.2.move"
+        self.KEY_PLAYER_MON_MOVE_4 = "player.team.0.moves.3.move"
         self.ALL_KEYS_PLAYER_MOVES = [
             self.KEY_PLAYER_MON_MOVE_1,
             self.KEY_PLAYER_MON_MOVE_2,
@@ -36,114 +40,121 @@ class Gen3GameHookConstants:
             self.KEY_PLAYER_MON_MOVE_4,
         ]
 
-        self.KEY_PLAYER_MON_STAT_EXP_HP = "player.team.0.statExpHp"
-        self.KEY_PLAYER_MON_STAT_EXP_ATTACK = "player.team.0.statExpAttack"
-        self.KEY_PLAYER_MON_STAT_EXP_DEFENSE = "player.team.0.statExpDefense"
-        self.KEY_PLAYER_MON_STAT_EXP_SPEED = "player.team.0.statExpSpeed"
-        self.KEY_PLAYER_MON_STAT_EXP_SPECIAL = "player.team.0.statExpSpecial"
+        self.KEY_PLAYER_MON_STAT_EXP_HP = "player.team.0.evs.hp"
+        self.KEY_PLAYER_MON_STAT_EXP_ATTACK = "player.team.0.evs.attack"
+        self.KEY_PLAYER_MON_STAT_EXP_DEFENSE = "player.team.0.evs.defense"
+        self.KEY_PLAYER_MON_STAT_EXP_SPEED = "player.team.0.evs.speed"
+        self.KEY_PLAYER_MON_STAT_EXP_SPECIAL_ATTACK = "player.team.0.evs.specialAttack"
+        self.KEY_PLAYER_MON_STAT_EXP_SPECIAL_DEFENSE = "player.team.0.evs.specialDefense"
         self.ALL_KEYS_STAT_EXP = [
             self.KEY_PLAYER_MON_STAT_EXP_HP,
             self.KEY_PLAYER_MON_STAT_EXP_ATTACK,
             self.KEY_PLAYER_MON_STAT_EXP_DEFENSE,
             self.KEY_PLAYER_MON_STAT_EXP_SPEED,
-            self.KEY_PLAYER_MON_STAT_EXP_SPECIAL,
+            self.KEY_PLAYER_MON_STAT_EXP_SPECIAL_ATTACK,
+            self.KEY_PLAYER_MON_STAT_EXP_SPECIAL_DEFENSE,
         ]
 
         self.KEY_GAMETIME_SECONDS = "gameTime.seconds"
-        self.KEY_AUDIO_CURRENT_SOUND = "audio.currentSound"
-        self.PKMN_CENTER_HEAL_SOUND_ID = 18
-        self.SAVE_HEAL_SOUND_ID = 37
-        self.KEY_BATTLE_MODE = "battle.mode"
-        self.KEY_BATTLE_TYPE = "battle.type"
-        self.KEY_BATTLE_TEXT_BUFFER = "battle.textBuffer"
-        self.KEY_BATTLE_RESULT = "battle.result"
-        self.KEY_BATTLE_START = "battle.battleStart"
-        self.KEY_BATTLE_TRAINER_CLASS = "battle.trainer.class"
-        self.KEY_BATTLE_TRAINER_NAME = "battle.trainer.name"
-        self.KEY_BATTLE_TRAINER_NUMBER = "battle.trainer.id"
-        self.KEY_BATTLE_TRAINER_TOTAL_POKEMON = "battle.trainer.totalPokemon"
-        self.KEY_BATTLE_PLAYER_MON_PARTY_POS = "battle.yourPokemon.partyPos"
-        self.KEY_BATTLE_PLAYER_MON_SPECIES = "battle.yourPokemon.species"
-        self.KEY_BATTLE_PLAYER_MON_HP = "battle.yourPokemon.hp"
-        self.KEY_BATTLE_ENEMY_SPECIES = "battle.enemyPokemon.species"
-        self.KEY_BATTLE_ENEMY_LEVEL = "battle.enemyPokemon.level"
-        self.KEY_BATTLE_ENEMY_HP = "battle.enemyPokemon.hp"
-        self.KEY_BATTLE_ENEMY_MON_PARTY_POS = "battle.enemyPokemon.partyPos"
+        self.KEY_GAMETIME_FRAMES = "gameTime.frames"
+        self.KEY_BATTLE_FLAG = "battle.turnInfo.type.is_battle"
+        self.KEY_TRAINER_BATTLE_FLAG = "battle.turnInfo.type.trainer"
+        self.KEY_DOUBLE_BATTLE_FLAG = "battle.turnInfo.type.double"
+        self.KEY_MULTI_BATTLE_FLAG = "battle.turnInfo.type.multi"
+        self.KEY_BATTLE_OUTCOME = "battle.turnInfo.battleOutcome"
+        self.KEY_BATTLE_TRAINER_TOTAL_POKEMON = "battle.opponentA.teamCount"
+        self.KEY_BATTLE_PLAYER_MON_PARTY_POS = "battle.player.activePokemon.partyPos"
+        self.KEY_BATTLE_PLAYER_MON_HP = "battle.player.activePokemon.stats.hp"
+
+        self.KEY_BATTLE_TRAINER_A_NUMBER = "battle.opponentA.id"
+        self.KEY_BATTLE_A_FIRST_ENEMY_SPECIES = "battle.opponentA.activePokemon.species"
+        self.KEY_BATTLE_A_FIRST_ENEMY_LEVEL = "battle.opponentA.activePokemon.level"
+        self.KEY_BATTLE_A_FIRST_ENEMY_HP = "battle.opponentA.activePokemon.stats.hp"
+        self.KEY_BATTLE_A_FIRST_ENEMY_PARTY_POS = "battle.opponentA.activePokemon.partyPos"
+        self.KEY_BATTLE_A_SECOND_ENEMY_SPECIES = "battle.opponentA.activePokemon2.species"
+        self.KEY_BATTLE_A_SECOND_ENEMY_LEVEL = "battle.opponentA.activePokemon2.level"
+        self.KEY_BATTLE_A_SECOND_ENEMY_HP = "battle.opponentA.activePokemon2.stats.hp"
+        self.KEY_BATTLE_A_SECOND_ENEMY_PARTY_POS = "battle.opponentA.activePokemon2.partyPos"
+
+        self.KEY_BATTLE_TRAINER_B_NUMBER = "battle.opponentB.id"
+        self.KEY_BATTLE_B_FIRST_ENEMY_SPECIES = "battle.opponentB.activePokemon.species"
+        self.KEY_BATTLE_B_FIRST_ENEMY_LEVEL = "battle.opponentB.activePokemon.level"
+        self.KEY_BATTLE_B_FIRST_ENEMY_HP = "battle.opponentB.activePokemon.stats.hp"
+        self.KEY_BATTLE_B_FIRST_ENEMY_PARTY_POS = "battle.opponentB.activePokemon.partyPos"
 
         self.KEY_ITEM_COUNT = "player.itemCount"
-        self.ALL_KEYS_ITEM_TYPE = [f"player.items.{i}.item" for i in range(0, 20)]
-        self.ALL_KEYS_ITEM_QUANTITY = [f"player.items.{i}.quantity" for i in range(0, 20)]
-        self.KEY_BALL_COUNT = "player.pokeBallCount"
-        self.ALL_KEYS_BALL_TYPE = [f"player.pokeBalls.{i}.item" for i in range(0, 12)]
-        self.ALL_KEYS_BALL_QUANTITY = [f"player.pokeBalls.{i}.quantity" for i in range(0, 12)]
-        self.KEY_KEY_ITEM_COUNT = "player.totalKeyItems"
-        self.ALL_KEYS_KEY_ITEMS = [f"player.keyItems.{i}" for i in range(0, 26)]
+        self.KEY_ITEM_QUANTITY_DECRYPTION_KEY = "bag.quantityDecryptionKey"
+        self.ALL_KEYS_ITEM_TYPE = [f"bag.items.{i}.item" for i in range(0, 30)]
+        self.ALL_KEYS_ITEM_QUANTITY = [f"bag.items.{i}.quantity" for i in range(0, 30)]
+        self.ALL_KEYS_BALL_TYPE = [f"bag.pokeBalls.{i}.item" for i in range(0, 16)]
+        self.ALL_KEYS_BALL_QUANTITY = [f"bag.pokeBalls.{i}.quantity" for i in range(0, 16)]
+        self.ALL_KEYS_KEY_ITEMS = [f"bag.keyItems.{i}.item" for i in range(0, 30)]
 
         self.ALL_TM_KEYS = [
-            "player.tms.TM01-DynamicPunch",
-            "player.tms.TM02-Headbutt",
-            "player.tms.TM03-Curse",
-            "player.tms.TM04-Rollout",
-            "player.tms.TM05-Roar",
-            "player.tms.TM06-Toxic",
-            "player.tms.TM07-Zap Cannon",
-            "player.tms.TM08-Rock Smash",
-            "player.tms.TM09-Psych Up",
-            "player.tms.TM10-Hidden Power",
-            "player.tms.TM11-Sunny Day",
-            "player.tms.TM12-Sweet Scent",
-            "player.tms.TM13-Snore",
-            "player.tms.TM14-Blizzard",
-            "player.tms.TM15-Hyper Beam",
-            "player.tms.TM16-Icy Wind",
-            "player.tms.TM17-Protect",
-            "player.tms.TM18-Rain Dance",
-            "player.tms.TM19-Giga Drain",
-            "player.tms.TM20-Endure",
-            "player.tms.TM21-Frustration",
-            "player.tms.TM22-SolarBeam",
-            "player.tms.TM23-Iron Tail",
-            "player.tms.TM24-Dragonbreath",
-            "player.tms.TM25-Thunder",
-            "player.tms.TM26-Earthquake",
-            "player.tms.TM27-Return",
-            "player.tms.TM28-Dig",
-            "player.tms.TM29-Psychic",
-            "player.tms.TM30-Shadow Ball",
-            "player.tms.TM31-Mud-Slap",
-            "player.tms.TM32-Double Team",
-            "player.tms.TM33-Ice Punch",
-            "player.tms.TM34-Swagger",
-            "player.tms.TM35-Sleep Talk",
-            "player.tms.TM36-Sludge Bomb",
-            "player.tms.TM37-Sandstorm",
-            "player.tms.TM38-Fire Blast",
-            "player.tms.TM39-Swift",
-            "player.tms.TM40-Defense Curl",
-            "player.tms.TM41-ThunderPunch",
-            "player.tms.TM42-Dream Eater",
-            "player.tms.TM43-Detect",
-            "player.tms.TM44-Rest",
-            "player.tms.TM45-Attract",
-            "player.tms.TM46-Thief",
-            "player.tms.TM47-Steel Wing",
-            "player.tms.TM48-Fire Punch",
-            "player.tms.TM49-Fury Cutter",
-            "player.tms.TM50-Nightmare",
+            "bag.tmhm.TM01-Focus Punch.quantity",
+            "bag.tmhm.TM02-Dragon Claw.quantity",
+            "bag.tmhm.TM03-Water Pulse.quantity",
+            "bag.tmhm.TM04-Calm Mind.quantity",
+            "bag.tmhm.TM05-Roar.quantity",
+            "bag.tmhm.TM06-Toxic.quantity",
+            "bag.tmhm.TM07-Hail.quantity",
+            "bag.tmhm.TM08-Bulk Up.quantity",
+            "bag.tmhm.TM09-Bullet Seed.quantity",
+            "bag.tmhm.TM10-Hidden Power.quantity",
+            "bag.tmhm.TM11-Sunny Day.quantity",
+            "bag.tmhm.TM12-Taunt.quantity",
+            "bag.tmhm.TM13-Ice Beam.quantity",
+            "bag.tmhm.TM14-Blizzard.quantity",
+            "bag.tmhm.TM15-Hyper Beam.quantity",
+            "bag.tmhm.TM16-Light Screen.quantity",
+            "bag.tmhm.TM17-Protect.quantity",
+            "bag.tmhm.TM18-Rain Dance.quantity",
+            "bag.tmhm.TM19-Giga Drain.quantity",
+            "bag.tmhm.TM20-Safeguard.quantity",
+            "bag.tmhm.TM21-Frustration.quantity",
+            "bag.tmhm.TM22-SolarBeam.quantity",
+            "bag.tmhm.TM23-Iron Tail.quantity",
+            "bag.tmhm.TM24-Thunderbolt.quantity",
+            "bag.tmhm.TM25-Thunder.quantity",
+            "bag.tmhm.TM26-Earthquake.quantity",
+            "bag.tmhm.TM27-Return.quantity",
+            "bag.tmhm.TM28-Dig.quantity",
+            "bag.tmhm.TM29-Psychic.quantity",
+            "bag.tmhm.TM30-Shadow Ball.quantity",
+            "bag.tmhm.TM31-Brick Break.quantity",
+            "bag.tmhm.TM32-Double Team.quantity",
+            "bag.tmhm.TM33-Reflect.quantity",
+            "bag.tmhm.TM34-Shock Wave.quantity",
+            "bag.tmhm.TM35-Flamethrower.quantity",
+            "bag.tmhm.TM36-Sludge Bomb.quantity",
+            "bag.tmhm.TM37-Sandstorm.quantity",
+            "bag.tmhm.TM38-Fire Blast.quantity",
+            "bag.tmhm.TM39-Rock Tomb.quantity",
+            "bag.tmhm.TM40-Aerial Ace.quantity",
+            "bag.tmhm.TM41-Torment.quantity",
+            "bag.tmhm.TM42-Facade.quantity",
+            "bag.tmhm.TM43-Secret Power.quantity",
+            "bag.tmhm.TM44-Rest.quantity",
+            "bag.tmhm.TM45-Attract.quantity",
+            "bag.tmhm.TM46-Thief.quantity",
+            "bag.tmhm.TM47-Steel Wing.quantity",
+            "bag.tmhm.TM48-Skill Swap.quantity",
+            "bag.tmhm.TM49-Snatch.quantity",
+            "bag.tmhm.TM50-Overheat.quantity",
         ]
 
         self.ALL_HM_KEYS = [
-            "player.hms.HM01-Cut",
-            "player.hms.HM02-Fly",
-            "player.hms.HM03-Surf",
-            "player.hms.HM04-Strength",
-            "player.hms.HM05-Flash",
-            "player.hms.HM06-Whirlpool",
-            "player.hms.HM07-Waterfall",
+            "bag.tmhm.HM01-Cut.quantity",
+            "bag.tmhm.HM02-Fly.quantity",
+            "bag.tmhm.HM03-Surf.quantity",
+            "bag.tmhm.HM04-Strength.quantity",
+            "bag.tmhm.HM05-Flash.quantity",
+            "bag.tmhm.HM06-Rock Smash.quantity",
+            "bag.tmhm.HM07-Waterfall.quantity",
+            "bag.tmhm.HM08-Dive.quantity",
         ]
 
-        #self.ALL_KEYS_ALL_ITEM_FIELDS = set([self.KEY_ITEM_COUNT, self.KEY_BALL_COUNT, self.KEY_KEY_ITEM_COUNT])
-        self.ALL_KEYS_ALL_ITEM_FIELDS = set([self.KEY_ITEM_COUNT, self.KEY_KEY_ITEM_COUNT])
+        self.ALL_KEYS_ALL_ITEM_FIELDS = set([self.KEY_ITEM_QUANTITY_DECRYPTION_KEY])
         self.ALL_KEYS_ALL_ITEM_FIELDS.update(self.ALL_KEYS_ITEM_TYPE)
         self.ALL_KEYS_ALL_ITEM_FIELDS.update(self.ALL_KEYS_ITEM_QUANTITY)
         self.ALL_KEYS_ALL_ITEM_FIELDS.update(self.ALL_KEYS_BALL_TYPE)
@@ -152,27 +163,45 @@ class Gen3GameHookConstants:
         self.ALL_KEYS_ALL_ITEM_FIELDS.update(self.ALL_TM_KEYS)
         self.ALL_KEYS_ALL_ITEM_FIELDS.update(self.ALL_HM_KEYS)
 
+        self.DMA_A_KEYS = set()
+        #self.DMA_A_KEYS = set(["bag.items.0.item", "bag.items.1.item", "bag.items.2.item", "bag.items.3.item", "bag.items.4.item"])
+        self.DMA_A_KEYS.update(self.ALL_KEYS_ALL_ITEM_FIELDS)
+
         self.ALL_KEYS_TO_REGISTER = [
+            self.KEY_DMA_A,
+            self.KEY_DMA_B,
+            self.KEY_DMA_C,
+            self.KEY_STATE_1,
+            self.KEY_STATE_2,
             self.KEY_OVERWORLD_MAP,
-            self.KEY_PLAYER_PLAYERID,
-            self.KEY_PLAYER_MONEY,
+            #self.KEY_PLAYER_PLAYERID,
+            #self.KEY_PLAYER_MONEY,
             self.KEY_PLAYER_MON_EXPPOINTS,
             self.KEY_PLAYER_MON_LEVEL,
             self.KEY_PLAYER_MON_SPECIES,
             self.KEY_PLAYER_MON_HELD_ITEM,
             self.KEY_GAMETIME_SECONDS,
-            self.KEY_BATTLE_MODE,
-            self.KEY_BATTLE_TYPE,
-            self.KEY_BATTLE_TEXT_BUFFER,
-            self.KEY_BATTLE_RESULT,
-            self.KEY_BATTLE_START,
+            self.KEY_BATTLE_FLAG,
+            self.KEY_TRAINER_BATTLE_FLAG,
+            self.KEY_DOUBLE_BATTLE_FLAG,
+            self.KEY_MULTI_BATTLE_FLAG,
+            self.KEY_BATTLE_OUTCOME,
+            self.KEY_BATTLE_TRAINER_A_NUMBER,
+            self.KEY_BATTLE_TRAINER_B_NUMBER,
             self.KEY_BATTLE_PLAYER_MON_HP,
             self.KEY_BATTLE_PLAYER_MON_PARTY_POS,
-            self.KEY_BATTLE_ENEMY_SPECIES,
-            self.KEY_BATTLE_ENEMY_LEVEL,
-            self.KEY_BATTLE_ENEMY_HP,
-            self.KEY_BATTLE_ENEMY_MON_PARTY_POS,
-            self.KEY_AUDIO_CURRENT_SOUND,
+            self.KEY_BATTLE_A_FIRST_ENEMY_SPECIES,
+            self.KEY_BATTLE_A_FIRST_ENEMY_LEVEL,
+            self.KEY_BATTLE_A_FIRST_ENEMY_HP,
+            self.KEY_BATTLE_A_FIRST_ENEMY_PARTY_POS,
+            self.KEY_BATTLE_A_SECOND_ENEMY_SPECIES,
+            self.KEY_BATTLE_A_SECOND_ENEMY_LEVEL,
+            self.KEY_BATTLE_A_SECOND_ENEMY_HP,
+            self.KEY_BATTLE_A_SECOND_ENEMY_PARTY_POS,
+            self.KEY_BATTLE_B_FIRST_ENEMY_SPECIES,
+            self.KEY_BATTLE_B_FIRST_ENEMY_LEVEL,
+            self.KEY_BATTLE_B_FIRST_ENEMY_HP,
+            self.KEY_BATTLE_B_FIRST_ENEMY_PARTY_POS,
         ]
         self.ALL_KEYS_TO_REGISTER.extend(self.ALL_KEYS_PLAYER_MOVES)
         self.ALL_KEYS_TO_REGISTER.extend(self.ALL_KEYS_STAT_EXP)
@@ -191,6 +220,7 @@ class GameHookConstantConverter:
             sanitize_string("IRON"),
             sanitize_string("CARBOS"),
             sanitize_string("CALCIUM"),
+            sanitize_string("ZINC"),
         ]
         self._game_rare_candy = sanitize_string("RARE CANDY")
     

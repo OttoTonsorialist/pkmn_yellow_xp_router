@@ -14,7 +14,7 @@ from pkmn.gen_3.data_objects import GenThreeBadgeList, GenThreeStatBlock, instan
 from pkmn.gen_3.gen_three_constants import gen_three_const
 from pkmn.pkmn_db import ItemDB, MinBattlesDB, PkmnDB, TrainerDB, MoveDB
 from pkmn.pkmn_info import CurrentGen
-from route_recording.game_recorders.gen_two.crystal_recorder import CrystalRecorder
+from route_recording.game_recorders.gen_three.emerald_recorder import EmeraldRecorder
 from route_recording.recorder import RecorderController, RecorderGameHookClient
 from routing import full_route_state
 from utils.constants import const
@@ -134,6 +134,13 @@ class GenThree(CurrentGen):
         return self._min_battles_db
 
     def get_recorder_client(self, recorder_controller:RecorderController) -> RecorderGameHookClient:
+        version_name = self._base_version_name
+        if version_name is None:
+            version_name = self._version_name
+
+        if version_name == const.EMERALD_VERSION:
+            return EmeraldRecorder(recorder_controller, ["Pokemon Emerald"])
+
         raise NotImplementedError()
 
     def create_trainer_pkmn(self, pkmn_name, pkmn_level):

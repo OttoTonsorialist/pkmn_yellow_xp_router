@@ -89,6 +89,8 @@ class GameHookClient:
         self._ui_configuration = None
         self.properties = {}
         self.connected:bool = False
+        self._ignore_properties = set()
+        self._ignored_updates = {}
     
     def is_mapper_loaded(self):
         return len(self.meta) != 0
@@ -159,6 +161,8 @@ class GameHookClient:
         self.glossary = {}
         self._ui_configuration = None
         self.properties = {}
+        self._ignore_properties = set()
+        self._ignored_updates = {}
         self.connected = False
         if self._signalr_client is not None:
             # kind of weird, but basically start by un-assigning self._signalr_client to serve as a flag to not reconnect
@@ -186,6 +190,8 @@ class GameHookClient:
         self.meta = mapper["meta"]
         self.glossary = mapper["glossary"]
         self.properties = {x["path"]: GameHookProperty(self, x) for x in mapper["properties"]}
+        self._ignore_properties = set()
+        self._ignored_updates = {}
 
         if propagate_event:
             logger.info("[GameHook Client] Mapper loaded successfully!")
@@ -218,6 +224,8 @@ class GameHookClient:
         self.meta = {}
         self.glossary = {}
         self.properties = {}
+        self._ignore_properties = set()
+        self._ignored_updates = {}
 
     def get(self, path):
         result = self.properties.get(path)
@@ -276,6 +284,13 @@ class GameHookClient:
             return
         if path not in self.properties:
             logger.debug(f"[GameHook Client] Could not find a related propery in PropertUpdated event for: {path}: {value}")
+            return
+        if path in self._ignore_properties:
+            #logger.info(f"Caching ignored update to {path}: {args}")
+            self._ignored_updates[path] = args
+            return
+        if value == self.properties[path].value and bytes_value == self.properties[path].bytes_value:
+            #logger.debug(f"[GameHook Client] Silently ignoring update to property due to no meaningful change: {path}")
             return
         
         new_property = self.properties[path]
@@ -356,3 +371,18 @@ class GameHookClient:
 
     def on_ui_configuration_changed(self, config):
         pass
+
+    ######
+    # My janky shit
+    ######
+
+    def ignore_properties(self, prop_set):
+        self._ignore_properties.update(prop_set)
+    
+    def unignore_properties(self, prop_set): 
+        for cur_prop in prop_set:
+            if cur_prop not in self._ignore_properties:
+                continue
+            self._ignore_properties.remove(cur_prop)
+            if cur_prop in self._ignored_updates:
+                self._on_propery_changed(self._ignored_updates.pop(cur_prop))
