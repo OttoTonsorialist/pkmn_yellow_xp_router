@@ -257,6 +257,8 @@ namespace eval ttk::theme::azure-dark {
         ttk::style configure Accent.TLabel -background $colors(-selectbg) -anchor center
         ttk::style configure SummaryHeader.TFrame -background $colors(-disabledbg)
         ttk::style configure SummaryHeader.TLabel -background $colors(-disabledbg) -anchor center -borderwidth 2
+        ttk::style configure SummaryHeaderCandy.TFrame -background $colors(-warning)
+        ttk::style configure SummaryHeaderCandy.TLabel -background $colors(-warning) -anchor center -borderwidth 2
         
         # Type labels
         ttk::style configure NormalType.TFrame -background $colors(-normal)

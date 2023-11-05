@@ -130,28 +130,37 @@ class TrainerFightEditor(EventEditorBase):
         self._cur_trainer = None
         self._num_pkmn = 0
         self._header_frame = ttk.Frame(self)
-        self._header_frame.grid(column=0, row=0, columnspan=6, sticky=tk.EW)
+        self._header_frame.pack(fill=tk.X)
         self._exp_per_sec_label = ttk.Label(self._header_frame, text=self.EXP_PER_SEC_TEXT)
-        self._exp_per_sec_label.grid(column=1, row=0, columnspan=2)
+        self._exp_per_sec_label.grid(column=4, row=0)
         self._pay_day_label = ttk.Label(self._header_frame, text="Pay Day Amount: ")
-        self._pay_day_label.grid(column=1, row=1)
-        self._pay_day_value = custom_components.SimpleEntry(self._header_frame, callback=self._trigger_save)
-        self._pay_day_value.grid(column=2, row=1)
+        self._pay_day_label.grid(column=1, row=0)
+        self._pay_day_value = custom_components.SimpleEntry(self._header_frame, callback=self._trigger_save, width=8)
+        self._pay_day_value.grid(column=2, row=0)
         self._header_frame.columnconfigure(0, weight=1, uniform="group")
         self._header_frame.columnconfigure(3, weight=1, uniform="group")
-        self._all_pkmn = [PkmnViewer(self, font_size=10) for _ in range(6)]
+        self._header_frame.columnconfigure(5, weight=1, uniform="group")
+
+        self._info_frame = ttk.Frame(self)
+        self._info_frame.pack(fill=tk.BOTH)
+        self._info_frame.columnconfigure(0, weight=1, uniform="group")
+        self._info_frame.columnconfigure(13, weight=1, uniform="group")
+        self._info_frame.rowconfigure(0, weight=1, uniform="group")
+        self._info_frame.rowconfigure(5, weight=1, uniform="group")
+        self._all_pkmn = [PkmnViewer(self._info_frame, font_size=10) for _ in range(6)]
         self._cached_definition_order = []
-        self._all_exp_labels = [ttk.Label(self, text="Exp Split:") for _ in range(6)]
+        self._all_exp_labels = [ttk.Label(self._info_frame, text="Exp Split:") for _ in range(6)]
         self._all_exp_splits = [
-            custom_components.SimpleOptionMenu(self, option_list=[1, 2, 3, 4, 5, 6], callback=self._trigger_save) for _ in range(6)
+            custom_components.SimpleOptionMenu(self._info_frame, option_list=[1, 2, 3, 4, 5, 6], callback=self._trigger_save, width=5) for _ in range(6)
         ]
-        self._all_order_labels = [ttk.Label(self, text="Mon Order") for _ in range(6)]
+        self._all_order_labels = [ttk.Label(self._info_frame, text="Mon Order") for _ in range(6)]
         self._all_order_menus = [
             custom_components.SimpleOptionMenu(
-                self,
+                self._info_frame,
                 option_list=[1, 2, 3, 4, 5, 6],
                 callback=self._reorder_mons,
-                var_name=f"TRAINER_MON_{self.VAR_COUNTER}_{idx}"
+                var_name=f"TRAINER_MON_{self.VAR_COUNTER}_{idx}",
+                width=5
             ) for idx in range(6)
         ]
         self._order_menu_lookup = {x._val._name: x for x in self._all_order_menus}
@@ -191,20 +200,20 @@ class TrainerFightEditor(EventEditorBase):
             else:
                 speed_style = "Contrast"
 
-            row_idx = (3 * (idx // 3)) + 1
-            col_idx = 2 * (idx % 3)
+            row_idx = (2 * (idx // 3)) + 1
+            col_idx = 4 * (idx % 3) + 1
 
             self._all_pkmn[idx].set_pkmn(cur_pkmn, speed_style=speed_style)
-            self._all_pkmn[idx].grid(row=row_idx, column=col_idx, columnspan=2, padx=5, pady=5)
+            self._all_pkmn[idx].grid(row=row_idx, column=col_idx, columnspan=4, padx=5, pady=5)
 
-            self._all_exp_labels[idx].grid(row=row_idx + 1, column=col_idx, padx=2, pady=(5, 10))
-            self._all_exp_splits[idx].set(cur_pkmn.exp_split)
-            self._all_exp_splits[idx].grid(row=row_idx + 1, column=col_idx + 1, padx=2, pady=(5, 10))
-
-            self._all_order_labels[idx].grid(row=row_idx + 2, column=col_idx, padx=2, pady=(5, 10))
+            self._all_order_labels[idx].grid(row=row_idx + 1, column=col_idx, padx=2, pady=(5, 10))
             self._all_order_menus[idx].new_values(order_values)
             self._all_order_menus[idx].set(cur_pkmn.mon_order)
-            self._all_order_menus[idx].grid(row=row_idx + 2, column=col_idx + 1, padx=2, pady=(5, 10))
+            self._all_order_menus[idx].grid(row=row_idx + 1, column=col_idx + 1, padx=2, pady=(5, 10))
+
+            self._all_exp_labels[idx].grid(row=row_idx + 1, column=col_idx + 2, padx=2, pady=(5, 10))
+            self._all_exp_splits[idx].set(cur_pkmn.exp_split)
+            self._all_exp_splits[idx].grid(row=row_idx + 1, column=col_idx + 3, padx=2, pady=(5, 10))
 
         
         for missing_idx in range(idx+1, 6):
