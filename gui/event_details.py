@@ -175,7 +175,7 @@ class EventDetails(ttk.Frame):
                 event_group.event_definition.get_event_type() == const.TASK_LEARN_MOVE_LEVELUP
             )
             trainer_event_group = event_group
-            if isinstance(trainer_event_group, EventItem):
+            if isinstance(trainer_event_group, EventItem) and event_group.event_definition.learn_move is None:
                 trainer_event_group = trainer_event_group.parent
             
             if self._ignore_tab_switching or self.auto_change_tab_checkbox.is_checked():

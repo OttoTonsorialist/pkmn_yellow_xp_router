@@ -201,6 +201,8 @@ class MainController:
 
     @handle_exceptions
     def update_existing_event(self, event_group_id:int, new_event:EventDefinition):
+        if new_event.learn_move is not None and new_event.learn_move.source == const.MOVE_SOURCE_LEVELUP:
+            return self.update_levelup_move(new_event.learn_move)
         self._data.replace_event_group(event_group_id, new_event)
         self._on_event_change()
 
