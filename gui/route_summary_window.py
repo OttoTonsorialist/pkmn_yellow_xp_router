@@ -18,6 +18,7 @@ class SummaryInfo:
     mon_level:int
     held_item:str
     moves:List[str]
+    rare_candy_count:int
 
 @dataclass
 class RenderInfo:
@@ -89,8 +90,19 @@ class RouteSummaryWindow(tk.Toplevel):
                             cur_event.init_state.solo_pkmn.cur_level,
                             cur_event.init_state.solo_pkmn.held_item,
                             cur_event.init_state.solo_pkmn.move_list,
+                            0,
                         )
                     )
+            elif cur_event.event_definition.rare_candy is not None and cur_event.event_definition.enabled:
+                summary_list.append(
+                    SummaryInfo(
+                        "",
+                        cur_event.final_state.solo_pkmn.cur_level,
+                        cur_event.final_state.solo_pkmn.held_item,
+                        cur_event.final_state.solo_pkmn.move_list,
+                        rare_candy_count=cur_event.event_definition.rare_candy.amount,
+                    )
+                )
             
             cur_event = self._controller.get_next_event(cur_event.group_id)
         
@@ -108,25 +120,37 @@ class RouteSummaryWindow(tk.Toplevel):
         move_display_info:List[List[RenderInfo]] = [[], [], [], []]
         held_item_display_info:List[RenderInfo] = []
         for cur_idx, cur_summary in enumerate(summary_list):
-            header_frame = ttk.Frame(self._main_frame, style="SummaryHeader.TFrame")
+
+            if cur_summary.rare_candy_count == 0:
+                header_style = "SummaryHeader.TFrame"
+                label_style = "SummaryHeader.TLabel"
+
+                split_name = cur_summary.trainer_name.split(" ")
+                if len(split_name) > 2:
+                    first_line = " ".join(split_name[0:2])
+                    second_line = " ".join(split_name[2:])
+                    trainer_text = first_line + "\n" + second_line
+                elif len(split_name) == 2 and len(split_name[1]) > 1:
+                    trainer_text = split_name[0] + "\n" + split_name[1]
+                else:
+                    trainer_text = cur_summary.trainer_name
+
+            else:
+                header_style = "SummaryHeaderCandy.TFrame"
+                label_style = "SummaryHeaderCandy.TLabel"
+                trainer_text = f"Rare Candy x{cur_summary.rare_candy_count}"
+
+            header_frame = ttk.Frame(self._main_frame, style=header_style)
             header_frame.grid(row=0, column=cur_idx, padx=2, pady=2, sticky=tk.NSEW)
 
-            trainer_name = cur_summary.trainer_name
-            split_name = trainer_name.split(" ")
-            if len(split_name) > 2:
-                first_line = " ".join(split_name[0:2])
-                second_line = " ".join(split_name[2:])
-                trainer_name = first_line + "\n" + second_line
-            elif len(split_name) == 2 and len(split_name[1]) > 1:
-                trainer_name = split_name[0] + "\n" + split_name[1]
-            trainer_label = ttk.Label(header_frame, text=trainer_name, style="SummaryHeader.TLabel", justify="center")
+            trainer_label = ttk.Label(header_frame, text=trainer_text, style=label_style, justify="center")
             trainer_label.pack(pady=(15, 2), padx=5)
             self._labels.append(trainer_label)
 
-            level_label = ttk.Label(header_frame, text=f"Lv: {cur_summary.mon_level}", style="SummaryHeader.TLabel")
+            level_label = ttk.Label(header_frame, text=f"Lv: {cur_summary.mon_level}", style=label_style)
             level_label.pack(pady=(2, 15), padx=5, side="bottom")
-            self._labels.append(level_label)
 
+            self._labels.append(level_label)
             self._header_frames.append(header_frame)
 
             if len(held_item_display_info) == 0 or held_item_display_info[-1].move_name != cur_summary.held_item:
