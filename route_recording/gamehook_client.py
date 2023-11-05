@@ -131,7 +131,8 @@ class GameHookClient:
                 self._signalr_client.start()
 
                 self._signalr_client.on_close(self._on_disconnect_helper)
-                self._signalr_client.on('PropertyChanged', self._on_propery_changed)
+                self._signalr_client.on('PropertiesChanged', self._on_properties_changed)
+                self._signalr_client.on('PropertyChanged', self._on_single_property_changed)
                 self._signalr_client.on('MapperLoaded', self._on_mapper_loaded)
                 self._signalr_client.on('GameHookError', self._on_game_hook_error)
                 self._signalr_client.on('DriverError', self._on_driver_error)
@@ -268,7 +269,20 @@ class GameHookClient:
             logger.warning("[GameHook Client] Attempting automatic reconnection...")
             self._establish_connection()
 
-    def _on_propery_changed(self, args):
+    def _on_properties_changed(self, args):
+        for cur_prop_changed in args[0]:
+            self._on_single_property_changed(
+                [
+                    cur_prop_changed["path"],
+                    cur_prop_changed["address"],
+                    cur_prop_changed["value"],
+                    cur_prop_changed["bytes"],
+                    cur_prop_changed["frozen"],
+                    cur_prop_changed["fieldsChanged"],
+                ]
+            )
+    
+    def _on_single_property_changed(self, args):
         # NOTE: all of the data is passed via a single list, so unpack the list into meaningful values
         [path, address, value, bytes_value, frozen, fields_changed] = args
         if not self.properties:
