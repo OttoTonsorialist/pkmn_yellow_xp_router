@@ -447,10 +447,10 @@ class BattleSummaryController:
             while cur_item_idx < len(event_group.event_items):
                 cur_event_item = event_group.event_items[cur_item_idx]
                 cur_item_pkmn_list = cur_event_item.event_definition.get_pokemon_list()
+                cur_item_idx += 1
 
                 # skip level-up events mid-fight
                 if not cur_item_pkmn_list:
-                    cur_item_idx += 1
                     continue
 
                 if cur_item_pkmn_list[cur_event_item.to_defeat_idx].name == cur_pkmn.name:
@@ -462,7 +462,6 @@ class BattleSummaryController:
                         )
                     )
                     break
-                cur_item_idx += 1
         
         self._full_refresh(is_load=True)
 
