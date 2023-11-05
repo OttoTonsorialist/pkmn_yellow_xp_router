@@ -36,13 +36,8 @@ class EventDetails(ttk.Frame):
         self.auto_change_tab_checkbox = custom_components.CheckboxLabel(self.pre_state_frame, text="Switch tabs automatically", flip=True)
         self.auto_change_tab_checkbox.grid(column=1, row=0, padx=10, pady=5, columnspan=2)
         self.auto_change_tab_checkbox.set_checked(True)
-        self.state_pre_label = tk.Label(self.pre_state_frame, text="Pre-event State Display Mode:")
-        self.state_pre_label.grid(column=1, row=1, padx=10, pady=5)
-        self.pre_state_selector = custom_components.SimpleOptionMenu(self.pre_state_frame, [const.STATE_SUMMARY_LABEL, const.BADGE_BOOST_LABEL], callback=self._pre_state_display_mode_callback, width=25)
-        self.pre_state_selector.grid(column=2, row=1, padx=10, pady=5)
         self.state_pre_viewer = pkmn_components.StateViewer(self.pre_state_frame)
         self.state_pre_viewer.grid(column=1, row=2, padx=10, pady=10, columnspan=2)
-        self.badge_boost_viewer = pkmn_components.BadgeBoostViewer(self.pre_state_frame)
 
         self.pre_state_frame.columnconfigure(0, weight=1)
         self.pre_state_frame.columnconfigure(3, weight=1)
@@ -67,12 +62,15 @@ class EventDetails(ttk.Frame):
 
         self.event_viewer_frame = ttk.Frame(self)
         self.event_viewer_frame.pack(anchor=tk.N, fill=tk.BOTH, expand=True, padx=5, pady=5)
-
-        self.event_details_frame = ttk.Frame(self.event_viewer_frame)
-        self.event_details_frame.grid(row=0, column=0)
-
         self.event_viewer_frame.rowconfigure(0, weight=1)
         self.event_viewer_frame.columnconfigure(0, weight=1)
+
+        self.event_details_frame = ttk.Frame(self.event_viewer_frame)
+        self.event_details_frame.grid(row=0, column=0, sticky=tk.NSEW)
+        self.event_details_frame.rowconfigure(0, weight=1, uniform="group")
+        self.event_details_frame.rowconfigure(2, weight=1, uniform="group")
+        self.event_details_frame.columnconfigure(0, weight=1, uniform="group")
+        self.event_details_frame.columnconfigure(2, weight=1, uniform="group")
 
         self.footer_frame = ttk.Frame(self.event_viewer_frame)
         self.footer_frame.grid(row=1, column=0, sticky=tk.EW)
@@ -139,15 +137,7 @@ class EventDetails(ttk.Frame):
 
             self.notebook_holder.pack(anchor=tk.N, fill=tk.X, padx=2, pady=2)
             self.event_viewer_frame.pack(anchor=tk.N, fill=tk.BOTH, expand=True, padx=2, pady=2)
-            self.event_details_frame.grid(row=0, column=0)
-
-    def _pre_state_display_mode_callback(self, *args, **kwargs):
-        if self.pre_state_selector.get() == const.BADGE_BOOST_LABEL:
-            self.state_pre_viewer.grid_forget()
-            self.badge_boost_viewer.grid(column=1, row=2, padx=10, pady=10, columnspan=2)
-        else:
-            self.badge_boost_viewer.grid_forget()
-            self.state_pre_viewer.grid(column=1, row=2, padx=10, pady=10, columnspan=2)
+            self.event_details_frame.grid(row=0, column=0, sticky=tk.NSEW)
     
     def _handle_version_change(self, *args, **kwargs):
         self._battle_summary_controller.load_empty()
@@ -158,12 +148,10 @@ class EventDetails(ttk.Frame):
         event_group = self._controller.get_single_selected_event_obj()
         if event_group is None:
             self.state_pre_viewer.set_state(self._controller.get_init_state())
-            self.badge_boost_viewer.set_state(self._controller.get_init_state())
             self.state_post_viewer.set_state(self._controller.get_final_state())
             self.battle_summary_frame.set_team(None)
         else:
             self.state_pre_viewer.set_state(event_group.init_state)
-            self.badge_boost_viewer.set_state(event_group.init_state)
             self.state_post_viewer.set_state(event_group.final_state)
             if event_group.event_definition.trainer_def is not None:
                 self.battle_summary_frame.set_team(
@@ -203,12 +191,10 @@ class EventDetails(ttk.Frame):
             allow_updates = False
 
         self.state_pre_viewer.set_state(init_state)
-        self.badge_boost_viewer.set_state(init_state)
-
         self.state_post_viewer.set_state(final_state)
 
         if self.current_event_editor is not None:
-            self.current_event_editor.pack_forget()
+            self.current_event_editor.grid_forget()
             self.current_event_editor = None
 
         if event_def is None:
@@ -230,7 +216,7 @@ class EventDetails(ttk.Frame):
                     is_enabled=allow_updates
                 )
                 self.current_event_editor.load_event(event_def)
-                self.current_event_editor.pack()
+                self.current_event_editor.grid(row=1, column=1)
 
     def update_existing_event(self, *args, **kwargs):
         self._event_update_helper(self._controller.get_single_selected_event_id())
