@@ -200,7 +200,7 @@ class GenTwo(CurrentGen):
         return full_route_state.Inventory()
     
     def get_stat_modifer_moves(self) -> List[str]:
-        return [self._move_db.get_move(x).name for x in self._move_db.stat_mod_moves.keys()]
+        return sorted([self._move_db.get_move(x).name for x in self._move_db.stat_mod_moves.keys()])
     
     def get_fight_reward(self, trainer_name) -> str:
         return self._fight_rewards.get(trainer_name)
