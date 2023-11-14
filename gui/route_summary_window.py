@@ -79,7 +79,10 @@ class RouteSummaryWindow(tk.Toplevel):
         summary_list:List[SummaryInfo] = []
         cur_event = self._controller.get_next_event()
         while cur_event is not None:
-            if cur_event.event_definition.trainer_def is not None and cur_event.event_definition.enabled:
+            if (
+                cur_event.event_definition.trainer_def is not None and
+                cur_event.event_definition.enabled
+            ):
                 if (
                     cur_event.event_definition.is_highlighted() or
                     current_gen_info().is_major_fight(cur_event.event_definition.trainer_def.trainer_name)
@@ -93,7 +96,11 @@ class RouteSummaryWindow(tk.Toplevel):
                             0,
                         )
                     )
-            elif cur_event.event_definition.rare_candy is not None and cur_event.event_definition.enabled:
+            elif (
+                cur_event.event_definition.rare_candy is not None and
+                cur_event.event_definition.enabled and
+                cur_event.event_definition.rare_candy.amount > 0
+            ):
                 summary_list.append(
                     SummaryInfo(
                         "",
@@ -121,9 +128,10 @@ class RouteSummaryWindow(tk.Toplevel):
         held_item_display_info:List[RenderInfo] = []
         for cur_idx, cur_summary in enumerate(summary_list):
 
-            if cur_summary.rare_candy_count == 0:
+            if cur_summary.trainer_name:
                 header_style = "SummaryHeader.TFrame"
                 label_style = "SummaryHeader.TLabel"
+                level_text = f"Lv: {cur_summary.mon_level}"
 
                 split_name = cur_summary.trainer_name.split(" ")
                 if len(split_name) > 2:
@@ -138,7 +146,8 @@ class RouteSummaryWindow(tk.Toplevel):
             else:
                 header_style = "SummaryHeaderCandy.TFrame"
                 label_style = "SummaryHeaderCandy.TLabel"
-                trainer_text = f"Rare Candy x{cur_summary.rare_candy_count}"
+                trainer_text = f"Rare Candy\nx{cur_summary.rare_candy_count}"
+                level_text = f"Lv: {cur_summary.mon_level - cur_summary.rare_candy_count}->{cur_summary.mon_level}"
 
             header_frame = ttk.Frame(self._main_frame, style=header_style)
             header_frame.grid(row=0, column=cur_idx, padx=2, pady=2, sticky=tk.NSEW)
@@ -147,7 +156,7 @@ class RouteSummaryWindow(tk.Toplevel):
             trainer_label.pack(pady=(15, 2), padx=5)
             self._labels.append(trainer_label)
 
-            level_label = ttk.Label(header_frame, text=f"Lv: {cur_summary.mon_level}", style=label_style)
+            level_label = ttk.Label(header_frame, text=level_text, style=label_style)
             level_label.pack(pady=(2, 15), padx=5, side="bottom")
 
             self._labels.append(level_label)
