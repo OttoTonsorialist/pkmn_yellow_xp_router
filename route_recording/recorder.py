@@ -264,8 +264,15 @@ class RecorderGameHookClient(GameHookClient):
     
     def on_mapper_loaded(self):
         game_name = self.meta.get("gameName")
-        logger.info(f"Successfully loaded mapper. Got gameName: {game_name}, to be validated against: {self._expected_names} (result: {game_name in self._expected_names})")
-        if game_name in self._expected_names:
+
+        correct_mapper_loaded = False
+        for test in self._expected_names:
+            if test in game_name:
+                correct_mapper_loaded = True
+                break
+
+        logger.info(f"Successfully loaded mapper. Got gameName: {game_name}, to be validated against: {self._expected_names} (result: {correct_mapper_loaded})")
+        if correct_mapper_loaded:
             self._controller.set_ready(True)
             self._controller.set_status(const.RECORDING_STATUS_READY)
         else:
