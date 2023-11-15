@@ -228,7 +228,7 @@ class RecorderController:
                 last_event.event_definition.item_event_def.item_name == event_def.item_event_def.item_name and
                 last_event.event_definition.item_event_def.is_acquire == event_def.item_event_def.is_acquire and
                 last_event.event_definition.item_event_def.with_money == event_def.item_event_def.with_money and
-                last_event.parent.name == self._active_area_name
+                last_event.parent.name == self._active_folder_name
             ):
                 event_def.item_event_def.item_amount += last_event.event_definition.item_event_def.item_amount
                 self._controller.update_existing_event(last_event.group_id, event_def)
@@ -239,7 +239,7 @@ class RecorderController:
                 last_event is not None and
                 last_event.event_definition.vitamin is not None and
                 last_event.event_definition.vitamin.vitamin == event_def.vitamin.vitamin and
-                last_event.parent.name == self._active_area_name
+                last_event.parent.name == self._active_folder_name
             ):
                 event_def.vitamin.amount += last_event.event_definition.vitamin.amount
                 self._controller.update_existing_event(last_event.group_id, event_def)
@@ -249,7 +249,7 @@ class RecorderController:
             if (
                 last_event is not None and
                 last_event.event_definition.rare_candy is not None and
-                last_event.parent.name == self._active_area_name
+                last_event.parent.name == self._active_folder_name
             ):
                 event_def.rare_candy.amount += last_event.event_definition.rare_candy.amount
                 self._controller.update_existing_event(last_event.group_id, event_def)
