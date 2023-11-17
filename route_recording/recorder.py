@@ -227,7 +227,8 @@ class RecorderController:
                 last_event.event_definition.item_event_def is not None and
                 last_event.event_definition.item_event_def.item_name == event_def.item_event_def.item_name and
                 last_event.event_definition.item_event_def.is_acquire == event_def.item_event_def.is_acquire and
-                last_event.event_definition.item_event_def.with_money == event_def.item_event_def.with_money
+                last_event.event_definition.item_event_def.with_money == event_def.item_event_def.with_money and
+                last_event.parent.name == self._active_folder_name
             ):
                 event_def.item_event_def.item_amount += last_event.event_definition.item_event_def.item_amount
                 self._controller.update_existing_event(last_event.group_id, event_def)
@@ -237,7 +238,8 @@ class RecorderController:
             if (
                 last_event is not None and
                 last_event.event_definition.vitamin is not None and
-                last_event.event_definition.vitamin.vitamin == event_def.vitamin.vitamin
+                last_event.event_definition.vitamin.vitamin == event_def.vitamin.vitamin and
+                last_event.parent.name == self._active_folder_name
             ):
                 event_def.vitamin.amount += last_event.event_definition.vitamin.amount
                 self._controller.update_existing_event(last_event.group_id, event_def)
@@ -246,7 +248,8 @@ class RecorderController:
             last_event = self._controller.get_previous_event()
             if (
                 last_event is not None and
-                last_event.event_definition.rare_candy is not None
+                last_event.event_definition.rare_candy is not None and
+                last_event.parent.name == self._active_folder_name
             ):
                 event_def.rare_candy.amount += last_event.event_definition.rare_candy.amount
                 self._controller.update_existing_event(last_event.group_id, event_def)
@@ -264,8 +267,15 @@ class RecorderGameHookClient(GameHookClient):
     
     def on_mapper_loaded(self):
         game_name = self.meta.get("gameName")
-        logger.info(f"Successfully loaded mapper. Got gameName: {game_name}, to be validated against: {self._expected_names} (result: {game_name in self._expected_names})")
-        if game_name in self._expected_names:
+
+        correct_mapper_loaded = False
+        for test in self._expected_names:
+            if test in game_name:
+                correct_mapper_loaded = True
+                break
+
+        logger.info(f"Successfully loaded mapper. Got gameName: {game_name}, to be validated against: {self._expected_names} (result: {correct_mapper_loaded})")
+        if correct_mapper_loaded:
             self._controller.set_ready(True)
             self._controller.set_status(const.RECORDING_STATUS_READY)
         else:
