@@ -315,7 +315,7 @@ class GameHookClient:
         new_property.bytes_value = bytes_value
         new_property.frozen = frozen
 
-        if "value" in fields_changed:
+        if "value" in fields_changed and new_property.value != old_property.value:
             if path in self._change:
                 for callback_fn in self._change[path]:
                     try:

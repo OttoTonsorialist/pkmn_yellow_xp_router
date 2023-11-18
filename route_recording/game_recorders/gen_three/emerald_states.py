@@ -46,8 +46,6 @@ class WatchState(State):
         if new_prop.path != gh_gen_three_const.KEY_GAMETIME_SECONDS:
             frame_val = self.machine._gamehook_client.get(gh_gen_three_const.KEY_GAMETIME_FRAMES).value
             logger.info(f"On Frame {frame_val:02} Changing {new_prop.path} from {prev_prop.value} to {new_prop.value}({type(new_prop.value)})")
-        else:
-            logger.info(f"On Frame {frame_val:02} Changing {new_prop.path} from {prev_prop.value} to {new_prop.value}({type(new_prop.value)})")
 
         return self.state_type
 
