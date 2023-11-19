@@ -299,7 +299,7 @@ class UseRareCandyState(WatchForResetState):
             if not self._item_removal_detected:
                 return StateType.OVERWORLD
         elif new_prop.path in gh_gen_one_const.ALL_KEYS_ITEM_TYPE:
-            if new_prop.value is None or new_prop.value == gh_gen_one_const.END_OF_ITEM_LIST:
+            if new_prop.value is None:
                 return StateType.OVERWORLD
 
         return self.state_type
@@ -325,7 +325,7 @@ class UseTMState(WatchForResetState):
             if not self._item_removal_detected:
                 return StateType.OVERWORLD
         elif new_prop.path in gh_gen_one_const.ALL_KEYS_ITEM_TYPE:
-            if new_prop.value is None or new_prop.value == gh_gen_one_const.END_OF_ITEM_LIST:
+            if new_prop.value is None:
                 return StateType.OVERWORLD
 
         return self.state_type
@@ -351,7 +351,7 @@ class UseVitaminState(WatchForResetState):
             if not self._item_removal_detected:
                 return StateType.OVERWORLD
         elif new_prop.path in gh_gen_one_const.ALL_KEYS_ITEM_TYPE:
-            if new_prop.value is None or new_prop.value == gh_gen_one_const.END_OF_ITEM_LIST:
+            if new_prop.value is None:
                 return StateType.OVERWORLD
 
         return self.state_type

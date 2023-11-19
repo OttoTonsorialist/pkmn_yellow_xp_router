@@ -197,22 +197,34 @@ class Machine:
 
         # start with the normal pocket
         for i in range(len(gh_gen_two_const.ALL_KEYS_ITEM_TYPE)):
+            logger.info(f"trying out: {i} vs {self._gamehook_client.get(gh_gen_two_const.KEY_ITEM_COUNT).value} which holds {self._gamehook_client.get(gh_gen_two_const.ALL_KEYS_ITEM_TYPE[i]).value} x{self._gamehook_client.get(gh_gen_two_const.ALL_KEYS_ITEM_QUANTITY[i]).value}")
+            if i >= self._gamehook_client.get(gh_gen_two_const.KEY_ITEM_COUNT).value:
+                break
             item_type = self._gamehook_client.get(gh_gen_two_const.ALL_KEYS_ITEM_TYPE[i]).value
             if item_type is None:
                 break
             
+            if self._gamehook_client.get(gh_gen_two_const.ALL_KEYS_ITEM_QUANTITY[i]).value <= 0:
+                break
             result[item_type] = self._gamehook_client.get(gh_gen_two_const.ALL_KEYS_ITEM_QUANTITY[i]).value
+            logger.info(f"got {item_type} x{result[item_type]}")
         
         # load the ball pocket
         for i in range(len(gh_gen_two_const.ALL_KEYS_BALL_TYPE)):
+            if i >= self._gamehook_client.get(gh_gen_two_const.KEY_BALL_COUNT).value:
+                break
             item_type = self._gamehook_client.get(gh_gen_two_const.ALL_KEYS_BALL_TYPE[i]).value
             if item_type is None:
                 break
             
+            if self._gamehook_client.get(gh_gen_two_const.ALL_KEYS_BALL_QUANTITY[i]).value <= 0:
+                break
             result[item_type] = self._gamehook_client.get(gh_gen_two_const.ALL_KEYS_BALL_QUANTITY[i]).value
 
         # load the key items pocket
         for i in range(len(gh_gen_two_const.ALL_KEYS_KEY_ITEMS)):
+            if i >= self._gamehook_client.get(gh_gen_two_const.KEY_KEY_ITEM_COUNT).value:
+                break
             item_type = self._gamehook_client.get(gh_gen_two_const.ALL_KEYS_KEY_ITEMS[i]).value
             if item_type is None:
                 break
@@ -230,6 +242,7 @@ class Machine:
             if self._gamehook_client.get(gh_gen_two_const.ALL_HM_KEYS[i]).value:
                 result[self.gh_converter.get_tmhm_name_from_path(gh_gen_two_const.ALL_HM_KEYS[i])] = 1
 
+        logger.info(f"cached result: {result}")
         return result
 
     def _item_cache_update(

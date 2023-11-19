@@ -306,9 +306,7 @@ class RecorderGameHookClient(GameHookClient):
                     if inner_val in self.properties:
                         continue
                     if inner_val.lower() in lower_vals:
-                        logger.info(f"replacing element in {cur_attr}: {inner_val}")
                         cur_val[inner_idx] = real_vals[lower_vals.index(inner_val.lower())]
-                        logger.info(f"new value: {cur_val[inner_idx]}")
                         continue
                     invalid_props.add(inner_val)
             elif isinstance(cur_val, set):
@@ -331,9 +329,10 @@ class RecorderGameHookClient(GameHookClient):
                     setattr(constants, cur_attr, replacement_val)
         
         if invalid_props:
-            logger.error(f"Likely due to mismatching GameHook version, invalid GameHook properties: {list(invalid_props)}")
-            self._controller._controller.trigger_exception(f"Likely due to mismatching GameHook version, invalid GameHook properties: {list(invalid_props)}")
+            return list(invalid_props)
+
         logger.info("Validated GameHook constants successfully")
+        return []
 
 
     def on_mapper_load_error(self, err):

@@ -9,9 +9,13 @@ class Gen1GameHookConstants:
     # NOTE: every key defined here is tied to a sepcific version of a GameHook mapper
     # if the keys in the mapper ever change such that they don't match anymore, the whole recorder will start to fail
     def __init__(self):
+        # initial values are completely agnostic to all mappers
         self.RESET_FLAG = const.RECORDING_ERROR_FRAGMENT + "FLAG TO SIGNAL GAME RESET. USER SHOULD NEVER SEE THIS"
         self.TRAINER_LOSS_FLAG = const.RECORDING_ERROR_FRAGMENT + "FLAG TO SIGNAL LOSING TO TRAINER. USER SHOULD NEVER SEE THIS"
         self.PAY_DAY_FLAG = const.RECORDING_ERROR_FRAGMENT + "FLAG TO HANDLE POTENTIAL PAY DAY REWARDS. USER SHOULD NEVER SEE THIS"
+
+        # these values are not mapper agnostic, but are the same across both supported mapper versions
+        # or at least, are the same after initial string standardization
         self.OAKS_PARCEL = "Oak's Parcel"
         self.VENDING_MACHINE_DRINKS = [
             "Fresh Water",
@@ -19,17 +23,22 @@ class Gen1GameHookConstants:
             "Lemonade",
         ]
         self.NUGGET = "Nugget"
-        self.ROUTE_24 = "Route 24"
         self.NUGGET_ROCKET = "Rocket 6"
-        self.DOME_FOSSIL = "Dome Fossil"
-        self.MT_MOON = "Mt Moon"
         self.RIVAL_LAB_FIGHTS = [
             "Rival1 1",
             "Rival1 Charmander 1",
             "Rival1 Squirtle 1",
             "Rival1 Bulbasaur 1",
         ]
+        self.TRAINER_BATTLE_TYPE = "Trainer"
+        self.WILD_BATTLE_TYPE = "Wild"
+        self.NONE_BATTLE_TYPE = "None"
+        self.MAP_GAME_CORNER = "Celadon City - Game Corner"
 
+        # then configure the mapper specific values
+        self.use_new_mapper()
+    
+    def use_old_mapper(self):
         self.KEY_OVERWORLD_MAP = "overworld.map"
         self.KEY_AUDIO_CHANNEL_4 = "audio.channel4"
         self.KEY_AUDIO_CHANNEL_5 = "audio.channel5"
@@ -97,13 +106,75 @@ class Gen1GameHookConstants:
         self.ALL_KEYS_TO_REGISTER.extend(self.ALL_KEYS_STAT_EXP)
         self.ALL_KEYS_TO_REGISTER.extend(self.ALL_KEYS_ITEM_TYPE)
         self.ALL_KEYS_TO_REGISTER.extend(self.ALL_KEYS_ITEM_QUANTITY)
+    
+    def use_new_mapper(self):
+        self.KEY_OVERWORLD_MAP = "overworld.map"
+        self.KEY_AUDIO_CHANNEL_4 = "audio.channel4"
+        self.KEY_AUDIO_CHANNEL_5 = "audio.channel5"
+        self.KEY_AUDIO_CHANNEL_7 = "audio.channel7"
+        self.KEY_PLAYER_PLAYERID = "player.playerId"
+        self.KEY_PLAYER_MONEY = "bag.money"
+        self.KEY_PLAYER_MON_EXPPOINTS = "player.team.0.expPoints"
+        self.KEY_PLAYER_MON_LEVEL = "player.team.0.level"
+        self.KEY_PLAYER_MON_SPECIES = "player.team.0.species"
 
-        self.TRAINER_BATTLE_TYPE = "Trainer"
-        self.WILD_BATTLE_TYPE = "Wild"
-        self.NONE_BATTLE_TYPE = "None"
-        self.END_OF_ITEM_LIST = "--End of list--"
+        self.KEY_PLAYER_MON_MOVE_1 = "player.team.0.moves.0.move"
+        self.KEY_PLAYER_MON_MOVE_2 = "player.team.0.moves.1.move"
+        self.KEY_PLAYER_MON_MOVE_3 = "player.team.0.moves.2.move"
+        self.KEY_PLAYER_MON_MOVE_4 = "player.team.0.moves.3.move"
+        self.ALL_KEYS_PLAYER_MOVES = [
+            self.KEY_PLAYER_MON_MOVE_1,
+            self.KEY_PLAYER_MON_MOVE_2,
+            self.KEY_PLAYER_MON_MOVE_3,
+            self.KEY_PLAYER_MON_MOVE_4,
+        ]
 
-        self.MAP_GAME_CORNER = "Celadon City - Game Corner"
+        self.KEY_PLAYER_MON_STAT_EXP_HP = "player.team.0.evs.hp"
+        self.KEY_PLAYER_MON_STAT_EXP_ATTACK = "player.team.0.evs.attack"
+        self.KEY_PLAYER_MON_STAT_EXP_DEFENSE = "player.team.0.evs.defense"
+        self.KEY_PLAYER_MON_STAT_EXP_SPEED = "player.team.0.evs.speed"
+        self.KEY_PLAYER_MON_STAT_EXP_SPECIAL = "player.team.0.evs.special"
+        self.ALL_KEYS_STAT_EXP = [
+            self.KEY_PLAYER_MON_STAT_EXP_HP,
+            self.KEY_PLAYER_MON_STAT_EXP_ATTACK,
+            self.KEY_PLAYER_MON_STAT_EXP_DEFENSE,
+            self.KEY_PLAYER_MON_STAT_EXP_SPEED,
+            self.KEY_PLAYER_MON_STAT_EXP_SPECIAL,
+        ]
+
+        self.KEY_GAMETIME_SECONDS = "gameTime.seconds"
+        self.KEY_BATTLE_TYPE = "battle.mode"
+        self.KEY_BATTLE_TRAINER_CLASS = "battle.trainer.class"
+        self.KEY_BATTLE_TRAINER_NUMBER = "battle.trainer.number"
+        self.KEY_BATTLE_PLAYER_MON_SPECIES = "battle.playerPokemon.species"
+        self.KEY_BATTLE_PLAYER_MON_HP = "battle.playerPokemon.stats.hp"
+        self.KEY_BATTLE_ENEMY_SPECIES = "battle.enemyPokemon.species"
+        self.KEY_BATTLE_ENEMY_LEVEL = "battle.enemyPokemon.level"
+
+        self.KEY_ITEM_COUNT = "bag.itemCount"
+        self.ALL_KEYS_ITEM_TYPE = [f"bag.items.{i}.item" for i in range(0, 20)]
+        self.ALL_KEYS_ITEM_QUANTITY = [f"bag.items.{i}.quantity" for i in range(0, 20)]
+
+        self.ALL_KEYS_TO_REGISTER = [
+            self.KEY_OVERWORLD_MAP,
+            self.KEY_AUDIO_CHANNEL_4,
+            self.KEY_AUDIO_CHANNEL_5,
+            self.KEY_PLAYER_PLAYERID,
+            self.KEY_PLAYER_MONEY,
+            self.KEY_PLAYER_MON_EXPPOINTS,
+            self.KEY_PLAYER_MON_LEVEL,
+            self.KEY_PLAYER_MON_SPECIES,
+            self.KEY_GAMETIME_SECONDS,
+            self.KEY_BATTLE_TYPE,
+            self.KEY_BATTLE_PLAYER_MON_HP,
+            self.KEY_BATTLE_ENEMY_SPECIES,
+            self.KEY_BATTLE_ENEMY_LEVEL,
+            self.KEY_ITEM_COUNT,
+        ]
+        self.ALL_KEYS_TO_REGISTER.extend(self.ALL_KEYS_PLAYER_MOVES)
+        self.ALL_KEYS_TO_REGISTER.extend(self.ALL_KEYS_STAT_EXP)
+        self.ALL_KEYS_TO_REGISTER.extend(self.ALL_KEYS_ITEM_TYPE)
+        self.ALL_KEYS_TO_REGISTER.extend(self.ALL_KEYS_ITEM_QUANTITY)
 
 
 class GameHookConstantConverter:

@@ -10,11 +10,25 @@ class Gen2GameHookConstants:
     # NOTE: every key defined here is tied to a sepcific version of a GameHook mapper
     # if the keys in the mapper ever change such that they don't match anymore, the whole recorder will start to fail
     def __init__(self):
+        # initial values are completely agnostic to all mappers
         self.RESET_FLAG = const.RECORDING_ERROR_FRAGMENT + "FLAG TO SIGNAL GAME RESET. USER SHOULD NEVER SEE THIS"
         self.TRAINER_LOSS_FLAG = const.RECORDING_ERROR_FRAGMENT + "FLAG TO SIGNAL LOSING TO TRAINER. USER SHOULD NEVER SEE THIS"
         self.ROAR_FLAG = const.RECORDING_ERROR_FRAGMENT + "FLAG TO SIGNAL ROARS NEED TO BE HANDLED. USER SHOULD NEVER SEE THIS"
         self.HELD_CHECK_FLAG = const.RECORDING_ERROR_FRAGMENT + "FLAG TO SIGNAL FOR DEEPER HELD ITEM CHECKING. USER SHOULD NEVER SEE THIS"
 
+        # these values are not mapper agnostic, but are the same across both supported mapper versions
+        # or at least, are the same after initial string standardization
+        self.PKMN_CENTER_HEAL_SOUND_ID = 18
+        self.SAVE_HEAL_SOUND_ID = 37
+
+        self.TRAINER_BATTLE_TYPE = "Trainer"
+        self.WILD_BATTLE_TYPE = "Wild"
+        self.BATTLE_RESULT_DRAW = "DRAW"
+
+        # then configure the mapper specific values
+        self.use_new_mapper()
+    
+    def use_old_mapper(self):
         self.KEY_OVERWORLD_MAP = "overworld.mapGroup"
         self.KEY_OVERWORLD_MAP_NUM = "overworld.mapNumber"
         self.KEY_PLAYER_PLAYERID = "player.playerId"
@@ -51,10 +65,7 @@ class Gen2GameHookConstants:
 
         self.KEY_GAMETIME_SECONDS = "gameTime.seconds"
         self.KEY_AUDIO_CURRENT_SOUND = "audio.currentSound"
-        self.PKMN_CENTER_HEAL_SOUND_ID = 18
-        self.SAVE_HEAL_SOUND_ID = 37
         self.KEY_BATTLE_MODE = "battle.mode"
-        self.KEY_BATTLE_TYPE = "battle.type"
         self.KEY_BATTLE_TEXT_BUFFER = "battle.textBuffer"
         self.KEY_BATTLE_RESULT = "battle.result"
         self.KEY_BATTLE_START = "battle.battleStart"
@@ -142,7 +153,6 @@ class Gen2GameHookConstants:
             "player.hms.HM07-Waterfall",
         ]
 
-        #self.ALL_KEYS_ALL_ITEM_FIELDS = set([self.KEY_ITEM_COUNT, self.KEY_BALL_COUNT, self.KEY_KEY_ITEM_COUNT])
         self.ALL_KEYS_ALL_ITEM_FIELDS = set([self.KEY_ITEM_COUNT, self.KEY_KEY_ITEM_COUNT])
         self.ALL_KEYS_ALL_ITEM_FIELDS.update(self.ALL_KEYS_ITEM_TYPE)
         self.ALL_KEYS_ALL_ITEM_FIELDS.update(self.ALL_KEYS_ITEM_QUANTITY)
@@ -162,7 +172,6 @@ class Gen2GameHookConstants:
             self.KEY_PLAYER_MON_HELD_ITEM,
             self.KEY_GAMETIME_SECONDS,
             self.KEY_BATTLE_MODE,
-            self.KEY_BATTLE_TYPE,
             self.KEY_BATTLE_TEXT_BUFFER,
             self.KEY_BATTLE_RESULT,
             self.KEY_BATTLE_START,
@@ -178,9 +187,171 @@ class Gen2GameHookConstants:
         self.ALL_KEYS_TO_REGISTER.extend(self.ALL_KEYS_STAT_EXP)
         self.ALL_KEYS_TO_REGISTER.extend(self.ALL_KEYS_ALL_ITEM_FIELDS)
 
-        self.TRAINER_BATTLE_TYPE = "Trainer"
-        self.WILD_BATTLE_TYPE = "Wild"
-        self.BATTLE_RESULT_DRAW = "DRAW"
+    def use_new_mapper(self):
+        self.KEY_OVERWORLD_MAP = "overworld.mapGroup"
+        self.KEY_OVERWORLD_MAP_NUM = "overworld.mapNumber"
+        self.KEY_PLAYER_PLAYERID = "player.playerId"
+        self.KEY_PLAYER_MONEY = "bag.money"
+        self.KEY_PLAYER_MON_EXPPOINTS = "player.team.0.experiencePoints"
+        self.KEY_PLAYER_MON_LEVEL = "player.team.0.level"
+        self.KEY_PLAYER_MON_SPECIES = "player.team.0.species"
+        self.KEY_PLAYER_MON_HELD_ITEM = "player.team.0.heldItem"
+        self.KEY_PLAYER_MON_FRIENDSHIP = "player.team.0.friendshipPoints"
+
+        self.KEY_PLAYER_MON_MOVE_1 = "player.team.0.moves.0.type"
+        self.KEY_PLAYER_MON_MOVE_2 = "player.team.0.moves.1.type"
+        self.KEY_PLAYER_MON_MOVE_3 = "player.team.0.moves.2.type"
+        self.KEY_PLAYER_MON_MOVE_4 = "player.team.0.moves.3.type"
+        self.ALL_KEYS_PLAYER_MOVES = [
+            self.KEY_PLAYER_MON_MOVE_1,
+            self.KEY_PLAYER_MON_MOVE_2,
+            self.KEY_PLAYER_MON_MOVE_3,
+            self.KEY_PLAYER_MON_MOVE_4,
+        ]
+
+        self.KEY_PLAYER_MON_STAT_EXP_HP = "player.team.0.evs.hp"
+        self.KEY_PLAYER_MON_STAT_EXP_ATTACK = "player.team.0.evs.attack"
+        self.KEY_PLAYER_MON_STAT_EXP_DEFENSE = "player.team.0.evs.defense"
+        self.KEY_PLAYER_MON_STAT_EXP_SPEED = "player.team.0.evs.speed"
+        self.KEY_PLAYER_MON_STAT_EXP_SPECIAL = "player.team.0.evs.special"
+        self.ALL_KEYS_STAT_EXP = [
+            self.KEY_PLAYER_MON_STAT_EXP_HP,
+            self.KEY_PLAYER_MON_STAT_EXP_ATTACK,
+            self.KEY_PLAYER_MON_STAT_EXP_DEFENSE,
+            self.KEY_PLAYER_MON_STAT_EXP_SPEED,
+            self.KEY_PLAYER_MON_STAT_EXP_SPECIAL,
+        ]
+
+        self.KEY_GAMETIME_SECONDS = "gameTime.seconds"
+        self.KEY_AUDIO_CURRENT_SOUND = "audio.currentSound"
+        self.KEY_BATTLE_MODE = "battle.mode"
+        self.KEY_BATTLE_TEXT_BUFFER = "battle.textBuffer"
+        self.KEY_BATTLE_RESULT = "battle.result"
+        self.KEY_BATTLE_START = "battle.battleStart"
+        self.KEY_BATTLE_TRAINER_CLASS = "battle.trainer.class"
+        self.KEY_BATTLE_TRAINER_NAME = "battle.trainer.name"
+        self.KEY_BATTLE_TRAINER_NUMBER = "battle.trainer.id"
+        self.KEY_BATTLE_TRAINER_TOTAL_POKEMON = "battle.trainer.totalPokemon"
+        self.KEY_BATTLE_PLAYER_MON_PARTY_POS = "battle.playerPokemon.partyPos"
+        self.KEY_BATTLE_PLAYER_MON_SPECIES = "battle.playerPokemon.species"
+        self.KEY_BATTLE_PLAYER_MON_HP = "battle.playerPokemon.stats.hp"
+        self.KEY_BATTLE_ENEMY_SPECIES = "battle.enemyPokemon.species"
+        self.KEY_BATTLE_ENEMY_LEVEL = "battle.enemyPokemon.level"
+        self.KEY_BATTLE_ENEMY_HP = "battle.enemyPokemon.stats.hp"
+        self.KEY_BATTLE_ENEMY_MON_PARTY_POS = "battle.enemyPokemon.partyPos"
+
+        self.KEY_ITEM_COUNT = "bag.itemCount"
+        self.ALL_KEYS_ITEM_TYPE = [f"bag.items.{i}.item" for i in range(0, 20)]
+        self.ALL_KEYS_ITEM_QUANTITY = [f"bag.items.{i}.quantity" for i in range(0, 20)]
+        self.KEY_BALL_COUNT = "bag.pokeBallCount"
+        self.ALL_KEYS_BALL_TYPE = [f"bag.balls.{i}.item" for i in range(0, 12)]
+        self.ALL_KEYS_BALL_QUANTITY = [f"bag.balls.{i}.quantity" for i in range(0, 12)]
+        self.KEY_KEY_ITEM_COUNT = "bag.totalKeyItems"
+        self.ALL_KEYS_KEY_ITEMS = [f"bag.keyItems.{i}.item" for i in range(0, 26)]
+
+        self.ALL_TM_KEYS = [
+            "bag.tms.tm01-dynamicpunch",
+            "bag.tms.tm02-headbutt",
+            "bag.tms.tm03-curse",
+            "bag.tms.tm04-rollout",
+            "bag.tms.tm05-roar",
+            "bag.tms.tm06-toxic",
+            "bag.tms.tm07-zapcannon",
+            "bag.tms.tm08-rocksmash",
+            "bag.tms.tm09-psychup",
+            "bag.tms.tm10-hiddenpower",
+            "bag.tms.tm11-sunnyday",
+            "bag.tms.tm12-sweetscent",
+            "bag.tms.tm13-snore",
+            "bag.tms.tm14-blizzard",
+            "bag.tms.tm15-hyperbeam",
+            "bag.tms.tm16-icywind",
+            "bag.tms.tm17-protect",
+            "bag.tms.tm18-raindance",
+            "bag.tms.tm19-gigadrain",
+            "bag.tms.tm20-endure",
+            "bag.tms.tm21-frustration",
+            "bag.tms.tm22-solarbeam",
+            "bag.tms.tm23-irontail",
+            "bag.tms.tm24-dragonbreath",
+            "bag.tms.tm25-thunder",
+            "bag.tms.tm26-earthquake",
+            "bag.tms.tm27-return",
+            "bag.tms.tm28-dig",
+            "bag.tms.tm29-psychic",
+            "bag.tms.tm30-shadowball",
+            "bag.tms.tm31-mudslap",
+            "bag.tms.tm32-doubleteam",
+            "bag.tms.tm33-icepunch",
+            "bag.tms.tm34-swagger",
+            "bag.tms.tm35-sleeptalk",
+            "bag.tms.tm36-sludgebomb",
+            "bag.tms.tm37-sandstorm",
+            "bag.tms.tm38-fireblast",
+            "bag.tms.tm39-swift",
+            "bag.tms.tm40-defensecurl",
+            "bag.tms.tm41-thunderpunch",
+            "bag.tms.tm42-dreameater",
+            "bag.tms.tm43-detect",
+            "bag.tms.tm44-rest",
+            "bag.tms.tm45-attract",
+            "bag.tms.tm46-thief",
+            "bag.tms.tm47-steelwing",
+            "bag.tms.tm48-firepunch",
+            "bag.tms.tm49-furycutter",
+            "bag.tms.tm50-nightmare",
+        ]
+
+        self.ALL_HM_KEYS = [
+            #"bag.hms.hm01-cut",
+            #"bag.hms.hm02-fly",
+            #"bag.hms.hm03-surf",
+            #"bag.hms.hm04-strength",
+            #"bag.hms.hm05-flash",
+            #"bag.hms.hm06-whirlpool",
+            #"bag.hms.hm07-waterfall",
+            "bag.hms.hm01",
+            "bag.hms.hm02",
+            "bag.hms.hm03",
+            "bag.hms.hm04",
+            "bag.hms.hm05",
+            "bag.hms.hm06",
+            "bag.hms.hm07",
+        ]
+
+        self.ALL_KEYS_ALL_ITEM_FIELDS = set([self.KEY_ITEM_COUNT, self.KEY_KEY_ITEM_COUNT])
+        self.ALL_KEYS_ALL_ITEM_FIELDS.update(self.ALL_KEYS_ITEM_TYPE)
+        self.ALL_KEYS_ALL_ITEM_FIELDS.update(self.ALL_KEYS_ITEM_QUANTITY)
+        self.ALL_KEYS_ALL_ITEM_FIELDS.update(self.ALL_KEYS_BALL_TYPE)
+        self.ALL_KEYS_ALL_ITEM_FIELDS.update(self.ALL_KEYS_BALL_QUANTITY)
+        self.ALL_KEYS_ALL_ITEM_FIELDS.update(self.ALL_KEYS_KEY_ITEMS)
+        self.ALL_KEYS_ALL_ITEM_FIELDS.update(self.ALL_TM_KEYS)
+        self.ALL_KEYS_ALL_ITEM_FIELDS.update(self.ALL_HM_KEYS)
+
+        self.ALL_KEYS_TO_REGISTER = [
+            self.KEY_OVERWORLD_MAP,
+            self.KEY_PLAYER_PLAYERID,
+            self.KEY_PLAYER_MONEY,
+            self.KEY_PLAYER_MON_EXPPOINTS,
+            self.KEY_PLAYER_MON_LEVEL,
+            self.KEY_PLAYER_MON_SPECIES,
+            self.KEY_PLAYER_MON_HELD_ITEM,
+            self.KEY_GAMETIME_SECONDS,
+            self.KEY_BATTLE_MODE,
+            self.KEY_BATTLE_TEXT_BUFFER,
+            self.KEY_BATTLE_RESULT,
+            self.KEY_BATTLE_START,
+            self.KEY_BATTLE_PLAYER_MON_HP,
+            self.KEY_BATTLE_PLAYER_MON_PARTY_POS,
+            self.KEY_BATTLE_ENEMY_SPECIES,
+            self.KEY_BATTLE_ENEMY_LEVEL,
+            self.KEY_BATTLE_ENEMY_HP,
+            self.KEY_BATTLE_ENEMY_MON_PARTY_POS,
+            self.KEY_AUDIO_CURRENT_SOUND,
+        ]
+        self.ALL_KEYS_TO_REGISTER.extend(self.ALL_KEYS_PLAYER_MOVES)
+        self.ALL_KEYS_TO_REGISTER.extend(self.ALL_KEYS_STAT_EXP)
+        self.ALL_KEYS_TO_REGISTER.extend(self.ALL_KEYS_ALL_ITEM_FIELDS)
 
 
 class GameHookConstantConverter:

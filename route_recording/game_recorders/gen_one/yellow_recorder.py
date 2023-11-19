@@ -29,7 +29,16 @@ class YellowRecorder(route_recording.recorder.RecorderGameHookClient):
         result = super().on_mapper_loaded()
 
         if self._controller.is_ready():
-            self.validate_constants(gh_gen_one_const)
+
+            # try to find the right mapper version
+            gh_gen_one_const.use_new_mapper()
+            invalid_props = self.validate_constants(gh_gen_one_const)
+            if invalid_props:
+                gh_gen_one_const.use_old_mapper()
+                invalid_props = self.validate_constants(gh_gen_one_const)
+                if invalid_props:
+                    logger.error(f"Likely due to mismatching GameHook version, invalid GameHook properties: {list(invalid_props)}")
+                    self._controller._controller.trigger_exception(f"Likely due to mismatching GameHook version, invalid GameHook properties: {list(invalid_props)}")
 
             for cur_key in gh_gen_one_const.ALL_KEYS_TO_REGISTER:
                 self.get(cur_key).change(self._machine.handle_event)
