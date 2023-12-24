@@ -87,6 +87,7 @@ class PkmnDB:
 class TrainerDB:
     def __init__(self, data:Dict[str, universal_data_objects.Trainer]):
         self._data = {sanitize_string(x.name): x for x in data.values()}
+        self._id_lookup = {x.trainer_id: x for x in data.values()}
         self.loc_oriented_trainers:Dict[str, List[str]] = {}
         self.class_oriented_trainers:Dict[str, List[str]] = {}
 
@@ -117,6 +118,9 @@ class TrainerDB:
     
     def get_trainer(self, trainer_name):
         return self._data.get(sanitize_string(trainer_name))
+    
+    def get_trainer_by_id(self, trainer_id):
+        return self._id_lookup.get(trainer_id)
     
     def get_all_locations(self):
         return list(self.loc_oriented_trainers.keys())

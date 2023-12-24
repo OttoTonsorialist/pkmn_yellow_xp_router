@@ -285,6 +285,7 @@ class SoloPokemon:
             self.dvs,
             stat_xp=self.realized_stat_xp,
             badges=badges,
+            is_trainer_mon=True,
             held_item=self.held_item,
             ability=self.ability,
             nature=self.nature

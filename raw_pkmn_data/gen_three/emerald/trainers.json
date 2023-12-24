@@ -29808,7 +29808,7 @@
             ]
         },
         {
-            "trainer_name": "Lady Cindy",
+            "trainer_name": "Unused Lady Cindy",
             "trainer_class": "Lady",
             "trainer_items": [
                 "Full Restore"
@@ -38187,7 +38187,7 @@
             ]
         },
         {
-            "trainer_name": "Twins Gina & mia",
+            "trainer_name": "Twins Gina & Mia",
             "trainer_class": "Twins",
             "trainer_items": [],
             "trainer_id": 483,
@@ -38295,7 +38295,7 @@
             ]
         },
         {
-            "trainer_name": "Twins Amy & liv",
+            "trainer_name": "Unused Twins Amy & liv",
             "trainer_class": "Twins",
             "trainer_items": [],
             "trainer_id": 485,

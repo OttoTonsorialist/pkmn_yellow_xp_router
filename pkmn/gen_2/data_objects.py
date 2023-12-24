@@ -450,7 +450,8 @@ def instantiate_trainer_pokemon(pkmn_data:universal_data_objects.PokemonSpecies,
         pkmn_data.stats,
         GenTwoStatBlock(8, 9, 8, 8, 8, 8),
         GenTwoStatBlock(0, 0, 0, 0, 0, 0, is_stat_xp=True),
-        None
+        None,
+        is_trainer_mon=True
     )
 
 
@@ -472,7 +473,8 @@ def instantiate_wild_pokemon(pkmn_data:universal_data_objects.PokemonSpecies, ta
         pkmn_data.stats,
         GenTwoStatBlock(15, 15, 15, 15, 15, 15),
         GenTwoStatBlock(0, 0, 0, 0, 0, 0, is_stat_xp=True),
-        None
+        None,
+        is_trainer_mon=False
     )
 
 

@@ -43411,7 +43411,7 @@
             ]
         },
         {
-            "trainer_name": "Champion Squirtle",
+            "trainer_name": "Champion Squirtle Rematch",
             "trainer_class": "Champion",
             "trainer_items": [
                 "Full Restore",
@@ -43560,7 +43560,7 @@
             ]
         },
         {
-            "trainer_name": "Champion Bulbasaur",
+            "trainer_name": "Champion Bulbasaur Rematch",
             "trainer_class": "Champion",
             "trainer_items": [
                 "Full Restore",
@@ -43709,7 +43709,7 @@
             ]
         },
         {
-            "trainer_name": "Champion Charmander",
+            "trainer_name": "Champion Charmander Rematch",
             "trainer_class": "Champion",
             "trainer_items": [
                 "Full Restore",

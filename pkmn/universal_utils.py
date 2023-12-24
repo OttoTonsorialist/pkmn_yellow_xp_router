@@ -12,10 +12,11 @@ STAT_MIN = 1
 STAT_MAX = 999
 
 
-def calc_xp_yield(base_yield, level, is_trainer_battle):
-    # NOTE: assumes single battler, no XP all, player's pokemon are not traded
+def calc_xp_yield(base_yield, level, is_trainer_battle, exp_split=1):
+    # NOTE: assumes player's pokemon are not traded
     result = base_yield * level
     result = math.floor(result / 7)
+    result = math.floor(result / exp_split)
 
     if is_trainer_battle:
         result = math.floor((result * 3) / 2)

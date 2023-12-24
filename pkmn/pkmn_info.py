@@ -51,7 +51,8 @@ class CurrentGen:
         defending_stage_modifiers:universal_data_objects.StageModifiers=None,
         is_crit:bool=False,
         custom_move_data:str="",
-        weather:str=const.WEATHER_NONE
+        weather:str=const.WEATHER_NONE,
+        is_double_battle:bool=False,
     ) -> DamageRange:
         raise NotImplementedError()
 
@@ -128,6 +129,6 @@ class CurrentGen:
     def get_trainer_timing_info(self) -> universal_data_objects.TrainerTimingStats:
         raise NotImplementedError()
     
-    def get_stat_xp_yeild(self, pkmn_name:str, exp_split:int) -> universal_data_objects.StatBlock:
+    def get_stat_xp_yield(self, pkmn_name:str, exp_split:int) -> universal_data_objects.StatBlock:
         raise NotImplementedError()
 

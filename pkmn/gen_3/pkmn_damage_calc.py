@@ -55,7 +55,7 @@ def calculate_gen_three_damage(
     defender_has_reflect:bool=False,
     custom_move_data:str="",
     weather:str=const.WEATHER_NONE,
-    two_enemy_mons_alive:bool=False
+    is_double_battle:bool=False
 ):
     if move.name == const.HIDDEN_POWER_MOVE_NAME:
         move_type = get_hidden_power_type(attacking_pkmn.dvs)
@@ -293,7 +293,7 @@ def calculate_gen_three_damage(
     if screen_active:
         temp = math.floor(temp / 2)
     
-    if two_enemy_mons_alive and move.targeting == const.TARGETING_BOTH_ENEMIES:
+    if is_double_battle and move.targeting == const.TARGETING_BOTH_ENEMIES:
         temp = math.floor(temp / 2)
 
     weather_boost = False

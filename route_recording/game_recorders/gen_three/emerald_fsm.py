@@ -209,6 +209,14 @@ class Machine:
                 break
             
             result[item_type] = self._gamehook_client.get(gh_gen_three_const.ALL_KEYS_BALL_QUANTITY[i]).value
+        
+        # load the berries pocket
+        for i in range(len(gh_gen_three_const.ALL_KEYS_BERRY_TYPE)):
+            item_type = self._gamehook_client.get(gh_gen_three_const.ALL_KEYS_BERRY_TYPE[i]).value
+            if item_type is None:
+                break
+            
+            result[item_type] = self._gamehook_client.get(gh_gen_three_const.ALL_KEYS_BERRY_QUANTITY[i]).value
 
         # load the key items pocket
         for i in range(len(gh_gen_three_const.ALL_KEYS_KEY_ITEMS)):
@@ -219,15 +227,12 @@ class Machine:
             result[item_type] = 1
 
         # load the tms pocket
-        for i in range(len(gh_gen_three_const.ALL_TM_KEYS)):
-            tm_count = self._gamehook_client.get(gh_gen_three_const.ALL_TM_KEYS[i]).value
-            if tm_count > 0:
-                result[self.gh_converter.get_tmhm_name_from_path(gh_gen_three_const.ALL_TM_KEYS[i])] = tm_count
-
-        # load the hms
-        for i in range(len(gh_gen_three_const.ALL_HM_KEYS)):
-            if self._gamehook_client.get(gh_gen_three_const.ALL_HM_KEYS[i]).value:
-                result[self.gh_converter.get_tmhm_name_from_path(gh_gen_three_const.ALL_HM_KEYS[i])] = 1
+        for i in range(len(gh_gen_three_const.ALL_KEYS_TMHM_TYPE)):
+            item_type = self._gamehook_client.get(gh_gen_three_const.ALL_KEYS_TMHM_TYPE[i]).value
+            if item_type is None:
+                break
+            
+            result[item_type] = self._gamehook_client.get(gh_gen_three_const.ALL_KEYS_TMHM_QUANTITY[i]).value
 
         return result
 
@@ -263,6 +268,7 @@ class Machine:
             if new_item in compared:
                 continue
             cur_count = 0
+            logger.info(f"comparing ({type(new_count)}) {new_count} to ({type(cur_count)}) {cur_count}")
             if new_count > cur_count:
                 gained_items[new_item] = new_count - cur_count
             elif cur_count > new_count:
@@ -289,6 +295,7 @@ class Machine:
 
         for cur_lost_item, cur_lost_num in lost_items.items():
             app_item_name = self.gh_converter.item_name_convert(cur_lost_item)
+            logger.info(f"trying to lose item: {app_item_name}, converted from {cur_lost_item}")
             if vitamin_flag and self.gh_converter.is_game_vitamin(cur_lost_item):
                 if sale_expected:
                     logger.error("Expected sale, but looks like vitamins were used too???")
@@ -335,7 +342,8 @@ class Machine:
     def handle_event(self, new_prop:GameHookProperty, prev_prop:GameHookProperty):
         if (
             self.debug_mode and
-            new_prop.path != gh_gen_three_const.KEY_GAMETIME_SECONDS
+            new_prop.path != gh_gen_three_const.KEY_GAMETIME_SECONDS and
+            'audio' not in new_prop.path
         ):
             logger.info(f"Change of {new_prop.path} from {prev_prop.value} to {new_prop.value} for state {self._cur_state.state_type}")
         result = self._cur_state.transition(new_prop, prev_prop)
@@ -358,21 +366,7 @@ class Machine:
     
     def _queue_new_event(self, event_def:EventDefinition):
         self._events_to_generate.append(event_def)
-    
-    def _get_trainer_obj(self, converted_trainer_name):
-        # coupled with gh_gen_three_const.trainer_name_convert 
-        if ":" not in converted_trainer_name:
-            return current_gen_info().trainer_db().get_trainer(converted_trainer_name)
 
-        [trainer_class, trainer_id] = converted_trainer_name.split(":")
-        trainer_id = int(trainer_id)
-        for cur_trainer_name in current_gen_info().trainer_db().get_valid_trainers(trainer_class=trainer_class):
-            cur_trainer = current_gen_info().trainer_db().get_trainer(cur_trainer_name)
-            if cur_trainer.trainer_id == trainer_id:
-                return cur_trainer
-
-        return None
-    
     def _process_events(self):
         # Converts all in-game data to app data, then sends the events to the main app
 
@@ -387,9 +381,10 @@ class Machine:
                         self._controller.game_reset()
                         continue
                     elif None is not cur_event.trainer_def:
-                        trainer = self._get_trainer_obj(cur_event.trainer_def.trainer_name)
+                        trainer_id = int(cur_event.trainer_def.trainer_name)
+                        trainer = current_gen_info().trainer_db().get_trainer_by_id(trainer_id)
                         if trainer is None:
-                            msg = f"Failed to find trainer from GameHook: {cur_event.trainer_def.trainer_name}"
+                            msg = f"Failed to find trainer from GameHook: ({type(trainer_id)}) {trainer_id}"
                             logger.error(msg)
                             self._controller.add_event(
                                 EventDefinition(notes=const.RECORDING_ERROR_FRAGMENT + msg)
@@ -401,6 +396,7 @@ class Machine:
                             self._controller.lost_trainer_battle(cur_event.trainer_def.trainer_name)
                             continue
                         elif cur_event.notes == gh_gen_three_const.ROAR_FLAG:
+                            logger.info(f"Updating full trainer event: {cur_event}")
                             logger.info(f"Updating split exp for trainer {cur_event.trainer_def.trainer_name} to {cur_event.trainer_def.exp_split}")
 
                             test_obj = self._controller._controller.get_previous_event()
@@ -482,10 +478,6 @@ class Machine:
                                 cur_event.notes = const.RECORDING_ERROR_FRAGMENT + f"Failed to find tm for item source: {cur_event.learn_move.source}"
 
                     elif None is not cur_event.hold_item:
-                        if self._controller._controller.get_previous_event() is None:
-                            logger.info("Giving player initial berry that mon starts with")
-                            self._controller.add_event(EventDefinition(item_event_def=InventoryEventDefinition("Berry", 1, True, False)))
-
                         if cur_event.notes == gh_gen_three_const.HELD_CHECK_FLAG:
                             cur_event.notes = ""
                             list_of_prev_events = [self._controller._controller.get_previous_event()]

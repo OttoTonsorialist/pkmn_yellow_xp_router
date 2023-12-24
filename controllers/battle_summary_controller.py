@@ -73,6 +73,7 @@ class BattleSummaryController:
         self._custom_move_data:List[Dict[str, Dict[str, str]]] = []
         self._cached_definition_order = []
         self._weather = None
+        self._double_battle_flag = False
 
         # NOTE: all of the state above this comment is considered the "true" state
         # The below state is all calculated based on values from the above state
@@ -366,7 +367,8 @@ class BattleSummaryController:
             attacking_stage_modifiers=attacking_stage_modifiers,
             defending_stage_modifiers=defending_stage_modifiers,
             custom_move_data=custom_data_selection,
-            weather=self._weather
+            weather=self._weather,
+            is_double_battle=self._double_battle_flag,
         )
         crit_ranges = current_gen_info().calculate_damage(
             attacking_mon,
@@ -376,7 +378,8 @@ class BattleSummaryController:
             defending_stage_modifiers=defending_stage_modifiers,
             custom_move_data=custom_data_selection,
             is_crit=True,
-            weather=self._weather
+            weather=self._weather,
+            is_double_battle=self._double_battle_flag,
         )
         if normal_ranges is not None and crit_ranges is not None:
             if config.do_ignore_accuracy():
@@ -424,6 +427,7 @@ class BattleSummaryController:
 
         self._trainer_name = trainer_def.trainer_name
         self._weather = trainer_def.weather
+        self._double_battle_flag = trainer_obj.double_battle
         self._mimic_selection = trainer_def.mimic_selection
         self._player_setup_move_list = trainer_def.setup_moves.copy()
         self._player_stage_modifier = self._calc_stage_modifier(self._player_setup_move_list)
@@ -490,6 +494,12 @@ class BattleSummaryController:
             self._original_player_mon_list.append(cur_state.solo_pkmn.get_pkmn_obj(cur_state.badges))
 
             cur_state = cur_state.defeat_pkmn(cur_enemy)[0]
+        
+        trainer_obj = current_gen_info().trainer_db().get_trainer(trainer_name)
+        if trainer_obj is None:
+            self._double_battle_flag = False
+        else:
+            self._double_battle_flag = trainer_obj.double_battle
 
         self._full_refresh(is_load=True)
     
@@ -497,6 +507,7 @@ class BattleSummaryController:
         self._event_group_id = None
         self._trainer_name = ""
         self._weather = const.WEATHER_NONE
+        self._double_battle_flag = False
         self._mimic_selection = ""
         self._player_setup_move_list = []
         self._enemy_setup_move_list = []
@@ -564,6 +575,9 @@ class BattleSummaryController:
 
     def get_enemy_setup_moves(self) -> List[str]:
         return self._enemy_setup_move_list
+    
+    def is_double_battle(self) -> bool:
+        return self._double_battle_flag
 
     @staticmethod
     def _is_move_better(new_move:MoveRenderInfo, prev_move:MoveRenderInfo, strat:str, other_mon:PkmnRenderInfo) -> bool:

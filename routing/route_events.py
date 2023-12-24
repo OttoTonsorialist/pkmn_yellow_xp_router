@@ -158,8 +158,9 @@ class LearnMoveEventDefinition:
 
 
 class TrainerEventDefinition:
-    def __init__(self, trainer_name, verbose_export=False, setup_moves=None, mimic_selection="", custom_move_data=None, enemy_setup_moves=None, exp_split=None, weather=const.WEATHER_NONE, pay_day_amount=0, mon_order=None):
+    def __init__(self, trainer_name, second_trainer_name="", verbose_export=False, setup_moves=None, mimic_selection="", custom_move_data=None, enemy_setup_moves=None, exp_split=None, weather=const.WEATHER_NONE, pay_day_amount=0, mon_order=None):
         self.trainer_name = trainer_name
+        self.second_trainer_name = second_trainer_name
         self.verbose_export = verbose_export
         if setup_moves is None:
             setup_moves = []
@@ -183,6 +184,7 @@ class TrainerEventDefinition:
     def serialize(self):
         return {
             const.TRAINER_NAME: self.trainer_name,
+            const.SECOND_TRAINER_NAME: self.second_trainer_name,
             const.VERBOSE_KEY: self.verbose_export,
             const.SETUP_MOVES_KEY: self.setup_moves,
             const.ENEMY_SETUP_MOVES_KEY: self.enemy_setup_moves,
@@ -220,6 +222,7 @@ class TrainerEventDefinition:
             weather=raw_val.get(const.WEATHER, const.WEATHER_NONE),
             pay_day_amount=raw_val.get(const.PAY_DAY_AMOUNT, 0),
             mon_order=raw_val.get(const.MON_ORDER),
+            second_trainer_name=raw_val.get(const.MON_ORDER, ""),
         )
     
     def __str__(self):

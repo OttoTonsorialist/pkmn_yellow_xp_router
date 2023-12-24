@@ -160,6 +160,7 @@ class GenOne(CurrentGen):
         is_crit:bool=False,
         custom_move_data:str="",
         weather:str=const.WEATHER_NONE,
+        is_double_battle:bool=False,
     ) -> DamageRange:
         return pkmn_damage_calc.calculate_gen_one_damage(
             attacking_pkmn,
@@ -261,7 +262,7 @@ class GenOne(CurrentGen):
     def get_trainer_timing_info(self) -> universal_data_objects.TrainerTimingStats:
         return self._trainer_timing_info
     
-    def get_stat_xp_yeild(self, pkmn_name:str, exp_split:int) -> universal_data_objects.StatBlock:
+    def get_stat_xp_yield(self, pkmn_name:str, exp_split:int) -> universal_data_objects.StatBlock:
         stat_xp_yield = self.pkmn_db().get_pkmn(pkmn_name).stat_xp_yield
         return GenOneStatBlock(
             math.floor(stat_xp_yield.hp / exp_split),
@@ -353,6 +354,7 @@ def _create_trainer(trainer_dict, pkmn_db:PkmnDB) -> universal_data_objects.Trai
                 GenOneStatBlock(8, 9, 8, 8, 8, 8),
                 GenOneStatBlock(0, 0, 0, 0, 0, 0),
                 None,
+                is_trainer_mon=True
             )
         )
 

@@ -18,11 +18,9 @@ class Gen3GameHookConstants:
         self.KEY_DMA_A = "apointers.dma1"
         self.KEY_DMA_B = "apointers.dma2"
         self.KEY_DMA_C = "apointers.dma3"
-        self.KEY_STATE_1 = "apointers.callback1"
-        self.KEY_STATE_2 = "apointers.callback2"
         self.KEY_OVERWORLD_MAP = "overworld.mapName"
         self.KEY_PLAYER_PLAYERID = "player.playerId"
-        self.KEY_PLAYER_MONEY = "player.money"
+        self.KEY_PLAYER_MONEY = "bag.money"
         self.KEY_PLAYER_MON_EXPPOINTS = "player.team.0.expPoints"
         self.KEY_PLAYER_MON_LEVEL = "player.team.0.level"
         self.KEY_PLAYER_MON_SPECIES = "player.team.0.species"
@@ -62,120 +60,60 @@ class Gen3GameHookConstants:
         self.KEY_DOUBLE_BATTLE_FLAG = "battle.turnInfo.type.double"
         self.KEY_MULTI_BATTLE_FLAG = "battle.turnInfo.type.multi"
         self.KEY_BATTLE_OUTCOME = "battle.turnInfo.battleOutcome"
-        self.KEY_BATTLE_TRAINER_TOTAL_POKEMON = "battle.opponentA.teamCount"
         self.KEY_BATTLE_PLAYER_MON_PARTY_POS = "battle.player.activePokemon.partyPos"
         self.KEY_BATTLE_PLAYER_MON_HP = "battle.player.activePokemon.stats.hp"
+        self.KEY_BATTLE_ALLY_MON_PARTY_POS = "battle.player.activePokemon2.partyPos"
+        self.KEY_BATTLE_ALLY_MON_HP = "battle.player.activePokemon2.stats.hp"
 
-        self.KEY_BATTLE_TRAINER_A_NUMBER = "battle.opponentA.id"
-        self.KEY_BATTLE_A_FIRST_ENEMY_SPECIES = "battle.opponentA.activePokemon.species"
-        self.KEY_BATTLE_A_FIRST_ENEMY_LEVEL = "battle.opponentA.activePokemon.level"
-        self.KEY_BATTLE_A_FIRST_ENEMY_HP = "battle.opponentA.activePokemon.stats.hp"
-        self.KEY_BATTLE_A_FIRST_ENEMY_PARTY_POS = "battle.opponentA.activePokemon.partyPos"
-        self.KEY_BATTLE_A_SECOND_ENEMY_SPECIES = "battle.opponentA.activePokemon2.species"
-        self.KEY_BATTLE_A_SECOND_ENEMY_LEVEL = "battle.opponentA.activePokemon2.level"
-        self.KEY_BATTLE_A_SECOND_ENEMY_HP = "battle.opponentA.activePokemon2.stats.hp"
-        self.KEY_BATTLE_A_SECOND_ENEMY_PARTY_POS = "battle.opponentA.activePokemon2.partyPos"
+        self.KEY_BATTLE_TRAINER_A_NUMBER = "battle.opponent.id"
+        self.KEY_BATTLE_TRAINER_B_NUMBER = "battle.opponent.secondId"
+        self.KEY_BATTLE_FIRST_ENEMY_SPECIES = "battle.opponent.activePokemon.species"
+        self.KEY_BATTLE_FIRST_ENEMY_LEVEL = "battle.opponent.activePokemon.level"
+        self.KEY_BATTLE_FIRST_ENEMY_HP = "battle.opponent.activePokemon.stats.hp"
+        self.KEY_BATTLE_FIRST_ENEMY_PARTY_POS = "battle.opponent.activePokemon.partyPos"
+        self.KEY_BATTLE_SECOND_ENEMY_SPECIES = "battle.opponent.activePokemon2.species"
+        self.KEY_BATTLE_SECOND_ENEMY_LEVEL = "battle.opponent.activePokemon2.level"
+        self.KEY_BATTLE_SECOND_ENEMY_HP = "battle.opponent.activePokemon2.stats.hp"
+        self.KEY_BATTLE_SECOND_ENEMY_PARTY_POS = "battle.opponent.activePokemon2.partyPos"
 
-        self.KEY_BATTLE_TRAINER_B_NUMBER = "battle.opponentB.id"
-        self.KEY_BATTLE_B_FIRST_ENEMY_SPECIES = "battle.opponentB.activePokemon.species"
-        self.KEY_BATTLE_B_FIRST_ENEMY_LEVEL = "battle.opponentB.activePokemon.level"
-        self.KEY_BATTLE_B_FIRST_ENEMY_HP = "battle.opponentB.activePokemon.stats.hp"
-        self.KEY_BATTLE_B_FIRST_ENEMY_PARTY_POS = "battle.opponentB.activePokemon.partyPos"
+        self.ALL_KEYS_ENEMY_TEAM_SPECIES = [f"battle.opponent.team.{i}.species" for i in range(0, 6)]
 
-        self.KEY_ITEM_COUNT = "player.itemCount"
+        self.KEY_AUDIO_SOUND_EFFECT_1 = "audio.soundEffect1"
+        self.KEY_AUDIO_SOUND_EFFECT_2 = "audio.soundEffect2"
+        # corresponds to 0x088fcdc4 in little endian bytes, or 143642052
+        # expect this value to be in soundEffect1
+        self.SAVE_SOUND_EFFECT_BYTES_VALUE = [196, 205, 143, 8]
+        # corresponds to 0x0890dcc8 in little endian bytes, or 143711432
+        # expect this value to be in soundEffect2
+        self.HEAL_SOUND_EFFECT_BYTES_VALUE = [200, 220, 144, 8]
+
         self.KEY_ITEM_QUANTITY_DECRYPTION_KEY = "bag.quantityDecryptionKey"
         self.ALL_KEYS_ITEM_TYPE = [f"bag.items.{i}.item" for i in range(0, 30)]
         self.ALL_KEYS_ITEM_QUANTITY = [f"bag.items.{i}.quantity" for i in range(0, 30)]
         self.ALL_KEYS_BALL_TYPE = [f"bag.pokeBalls.{i}.item" for i in range(0, 16)]
         self.ALL_KEYS_BALL_QUANTITY = [f"bag.pokeBalls.{i}.quantity" for i in range(0, 16)]
+        self.ALL_KEYS_BERRY_TYPE = [f"bag.berries.{i}.item" for i in range(0, 46)]
+        self.ALL_KEYS_BERRY_QUANTITY = [f"bag.berries.{i}.quantity" for i in range(0, 46)]
         self.ALL_KEYS_KEY_ITEMS = [f"bag.keyItems.{i}.item" for i in range(0, 30)]
 
-        self.ALL_TM_KEYS = [
-            "bag.tmhm.TM01-Focus Punch.quantity",
-            "bag.tmhm.TM02-Dragon Claw.quantity",
-            "bag.tmhm.TM03-Water Pulse.quantity",
-            "bag.tmhm.TM04-Calm Mind.quantity",
-            "bag.tmhm.TM05-Roar.quantity",
-            "bag.tmhm.TM06-Toxic.quantity",
-            "bag.tmhm.TM07-Hail.quantity",
-            "bag.tmhm.TM08-Bulk Up.quantity",
-            "bag.tmhm.TM09-Bullet Seed.quantity",
-            "bag.tmhm.TM10-Hidden Power.quantity",
-            "bag.tmhm.TM11-Sunny Day.quantity",
-            "bag.tmhm.TM12-Taunt.quantity",
-            "bag.tmhm.TM13-Ice Beam.quantity",
-            "bag.tmhm.TM14-Blizzard.quantity",
-            "bag.tmhm.TM15-Hyper Beam.quantity",
-            "bag.tmhm.TM16-Light Screen.quantity",
-            "bag.tmhm.TM17-Protect.quantity",
-            "bag.tmhm.TM18-Rain Dance.quantity",
-            "bag.tmhm.TM19-Giga Drain.quantity",
-            "bag.tmhm.TM20-Safeguard.quantity",
-            "bag.tmhm.TM21-Frustration.quantity",
-            "bag.tmhm.TM22-SolarBeam.quantity",
-            "bag.tmhm.TM23-Iron Tail.quantity",
-            "bag.tmhm.TM24-Thunderbolt.quantity",
-            "bag.tmhm.TM25-Thunder.quantity",
-            "bag.tmhm.TM26-Earthquake.quantity",
-            "bag.tmhm.TM27-Return.quantity",
-            "bag.tmhm.TM28-Dig.quantity",
-            "bag.tmhm.TM29-Psychic.quantity",
-            "bag.tmhm.TM30-Shadow Ball.quantity",
-            "bag.tmhm.TM31-Brick Break.quantity",
-            "bag.tmhm.TM32-Double Team.quantity",
-            "bag.tmhm.TM33-Reflect.quantity",
-            "bag.tmhm.TM34-Shock Wave.quantity",
-            "bag.tmhm.TM35-Flamethrower.quantity",
-            "bag.tmhm.TM36-Sludge Bomb.quantity",
-            "bag.tmhm.TM37-Sandstorm.quantity",
-            "bag.tmhm.TM38-Fire Blast.quantity",
-            "bag.tmhm.TM39-Rock Tomb.quantity",
-            "bag.tmhm.TM40-Aerial Ace.quantity",
-            "bag.tmhm.TM41-Torment.quantity",
-            "bag.tmhm.TM42-Facade.quantity",
-            "bag.tmhm.TM43-Secret Power.quantity",
-            "bag.tmhm.TM44-Rest.quantity",
-            "bag.tmhm.TM45-Attract.quantity",
-            "bag.tmhm.TM46-Thief.quantity",
-            "bag.tmhm.TM47-Steel Wing.quantity",
-            "bag.tmhm.TM48-Skill Swap.quantity",
-            "bag.tmhm.TM49-Snatch.quantity",
-            "bag.tmhm.TM50-Overheat.quantity",
-        ]
+        self.ALL_KEYS_TMHM_TYPE = [f"bag.tmhm.{i}.item" for i in range(0, 64)]
+        self.ALL_KEYS_TMHM_QUANTITY = [f"bag.tmhm.{i}.quantity" for i in range(0, 64)]
 
-        self.ALL_HM_KEYS = [
-            "bag.tmhm.HM01-Cut.quantity",
-            "bag.tmhm.HM02-Fly.quantity",
-            "bag.tmhm.HM03-Surf.quantity",
-            "bag.tmhm.HM04-Strength.quantity",
-            "bag.tmhm.HM05-Flash.quantity",
-            "bag.tmhm.HM06-Rock Smash.quantity",
-            "bag.tmhm.HM07-Waterfall.quantity",
-            "bag.tmhm.HM08-Dive.quantity",
-        ]
-
-        self.ALL_KEYS_ALL_ITEM_FIELDS = set([self.KEY_ITEM_QUANTITY_DECRYPTION_KEY])
+        self.ALL_KEYS_ALL_ITEM_FIELDS = set([])
         self.ALL_KEYS_ALL_ITEM_FIELDS.update(self.ALL_KEYS_ITEM_TYPE)
         self.ALL_KEYS_ALL_ITEM_FIELDS.update(self.ALL_KEYS_ITEM_QUANTITY)
         self.ALL_KEYS_ALL_ITEM_FIELDS.update(self.ALL_KEYS_BALL_TYPE)
         self.ALL_KEYS_ALL_ITEM_FIELDS.update(self.ALL_KEYS_BALL_QUANTITY)
+        self.ALL_KEYS_ALL_ITEM_FIELDS.update(self.ALL_KEYS_BERRY_TYPE)
+        self.ALL_KEYS_ALL_ITEM_FIELDS.update(self.ALL_KEYS_BERRY_QUANTITY)
         self.ALL_KEYS_ALL_ITEM_FIELDS.update(self.ALL_KEYS_KEY_ITEMS)
-        self.ALL_KEYS_ALL_ITEM_FIELDS.update(self.ALL_TM_KEYS)
-        self.ALL_KEYS_ALL_ITEM_FIELDS.update(self.ALL_HM_KEYS)
-
-        self.DMA_A_KEYS = set()
-        #self.DMA_A_KEYS = set(["bag.items.0.item", "bag.items.1.item", "bag.items.2.item", "bag.items.3.item", "bag.items.4.item"])
-        self.DMA_A_KEYS.update(self.ALL_KEYS_ALL_ITEM_FIELDS)
+        self.ALL_KEYS_ALL_ITEM_FIELDS.update(self.ALL_KEYS_TMHM_TYPE)
+        self.ALL_KEYS_ALL_ITEM_FIELDS.update(self.ALL_KEYS_TMHM_QUANTITY)
 
         self.ALL_KEYS_TO_REGISTER = [
-            self.KEY_DMA_A,
-            self.KEY_DMA_B,
-            self.KEY_DMA_C,
-            self.KEY_STATE_1,
-            self.KEY_STATE_2,
             self.KEY_OVERWORLD_MAP,
-            #self.KEY_PLAYER_PLAYERID,
-            #self.KEY_PLAYER_MONEY,
+            self.KEY_PLAYER_PLAYERID,
+            self.KEY_PLAYER_MONEY,
             self.KEY_PLAYER_MON_EXPPOINTS,
             self.KEY_PLAYER_MON_LEVEL,
             self.KEY_PLAYER_MON_SPECIES,
@@ -190,26 +128,25 @@ class Gen3GameHookConstants:
             self.KEY_BATTLE_TRAINER_B_NUMBER,
             self.KEY_BATTLE_PLAYER_MON_HP,
             self.KEY_BATTLE_PLAYER_MON_PARTY_POS,
-            self.KEY_BATTLE_A_FIRST_ENEMY_SPECIES,
-            self.KEY_BATTLE_A_FIRST_ENEMY_LEVEL,
-            self.KEY_BATTLE_A_FIRST_ENEMY_HP,
-            self.KEY_BATTLE_A_FIRST_ENEMY_PARTY_POS,
-            self.KEY_BATTLE_A_SECOND_ENEMY_SPECIES,
-            self.KEY_BATTLE_A_SECOND_ENEMY_LEVEL,
-            self.KEY_BATTLE_A_SECOND_ENEMY_HP,
-            self.KEY_BATTLE_A_SECOND_ENEMY_PARTY_POS,
-            self.KEY_BATTLE_B_FIRST_ENEMY_SPECIES,
-            self.KEY_BATTLE_B_FIRST_ENEMY_LEVEL,
-            self.KEY_BATTLE_B_FIRST_ENEMY_HP,
-            self.KEY_BATTLE_B_FIRST_ENEMY_PARTY_POS,
+            self.KEY_BATTLE_ALLY_MON_HP,
+            self.KEY_BATTLE_ALLY_MON_PARTY_POS,
+            self.KEY_BATTLE_FIRST_ENEMY_SPECIES,
+            self.KEY_BATTLE_FIRST_ENEMY_LEVEL,
+            self.KEY_BATTLE_FIRST_ENEMY_HP,
+            self.KEY_BATTLE_FIRST_ENEMY_PARTY_POS,
+            self.KEY_BATTLE_SECOND_ENEMY_SPECIES,
+            self.KEY_BATTLE_SECOND_ENEMY_LEVEL,
+            self.KEY_BATTLE_SECOND_ENEMY_HP,
+            self.KEY_BATTLE_SECOND_ENEMY_PARTY_POS,
+            self.KEY_AUDIO_SOUND_EFFECT_1,
+            self.KEY_AUDIO_SOUND_EFFECT_2,
         ]
         self.ALL_KEYS_TO_REGISTER.extend(self.ALL_KEYS_PLAYER_MOVES)
         self.ALL_KEYS_TO_REGISTER.extend(self.ALL_KEYS_STAT_EXP)
         self.ALL_KEYS_TO_REGISTER.extend(self.ALL_KEYS_ALL_ITEM_FIELDS)
 
-        self.TRAINER_BATTLE_TYPE = "Trainer"
-        self.WILD_BATTLE_TYPE = "Wild"
-        self.BATTLE_RESULT_DRAW = "DRAW"
+        # for debugging
+        self.ALL_KEYS_TO_REGISTER.extend([self.KEY_DMA_A, self.KEY_DMA_B, self.KEY_DMA_C])
 
 
 class GameHookConstantConverter:
@@ -236,7 +173,15 @@ class GameHookConstantConverter:
     def _name_prettify(self, item_name:str):
         return " ".join([x.capitalize() for x in item_name.lower().split(" ")])
 
-    TUTOR_MOVES = ["Thunderbolt", "Flamethrower", "Ice Beam"]
+    TUTOR_MOVES = set([
+        "Body Slam", "Counter", "Double Edge", "Double-Edge", "Dream Eater",
+        "Explosion", "Mega Kick", "Mega Punch", "Metronome", "Mimic", "Rock Slide",
+        "Seismic Toss", "Softboiled", "Substitute", "Swords Dance", "Thunder Wave",
+        "Blast Burn", "Frenzy Plant", "Hydro Cannon",
+        "Dynamicpunch", "Dynamic Punch", "Fury Cutter", "Rollout", "Sleep Talk", "Swagger",
+        "Defense Curl", "Snore", "Mud Slap", "Swift", "Icy Wind", "Endure", "Psych Up",
+        "Ice Punch", "Thunderpunch", "Thunder Punch", "Fire Punch"
+    ])
     def is_tutor_move(self, gh_move_name):
         return self._name_prettify(gh_move_name) in self.TUTOR_MOVES
     
@@ -252,10 +197,12 @@ class GameHookConstantConverter:
             return "HM04 Strength"
         elif gh_move_name == "Flash":
             return "HM05 Flash"
-        elif gh_move_name == "Whirlpool":
-            return "HM06 Whirlpool"
+        elif gh_move_name == "Rock Smash":
+            return "HM06 Rock Smash"
         elif gh_move_name == "Waterfall":
             return "HM07 Waterfall"
+        elif gh_move_name == "Dive":
+            return "HM08 Dive"
         return None
 
     def get_tmhm_name_from_path(self, gh_path:str):
@@ -352,55 +299,6 @@ class GameHookConstantConverter:
             converted_name = "HoOh"
 
         return converted_name
-    
-    LEADER_CLASSES = [
-        "Falkner", "Whitney", "Bugsy", "Morty", "Pryce", "Jasmine", "Chuck", "Clair", "Brock", "Misty", "Lt.Surge",
-        "Erika", "Janine", "Sabrina", "Blaine", "Blue", "Red"
-    ]
-    ELITE_FOUR_CLASSES = ["Will", "Bruno", "Karen", "Koga"]
-    def _trainer_class_convert(self, gh_trainer_class:str):
-        if gh_trainer_class is None:
-            return None
-        converted_name:str = self._name_prettify(gh_trainer_class)
-
-        if converted_name == "Cal":
-            converted_name = "PkmnTrainer"
-        elif converted_name == "Cooltrainer M":
-            converted_name = "CoolTrainerM"
-        elif converted_name == "Cooltrainer F":
-            converted_name = "CoolTrainerF"
-        elif converted_name == "Grunt M":
-            converted_name = "GruntM"
-        elif converted_name == "Grunt F":
-            converted_name = "GruntF"
-        elif converted_name == "Swimmer M":
-            converted_name = "SwimmerM"
-        elif converted_name == "Swimmer F":
-            converted_name = "SwimmerF"
-        elif converted_name == "Executive M":
-            converted_name = "ExecutiveM"
-        elif converted_name == "Executive F":
-            converted_name = "ExecutiveF"
-        elif converted_name == "Pokefan M":
-            converted_name = "PokefanM"
-        elif converted_name == "Pokefan F":
-            converted_name = "PokefanF"
-        elif converted_name == "Mystical Man":
-            converted_name = "Mysticalman"
-        elif converted_name == "Lt. Surge":
-            converted_name = "Lt.Surge"
-        
-        return converted_name
-
-    def trainer_name_convert(self, trainer_class:str, trainer_num:int):
-        trainer_class = self._trainer_class_convert(trainer_class)
-
-        if trainer_class in self.LEADER_CLASSES:
-            return f"Leader {trainer_class}"
-        elif trainer_class in self.ELITE_FOUR_CLASSES:
-            return f"Elite Four {trainer_class}"
-
-        return f"{trainer_class}:{trainer_num}"
     
     def area_name_convert(self, area_name:str):
         area_name = area_name.split("-")[0].strip()

@@ -53,6 +53,9 @@ class BattleSummary(ttk.Frame):
         self.config_button = custom_components.SimpleButton(self._weather_half, text="Configure/Help", command=self._launch_config_popup)
         self.config_button.grid(row=0, column=0, sticky=tk.EW, padx=10, pady=(0, 2))
 
+        self.double_label = ttk.Label(self._weather_half, text="Single Battle")
+        self.double_label.grid(row=1, column=0, sticky=tk.EW, padx=10, pady=(0, 2))
+
         self.weather_status = WeatherSummary(self._weather_half, callback=self._weather_callback)
         self.weather_status.grid(row=0, column=1, sticky=tk.EW, padx=2, pady=(0, 2))
 
@@ -122,6 +125,12 @@ class BattleSummary(ttk.Frame):
             self.candy_summary.disable()
         else:
             self.candy_summary.enable()
+
+        if self._controller.is_double_battle():
+            self.double_label.configure(text="Double Battle")
+        else:
+            self.double_label.configure(text="Single Battle")
+
         self.weather_status.set_weather(self._controller.get_weather())
         self.setup_moves.set_move_list(self._controller.get_player_setup_moves())
         self.enemy_setup_moves.set_move_list(self._controller.get_enemy_setup_moves())

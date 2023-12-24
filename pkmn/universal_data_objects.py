@@ -338,6 +338,7 @@ class EnemyPkmn:
         badges:BadgeList,
         held_item:str=None,
         custom_move_data:Dict[str, Dict[str, str]]=None,
+        is_trainer_mon:bool=False,
         exp_split:int=1,
         mon_order:int=1,
         definition_order:int=1,
@@ -355,6 +356,7 @@ class EnemyPkmn:
         self.badges = badges
         self.held_item = held_item
         self.custom_move_data = custom_move_data
+        self.is_trainer_mon = is_trainer_mon
         self.exp_split = exp_split
         self.mon_order = mon_order
         self.definition_order = definition_order
@@ -409,7 +411,8 @@ class Trainer:
         pkmn:List[EnemyPkmn],
         rematch:bool=False,
         trainer_id:int=-1,
-        refightable=False
+        refightable=False,
+        double_battle=False,
     ):
         self.trainer_class = trainer_class
         self.name = name
@@ -419,6 +422,7 @@ class Trainer:
         self.rematch = rematch
         self.trainer_id = trainer_id
         self.refightable = refightable
+        self.double_battle = double_battle
     
 
 class BaseItem:

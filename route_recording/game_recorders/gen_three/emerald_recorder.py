@@ -1,7 +1,7 @@
 from __future__ import annotations
 import logging
 from typing import List
-from route_recording.game_recorders.gen_two.crystal_fsm import Machine
+from route_recording.game_recorders.gen_three.emerald_fsm import Machine
 
 import route_recording.recorder
 from route_recording.game_recorders.gen_three import emerald_states
@@ -16,29 +16,26 @@ class EmeraldRecorder(route_recording.recorder.RecorderGameHookClient):
         super().__init__(controller, expected_names)
 
         self._machine = Machine(controller, self, GameHookConstantConverter())
+
+        """
         self._machine.register(emerald_states.WatchState(self._machine))
 
         """
-        self._machine.register(route_recording.game_recorders.gen_three.crystal_states.UninitializedState(self._machine))
-        self._machine.register(route_recording.game_recorders.gen_three.crystal_states.ResettingState(self._machine))
-        self._machine.register(route_recording.game_recorders.gen_three.crystal_states.BattleState(self._machine))
-        self._machine.register(route_recording.game_recorders.gen_three.crystal_states.InventoryChangeState(self._machine))
-        self._machine.register(route_recording.game_recorders.gen_three.crystal_states.UseRareCandyState(self._machine))
-        self._machine.register(route_recording.game_recorders.gen_three.crystal_states.UseTMState(self._machine))
-        self._machine.register(route_recording.game_recorders.gen_three.crystal_states.MoveDeleteState(self._machine))
-        self._machine.register(route_recording.game_recorders.gen_three.crystal_states.UseVitaminState(self._machine))
-        self._machine.register(route_recording.game_recorders.gen_three.crystal_states.OverworldState(self._machine))
-        """
+        self._machine.register(emerald_states.UninitializedState(self._machine))
+        self._machine.register(emerald_states.ResettingState(self._machine))
+        self._machine.register(emerald_states.BattleState(self._machine))
+        self._machine.register(emerald_states.InventoryChangeState(self._machine))
+        self._machine.register(emerald_states.UseRareCandyState(self._machine))
+        self._machine.register(emerald_states.UseTMState(self._machine))
+        self._machine.register(emerald_states.MoveDeleteState(self._machine))
+        self._machine.register(emerald_states.UseVitaminState(self._machine))
+        self._machine.register(emerald_states.OverworldState(self._machine))
     
     def on_mapper_loaded(self):
         result = super().on_mapper_loaded()
 
         if self._controller.is_ready():
-            """
             self.validate_constants(gh_gen_three_const)
-
-            """
-
             for cur_key in gh_gen_three_const.ALL_KEYS_TO_REGISTER:
                 self.get(cur_key).change(self._machine.handle_event)
 

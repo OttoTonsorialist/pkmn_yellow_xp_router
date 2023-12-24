@@ -244,7 +244,6 @@ class PkmnViewer(ttk.Frame):
         self._name_value.grid(row=0, column=0, columnspan=2, sticky=tk.EW)
 
         self._held_item = ttk.Label(self, style="Header.TLabel", font=font_to_use)
-        self._nature = ttk.Label(self, style="Header.TLabel", font=font_to_use)
         self._ability = ttk.Label(self, style="Header.TLabel", font=font_to_use)
 
         self.stat_column = StatColumn(self, val_width=self.stat_width, num_rows=6, style_prefix="Secondary", font=font_to_use)
@@ -266,13 +265,7 @@ class PkmnViewer(ttk.Frame):
         
         self._name_value.config(text=pkmn.name)
 
-        self._nature.config(text=f"Nature: {pkmn.nature}")
-        if current_gen_info().get_generation() >= 3:
-            self._nature.grid(row=1, column=0, columnspan=2, sticky=tk.EW)
-        else:
-            self._nature.grid_forget()
-
-        self._ability.config(text=f"Ability: {pkmn.ability}")
+        self._ability.config(text=f"{pkmn.ability} ({pkmn.nature})")
         if current_gen_info().get_generation() >= 3:
             self._ability.grid(row=2, column=0, columnspan=2, sticky=tk.EW)
         else:

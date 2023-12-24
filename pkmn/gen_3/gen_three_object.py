@@ -164,6 +164,7 @@ class GenThree(CurrentGen):
         is_crit:bool=False,
         custom_move_data:str="",
         weather:str=const.WEATHER_NONE,
+        is_double_battle:bool=False,
     ) -> DamageRange:
         return pkmn_damage_calc.calculate_gen_three_damage(
             attacking_pkmn,
@@ -178,7 +179,8 @@ class GenThree(CurrentGen):
             defending_stage_modifiers=defending_stage_modifiers,
             is_crit=is_crit,
             custom_move_data=custom_move_data,
-            weather=weather
+            weather=weather,
+            is_double_battle=is_double_battle,
         )
     
     def make_stat_block(self, hp, attack, defense, special_attack, special_defense, speed, is_stat_xp=False) -> universal_data_objects.StatBlock:
@@ -266,7 +268,7 @@ class GenThree(CurrentGen):
     def get_trainer_timing_info(self) -> universal_data_objects.TrainerTimingStats:
         return self._trainer_timing_info
     
-    def get_stat_xp_yeild(self, pkmn_name:str, exp_split:int) -> universal_data_objects.StatBlock:
+    def get_stat_xp_yield(self, pkmn_name:str, exp_split:int) -> universal_data_objects.StatBlock:
         return self.pkmn_db().get_pkmn(pkmn_name).stat_xp_yield
     
     def _validate_special_types(self, supported_types):
@@ -365,19 +367,17 @@ def _create_trainer(trainer_dict, pkmn_db:PkmnDB, extract_trainer_id=False) -> u
                 ),
                 GenThreeStatBlock(0, 0, 0, 0, 0, 0),
                 None,
+                is_trainer_mon=True,
                 held_item=cur_mon[const.HELD_ITEM_KEY],
                 ability=cur_mon[const.ABILITY_KEY],
                 nature=universal_data_objects.Nature(cur_mon[const.NATURE_KEY])
             )
         )
     
-    if extract_trainer_id:
-        try:
-            trainer_id = trainer_dict[const.TRAINER_ID]
-        except Exception as e:
-            raise KeyError(f"Issue with {trainer_dict[const.TRAINER_NAME]}") from e
-    else:
-        trainer_id = -1
+    try:
+        trainer_id = trainer_dict[const.TRAINER_ID]
+    except Exception as e:
+        raise KeyError(f"Issue with {trainer_dict[const.TRAINER_NAME]}") from e
 
     return universal_data_objects.Trainer(
         trainer_dict[const.TRAINER_CLASS],
@@ -387,22 +387,29 @@ def _create_trainer(trainer_dict, pkmn_db:PkmnDB, extract_trainer_id=False) -> u
         enemy_pkmn,
         rematch=("Rematch" in trainer_dict[const.TRAINER_NAME]),
         trainer_id=trainer_id,
-        refightable=trainer_dict.get(const.TRAINER_REFIGHTABLE, False)
+        refightable=trainer_dict.get(const.TRAINER_REFIGHTABLE, False),
+        double_battle=trainer_dict[const.TRAINER_DOUBLE_BATTLE]
     )
 
 
-def _load_trainer_db(path, pkmn_db:PkmnDB, extract_trainer_id=False):
+def _load_trainer_db(path, pkmn_db:PkmnDB):
     result = {}
     with open(path, 'r') as f:
         raw_db = json.load(f)
 
     all_trainers = raw_db.get("trainers", raw_db.values())
+    unused_count = 0
     for raw_trainer in all_trainers:
         # ignoring all unused trainers
         if raw_trainer[const.TRAINER_LOC] == const.UNUSED_TRAINER_LOC:
+            unused_count += 1
             continue
-        result[raw_trainer[const.TRAINER_NAME]] = _create_trainer(raw_trainer, pkmn_db, extract_trainer_id=extract_trainer_id)
+        if raw_trainer[const.TRAINER_NAME] in result:
+            print(f"Duplicate entry for trainer: {raw_trainer}")
+        result[raw_trainer[const.TRAINER_NAME]] = _create_trainer(raw_trainer, pkmn_db)
     
+    if not len(all_trainers) == len(result) + unused_count:
+        raise ValueError("Incorrect number of trainers. Some name collisions must exist")
     return result
 
 

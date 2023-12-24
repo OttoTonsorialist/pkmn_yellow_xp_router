@@ -1,11 +1,11 @@
-
-import math
 import logging
 from utils.constants import const
 import pkmn.universal_utils
 import pkmn.universal_data_objects
 import pkmn.gen_factory
 from routing.state_objects import Inventory, SoloPokemon
+
+from pkmn.gen_factory import current_gen_info
 
 logger = logging.getLogger(__name__)
 
@@ -33,8 +33,15 @@ def _defeat_trainer(inventory:Inventory, solo_pkmn:SoloPokemon, trainer_obj:pkmn
 
 
 def _defeat_pkmn(cur_pkmn:SoloPokemon, enemy_pkmn: pkmn.universal_data_objects.EnemyPkmn, badges:pkmn.universal_data_objects.BadgeList, exp_split:int):
-    # enemy_pkmn is an EnemyPkmn type
-    gained_xp = math.floor(enemy_pkmn.xp / exp_split)
+    if exp_split != 1:
+        gained_xp = pkmn.universal_utils.calc_xp_yield(
+            current_gen_info().pkmn_db().get_pkmn(enemy_pkmn.name).base_xp,
+            enemy_pkmn.level,
+            enemy_pkmn.is_trainer_mon,
+            exp_split=exp_split
+        )
+    else:
+        gained_xp = enemy_pkmn.xp
     return SoloPokemon(
         cur_pkmn.name,
         cur_pkmn.species_def,
@@ -48,7 +55,7 @@ def _defeat_pkmn(cur_pkmn:SoloPokemon, enemy_pkmn: pkmn.universal_data_objects.E
         realized_stat_xp=cur_pkmn.realized_stat_xp,
         unrealized_stat_xp=cur_pkmn.unrealized_stat_xp,
         gained_xp=gained_xp,
-        gained_stat_xp=pkmn.gen_factory.current_gen_info().get_stat_xp_yeild(enemy_pkmn.name, exp_split),
+        gained_stat_xp=pkmn.gen_factory.current_gen_info().get_stat_xp_yield(enemy_pkmn.name, exp_split),
         held_item=cur_pkmn.held_item
     )
 

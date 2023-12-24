@@ -130,7 +130,8 @@ def instantiate_trainer_pokemon(pkmn_data:PokemonSpecies, target_level, special_
         pkmn_data.stats,
         GenOneStatBlock(8, 9, 8, 8, 8, 8),
         GenOneStatBlock(0, 0, 0, 0, 0, 0, is_stat_xp=True),
-        None
+        None,
+        is_trainer_mon=True
     )
 
 
@@ -152,5 +153,6 @@ def instantiate_wild_pokemon(pkmn_data:PokemonSpecies, target_level) -> EnemyPkm
         pkmn_data.stats,
         GenOneStatBlock(15, 15, 15, 15, 15, 15),
         GenOneStatBlock(0, 0, 0, 0, 0, 0, is_stat_xp=True),
-        None
+        None,
+        is_trainer_mon=False
     )
