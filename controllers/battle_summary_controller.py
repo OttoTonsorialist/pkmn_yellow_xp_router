@@ -60,6 +60,7 @@ class BattleSummaryController:
 
         # trainer object data that we don't actually use, but need to hang on to to properly re-create events
         self._trainer_name = None
+        self._second_trainer_name = None
         self._event_group_id = None
 
         # actual state used to calculate battle stats
@@ -423,11 +424,13 @@ class BattleSummaryController:
 
         self._event_group_id = event_group.group_id
         trainer_def = event_group.event_definition.trainer_def
-        trainer_obj = event_group.event_definition.get_trainer_obj()
+        trainer_obj = event_group.event_definition.get_first_trainer_obj()
+        second_trainer_obj = event_group.event_definition.get_second_trainer_obj()
 
         self._trainer_name = trainer_def.trainer_name
+        self._second_trainer_name = trainer_def.second_trainer_name
         self._weather = trainer_def.weather
-        self._double_battle_flag = trainer_obj.double_battle
+        self._double_battle_flag = trainer_obj.double_battle or second_trainer_obj is not None
         self._mimic_selection = trainer_def.mimic_selection
         self._player_setup_move_list = trainer_def.setup_moves.copy()
         self._player_stage_modifier = self._calc_stage_modifier(self._player_setup_move_list)
@@ -436,7 +439,7 @@ class BattleSummaryController:
         self._cached_definition_order = [x.mon_order - 1 for x in event_group.event_definition.get_pokemon_list(definition_order=True)]
         if not trainer_def.custom_move_data:
             self._custom_move_data = []
-            for _ in range(len(trainer_obj.pkmn)):
+            for _ in range(len(event_group.event_definition.get_pokemon_list())):
                 self._custom_move_data.append({const.PLAYER_KEY: {}, const.ENEMY_KEY: {}})
         else:
             self._custom_move_data = [copy.deepcopy(x.custom_move_data) for x in event_group.event_definition.get_pokemon_list()]
@@ -450,14 +453,12 @@ class BattleSummaryController:
         for cur_pkmn in event_group.event_definition.get_pokemon_list():
             while cur_item_idx < len(event_group.event_items):
                 cur_event_item = event_group.event_items[cur_item_idx]
-                cur_item_pkmn_list = cur_event_item.event_definition.get_pokemon_list()
                 cur_item_idx += 1
-
                 # skip level-up events mid-fight
-                if not cur_item_pkmn_list:
+                if cur_event_item.event_definition.trainer_def is None:
                     continue
 
-                if cur_item_pkmn_list[cur_event_item.to_defeat_idx].name == cur_pkmn.name:
+                if cur_event_item.to_defeat_mon == cur_pkmn:
                     self._original_enemy_mon_list.append(cur_pkmn)
                     self._original_player_mon_list.append(
                         cur_event_item.init_state.solo_pkmn.get_pkmn_obj(
@@ -476,6 +477,7 @@ class BattleSummaryController:
 
         self._event_group_id = None
         self._trainer_name = trainer_name
+        self._second_trainer_name = ""
         self._weather = const.WEATHER_NONE
         self._mimic_selection = ""
         self._player_setup_move_list = []
@@ -506,6 +508,7 @@ class BattleSummaryController:
     def load_empty(self):
         self._event_group_id = None
         self._trainer_name = ""
+        self._second_trainer_name = ""
         self._weather = const.WEATHER_NONE
         self._double_battle_flag = False
         self._mimic_selection = ""
@@ -521,7 +524,7 @@ class BattleSummaryController:
     # Methods that do not induce a state change
     ######
 
-    def get_trainer_definition(self) -> TrainerEventDefinition:
+    def get_partial_trainer_definition(self) -> TrainerEventDefinition:
         if not self._trainer_name:
             return None
 
@@ -536,8 +539,12 @@ class BattleSummaryController:
         else:
             final_custom_move_data = None
 
+        # NOTE: somewhat gross, but we are intentionally ignoring the extra fields here (exp_split, mon_order, etc)
+        # Instead, we expect that the place this is called is smart enough to fill in the extra pieces that we don't
+        # have full info to replicate here
         return TrainerEventDefinition(
             self._trainer_name,
+            second_trainer_name=self._second_trainer_name,
             setup_moves=self._player_setup_move_list,
             enemy_setup_moves=self._enemy_setup_move_list,
             mimic_selection=self._mimic_selection,

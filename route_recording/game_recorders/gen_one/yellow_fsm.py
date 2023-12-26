@@ -360,7 +360,7 @@ class Machine:
                             if (
                                 prev_event is not None and
                                 prev_event.event_definition.trainer_def is not None and
-                                cur_event.item_event_def.item_name == current_gen_info().get_fight_reward(prev_event.event_definition.get_trainer_obj().name)
+                                cur_event.item_event_def.item_name == current_gen_info().get_fight_reward(prev_event.event_definition.get_first_trainer_obj().name)
                             ):
                                 logger.info(f"Intentionally ignoring item add for battle reward: {cur_event.item_event_def.item_name}")
                                 continue

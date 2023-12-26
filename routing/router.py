@@ -244,6 +244,8 @@ class Router:
         elif event_def is not None:
             if event_def.trainer_def and not current_gen_info().trainer_db().get_trainer(event_def.trainer_def.trainer_name).refightable:
                 self.defeated_trainers.add(event_def.trainer_def.trainer_name)
+                if event_def.trainer_def.second_trainer_name and not current_gen_info().trainer_db().get_trainer(event_def.trainer_def.trainer_name).refightable:
+                    self.defeated_trainers.add(event_def.trainer_def.second_trainer_name)
             new_obj = route_events.EventGroup(parent_obj, event_def)
         
         self.event_lookup[new_obj.group_id] = new_obj
@@ -269,6 +271,8 @@ class Router:
         if isinstance(cur_event, route_events.EventGroup) and cur_event.event_definition.trainer_def is not None:
             if cur_event.event_definition.trainer_def.trainer_name in self.defeated_trainers:
                 self.defeated_trainers.remove(cur_event.event_definition.trainer_def.trainer_name)
+            if cur_event.event_definition.trainer_def.second_trainer_name in self.defeated_trainers:
+                self.defeated_trainers.remove(cur_event.event_definition.trainer_def.second_trainer_name)
         
         cur_event.parent.remove_child(cur_event)
         del self.event_lookup[cur_event.group_id]

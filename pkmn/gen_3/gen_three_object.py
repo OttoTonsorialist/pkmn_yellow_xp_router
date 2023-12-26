@@ -405,7 +405,7 @@ def _load_trainer_db(path, pkmn_db:PkmnDB):
             unused_count += 1
             continue
         if raw_trainer[const.TRAINER_NAME] in result:
-            print(f"Duplicate entry for trainer: {raw_trainer}")
+            raise ValueError(f"Multiple trainers with the same name ({raw_trainer[const.TRAINER_NAME]}) from trainer file: {path}")
         result[raw_trainer[const.TRAINER_NAME]] = _create_trainer(raw_trainer, pkmn_db)
     
     if not len(all_trainers) == len(result) + unused_count:

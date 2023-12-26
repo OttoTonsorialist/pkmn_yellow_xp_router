@@ -1,7 +1,8 @@
 
 import math
 import logging
-from pkmn.universal_data_objects import Trainer, TrainerTimingStats
+from typing import List
+from pkmn.universal_data_objects import EnemyPkmn, Trainer, TrainerTimingStats
 
 from utils.constants import const
 
@@ -112,10 +113,10 @@ level_lookups = {
 }
 
 
-def experience_per_second(timing_obj:TrainerTimingStats ,trainer_obj:Trainer):
+def experience_per_second(timing_obj:TrainerTimingStats, pmkn_list:List[EnemyPkmn]):
     result = timing_obj.get_optimal_exp_per_second(
-        len(trainer_obj.pkmn),
-        sum([x.xp for x in trainer_obj.pkmn])
+        len(pmkn_list),
+        sum([x.xp for x in pmkn_list])
     )
     result = round(result)
     return str(result)

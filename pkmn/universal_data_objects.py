@@ -378,7 +378,8 @@ class EnemyPkmn:
             self.stat_xp == other.stat_xp and
             self.badges == other.badges and
             self.held_item == other.held_item and
-            self.nature == other.nature
+            self.nature == other.nature and
+            self.ability == other.ability
         )
     
     def __repr__(self):

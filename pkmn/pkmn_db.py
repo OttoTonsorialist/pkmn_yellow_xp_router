@@ -128,7 +128,13 @@ class TrainerDB:
     def get_all_classes(self):
         return list(self.class_oriented_trainers.keys())
     
-    def get_valid_trainers(self, trainer_class=None, trainer_loc=None, defeated_trainers=None, show_rematches=True, custom_name_fn=None):
+    def can_trainer_multi_battle(self, trainer_name):
+        temp = self.get_trainer(trainer_name)
+        if temp is None:
+            return False
+        return len(temp.pkmn) <= 3
+    
+    def get_valid_trainers(self, trainer_class=None, trainer_loc=None, defeated_trainers=None, show_rematches=True, custom_name_fn=None, multi_only=False):
         if trainer_class == const.ALL_TRAINERS:
             trainer_class = None
         if trainer_loc == const.ALL_TRAINERS:
@@ -149,6 +155,8 @@ class TrainerDB:
             elif cur_trainer.name in defeated_trainers:
                 continue
             elif not show_rematches and cur_trainer.rematch:
+                continue
+            elif multi_only and len(cur_trainer.pkmn) > 3:
                 continue
 
             valid_trainers.append(custom_name_fn(cur_trainer))

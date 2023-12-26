@@ -2,6 +2,7 @@
 import logging
 import copy
 from typing import Dict, List
+from pkmn.universal_data_objects import EnemyPkmn
 from routing.full_route_state import RouteState
 from utils.constants import const
 from pkmn.gen_factory import current_gen_info
@@ -222,7 +223,7 @@ class TrainerEventDefinition:
             weather=raw_val.get(const.WEATHER, const.WEATHER_NONE),
             pay_day_amount=raw_val.get(const.PAY_DAY_AMOUNT, 0),
             mon_order=raw_val.get(const.MON_ORDER),
-            second_trainer_name=raw_val.get(const.MON_ORDER, ""),
+            second_trainer_name=raw_val.get(const.SECOND_TRAINER_NAME, ""),
         )
     
     def __str__(self):
@@ -292,7 +293,8 @@ class EventDefinition:
         self.rare_candy:RareCandyEventDefinition = rare_candy
         self.vitamin:VitaminEventDefinition = vitamin
         self.trainer_def:TrainerEventDefinition = trainer_def
-        self._trainer_obj = None
+        self._first_trainer_obj = None
+        self._second_trainer_obj = None
         self.wild_pkmn_info:WildPkmnEventDefinition = wild_pkmn_info
         self._wild_pkmn = None
         self.item_event_def:InventoryEventDefinition = item_event_def
@@ -307,12 +309,19 @@ class EventDefinition:
         self.tags = tags
         self.notes = notes
 
-    def get_trainer_obj(self):
-        if self._trainer_obj is None and self.trainer_def is not None:
-            self._trainer_obj = current_gen_info().trainer_db().get_trainer(self.trainer_def.trainer_name)
-            if self._trainer_obj is None:
+    def get_first_trainer_obj(self):
+        if self._first_trainer_obj is None and self.trainer_def is not None:
+            self._first_trainer_obj = current_gen_info().trainer_db().get_trainer(self.trainer_def.trainer_name)
+            if self._first_trainer_obj is None:
                 raise ValueError(f"Could not find trainer object for trainer named: '{self.trainer_def.trainer_name}', from trainer_db for version: {current_gen_info().version_name()}")
-        return self._trainer_obj
+        return self._first_trainer_obj
+
+    def get_second_trainer_obj(self):
+        if self._second_trainer_obj is None and self.trainer_def is not None and self.trainer_def.second_trainer_name:
+            self._second_trainer_obj = current_gen_info().trainer_db().get_trainer(self.trainer_def.second_trainer_name)
+            if self._second_trainer_obj is None:
+                raise ValueError(f"Could not find trainer object for trainer named: '{self.trainer_def.second_trainer_name}', from trainer_db for version: {current_gen_info().version_name()}")
+        return self._second_trainer_obj
     
     def get_wild_pkmn(self):
         if self._wild_pkmn is None and self.wild_pkmn_info is not None:
@@ -322,22 +331,34 @@ class EventDefinition:
                 self._wild_pkmn = current_gen_info().create_wild_pkmn(self.wild_pkmn_info.name, self.wild_pkmn_info.level)
         return self._wild_pkmn
     
-    def get_pokemon_list(self, definition_order=False):
+    def get_pokemon_list(self, definition_order=False, include_definition_idx=False):
         wild_pkmn = self.get_wild_pkmn()
         if wild_pkmn is not None:
             # NOTE: technically bad, it's just multiple references to the same object
             # but since these objects are treated as immutable, it's not actually a problem
+            if include_definition_idx:
+                return [(x, wild_pkmn) for x in range(self.wild_pkmn_info.quantity)]
             return [wild_pkmn for _ in range(self.wild_pkmn_info.quantity)]
         
-        trainer = self.get_trainer_obj()
+        trainer = self.get_first_trainer_obj()
         if trainer is None:
             return []
-
-        if self.trainer_def is None:
-            return trainer.pkmn
         
+        second_trainer = self.get_second_trainer_obj()
+        if second_trainer is None:
+            pkmn_list = trainer.pkmn
+        else:
+            pkmn_list = []
+            # the goal is that the default order should have the mons interleaved from each trainer
+            # alternating first and then second
+            for idx in range(0, 3):
+                if idx < len(trainer.pkmn):
+                    pkmn_list.append(trainer.pkmn[idx])
+                if idx < len(second_trainer.pkmn):
+                    pkmn_list.append(second_trainer.pkmn[idx])
+
         if not self.trainer_def.mon_order or definition_order:
-            mon_order = list(range(1, len(trainer.pkmn) + 1))
+            mon_order = list(range(1, len(pkmn_list) + 1))
         else:
             mon_order = self.trainer_def.mon_order
 
@@ -347,7 +368,7 @@ class EventDefinition:
         while order_idx <= len(mon_order):
             for lookup_idx, test_idx in enumerate(mon_order):
                 if order_idx == test_idx:
-                    cur_result = copy.copy(trainer.pkmn[lookup_idx])
+                    cur_result = copy.copy(pkmn_list[lookup_idx])
                     if len(self.trainer_def.custom_move_data) > lookup_idx:
                         cur_result.custom_move_data = self.trainer_def.custom_move_data[lookup_idx]
                     if len(self.trainer_def.exp_split) > lookup_idx:
@@ -363,6 +384,8 @@ class EventDefinition:
                     break
             order_idx += 1
 
+        if include_definition_idx:
+            return [(mon_order[x] - 1, result[x]) for x in range(len(result))]
         return result
     
     def get_event_type(self):
@@ -406,8 +429,12 @@ class EventDefinition:
         elif self.wild_pkmn_info is not None:
             return str(self.wild_pkmn_info)
         elif self.trainer_def is not None:
-            trainer = self.get_trainer_obj()
-            return f"Trainer: {trainer.name} ({trainer.location})"
+            trainer = self.get_first_trainer_obj()
+            second_trainer = self.get_second_trainer_obj()
+            if second_trainer is None:
+                return f"Trainer: {trainer.name} ({trainer.location})"
+            else:
+                return f"Multi: {trainer.name}, {second_trainer.name} ({trainer.location})"
         elif self.item_event_def is not None:
             return str(self.item_event_def)
         elif self.learn_move is not None:
@@ -431,8 +458,12 @@ class EventDefinition:
         elif self.wild_pkmn_info is not None:
             return str(self.wild_pkmn_info)
         elif self.trainer_def is not None:
-            trainer = self.get_trainer_obj()
-            return f"Trainer: {trainer.name} ({trainer.location})"
+            trainer = self.get_first_trainer_obj()
+            second_trainer = self.get_second_trainer_obj()
+            if second_trainer is None:
+                return f"Trainer: {trainer.name} ({trainer.location})"
+            else:
+                return f"Multi: {trainer.name}, {second_trainer.name} ({trainer.location})"
         elif self.item_event_def is not None:
             return str(self.item_event_def)
         elif self.learn_move is not None:
@@ -457,7 +488,7 @@ class EventDefinition:
         
         return universal_utils.experience_per_second(
             current_gen_info().get_trainer_timing_info(),
-            self.get_trainer_obj()
+            self.get_pokemon_list()
         )
         
     
@@ -540,7 +571,7 @@ class EventItem:
     """
     This class effectively functions as the conversion layer between EventDefinitions and the RouteState object.
     """
-    def __init__(self, parent, event_definition:EventDefinition, to_defeat_idx=None, cur_state=None, exp_split_num=1, pay_day_amount=0):
+    def __init__(self, parent, event_definition:EventDefinition, to_defeat_mon=None, cur_state=None, exp_split_num=1, pay_day_amount=0, defeating_trainer=False):
         global event_id_counter
         self.group_id = event_id_counter
         event_id_counter += 1
@@ -548,9 +579,10 @@ class EventItem:
         self._enabled = True
         self.parent = parent
         self.name = event_definition.get_item_label()
-        self.to_defeat_idx = to_defeat_idx
+        self.to_defeat_mon:EnemyPkmn = to_defeat_mon
         self.exp_split_num = exp_split_num
         self.pay_day_amount = pay_day_amount
+        self.defeating_trainer = defeating_trainer
         self.event_definition:EventDefinition = event_definition
 
         self.init_state = None
@@ -575,25 +607,19 @@ class EventItem:
         # NOTE: if you're confused by the strange inversion of "if None is self.event_definition.x" in the if statements below...
         # Pylance forgets all type-hints for self.event_definition with the other order, for some reason...
         # so do it this annoying way just to keep Pylance from shitting the bed. grumble grumble grumble
-        if self.to_defeat_idx is not None:
-            enemy_team = self.event_definition.get_pokemon_list()
-            if len(enemy_team) <= self.to_defeat_idx:
-                self.final_state = cur_state
-                self.error_message = f"No Num {self.to_defeat_idx} pkmn from team: {self.event_definition}"
-            else:
-                # you only "defeat" a trainer after defeating their final pokemon
-                if None is not self.event_definition.trainer_def:
-                    if self.to_defeat_idx == len(enemy_team) - 1:
-                        defeated_trainer_name = self.event_definition.trainer_def.trainer_name
-                    else:
-                        defeated_trainer_name = None
-                    render_trainer_name = self.event_definition.trainer_def.trainer_name
+        if self.to_defeat_mon is not None:
+            if None is not self.event_definition.trainer_def:
+                if self.defeating_trainer:
+                    defeated_trainer_name = self.event_definition.trainer_def.trainer_name
                 else:
                     defeated_trainer_name = None
-                    render_trainer_name = "TrainerPkmn" if self.event_definition.wild_pkmn_info.trainer_pkmn else "WildPkmn"
+                render_trainer_name = self.event_definition.trainer_def.trainer_name
+            else:
+                defeated_trainer_name = None
+                render_trainer_name = "TrainerPkmn" if self.event_definition.wild_pkmn_info.trainer_pkmn else "WildPkmn"
 
-                self.name = f"{render_trainer_name}: {enemy_team[self.to_defeat_idx].name}"
-                self.final_state, self.error_message = cur_state.defeat_pkmn(enemy_team[self.to_defeat_idx], trainer_name=defeated_trainer_name, exp_split=self.exp_split_num, pay_day_amount=self.pay_day_amount)
+            self.name = f"{render_trainer_name}: {self.to_defeat_mon.name}"
+            self.final_state, self.error_message = cur_state.defeat_pkmn(self.to_defeat_mon, trainer_name=defeated_trainer_name, exp_split=self.exp_split_num, pay_day_amount=self.pay_day_amount)
         elif None is not self.event_definition.rare_candy:
             # note: deliberatley ignoring amount here, that's handled at the group level
             # just apply one rare candy at the item level
@@ -712,97 +738,102 @@ class EventGroup:
         self.level_up_learn_event_defs = []
     
     def apply(self, cur_state, level_up_learn_event_defs=None):
-        self.name = self.event_definition.get_label()
-        self.init_state = cur_state
-        self.pkmn_after_levelups = []
-        self.event_items = []
-        self._enabled = self.event_definition.enabled
-
-        if not self.is_enabled():
-            self.final_state = cur_state
-            self.error_messages = []
-            self.name = f"Disabled: {self.event_definition.get_label()}"
-            return
-
-        if level_up_learn_event_defs is None:
-            self.level_up_learn_event_defs = []
-        else:
-            self.level_up_learn_event_defs = level_up_learn_event_defs
-
-        if self.event_definition.trainer_def is not None or self.event_definition.wild_pkmn_info is not None:
-            pkmn_counter = {}
-            pkmn_to_fight = self.event_definition.get_pokemon_list()
-            for pkmn_idx, cur_pkmn in enumerate(pkmn_to_fight):
-                if self.event_definition.wild_pkmn_info is not None or not self.event_definition.trainer_def.exp_split:
-                    exp_split = 1
-                else:
-                    exp_split = self.event_definition.trainer_def.exp_split[pkmn_idx]
-
-                if (
-                    self.event_definition.wild_pkmn_info is not None or
-                    not isinstance(self.event_definition.trainer_def.pay_day_amount, int) or
-                    pkmn_idx != (len(pkmn_to_fight) - 1)
-                ):
-                    pay_day_amount = 0
-                else:
-                    pay_day_amount = self.event_definition.trainer_def.pay_day_amount
-
-                self.event_items.append(EventItem(self, self.event_definition, to_defeat_idx=pkmn_idx, cur_state=cur_state, exp_split_num=exp_split, pay_day_amount=pay_day_amount))
-                pkmn_counter[cur_pkmn.name] = pkmn_counter.get(cur_pkmn.name, 0) + 1
-                
-                next_state = self.event_items[-1].final_state
-                # when a level up occurs
-                if next_state.solo_pkmn.cur_level != cur_state.solo_pkmn.cur_level:
-                    # learn moves, if needed
-                    for learn_move in self.level_up_learn_event_defs:
-                        if learn_move.level == next_state.solo_pkmn.cur_level:
-                            self.event_items.append(EventItem(self, EventDefinition(learn_move=learn_move), cur_state=next_state))
-                            next_state = self.event_items[-1].final_state
-                    # keep track of pkmn coming out
-                    if pkmn_idx + 1 < len(pkmn_to_fight):
-                        next_pkmn_name = pkmn_to_fight[pkmn_idx + 1].name
-                        next_pkmn_count = pkmn_counter.get(next_pkmn_name, 0) + 1
-                        self.pkmn_after_levelups.append(f"#{next_pkmn_count} {next_pkmn_name}")
-                    else:
-                        self.pkmn_after_levelups.append("after_final_pkmn")
-                cur_state = next_state
-        
-        elif self.event_definition.rare_candy is not None:
-            if self.event_definition.rare_candy.amount <= 0:
-                #  if there are no candies, create a dummy empty notes event just to keep things happy
-                self.event_items.append(EventItem(self, EventDefinition(), cur_state=cur_state))
-
-            for _ in range(self.event_definition.rare_candy.amount):
-                self.event_items.append(EventItem(self, self.event_definition, cur_state=cur_state))
-                # TODO: duplicated logic for handling level up moves. How can this be unified?
-                next_state = self.event_items[-1].final_state
-                if next_state.solo_pkmn.cur_level != cur_state.solo_pkmn.cur_level:
-                    for learn_move in self.level_up_learn_event_defs:
-                        if learn_move.level == next_state.solo_pkmn.cur_level:
-                            self.event_items.append(EventItem(self, EventDefinition(learn_move=learn_move), cur_state=next_state))
-                            next_state = self.event_items[-1].final_state
-                cur_state = next_state
-        elif self.event_definition.vitamin is not None:
-            for _ in range(self.event_definition.vitamin.amount):
-                self.event_items.append(EventItem(self, self.event_definition, cur_state=cur_state))
-                cur_state = self.event_items[-1].final_state
-        else:
-            # assumption: can only have at most one level up per event group of non-trainer battle types
-            # This allows us to simplify the level up move learn checks
-            self.event_items.append(EventItem(self, self.event_definition, cur_state=cur_state))
-            if self.level_up_learn_event_defs:
-                self.event_items.append(EventItem(self, EventDefinition(learn_move=self.level_up_learn_event_defs[0]), cur_state=self.event_items[0].final_state))
-            
-        if len(self.event_items) == 0:
-            raise ValueError(f"Something went wrong generating event group: {self.event_definition}")
-        
-        self.error_messages = [x.error_message for x in self.event_items if x.error_message]
-        if self.error_messages:
-            self.name = ", ".join(self.error_messages)
-        else:
-            # hack to get move learn events to update properly when they get modified automatically during processing
+        try:
             self.name = self.event_definition.get_label()
-        self.final_state = self.event_items[-1].final_state
+            self.init_state = cur_state
+            self.pkmn_after_levelups = []
+            self.event_items = []
+            self._enabled = self.event_definition.enabled
+
+            if not self.is_enabled():
+                self.final_state = cur_state
+                self.error_messages = []
+                self.name = f"Disabled: {self.event_definition.get_label()}"
+                return
+
+            if level_up_learn_event_defs is None:
+                self.level_up_learn_event_defs = []
+            else:
+                self.level_up_learn_event_defs = level_up_learn_event_defs
+
+            if self.event_definition.trainer_def is not None or self.event_definition.wild_pkmn_info is not None:
+                pkmn_counter = {}
+                pkmn_to_fight = self.event_definition.get_pokemon_list(include_definition_idx=True)
+                for order_idx, (definition_idx, cur_pkmn) in enumerate(pkmn_to_fight):
+                    if self.event_definition.wild_pkmn_info is not None or not self.event_definition.trainer_def.exp_split:
+                        exp_split = 1
+                    else:
+                        exp_split = self.event_definition.trainer_def.exp_split[definition_idx]
+
+                    if (
+                        self.event_definition.wild_pkmn_info is not None or
+                        not isinstance(self.event_definition.trainer_def.pay_day_amount, int) or
+                        order_idx != (len(pkmn_to_fight) - 1)
+                    ):
+                        pay_day_amount = 0
+                    else:
+                        pay_day_amount = self.event_definition.trainer_def.pay_day_amount
+                    
+                    defeating_trainer = order_idx != (len(pkmn_to_fight) - 1)
+                    self.event_items.append(EventItem(self, self.event_definition, to_defeat_mon=cur_pkmn, cur_state=cur_state, exp_split_num=exp_split, pay_day_amount=pay_day_amount, defeating_trainer=defeating_trainer))
+                    pkmn_counter[cur_pkmn.name] = pkmn_counter.get(cur_pkmn.name, 0) + 1
+                    
+                    next_state = self.event_items[-1].final_state
+                    # when a level up occurs
+                    if next_state.solo_pkmn.cur_level != cur_state.solo_pkmn.cur_level:
+                        # learn moves, if needed
+                        for learn_move in self.level_up_learn_event_defs:
+                            if learn_move.level == next_state.solo_pkmn.cur_level:
+                                self.event_items.append(EventItem(self, EventDefinition(learn_move=learn_move), cur_state=next_state))
+                                next_state = self.event_items[-1].final_state
+                        # keep track of pkmn coming out
+                        if order_idx + 1 < len(pkmn_to_fight):
+                            next_pkmn_name = pkmn_to_fight[order_idx + 1][1].name
+                            next_pkmn_count = pkmn_counter.get(next_pkmn_name, 0) + 1
+                            self.pkmn_after_levelups.append(f"#{next_pkmn_count} {next_pkmn_name}")
+                        else:
+                            self.pkmn_after_levelups.append("after_final_pkmn")
+                    cur_state = next_state
+            
+            elif self.event_definition.rare_candy is not None:
+                if self.event_definition.rare_candy.amount <= 0:
+                    #  if there are no candies, create a dummy empty notes event just to keep things happy
+                    self.event_items.append(EventItem(self, EventDefinition(), cur_state=cur_state))
+
+                for _ in range(self.event_definition.rare_candy.amount):
+                    self.event_items.append(EventItem(self, self.event_definition, cur_state=cur_state))
+                    # TODO: duplicated logic for handling level up moves. How can this be unified?
+                    next_state = self.event_items[-1].final_state
+                    if next_state.solo_pkmn.cur_level != cur_state.solo_pkmn.cur_level:
+                        for learn_move in self.level_up_learn_event_defs:
+                            if learn_move.level == next_state.solo_pkmn.cur_level:
+                                self.event_items.append(EventItem(self, EventDefinition(learn_move=learn_move), cur_state=next_state))
+                                next_state = self.event_items[-1].final_state
+                    cur_state = next_state
+            elif self.event_definition.vitamin is not None:
+                for _ in range(self.event_definition.vitamin.amount):
+                    self.event_items.append(EventItem(self, self.event_definition, cur_state=cur_state))
+                    cur_state = self.event_items[-1].final_state
+            else:
+                # assumption: can only have at most one level up per event group of non-trainer battle types
+                # This allows us to simplify the level up move learn checks
+                self.event_items.append(EventItem(self, self.event_definition, cur_state=cur_state))
+                if self.level_up_learn_event_defs:
+                    self.event_items.append(EventItem(self, EventDefinition(learn_move=self.level_up_learn_event_defs[0]), cur_state=self.event_items[0].final_state))
+                
+            if len(self.event_items) == 0:
+                raise ValueError(f"Something went wrong generating event group: {self.event_definition}")
+            
+            self.error_messages = [x.error_message for x in self.event_items if x.error_message]
+            if self.error_messages:
+                self.name = ", ".join(self.error_messages)
+            else:
+                # hack to get move learn events to update properly when they get modified automatically during processing
+                self.name = self.event_definition.get_label()
+            self.final_state = self.event_items[-1].final_state
+        except Exception:
+            logger.error(f"Encountered exception with event {self}")
+            raise
     
     def contains_id(self, id_val):
         if self.group_id == id_val:

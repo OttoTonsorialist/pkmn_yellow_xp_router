@@ -13,7 +13,7 @@ logger = logging.getLogger(__name__)
 
 class WatchForResetState(State):
     def watch_for_reset(self, new_prop:GameHookProperty, prev_prop:GameHookProperty) -> StateType:
-        if new_prop.path != gh_gen_three_const.KEY_GAMETIME_SECONDS:
+        if new_prop.path != gh_gen_three_const.KEY_GAMETIME_SECONDS and 'audio' not in new_prop.path:
             frame_val = self.machine._gamehook_client.get(gh_gen_three_const.KEY_GAMETIME_FRAMES).value
             logger.info(f"On Frame {frame_val:02} Changing {new_prop.path} from {prev_prop.value} to {new_prop.value}({type(new_prop.value)})")
 
@@ -135,6 +135,8 @@ class BattleState(WatchForResetState):
         super().__init__(StateType.BATTLE, machine)
         self.is_trainer_battle = False
         self._trainer_name = ""
+        self._second_trainer_name = ""
+        self._enemy_pos_lookup = {}
         self._trainer_event_created = False
         self._defeated_trainer_mons = []
         self._waiting_for_moves = False
@@ -170,6 +172,8 @@ class BattleState(WatchForResetState):
         self._cached_second_mon_species = ""
         self._cached_second_mon_level = 0
         self._trainer_name = ""
+        self._second_trainer_name = ""
+        self._enemy_pos_lookup = {}
         self._exp_split = []
         self._enemy_mon_order = []
         self._friendship_data = []
@@ -191,6 +195,25 @@ class BattleState(WatchForResetState):
                 result += 1
         return result
 
+    def _get_enemy_pos_lookup(self):
+        # because we have a weird default mon order for multi battles, need to create this to make sure we handle things appropriately
+        if not self._second_trainer_name:
+            # single trainer battles (single or double) are trivial. just create all 6 lookups
+            return {x: x for x in range(6)}
+        
+        # just statically define the "real" order. Alternating between 2 trainers, taking their mons in order
+        # however, there's no guarantee we need all of them, so calculate the ones we actually need
+        real_order = [0, 3, 1, 4, 2, 5]
+        result = {}
+        next_pos_idx = 0
+        for cur_key_idx in real_order:
+            if self.machine._gamehook_client.get(gh_gen_three_const.ALL_KEYS_ENEMY_TEAM_SPECIES[cur_key_idx]).value:
+                result[cur_key_idx] = next_pos_idx
+                next_pos_idx += 1
+
+        logger.info(f"completed pos lookup for trainer: {result}")
+        return result
+
     def _battle_ready(self):
         # to be called after battle is actually initialized
         self._battle_started = True
@@ -198,16 +221,20 @@ class BattleState(WatchForResetState):
         self.is_trainer_battle = self.machine._gamehook_client.get(gh_gen_three_const.KEY_TRAINER_BATTLE_FLAG).value
 
         if self.is_trainer_battle:
+            self._trainer_name = self.machine._gamehook_client.get(gh_gen_three_const.KEY_BATTLE_TRAINER_A_NUMBER).value
+            self._second_trainer_name = self.machine._gamehook_client.get(gh_gen_three_const.KEY_BATTLE_TRAINER_B_NUMBER).value
+            if self._second_trainer_name is None or not self._is_double_battle:
+                self._second_trainer_name = ""
+
             num_enemy_pokemon = self._get_num_enemy_trainer_pokemon()
-            logger.info(f"got {num_enemy_pokemon} total enemy mons")
+            self._enemy_pos_lookup = self._get_enemy_pos_lookup()
             if self._is_double_battle:
-                self._exp_split = [set([0, 1]) for _ in range(num_enemy_pokemon)]
+                ally_mon_pos = self.machine._gamehook_client.get(gh_gen_three_const.KEY_BATTLE_ALLY_MON_PARTY_POS).value
+                self._exp_split = [set([0, ally_mon_pos]) for _ in range(num_enemy_pokemon)]
                 self._enemy_mon_order = [0, 1]
             else:
                 self._exp_split = [set([0]) for _ in range(num_enemy_pokemon)]
                 self._enemy_mon_order = [0]
-            self._trainer_name = self.machine._gamehook_client.get(gh_gen_three_const.KEY_BATTLE_TRAINER_A_NUMBER).value
-            logger.info(f"init exp_split is: {self._exp_split}")
 
             return_custom_move_data = None
             if gen_three_const.RETURN_MOVE_NAME in self.machine._cached_moves:
@@ -220,12 +247,20 @@ class BattleState(WatchForResetState):
                     })
 
             self.machine._queue_new_event(
-                EventDefinition(trainer_def=TrainerEventDefinition(self._trainer_name, custom_move_data=return_custom_move_data))
+                EventDefinition(
+                    trainer_def=TrainerEventDefinition(
+                        self._trainer_name,
+                        second_trainer_name=self._second_trainer_name,
+                        custom_move_data=return_custom_move_data,
+                        exp_split=[len(x) for x in self._exp_split]
+                    )
+                )
             )
     
     def _on_exit(self, next_state: State):
         if next_state.state_type != StateType.RESETTING:
             if self.is_trainer_battle:
+                logger.info(f"final exp split (before simplification): {self._exp_split}")
                 final_exp_split = [len(x) for x in self._exp_split]
                 if not any([True for x in final_exp_split if x > 1]):
                     final_exp_split = None
@@ -246,6 +281,7 @@ class BattleState(WatchForResetState):
                     EventDefinition(
                         trainer_def=TrainerEventDefinition(
                             self._trainer_name,
+                            second_trainer_name=self._second_trainer_name,
                             exp_split=final_exp_split,
                             mon_order=final_mon_order,
                             custom_move_data=return_custom_move_data,
@@ -272,6 +308,16 @@ class BattleState(WatchForResetState):
                 self.machine._item_cache_update()
             if self._held_item_consumed:
                 self.machine._queue_new_event(EventDefinition(hold_item=HoldItemEventDefinition(None, True)))
+    
+    def _get_first_enemy_mon_pos(self, value=None):
+        if value is None:
+            value = self.machine._gamehook_client.get(gh_gen_three_const.KEY_BATTLE_FIRST_ENEMY_PARTY_POS).value
+        return self._enemy_pos_lookup[value]
+
+    def _get_second_enemy_mon_pos(self, value=None):
+        if value is None:
+            value = self.machine._gamehook_client.get(gh_gen_three_const.KEY_BATTLE_SECOND_ENEMY_PARTY_POS).value
+        return self._enemy_pos_lookup[value]
 
     @auto_reset
     def transition(self, new_prop: GameHookProperty, prev_prop: GameHookProperty) -> StateType:
@@ -326,11 +372,11 @@ class BattleState(WatchForResetState):
                 if self._battle_started:
                     self._loss_detected = True
             elif new_prop.value <= 0:
-                enemy_mon_pos = self.machine._gamehook_client.get(gh_gen_three_const.KEY_BATTLE_FIRST_ENEMY_PARTY_POS).value
+                enemy_mon_pos = self._get_first_enemy_mon_pos()
                 if player_mon_pos in self._exp_split[enemy_mon_pos]:
                     self._exp_split[enemy_mon_pos].remove(player_mon_pos)
                 if self._is_double_battle:
-                    second_enemy_mon_pos = self.machine._gamehook_client.get(gh_gen_three_const.KEY_BATTLE_SECOND_ENEMY_PARTY_POS).value
+                    second_enemy_mon_pos = self._get_second_enemy_mon_pos()
                     if player_mon_pos in self._exp_split[second_enemy_mon_pos]:
                         self._exp_split[second_enemy_mon_pos].remove(player_mon_pos)
         elif new_prop.path == gh_gen_three_const.KEY_BATTLE_ALLY_MON_HP:
@@ -340,7 +386,7 @@ class BattleState(WatchForResetState):
                 # if the enemy has no HP *AND* is not cached for exp distribution, then they have died and enemy trainer has no further mons
                 #   In that case, leave the ally in the exp split, as they did participate already
                 ally_mon_pos = self.machine._gamehook_client.get(gh_gen_three_const.KEY_BATTLE_ALLY_MON_PARTY_POS).value
-                enemy_mon_pos = self.machine._gamehook_client.get(gh_gen_three_const.KEY_BATTLE_FIRST_ENEMY_PARTY_POS).value
+                enemy_mon_pos = self._get_first_enemy_mon_pos()
                 if (
                     ally_mon_pos in self._exp_split[enemy_mon_pos] and (
                         self.machine._gamehook_client.get(gh_gen_three_const.KEY_BATTLE_FIRST_ENEMY_HP).value > 0 or
@@ -350,7 +396,7 @@ class BattleState(WatchForResetState):
                     self._exp_split[enemy_mon_pos].remove(ally_mon_pos)
 
                 # do the same checks for second enemy mon
-                second_enemy_mon_pos = self.machine._gamehook_client.get(gh_gen_three_const.KEY_BATTLE_SECOND_ENEMY_PARTY_POS).value
+                second_enemy_mon_pos = self._get_second_enemy_mon_pos()
                 if (
                     ally_mon_pos in self._exp_split[second_enemy_mon_pos] and (
                         self.machine._gamehook_client.get(gh_gen_three_const.KEY_BATTLE_SECOND_ENEMY_HP).value > 0 or
@@ -387,38 +433,40 @@ class BattleState(WatchForResetState):
         elif new_prop.path == gh_gen_three_const.KEY_BATTLE_PLAYER_MON_PARTY_POS:
             if new_prop.value >= 0 and new_prop.value < 6:
                 if self.machine._gamehook_client.get(gh_gen_three_const.KEY_BATTLE_FIRST_ENEMY_HP).value > 0:
-                    self._exp_split[self.machine._gamehook_client.get(gh_gen_three_const.KEY_BATTLE_FIRST_ENEMY_PARTY_POS).value].add(new_prop.value)
+                    self._exp_split[self._get_first_enemy_mon_pos()].add(new_prop.value)
                 if self._is_double_battle:
                     if self.machine._gamehook_client.get(gh_gen_three_const.KEY_BATTLE_SECOND_ENEMY_HP).value > 0:
-                        self._exp_split[self.machine._gamehook_client.get(gh_gen_three_const.KEY_BATTLE_SECOND_ENEMY_PARTY_POS).value].add(new_prop.value)
+                        self._exp_split[self._get_second_enemy_mon_pos()].add(new_prop.value)
         elif new_prop.path == gh_gen_three_const.KEY_BATTLE_ALLY_MON_PARTY_POS:
             if self._is_double_battle and new_prop.value >= 0 and new_prop.value < 6:
                 if self.machine._gamehook_client.get(gh_gen_three_const.KEY_BATTLE_FIRST_ENEMY_HP).value > 0:
-                    self._exp_split[self.machine._gamehook_client.get(gh_gen_three_const.KEY_BATTLE_FIRST_ENEMY_PARTY_POS).value].add(new_prop.value)
+                    self._exp_split[self._get_first_enemy_mon_pos()].add(new_prop.value)
                 if self.machine._gamehook_client.get(gh_gen_three_const.KEY_BATTLE_SECOND_ENEMY_HP).value > 0:
-                    self._exp_split[self.machine._gamehook_client.get(gh_gen_three_const.KEY_BATTLE_SECOND_ENEMY_PARTY_POS).value].add(new_prop.value)
+                    self._exp_split[self._get_second_enemy_mon_pos()].add(new_prop.value)
         elif new_prop.path == gh_gen_three_const.KEY_BATTLE_FIRST_ENEMY_PARTY_POS:
-            if new_prop.value >= 0 and new_prop.value < len(self._exp_split):
+            real_new_value = self._get_first_enemy_mon_pos(value=new_prop.value)
+            if real_new_value >= 0 and real_new_value < len(self._exp_split):
                 if self.machine._gamehook_client.get(gh_gen_three_const.KEY_BATTLE_PLAYER_MON_HP).value > 0:
-                    self._exp_split[new_prop.value] = set([self.machine._gamehook_client.get(gh_gen_three_const.KEY_BATTLE_PLAYER_MON_PARTY_POS).value])
+                    self._exp_split[real_new_value] = set([self.machine._gamehook_client.get(gh_gen_three_const.KEY_BATTLE_PLAYER_MON_PARTY_POS).value])
                 if self._is_double_battle and self.machine._gamehook_client.get(gh_gen_three_const.KEY_BATTLE_ALLY_MON_HP).value > 0:
-                    self._exp_split[new_prop.value].add(self.machine._gamehook_client.get(gh_gen_three_const.KEY_BATTLE_ALLY_MON_PARTY_POS).value)
+                    self._exp_split[real_new_value].add(self.machine._gamehook_client.get(gh_gen_three_const.KEY_BATTLE_ALLY_MON_PARTY_POS).value)
 
                 # NOTE: this logic won't perfectly reflect things if the player uses roar/whirlwind
                 # or if the enemy trainer switches pokemon (and doesn't only send out new mons on previous death)
-                if new_prop.value not in self._enemy_mon_order:
-                    self._enemy_mon_order.append(new_prop.value)
+                if real_new_value not in self._enemy_mon_order:
+                    self._enemy_mon_order.append(real_new_value)
         elif new_prop.path == gh_gen_three_const.KEY_BATTLE_SECOND_ENEMY_PARTY_POS:
-            if self._is_double_battle and new_prop.value >= 0 and new_prop.value < len(self._exp_split):
+            real_new_value = self._get_second_enemy_mon_pos(value=new_prop.value)
+            if self._is_double_battle and real_new_value >= 0 and real_new_value < len(self._exp_split):
                 if self.machine._gamehook_client.get(gh_gen_three_const.KEY_BATTLE_PLAYER_MON_HP).value > 0:
-                    self._exp_split[new_prop.value] = set([self.machine._gamehook_client.get(gh_gen_three_const.KEY_BATTLE_PLAYER_MON_PARTY_POS).value])
+                    self._exp_split[real_new_value] = set([self.machine._gamehook_client.get(gh_gen_three_const.KEY_BATTLE_PLAYER_MON_PARTY_POS).value])
                 if self.machine._gamehook_client.get(gh_gen_three_const.KEY_BATTLE_ALLY_MON_HP).value > 0:
-                    self._exp_split[new_prop.value].add(self.machine._gamehook_client.get(gh_gen_three_const.KEY_BATTLE_ALLY_MON_PARTY_POS).value)
+                    self._exp_split[real_new_value].add(self.machine._gamehook_client.get(gh_gen_three_const.KEY_BATTLE_ALLY_MON_PARTY_POS).value)
 
                 # NOTE: this logic won't perfectly reflect things if the player uses roar/whirlwind
                 # or if the enemy trainer switches pokemon (and doesn't only send out new mons on previous death)
-                if new_prop.value not in self._enemy_mon_order:
-                    self._enemy_mon_order.append(new_prop.value)
+                if real_new_value not in self._enemy_mon_order:
+                    self._enemy_mon_order.append(real_new_value)
         elif new_prop.path == gh_gen_three_const.KEY_BATTLE_OUTCOME:
             # Kind of stupid, but the money update happens in between the outcome being set and the reload of the overworld
             # so the easiest thing to do for cleanly exiting the battle state is to flag when the outcome is set
@@ -524,6 +572,7 @@ class UseRareCandyState(WatchForResetState):
 
 
 class UseTMState(WatchForResetState):
+    BASE_DELAY = 2
     def __init__(self, machine: Machine):
         super().__init__(StateType.TM, machine)
 
@@ -536,8 +585,15 @@ class UseTMState(WatchForResetState):
     
     @auto_reset
     def transition(self, new_prop:GameHookProperty, prev_prop:GameHookProperty) -> StateType:
-        if new_prop.path in gh_gen_three_const.ALL_KEYS_TMHM_QUANTITY:
-            return StateType.OVERWORLD
+        if new_prop.path in gh_gen_three_const.ALL_KEYS_ALL_ITEM_FIELDS:
+            self._seconds_delay = self.BASE_DELAY
+        elif new_prop.path == gh_gen_three_const.KEY_PLAYER_MON_HELD_ITEM:
+            self._held_item_changed = True
+        elif new_prop.path == gh_gen_three_const.KEY_GAMETIME_SECONDS:
+            if self._seconds_delay <= 0:
+                return StateType.OVERWORLD
+            else:
+                self._seconds_delay -= 1
 
         return self.state_type
 

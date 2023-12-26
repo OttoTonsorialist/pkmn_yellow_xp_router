@@ -391,6 +391,17 @@ class Machine:
                             )
                             continue
                         cur_event.trainer_def.trainer_name = trainer.name
+                        if cur_event.trainer_def.second_trainer_name:
+                            second_trainer_id = int(cur_event.trainer_def.second_trainer_name)
+                            second_trainer = current_gen_info().trainer_db().get_trainer_by_id(second_trainer_id)
+                            if second_trainer is None:
+                                msg = f"Failed to find second trainer from GameHook: ({type(second_trainer_id)}) {second_trainer_id}"
+                                logger.error(msg)
+                                self._controller.add_event(
+                                    EventDefinition(notes=const.RECORDING_ERROR_FRAGMENT + msg)
+                                )
+                                continue
+                            cur_event.trainer_def.second_trainer_name = second_trainer.name
                         if cur_event.notes == gh_gen_three_const.TRAINER_LOSS_FLAG:
                             logger.info(f"Handling trainer loss: {cur_event.trainer_def.trainer_name}")
                             self._controller.lost_trainer_battle(cur_event.trainer_def.trainer_name)
@@ -442,7 +453,7 @@ class Machine:
                             if (
                                 prev_event is not None and
                                 prev_event.event_definition.trainer_def is not None and
-                                cur_event.item_event_def.item_name == current_gen_info().get_fight_reward(prev_event.event_definition.get_trainer_obj().name)
+                                cur_event.item_event_def.item_name == current_gen_info().get_fight_reward(prev_event.event_definition.get_first_trainer_obj().name)
                             ):
                                 logger.info(f"Intentionally ignoring item add for battle reward: {cur_event.item_event_def.item_name}")
                                 continue

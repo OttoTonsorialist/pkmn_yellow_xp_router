@@ -173,6 +173,7 @@ class TrainerFightEditor(EventEditorBase):
     @ignore_updates
     def load_event(self, event_def):
         self._cur_trainer = event_def.trainer_def.trainer_name
+        self._second_trainer = event_def.trainer_def.second_trainer_name
         try:
             pay_day_val = int(event_def.trainer_def.pay_day_amount)
         except Exception:
@@ -292,7 +293,15 @@ class TrainerFightEditor(EventEditorBase):
             pay_day_amount = int(self._pay_day_value.get())
         except Exception:
             pay_day_amount = 0
-        return EventDefinition(trainer_def=TrainerEventDefinition(self._cur_trainer, exp_split=exp_split, pay_day_amount=pay_day_amount, mon_order=mon_order))
+        return EventDefinition(
+            trainer_def=TrainerEventDefinition(
+                self._cur_trainer,
+                second_trainer_name=self._second_trainer,
+                exp_split=exp_split,
+                pay_day_amount=pay_day_amount,
+                mon_order=mon_order
+            )
+        )
     
     def enable(self):
         self._pay_day_value.enable()

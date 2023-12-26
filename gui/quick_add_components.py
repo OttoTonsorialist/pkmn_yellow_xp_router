@@ -25,6 +25,8 @@ class QuickTrainerAdd(ttk.LabelFrame):
         super().__init__(*args, **kwargs)
         self._controller = controller
         self._ignore_preview = False
+        self._multi_setup_mode = False
+        self._saved_partner = None
 
         self.padx = 5
         self.pady = 1
@@ -60,6 +62,11 @@ class QuickTrainerAdd(ttk.LabelFrame):
         self._rematches_label.grid(row=self._cur_row, column=0, columnspan=2, padx=self.padx, pady=self.pady, sticky=tk.EW)
         self._cur_row += 1
 
+        self._multi_partner_label = tk.Label(self._dropdowns, text="Multi Partner: ", justify=tk.LEFT)
+        self._multi_partner_name = tk.Label(self._dropdowns, justify=tk.RIGHT)
+        self._partner_label_row = self._cur_row
+        self._cur_row += 1
+
         self._buttons = ttk.Frame(self)
         self._buttons.pack(fill=tk.X, anchor=tk.CENTER, side=tk.BOTTOM)
         self._btn_width = 8
@@ -68,6 +75,8 @@ class QuickTrainerAdd(ttk.LabelFrame):
         self._add_trainer.grid(row=0, column=0, padx=self.padx, pady=self.pady + 1, sticky=tk.E)
         self._add_area = custom_components.SimpleButton(self._buttons, text="Add Area", command=self.add_area)
         self._add_area.grid(row=0, column=1, padx=self.padx, pady=self.pady + 1, sticky=tk.W)
+        self._add_multi = custom_components.SimpleButton(self._buttons, text="Multi Partner", command=self.toggle_multi)
+        self._add_multi.grid(row=0, column=2, padx=self.padx, pady=self.pady + 1, sticky=tk.W)
         self.bind(self._controller.register_event_selection(self), self.update_button_status)
         self.bind(self._controller.register_version_change(self), self.update_pkmn_version)
         self.bind(self._controller.register_route_change(self), self.route_change_callback)
@@ -77,23 +86,39 @@ class QuickTrainerAdd(ttk.LabelFrame):
         if not self._controller.can_insert_after_current_selection():
             self._add_trainer.disable()
             self._add_area.disable()
+            self._add_multi.disable()
             return
         
         selected_trainer = self._get_trainer_name()
         if selected_trainer == const.NO_TRAINERS:
             self._add_trainer.disable()
             self._add_area.disable()
+            if self._multi_setup_mode:
+                self._add_multi.enable()
+            else:
+                self._add_multi.disable()
         else:
             self._add_trainer.enable()
             loc_filter = self._trainers_by_loc.get()
-            if loc_filter == const.ALL_TRAINERS:
+            if loc_filter == const.ALL_TRAINERS or self._multi_setup_mode:
                 self._add_area.disable()
             else:
                 self._add_area.enable()
+            if current_gen_info().get_generation() >= 3 and current_gen_info().trainer_db().can_trainer_multi_battle(selected_trainer):
+                self._add_multi.enable()
+            else:
+                self._add_multi.disable()
     
     def update_pkmn_version(self, *args, **kwargs):
         self._trainers_by_loc.new_values([const.ALL_TRAINERS] + sorted(current_gen_info().trainer_db().get_all_locations()))
         self._trainers_by_class.new_values([const.ALL_TRAINERS] + sorted(current_gen_info().trainer_db().get_all_classes()))
+        self._set_multi_setup_mode(False)
+
+        if current_gen_info().get_generation() >= 3:
+            self._add_multi.grid(row=0, column=2, padx=self.padx, pady=self.pady + 1, sticky=tk.W)
+        else:
+            self._add_multi.grid_forget()
+
         self._trainer_name_callback()
     
     def route_change_callback(self, *args, **kwargs):
@@ -102,27 +127,29 @@ class QuickTrainerAdd(ttk.LabelFrame):
     @staticmethod
     def _custom_trainer_name(trainer_obj:Trainer):
         # custom name to inject exp per sec into name results
-        return f"({universal_utils.experience_per_second(current_gen_info().get_trainer_timing_info(), trainer_obj)}) {trainer_obj.name}"
-        return f"{trainer_obj.name} ({universal_utils.experience_per_second(current_gen_info().get_trainer_timing_info(), trainer_obj)})"
+        return f"({universal_utils.experience_per_second(current_gen_info().get_trainer_timing_info(), trainer_obj.pkmn)}) {trainer_obj.name}"
     
     def _get_trainer_name(self):
         # extract raw trainer name from value in list that has exp per sec
         # basically undoing the function above
         name_with_exp_per_sec = self._trainer_names.get()
         return name_with_exp_per_sec[name_with_exp_per_sec.find(')') + 1:].strip()
-        return name_with_exp_per_sec[:name_with_exp_per_sec.rfind('(')].strip()
 
     def trainer_filter_callback(self, *args, ignore_trainer_preview=False, **kwargs):
         loc_filter = self._trainers_by_loc.get()
         class_filter = self._trainers_by_class.get()
 
         self._ignore_preview = ignore_trainer_preview
+        defeated = self._controller.get_defeated_trainers()
+        if self._saved_partner:
+            defeated = defeated.union(set([self._saved_partner]))
         valid_trainers = current_gen_info().trainer_db().get_valid_trainers(
             trainer_class=class_filter,
             trainer_loc=loc_filter,
-            defeated_trainers=self._controller.get_defeated_trainers(),
+            defeated_trainers=defeated,
             show_rematches=self._rematches_label.is_checked(),
-            custom_name_fn=self._custom_trainer_name
+            custom_name_fn=self._custom_trainer_name,
+            multi_only=self._multi_setup_mode
         )
         if not valid_trainers:
             valid_trainers.append(const.NO_TRAINERS)
@@ -141,10 +168,18 @@ class QuickTrainerAdd(ttk.LabelFrame):
             self._controller.set_preview_trainer(selected_trainer)
     
     def add_trainer(self, *args, **kwargs):
-        self._controller.new_event(
-            EventDefinition(trainer_def=TrainerEventDefinition(self._get_trainer_name())),
-            insert_after=self._controller.get_single_selected_event_id()
-        )
+        if self._multi_setup_mode:
+            temp = EventDefinition(trainer_def=TrainerEventDefinition(self._saved_partner,second_trainer_name=self._get_trainer_name()))
+            temp.trainer_def.exp_split = [2 for _ in range(len(temp.get_pokemon_list()))]
+
+            self._controller.new_event(temp, insert_after=self._controller.get_single_selected_event_id())
+            self.toggle_multi()
+        else:
+            temp = EventDefinition(trainer_def=TrainerEventDefinition(self._get_trainer_name()))
+            if current_gen_info().trainer_db().get_trainer(self._get_trainer_name()).double_battle:
+                temp.trainer_def.exp_split = [2 for _ in range(len(temp.get_pokemon_list()))]
+
+            self._controller.new_event(temp, insert_after=self._controller.get_single_selected_event_id())
     
     def add_area(self, *args, **kwargs):
         insert_after = self._controller.get_single_selected_event_id()
@@ -156,6 +191,42 @@ class QuickTrainerAdd(ttk.LabelFrame):
             self._rematches_label.is_checked(),
             insert_after
         )
+
+    def toggle_multi(self, *args, **kwargs):
+        self._set_multi_setup_mode(not self._multi_setup_mode)
+        self.trainer_filter_callback(ignore_trainer_preview=(not self._multi_setup_mode))
+        self.update_button_status()
+    
+    def _set_multi_setup_mode(self, new_val):
+        if new_val:
+            selected_trainer = self._get_trainer_name()
+            if selected_trainer == const.NO_TRAINERS:
+                return
+            # should be impossible, but an extra sanity check never hurt anyone
+            if not current_gen_info().trainer_db().can_trainer_multi_battle(selected_trainer):
+                return
+
+            self._saved_partner = selected_trainer
+            self._multi_setup_mode = True
+            self._add_multi.configure(text="Cancel Multi")
+            self._add_trainer.configure(text="Add Multi")
+            self.configure(text="Select Partner")
+            self._multi_partner_label.grid(row=self._partner_label_row, column=0, padx=self.padx, pady=self.pady, sticky=tk.W)
+            self._multi_partner_name.configure(text=f"{self._saved_partner}")
+            self._multi_partner_name.grid(row=self._partner_label_row, column=1, padx=self.padx, pady=self.pady, sticky=tk.E)
+
+            trainer_obj = current_gen_info().trainer_db().get_trainer(selected_trainer)
+            self._trainers_by_loc.set(trainer_obj.location)
+            self._trainers_by_loc.disable()
+        else:
+            self._multi_setup_mode = False
+            self._saved_partner = None
+            self._add_multi.configure(text="Multi Partner")
+            self._add_trainer.configure(text="Add Trainer")
+            self.configure(text="Trainers")
+            self._multi_partner_label.grid_forget()
+            self._multi_partner_name.grid_forget()
+            self._trainers_by_loc.enable()
 
 
 class QuickWildPkmn(ttk.LabelFrame):
@@ -565,7 +636,7 @@ class QuickMiscEvents(ttk.LabelFrame):
         self._uninitialized = True
 
         self.padx = 5
-        self.pady = 1
+        self.pady = 2
         self.option_menu_width = 15
 
         self._buttons = ttk.Frame(self)

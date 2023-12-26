@@ -262,7 +262,7 @@ class EventDetails(ttk.Frame):
                 new_event = self.current_event_editor.get_event()
             
             if new_event.get_event_type() == const.TASK_TRAINER_BATTLE:
-                new_trainer_def = self._battle_summary_controller.get_trainer_definition()
+                new_trainer_def = self._battle_summary_controller.get_partial_trainer_definition()
                 if new_trainer_def is None:
                     logger.error(f"Expected to get updated trainer def from battle summary controller, but got None instead")
                 else:
