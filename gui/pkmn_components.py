@@ -515,7 +515,7 @@ class StatColumn(ttk.Frame):
             return
         
         self._header.pack()
-        self._header.config(text=header)
+        self._header.configure(text=header)
     
     def set_labels(self, label_text_iterable):
         for idx, cur_label_text in enumerate(label_text_iterable):
@@ -555,16 +555,28 @@ class StatExpViewer(ttk.Frame):
         self._total_stat_xp_column: StatColumn = None
         self._state = None
         self._stat_labels: List[str] = [] 
+        self._cached_gen = None
         self._config_for_gen()
 
     def _config_for_gen(self) -> Tuple[List[str]]:
-        if current_gen_info().get_generation() >= 2:
+        cur_gen = current_gen_info().get_generation()
+        if cur_gen == self._cached_gen:
+            return
+
+        self._cached_gen = cur_gen
+        if cur_gen >= 2:
             new_labels = ["HP:", "Attack:", "Defense:", "Spc Atk:", "Spc Def:", "Speed:"]
         else:
             new_labels =["HP:", "Attack:", "Defense:", "Special:", "Speed:"]
 
-        if len(new_labels) == len(self._stat_labels):
-            return
+        if cur_gen >= 3:
+            gain_header = "Net Stats\nFrom EVs"
+            realized_header = "Realized\nEVs"
+            total_header = "Total\nEVs"
+        else:
+            gain_header = "Net Stats\nFrom StatExp"
+            realized_header = "Realized\nStatExp"
+            total_header = "Total\nStatExp"
         
         self._stat_labels = new_labels
         
@@ -572,21 +584,21 @@ class StatExpViewer(ttk.Frame):
             self._net_gain_column.grid_forget()
         self._net_gain_column = StatColumn(self, num_rows=len(self._stat_labels), val_width=3, style_prefix="Header")
         self._net_gain_column.set_labels(self._stat_labels)
-        self._net_gain_column.set_header("Net Stats\nFrom StatExp")
+        self._net_gain_column.set_header(gain_header)
         self._net_gain_column.grid(row=0, column=0)
 
         if self._realized_stat_xp_column is not None:
             self._realized_stat_xp_column.grid_forget()
         self._realized_stat_xp_column = StatColumn(self, num_rows=len(self._stat_labels), val_width=5, style_prefix="Secondary")
         self._realized_stat_xp_column.set_labels(self._stat_labels)
-        self._realized_stat_xp_column.set_header("Realized\nStatExp")
+        self._realized_stat_xp_column.set_header(realized_header)
         self._realized_stat_xp_column.grid(row=0, column=1)
 
         if self._total_stat_xp_column is not None:
             self._total_stat_xp_column.grid_forget()
         self._total_stat_xp_column = StatColumn(self, num_rows=len(self._stat_labels), val_width=5)
         self._total_stat_xp_column.set_labels(self._stat_labels)
-        self._total_stat_xp_column.set_header("Total\nStatExp")
+        self._total_stat_xp_column.set_header(total_header)
         self._total_stat_xp_column.grid(row=0, column=2)
 
     def _vals_from_stat_block(self, stat_block:universal_data_objects.StatBlock):
