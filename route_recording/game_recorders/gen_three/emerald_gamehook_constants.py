@@ -58,7 +58,7 @@ class Gen3GameHookConstants:
         self.KEY_BATTLE_FLAG = "battle.turnInfo.type.is_battle"
         self.KEY_TRAINER_BATTLE_FLAG = "battle.turnInfo.type.trainer"
         self.KEY_DOUBLE_BATTLE_FLAG = "battle.turnInfo.type.double"
-        self.KEY_MULTI_BATTLE_FLAG = "battle.turnInfo.type.multi"
+        self.KEY_TWO_OPPONENTS_BATTLE_FLAG = "battle.turnInfo.type.two_opponents"
         self.KEY_BATTLE_OUTCOME = "battle.turnInfo.battleOutcome"
         self.KEY_BATTLE_PLAYER_MON_PARTY_POS = "battle.player.activePokemon.partyPos"
         self.KEY_BATTLE_PLAYER_MON_HP = "battle.player.activePokemon.stats.hp"
@@ -122,7 +122,7 @@ class Gen3GameHookConstants:
             self.KEY_BATTLE_FLAG,
             self.KEY_TRAINER_BATTLE_FLAG,
             self.KEY_DOUBLE_BATTLE_FLAG,
-            self.KEY_MULTI_BATTLE_FLAG,
+            self.KEY_TWO_OPPONENTS_BATTLE_FLAG,
             self.KEY_BATTLE_OUTCOME,
             self.KEY_BATTLE_TRAINER_A_NUMBER,
             self.KEY_BATTLE_TRAINER_B_NUMBER,

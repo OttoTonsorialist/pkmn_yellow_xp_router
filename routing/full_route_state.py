@@ -4,6 +4,7 @@ import pkmn.universal_utils
 import pkmn.universal_data_objects
 import pkmn.gen_factory
 from routing.state_objects import Inventory, SoloPokemon
+from copy import copy
 
 from pkmn.gen_factory import current_gen_info
 
@@ -55,7 +56,7 @@ def _defeat_pkmn(cur_pkmn:SoloPokemon, enemy_pkmn: pkmn.universal_data_objects.E
         realized_stat_xp=cur_pkmn.realized_stat_xp,
         unrealized_stat_xp=cur_pkmn.unrealized_stat_xp,
         gained_xp=gained_xp,
-        gained_stat_xp=pkmn.gen_factory.current_gen_info().get_stat_xp_yield(enemy_pkmn.name, exp_split),
+        gained_stat_xp=pkmn.gen_factory.current_gen_info().get_stat_xp_yield(enemy_pkmn.name, exp_split, cur_pkmn.held_item),
         held_item=cur_pkmn.held_item
     )
 
@@ -109,35 +110,33 @@ def _take_vitamin(cur_pkmn:SoloPokemon, vit_name, badges, force=False):
     # so any stat XP over the hard cap won't be properly ignored until it's realized
     # however, this bug is both minor (won't ever be reported in the actual pkmn stats) and rare (only when nearing stat XP cap, which is uncommon in solo playthroughs) 
     # intentionally ignoring for now
-    cur_stat_xp_total = cur_pkmn.realized_stat_xp.add(cur_pkmn.unrealized_stat_xp)
-
     vit_cap = pkmn.gen_factory.current_gen_info().get_vitamin_cap()
     vit_boost = pkmn.gen_factory.current_gen_info().get_vitamin_amount()
 
-    final_realized_stat_xp = cur_pkmn.unrealized_stat_xp
+    final_realized_stat_xp = copy(cur_pkmn.unrealized_stat_xp)
     for boosted_stat in pkmn.gen_factory.current_gen_info().get_stats_boosted_by_vitamin(vit_name):
         if boosted_stat == const.HP:
-            if cur_stat_xp_total.hp >= vit_cap and not force:
+            if cur_pkmn.unrealized_stat_xp.hp >= vit_cap and not force:
                 raise ValueError(f"Ineffective Vitamin: {vit_name} (Already above vitamin cap)")
             final_realized_stat_xp = final_realized_stat_xp.add(pkmn.gen_factory.current_gen_info().make_stat_block(vit_boost, 0, 0, 0, 0, 0, is_stat_xp=True))
         elif boosted_stat == const.ATK:
-            if cur_stat_xp_total.attack >= vit_cap and not force:
+            if cur_pkmn.unrealized_stat_xp.attack >= vit_cap and not force:
                 raise ValueError(f"Ineffective Vitamin: {vit_name} (Already above vitamin cap)")
             final_realized_stat_xp = final_realized_stat_xp.add(pkmn.gen_factory.current_gen_info().make_stat_block(0, vit_boost, 0, 0, 0, 0, is_stat_xp=True))
         elif boosted_stat == const.DEF:
-            if cur_stat_xp_total.defense >= vit_cap and not force:
+            if cur_pkmn.unrealized_stat_xp.defense >= vit_cap and not force:
                 raise ValueError(f"Ineffective Vitamin: {vit_name} (Already above vitamin cap)")
             final_realized_stat_xp = final_realized_stat_xp.add(pkmn.gen_factory.current_gen_info().make_stat_block(0, 0, vit_boost, 0, 0, 0, is_stat_xp=True))
         elif boosted_stat == const.SPA:
-            if cur_stat_xp_total.special_attack >= vit_cap and not force:
+            if cur_pkmn.unrealized_stat_xp.special_attack >= vit_cap and not force:
                 raise ValueError(f"Ineffective Vitamin: {vit_name} (Already above vitamin cap)")
             final_realized_stat_xp = final_realized_stat_xp.add(pkmn.gen_factory.current_gen_info().make_stat_block(0, 0, 0, vit_boost, 0, 0, is_stat_xp=True))
         elif boosted_stat == const.SPD:
-            if cur_stat_xp_total.special_defense >= vit_cap and not force:
+            if cur_pkmn.unrealized_stat_xp.special_defense >= vit_cap and not force:
                 raise ValueError(f"Ineffective Vitamin: {vit_name} (Already above vitamin cap)")
             final_realized_stat_xp = final_realized_stat_xp.add(pkmn.gen_factory.current_gen_info().make_stat_block(0, 0, 0, 0, vit_boost, 0, is_stat_xp=True))
         elif boosted_stat == const.SPE:
-            if cur_stat_xp_total.speed >= vit_cap and not force:
+            if cur_pkmn.unrealized_stat_xp.speed >= vit_cap and not force:
                 raise ValueError(f"Ineffective Vitamin: {vit_name} (Already above vitamin cap)")
             final_realized_stat_xp = final_realized_stat_xp.add(pkmn.gen_factory.current_gen_info().make_stat_block(0, 0, 0, 0, 0, vit_boost, is_stat_xp=True))
         else:
@@ -153,7 +152,7 @@ def _take_vitamin(cur_pkmn:SoloPokemon, vit_name, badges, force=False):
         cur_pkmn.nature,
         move_list=cur_pkmn.move_list,
         cur_xp=cur_pkmn.cur_xp,
-        realized_stat_xp=cur_pkmn.realized_stat_xp.add(final_realized_stat_xp),
+        realized_stat_xp=final_realized_stat_xp,
         held_item=cur_pkmn.held_item
     )
 

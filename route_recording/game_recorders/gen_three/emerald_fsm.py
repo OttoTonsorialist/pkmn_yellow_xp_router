@@ -251,7 +251,9 @@ class Machine:
         self._cached_items = new_cache
 
         if not generate_events:
-            return
+            return False
+        
+        expected_event_generated = False
         
         compared = set()
         gained_items = {}
@@ -281,6 +283,10 @@ class Machine:
             for cur_gained_item, cur_gain_num in gained_items.items():
                 app_item_name = self.gh_converter.item_name_convert(cur_gained_item)
                 logger.info(f"trying to gain item: {app_item_name}, converted from {cur_gained_item}")
+                if cur_gain_num > 100:
+                    logger.error(f"#" * 50)
+                    logger.error(f"Ignoring attempt to gain the above item, due to excessive number. Assuming this is happening due to DMA issues")
+                    continue
                 self._queue_new_event(
                     EventDefinition(
                         item_event_def=InventoryEventDefinition(app_item_name, cur_gain_num, True, purchase_expected)
@@ -290,28 +296,36 @@ class Machine:
         if len(lost_items) > 0:
             if purchase_expected:
                 logger.error(f"Lost the following items when expecting to be gain items to purchasing... {lost_items}")
+        if len(lost_items) > 1:
             if held_item_changed:
                 logger.error(f"Lost multiple items when trying to change the held item... {lost_items}")
 
         for cur_lost_item, cur_lost_num in lost_items.items():
             app_item_name = self.gh_converter.item_name_convert(cur_lost_item)
             logger.info(f"trying to lose item: {app_item_name}, converted from {cur_lost_item}")
+            if cur_lost_num > 100:
+                logger.error(f"#" * 50)
+                logger.error(f"Ignoring attempt to gain the above item, due to excessive number. Assuming this is happening due to DMA issues")
+                continue
             if vitamin_flag and self.gh_converter.is_game_vitamin(cur_lost_item):
                 if sale_expected:
                     logger.error("Expected sale, but looks like vitamins were used too???")
                 self._queue_new_event(
                     EventDefinition(vitamin=VitaminEventDefinition(app_item_name, cur_lost_num))
                 )
+                expected_event_generated = True
             elif candy_flag and self.gh_converter.is_game_rare_candy(cur_lost_item):
                 if sale_expected:
                     logger.error("Expected sale, but looks like rare candy was used too???")
                 self._queue_new_event(
                     EventDefinition(rare_candy=RareCandyEventDefinition(cur_lost_num))
                 )
+                expected_event_generated = True
             elif tm_flag and self.gh_converter.is_game_tm(cur_lost_item):
                 if sale_expected:
                     logger.error("Expected sale, but looks like TM was used too???")
                 self._move_cache_update(tm_name=app_item_name)
+                expected_event_generated = True
             elif held_item_changed:
                 if cur_lost_num > 1:
                     logger.error(f"Expected to lose multiple items while telling mon to hold item: {app_item_name} x{cur_lost_num}")
@@ -320,12 +334,15 @@ class Machine:
                         hold_item=HoldItemEventDefinition(app_item_name)
                     )
                 )
+                expected_event_generated = True
             else:
                 self._queue_new_event(
                     EventDefinition(
                         item_event_def=InventoryEventDefinition(app_item_name, cur_lost_num, False, sale_expected)
                     )
                 )
+
+        return expected_event_generated
     
     def register(self, state:State):
         if state.state_type in self._registered_states:

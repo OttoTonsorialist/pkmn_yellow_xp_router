@@ -129,6 +129,6 @@ class CurrentGen:
     def get_trainer_timing_info(self) -> universal_data_objects.TrainerTimingStats:
         raise NotImplementedError()
     
-    def get_stat_xp_yield(self, pkmn_name:str, exp_split:int) -> universal_data_objects.StatBlock:
+    def get_stat_xp_yield(self, pkmn_name:str, exp_split:int, held_item:str) -> universal_data_objects.StatBlock:
         raise NotImplementedError()
 

@@ -223,7 +223,7 @@ class BattleState(WatchForResetState):
         if self.is_trainer_battle:
             self._trainer_name = self.machine._gamehook_client.get(gh_gen_three_const.KEY_BATTLE_TRAINER_A_NUMBER).value
             self._second_trainer_name = self.machine._gamehook_client.get(gh_gen_three_const.KEY_BATTLE_TRAINER_B_NUMBER).value
-            if self._second_trainer_name is None or not self._is_double_battle:
+            if self._second_trainer_name is None or not self.machine._gamehook_client.get(gh_gen_three_const.KEY_TWO_OPPONENTS_BATTLE_FLAG).value:
                 self._second_trainer_name = ""
 
             num_enemy_pokemon = self._get_num_enemy_trainer_pokemon()
@@ -532,21 +532,26 @@ class InventoryChangeState(WatchForResetState):
 
 class UseRareCandyState(WatchForResetState):
     BASE_DELAY = 2
+    ERROR_DELAY = 5
     def __init__(self, machine: Machine):
         super().__init__(StateType.RARE_CANDY, machine)
         self._move_learned = False
         self._item_removal_detected = False
         self._cur_delay = self.BASE_DELAY
+        self._error_delay = self.ERROR_DELAY
 
     def _on_enter(self, prev_state: State):
         self._move_learned = False
         self._item_removal_detected = False
         self._cur_delay = self.BASE_DELAY
+        self._error_delay = self.ERROR_DELAY
     
     def _on_exit(self, next_state: State):
         if next_state.state_type != StateType.RESETTING:
-            self.machine._item_cache_update(candy_flag=True)
-            self.machine._solo_mon_levelup(self.machine._gamehook_client.get(gh_gen_three_const.KEY_PLAYER_MON_LEVEL).value)
+            if self._error_delay <= 0:
+                logger.error(f"Rare candy event not exited properly. Still attempting to apply level up")
+            if self.machine._item_cache_update(candy_flag=True):
+                self.machine._solo_mon_levelup(self.machine._gamehook_client.get(gh_gen_three_const.KEY_PLAYER_MON_LEVEL).value)
             if self._move_learned:
                 self.machine._move_cache_update(levelup_source=True)
     
@@ -626,17 +631,22 @@ class MoveDeleteState(WatchForResetState):
 
 class UseVitaminState(WatchForResetState):
     BASE_DELAY = 2
+    ERROR_DELAY = 5
     def __init__(self, machine: Machine):
         super().__init__(StateType.VITAMIN, machine)
         self._item_removal_detected = False
         self._cur_delay = self.BASE_DELAY
+        self._error_delay = self.ERROR_DELAY
 
     def _on_enter(self, prev_state: State):
         self._item_removal_detected = False
         self._cur_delay = self.BASE_DELAY
+        self._error_delay = self.ERROR_DELAY
     
     def _on_exit(self, next_state: State):
         if next_state.state_type != StateType.RESETTING:
+            if self._error_delay <= 0:
+                logger.error(f"Vitamin state hit error timeout. Will attempt to see if any vitamins were used anyways")
             self.machine._item_cache_update(vitamin_flag=True)
     
     @auto_reset
@@ -654,6 +664,11 @@ class UseVitaminState(WatchForResetState):
                     return StateType.OVERWORLD
                 else:
                     self._cur_delay -= 1
+            
+            if self._error_delay > 0:
+                self._error_delay -= 1
+            else:
+                return StateType.OVERWORLD
 
         return self.state_type
 
@@ -665,6 +680,7 @@ class OverworldState(WatchForResetState):
         self._waiting_for_registration = False
         self._register_delay = self.BASE_DELAY
         self._propagate_held_item_flag = False
+        self._validation_delay = 5
     
     def _on_enter(self, prev_state: State):
         self.machine._money_cache_update()
@@ -683,12 +699,53 @@ class OverworldState(WatchForResetState):
         else:
             self._waiting_for_solo_mon_in_slot_1 = False
             self._wrong_mon_in_slot_1 = False
+        
+        self._validation_delay = 5
     
     def _on_exit(self, next_state: State):
         if isinstance(next_state, InventoryChangeState):
             next_state.external_held_item_flag = self._propagate_held_item_flag
         
         self._propagate_held_item_flag = False
+    
+    def _validate(self):
+        logger.info("*" * 50)
+        logger.info("Attempting validation!")
+        valid = True
+        cur_state = self.machine._controller._controller.get_final_state()
+        live_xp = self.machine._gamehook_client.get(gh_gen_three_const.KEY_PLAYER_MON_EXPPOINTS).value
+        if live_xp != cur_state.solo_pkmn.cur_xp:
+            logger.error(f"VALIDATION FAILED for xp: {cur_state.solo_pkmn.cur_xp} vs {live_xp}")
+            valid = False
+        cur_total_evs = cur_state.solo_pkmn.unrealized_stat_xp.add(cur_state.solo_pkmn.realized_stat_xp)
+        hp_ev = self.machine._gamehook_client.get(gh_gen_three_const.KEY_PLAYER_MON_STAT_EXP_HP).value
+        if hp_ev != cur_total_evs.hp:
+            logger.error(f"VALIDATION FAILED for HP EV: {cur_total_evs.hp} vs {hp_ev}")
+            valid = False
+        attack_ev = self.machine._gamehook_client.get(gh_gen_three_const.KEY_PLAYER_MON_STAT_EXP_ATTACK).value
+        if attack_ev != cur_total_evs.attack:
+            logger.error(f"VALIDATION FAILED for attack EV: {cur_total_evs.attack} vs {attack_ev}")
+            valid = False
+        defense_ev = self.machine._gamehook_client.get(gh_gen_three_const.KEY_PLAYER_MON_STAT_EXP_DEFENSE).value
+        if defense_ev != cur_total_evs.defense:
+            logger.error(f"VALIDATION FAILED for defense EV: {cur_total_evs.defense} vs {defense_ev}")
+            valid = False
+        special_attack_ev = self.machine._gamehook_client.get(gh_gen_three_const.KEY_PLAYER_MON_STAT_EXP_SPECIAL_ATTACK).value
+        if special_attack_ev != cur_total_evs.special_attack:
+            logger.error(f"VALIDATION FAILED for special attack EV: {cur_total_evs.special_attack} vs {special_attack_ev}")
+            valid = False
+        special_defense_ev = self.machine._gamehook_client.get(gh_gen_three_const.KEY_PLAYER_MON_STAT_EXP_SPECIAL_DEFENSE).value
+        if special_defense_ev != cur_total_evs.special_defense:
+            logger.error(f"VALIDATION FAILED for special defense EV: {cur_total_evs.special_attack} vs {special_defense_ev}")
+            valid = False
+        speed_ev = self.machine._gamehook_client.get(gh_gen_three_const.KEY_PLAYER_MON_STAT_EXP_SPEED).value
+        if speed_ev != cur_total_evs.speed:
+            logger.error(f"VALIDATION FAILED for speed EV: {cur_total_evs.speed} vs {speed_ev}")
+            valid = False
+        
+        if valid:
+            logger.info("VALIDATION SUCCESS!!!")
+        logger.info("*" * 50)
     
     @auto_reset
     def transition(self, new_prop:GameHookProperty, prev_prop:GameHookProperty) -> StateType:
@@ -713,6 +770,7 @@ class OverworldState(WatchForResetState):
                 self.machine._gamehook_client.get(gh_gen_three_const.KEY_BATTLE_FLAG).value and
                 self.machine._gamehook_client.get(gh_gen_three_const.KEY_BATTLE_OUTCOME).value is None
             ):
+                logger.info(f"tranitioning into battle pre-emptively")
                 return StateType.BATTLE
             return self.state_type
 
@@ -793,6 +851,12 @@ class OverworldState(WatchForResetState):
                     self._waiting_for_registration = False
                     self.machine.register_solo_mon(self.machine._gamehook_client.get(gh_gen_three_const.KEY_PLAYER_MON_SPECIES).value)
                 self._register_delay -= 1
+            
+            if self._validation_delay > 0:
+                self._validation_delay -= 1
+            elif self._validation_delay == 0:
+                self._validate()
+                self._validation_delay -= 1
 
             if (
                 self.machine._gamehook_client.get(gh_gen_three_const.KEY_BATTLE_FLAG).value and

@@ -230,9 +230,22 @@ class GenThreeStatBlock(universal_data_objects.StatBlock):
         stat_dv:GenThreeStatBlock,
         stat_xp:GenThreeStatBlock,
         badges:GenThreeBadgeList,
-        nature:Nature
+        nature:Nature,
+        held_item:str
     ) -> GenThreeStatBlock:
         # assume self is base stats, level is target level, stat_xp is StatBlock of stat_xp vals, badges is a BadgeList
+        speed_stat = calc_stat(
+            self.speed,
+            level,
+            stat_dv.speed,
+            stat_xp.speed,
+            is_badge_boosted=badges.is_speed_boosted(),
+            nature_raised=nature.is_stat_raised(const.SPEED),
+            nature_lowered=nature.is_stat_lowered(const.SPEED),
+        )
+        if held_item == const.MACHO_BRACE_ITEM_NAME:
+            speed_stat = math.floor(speed_stat / 2)
+
         return GenThreeStatBlock(
             calc_stat(self.hp, level, stat_dv.hp, stat_xp.hp, is_hp=True),
             calc_stat(
@@ -271,15 +284,7 @@ class GenThreeStatBlock(universal_data_objects.StatBlock):
                 nature_raised=nature.is_stat_raised(const.SPECIAL_DEFENSE),
                 nature_lowered=nature.is_stat_lowered(const.SPECIAL_DEFENSE),
             ),
-            calc_stat(
-                self.speed,
-                level,
-                stat_dv.speed,
-                stat_xp.speed,
-                is_badge_boosted=badges.is_speed_boosted(),
-                nature_raised=nature.is_stat_raised(const.SPEED),
-                nature_lowered=nature.is_stat_lowered(const.SPEED),
-            ),
+            speed_stat,
         )
     
     def calc_battle_stats(
@@ -290,6 +295,7 @@ class GenThreeStatBlock(universal_data_objects.StatBlock):
         stage_modifiers:universal_data_objects.StageModifiers,
         badges:GenThreeBadgeList,
         nature:Nature,
+        held_item:str,
         is_crit=False
     ) -> GenThreeStatBlock:
         if is_crit:
@@ -342,6 +348,7 @@ class GenThreeStatBlock(universal_data_objects.StatBlock):
             is_badge_boosted=(badges is not None and badges.is_speed_boosted()),
             nature_raised=nature.is_stat_raised(const.SPEED),
             nature_lowered=nature.is_stat_lowered(const.SPEED),
+            macho_brace=held_item == const.MACHO_BRACE_ITEM_NAME
         )
 
         result.special_attack = calc_battle_stat(
@@ -385,7 +392,7 @@ class GenThreeStatBlock(universal_data_objects.StatBlock):
         addable_defense, cur_ev_total = self._get_actual_addable_evs(self.defense, other.defense, cur_ev_total)
         addable_speed, cur_ev_total = self._get_actual_addable_evs(self.speed, other.speed, cur_ev_total)
         addable_special_attack, cur_ev_total = self._get_actual_addable_evs(self.special_attack, other.special_attack, cur_ev_total)
-        addable_special_defense, _ = self._get_actual_addable_evs(self.special_defense, other.special_defense, cur_ev_total)
+        addable_special_defense, cur_ev_total = self._get_actual_addable_evs(self.special_defense, other.special_defense, cur_ev_total)
 
         return GenThreeStatBlock(
             self.hp + addable_hp,
@@ -407,13 +414,16 @@ class GenThreeStatBlock(universal_data_objects.StatBlock):
         return actual_new_ev, (cur_total_ev + actual_new_ev)
 
 
-def calc_battle_stat(base_val, level, dv, stat_xp, stage, is_badge_boosted=False, nature_raised=False, nature_lowered=False):
+def calc_battle_stat(base_val, level, dv, stat_xp, stage, is_badge_boosted=False, nature_raised=False, nature_lowered=False, macho_brace=False):
     """
     Fully recalculates a stat that has been modified by a stage modifier. This is the
     primary function that should be used when a pokemon's stat's stage has changed, 
     and needs to be recalculated
     """
     result = calc_unboosted_stat(base_val, level, dv, stat_xp, nature_raised=nature_raised, nature_lowered=nature_lowered)
+    if macho_brace:
+        result = math.floor(result / 2)
+
     if is_badge_boosted:
         result = badge_boost_single_stat(result)
 

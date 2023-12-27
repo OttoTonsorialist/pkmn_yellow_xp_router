@@ -178,8 +178,7 @@ class SoloPokemon:
         self.realized_stat_xp = realized_stat_xp
 
         if unrealized_stat_xp is None:
-            unrealized_stat_xp = copy(self._empty_stat_block)
-            unrealized_stat_xp._is_stat_xp = True
+            unrealized_stat_xp = copy(self.realized_stat_xp)
         self.unrealized_stat_xp = unrealized_stat_xp
 
         if gained_stat_xp is None:
@@ -213,8 +212,8 @@ class SoloPokemon:
             else:
                 # gained xp DID cause a level up
                 # realize ALL stat XP into new stats, reset unrealized stat XP, and then update level metadata
-                self.realized_stat_xp = self.realized_stat_xp.add(self.unrealized_stat_xp).add(gained_stat_xp)
-                self.unrealized_stat_xp = self._empty_stat_block
+                self.unrealized_stat_xp = self.unrealized_stat_xp.add(gained_stat_xp)
+                self.realized_stat_xp = copy(self.unrealized_stat_xp)
                 self.xp_to_next_level = level_info[1]
                 if const.DEBUG_MODE:
                     logger.info(f"Now level {self.cur_level}, {self.xp_to_next_level} TNL")
@@ -228,7 +227,7 @@ class SoloPokemon:
         else:
             last_level_xp = pkmn.universal_utils.level_lookups[self.species_def.growth_rate].get_xp_for_level(self.cur_level)
             self.percent_xp_to_next_level = f"{int((self.xp_to_next_level / (self.cur_xp + self.xp_to_next_level - last_level_xp)) * 100)} %"
-        self.cur_stats = self.species_def.stats.calc_level_stats(self.cur_level, self.dvs, self.realized_stat_xp, badges, nature)
+        self.cur_stats = self.species_def.stats.calc_level_stats(self.cur_level, self.dvs, self.realized_stat_xp, badges, nature, self.held_item)
     
     def __eq__(self, other):
         if not isinstance(other, SoloPokemon):
@@ -263,7 +262,8 @@ class SoloPokemon:
             self.dvs,
             self._empty_stat_block,
             badges,
-            self.nature
+            self.nature,
+            self.held_item
         )
 
         return self.cur_stats.subtract(temp)
@@ -273,7 +273,7 @@ class SoloPokemon:
         if stage_modifiers is None:
             stage_modifiers = pkmn.universal_data_objects.StageModifiers()
         
-        battle_stats = self.species_def.stats.calc_battle_stats(self.cur_level, self.dvs, self.realized_stat_xp, stage_modifiers, badges, self.nature)
+        battle_stats = self.species_def.stats.calc_battle_stats(self.cur_level, self.dvs, self.realized_stat_xp, stage_modifiers, badges, self.nature, self.held_item)
 
         return pkmn.universal_data_objects.EnemyPkmn(
             self.name,

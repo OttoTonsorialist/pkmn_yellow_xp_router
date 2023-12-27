@@ -262,7 +262,7 @@ class GenOne(CurrentGen):
     def get_trainer_timing_info(self) -> universal_data_objects.TrainerTimingStats:
         return self._trainer_timing_info
     
-    def get_stat_xp_yield(self, pkmn_name:str, exp_split:int) -> universal_data_objects.StatBlock:
+    def get_stat_xp_yield(self, pkmn_name:str, exp_split:int, held_item:str) -> universal_data_objects.StatBlock:
         stat_xp_yield = self.pkmn_db().get_pkmn(pkmn_name).stat_xp_yield
         return GenOneStatBlock(
             math.floor(stat_xp_yield.hp / exp_split),

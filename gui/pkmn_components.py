@@ -298,7 +298,8 @@ class PkmnViewer(ttk.Frame):
                     pkmn.dvs,
                     pkmn.stat_xp,
                     current_gen_info().make_badge_list(),
-                    pkmn.nature
+                    pkmn.nature,
+                    ""
                 ).special_attack
                 if not pkmn.cur_stats.should_ignore_spd_badge_boost(unboosted_spa):
                     spd_val = "*" + spd_val
@@ -623,6 +624,6 @@ class StatExpViewer(ttk.Frame):
         )
         self._total_stat_xp_column.set_values(
             self._vals_from_stat_block(
-                self._state.solo_pkmn.realized_stat_xp.add(self._state.solo_pkmn.unrealized_stat_xp)
+                self._state.solo_pkmn.unrealized_stat_xp
             )
         )

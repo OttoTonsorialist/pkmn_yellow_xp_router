@@ -262,7 +262,7 @@ class StatBlock:
             self.speed - other.speed,
             is_stat_xp=self._is_stat_xp
         )
-    
+
     def __eq__(self, other):
         if not isinstance(other, StatBlock):
             return False
@@ -289,10 +289,10 @@ class StatBlock:
     def __repr__(self):
         return f"HP: {self.hp}, attack: {self.attack}, defense: {self.defense}, special attack: {self.special_attack}, special_defense: {self.special_defense}, speed: {self.speed}"
     
-    def calc_level_stats(self, level:int, dvs:StatBlock, stat_xp:StatBlock, badges:BadgeList, nature:Nature) -> StatBlock:
+    def calc_level_stats(self, level:int, dvs:StatBlock, stat_xp:StatBlock, badges:BadgeList, nature:Nature, held_item:str) -> StatBlock:
         raise NotImplementedError()
     
-    def calc_battle_stats(self, level:int, dvs:StatBlock, stat_xp:StatBlock, stage_modifiers:StageModifiers, badges:BadgeList, nature:Nature, is_crit=False) -> StatBlock:
+    def calc_battle_stats(self, level:int, dvs:StatBlock, stat_xp:StatBlock, stage_modifiers:StageModifiers, badges:BadgeList, nature:Nature, held_item:str, is_crit=False) -> StatBlock:
         raise NotImplementedError()
 
 
@@ -398,6 +398,7 @@ class EnemyPkmn:
             stages,
             self.badges,
             self.nature,
+            self.held_item,
             is_crit
         )
 

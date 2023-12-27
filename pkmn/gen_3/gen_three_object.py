@@ -268,7 +268,9 @@ class GenThree(CurrentGen):
     def get_trainer_timing_info(self) -> universal_data_objects.TrainerTimingStats:
         return self._trainer_timing_info
     
-    def get_stat_xp_yield(self, pkmn_name:str, exp_split:int) -> universal_data_objects.StatBlock:
+    def get_stat_xp_yield(self, pkmn_name:str, exp_split:int, held_item:str) -> universal_data_objects.StatBlock:
+        if held_item == const.MACHO_BRACE_ITEM_NAME:
+            return self.pkmn_db().get_pkmn(pkmn_name).stat_xp_yield.add(self.pkmn_db().get_pkmn(pkmn_name).stat_xp_yield)
         return self.pkmn_db().get_pkmn(pkmn_name).stat_xp_yield
     
     def _validate_special_types(self, supported_types):

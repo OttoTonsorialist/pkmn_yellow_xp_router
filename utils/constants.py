@@ -392,6 +392,7 @@ class Constants:
         self.HIDDEN_POWER_MOVE_NAME = "Hidden Power"
         self.SOLAR_BEAM_MOVE_NAME = "SolarBeam"
         self.AMULET_COIN_ITEM_NAME = "Amulet Coin"
+        self.MACHO_BRACE_ITEM_NAME = "Macho Brace"
 
         self.TARGETING_BOTH_ENEMIES = "target_both_enemies"
 
