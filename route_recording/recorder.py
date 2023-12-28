@@ -159,24 +159,21 @@ class RecorderController:
     def lost_trainer_battle(self, trainer_name):
         # If we initiate a trainer battle, lose to that trainer, and _don't_ reset
         # Need to remove the event representing that trainer fight
-        if trainer_name not in self._controller.get_defeated_trainers():
-            logger.error(f"{const.RECORDING_ERROR_FRAGMENT} Lost trainer battle to trainer {trainer_name}, but no matching trainer event was found to remove")
-        else:
-            last_obj = test_obj = self._controller.get_previous_event()
-            while not self.is_trainer_event(test_obj, trainer_name):
-                if test_obj is None:
-                    break
-                test_obj = self._controller.get_previous_event(test_obj.group_id)
-            
+        last_obj = test_obj = self._controller.get_previous_event()
+        while not self.is_trainer_event(test_obj, trainer_name):
             if test_obj is None:
-                msg = f"{const.RECORDING_ERROR_FRAGMENT} Could not find trainer event {trainer_name} to remove after losing to them"
-                logger.error(msg)
-                self._controller.new_event(routing.route_events.EventDefinition(notes=msg), dest_folder_name=self._active_folder_name)
-            else:
-                if test_obj != last_obj:
-                    logger.error(f"{const.RECORDING_ERROR_FRAGMENT} When removing trainer event {trainer_name}, it was not the last event... odd")
+                break
+            test_obj = self._controller.get_previous_event(test_obj.group_id)
+        
+        if test_obj is None:
+            msg = f"{const.RECORDING_ERROR_FRAGMENT} Could not find trainer event {trainer_name} to remove after losing to them"
+            logger.error(msg)
+            self._controller.new_event(routing.route_events.EventDefinition(notes=msg), dest_folder_name=self._active_folder_name)
+        else:
+            if test_obj != last_obj:
+                logger.error(f"{const.RECORDING_ERROR_FRAGMENT} When removing trainer event {trainer_name}, it was not the last event... odd")
 
-                self._controller.delete_events([test_obj.group_id])
+            self._controller.delete_events([test_obj.group_id])
 
     @skip_if_inactive
     def add_event(self, event_def:routing.route_events.EventDefinition):

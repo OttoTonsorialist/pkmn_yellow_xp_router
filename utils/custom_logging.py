@@ -18,3 +18,4 @@ def config_logging(base_log_dir):
     _logger.setLevel(logging.INFO)
     _logger.addHandler(file_handler)
     _logger.addHandler(stream_handler)
+    _logger.info(f"Logging configured to output to: {base_log_dir}")

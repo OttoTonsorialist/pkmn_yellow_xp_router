@@ -152,8 +152,8 @@ class GenThree(CurrentGen):
     def get_crit_rate(self, pkmn, move, custom_move_data):
         return pkmn_damage_calc.get_crit_rate(pkmn, move, custom_move_data)
     
-    def get_move_accuracy(self, pkmn, move, custom_move_data):
-        return pkmn_damage_calc.get_move_accuracy(pkmn, move, custom_move_data)
+    def get_move_accuracy(self, pkmn, move, custom_move_data, defending_pkmn, weather):
+        return pkmn_damage_calc.get_move_accuracy(pkmn, move, custom_move_data, defending_pkmn, weather, self._special_types)
 
     def calculate_damage(self,
         attacking_pkmn:universal_data_objects.EnemyPkmn,

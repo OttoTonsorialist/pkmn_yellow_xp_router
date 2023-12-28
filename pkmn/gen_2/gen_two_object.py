@@ -161,7 +161,7 @@ class GenTwo(CurrentGen):
     def get_crit_rate(self, pkmn, move, custom_move_data):
         return pkmn_damage_calc.get_crit_rate(pkmn, move)
     
-    def get_move_accuracy(self, pkmn, move, custom_move_data):
+    def get_move_accuracy(self, pkmn, move, custom_move_data, defending_pkmn, weather):
         return move.accuracy
 
     def calculate_damage(self,

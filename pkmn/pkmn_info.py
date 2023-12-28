@@ -68,7 +68,9 @@ class CurrentGen:
         self,
         pkmn:universal_data_objects.EnemyPkmn,
         move:universal_data_objects.Move,
-        custom_move_data:str
+        custom_move_data:str,
+        defending_pkmn:universal_data_objects.EnemyPkmn,
+        weather:str,
     ) -> int:
         raise NotImplementedError()
     

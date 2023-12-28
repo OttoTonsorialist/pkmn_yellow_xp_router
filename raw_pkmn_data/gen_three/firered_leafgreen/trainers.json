@@ -35811,6 +35811,7 @@
             "trainer_location": "PokemonLeague",
             "is_double_battle": false,
             "is_female_trainer": true,
+            "refightable": true,
             "money": 5400,
             "pokemon": [
                 {
@@ -35936,6 +35937,7 @@
             "trainer_location": "PokemonLeague",
             "is_double_battle": false,
             "is_female_trainer": false,
+            "refightable": true,
             "money": 5600,
             "pokemon": [
                 {
@@ -36061,6 +36063,7 @@
             "trainer_location": "PokemonLeague",
             "is_double_battle": false,
             "is_female_trainer": true,
+            "refightable": true,
             "money": 5800,
             "pokemon": [
                 {
@@ -36186,6 +36189,7 @@
             "trainer_location": "PokemonLeague",
             "is_double_battle": false,
             "is_female_trainer": false,
+            "refightable": true,
             "money": 6000,
             "pokemon": [
                 {
@@ -38594,6 +38598,7 @@
             "trainer_location": "PokemonLeague",
             "is_double_battle": false,
             "is_female_trainer": false,
+            "refightable": true,
             "money": 6300,
             "pokemon": [
                 {
@@ -38743,6 +38748,7 @@
             "trainer_location": "PokemonLeague",
             "is_double_battle": false,
             "is_female_trainer": false,
+            "refightable": true,
             "money": 6300,
             "pokemon": [
                 {
@@ -38892,6 +38898,7 @@
             "trainer_location": "PokemonLeague",
             "is_double_battle": false,
             "is_female_trainer": false,
+            "refightable": true,
             "money": 6300,
             "pokemon": [
                 {
@@ -42921,6 +42928,7 @@
             "trainer_location": "PokemonLeague",
             "is_double_battle": false,
             "is_female_trainer": false,
+            "refightable": true,
             "money": 6600,
             "pokemon": [
                 {
@@ -43046,6 +43054,7 @@
             "trainer_location": "PokemonLeague",
             "is_double_battle": false,
             "is_female_trainer": false,
+            "refightable": true,
             "money": 6800,
             "pokemon": [
                 {
@@ -43171,6 +43180,7 @@
             "trainer_location": "PokemonLeague",
             "is_double_battle": false,
             "is_female_trainer": false,
+            "refightable": true,
             "money": 7000,
             "pokemon": [
                 {
@@ -43296,6 +43306,7 @@
             "trainer_location": "PokemonLeague",
             "is_double_battle": false,
             "is_female_trainer": false,
+            "refightable": true,
             "money": 7200,
             "pokemon": [
                 {
@@ -43423,6 +43434,7 @@
             "trainer_location": "PokemonLeague",
             "is_double_battle": false,
             "is_female_trainer": false,
+            "refightable": true,
             "money": 7500,
             "pokemon": [
                 {
@@ -43572,6 +43584,7 @@
             "trainer_location": "PokemonLeague",
             "is_double_battle": false,
             "is_female_trainer": false,
+            "refightable": true,
             "money": 7500,
             "pokemon": [
                 {
@@ -43721,6 +43734,7 @@
             "trainer_location": "PokemonLeague",
             "is_double_battle": false,
             "is_female_trainer": false,
+            "refightable": true,
             "money": 7500,
             "pokemon": [
                 {

@@ -386,7 +386,7 @@ class BattleSummaryController:
             if config.do_ignore_accuracy():
                 accuracy = 100
             else:
-                accuracy = current_gen_info().get_move_accuracy(attacking_mon, move, custom_data_selection)
+                accuracy = current_gen_info().get_move_accuracy(attacking_mon, move, custom_data_selection, defending_mon, self._weather)
                 if accuracy is None:
                     accuracy = 100
 

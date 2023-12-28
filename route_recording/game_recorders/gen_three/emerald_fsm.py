@@ -197,41 +197,26 @@ class Machine:
         # start with the normal pocket
         for i in range(len(gh_gen_three_const.ALL_KEYS_ITEM_TYPE)):
             item_type = self._gamehook_client.get(gh_gen_three_const.ALL_KEYS_ITEM_TYPE[i]).value
-            if item_type is None:
-                break
-            
             result[item_type] = self._gamehook_client.get(gh_gen_three_const.ALL_KEYS_ITEM_QUANTITY[i]).value
         
         # load the ball pocket
         for i in range(len(gh_gen_three_const.ALL_KEYS_BALL_TYPE)):
             item_type = self._gamehook_client.get(gh_gen_three_const.ALL_KEYS_BALL_TYPE[i]).value
-            if item_type is None:
-                break
-            
             result[item_type] = self._gamehook_client.get(gh_gen_three_const.ALL_KEYS_BALL_QUANTITY[i]).value
         
         # load the berries pocket
         for i in range(len(gh_gen_three_const.ALL_KEYS_BERRY_TYPE)):
             item_type = self._gamehook_client.get(gh_gen_three_const.ALL_KEYS_BERRY_TYPE[i]).value
-            if item_type is None:
-                break
-            
             result[item_type] = self._gamehook_client.get(gh_gen_three_const.ALL_KEYS_BERRY_QUANTITY[i]).value
 
         # load the key items pocket
         for i in range(len(gh_gen_three_const.ALL_KEYS_KEY_ITEMS)):
             item_type = self._gamehook_client.get(gh_gen_three_const.ALL_KEYS_KEY_ITEMS[i]).value
-            if item_type is None:
-                break
-            
             result[item_type] = 1
 
         # load the tms pocket
         for i in range(len(gh_gen_three_const.ALL_KEYS_TMHM_TYPE)):
             item_type = self._gamehook_client.get(gh_gen_three_const.ALL_KEYS_TMHM_TYPE[i]).value
-            if item_type is None:
-                break
-            
             result[item_type] = self._gamehook_client.get(gh_gen_three_const.ALL_KEYS_TMHM_QUANTITY[i]).value
 
         return result
@@ -504,6 +489,16 @@ class Machine:
                             
                             if not found:
                                 cur_event.notes = const.RECORDING_ERROR_FRAGMENT + f"Failed to find tm for item source: {cur_event.learn_move.source}"
+                        elif cur_event.learn_move.source == const.MOVE_SOURCE_LEVELUP:
+                            if not self._controller._controller.is_valid_levelup_move(cur_event.learn_move.move_to_learn, cur_event.learn_move.level):
+                                logger.warning(f"Seemingly invalid level up move {cur_event.learn_move.move_to_learn} at level {cur_event.learn_move.level}")
+                                cur_event.learn_move.level = const.LEVEL_ANY
+                                if self.gh_converter.get_hm_name(cur_event.learn_move.move_to_learn) is not None:
+                                    logger.warning("Looks like an HM, defaulting to that")
+                                    cur_event.learn_move.source = self.gh_converter.get_hm_name(cur_event.learn_move.move_to_learn)
+                                else:
+                                    logger.warning("Not an HM, defaulting to tutored move")
+                                    cur_event.learn_move.source = const.MOVE_SOURCE_TUTOR
 
                     elif None is not cur_event.hold_item:
                         if cur_event.notes == gh_gen_three_const.HELD_CHECK_FLAG:

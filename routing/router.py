@@ -383,7 +383,10 @@ class Router:
     def replace_levelup_move_event(self, new_event_def:route_events.LearnMoveEventDefinition):
         self.level_up_move_defs[(sanitize_string(new_event_def.move_to_learn), new_event_def.level)] = new_event_def
         self._recalc()
-
+    
+    def is_valid_levelup_move(self, move_to_learn:str, level:int):
+        return (sanitize_string(move_to_learn), level) in self.level_up_move_defs
+    
     def rename_event_folder(self, cur_name, new_name):
         folder_obj = self.folder_lookup[cur_name]
         folder_obj.name = new_name

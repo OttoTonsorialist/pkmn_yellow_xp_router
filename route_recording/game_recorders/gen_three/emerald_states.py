@@ -11,14 +11,47 @@ from utils.constants import const
 logger = logging.getLogger(__name__)
 
 
+class DelayedUpdate:
+    def __init__(self, machine: Machine, delay:int):
+        self.machine = machine
+        self.base_delay = delay
+        self.cur_delay = 0
+        self.is_active = False
+    
+    def reset(self):
+        self.cur_delay = 0
+        self.is_active = False
+    
+    def tick(self):
+        if self.is_active:
+            if self.cur_delay > 0:
+                self.cur_delay -= 1
+            else:
+                self.trigger()
+    
+    def begin_waiting(self, force_reset=True):
+        if self.is_active and not force_reset:
+            return
+        self.cur_delay = self.base_delay
+        self.is_active = True
+    
+    def trigger(self, force=False):
+        if self.is_active or force:
+            self.cur_delay = 0
+            self.is_active = False
+            self._update_helper()
+
+    def _update_helper(self):
+        raise NotImplementedError()
+
+
 class WatchForResetState(State):
     def watch_for_reset(self, new_prop:GameHookProperty, prev_prop:GameHookProperty) -> StateType:
-        if new_prop.path != gh_gen_three_const.KEY_GAMETIME_SECONDS and 'audio' not in new_prop.path:
-            frame_val = self.machine._gamehook_client.get(gh_gen_three_const.KEY_GAMETIME_FRAMES).value
-            logger.info(f"On Frame {frame_val:02} Changing {new_prop.path} from {prev_prop.value} to {new_prop.value}({type(new_prop.value)})")
-
-        if self.machine._player_id is not None and new_prop.path == gh_gen_three_const.KEY_PLAYER_PLAYERID and new_prop.value == 0:
-            return StateType.RESETTING
+        if self.machine._player_id is not None:
+            if new_prop.path == gh_gen_three_const.KEY_PLAYER_PLAYERID and new_prop.value == 0 and self.machine._gamehook_client.get(gh_gen_three_const.KEY_DMA_A).value == 0:
+                return StateType.RESETTING
+            elif new_prop.path == gh_gen_three_const.KEY_DMA_A and new_prop.value == 0 and self.machine._gamehook_client.get(gh_gen_three_const.KEY_PLAYER_PLAYERID).value == 0:
+                return StateType.RESETTING
         return None
 
 
@@ -131,6 +164,48 @@ class ResettingState(State):
 
 
 class BattleState(WatchForResetState):
+    BASE_DELAY = 3
+
+    class DelayedBattleMovesUpdate(DelayedUpdate):
+        def _update_helper(self):
+            if self.machine._gamehook_client.get(gh_gen_three_const.KEY_BATTLE_PLAYER_MON_PARTY_POS).value == 0:
+                self.machine._move_cache_update(levelup_source=True)
+
+    class DelayedBattleItemsUpdate(DelayedUpdate):
+        def _update_helper(self):
+            self.machine._item_cache_update()
+
+    class DelayedHeldItemUpdate(DelayedUpdate):
+        def configure_held_item(self, held_item:str):
+            self._init_held_item = held_item
+
+        def _update_helper(self):
+            if self.machine._gamehook_client.get(gh_gen_three_const.KEY_BATTLE_PLAYER_MON_PARTY_POS).value == 0:
+                if self.machine._gamehook_client.get(gh_gen_three_const.KEY_PLAYER_MON_HELD_ITEM).value is None:
+                    self.machine._queue_new_event(EventDefinition(hold_item=HoldItemEventDefinition(None, True)))
+                elif self.machine._gamehook_client.get(gh_gen_three_const.KEY_PLAYER_MON_HELD_ITEM).value != self._init_held_item:
+                    do_consume = self._init_held_item is not None
+                    self._init_held_item = self.machine._gamehook_client.get(gh_gen_three_const.KEY_PLAYER_MON_HELD_ITEM).value
+                    self.machine._queue_new_event(
+                        EventDefinition(
+                            hold_item=HoldItemEventDefinition(
+                                self.machine._gamehook_client.get(gh_gen_three_const.KEY_PLAYER_MON_HELD_ITEM).value,
+                                do_consume
+                            )
+                        )
+                    )
+
+    class DelayedLevelUpdate(DelayedUpdate):
+        def configure_level(self, original_level:int):
+            self.original_level = original_level
+
+        def _update_helper(self):
+            if self.machine._gamehook_client.get(gh_gen_three_const.KEY_BATTLE_PLAYER_MON_PARTY_POS).value == 0:
+                new_level = self.machine._gamehook_client.get(gh_gen_three_const.KEY_PLAYER_MON_LEVEL).value
+                if new_level > self.original_level:
+                    self.machine._solo_mon_levelup(new_level)
+                    self.original_level = new_level
+
     def __init__(self, machine: Machine):
         super().__init__(StateType.BATTLE, machine)
         self.is_trainer_battle = False
@@ -139,12 +214,11 @@ class BattleState(WatchForResetState):
         self._enemy_pos_lookup = {}
         self._trainer_event_created = False
         self._defeated_trainer_mons = []
-        self._waiting_for_moves = False
-        self._move_update_delay = 0
-        self._waiting_for_items = False
-        self._item_update_delay = 0
+        self._delayed_move_updater = self.DelayedBattleMovesUpdate(self.machine, self.BASE_DELAY)
+        self._delayed_item_updater = self.DelayedBattleItemsUpdate(self.machine, self.BASE_DELAY)
+        self._delayed_held_item_updater = self.DelayedHeldItemUpdate(self.machine, self.BASE_DELAY)
+        self._delayed_levelup = self.DelayedLevelUpdate(self.machine, self.BASE_DELAY)
         self._loss_detected = False
-        self._held_item_consumed = False
         self._cached_first_mon_species = ""
         self._cached_first_mon_level = 0
         self._cached_second_mon_species = ""
@@ -156,17 +230,17 @@ class BattleState(WatchForResetState):
         self._battle_finished = False
         self._is_double_battle = False
         self._initial_money = 0
+        self._init_held_item = None
     
     def _on_enter(self, prev_state: State):
         self._defeated_trainer_mons = []
-        self._waiting_for_moves = False
-        self._move_update_delay = 0
-        self._waiting_for_items = False
-        self._item_update_delay = 0
+        self._delayed_move_updater.reset()
+        self._delayed_item_updater.reset()
+        self._delayed_held_item_updater.reset()
+        self._delayed_levelup.reset()
         self.is_trainer_battle = False
         self._trainer_event_created = False
         self._loss_detected = False
-        self._held_item_consumed = False
         self._cached_first_mon_species = ""
         self._cached_first_mon_level = 0
         self._cached_second_mon_species = ""
@@ -181,6 +255,7 @@ class BattleState(WatchForResetState):
         self._battle_finished = False
         self._is_double_battle = False
         self._initial_money = self.machine._gamehook_client.get(gh_gen_three_const.KEY_PLAYER_MONEY).value
+        self._init_held_item = None
 
         if self.machine._gamehook_client.get(gh_gen_three_const.KEY_BATTLE_FLAG).value:
             self._battle_ready()
@@ -211,14 +286,15 @@ class BattleState(WatchForResetState):
                 result[cur_key_idx] = next_pos_idx
                 next_pos_idx += 1
 
-        logger.info(f"completed pos lookup for trainer: {result}")
         return result
 
     def _battle_ready(self):
         # to be called after battle is actually initialized
         self._battle_started = True
+        self._init_held_item = self.machine._gamehook_client.get(gh_gen_three_const.KEY_PLAYER_MON_HELD_ITEM).value
         self._is_double_battle = self.machine._gamehook_client.get(gh_gen_three_const.KEY_DOUBLE_BATTLE_FLAG).value
         self.is_trainer_battle = self.machine._gamehook_client.get(gh_gen_three_const.KEY_TRAINER_BATTLE_FLAG).value
+        self._delayed_levelup.configure_level(self.machine._gamehook_client.get(gh_gen_three_const.KEY_PLAYER_MON_LEVEL).value)
 
         if self.is_trainer_battle:
             self._trainer_name = self.machine._gamehook_client.get(gh_gen_three_const.KEY_BATTLE_TRAINER_A_NUMBER).value
@@ -260,13 +336,11 @@ class BattleState(WatchForResetState):
     def _on_exit(self, next_state: State):
         if next_state.state_type != StateType.RESETTING:
             if self.is_trainer_battle:
-                logger.info(f"final exp split (before simplification): {self._exp_split}")
                 final_exp_split = [len(x) for x in self._exp_split]
                 if not any([True for x in final_exp_split if x > 1]):
                     final_exp_split = None
                 
                 final_mon_order = [self._enemy_mon_order.index(x) + 1 for x in sorted(self._enemy_mon_order)]
-                logger.info(f"final mon order: {final_mon_order}")
 
                 return_custom_move_data = None
                 if gen_three_const.RETURN_MOVE_NAME in self.machine._cached_moves:
@@ -298,16 +372,11 @@ class BattleState(WatchForResetState):
                     for trainer_mon_event in self._defeated_trainer_mons:
                         self.machine._queue_new_event(trainer_mon_event)
                 self.machine._queue_new_event(EventDefinition(blackout=BlackoutEventDefinition()))
-            elif self.is_trainer_battle:
-                # TODO: is this relevant for emerald? if we won a trainer battle, check for special case of beating the champion
-                if False:
-                    self.machine._queue_new_event(EventDefinition(save=SaveEventDefinition(location="Post-Champion Autosave")))
-            if self._waiting_for_moves:
-                self.machine._move_cache_update(levelup_source=True)
-            if self._waiting_for_items:
-                self.machine._item_cache_update()
-            if self._held_item_consumed:
-                self.machine._queue_new_event(EventDefinition(hold_item=HoldItemEventDefinition(None, True)))
+
+            self._delayed_move_updater.trigger()
+            self._delayed_item_updater.trigger()
+            self._delayed_held_item_updater.trigger()
+            self._delayed_levelup.trigger()
     
     def _get_first_enemy_mon_pos(self, value=None):
         if value is None:
@@ -351,7 +420,7 @@ class BattleState(WatchForResetState):
                 self._cached_second_mon_species = ""
                 self._cached_second_mon_level = 0
             else:
-                logger.error(f"Solo mon gained experience, but we didn't properly cache which enemy mon was defeated...")
+                logger.error(f"Solo mon gained experience, but we didn't properly cache which enemy mon was defeated... This is normal if the a different pokemon has been pulled into player's slot 1")
 
         elif new_prop.path == gh_gen_three_const.KEY_BATTLE_FLAG:
             if new_prop.value and not self._battle_started:
@@ -406,30 +475,18 @@ class BattleState(WatchForResetState):
                     self._exp_split[second_enemy_mon_pos].remove(ally_mon_pos)
 
         elif new_prop.path in gh_gen_three_const.ALL_KEYS_PLAYER_MOVES:
-            if not self._waiting_for_moves:
-                self._move_update_delay = 2
-                self._waiting_for_moves = True
+            self._delayed_move_updater.begin_waiting()
         elif new_prop.path in gh_gen_three_const.ALL_KEYS_ALL_ITEM_FIELDS:
-            if not self._waiting_for_items:
-                self._item_update_delay = 2
-                self._waiting_for_items = True
-        elif new_prop.path == gh_gen_three_const.KEY_GAMETIME_SECONDS:
-            if self._waiting_for_moves:
-                if self._move_update_delay <= 0:
-                    self._waiting_for_moves = False
-                    self.machine._move_cache_update(levelup_source=True)
-                else:
-                    self._move_update_delay -= 1
-            if self._waiting_for_items:
-                if self._item_update_delay <= 0:
-                    self._waiting_for_items = False
-                    self.machine._item_cache_update()
-                else:
-                    self._item_update_delay -= 1
-        elif new_prop.path == gh_gen_three_const.KEY_PLAYER_MON_LEVEL:
-            self.machine._solo_mon_levelup(new_prop.value)
+            self._delayed_item_updater.begin_waiting()
         elif new_prop.path == gh_gen_three_const.KEY_PLAYER_MON_HELD_ITEM:
-            self._held_item_consumed = True
+            self._delayed_held_item_updater.begin_waiting()
+        elif new_prop.path == gh_gen_three_const.KEY_PLAYER_MON_LEVEL:
+            self._delayed_levelup.begin_waiting()
+        elif new_prop.path == gh_gen_three_const.KEY_GAMETIME_SECONDS:
+            self._delayed_move_updater.tick()
+            self._delayed_item_updater.tick()
+            self._delayed_held_item_updater.tick()
+            self._delayed_levelup.tick()
         elif new_prop.path == gh_gen_three_const.KEY_BATTLE_PLAYER_MON_PARTY_POS:
             if new_prop.value >= 0 and new_prop.value < 6:
                 if self.machine._gamehook_client.get(gh_gen_three_const.KEY_BATTLE_FIRST_ENEMY_HP).value > 0:
@@ -503,7 +560,6 @@ class InventoryChangeState(WatchForResetState):
     
     def _on_exit(self, next_state: State):
         if next_state.state_type != StateType.RESETTING:
-            logger.info(f"after inventory change, held_item_changed? {self._held_item_changed}")
             self.machine._item_cache_update(
                 sale_expected=self._money_gained,
                 purchase_expected=self._money_lost,
@@ -532,24 +588,19 @@ class InventoryChangeState(WatchForResetState):
 
 class UseRareCandyState(WatchForResetState):
     BASE_DELAY = 2
-    ERROR_DELAY = 5
     def __init__(self, machine: Machine):
         super().__init__(StateType.RARE_CANDY, machine)
         self._move_learned = False
         self._item_removal_detected = False
         self._cur_delay = self.BASE_DELAY
-        self._error_delay = self.ERROR_DELAY
 
     def _on_enter(self, prev_state: State):
         self._move_learned = False
         self._item_removal_detected = False
         self._cur_delay = self.BASE_DELAY
-        self._error_delay = self.ERROR_DELAY
     
     def _on_exit(self, next_state: State):
         if next_state.state_type != StateType.RESETTING:
-            if self._error_delay <= 0:
-                logger.error(f"Rare candy event not exited properly. Still attempting to apply level up")
             if self.machine._item_cache_update(candy_flag=True):
                 self.machine._solo_mon_levelup(self.machine._gamehook_client.get(gh_gen_three_const.KEY_PLAYER_MON_LEVEL).value)
             if self._move_learned:
@@ -560,18 +611,14 @@ class UseRareCandyState(WatchForResetState):
         if new_prop.path in gh_gen_three_const.ALL_KEYS_PLAYER_MOVES:
             self._move_learned = True
         elif new_prop.path in gh_gen_three_const.ALL_KEYS_ITEM_QUANTITY:
-            if not self._item_removal_detected:
-                return StateType.OVERWORLD
+            self._cur_delay = self.BASE_DELAY
         elif new_prop.path in gh_gen_three_const.ALL_KEYS_ITEM_TYPE:
-            self._item_removal_detected = True
-            if new_prop.value is None:
-                return StateType.OVERWORLD
+            self._cur_delay = self.BASE_DELAY
         elif new_prop.path in gh_gen_three_const.KEY_GAMETIME_SECONDS:
-            if self._item_removal_detected:
-                if self._cur_delay <= 0:
-                    return StateType.OVERWORLD
-                else:
-                    self._cur_delay -= 1
+            if self._cur_delay <= 0:
+                return StateType.OVERWORLD
+            else:
+                self._cur_delay -= 1
 
         return self.state_type
 
@@ -582,18 +629,17 @@ class UseTMState(WatchForResetState):
         super().__init__(StateType.TM, machine)
 
     def _on_enter(self, prev_state: State):
-        pass
+        self._seconds_delay = self.BASE_DELAY
     
     def _on_exit(self, next_state: State):
         if next_state.state_type != StateType.RESETTING:
-            self.machine._item_cache_update(tm_flag=True)
+            if not self.machine._item_cache_update(tm_flag=True):
+                self.machine._move_cache_update(levelup_source=True)
     
     @auto_reset
     def transition(self, new_prop:GameHookProperty, prev_prop:GameHookProperty) -> StateType:
         if new_prop.path in gh_gen_three_const.ALL_KEYS_ALL_ITEM_FIELDS:
             self._seconds_delay = self.BASE_DELAY
-        elif new_prop.path == gh_gen_three_const.KEY_PLAYER_MON_HELD_ITEM:
-            self._held_item_changed = True
         elif new_prop.path == gh_gen_three_const.KEY_GAMETIME_SECONDS:
             if self._seconds_delay <= 0:
                 return StateType.OVERWORLD
@@ -651,13 +697,8 @@ class UseVitaminState(WatchForResetState):
     
     @auto_reset
     def transition(self, new_prop:GameHookProperty, prev_prop:GameHookProperty) -> StateType:
-        if new_prop.path in gh_gen_three_const.ALL_KEYS_ITEM_QUANTITY:
-            if not self._item_removal_detected:
-                return StateType.OVERWORLD
-        elif new_prop.path in gh_gen_three_const.ALL_KEYS_ITEM_TYPE:
+        if new_prop.path in gh_gen_three_const.ALL_KEYS_ITEM_TYPE:
             self._item_removal_detected = True
-            if new_prop.value is None:
-                return StateType.OVERWORLD
         elif new_prop.path == gh_gen_three_const.KEY_GAMETIME_SECONDS:
             if self._item_removal_detected:
                 if self._cur_delay <= 0:
@@ -825,10 +866,6 @@ class OverworldState(WatchForResetState):
                         all_cur_moves.append(self.machine._gamehook_client.get(move_path).value)
                 if new_prop.value is None or new_prop.value in all_cur_moves:
                     return StateType.MOVE_DELETE
-                elif self.machine.gh_converter.get_hm_name(new_prop.value) is not None:
-                    self.machine._move_cache_update(hm_expected=True)
-                elif self.machine.gh_converter.is_tutor_move(new_prop.value):
-                    self.machine._move_cache_update(tutor_expected=True)
                 else:
                     return StateType.TM
         elif new_prop.path in gh_gen_three_const.ALL_KEYS_STAT_EXP:
@@ -855,7 +892,7 @@ class OverworldState(WatchForResetState):
             if self._validation_delay > 0:
                 self._validation_delay -= 1
             elif self._validation_delay == 0:
-                self._validate()
+                #self._validate()
                 self._validation_delay -= 1
 
             if (

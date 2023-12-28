@@ -23798,7 +23798,7 @@
             ]
         },
         {
-            "trainer_name": "Leader Tate&liza",
+            "trainer_name": "Leader Tate & Liza",
             "trainer_class": "Leader",
             "trainer_items": [
                 "Hyper Potion",
@@ -23903,7 +23903,7 @@
             ]
         },
         {
-            "trainer_name": "Leader Tate&liza Rematch 1",
+            "trainer_name": "Leader Tate & Liza Rematch 1",
             "trainer_class": "Leader",
             "trainer_items": [
                 "Full Restore",
@@ -24029,7 +24029,7 @@
             ]
         },
         {
-            "trainer_name": "Leader Tate&liza Rematch 2",
+            "trainer_name": "Leader Tate & Liza Rematch 2",
             "trainer_class": "Leader",
             "trainer_items": [
                 "Full Restore",
@@ -24177,7 +24177,7 @@
             ]
         },
         {
-            "trainer_name": "Leader Tate&liza Rematch 3",
+            "trainer_name": "Leader Tate & Liza Rematch 3",
             "trainer_class": "Leader",
             "trainer_items": [
                 "Full Restore",
@@ -24325,7 +24325,7 @@
             ]
         },
         {
-            "trainer_name": "Leader Tate&liza Rematch 4",
+            "trainer_name": "Leader Tate & Liza Rematch 4",
             "trainer_class": "Leader",
             "trainer_items": [
                 "Full Restore",
@@ -25156,6 +25156,7 @@
             "trainer_location": "EverGrandeCity",
             "is_double_battle": false,
             "is_female_trainer": false,
+            "refightable": true,
             "money": 4900,
             "pokemon": [
                 {
@@ -25281,6 +25282,7 @@
             "trainer_location": "EverGrandeCity",
             "is_double_battle": false,
             "is_female_trainer": true,
+            "refightable": true,
             "money": 5100,
             "pokemon": [
                 {
@@ -25406,6 +25408,7 @@
             "trainer_location": "EverGrandeCity",
             "is_double_battle": false,
             "is_female_trainer": true,
+            "refightable": true,
             "money": 5300,
             "pokemon": [
                 {
@@ -25531,6 +25534,7 @@
             "trainer_location": "EverGrandeCity",
             "is_double_battle": false,
             "is_female_trainer": false,
+            "refightable": true,
             "money": 5500,
             "pokemon": [
                 {
@@ -25658,6 +25662,7 @@
             "trainer_location": "EverGrandeCity",
             "is_double_battle": false,
             "is_female_trainer": false,
+            "refightable": true,
             "money": 11600,
             "pokemon": [
                 {

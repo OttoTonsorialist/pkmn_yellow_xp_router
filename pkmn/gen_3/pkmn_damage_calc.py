@@ -24,19 +24,42 @@ def get_crit_rate(pkmn:universal_data_objects.EnemyPkmn, move:universal_data_obj
     return (1/16)
 
 
-def get_move_accuracy(pkmn:universal_data_objects.EnemyPkmn, move:universal_data_objects.Move, custom_move_data:str):
+def get_move_accuracy(pkmn:universal_data_objects.EnemyPkmn, move:universal_data_objects.Move, custom_move_data:str, defending_pkmn:universal_data_objects.EnemyPkmn, weather:str, special_types:List[str]):
     if move.name == gen_three_const.NATURE_POWER_MOVE_NAME:
         if custom_move_data == gen_three_const.TALL_GRASS_TERRAIN:
-            return 75
+            result = 75
         elif custom_move_data == gen_three_const.LONG_GRASS_TERRAIN:
-            return 95
+            result = 95
         elif custom_move_data == gen_three_const.UNDERWATER_TERRAIN:
-            return 80
+            result = 80
         elif custom_move_data == gen_three_const.PLAIN_TERRAIN:
-            return None
-        return 100
+            result = None
+        result = 100
+    else:
+        result = move.accuracy
     
-    return move.accuracy
+    if result is None:
+        return None
+    
+    if pkmn.ability == gen_three_const.COMPOUND_EYES_ABILITY:
+        result = min(
+            math.floor(result * 1.3),
+            100
+        )
+    elif pkmn.ability == gen_three_const.HUSTLE_ABILITY:
+        is_physical = False
+        if move.name == gen_three_const.NATURE_POWER_MOVE_NAME:
+            is_physical = custom_move_data in [gen_three_const.PLAIN_TERRAIN, gen_three_const.SAND_TERRAIN, gen_three_const.CAVE_TERRAIN, gen_three_const.ROCK_TERRAIN]
+        elif move.move_type not in special_types:
+            is_physical = True
+
+        if is_physical:
+            result = math.floor(result * 3277 / 4096)
+    
+    if defending_pkmn.ability == gen_three_const.SAND_VEIL_ABILITY and weather == const.WEATHER_SANDSTORM:
+        result = math.floor(result * 3277 / 4096)
+
+    return result
 
 
 def calculate_gen_three_damage(
@@ -72,6 +95,53 @@ def calculate_gen_three_damage(
         type_chart.get(move_type).get(defending_species.second_type) == const.IMMUNE
     ):
         return None
+    elif (
+        defending_pkmn.ability == gen_three_const.LEVITATE_ABILITY and
+        move_type == const.TYPE_GROUND
+    ):
+        return None
+    elif (
+        defending_pkmn.ability == gen_three_const.DAMP_ABILITY and
+        (
+            move.name == const.SELFDESTRUCT_MOVE_NAME or
+            move.name == const.EXPLOSION_MOVE_NAME
+        )
+    ):
+        return None
+    elif (
+        (
+            defending_pkmn.ability == gen_three_const.VOLT_ABOSRB_ABILITY or
+            defending_pkmn.ability == gen_three_const.LIGHTNING_ROD_ABILITY
+        ) and
+        move_type == const.TYPE_ELECTRIC
+    ):
+        return None
+    elif (
+        defending_pkmn.ability == gen_three_const.WATER_ABSORB_ABILITY and
+        move_type == const.TYPE_WATER
+    ):
+        return None
+    elif (
+        defending_pkmn.ability == gen_three_const.FLASH_FIRE_ABILITY and
+        move_type == const.TYPE_FIRE
+    ):
+        return None
+    elif defending_pkmn.ability == gen_three_const.WONDER_GUARD_ABILITY:
+        first_effectiveness = type_chart.get(move_type).get(defending_species.first_type)
+        second_effectiveness = type_chart.get(move_type).get(defending_species.second_type)
+        # if either is immune, then shedinja is immune
+        # if either is not very effective, then shedinja is net neutral at worst. And thus immune
+        if (
+            first_effectiveness == const.IMMUNE or first_effectiveness == const.NOT_VERY_EFFECTIVE or
+            second_effectiveness == const.IMMUNE or second_effectiveness == const.NOT_VERY_EFFECTIVE
+        ):
+            return None
+        # if neither is super effective, then shedinja is also immune
+        elif (
+            first_effectiveness != const.SUPER_EFFECTIVE and second_effectiveness != const.SUPER_EFFECTIVE
+        ):
+            return None
+        # we are left with only the cases where at least one is super effective, and the other is either neutral or super effective
     
     # special move interactions
     if const.FLAVOR_FIXED_DAMAGE in move.attack_flavor:
@@ -226,6 +296,12 @@ def calculate_gen_three_damage(
     
     if attacking_pkmn.ability == gen_three_const.HUSTLE_ABILITY:
         attacking_battle_stats.attack = math.floor(attacking_battle_stats.attack * 1.5)
+
+    if (
+        attacking_pkmn.ability == gen_three_const.HUGE_POWER_ABILITY or
+        attacking_pkmn.ability == gen_three_const.PURE_POWER_ABILITY
+    ):
+        attacking_battle_stats.attack = math.floor(attacking_battle_stats.attack * 2)
     
     if attacking_pkmn.held_item == gen_three_const.CHOICE_BAND_NAME:
         attacking_battle_stats.attack = math.floor(attacking_battle_stats.attack * 1.5)
