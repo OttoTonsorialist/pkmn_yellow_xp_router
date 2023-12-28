@@ -66,7 +66,7 @@ class Gen3GameHookConstants:
         self.KEY_BATTLE_ALLY_MON_HP = "battle.player.activePokemon2.stats.hp"
 
         self.KEY_BATTLE_TRAINER_A_NUMBER = "battle.opponent.id"
-        self.KEY_BATTLE_TRAINER_B_NUMBER = "battle.opponent.secondId"
+        self.KEY_BATTLE_TRAINER_B_NUMBER = "battle.opponent2.id"
         self.KEY_BATTLE_FIRST_ENEMY_SPECIES = "battle.opponent.activePokemon.species"
         self.KEY_BATTLE_FIRST_ENEMY_LEVEL = "battle.opponent.activePokemon.level"
         self.KEY_BATTLE_FIRST_ENEMY_HP = "battle.opponent.activePokemon.stats.hp"
