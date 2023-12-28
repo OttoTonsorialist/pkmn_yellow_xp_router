@@ -89,7 +89,7 @@ def is_upgrade_possible():
 
 def update(new_version=None, asset_url=None, display_fn=None) -> bool:
     # NOTE: automatic updates are currently only supported for windows
-    if is_upgrade_possible():
+    if not is_upgrade_possible():
         message = "Rejecting automatic update due to non-windows platform"
         if display_fn is not None:
             display_fn(message)
