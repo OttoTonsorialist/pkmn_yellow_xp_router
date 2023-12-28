@@ -750,6 +750,10 @@ class InventoryEventEditor(EventEditorBase):
         self._consume_held_item_row = self._cur_row
         self._cur_row += 1
 
+        self._hold_nothing = custom_components.CheckboxLabel(self, text="Hold nothing?", toggle_command=self._trigger_save, width=15, flip=True)
+        self._hold_nothing_row = self._cur_row
+        self._cur_row += 1
+
     def _hide_all_item_obj(self):
         self._item_type_label.grid_remove()
         self._item_type_selector.grid_remove()
@@ -816,6 +820,7 @@ class InventoryEventEditor(EventEditorBase):
         self._item_selector_label.grid(row=self._item_selector_row, column=0, pady=2)
         self._item_selector.grid(row=self._item_selector_row, column=1, pady=2)
         self._consume_held_item.grid(row=self._consume_held_item_row, column=0, columnspan=2, pady=2)
+        self._hold_nothing.grid(row=self._hold_nothing_row, column=0, columnspan=2, pady=2)
 
     def _item_filter_callback(self, *args, **kwargs):
         item_type = self._item_type_selector.get()
@@ -928,6 +933,7 @@ class InventoryEventEditor(EventEditorBase):
         else:
             self._item_selector.set(event_def.hold_item.item_name)
             self._consume_held_item.set_checked(event_def.hold_item.consumed)
+            self._hold_nothing.set_checked(event_def.hold_item.item_name is None)
 
     def get_event(self):
         if self.event_type == const.TASK_GET_FREE_ITEM:
@@ -971,8 +977,12 @@ class InventoryEventEditor(EventEditorBase):
             )
         
         elif self.event_type == const.TASK_HOLD_ITEM:
+            if self._hold_nothing.is_checked():
+                held_item = None
+            else:
+                held_item = self._item_selector.get()
             return EventDefinition(
-                hold_item=HoldItemEventDefinition(self._item_selector.get(), consumed=self._consume_held_item.is_checked())
+                hold_item=HoldItemEventDefinition(held_item, consumed=self._consume_held_item.is_checked())
             )
         
         raise ValueError(f"Cannot generate inventory event for event type: {self.editor_params.event_type}")

@@ -15,9 +15,9 @@ class Gen3GameHookConstants:
         self.ROAR_FLAG = const.RECORDING_ERROR_FRAGMENT + "FLAG TO SIGNAL ROARS NEED TO BE HANDLED. USER SHOULD NEVER SEE THIS"
         self.HELD_CHECK_FLAG = const.RECORDING_ERROR_FRAGMENT + "FLAG TO SIGNAL FOR DEEPER HELD ITEM CHECKING. USER SHOULD NEVER SEE THIS"
 
-        self.KEY_DMA_A = "apointers.dma1"
-        self.KEY_DMA_B = "apointers.dma2"
-        self.KEY_DMA_C = "apointers.dma3"
+        self.KEY_DMA_A = "pointers.dma1"
+        self.KEY_DMA_B = "pointers.dma2"
+        self.KEY_DMA_C = "pointers.dma3"
         self.KEY_OVERWORLD_MAP = "overworld.mapName"
         self.KEY_PLAYER_PLAYERID = "player.playerId"
         self.KEY_PLAYER_MONEY = "bag.money"
