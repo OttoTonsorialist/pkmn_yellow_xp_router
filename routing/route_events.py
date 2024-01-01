@@ -774,7 +774,7 @@ class EventGroup:
                     else:
                         pay_day_amount = self.event_definition.trainer_def.pay_day_amount
                     
-                    defeating_trainer = order_idx != (len(pkmn_to_fight) - 1)
+                    defeating_trainer = order_idx == (len(pkmn_to_fight) - 1)
                     self.event_items.append(EventItem(self, self.event_definition, to_defeat_mon=cur_pkmn, cur_state=cur_state, exp_split_num=exp_split, pay_day_amount=pay_day_amount, defeating_trainer=defeating_trainer))
                     pkmn_counter[cur_pkmn.name] = pkmn_counter.get(cur_pkmn.name, 0) + 1
                     
