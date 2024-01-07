@@ -2,13 +2,11 @@ from __future__ import annotations
 import tkinter as tk
 from tkinter import ttk
 import logging
-from typing import List
 
 from gui import custom_components
-from gui.pkmn_components import EnemyPkmnTeam, PkmnViewer
+from gui.pkmn_components.pkmn_viewer import PkmnViewer
 from utils.constants import const
 from pkmn.gen_factory import current_gen_info
-from pkmn import universal_data_objects
 from routing.route_events import BlackoutEventDefinition, EventDefinition, HealEventDefinition, HoldItemEventDefinition, InventoryEventDefinition, LearnMoveEventDefinition, RareCandyEventDefinition, SaveEventDefinition, TrainerEventDefinition, VitaminEventDefinition, WildPkmnEventDefinition
 from routing import full_route_state
 

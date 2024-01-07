@@ -7,8 +7,9 @@ import tkinter as tk
 from tkinter import ttk, font, messagebox
 
 from controllers.main_controller import MainController
-from gui import custom_components, pkmn_components, quick_add_components
+from gui import custom_components, quick_add_components
 from gui.event_details import EventDetails
+from gui.pkmn_components.route_list import RouteList
 from gui.route_summary_window import RouteSummaryWindow
 from gui.popups.color_config import ConfigWindow
 from gui.popups.custom_dvs_popup import CustomDvsWindow
@@ -208,7 +209,7 @@ class MainWindow(tk.Tk):
         self.frame_for_event_list = ttk.Frame(self.left_info_panel)
         self.frame_for_event_list.pack(fill=tk.BOTH, anchor=tk.CENTER, expand=True)
 
-        self.event_list = pkmn_components.RouteList(self._controller, self.frame_for_event_list)
+        self.event_list = RouteList(self._controller, self.frame_for_event_list)
         self.scroll_bar = ttk.Scrollbar(self.frame_for_event_list, orient="vertical", command=self.event_list.yview, style="Wide.Vertical.TScrollbar")
 
         # intentionally pack event list after scrollbar, so they're ordered correctly

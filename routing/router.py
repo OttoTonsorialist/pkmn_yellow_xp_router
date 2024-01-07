@@ -62,24 +62,25 @@ class Router:
         if custom_dvs is not None:
             # when setting custom DVs, should expect a dict of all values
             # Convert that to a StatBlock here when appropriate
-            try:
-                custom_dvs = current_gen_info().make_stat_block(
-                    custom_dvs[const.HP],
-                    custom_dvs[const.ATTACK],
-                    custom_dvs[const.DEFENSE],
-                    custom_dvs[const.SPECIAL_ATTACK],
-                    custom_dvs[const.SPECIAL_DEFENSE],
-                    custom_dvs[const.SPEED]
-                )
-            except Exception:
-                custom_dvs = current_gen_info().make_stat_block(
-                    custom_dvs[const.HP],
-                    custom_dvs[const.ATK],
-                    custom_dvs[const.DEF],
-                    custom_dvs[const.SPC],
-                    custom_dvs[const.SPC],
-                    custom_dvs[const.SPD]
-                )
+            if not isinstance(custom_dvs, universal_data_objects.StatBlock):
+                try:
+                    custom_dvs = current_gen_info().make_stat_block(
+                        custom_dvs[const.HP],
+                        custom_dvs[const.ATTACK],
+                        custom_dvs[const.DEFENSE],
+                        custom_dvs[const.SPECIAL_ATTACK],
+                        custom_dvs[const.SPECIAL_DEFENSE],
+                        custom_dvs[const.SPEED]
+                    )
+                except Exception:
+                    custom_dvs = current_gen_info().make_stat_block(
+                        custom_dvs[const.HP],
+                        custom_dvs[const.ATK],
+                        custom_dvs[const.DEF],
+                        custom_dvs[const.SPC],
+                        custom_dvs[const.SPC],
+                        custom_dvs[const.SPD]
+                    )
         else:
             if current_gen_info().get_generation() <= 2:
                 custom_dvs = current_gen_info().make_stat_block(15, 15, 15, 15, 15, 15)
@@ -413,10 +414,10 @@ class Router:
         with open(final_path, 'w') as f:
             json.dump(out_obj, f, indent=4)
     
-    def new_route(self, solo_mon, base_route_path=None, pkmn_version=const.YELLOW_VERSION, custom_dvs=None):
+    def new_route(self, solo_mon, base_route_path=None, pkmn_version=const.YELLOW_VERSION, custom_dvs=None, custom_ability=None, custom_nature=None):
         self._change_version(pkmn_version)
         self._reset_events()
-        self.set_solo_pkmn(solo_mon, custom_dvs=custom_dvs)
+        self.set_solo_pkmn(solo_mon, custom_dvs=custom_dvs, custom_ability=custom_ability, custom_nature=custom_nature)
 
         if base_route_path is not None:
             self.load(base_route_path, load_events_only=True)

@@ -5,7 +5,8 @@ from controllers.battle_summary_controller import BattleSummaryController
 import time
 
 from controllers.main_controller import MainController
-from gui import custom_components, route_event_components, pkmn_components, battle_summary
+from gui import custom_components, route_event_components, battle_summary
+from gui.pkmn_components.state_viewer import StateViewer
 from routing.route_events import EventDefinition, EventFolder, EventGroup, EventItem
 from utils.constants import const
 from utils import tk_utils
@@ -36,7 +37,7 @@ class EventDetails(ttk.Frame):
         self.auto_change_tab_checkbox = custom_components.CheckboxLabel(self.pre_state_frame, text="Switch tabs automatically", flip=True)
         self.auto_change_tab_checkbox.grid(column=1, row=0, padx=10, pady=5, columnspan=2)
         self.auto_change_tab_checkbox.set_checked(True)
-        self.state_pre_viewer = pkmn_components.StateViewer(self.pre_state_frame)
+        self.state_pre_viewer = StateViewer(self.pre_state_frame)
         self.state_pre_viewer.grid(column=1, row=2, padx=10, pady=10, columnspan=2)
 
         self.pre_state_frame.columnconfigure(0, weight=1)
@@ -46,7 +47,7 @@ class EventDetails(ttk.Frame):
         self.post_state_frame.pack()
         self.state_post_label = tk.Label(self.post_state_frame, text="Post-event State:")
         self.state_post_label.grid(column=1, row=0, padx=10, pady=10)
-        self.state_post_viewer = pkmn_components.StateViewer(self.post_state_frame)
+        self.state_post_viewer = StateViewer(self.post_state_frame)
         self.state_post_viewer.grid(column=1, row=1, padx=10, pady=10)
 
         self.battle_summary_frame = battle_summary.BattleSummary(self._battle_summary_controller, self.tabbed_states)
