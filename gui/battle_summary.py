@@ -422,9 +422,14 @@ class DamageSummary(ttk.Frame):
                 return f"{kill_info[0]}-hit kill: 100 %"
             else:
                 return f"{kill_info[0]}-hit kill, IGNORING ACC"
+
+        if round(kill_pct, 1) == int(kill_pct):
+            rendered_kill_pct = f"{kill_pct:02}"
+        else:
+            rendered_kill_pct = f"{kill_pct:.1f}"
         if config.do_ignore_accuracy():
-            return f"{kill_info[0]}-hit kill: {kill_pct:.2f} %"
-        return f"{kill_info[0]}-turn kill: {kill_pct:.2f} %"
+            return f"{kill_info[0]}-hit kill: {rendered_kill_pct} %"
+        return f"{kill_info[0]}-turn kill: {rendered_kill_pct} %"
 
     def update_rendering(self):
         move = self._controller.get_move_info(self._mon_idx, self._move_idx, self._is_player_mon)
