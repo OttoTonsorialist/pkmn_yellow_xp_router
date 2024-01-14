@@ -534,16 +534,6 @@ class MainController:
     def is_record_mode_active(self):
         return self._is_record_mode_active
     
-    def get_levelup_move_event(self, move_name, new_level) -> LearnMoveEventDefinition:
-        levelup_move = self._data.level_up_move_defs.get(tuple(move_name, new_level))
-        if levelup_move is None:
-            # NOTE: check for edge case that mon got 2 level ups at once, and got move from first level up
-            # this is rare, but theoretically possible. It should also be safe, because there are no cases where
-            # the same move is learned 2 levels in a row
-            levelup_move = self._data.level_up_move_defs.get(tuple(move_name, new_level))
-        
-        return levelup_move
-    
     def get_move_idx(self, move_name, state=None):
         if state is None:
             state = self.get_final_state()

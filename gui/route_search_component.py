@@ -7,7 +7,6 @@ from controllers.main_controller import MainController
 from gui import custom_components
 
 from utils.constants import const
-from pkmn.gen_factory import current_gen_info
 
 logger = logging.getLogger(__name__)
 

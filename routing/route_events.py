@@ -287,8 +287,27 @@ class BlackoutEventDefinition:
         return f"Black Out"
 
 
+class EvolutionEventDefinition:
+    def __init__(self, evolved_species):
+        self.evolved_species = evolved_species
+    
+    def serialize(self):
+        return {
+            const.EVOLVED_SPECIES: self.evolved_species,
+        }
+    
+    @staticmethod
+    def deserialize(raw_val):
+        if not raw_val:
+            return None
+        return EvolutionEventDefinition(raw_val[const.EVOLVED_SPECIES])
+    
+    def __str__(self):
+        return f"Evolve into: {self.evolved_species}"
+
+
 class EventDefinition:
-    def __init__(self, enabled=True, rare_candy=None, vitamin=None, trainer_def=None, wild_pkmn_info=None, item_event_def=None, learn_move=None, hold_item=None, save=None, heal=None, blackout=None, notes="", tags=None):
+    def __init__(self, enabled=True, rare_candy=None, vitamin=None, trainer_def=None, wild_pkmn_info=None, item_event_def=None, learn_move=None, hold_item=None, save=None, heal=None, blackout=None, evolution=None, notes="", tags=None):
         self.enabled = enabled
         self.rare_candy:RareCandyEventDefinition = rare_candy
         self.vitamin:VitaminEventDefinition = vitamin
@@ -303,6 +322,7 @@ class EventDefinition:
         self.save:SaveEventDefinition = save
         self.heal:HealEventDefinition = heal
         self.blackout:BlackoutEventDefinition = blackout
+        self.evolution:EvolutionEventDefinition = evolution
 
         if tags is None:
             tags = []
@@ -418,6 +438,8 @@ class EventDefinition:
             return const.TASK_HEAL
         elif self.blackout is not None:
             return const.TASK_BLACKOUT
+        elif self.evolution is not None:
+            return const.TASK_EVOLUTION
         
         return const.TASK_NOTES_ONLY
 
@@ -447,6 +469,8 @@ class EventDefinition:
             return str(self.heal)
         elif self.blackout is not None:
             return str(self.blackout)
+        elif self.evolution is not None:
+            return str(self.evolution)
         
         return f"Notes: {self.notes}"
     
@@ -476,6 +500,8 @@ class EventDefinition:
             return str(self.heal)
         elif self.blackout is not None:
             return str(self.blackout)
+        elif self.evolution is not None:
+            return str(self.evolution)
         
         return f"Notes: {self.notes}"
     
@@ -541,6 +567,8 @@ class EventDefinition:
             result.update({const.TASK_HEAL: self.heal.serialize()})
         elif self.blackout is not None:
             result.update({const.TASK_BLACKOUT: self.blackout.serialize()})
+        elif self.evolution is not None:
+            result.update({const.TASK_EVOLUTION: self.evolution.serialize()})
         
         return result    
 
@@ -561,6 +589,7 @@ class EventDefinition:
             save=SaveEventDefinition.deserialize(raw_val.get(const.TASK_SAVE)),
             heal=HealEventDefinition.deserialize(raw_val.get(const.TASK_HEAL)),
             blackout=BlackoutEventDefinition.deserialize(raw_val.get(const.TASK_BLACKOUT)),
+            evolution=EvolutionEventDefinition.deserialize(raw_val.get(const.TASK_EVOLUTION)),
         )
         if result.wild_pkmn_info is not None:
             result.trainer_def = None
@@ -585,8 +614,8 @@ class EventItem:
         self.defeating_trainer = defeating_trainer
         self.event_definition:EventDefinition = event_definition
 
-        self.init_state = None
-        self.final_state = None
+        self.init_state:RouteState = None
+        self.final_state:RouteState = None
         self.error_message = ""
 
         if cur_state is not None:
@@ -662,6 +691,8 @@ class EventItem:
             )
         elif None is not self.event_definition.blackout:
             self.final_state, self.error_message = cur_state.blackout()
+        elif None is not self.event_definition.evolution:
+            self.final_state, self.error_message = cur_state.evolve()
         else:
             # Save events, heal events (both of which currently do nothing), or a notes only event
             # No processing just pass through
@@ -737,7 +768,7 @@ class EventGroup:
         self.error_messages = []
         self.level_up_learn_event_defs = []
     
-    def apply(self, cur_state, level_up_learn_event_defs=None):
+    def apply(self, cur_state:RouteState, level_up_learn_event_defs=None):
         try:
             self.name = self.event_definition.get_label()
             self.init_state = cur_state

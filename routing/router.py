@@ -151,7 +151,7 @@ class Router:
                     obj.child_errors = True
             obj.final_state = cur_state
 
-    def _calc_single_event(self, event_group, prev_state):
+    def _calc_single_event(self, event_group:route_events.EventGroup, prev_state:full_route_state.RouteState):
         # kind of ugly, we're going to double-calculate some events this way
         # but basically, need to run once, and see if a particular event causes a level up that results in a new move
         event_group.apply(prev_state)

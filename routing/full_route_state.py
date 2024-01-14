@@ -314,3 +314,18 @@ class RouteState:
             inv
         ), ""
 
+    def evolve(self, evolved_species):
+        new_species = pkmn.gen_factory.current_gen_info().pkmn_db().get_pkmn(evolved_species)
+        if new_species is None:
+            raise ValueError(f"Could not find dex entry for evolution: {evolved_species}")
+        
+        if new_species.growth_rate != self.solo_pkmn.species_def.growth_rate:
+            raise ValueError(f"Cannot evolve into species ({new_species.name}) with different growth rate: {new_species.growth_rate}")
+        
+        new_solo_pkmn = SoloPokemon()
+
+        return RouteState(
+            self.solo_pkmn,
+            self.badges,
+            self.inventory,
+        ), ""

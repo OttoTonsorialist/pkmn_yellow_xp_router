@@ -137,6 +137,7 @@ class Constants:
         self.MON_ORDER = "mon_order"
         self.PLAYER_KEY = "player"
         self.ENEMY_KEY = "enemy"
+        self.EVOLVED_SPECIES = "evolved_species"
 
         self.MOVE_TYPE = "type"
         self.BASE_POWER = "base_power"
@@ -191,6 +192,7 @@ class Constants:
         self.TASK_SAVE = "Game Save"
         self.TASK_HEAL = "PkmnCenter Heal"
         self.TASK_BLACKOUT = "Blackout"
+        self.TASK_EVOLUTION = "Evolution"
         self.TASK_NOTES_ONLY = "Just Notes"
 
         self.ITEM_ROUTE_EVENT_TYPES = [
@@ -216,6 +218,7 @@ class Constants:
             self.TASK_SAVE,
             self.TASK_HEAL,
             self.TASK_BLACKOUT,
+            self.TASK_EVOLUTION,
             self.TASK_NOTES_ONLY,
         ]
 
