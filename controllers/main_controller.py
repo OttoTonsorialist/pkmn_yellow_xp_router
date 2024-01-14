@@ -233,7 +233,7 @@ class MainController:
             logger.error(f"Exception ocurred trying to copy route: {base_route_path}")
             logger.exception(e)
             # load an empty route, just in case
-            self._data.new_route(solo_mon)
+            self._data.new_route("Abra")
             raise e
         finally:
             self._on_name_change()

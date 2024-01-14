@@ -148,7 +148,10 @@ class SoloPokemon:
 
         if cur_xp == 0:
             # if no initial XP is defined, assume creating a new level 5 pkmn
-            self.cur_xp = pkmn.universal_utils.level_lookups[self.species_def.growth_rate].get_xp_for_level(5)
+            try:
+                self.cur_xp = pkmn.universal_utils.level_lookups[self.species_def.growth_rate].get_xp_for_level(5)
+            except KeyError as e:
+                raise ValueError(f"Invalid growth rate: {self.species_def.growth_rate}") from e
         else:
             self.cur_xp = cur_xp
 
