@@ -342,7 +342,7 @@ class Constants:
 
             self.GOLD_VERSION: "#daa520",
             self.SILVER_VERSION: "#c0c0c0",
-            self.CRYSTAL_VERSION: "#00a000",
+            self.CRYSTAL_VERSION: "#4FFFFF",
 
             self.RUBY_VERSION: "#a00000",
             self.SAPPHIRE_VERSION: "#0000a0",
