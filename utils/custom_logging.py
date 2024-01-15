@@ -1,5 +1,6 @@
 import os
 import logging
+import logging.handlers
 
 
 def config_logging(base_log_dir):
@@ -8,8 +9,11 @@ def config_logging(base_log_dir):
 
     formatter = logging.Formatter('%(asctime)s %(levelname)-8s [%(filename)s:%(lineno)d] %(message)s')
 
-    file_handler = logging.FileHandler(os.path.join(base_log_dir, "pkmn_router_logs.log"), encoding="utf-8")
+    final_log_path = os.path.join(base_log_dir, "pkmn_router_logs.log")
+    file_handler = logging.handlers.RotatingFileHandler(final_log_path, encoding="utf-8", backupCount=20)
     file_handler.setFormatter(formatter)
+    if os.path.exists(final_log_path):
+        file_handler.doRollover()
 
     stream_handler = logging.StreamHandler()
     stream_handler.setFormatter(formatter)
