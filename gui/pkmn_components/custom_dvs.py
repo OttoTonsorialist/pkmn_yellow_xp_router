@@ -12,7 +12,7 @@ logger = logging.getLogger(__name__)
 
 
 class CustomDVsFrame(ttk.Frame):
-    def __init__(self, target_mon:PokemonSpecies, *args, target_game:CurrentGen=None, init_dvs:StatBlock=None, init_ability:str=None, init_nature:Nature=None, **kwargs):
+    def __init__(self, target_mon:PokemonSpecies, *args, target_game:CurrentGen=None, init_dvs:StatBlock=None, init_ability_idx:int=None, init_nature:Nature=None, **kwargs):
         super().__init__(*args, **kwargs)
         # will be overwritten later by config function that runs at the end of constructor
         self._target_game = None
@@ -49,13 +49,13 @@ class CustomDVsFrame(ttk.Frame):
             target_game,
             target_mon,
             init_dvs=init_dvs,
-            init_ability=init_ability,
+            init_ability_idx=init_ability_idx,
             init_nature=init_nature,
         )
 
 
     
-    def config_for_target_game_and_mon(self, target_game:CurrentGen, target_mon:PokemonSpecies, init_dvs:StatBlock=None, init_ability:str=None, init_nature:Nature=None):
+    def config_for_target_game_and_mon(self, target_game:CurrentGen, target_mon:PokemonSpecies, init_dvs:StatBlock=None, init_ability_idx:int=None, init_nature:Nature=None):
         logger.info(f"configuring for mon: {target_mon.name if target_mon is not None else target_mon}")
         self._target_game = target_game
         cur_gen = self._target_game.get_generation()
@@ -68,11 +68,8 @@ class CustomDVsFrame(ttk.Frame):
 
             init_dvs = self._target_game.make_stat_block(max_dv, max_dv, max_dv, max_dv, max_dv, max_dv)
         
-        if init_ability is None and cur_gen >= 3:
-            if target_mon is None:
-                init_ability = ""
-            else:
-                init_ability = target_mon.abilitiies[0]
+        if init_ability_idx is None and cur_gen >= 3:
+            init_ability_idx = 0
         
         if init_nature is None and cur_gen >= 3:
             init_nature = Nature.HARDY
@@ -94,14 +91,14 @@ class CustomDVsFrame(ttk.Frame):
             if self.ability_label is None:
                 self.ability_label = tk.Label(self.controls_frame, text="Ability:")
             if self.ability_vals is None:
-                ability_list = target_mon.abilitiies if target_mon is not None else []
+                ability_list = target_mon.abilities if target_mon is not None else [""]
                 self.ability_vals = custom_components.SimpleOptionMenu(
                     self.controls_frame,
                     ability_list,
-                    default_val=init_ability
+                    default_val=ability_list[init_ability_idx]
                 )
             else:
-                ability_list = target_mon.abilitiies if target_mon is not None else [""]
+                ability_list = target_mon.abilities if target_mon is not None else [""]
                 self.ability_vals.new_values(ability_list)
             if self.hidden_power_label is None:
                 self.hidden_power_label = tk.Label(self.controls_frame, text="Hidden Power:")
@@ -127,6 +124,7 @@ class CustomDVsFrame(ttk.Frame):
             self.custom_dvs_spc_def_label.configure(text=f"Special Defense {dv_text}:")
             self.custom_dvs_spc_def.max_val = dv_max
             self.custom_dvs_spc_def.set(init_dvs.special_defense)
+            self.ability_vals.set(ability_list[init_ability_idx])
         else:
             dv_text = "DV"
             dv_max = 15
@@ -243,9 +241,9 @@ class CustomDVsFrame(ttk.Frame):
             new_nature = Nature(self._nature_lookup.index(self.nature_vals.get()))
         
         if self.ability_vals is None:
-            new_ability = ""
+            new_ability = 0
         else:
-            new_ability = self.ability_vals.get()
+            new_ability = self.ability_vals.cur_options.index(self.ability_vals.get())
         
         if self.custom_dvs_spc_def is not None:
             spc_def_stat = self.custom_dvs_spc_def.get()

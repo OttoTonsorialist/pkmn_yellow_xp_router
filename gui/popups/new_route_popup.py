@@ -120,13 +120,13 @@ class NewRouteWindow(Popup):
         else:
             selected_base_route = io_utils.get_existing_route_path(selected_base_route)
             
-        custom_dvs, custom_ability, custom_nature = self.custom_dvs_frame.get_dvs()
+        custom_dvs, custom_ability_idx, custom_nature = self.custom_dvs_frame.get_dvs()
         self.close()
         self._controller.create_new_route(
             self.solo_selector.get(),
             selected_base_route,
             self.pkmn_version.get(),
             custom_dvs=custom_dvs,
-            custom_ability=custom_ability,
+            custom_ability_idx=custom_ability_idx,
             custom_nature=custom_nature
         )

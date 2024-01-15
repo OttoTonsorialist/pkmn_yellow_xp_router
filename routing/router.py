@@ -23,7 +23,7 @@ class Router:
         self.event_lookup = {}
         self.event_item_lookup = {}
 
-        self.level_up_move_defs:Dict[Tuple[str, int], route_events.LearnMoveEventDefinition] = {}
+        self.level_up_move_defs:Dict[Tuple[str, int, str], route_events.LearnMoveEventDefinition] = {}
         self.defeated_trainers = set()
     
     def _reset_events(self):
@@ -46,13 +46,13 @@ class Router:
             return self.root_folder.final_state
         return self.init_route_state
     
-    def set_solo_pkmn(self, pkmn_name, level_up_moves=None, custom_dvs=None, custom_ability=None, custom_nature=None):
+    def set_solo_pkmn(self, pkmn_name, level_up_moves=None, custom_dvs=None, custom_ability_idx=None, custom_nature=None):
         pkmn_base = current_gen_info().pkmn_db().get_pkmn(pkmn_name)
         if pkmn_base is None:
             raise ValueError(f"Could not find base stats for Pokemon: {pkmn_name}")
         
-        if custom_ability is None:
-            custom_ability = pkmn_base.abilitiies[0]
+        if custom_ability_idx is None:
+            custom_ability_idx = 0
         
         if custom_nature is None:
             custom_nature = universal_data_objects.Nature.HARDY
@@ -95,7 +95,7 @@ class Router:
                 custom_dvs,
                 new_badge_list,
                 current_gen_info().make_stat_block(0, 0, 0, 0, 0, 0, is_stat_xp=True),
-                custom_ability,
+                custom_ability_idx,
                 custom_nature,
             ),
             new_badge_list,
@@ -404,7 +404,7 @@ class Router:
         out_obj = {
             const.NAME_KEY: self.init_route_state.solo_pkmn.name,
             const.DVS_KEY: self.init_route_state.solo_pkmn.dvs.serialize(current_gen_info().get_generation()),
-            const.ABILITY_KEY: self.init_route_state.solo_pkmn.ability,
+            const.ABILITY_KEY: self.init_route_state.solo_pkmn.ability_idx,
             const.NATURE_KEY: self.init_route_state.solo_pkmn.nature.value,
             const.PKMN_VERSION_KEY: self.pkmn_version,
             const.TASK_LEARN_MOVE_LEVELUP: [x.serialize() for x in self.level_up_move_defs.values()],
@@ -414,10 +414,10 @@ class Router:
         with open(final_path, 'w') as f:
             json.dump(out_obj, f, indent=4)
     
-    def new_route(self, solo_mon, base_route_path=None, pkmn_version=const.YELLOW_VERSION, custom_dvs=None, custom_ability=None, custom_nature=None):
+    def new_route(self, solo_mon, base_route_path=None, pkmn_version=const.YELLOW_VERSION, custom_dvs=None, custom_ability_idx=None, custom_nature=None):
         self._change_version(pkmn_version)
         self._reset_events()
-        self.set_solo_pkmn(solo_mon, custom_dvs=custom_dvs, custom_ability=custom_ability, custom_nature=custom_nature)
+        self.set_solo_pkmn(solo_mon, custom_dvs=custom_dvs, custom_ability_idx=custom_ability_idx, custom_nature=custom_nature)
 
         if base_route_path is not None:
             self.load(base_route_path, load_events_only=True)
@@ -438,11 +438,15 @@ class Router:
             else:
                 level_up_moves = None
             
+            ability_idx = result.get(const.ABILITY_KEY)
+            if isinstance(ability_idx, str):
+                ability_idx = current_gen_info().pkmn_db().get_pkmn(result[const.NAME_KEY]).abilities.index(ability_idx)
+
             self.set_solo_pkmn(
                 result[const.NAME_KEY],
                 level_up_moves=level_up_moves,
                 custom_dvs=result.get(const.DVS_KEY),
-                custom_ability=result.get(const.ABILITY_KEY),
+                custom_ability_idx=ability_idx,
                 custom_nature=result.get(const.NATURE_KEY),
             )
         

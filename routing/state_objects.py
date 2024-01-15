@@ -126,7 +126,7 @@ class SoloPokemon:
             dvs:pkmn.universal_data_objects.StatBlock,
             badges:pkmn.universal_data_objects.BadgeList,
             empty_stat_block:pkmn.universal_data_objects.StatBlock,
-            ability:str,
+            ability_idx:int,
             nature:pkmn.universal_data_objects.Nature,
             move_list:list=None,
             cur_xp:int=0,
@@ -141,7 +141,8 @@ class SoloPokemon:
         self.dvs = dvs
         self.badges = badges
         self.held_item = held_item
-        self.ability = ability
+        self.ability_idx = ability_idx
+        self.ability = species_def.abilities[self.ability_idx] if species_def.abilities else ""
         self.nature = nature
         # just need to hold on to a reference for a few places
         self._empty_stat_block = empty_stat_block

@@ -321,7 +321,7 @@ class PokemonSpecies:
         self.levelup_moves = levelup_moves
         self.tmhm_moves = tmhm_moves
         self.stat_xp_yield = stat_xp_yield
-        self.abilitiies = abilities
+        self.abilities = abilities
 
 
 class EnemyPkmn:

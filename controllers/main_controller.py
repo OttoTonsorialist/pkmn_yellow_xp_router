@@ -221,14 +221,14 @@ class MainController:
         self._on_route_change()
 
     @handle_exceptions
-    def create_new_route(self, solo_mon, base_route_path, pkmn_version, custom_dvs=None, custom_ability=None, custom_nature=None):
+    def create_new_route(self, solo_mon, base_route_path, pkmn_version, custom_dvs=None, custom_ability_idx=None, custom_nature=None):
         if base_route_path == const.EMPTY_ROUTE_NAME:
             base_route_path = None
 
         self._route_name = ""
         self._selected_ids = []
         try:
-            self._data.new_route(solo_mon, base_route_path, pkmn_version=pkmn_version, custom_dvs=custom_dvs, custom_ability=custom_ability, custom_nature=custom_nature)
+            self._data.new_route(solo_mon, base_route_path, pkmn_version=pkmn_version, custom_dvs=custom_dvs, custom_ability_idx=custom_ability_idx, custom_nature=custom_nature)
         except Exception as e:
             logger.error(f"Exception ocurred trying to copy route: {base_route_path}")
             logger.exception(e)
@@ -422,6 +422,9 @@ class MainController:
     
     def get_dvs(self):
         return self._data.init_route_state.solo_pkmn.dvs
+    
+    def get_ability_idx(self):
+        return self._data.init_route_state.solo_pkmn.ability_idx
     
     def get_ability(self):
         return self._data.init_route_state.solo_pkmn.ability
