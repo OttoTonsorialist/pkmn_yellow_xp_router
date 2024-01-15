@@ -448,8 +448,8 @@ class MainController:
     def is_empty(self):
         return len(self._data.root_folder.children) == 0
     
-    def is_valid_levelup_move(self, move_name, level):
-        return self._data.is_valid_levelup_move(move_name, level)
+    def is_valid_levelup_move(self, new_move_def):
+        return self._data.is_valid_levelup_move(new_move_def)
 
     def has_unsaved_changes(self) -> routing.router.Router:
         return self._unsaved_changes

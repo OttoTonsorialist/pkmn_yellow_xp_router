@@ -58,8 +58,11 @@ class PkmnDB:
         if len(invalid_mons) > 0:
             raise ValueError(f"Invalid mons detected with unsupported types: {invalid_mons}")
     
-    def get_all_names(self) -> List[str]:
-        return [x.name for x in self._data.values()]
+    def get_all_names(self, growth_rate=None) -> List[str]:
+        if growth_rate is None:
+            return [x.name for x in self._data.values()]
+        else:
+            return [x.name for x in self._data.values() if x.growth_rate == growth_rate]
     
     def get_pkmn(self, name:str) -> universal_data_objects.PokemonSpecies:
         name = sanitize_string(name)
@@ -71,13 +74,13 @@ class PkmnDB:
         
         return None
     
-    def get_filtered_names(self, filter_val=None) -> List[str]:
+    def get_filtered_names(self, filter_val=None, growth_rate=None) -> List[str]:
         orig_filter_fal = filter_val
         if filter_val is None:
-            return self.get_all_names()
+            return self.get_all_names(growth_rate=growth_rate)
         
         filter_val = sanitize_string(filter_val)
-        result = [v.name for k, v in self._data.items() if filter_val in k]
+        result = [v.name for k, v in self._data.items() if filter_val in k and (v.growth_rate == growth_rate if not growth_rate is None else True)]
         if not result:
             result = [f"No Match: '{orig_filter_fal}'"]
         
@@ -212,27 +215,26 @@ class ItemDB:
         
         return self._data.get(item_name)
     
-    def get_filtered_names(self, item_type=const.ITEM_TYPE_ALL_ITEMS, source_mart=const.ITEM_TYPE_ALL_ITEMS):
-        if item_type == const.ITEM_TYPE_ALL_ITEMS and source_mart == const.ITEM_TYPE_ALL_ITEMS:
-            return [x.name for x in self._data.values()]
-        elif item_type == const.ITEM_TYPE_ALL_ITEMS:
-            return self.mart_items[source_mart]
-        elif source_mart == const.ITEM_TYPE_ALL_ITEMS:
-            if item_type == const.ITEM_TYPE_KEY_ITEMS:
-                return self.key_items
-            elif item_type == const.ITEM_TYPE_TM:
-                return self.tms
-            else:
-                return self.other_items
+    def get_filtered_names(self, item_type=const.ITEM_TYPE_ALL_ITEMS, source_mart=const.ITEM_TYPE_ALL_ITEMS, name_filter=None):
+        result = []
+
+        if item_type == const.ITEM_TYPE_ALL_ITEMS:
+            base_list = [x.name for x in self._data.values()]
+        elif item_type == const.ITEM_TYPE_KEY_ITEMS:
+            base_list = self.key_items
+        elif item_type == const.ITEM_TYPE_TM:
+            base_list = self.tms
         else:
-            if item_type == const.ITEM_TYPE_KEY_ITEMS:
-                result = self.key_items
-            elif item_type == const.ITEM_TYPE_TM:
-                result = self.tms
-            else:
-                result = self.other_items
-            
-            return [x for x in result if x in self.mart_items[source_mart]]
+            base_list = self.other_items
+        
+        for cur_test in base_list:
+            if (
+                (source_mart == const.ITEM_TYPE_ALL_ITEMS or cur_test in self.mart_items[source_mart]) and
+                (name_filter is None or sanitize_string(name_filter) in sanitize_string(cur_test))
+            ):
+                result.append(cur_test)
+        
+        return result
 
 
 class MoveDB:

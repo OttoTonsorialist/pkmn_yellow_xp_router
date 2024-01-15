@@ -7,7 +7,7 @@ from gui import custom_components
 from gui.pkmn_components.pkmn_viewer import PkmnViewer
 from utils.constants import const
 from pkmn.gen_factory import current_gen_info
-from routing.route_events import BlackoutEventDefinition, EventDefinition, HealEventDefinition, HoldItemEventDefinition, InventoryEventDefinition, LearnMoveEventDefinition, RareCandyEventDefinition, SaveEventDefinition, TrainerEventDefinition, VitaminEventDefinition, WildPkmnEventDefinition
+from routing.route_events import BlackoutEventDefinition, EventDefinition, EvolutionEventDefinition, HealEventDefinition, HoldItemEventDefinition, InventoryEventDefinition, LearnMoveEventDefinition, RareCandyEventDefinition, SaveEventDefinition, TrainerEventDefinition, VitaminEventDefinition, WildPkmnEventDefinition
 from routing import full_route_state
 
 logger = logging.getLogger(__name__)
@@ -1072,6 +1072,70 @@ class BlackoutEventEditor(EventEditorBase):
         self._location_value.disable()
 
 
+class EvolutionEditor(EventEditorBase):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self._growth_rate = ""
+
+        self._pkmn_label = ttk.Label(self, text="Pokemon Species:")
+        self._pkmn_types = custom_components.SimpleOptionMenu(self, [const.NO_POKEMON], width=15, callback=self._trigger_save)
+        self._pkmn_label.grid(row=self._cur_row, column=0, pady=2)
+        self._pkmn_types.grid(row=self._cur_row, column=1, pady=2)
+        self._cur_row += 1
+
+        self._pkmn_filter_label = ttk.Label(self, text="Pokemon Species Filter:")
+        self._pkmn_filter = custom_components.SimpleEntry(self, callback=self._pkmn_filter_callback, width=15)
+        self._pkmn_filter_label.grid(row=self._cur_row, column=0, pady=2)
+        self._pkmn_filter.grid(row=self._cur_row, column=1, pady=2)
+        self._cur_row += 1
+
+        self._item_selector_label = ttk.Label(self, text="By Stone:")
+        self._item_selector = custom_components.SimpleOptionMenu(self, [const.NO_ITEM], callback=self._trigger_save, width=15)
+        self._item_selector_label.grid(row=self._cur_row, column=0, pady=2)
+        self._item_selector.grid(row=self._cur_row, column=1, pady=2)
+        self._cur_row += 1
+
+    
+    @ignore_updates
+    def configure(self, editor_params, save_callback=None, delayed_save_callback=None):
+        self._item_selector.new_values([const.NO_ITEM] + current_gen_info().item_db().get_filtered_names(name_filter="stone"))
+        return super().configure(editor_params, save_callback, delayed_save_callback)
+    
+    @ignore_updates
+    def load_event(self, event_def):
+        self._growth_rate = current_gen_info().pkmn_db().get_pkmn(event_def.evolution.evolved_species).growth_rate
+        self._pkmn_types.new_values(current_gen_info().pkmn_db().get_all_names(growth_rate=self._growth_rate), default_val=event_def.evolution.evolved_species)
+        self._pkmn_filter.set("")
+        if event_def.evolution.by_stone:
+            self._item_selector.set(event_def.evolution.by_stone)
+        else:
+            self._item_selector.set(const.NO_ITEM)
+
+    def get_event(self):
+        return EventDefinition(
+            evolution=EvolutionEventDefinition(
+                self._pkmn_types.get(),
+                by_stone=None if self._item_selector.get() == const.NO_ITEM else self._item_selector.get(),
+            )
+        )
+    
+    def enable(self):
+        self._pkmn_types.enable()
+        self._pkmn_filter.enable()
+        self._item_selector.enable()
+    
+    def disable(self):
+        self._pkmn_types.disable()
+        self._pkmn_filter.disable()
+        self._item_selector.disable()
+
+    def _pkmn_filter_callback(self, *args, **kwargs):
+        self._pkmn_types.new_values(current_gen_info().pkmn_db().get_filtered_names(filter_val=self._pkmn_filter.get().strip(), growth_rate=self._growth_rate))
+
+    def _pkmn_filter_callback(self, *args, **kwargs):
+        self._pkmn_types.new_values(current_gen_info().pkmn_db().get_filtered_names(filter_val=self._pkmn_filter.get().strip(), growth_rate=self._growth_rate))
+
+
 class EventEditorFactory:
     # NOTE: any event type that we want to support must have an entry in this map
     # NOTE: otherwise, you won't be able to get a visual editor for it
@@ -1091,6 +1155,7 @@ class EventEditorFactory:
         const.TASK_HEAL: HealEventEditor,
         const.TASK_BLACKOUT: BlackoutEventEditor,
         const.TASK_NOTES_ONLY: NotesEditor,
+        const.TASK_EVOLUTION: EvolutionEditor,
     }
 
     def __init__(self, tk_container):

@@ -174,6 +174,23 @@ def _hold_item(cur_pkmn:SoloPokemon, item_name, badges):
     )
 
 
+def _evolve(cur_pkmn:SoloPokemon, new_pokemon:pkmn.universal_data_objects.PokemonSpecies, badges):
+    return SoloPokemon(
+        new_pokemon.name,
+        new_pokemon,
+        cur_pkmn.dvs,
+        badges,
+        cur_pkmn._empty_stat_block,
+        cur_pkmn.ability_idx,
+        cur_pkmn.nature,
+        move_list=cur_pkmn.move_list,
+        cur_xp=cur_pkmn.cur_xp,
+        realized_stat_xp=cur_pkmn.realized_stat_xp,
+        unrealized_stat_xp=cur_pkmn.unrealized_stat_xp,
+        held_item=cur_pkmn.held_item
+    )
+
+
 class RouteState:
     # note: paradigm of this is kind of clunky
     # basically we ask each aspect of the current state of the run (represented by an object)
@@ -314,18 +331,34 @@ class RouteState:
             inv
         ), ""
 
-    def evolve(self, evolved_species):
-        new_species = pkmn.gen_factory.current_gen_info().pkmn_db().get_pkmn(evolved_species)
-        if new_species is None:
-            raise ValueError(f"Could not find dex entry for evolution: {evolved_species}")
+    def evolve(self, evolved_species, by_stone=None):
+        error_message = ""
+        if not evolved_species or evolved_species == const.NO_POKEMON:
+            result_mon = self.solo_pkmn
+        else:
+
+            new_species = pkmn.gen_factory.current_gen_info().pkmn_db().get_pkmn(evolved_species)
+            if new_species is None:
+                result_mon = self.solo_pkmn
+                error_message = f"Could not find dex entry for evolution: {evolved_species}"
+            elif new_species.growth_rate != self.solo_pkmn.species_def.growth_rate:
+                result_mon = self.solo_pkmn
+                error_message = f"Cannot evolve into species ({new_species.name}) with different growth rate: {new_species.growth_rate}"
+            else:
+                result_mon = _evolve(self.solo_pkmn, new_species, self.badges)
         
-        if new_species.growth_rate != self.solo_pkmn.species_def.growth_rate:
-            raise ValueError(f"Cannot evolve into species ({new_species.name}) with different growth rate: {new_species.growth_rate}")
-        
-        new_solo_pkmn = SoloPokemon()
+
+        if by_stone is not None:
+            try:
+                inv = self.inventory.remove_item(pkmn.gen_factory.current_gen_info().item_db().get_item(by_stone), 1, False)
+            except Exception as e:
+                error_message += str(e)
+                inv = self.inventory.remove_item(pkmn.gen_factory.current_gen_info().item_db().get_item(by_stone), 1, False, force=True)
+        else:
+            inv = self.inventory
 
         return RouteState(
-            self.solo_pkmn,
+            result_mon,
             self.badges,
-            self.inventory,
-        ), ""
+            inv
+        ), error_message

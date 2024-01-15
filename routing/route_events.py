@@ -7,6 +7,7 @@ from routing.full_route_state import RouteState
 from utils.constants import const
 from pkmn.gen_factory import current_gen_info
 from pkmn import universal_utils
+from pkmn.pkmn_db import sanitize_string
 
 logger = logging.getLogger(__name__)
 
@@ -145,19 +146,38 @@ class LearnMoveEventDefinition:
             const.MOVE_MON_KEY: self.mon
         }
     
+    def get_level_up_key(self):
+        return (
+            sanitize_string(self.mon),
+            int(self.level),
+            sanitize_string(self.move_to_learn),
+        )
+    
+    def matches_level_up_move(self, level:int, mon:str):
+        return (
+            level == self.level and
+            sanitize_string(self.mon) == sanitize_string(mon)
+        )
+    
     @staticmethod
-    def deserialize(raw_val):
+    def deserialize(raw_val, mon_default=None):
         if not raw_val:
             return None
         if isinstance(raw_val, list):
-            return LearnMoveEventDefinition(raw_val[0], raw_val[1], raw_val[2], level=raw_val[3])
+            result = LearnMoveEventDefinition(raw_val[0], raw_val[1], raw_val[2], level=raw_val[3])
+            if result.level != const.LEVEL_ANY:
+                result.mon = mon_default
+            return result
         else:
+            mon_val = raw_val[const.MOVE_MON_KEY]
+            if mon_val is None:
+                mon_val = mon_default
             return LearnMoveEventDefinition(
                 raw_val[const.LEARN_MOVE_KEY],
                 raw_val[const.MOVE_DEST_KEY],
                 raw_val[const.MOVE_SOURCE_KEY],
                 level=raw_val[const.MOVE_LEVEL_KEY],
-                mon=raw_val[const.MOVE_MON_KEY]
+                mon=mon_val
             )
     
     def __str__(self):
@@ -304,19 +324,24 @@ class BlackoutEventDefinition:
 
 
 class EvolutionEventDefinition:
-    def __init__(self, evolved_species):
+    def __init__(self, evolved_species, by_stone=None):
         self.evolved_species = evolved_species
+        self.by_stone = by_stone
     
     def serialize(self):
         return {
             const.EVOLVED_SPECIES: self.evolved_species,
+            const.BY_STONE_KEY: self.by_stone,
         }
     
     @staticmethod
     def deserialize(raw_val):
         if not raw_val:
             return None
-        return EvolutionEventDefinition(raw_val[const.EVOLVED_SPECIES])
+        return EvolutionEventDefinition(
+            raw_val[const.EVOLVED_SPECIES],
+            by_stone=raw_val[const.BY_STONE_KEY]
+        )
     
     def __str__(self):
         return f"Evolve into: {self.evolved_species}"
@@ -708,7 +733,10 @@ class EventItem:
         elif None is not self.event_definition.blackout:
             self.final_state, self.error_message = cur_state.blackout()
         elif None is not self.event_definition.evolution:
-            self.final_state, self.error_message = cur_state.evolve()
+            self.final_state, self.error_message = cur_state.evolve(
+                self.event_definition.evolution.evolved_species,
+                by_stone=self.event_definition.evolution.by_stone
+            )
         else:
             # Save events, heal events (both of which currently do nothing), or a notes only event
             # No processing just pass through

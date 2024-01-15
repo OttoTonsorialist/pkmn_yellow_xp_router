@@ -1,7 +1,7 @@
 import os
 import json
 import logging
-from typing import Dict, Tuple
+from typing import Dict, Tuple, List
 
 from utils.constants import const
 from pkmn import universal_data_objects
@@ -46,7 +46,14 @@ class Router:
             return self.root_folder.final_state
         return self.init_route_state
     
-    def set_solo_pkmn(self, pkmn_name, level_up_moves=None, custom_dvs=None, custom_ability_idx=None, custom_nature=None):
+    def set_solo_pkmn(
+            self,
+            pkmn_name:str,
+            level_up_moves:List[route_events.LearnMoveEventDefinition]=None,
+            custom_dvs:Dict[str, int]=None,
+            custom_ability_idx:int=None,
+            custom_nature:universal_data_objects.Nature=None
+        ):
         pkmn_base = current_gen_info().pkmn_db().get_pkmn(pkmn_name)
         if pkmn_base is None:
             raise ValueError(f"Could not find base stats for Pokemon: {pkmn_name}")
@@ -103,15 +110,20 @@ class Router:
         )
 
         if level_up_moves is None:
-            self.level_up_move_defs = {
-                (sanitize_string(x[1]), int(x[0])): route_events.LearnMoveEventDefinition(x[1], None, const.MOVE_SOURCE_LEVELUP, level=int(x[0]))
-                for x in pkmn_base.levelup_moves
-            }
+            self.level_up_move_defs = {}
+            self._add_level_up_moves_for_mon(pkmn_base)
         else:
             # TODO: should double check loaded moves against expected moves from DB, and complain if something doesn't match
-            self.level_up_move_defs = {(sanitize_string(x.move_to_learn), x.level): x for x in level_up_moves}
-
+            self.level_up_move_defs = {x.get_level_up_key(): x for x in level_up_moves}
+        
         self._recalc()
+    
+    def _add_level_up_moves_for_mon(self, pkmn_base:universal_data_objects.PokemonSpecies):
+        for cur_level_up_move in pkmn_base.levelup_moves:
+            cur_def = route_events.LearnMoveEventDefinition(cur_level_up_move[1], None, const.MOVE_SOURCE_LEVELUP, level=int(cur_level_up_move[0]), mon=pkmn_base.name)
+            cur_key = cur_def.get_level_up_key()
+            if cur_key not in self.level_up_move_defs:
+                self.level_up_move_defs[cur_key] = cur_def
     
     def change_current_innate_stats(self, new_dvs:universal_data_objects.StatBlock, new_ability:str, new_nature:universal_data_objects.Nature):
         cur_mon = self.init_route_state.solo_pkmn
@@ -163,9 +175,19 @@ class Router:
 
         to_learn = []
         for cur_new_level in new_levels:
-            for test_key in self.level_up_move_defs:
-                if test_key[1] == cur_new_level:
-                    to_learn.append(self.level_up_move_defs[test_key])
+            for test_level_up_move in self.level_up_move_defs.values():
+                if test_level_up_move.matches_level_up_move(cur_new_level, prev_state.solo_pkmn.name):
+                    to_learn.append(test_level_up_move)
+
+        # handle evolutions
+        if post_state.solo_pkmn.name != prev_state.solo_pkmn.name:
+            self._add_level_up_moves_for_mon(post_state.solo_pkmn.species_def)
+            # only test the last level when an evolution occurs
+            # TODO: validate, is this logic correct?
+            if len(new_levels):
+                for test_level_up_move in self.level_up_move_defs.values():
+                    if test_level_up_move.matches_level_up_move(new_levels[-1], post_state.solo_pkmn.name):
+                        to_learn.append(test_level_up_move)
         
         if to_learn:
             event_group.apply(prev_state, level_up_learn_event_defs=to_learn)
@@ -367,7 +389,11 @@ class Router:
                 raise ValueError(f"Can only update event items for level up moves, currentlty")
             
             # just replace the lookup definition
-            self.level_up_move_defs[(new_event_def.learn_move.move_to_learn, new_event_def.learn_move.level)] = new_event_def.learn_move
+            level_up_key = new_event_def.learn_move.get_level_up_key()
+            if level_up_key in self.level_up_move_defs:
+                raise ValueError(f"Invalid level up move: {level_up_key}")
+            else:
+                self.level_up_move_defs[level_up_key] = new_event_def.learn_move
 
         else:
             if event_group_obj.event_definition.trainer_def is not None:
@@ -382,11 +408,11 @@ class Router:
         self._recalc()
     
     def replace_levelup_move_event(self, new_event_def:route_events.LearnMoveEventDefinition):
-        self.level_up_move_defs[(sanitize_string(new_event_def.move_to_learn), new_event_def.level)] = new_event_def
+        self.level_up_move_defs[new_event_def.get_level_up_key()] = new_event_def
         self._recalc()
     
-    def is_valid_levelup_move(self, move_to_learn:str, level:int):
-        return (sanitize_string(move_to_learn), level) in self.level_up_move_defs
+    def is_valid_levelup_move(self, new_event_def:route_events.LearnMoveEventDefinition):
+        return new_event_def.get_level_up_key() in self.level_up_move_defs
     
     def rename_event_folder(self, cur_name, new_name):
         folder_obj = self.folder_lookup[cur_name]
@@ -434,7 +460,7 @@ class Router:
             self._change_version(result.get(const.PKMN_VERSION_KEY, const.YELLOW_VERSION))
             raw_level_up_moves = result.get(const.TASK_LEARN_MOVE_LEVELUP)
             if raw_level_up_moves is not None:
-                level_up_moves = [route_events.LearnMoveEventDefinition.deserialize(x) for x in raw_level_up_moves]
+                level_up_moves = [route_events.LearnMoveEventDefinition.deserialize(x, mon_default=result[const.NAME_KEY]) for x in raw_level_up_moves]
             else:
                 level_up_moves = None
             

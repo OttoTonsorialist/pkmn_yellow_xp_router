@@ -56,7 +56,6 @@ class CustomDVsFrame(ttk.Frame):
 
     
     def config_for_target_game_and_mon(self, target_game:CurrentGen, target_mon:PokemonSpecies, init_dvs:StatBlock=None, init_ability_idx:int=None, init_nature:Nature=None):
-        logger.info(f"configuring for mon: {target_mon.name if target_mon is not None else target_mon}")
         self._target_game = target_game
         cur_gen = self._target_game.get_generation()
 

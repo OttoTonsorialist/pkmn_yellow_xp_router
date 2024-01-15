@@ -138,6 +138,7 @@ class Constants:
         self.PLAYER_KEY = "player"
         self.ENEMY_KEY = "enemy"
         self.EVOLVED_SPECIES = "evolved_species"
+        self.BY_STONE_KEY = "by_stone"
 
         self.MOVE_TYPE = "type"
         self.BASE_POWER = "base_power"

@@ -494,7 +494,7 @@ class Machine:
                             if not found:
                                 cur_event.notes = const.RECORDING_ERROR_FRAGMENT + f"Failed to find tm for item source: {cur_event.learn_move.source}"
                         elif cur_event.learn_move.source == const.MOVE_SOURCE_LEVELUP:
-                            if not self._controller._controller.is_valid_levelup_move(cur_event.learn_move.move_to_learn, cur_event.learn_move.level):
+                            if not self._controller._controller.is_valid_levelup_move(cur_event.learn_move):
                                 logger.warning(f"Seemingly invalid level up move {cur_event.learn_move.move_to_learn} at level {cur_event.learn_move.level}")
                                 cur_event.learn_move.level = const.LEVEL_ANY
                                 if self.gh_converter.get_hm_name(cur_event.learn_move.move_to_learn) is not None:

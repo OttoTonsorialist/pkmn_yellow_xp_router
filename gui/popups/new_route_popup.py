@@ -96,7 +96,6 @@ class NewRouteWindow(Popup):
         self.solo_selector.new_values(gen_factory.get_specific_version(self.pkmn_version.get()).pkmn_db().get_filtered_names(filter_val=self.pkmn_filter.get().strip()))
 
     def _pkmn_selector_callback(self, *args, **kwargs):
-        print(f"ollo!")
         temp_gen = gen_factory.get_specific_version(self.pkmn_version.get())
         self.custom_dvs_frame.config_for_target_game_and_mon(temp_gen, temp_gen.pkmn_db().get_pkmn(self.solo_selector.get()))
 
