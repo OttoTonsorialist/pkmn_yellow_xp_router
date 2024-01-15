@@ -115,7 +115,7 @@ class Machine:
     def _solo_mon_levelup(self, new_level):
         for move_name in self._level_up_moves.get(new_level, []):
             self._queue_new_event(
-                EventDefinition(learn_move=LearnMoveEventDefinition(move_name, None, const.MOVE_SOURCE_LEVELUP, level=new_level))
+                EventDefinition(learn_move=LearnMoveEventDefinition(move_name, None, const.MOVE_SOURCE_LEVELUP, level=new_level, mon=self._solo_mon_species))
             )
     
     def _money_cache_update(self):
@@ -172,7 +172,8 @@ class Machine:
                             self.gh_converter.move_name_convert(to_learn_move),
                             self.gh_converter.move_name_convert(to_delete_move),
                             source,
-                            level=level
+                            level=level,
+                            mon=self._solo_mon_species
                         )
                     )
                 )

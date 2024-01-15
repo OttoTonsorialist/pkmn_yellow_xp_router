@@ -256,6 +256,12 @@ class Constants:
         self.EVENT_TAG_IMPORTANT = "important"
         self.EVENT_TAG_ERRORS = "errors"
 
+        self.MOVE_KEY = "move_name"
+        self.MOVE_DEST_KEY = "destination_slot"
+        self.MOVE_SOURCE_KEY = "source"
+        self.MOVE_LEVEL_KEY = "level_learned"
+        self.MOVE_MON_KEY = "species_when_learned"
+
         self.LEARN_MOVE_KEY = "LearnMove"
         self.MOVE_SLOT_TEMPLATE = "Move #{} (Over {})"
         self.MOVE_DONT_LEARN = "Don't Learn"

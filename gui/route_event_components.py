@@ -544,6 +544,7 @@ class LearnMoveEditor(EventEditorBase):
             self._move = event_def.learn_move.move_to_learn
             self._move_name_label.config(text=f"Move: {self._move}")
             self._level = event_def.learn_move.level
+            self._mon = event_def.learn_move.mon
         else:
             if event_def.learn_move.source == const.MOVE_SOURCE_TUTOR:
                 self._source.set(const.MOVE_SOURCE_TUTOR)
@@ -553,11 +554,13 @@ class LearnMoveEditor(EventEditorBase):
                     move = const.DELETE_MOVE
                 self._move_selector.set(move)
                 self._level = const.LEVEL_ANY
+                self._mon = None
             else:
                 self._source.set(const.MOVE_SOURCE_TM_HM)
                 self._item_filter.set("")
                 self._item_selector.set(event_def.learn_move.source)
                 self._level = const.LEVEL_ANY
+                self._mon = None
         
         self._move_selected_callback()
         if event_def.learn_move.destination is None:
@@ -583,7 +586,7 @@ class LearnMoveEditor(EventEditorBase):
         else:
             source = self._item_selector.get()
 
-        return EventDefinition(learn_move=LearnMoveEventDefinition(self._move, dest, source, level=self._level))
+        return EventDefinition(learn_move=LearnMoveEventDefinition(self._move, dest, source, level=self._level, mon=self._mon))
     
     def enable(self):
         self._item_filter.enable()

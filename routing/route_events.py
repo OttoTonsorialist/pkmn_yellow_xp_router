@@ -129,20 +129,36 @@ class WildPkmnEventDefinition:
 
 
 class LearnMoveEventDefinition:
-    def __init__(self, move_to_learn, destination, source, level=const.LEVEL_ANY):
+    def __init__(self, move_to_learn, destination, source, level=const.LEVEL_ANY, mon=None):
         self.move_to_learn = move_to_learn
         self.destination = destination
         self.source = source
         self.level = level
+        self.mon = mon
 
     def serialize(self):
-        return [self.move_to_learn, self.destination, self.source, self.level]
+        return {
+            const.LEARN_MOVE_KEY: self.move_to_learn,
+            const.MOVE_DEST_KEY: self.destination,
+            const.MOVE_SOURCE_KEY: self.source,
+            const.MOVE_LEVEL_KEY: self.level,
+            const.MOVE_MON_KEY: self.mon
+        }
     
     @staticmethod
     def deserialize(raw_val):
         if not raw_val:
             return None
-        return LearnMoveEventDefinition(raw_val[0], raw_val[1], raw_val[2], level=raw_val[3])
+        if isinstance(raw_val, list):
+            return LearnMoveEventDefinition(raw_val[0], raw_val[1], raw_val[2], level=raw_val[3])
+        else:
+            return LearnMoveEventDefinition(
+                raw_val[const.LEARN_MOVE_KEY],
+                raw_val[const.MOVE_DEST_KEY],
+                raw_val[const.MOVE_SOURCE_KEY],
+                level=raw_val[const.MOVE_LEVEL_KEY],
+                mon=raw_val[const.MOVE_MON_KEY]
+            )
     
     def __str__(self):
         try:

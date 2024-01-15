@@ -3,7 +3,7 @@ import logging
 
 from route_recording.game_recorders.gen_three.emerald_fsm import Machine, State, StateType
 from route_recording.gamehook_client import GameHookProperty
-from routing.route_events import BlackoutEventDefinition, EventDefinition, HealEventDefinition, HoldItemEventDefinition, LearnMoveEventDefinition, SaveEventDefinition, TrainerEventDefinition, WildPkmnEventDefinition
+from routing.route_events import BlackoutEventDefinition, EventDefinition, HealEventDefinition, HoldItemEventDefinition, SaveEventDefinition, TrainerEventDefinition, WildPkmnEventDefinition
 from route_recording.game_recorders.gen_three.emerald_gamehook_constants import gh_gen_three_const
 from pkmn.gen_3.gen_three_constants import gen_three_const
 from utils.constants import const

@@ -3,7 +3,7 @@ import logging
 
 from route_recording.game_recorders.gen_two.crystal_fsm import Machine, State, StateType
 from route_recording.gamehook_client import GameHookProperty
-from routing.route_events import BlackoutEventDefinition, EventDefinition, HealEventDefinition, HoldItemEventDefinition, LearnMoveEventDefinition, SaveEventDefinition, TrainerEventDefinition, WildPkmnEventDefinition
+from routing.route_events import BlackoutEventDefinition, EventDefinition, HealEventDefinition, HoldItemEventDefinition, SaveEventDefinition, TrainerEventDefinition, WildPkmnEventDefinition
 from route_recording.game_recorders.gen_two.crystal_gamehook_constants import gh_gen_two_const
 from pkmn.gen_2.gen_two_constants import gen_two_const
 from utils.constants import const

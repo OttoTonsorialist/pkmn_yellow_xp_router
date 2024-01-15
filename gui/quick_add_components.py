@@ -612,7 +612,6 @@ class QuickItemAdd(ttk.LabelFrame):
                             move_name,
                             cur_state.solo_pkmn.get_move_destination(move_name, None)[0],
                             cur_item,
-                            const.LEVEL_ANY
                         )
                     )
                 )
