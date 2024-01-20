@@ -438,7 +438,7 @@ class DamageSummary(ttk.Frame):
                 return f"{kill_info[0]}-hit kill, IGNORING ACC"
 
         if round(kill_pct, 1) == int(kill_pct):
-            rendered_kill_pct = f"{int(kill_pct):02}"
+            rendered_kill_pct = f"{int(kill_pct)}"
         else:
             rendered_kill_pct = f"{kill_pct:.1f}"
         if config.do_ignore_accuracy():
