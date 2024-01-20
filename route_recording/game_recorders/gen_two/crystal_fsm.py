@@ -47,7 +47,7 @@ class Machine:
         self._controller = controller
         self._gamehook_client = gamehook_client
         self.gh_converter = gh_converter
-        self.debug_mode = False
+        self.debug_mode = const.DEBUG_RECORDING_MODE
 
         self._player_id = None
         self._solo_mon_species = None
@@ -338,7 +338,7 @@ class Machine:
             self.debug_mode and
             new_prop.path != gh_gen_two_const.KEY_GAMETIME_SECONDS
         ):
-            logger.info(f"Change of {new_prop.path} from {prev_prop.value} to {new_prop.value} for state {self._cur_state.state_type}")
+            logger.info(f"Change of {new_prop.path} from {prev_prop.value} to {new_prop.value} for state {self._cur_state.state_type}, on frame {self._gamehook_client.get(gh_gen_two_const.KEY_GAMETIME_FRAMES).value}")
         result = self._cur_state.transition(new_prop, prev_prop)
         if result != self._cur_state.state_type:
             new_state = self._registered_states.get(result)

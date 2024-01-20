@@ -50,6 +50,7 @@ class Gen2GameHookConstants:
         ]
 
         self.KEY_GAMETIME_SECONDS = "gameTime.seconds"
+        self.KEY_GAMETIME_FRAMES = "gameTime.frames"
         self.KEY_AUDIO_CURRENT_SOUND = "audio.currentSound"
         self.PKMN_CENTER_HEAL_SOUND_ID = 18
         self.SAVE_HEAL_SOUND_ID = 37
