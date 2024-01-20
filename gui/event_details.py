@@ -21,19 +21,26 @@ class EventDetails(ttk.Frame):
         self.battle_summary_width = 1400
         self.save_delay = 2
         super().__init__(*args, **kwargs, width=self.state_summary_width)
+        self.grid_propagate(False)
 
         self._controller = controller
         self._battle_summary_controller = BattleSummaryController(self._controller)
-        self._prev_selected_tab = None
         self._ignore_tab_switching = False
         self._cur_delayed_event_id = None
         self._cur_delayed_event_start = None
 
+        self.columnconfigure(0, weight=1)
+        self.rowconfigure(0, weight=1)
+
         self.notebook_holder = ttk.Frame(self)
+        self.notebook_holder.grid(row=0, column=0, padx=2, pady=2, sticky=tk.NSEW)
+        self.notebook_holder.columnconfigure(0, weight=1)
+        self.notebook_holder.rowconfigure(0, weight=1)
         self.tabbed_states = ttk.Notebook(self.notebook_holder)
+        self.tabbed_states.enable_traversal()
 
         self.pre_state_frame = ttk.Frame(self.tabbed_states)
-        self.pre_state_frame.pack(fill=tk.X)
+        self.pre_state_frame.grid(row=0, column=0, padx=2, pady=2, sticky=tk.NSEW)
         self.auto_change_tab_checkbox = custom_components.CheckboxLabel(self.pre_state_frame, text="Switch tabs automatically", flip=True)
         self.auto_change_tab_checkbox.grid(column=1, row=0, padx=10, pady=5, columnspan=2)
         self.auto_change_tab_checkbox.set_checked(True)
@@ -42,41 +49,29 @@ class EventDetails(ttk.Frame):
 
         self.pre_state_frame.columnconfigure(0, weight=1)
         self.pre_state_frame.columnconfigure(3, weight=1)
+        self.pre_state_frame.rowconfigure(5, weight=1)
 
-        self.post_state_frame = ttk.Frame(self.tabbed_states)
-        self.post_state_frame.pack()
-        self.state_post_label = tk.Label(self.post_state_frame, text="Post-event State:")
-        self.state_post_label.grid(column=1, row=0, padx=10, pady=10)
-        self.state_post_viewer = StateViewer(self.post_state_frame)
-        self.state_post_viewer.grid(column=1, row=1, padx=10, pady=10)
-
-        self.battle_summary_frame = battle_summary.BattleSummary(self._battle_summary_controller, self.tabbed_states)
-        self.battle_summary_frame.pack(padx=2, pady=2)
+        self.battle_summary_frame = battle_summary.BattleSummary(self._battle_summary_controller, self.tabbed_states, width=self.battle_summary_width)
+        self.battle_summary_frame.grid(row=1, column=0, padx=2, pady=2)
+        self.battle_summary_frame.show_contents()
 
         self.tabbed_states.add(self.pre_state_frame, text="Pre-event State")
         self.pre_state_tab_index = 0
-        self.tabbed_states.add(self.post_state_frame, text="Post-event State")
-        self.post_state_tab_index = 1
         self.tabbed_states.add(self.battle_summary_frame, text="Battle Summary")
-        self.battle_summary_tab_index = 2
-        self.tabbed_states.pack(expand=True, fill=tk.BOTH)
+        self.battle_summary_tab_index = 1
+        self.tabbed_states.grid(row=0, column=0, sticky=tk.NSEW)
+        self.tabbed_states.columnconfigure(0, weight=1)
+        self.tabbed_states.rowconfigure(0, weight=1)
 
-        self.event_viewer_frame = ttk.Frame(self)
-        self.event_viewer_frame.pack(anchor=tk.N, fill=tk.BOTH, expand=True, padx=5, pady=5)
-        self.event_viewer_frame.rowconfigure(0, weight=1)
-        self.event_viewer_frame.columnconfigure(0, weight=1)
-
-        self.event_details_frame = ttk.Frame(self.event_viewer_frame)
-        self.event_details_frame.grid(row=0, column=0, sticky=tk.NSEW)
+        self.event_details_frame = ttk.Frame(self.pre_state_frame)
+        self.event_details_frame.grid(row=5, column=0, columnspan=4, sticky=tk.NSEW)
         self.event_details_frame.rowconfigure(0, weight=1, uniform="group")
         self.event_details_frame.rowconfigure(2, weight=1, uniform="group")
         self.event_details_frame.columnconfigure(0, weight=1, uniform="group")
         self.event_details_frame.columnconfigure(2, weight=1, uniform="group")
 
-        self.footer_frame = ttk.Frame(self.event_viewer_frame)
-        self.footer_frame.grid(row=1, column=0, sticky=tk.EW)
-
-        self.footer_button_frame = ttk.Frame(self.footer_frame)
+        self.footer_frame = ttk.Frame(self)
+        self.footer_frame.grid(row=1, column=0, padx=5, pady=5, sticky=tk.EW)
 
         # create this slightly out of order because we need the reference
         self.event_editor_lookup = route_event_components.EventEditorFactory(self.event_details_frame)
@@ -88,8 +83,6 @@ class EventDetails(ttk.Frame):
             delayed_save_callback=self.update_existing_event_after_delay
         )
         self.trainer_notes.grid(row=0, column=0, sticky=tk.EW)
-
-        self.footer_button_frame.grid(row=1, column=0, sticky=tk.EW)
 
         self.footer_frame.columnconfigure(0, weight=1)
 
@@ -111,34 +104,22 @@ class EventDetails(ttk.Frame):
             return
 
         selected_tab_index = self.tabbed_states.index(self.tabbed_states.select())
-        prev_tab = self._prev_selected_tab
-        self._prev_selected_tab = selected_tab_index
-
         if selected_tab_index == self.battle_summary_tab_index:
-            if prev_tab == selected_tab_index:
-                return
-
             self.configure(width=self.battle_summary_width)
-            self.event_details_frame.grid_forget()
-            self.event_viewer_frame.pack_forget()
-            self.notebook_holder.pack_forget()
-
-            self.battle_summary_frame.show_contents()
-            self.notebook_holder.pack(anchor=tk.N, fill=tk.BOTH, expand=True, padx=2, pady=2)
-            self.event_viewer_frame.pack(anchor=tk.N, fill=tk.BOTH, expand=False, padx=2, pady=2)
-
+            self.battle_summary_frame.after(300, self.battle_summary_frame.show_contents)
         else:
-            if prev_tab == self.pre_state_tab_index or prev_tab == self.post_state_tab_index:
-                return
-            self.configure(width=self.state_summary_width)
             self.battle_summary_frame.hide_contents()
-            self.event_details_frame.grid_forget()
-            self.event_viewer_frame.pack_forget()
-            self.notebook_holder.pack_forget()
+            self.configure(width=self.state_summary_width)
+    
+    def change_tabs(self, *args, **kwargs):
+        if not self.tabbed_states.select():
+            return
 
-            self.notebook_holder.pack(anchor=tk.N, fill=tk.X, padx=2, pady=2)
-            self.event_viewer_frame.pack(anchor=tk.N, fill=tk.BOTH, expand=True, padx=2, pady=2)
-            self.event_details_frame.grid(row=0, column=0, sticky=tk.NSEW)
+        selected_tab_index = self.tabbed_states.index(self.tabbed_states.select())
+        if selected_tab_index == self.battle_summary_tab_index:
+            self.tabbed_states.select(self.pre_state_tab_index)
+        else:
+            self.tabbed_states.select(self.battle_summary_tab_index)
     
     def _handle_version_change(self, *args, **kwargs):
         self._battle_summary_controller.load_empty()
@@ -149,11 +130,9 @@ class EventDetails(ttk.Frame):
         event_group = self._controller.get_single_selected_event_obj()
         if event_group is None:
             self.state_pre_viewer.set_state(self._controller.get_init_state())
-            self.state_post_viewer.set_state(self._controller.get_final_state())
             self.battle_summary_frame.set_team(None)
         else:
             self.state_pre_viewer.set_state(event_group.init_state)
-            self.state_post_viewer.set_state(event_group.final_state)
             if event_group.event_definition.trainer_def is not None:
                 self.battle_summary_frame.set_team(
                     event_group.event_definition.get_pokemon_list(),
@@ -192,8 +171,6 @@ class EventDetails(ttk.Frame):
             allow_updates = False
 
         self.state_pre_viewer.set_state(init_state)
-        self.state_post_viewer.set_state(final_state)
-
         if self.current_event_editor is not None:
             self.current_event_editor.grid_forget()
             self.current_event_editor = None
