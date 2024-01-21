@@ -10,6 +10,7 @@ from route_recording.gamehook_client import GameHookProperty
 from routing.route_events import EventDefinition, HoldItemEventDefinition, InventoryEventDefinition, LearnMoveEventDefinition, RareCandyEventDefinition, SaveEventDefinition, VitaminEventDefinition
 from route_recording.game_recorders.gen_two.crystal_gamehook_constants import GameHookConstantConverter, gh_gen_two_const
 from utils.constants import const
+from utils.config_manager import config
 from pkmn.gen_factory import current_gen_info
 
 logger = logging.getLogger(__name__)
@@ -47,7 +48,8 @@ class Machine:
         self._controller = controller
         self._gamehook_client = gamehook_client
         self.gh_converter = gh_converter
-        self.debug_mode = const.DEBUG_RECORDING_MODE
+        self.debug_mode = config.is_debug_mode()
+
 
         self._player_id = None
         self._solo_mon_species = None

@@ -20,10 +20,8 @@ logger = logging.getLogger(__name__)
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument("--debug", action="store_true")
-    parser.add_argument("--debug_recorder", action="store_true")
     args = parser.parse_args()
     const.DEBUG_MODE = args.debug
-    const.DEBUG_RECORDING_MODE = args.debug_recorder or args.debug
 
     custom_logging.config_logging(const.GLOBAL_CONFIG_DIR)
 

@@ -280,6 +280,7 @@ class Constants:
         self.FORCE_FULL_SEARCH = "force_full_search"
 
         self.CUSTOM_FONT_NAME_KEY = "custom_font_name"
+        self.DEBUG_MODE_KEY = "debug_mode"
 
         # not configurable, just for important events in route list
         self.IMPORTANT_COLOR = "#b3b6b7"
