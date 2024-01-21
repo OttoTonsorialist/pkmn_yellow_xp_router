@@ -40,7 +40,7 @@ class DataDirConfigWindow(Popup):
         self.app_release_date_value = tk.Label(self.app_info_frame, text=const.APP_RELEASE_DATE)
         self.app_release_date_value.grid(row=1, column=1)
 
-        self.debug_mode_label = tk.Label(self.app_info_frame, text="Debug Mode:")
+        self.debug_mode_label = tk.Label(self.app_info_frame, text="Debug Logging when Recording:")
         self.debug_mode_label.grid(row=2, column=0)
         self.debug_mode_value = tk.BooleanVar()
         self.debug_mode_value.set(config.is_debug_mode())
