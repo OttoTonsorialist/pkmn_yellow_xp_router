@@ -17,6 +17,8 @@ class Gen2GameHookConstants:
 
         self.KEY_OVERWORLD_MAP = "overworld.mapGroup"
         self.KEY_OVERWORLD_MAP_NUM = "overworld.mapNumber"
+        self.KEY_OVERWORLD_X_POS = "overworld.x"
+        self.KEY_OVERWORLD_Y_POS = "overworld.y"
         self.KEY_PLAYER_PLAYERID = "player.playerId"
         self.KEY_PLAYER_MONEY = "player.money"
         self.KEY_PLAYER_MON_EXPPOINTS = "player.team.0.expPoints"
@@ -155,6 +157,8 @@ class Gen2GameHookConstants:
 
         self.ALL_KEYS_TO_REGISTER = [
             self.KEY_OVERWORLD_MAP,
+            self.KEY_OVERWORLD_X_POS,
+            self.KEY_OVERWORLD_Y_POS,
             self.KEY_PLAYER_PLAYERID,
             self.KEY_PLAYER_MONEY,
             self.KEY_PLAYER_MON_EXPPOINTS,

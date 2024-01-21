@@ -412,6 +412,9 @@ class UseRareCandyState(WatchForResetState):
                     return StateType.OVERWORLD
                 else:
                     self._cur_delay -= 1
+        elif new_prop.path in [gh_gen_two_const.KEY_OVERWORLD_X_POS, gh_gen_two_const.KEY_OVERWORLD_Y_POS]:
+            # fail-safe. If the player is moving around, rare candy is definitely over. Just give up
+            return StateType.OVERWORLD
 
         return self.state_type
 
@@ -534,7 +537,6 @@ class OverworldState(WatchForResetState):
                 self._new_file_delay -= 1
                 self._wrong_mon_delay -= 1
             
-            logger.info(f"blocking events until solo mon is ready")
             return self.state_type
 
         if new_prop.path == gh_gen_two_const.KEY_BATTLE_MODE:
@@ -562,14 +564,14 @@ class OverworldState(WatchForResetState):
                 self._waiting_for_registration = True
             elif self.machine._solo_mon_species == self.machine.gh_converter.pkmn_name_convert(prev_prop.value):
                 self._wrong_mon_in_slot_1 = True
-                logger.info(f"wrong mon identified, blocking most updates...")
             elif self.machine._solo_mon_species == self.machine.gh_converter.pkmn_name_convert(new_prop.value):
                 self._wrong_mon_delay = self.BASE_DELAY
                 self._waiting_for_solo_mon_in_slot_1 = True
-                logger.info(f"correct mon in first pos again, waitin for stuff to shake out")
         elif new_prop.path == gh_gen_two_const.KEY_PLAYER_MON_LEVEL:
             if not self._waiting_for_registration and not self._wrong_mon_in_slot_1:
-                return StateType.RARE_CANDY
+                if new_prop.value == prev_prop.value + 1:
+                    return StateType.RARE_CANDY
+                logger.warning(f"Ignoring level change event that seems impossible, transitioning from: {prev_prop.value} to {new_prop.value}")
         elif new_prop.path in gh_gen_two_const.ALL_KEYS_PLAYER_MOVES:
             if not self._waiting_for_registration and not self._wrong_mon_in_slot_1:
                 all_cur_moves = []
