@@ -57,6 +57,7 @@ class Machine:
         self._cached_items = {}
         self._cached_moves = [None, None, None, None]
         self._cached_money = 0
+        self._cached_lost_trainer = None
 
         self._cur_state:State = None
         self._registered_states:Dict[StateType, State] = {}
@@ -376,6 +377,33 @@ class Machine:
 
         return None
     
+    def _validate_trainer_pkmn(self, event_def:EventDefinition, expected_trainer:str):
+        try:
+            trainer_obj = current_gen_info().trainer_db().get_trainer(expected_trainer)
+
+            # first, see if the mon is valid already
+            for test_mon in trainer_obj.pkmn:
+                if (
+                    test_mon.name == event_def.wild_pkmn_info.name and
+                    test_mon.level == event_def.wild_pkmn_info.level
+                ):
+                    return event_def
+            
+            # if the mon is not valid, correct if possible
+            # ASSUMPTION: just finding the first valid mon.
+            # This assumption fails if we get an invalid mon AND the source trainer has multiple mons at different levels
+            for test_mon in trainer_obj.pkmn:
+                if test_mon.name == event_def.wild_pkmn_info.name:
+                    logger.info(f"automatically correcting trainer mon's level from {event_def.wild_pkmn_info.level} to {test_mon.level}")
+                    event_def.wild_pkmn_info.level = test_mon.level
+                    return event_def
+            
+            raise ValueError(f"No matching species exists on source trainer")
+        
+        except Exception as e:
+            logger.warning(f"Couldn't validate wild mon {event_def} from trainer {expected_trainer} due to: ({type(e)}){e}")
+            return event_def
+
     def _process_events(self):
         # Converts all in-game data to app data, then sends the events to the main app
 
@@ -385,6 +413,11 @@ class Machine:
             if len(self._events_to_generate) != 0:
                 cur_event = self._events_to_generate.pop(0)
                 try:
+                    # quick pre-check to handle lost trainer cache
+                    if None is cur_event.wild_pkmn_info:
+                        self._cached_lost_trainer = None
+
+                    # start actually handling events
                     if cur_event.notes == gh_gen_two_const.RESET_FLAG:
                         logger.info(f"Resetting to last save...")
                         self._controller.game_reset()
@@ -402,6 +435,8 @@ class Machine:
                         if cur_event.notes == gh_gen_two_const.TRAINER_LOSS_FLAG:
                             logger.info(f"Handling trainer loss: {cur_event.trainer_def.trainer_name}")
                             self._controller.lost_trainer_battle(cur_event.trainer_def.trainer_name)
+                            self._cached_lost_trainer = cur_event.trainer_def.trainer_name
+                            logger.info(f"setting cached_lost_trainer: {self._cached_lost_trainer}")
                             continue
                         elif cur_event.notes == gh_gen_two_const.ROAR_FLAG:
                             logger.info(f"Updating split exp for trainer {cur_event.trainer_def.trainer_name} to {cur_event.trainer_def.exp_split}")
@@ -535,6 +570,9 @@ class Machine:
                                 EventDefinition(notes=const.RECORDING_ERROR_FRAGMENT + msg)
                             )
                             continue
+                        if cur_event.wild_pkmn_info.trainer_pkmn:
+                            logger.info(f"handling trainer mon event: {cur_event} with _cached_lost_trainer: {self._cached_lost_trainer}")
+                            cur_event = self._validate_trainer_pkmn(cur_event, self._cached_lost_trainer)
 
 
                     auto_save = False
