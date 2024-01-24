@@ -9,6 +9,7 @@ from gui import custom_components, route_event_components, battle_summary
 from gui.pkmn_components.state_viewer import StateViewer
 from routing.route_events import EventDefinition, EventFolder, EventGroup, EventItem
 from utils.constants import const
+from utils.config_manager import config
 from utils import tk_utils
 from pkmn.gen_factory import current_gen_info
 
@@ -41,9 +42,9 @@ class EventDetails(ttk.Frame):
 
         self.pre_state_frame = ttk.Frame(self.tabbed_states)
         self.pre_state_frame.grid(row=0, column=0, padx=2, pady=2, sticky=tk.NSEW)
-        self.auto_change_tab_checkbox = custom_components.CheckboxLabel(self.pre_state_frame, text="Switch tabs automatically", flip=True)
+        self.auto_change_tab_checkbox = custom_components.CheckboxLabel(self.pre_state_frame, text="Switch tabs automatically", flip=True, toggle_command=self._handle_auto_switch_toggle)
         self.auto_change_tab_checkbox.grid(column=1, row=0, padx=10, pady=5, columnspan=2)
-        self.auto_change_tab_checkbox.set_checked(True)
+        self.auto_change_tab_checkbox.set_checked(config.do_auto_switch())
         self.state_pre_viewer = StateViewer(self.pre_state_frame)
         self.state_pre_viewer.grid(column=1, row=2, padx=10, pady=10, columnspan=2)
 
@@ -80,7 +81,8 @@ class EventDetails(ttk.Frame):
         self.trainer_notes = route_event_components.EventEditorFactory(self.footer_frame).get_editor(
             route_event_components.EditorParams(const.TASK_NOTES_ONLY, None, None),
             save_callback=self.update_existing_event,
-            delayed_save_callback=self.update_existing_event_after_delay
+            delayed_save_callback=self.update_existing_event_after_delay,
+            notes_visibility_callback=self._tab_changed_callback,
         )
         self.trainer_notes.grid(row=0, column=0, sticky=tk.EW)
 
@@ -107,9 +109,12 @@ class EventDetails(ttk.Frame):
         if selected_tab_index == self.battle_summary_tab_index:
             self.configure(width=self.battle_summary_width)
             self.battle_summary_frame.after(300, self.battle_summary_frame.show_contents)
+            if not config.are_notes_visible_in_battle_summary():
+                self.footer_frame.grid_forget()
         else:
             self.battle_summary_frame.hide_contents()
             self.configure(width=self.state_summary_width)
+            self.footer_frame.grid(row=1, column=0, padx=5, pady=5, sticky=tk.EW)
     
     def change_tabs(self, *args, **kwargs):
         if not self.tabbed_states.select():
@@ -125,6 +130,9 @@ class EventDetails(ttk.Frame):
         self._battle_summary_controller.load_empty()
         self.battle_summary_frame.configure_weather(current_gen_info().get_valid_weather())
         self.battle_summary_frame.configure_setup_moves(current_gen_info().get_stat_modifer_moves())
+    
+    def _handle_auto_switch_toggle(self, *args, **kwargs):
+        config.set_auto_switch(self.auto_change_tab_checkbox.is_checked())
     
     def _handle_route_change(self, *args, **kwargs):
         event_group = self._controller.get_single_selected_event_obj()

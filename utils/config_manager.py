@@ -24,6 +24,8 @@ class Config:
     DEFAULT_FORCE_FULL_SEARCH = False
     DEFAULT_DAMAGE_SEARCH_DEPTH = 20
     DEFAULT_DEBUG_MODE = False
+    DEFAULT_AUTO_SWITCH = True
+    DEFAULT_NOTES_VISIBILITY = False
 
     def __init__(self):
         self.reload()
@@ -59,6 +61,8 @@ class Config:
 
         self._custom_font_name = raw.get(const.CUSTOM_FONT_NAME_KEY, self.DEFAULT_FONT_NAME)
         self._debug_mode = raw.get(const.DEBUG_MODE_KEY, self.DEFAULT_DEBUG_MODE)
+        self._auto_switch = raw.get(const.AUTO_SWITCH_KEY, self.DEFAULT_AUTO_SWITCH)
+        self._notes_visibility = raw.get(const.NOTES_VISIBILITY_KEY, self.DEFAULT_NOTES_VISIBILITY)
     
     def _save(self):
         if not os.path.exists(const.GLOBAL_CONFIG_DIR):
@@ -86,6 +90,8 @@ class Config:
                 const.DAMAGE_SEARCH_DEPTH: self._damage_search_depth,
                 const.FORCE_FULL_SEARCH: self._force_full_search,
                 const.DEBUG_MODE_KEY: self._debug_mode,
+                const.AUTO_SWITCH_KEY: self._auto_switch,
+                const.NOTES_VISIBILITY_KEY: self._notes_visibility,
             }, f, indent=4)
     
     def set_window_geometry(self, new_geometry):
@@ -172,6 +178,14 @@ class Config:
         self._debug_mode = is_debug_mode
         self._save()
 
+    def set_auto_switch(self, do_auto_switch):
+        self._auto_switch = do_auto_switch
+        self._save()
+
+    def set_notes_visibility_in_battle_summary(self, are_notes_visible):
+        self._notes_visibility = are_notes_visible
+        self._save()
+
     def get_success_color(self):
         return self._success_color
 
@@ -234,6 +248,12 @@ class Config:
     
     def is_debug_mode(self):
         return self._debug_mode
+    
+    def do_auto_switch(self):
+        return self._auto_switch
+    
+    def are_notes_visible_in_battle_summary(self):
+        return self._notes_visibility
     
     def reset_all_colors(self):
         self._success_color = self.DEFAULT_SUCCESS

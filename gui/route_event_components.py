@@ -6,6 +6,7 @@ import logging
 from gui import custom_components
 from gui.pkmn_components.pkmn_viewer import PkmnViewer
 from utils.constants import const
+from utils.config_manager import config
 from pkmn.gen_factory import current_gen_info
 from routing.route_events import BlackoutEventDefinition, EventDefinition, HealEventDefinition, HoldItemEventDefinition, InventoryEventDefinition, LearnMoveEventDefinition, RareCandyEventDefinition, SaveEventDefinition, TrainerEventDefinition, VitaminEventDefinition, WildPkmnEventDefinition
 from routing import full_route_state
@@ -38,12 +39,13 @@ class EditorParams:
 
 
 class EventEditorBase(ttk.Frame):
-    def __init__(self, parent, editor_params: EditorParams, *args, **kwargs):
+    def __init__(self, parent, editor_params: EditorParams, *args, notes_visibility_callback=None, **kwargs):
         super().__init__(parent, *args, **kwargs)
         self.editor_params = editor_params
         self._save_callback = None
         self._delayed_save_callback = None
         self._ignoring_updates = False
+        self._notes_visibility_callback = notes_visibility_callback
 
         self._cur_row = 0
     
@@ -87,8 +89,8 @@ class NotesEditor(EventEditorBase):
         self._notes_label.grid(row=self._cur_row, column=0, sticky=tk.W, padx=5, pady=5)
         self._stat_label = ttk.Label(self, text="Stats with * are calculated with a badge boost", style="Contrast.TLabel")
         self._stat_label.grid(row=self._cur_row, column=1, sticky=tk.W, padx=5, pady=5)
-        self._padding_label = ttk.Label(self, text="")
-        self._padding_label.grid(row=self._cur_row, column=2, sticky=tk.W, padx=5, pady=5)
+        self._visibility = custom_components.CheckboxLabel(self, text="Show in battle summary?", toggle_command=self._toggle_show_in_battle_summary, flip=True)
+        self._visibility.grid(row=self._cur_row, column=2, sticky=tk.E, padx=5, pady=5)
         self._cur_row += 1
 
         self._notes = custom_components.SimpleText(self, height=8)
@@ -117,6 +119,13 @@ class NotesEditor(EventEditorBase):
     
     def disable(self):
         self._notes.disable()
+    
+    def _toggle_show_in_battle_summary(self):
+        config.set_notes_visibility_in_battle_summary(self._visibility.is_checked())
+        logger.info(f"notes visibility state toggled to: {config.are_notes_visible_in_battle_summary()}")
+        if self._notes_visibility_callback is not None:
+            logger.info(f"doing the callback")
+            self._notes_visibility_callback()
 
 
 class TrainerFightEditor(EventEditorBase):
@@ -1094,7 +1103,7 @@ class EventEditorFactory:
         self._lookup = {}
         self._tk_container = tk_container
 
-    def get_editor(self, editor_params:EditorParams, save_callback=None, delayed_save_callback=None, is_enabled=True) -> EventEditorBase:
+    def get_editor(self, editor_params:EditorParams, save_callback=None, delayed_save_callback=None, is_enabled=True, notes_visibility_callback=None) -> EventEditorBase:
         if editor_params.event_type in self._lookup:
             result:EventEditorBase = self._lookup[editor_params.event_type]
             result.configure(editor_params, save_callback=save_callback, delayed_save_callback=delayed_save_callback)
@@ -1109,8 +1118,16 @@ class EventEditorFactory:
         if editor_type is None:
             raise ValueError(f"Could not find visual editor for event type: {editor_params.event_type}")
 
-        result = editor_type(self._tk_container, editor_params)
-        result.configure(editor_params, save_callback=save_callback, delayed_save_callback=delayed_save_callback)
+        result = editor_type(
+            self._tk_container,
+            editor_params,
+            notes_visibility_callback=notes_visibility_callback,
+        )
+        result.configure(
+            editor_params,
+            save_callback=save_callback,
+            delayed_save_callback=delayed_save_callback,
+        )
         self._lookup[editor_params.event_type] = result
 
         # dumb hack, but wtv. Use the same editor for all item events

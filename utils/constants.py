@@ -281,6 +281,8 @@ class Constants:
 
         self.CUSTOM_FONT_NAME_KEY = "custom_font_name"
         self.DEBUG_MODE_KEY = "debug_mode"
+        self.AUTO_SWITCH_KEY = "auto_switch"
+        self.NOTES_VISIBILITY_KEY = "notes_visibility"
 
         # not configurable, just for important events in route list
         self.IMPORTANT_COLOR = "#b3b6b7"
