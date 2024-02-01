@@ -443,6 +443,7 @@ class Constants:
         self.RECORDING_STATUS_NO_MAPPER = "Failed to load mapper. Have you loaded it in GameHook?"
         self.RECORDING_STATUS_WRONG_MAPPER = "Incorrect Mapper Loaded"
         self.RECORDING_STATUS_FAILED_CONNECTION = "Connection Failed. This usually means GameHook isn't running"
+        self.RECORDING_STATUS_GAMEHOOK_FAILED = "Reading GameHook data failed. This version of GameHook may be incompatible with the router"
 
         self.EVENT_NAME_CHANGE = "<<RouteNameChange_{}>>"
         self.EVENT_VERSION_CHANGE = "<<GameVersionChange_{}>>"

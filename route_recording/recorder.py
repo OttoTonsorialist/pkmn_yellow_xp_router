@@ -348,3 +348,8 @@ class RecorderGameHookClient(GameHookClient):
     def on_connection_error(self):
         self._controller.set_ready(False)
         self._controller.set_status(const.RECORDING_STATUS_FAILED_CONNECTION)
+    
+    def on_game_hook_error(self, err):
+        self._controller.set_ready(False)
+        self._controller._controller.trigger_exception(f"{type(err)}: {err}")
+        self._controller.set_status(const.RECORDING_STATUS_GAMEHOOK_FAILED)
