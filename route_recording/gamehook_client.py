@@ -286,9 +286,8 @@ class GameHookClient:
                         cur_prop_changed["address"],
                         cur_prop_changed["value"],
                         cur_prop_changed["bytes"],
-                        #cur_prop_changed.get("is_frozen", cur_prop_changed.get("frozen", False)),
-                        cur_prop_changed["frozen"],
-                        cur_prop_changed.get("fieldsChanged"),
+                        cur_prop_changed.get("is_frozen", cur_prop_changed.get("frozen", False)),
+                        cur_prop_changed.get("fieldsChanged", []),
                     ]
                 )
             except Exception as e:
