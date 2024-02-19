@@ -34,7 +34,11 @@ class BattleSummary(ttk.Frame):
         self._mimic_selection = ""
         self._custom_move_data = None
 
-        self._top_bar = ttk.Frame(self)
+        self._base_frame = ttk.Frame(self)
+        self._base_frame.grid(row=0, column=0, sticky=tk.NSEW)
+        self._base_frame.columnconfigure(0, weight=1)
+
+        self._top_bar = ttk.Frame(self._base_frame)
         self._top_bar.grid(row=0, column=0, sticky=tk.EW)
 
         self._setup_half = ttk.Frame(self._top_bar)
@@ -63,9 +67,11 @@ class BattleSummary(ttk.Frame):
         self.candy_summary.grid(row=1, column=1, sticky=tk.EW, padx=2, pady=(0, 2))
 
         self._mon_pairs:List[MonPairSummary] = []
+        self._did_draw_mon_pairs:List[bool] = []
 
         for idx in range(6):
-            self._mon_pairs.append(MonPairSummary(self._controller, idx, self))
+            self._mon_pairs.append(MonPairSummary(self._controller, idx, self._base_frame))
+            self._did_draw_mon_pairs.append(False)
         
         self.error_message = tk.Label(self, text="Select a battle to see damage calculations")
         self.should_render = False
@@ -81,12 +87,13 @@ class BattleSummary(ttk.Frame):
     
     def hide_contents(self):
         self.should_render = False
-        for cur_mon_pair in self._mon_pairs:
-            cur_mon_pair.grid_forget()
+        self._base_frame.grid_forget()
     
     def show_contents(self):
         self.should_render = True
+        self._base_frame.grid_forget()
         self._on_full_refresh()
+        self._base_frame.grid(row=0, column=0, sticky=tk.NSEW)
     
     def _launch_config_popup(self, *args, **kwargs):
         BattleConfigWindow(self.winfo_toplevel(), battle_controller=self._controller)
@@ -139,12 +146,13 @@ class BattleSummary(ttk.Frame):
             enemy_info = self._controller.get_pkmn_info(idx, False)
 
             if player_info is None and enemy_info is None:
-                self._mon_pairs[idx].grid_forget()
-                if idx == 0:
-                    pass
-            
+                if self._did_draw_mon_pairs[idx]:
+                    self._mon_pairs[idx].grid_forget()
+                    self._did_draw_mon_pairs[idx] = False
             else:
-                self._mon_pairs[idx].grid(row=idx + 2, column=0, sticky=tk.EW)
+                if not self._did_draw_mon_pairs[idx]:
+                    self._mon_pairs[idx].grid(row=idx + 2, column=0, sticky=tk.EW)
+                    self._did_draw_mon_pairs[idx] = True
                 self._mon_pairs[idx].update_rendering()
 
 
@@ -324,8 +332,10 @@ class MonPairSummary(ttk.Frame):
         self.columnconfigure(8, weight=1, uniform="move_group")
 
         self.move_list:List[DamageSummary] = []
+        self._did_draw:List[bool] = []
         for cur_idx in range(8):
             self.move_list.append(DamageSummary(self._controller, self._mon_idx, cur_idx % 4, cur_idx < 4, self))
+            self._did_draw.append(False)
     
     def update_rendering(self):
         player_rendering_info = self._controller.get_pkmn_info(self._mon_idx, True)
@@ -340,11 +350,15 @@ class MonPairSummary(ttk.Frame):
                 column_idx += 1
 
             if self._controller.get_move_info(cur_move._mon_idx, cur_move._move_idx, cur_move._is_player_mon) is not None:
-                cur_move.grid(row=1, column=column_idx, sticky=tk.NSEW)
-            else:
-                cur_move.grid_forget()
+                if not self._did_draw[cur_idx]:
+                    cur_move.grid(row=1, column=column_idx, sticky=tk.NSEW)
+                    self._did_draw[cur_idx] = True
 
-            cur_move.update_rendering()
+                cur_move.update_rendering()
+            else:
+                if self._did_draw[cur_idx]:
+                    cur_move.grid_forget()
+                    self._did_draw[cur_idx] = False
 
 
 class DamageSummary(ttk.Frame):
@@ -424,7 +438,7 @@ class DamageSummary(ttk.Frame):
                 return f"{kill_info[0]}-hit kill, IGNORING ACC"
 
         if round(kill_pct, 1) == int(kill_pct):
-            rendered_kill_pct = f"{int(kill_pct):02}"
+            rendered_kill_pct = f"{int(kill_pct)}"
         else:
             rendered_kill_pct = f"{kill_pct:.1f}"
         if config.do_ignore_accuracy():

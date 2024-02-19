@@ -40,6 +40,14 @@ class DataDirConfigWindow(Popup):
         self.app_release_date_value = tk.Label(self.app_info_frame, text=const.APP_RELEASE_DATE)
         self.app_release_date_value.grid(row=1, column=1)
 
+        self.debug_mode_label = tk.Label(self.app_info_frame, text="Debug Logging when Recording:")
+        self.debug_mode_label.grid(row=2, column=0)
+        self.debug_mode_value = tk.BooleanVar()
+        self.debug_mode_value.set(config.is_debug_mode())
+        self.debug_mode_value.trace("w", self.toggle_debug_mode)
+        self.debug_mode_button = ttk.Checkbutton(self.app_info_frame, variable=self.debug_mode_value)
+        self.debug_mode_button.grid(row=2, column=1)
+
         self._windows_label = tk.Label(self.app_info_frame, text="Automatic updates only supported on windows machines")
         self._windows_label.grid(row=5, column=0, columnspan=2, padx=self.padx, pady=(2 * self.pady, self.pady))
         self._latest_version_label = tk.Label(self.app_info_frame, text="Fetching newest version...")
@@ -91,6 +99,9 @@ class DataDirConfigWindow(Popup):
 
     def open_data_location(self, *args, **kwargs):
         io_utils.open_explorer(config.get_user_data_dir())
+    
+    def toggle_debug_mode(self, *args, **kwargs):
+        config.set_debug_mode(not config.is_debug_mode())
 
     def change_data_location(self, *args, **kwargs):
         valid_path_found = False

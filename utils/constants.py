@@ -5,8 +5,8 @@ import sys
 
 class Constants:
     def __init__(self):
-        self.APP_VERSION = "v3.0d"
-        self.APP_RELEASE_DATE = "2024-Jan-14"
+        self.APP_VERSION = "v3.0g"
+        self.APP_RELEASE_DATE = "2024-Jan-21"
 
         self.NUZLOCKE_APP_VERSION = "v0.5a"
         self.NUZLOCKE_APP_RELEASE_DATE = "2023-Apr-01"
@@ -290,6 +290,9 @@ class Constants:
         self.FORCE_FULL_SEARCH = "force_full_search"
 
         self.CUSTOM_FONT_NAME_KEY = "custom_font_name"
+        self.DEBUG_MODE_KEY = "debug_mode"
+        self.AUTO_SWITCH_KEY = "auto_switch"
+        self.NOTES_VISIBILITY_KEY = "notes_visibility"
 
         # not configurable, just for important events in route list
         self.IMPORTANT_COLOR = "#b3b6b7"
@@ -450,6 +453,7 @@ class Constants:
         self.RECORDING_STATUS_NO_MAPPER = "Failed to load mapper. Have you loaded it in GameHook?"
         self.RECORDING_STATUS_WRONG_MAPPER = "Incorrect Mapper Loaded"
         self.RECORDING_STATUS_FAILED_CONNECTION = "Connection Failed. This usually means GameHook isn't running"
+        self.RECORDING_STATUS_GAMEHOOK_FAILED = "Reading GameHook data failed. This version of GameHook may be incompatible with the router"
 
         self.EVENT_NAME_CHANGE = "<<RouteNameChange_{}>>"
         self.EVENT_VERSION_CHANGE = "<<GameVersionChange_{}>>"

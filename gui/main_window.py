@@ -85,8 +85,15 @@ class MainWindow(tk.Tk):
         self.primary_window = ttk.Frame(self)
         self.primary_window.pack(fill=tk.BOTH, expand=True)
 
-        # create top row, which goes across the whole screen
-        self.top_row = ttk.Frame(self.primary_window)
+        # create container for split columns
+        self.info_panel = ttk.Frame(self.primary_window)
+        self.info_panel.pack(expand=True, fill=tk.BOTH)
+
+        # left panel for controls and event list
+        self.left_info_panel = ttk.Frame(self.info_panel)
+        self.left_info_panel.grid(row=0, column=0, sticky="nsew")
+
+        self.top_row = ttk.Frame(self.left_info_panel)
         self.top_row.pack(fill=tk.X)
         self.top_row.pack_propagate(False)
 
@@ -114,14 +121,6 @@ class MainWindow(tk.Tk):
 
         self.message_label = custom_components.AutoClearingLabel(self.top_row, width=100, justify=tk.LEFT, anchor=tk.W)
         self.message_label.grid(row=0, column=5, sticky=tk.E)
-
-        # create container for split columns
-        self.info_panel = ttk.Frame(self.primary_window)
-        self.info_panel.pack(expand=True, fill=tk.BOTH)
-
-        # left panel for controls and event list
-        self.left_info_panel = ttk.Frame(self.info_panel)
-        self.left_info_panel.grid(row=0, column=0, sticky="nsew")
 
         self.top_left_controls = ttk.Frame(self.left_info_panel)
         self.top_left_controls.pack(fill=tk.X, anchor=tk.CENTER)

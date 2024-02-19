@@ -156,7 +156,7 @@ class BattleState(WatchForResetState):
         self._cached_mon_species = ""
         self._cached_mon_level = 0
         self._trainer_name = ""
-        self._exp_split = []
+        self._exp_split = [set([0])]
         self._enemy_mon_order = []
         self._friendship_data = []
         self._battle_started = False
@@ -310,8 +310,12 @@ class BattleState(WatchForResetState):
         elif new_prop.path == gh_gen_two_const.KEY_PLAYER_MON_HELD_ITEM:
             self._held_item_consumed = True
         elif new_prop.path == gh_gen_two_const.KEY_BATTLE_PLAYER_MON_PARTY_POS:
-            if new_prop.value >= 0 and new_prop.value < 6:
-                self._exp_split[self.machine._gamehook_client.get(gh_gen_two_const.KEY_BATTLE_ENEMY_MON_PARTY_POS).value].add(new_prop.value)
+            enemy_mon_pos = self.machine._gamehook_client.get(gh_gen_two_const.KEY_BATTLE_ENEMY_MON_PARTY_POS).value
+            if (
+                (new_prop.value >= 0 and new_prop.value < 6) and
+                (enemy_mon_pos >= 0 and enemy_mon_pos < 6)
+            ):
+                self._exp_split[enemy_mon_pos].add(new_prop.value)
         elif new_prop.path == gh_gen_two_const.KEY_BATTLE_ENEMY_MON_PARTY_POS:
             if new_prop.value >= 0 and new_prop.value < len(self._exp_split):
                 self._exp_split[new_prop.value] = set([self.machine._gamehook_client.get(gh_gen_two_const.KEY_BATTLE_PLAYER_MON_PARTY_POS).value])
@@ -359,7 +363,8 @@ class InventoryChangeState(WatchForResetState):
         elif new_prop.path in gh_gen_two_const.ALL_KEYS_ALL_ITEM_FIELDS:
             self._seconds_delay = self.BASE_DELAY
         elif new_prop.path == gh_gen_two_const.KEY_PLAYER_MON_HELD_ITEM:
-            self._held_item_changed = True
+            if self.machine._solo_mon_species == self.machine.gh_converter.pkmn_name_convert(prev_prop.value):
+                self._held_item_changed = True
         elif new_prop.path == gh_gen_two_const.KEY_GAMETIME_SECONDS:
             if self._seconds_delay <= 0:
                 return StateType.OVERWORLD
@@ -407,6 +412,9 @@ class UseRareCandyState(WatchForResetState):
                     return StateType.OVERWORLD
                 else:
                     self._cur_delay -= 1
+        elif new_prop.path in [gh_gen_two_const.KEY_OVERWORLD_X_POS, gh_gen_two_const.KEY_OVERWORLD_Y_POS]:
+            # fail-safe. If the player is moving around, rare candy is definitely over. Just give up
+            return StateType.OVERWORLD
 
         return self.state_type
 
@@ -544,12 +552,13 @@ class OverworldState(WatchForResetState):
         elif new_prop.path in gh_gen_two_const.ALL_KEYS_ALL_ITEM_FIELDS:
             return StateType.INVENTORY_CHANGE
         elif new_prop.path == gh_gen_two_const.KEY_PLAYER_MON_HELD_ITEM:
-            self.machine._queue_new_event(
-                EventDefinition(
-                    hold_item=HoldItemEventDefinition(self.machine.gh_converter.item_name_convert(new_prop.value)),
-                    notes=gh_gen_two_const.HELD_CHECK_FLAG
+            if not self._wrong_mon_in_slot_1:
+                self.machine._queue_new_event(
+                    EventDefinition(
+                        hold_item=HoldItemEventDefinition(self.machine.gh_converter.item_name_convert(new_prop.value)),
+                        notes=gh_gen_two_const.HELD_CHECK_FLAG
+                    )
                 )
-            )
         elif new_prop.path == gh_gen_two_const.KEY_PLAYER_MON_SPECIES:
             if not prev_prop.value:
                 self._waiting_for_registration = True
@@ -560,7 +569,9 @@ class OverworldState(WatchForResetState):
                 self._waiting_for_solo_mon_in_slot_1 = True
         elif new_prop.path == gh_gen_two_const.KEY_PLAYER_MON_LEVEL:
             if not self._waiting_for_registration and not self._wrong_mon_in_slot_1:
-                return StateType.RARE_CANDY
+                if new_prop.value == prev_prop.value + 1:
+                    return StateType.RARE_CANDY
+                logger.warning(f"Ignoring level change event that seems impossible, transitioning from: {prev_prop.value} to {new_prop.value}")
         elif new_prop.path in gh_gen_two_const.ALL_KEYS_PLAYER_MOVES:
             if not self._waiting_for_registration and not self._wrong_mon_in_slot_1:
                 all_cur_moves = []

@@ -279,16 +279,22 @@ class GameHookClient:
 
     def _on_properties_changed(self, args):
         for cur_prop_changed in args[0]:
-            self._on_single_property_changed(
-                [
-                    cur_prop_changed["path"],
-                    cur_prop_changed["address"],
-                    cur_prop_changed["value"],
-                    cur_prop_changed["bytes"],
-                    cur_prop_changed["frozen"],
-                    cur_prop_changed["fieldsChanged"],
-                ]
-            )
+            try:
+                self._on_single_property_changed(
+                    [
+                        cur_prop_changed["path"],
+                        cur_prop_changed["address"],
+                        cur_prop_changed["value"],
+                        cur_prop_changed["bytes"],
+                        cur_prop_changed.get("is_frozen", cur_prop_changed.get("frozen", False)),
+                        cur_prop_changed.get("fieldsChanged", []),
+                    ]
+                )
+            except Exception as e:
+                logger.exception(f"Exception generated handling property change")
+                self._on_game_hook_error(e)
+                self.disconnect()
+                break
     
     def _on_single_property_changed(self, args):
         # NOTE: all of the data is passed via a single list, so unpack the list into meaningful values
@@ -300,11 +306,9 @@ class GameHookClient:
             logger.debug(f"[GameHook Client] Could not find a related propery in PropertUpdated event for: {path}: {value}")
             return
         if path in self._ignore_properties:
-            #logger.info(f"Caching ignored update to {path}: {args}")
             self._ignored_updates[path] = args
             return
         if value == self.properties[path].value and bytes_value == self.properties[path].bytes_value:
-            #logger.debug(f"[GameHook Client] Silently ignoring update to property due to no meaningful change: {path}")
             return
         
         new_property = self.properties[path]
