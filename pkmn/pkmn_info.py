@@ -49,6 +49,8 @@ class CurrentGen:
         defending_pkmn:universal_data_objects.EnemyPkmn,
         attacking_stage_modifiers:universal_data_objects.StageModifiers=None,
         defending_stage_modifiers:universal_data_objects.StageModifiers=None,
+        attacking_field:universal_data_objects.FieldStatus=None,
+        defending_field:universal_data_objects.FieldStatus=None,
         is_crit:bool=False,
         custom_move_data:str="",
         weather:str=const.WEATHER_NONE,

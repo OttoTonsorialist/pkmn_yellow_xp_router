@@ -9,6 +9,12 @@ from utils.constants import const
 logger = logging.getLogger(__name__)
 
 
+def sanitize_string(string:str):
+    if not isinstance(string, str):
+        return string
+    return ''.join([x for x in string if x.isalnum()]).lower()
+
+
 def get_path_safe_string(raw_string):
     value = re.sub('[^\w\s-]', '', raw_string).strip().lower()
     value = re.sub('[-\s]+', '-', value)

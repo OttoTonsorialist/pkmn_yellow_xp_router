@@ -4,12 +4,7 @@ from typing import Dict, List, Tuple
 
 from utils.constants import const
 from pkmn import universal_data_objects
-
-
-def sanitize_string(string:str):
-    if not isinstance(string, str):
-        return string
-    return ''.join([x for x in string if x.isalnum()]).lower()
+from utils.io_utils import sanitize_string
 
 
 class MinBattlesDB:
@@ -238,7 +233,7 @@ class ItemDB:
 class MoveDB:
     def __init__(self, data:Dict[str, universal_data_objects.Move]):
         self._data = {sanitize_string(x.name): x for x in data.values()}
-        self.stat_mod_moves:Dict[str, universal_data_objects.Move] = {}
+        self.stat_mod_moves:Dict[str, List[Tuple[str, int]]] = {}
 
         # doing some weird stuff to make sure boosting moves appear at the top
         stat_reduction_moves = {}
@@ -259,6 +254,17 @@ class MoveDB:
                     stat_reduction_moves[sanitize_string(cur_move.name)] = cur_stat_mods
 
         self.stat_mod_moves.update(stat_reduction_moves)
+
+        # set up field moves
+        self.field_moves:Dict[str, universal_data_objects.Move] = {}
+        # TODO: configure field moves for real. Rigt now, just hacking stuff in
+        lightscreen_move = self._data.get("lightscreen")
+        if not lightscreen_move is None:
+            self.field_moves[sanitize_string(lightscreen_move.name)] = lightscreen_move
+
+        reflect_move = self._data.get("reflect")
+        if not reflect_move is None:
+            self.field_moves[sanitize_string(reflect_move.name)] = reflect_move
     
     def validate_move_types(self, supported_types):
         invalid_moves = []

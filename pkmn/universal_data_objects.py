@@ -4,6 +4,7 @@ from typing import Dict, List, Tuple
 from enum import Enum
 
 from utils.constants import const
+from utils.io_utils import sanitize_string
 
 
 _NEUTRAL_NATURES = [0, 6, 12, 18, 24]
@@ -502,3 +503,31 @@ class TrainerTimingStats:
                 (self.send_out_time * (num_pokemon - 1))
             )
         )
+
+
+class FieldStatus:
+    def __init__(
+        self,
+        light_screen=False,
+        reflect=False,
+    ):
+        # TODO: do we need a gen-unique version of this? Currently only supporting things that are present in all gens, so not the biggest deal
+        self.light_screen = light_screen
+        self.reflect = reflect
+    
+    def _copy(self):
+        return FieldStatus(
+            light_screen=self.light_screen,
+            reflect=self.reflect,
+        )
+    
+    def apply_move(self, move:Move) -> FieldStatus:
+        # TODO: extract out field effects to be uniquely parseable from other effect
+        # TODO: for now, just hacking in support for reflect/light screen
+        result = self._copy()
+        if sanitize_string(move.name) == "lightscreen":
+            result.light_screen = True
+        elif sanitize_string(move.name) == "reflect":
+            result.reflect = True
+
+        return result

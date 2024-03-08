@@ -5,7 +5,7 @@ import logging
 from typing import Dict, List, Tuple
 from controllers.main_controller import MainController
 from pkmn.damage_calc import DamageRange, find_kill
-from pkmn.universal_data_objects import BadgeList, EnemyPkmn, Move, StageModifiers
+from pkmn.universal_data_objects import BadgeList, EnemyPkmn, FieldStatus, Move, StageModifiers
 from routing.full_route_state import RouteState
 from routing.state_objects import SoloPokemon
 from utils.config_manager import config
@@ -80,6 +80,8 @@ class BattleSummaryController:
         # The below state is all calculated based on values from the above state
         self._player_stage_modifier:StageModifiers = None
         self._enemy_stage_modifier:StageModifiers = None
+        self._player_field_status:FieldStatus = None
+        self._enemy_field_status:FieldStatus = None
 
         # NOTE: and finally, the actual display information
         # first idx: idx of pkmn in team
@@ -245,7 +247,9 @@ class BattleSummaryController:
     def _full_refresh(self, is_load=False):
         # Once the "true" state of the current battle has been updated, recalculate all the derived properties
         self._player_stage_modifier = self._calc_stage_modifier(self._player_setup_move_list)
+        self._player_field_status = self._calc_field_status(self._player_setup_move_list)
         self._enemy_stage_modifier = self._calc_stage_modifier(self._enemy_setup_move_list)
+        self._enemy_field_status = self._calc_field_status(self._enemy_setup_move_list)
         self._player_pkmn_matchup_data = []
         self._enemy_pkmn_matchup_data = []
         self._player_move_data = []
@@ -328,14 +332,18 @@ class BattleSummaryController:
         if is_player_mon:
             attacking_mon = self._original_player_mon_list[mon_idx]
             attacking_stage_modifiers = self._player_stage_modifier
+            attacking_field_status = self._player_field_status
             defending_mon = self._original_enemy_mon_list[mon_idx]
             defending_stage_modifiers = self._enemy_stage_modifier
+            defending_field_status = self._enemy_field_status
             custom_lookup_key = const.PLAYER_KEY
         else:
             attacking_mon = self._original_enemy_mon_list[mon_idx]
             attacking_stage_modifiers = self._enemy_stage_modifier
+            attacking_field_status = self._enemy_field_status
             defending_mon = self._original_player_mon_list[mon_idx]
             defending_stage_modifiers = self._player_stage_modifier
+            defending_field_status = self._player_field_status
             custom_lookup_key = const.ENEMY_KEY
 
         if not move_name:
@@ -367,6 +375,8 @@ class BattleSummaryController:
             defending_mon,
             attacking_stage_modifiers=attacking_stage_modifiers,
             defending_stage_modifiers=defending_stage_modifiers,
+            attacking_field=attacking_field_status,
+            defending_field=defending_field_status,
             custom_move_data=custom_data_selection,
             weather=self._weather,
             is_double_battle=self._double_battle_flag,
@@ -377,6 +387,8 @@ class BattleSummaryController:
             defending_mon,
             attacking_stage_modifiers=attacking_stage_modifiers,
             defending_stage_modifiers=defending_stage_modifiers,
+            attacking_field=attacking_field_status,
+            defending_field=defending_field_status,
             custom_move_data=custom_data_selection,
             is_crit=True,
             weather=self._weather,
@@ -434,8 +446,10 @@ class BattleSummaryController:
         self._mimic_selection = trainer_def.mimic_selection
         self._player_setup_move_list = trainer_def.setup_moves.copy()
         self._player_stage_modifier = self._calc_stage_modifier(self._player_setup_move_list)
+        self._player_field_status = self._calc_field_status(self._player_setup_move_list)
         self._enemy_setup_move_list = trainer_def.enemy_setup_moves.copy()
         self._enemy_stage_modifier = self._calc_stage_modifier(self._enemy_setup_move_list)
+        self._enemy_stage_modifier = self._calc_field_status(self._enemy_setup_move_list)
         self._cached_definition_order = [x.mon_order - 1 for x in event_group.event_definition.get_pokemon_list(definition_order=True)]
         if not trainer_def.custom_move_data:
             self._custom_move_data = []
@@ -674,6 +688,15 @@ class BattleSummaryController:
 
         for cur_move in move_list:
             result = result.apply_stat_mod(current_gen_info().move_db().get_stat_mod(cur_move))
+        
+        return result
+
+    @staticmethod
+    def _calc_field_status(move_list) -> FieldStatus:
+        result = FieldStatus()
+
+        for cur_move in move_list:
+            result = result.apply_move(current_gen_info().move_db().get_move(cur_move))
         
         return result
     

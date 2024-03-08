@@ -5,7 +5,7 @@ from typing import List, Tuple
 import tkinter
 from PIL import ImageGrab
 
-from pkmn.pkmn_db import sanitize_string
+from utils.io_utils import sanitize_string
 from utils.constants import const
 from utils import io_utils
 from routing.route_events import EventDefinition, EventFolder, EventGroup, EventItem, LearnMoveEventDefinition, TrainerEventDefinition
