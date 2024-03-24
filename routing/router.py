@@ -6,7 +6,7 @@ from typing import Dict, Tuple, List
 from utils.constants import const
 from pkmn import universal_data_objects
 from pkmn.gen_factory import current_gen_info, change_version
-from pkmn.pkmn_db import sanitize_string
+from utils.io_utils import sanitize_string
 from utils import io_utils
 from routing import route_events
 from routing import full_route_state

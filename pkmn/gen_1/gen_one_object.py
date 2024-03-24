@@ -157,6 +157,8 @@ class GenOne(CurrentGen):
         defending_pkmn:universal_data_objects.EnemyPkmn,
         attacking_stage_modifiers:universal_data_objects.StageModifiers=None,
         defending_stage_modifiers:universal_data_objects.StageModifiers=None,
+        attacking_field:universal_data_objects.FieldStatus=None,
+        defending_field:universal_data_objects.FieldStatus=None,
         is_crit:bool=False,
         custom_move_data:str="",
         weather:str=const.WEATHER_NONE,
@@ -172,6 +174,8 @@ class GenOne(CurrentGen):
             self._type_chart,
             attacking_stage_modifiers=attacking_stage_modifiers,
             defending_stage_modifiers=defending_stage_modifiers,
+            defender_has_light_screen=defending_field is not None and defending_field.light_screen,
+            defender_has_reflect=defending_field is not None and defending_field.reflect,
             is_crit=is_crit,
             custom_move_data=custom_move_data
         )
@@ -186,7 +190,9 @@ class GenOne(CurrentGen):
         return full_route_state.Inventory(bag_limit=gen_one_const.BAG_LIMIT)
     
     def get_stat_modifer_moves(self) -> List[str]:
-        return sorted([self._move_db.get_move(x).name for x in self._move_db.stat_mod_moves.keys()])
+        result = [self._move_db.get_move(x).name for x in self._move_db.stat_mod_moves.keys()]
+        result.extend([self._move_db.get_move(x).name for x in self._move_db.field_moves.keys()])
+        return sorted(result)
     
     def get_fight_reward(self, trainer_name) -> str:
         return self._fight_rewards.get(trainer_name)

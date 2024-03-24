@@ -1,7 +1,7 @@
 import logging
 
 from utils.constants import const
-from pkmn.pkmn_db import sanitize_string
+from utils.io_utils import sanitize_string
 
 logger = logging.getLogger(__name__)
 
