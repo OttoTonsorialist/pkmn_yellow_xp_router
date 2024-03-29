@@ -450,6 +450,13 @@ class MainController:
     
     def is_valid_levelup_move(self, new_move_def):
         return self._data.is_valid_levelup_move(new_move_def)
+    
+    def can_evolve_into(self, species_name):
+        target_mon = gen_factory.current_gen_info().pkmn_db().get_pkmn(species_name)
+        if target_mon is None:
+            return False
+        
+        return target_mon.growth_rate == self.get_final_state().solo_pkmn.species_def.growth_rate
 
     def has_unsaved_changes(self) -> routing.router.Router:
         return self._unsaved_changes

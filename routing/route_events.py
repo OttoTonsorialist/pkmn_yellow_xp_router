@@ -183,13 +183,13 @@ class LearnMoveEventDefinition:
     def __str__(self):
         try:
             if self.destination is None:
-                return f"Ignoring {self.move_to_learn}, from {self.source}"
+                return f"Ignoring {self.move_to_learn}, from {self.source} (mon: {self.mon})"
             elif self.move_to_learn is None:
                 return f"Deleting move in slot #: {self.destination + 1}"
             elif isinstance(self.destination, int):
-                return f"Learning {self.move_to_learn} in slot #: {self.destination + 1}, from {self.source}"
+                return f"Learning {self.move_to_learn} in slot #: {self.destination + 1}, from {self.source} (mon: {self.mon})"
 
-            return f"Learning {self.move_to_learn} over: {self.destination}, from {self.source}"
+            return f"Learning {self.move_to_learn} over: {self.destination}, from {self.source} (mon: {self.mon})"
         except Exception:
             return f"LearnMove: {self.move_to_learn, self.destination, self.source, self.level}"
 

@@ -300,10 +300,10 @@ class GameHookClient:
         # NOTE: all of the data is passed via a single list, so unpack the list into meaningful values
         [path, address, value, bytes_value, frozen, fields_changed] = args
         if not self.properties:
-            logger.debug(f"[GameHook Client] Mapper is not loaded, ignoring PropertUpdated event for: {path}: {value}")
+            logger.debug(f"[GameHook Client] Mapper is not loaded, ignoring PropertyUpdated event for: {path}: {value}")
             return
         if path not in self.properties:
-            logger.debug(f"[GameHook Client] Could not find a related propery in PropertUpdated event for: {path}: {value}")
+            logger.debug(f"[GameHook Client] Could not find a related propery in PropertyUpdated event for: {path}: {value}")
             return
         if path in self._ignore_properties:
             self._ignored_updates[path] = args

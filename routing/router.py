@@ -183,11 +183,9 @@ class Router:
         if post_state.solo_pkmn.name != prev_state.solo_pkmn.name:
             self._add_level_up_moves_for_mon(post_state.solo_pkmn.species_def)
             # only test the last level when an evolution occurs
-            # TODO: validate, is this logic correct?
-            if len(new_levels):
-                for test_level_up_move in self.level_up_move_defs.values():
-                    if test_level_up_move.matches_level_up_move(new_levels[-1], post_state.solo_pkmn.name):
-                        to_learn.append(test_level_up_move)
+            for test_level_up_move in self.level_up_move_defs.values():
+                if test_level_up_move.matches_level_up_move(post_state.solo_pkmn.cur_level, post_state.solo_pkmn.name):
+                    to_learn.append(test_level_up_move)
         
         if to_learn:
             event_group.apply(prev_state, level_up_learn_event_defs=to_learn)
@@ -512,13 +510,6 @@ class Router:
         
         return dest_path
                 
-    def _recalc(self):
-        self.event_item_lookup = {}
-
-        # TODO: only recalc what's necessary, based on a passed-in index
-        # TODO: wrapper for recursive function currently does nothing, may want to remove later
-        self._recursive_recalc(self.root_folder, self.init_route_state)
-
     def _export_single_entry(self, obj, depth:int, output:list):
         indent = "\t" * depth
         if isinstance(obj, route_events.EventFolder):
