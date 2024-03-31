@@ -5,9 +5,10 @@ import threading
 from typing import List, Dict
 from enum import Enum, auto
 
+from pkmn.universal_data_objects import PokemonSpecies
 import route_recording.recorder
 from route_recording.gamehook_client import GameHookProperty
-from routing.route_events import EventDefinition, HoldItemEventDefinition, InventoryEventDefinition, LearnMoveEventDefinition, RareCandyEventDefinition, SaveEventDefinition, VitaminEventDefinition
+from routing.route_events import EventDefinition, EvolutionEventDefinition, HoldItemEventDefinition, InventoryEventDefinition, LearnMoveEventDefinition, RareCandyEventDefinition, SaveEventDefinition, VitaminEventDefinition
 from route_recording.game_recorders.gen_two.crystal_gamehook_constants import GameHookConstantConverter, gh_gen_two_const
 from utils.constants import const
 from utils.config_manager import config
@@ -43,6 +44,42 @@ class State:
         return self.state_type
 
 
+class _MonKey:
+    def __init__(self, species, attack, defense, speed, special_attack, level):
+        self.species = species
+        self.attack = attack
+        self.defense = defense
+        self.speed = speed
+        self.special_attack = special_attack
+        self.level = level
+
+    def get_key(self):
+        return (
+            self.species,
+            self.get_dvs(),
+        )
+
+    def get_dvs(self):
+        return (
+            self.attack,
+            self.defense,
+            self.speed,
+            self.special_attack,
+        )
+    
+    def __eq__(self, other) -> bool:
+        if not isinstance(other, _MonKey):
+            return False
+        
+        return self.get_key() == other.get_key()
+    
+    def __hash__(self) -> int:
+        return hash(self.get_key())
+    
+    def __repr__(self) -> str:
+        return f"_MonKey: {self.get_key()}"
+
+
 class Machine:
     def __init__(self, controller:route_recording.recorder.RecorderController, gamehook_client:route_recording.recorder.RecorderGameHookClient, gh_converter:GameHookConstantConverter):
         self._controller = controller
@@ -52,7 +89,8 @@ class Machine:
 
 
         self._player_id = None
-        self._solo_mon_species = None
+        self.valid_solo_mon = False
+        self._cached_team = []
         self._level_up_moves = {}
         self._cached_items = {}
         self._cached_moves = [None, None, None, None]
@@ -64,50 +102,158 @@ class Machine:
         self._events_to_generate:List[EventDefinition] = []
         self._active = False
 
+        self._solo_mon_key:_MonKey = self._get_route_defined_mon_key()
+
         self._processing_thread = threading.Thread(target=self._process_events)
         self._processing_thread.setDaemon(True)
     
-    def register_solo_mon(self, mon_name=None):
-        if mon_name is None:
-            mon_name = self._gamehook_client.get(gh_gen_two_const.KEY_PLAYER_MON_SPECIES).value
+    def _get_route_defined_mon_key(self) -> _MonKey:
+        cur_dvs = self._controller._controller.get_dvs()
+        return _MonKey(
+            self._controller._controller.get_final_state().solo_pkmn.species_def.name,
+            cur_dvs.attack,
+            cur_dvs.defense,
+            cur_dvs.speed,
+            cur_dvs.special_attack,
+            None,
+        )
 
-        logger.info(f"Registering solo mon: {mon_name}")
-        if self._solo_mon_species is not None:
-            logger.error(f"Trying to register solo mon when one is already registered: {self._solo_mon_species}")
-        
-        self._solo_mon_species = self.gh_converter.pkmn_name_convert(mon_name)
-        if self._solo_mon_species is None:
-            self._move_cache_update(generate_events=False)
+    def _get_mon_key(self, mon_idx) -> _MonKey:
+        species_val = self.gh_converter.pkmn_name_convert(
+            self._gamehook_client.get(gh_gen_two_const.ALL_KEYS_PLAYER_TEAM_SPECIES[mon_idx]).value
+        )
+        return _MonKey(
+            species_val,
+            self._gamehook_client.get(gh_gen_two_const.ALL_KEYS_PLAYER_TEAM_DV_ATTACK[mon_idx]).value,
+            self._gamehook_client.get(gh_gen_two_const.ALL_KEYS_PLAYER_TEAM_DV_DEFENSE[mon_idx]).value,
+            self._gamehook_client.get(gh_gen_two_const.ALL_KEYS_PLAYER_TEAM_DV_SPEED[mon_idx]).value,
+            self._gamehook_client.get(gh_gen_two_const.ALL_KEYS_PLAYER_TEAM_DV_SPECIAL[mon_idx]).value,
+            self._gamehook_client.get(gh_gen_two_const.ALL_KEYS_PLAYER_TEAM_LEVEL[mon_idx]).value,
+        )
+    
+    def _load_level_up_moves(self):
+        new_mon:PokemonSpecies = current_gen_info().pkmn_db().get_pkmn(self._solo_mon_key.species)
+        if not new_mon:
+            logger.info(f"Couldn't load level up moves from invalid mon: {self._solo_mon_key.species}")
             return
 
-        solo_mon = current_gen_info().pkmn_db().get_pkmn(self._solo_mon_species)
-        if solo_mon is None:
-            self._controller._controller.trigger_exception(f"Identified solo mon was invalid: {mon_name} from GameHook, converted to {self._solo_mon_species}")
-            self._solo_mon_species = None
-            self._controller._controller.set_record_mode(False)
-            return
-        elif solo_mon.name != self._controller._controller.get_init_state().solo_pkmn.name:
-            self._controller._controller.trigger_exception(f"Identified solo mon {self._solo_mon_species} from GameHook did not match route solo mon: {self._controller._controller.get_init_state().solo_pkmn.name}")
-            self._solo_mon_species = None
-            self._controller._controller.set_record_mode(False)
-            return
-
-        self._level_up_moves = {}
-        for [move_level, move_name] in solo_mon.levelup_moves:
+        for [move_level, move_name] in new_mon.levelup_moves:
             move_level = int(move_level)
             if move_level not in self._level_up_moves:
-                self._level_up_moves[move_level] = []
+                self._level_up_moves[(new_mon.name, move_level)] = []
             
-            self._level_up_moves[move_level].append(move_name)
-        
-        self._move_cache_update(generate_events=False)
+            self._level_up_moves[(new_mon.name, move_level)].append(move_name)
     
-    def update_all_cached_info(self, include_solo_mon=False):
+    def update_team_cache(self, generate_events=True, regenerate_move_cache=False):
+        if not generate_events:
+            self.valid_solo_mon = False
+            self._solo_mon_key = self._get_route_defined_mon_key()
+            self._cached_team = []
+
+        new_cache:List[_MonKey] = [self._get_mon_key(i) for i in range(6)]
+        # filter out empty mons
+        new_cache:List[_MonKey] = [x for x in new_cache if x.species]
+
+        gained_mons = {}
+        lost_mons = {}
+        for mon_idx in range(len(new_cache)):
+            if mon_idx >= len(self._cached_team):
+                gained_mons[new_cache[mon_idx]] = gained_mons.get(new_cache[mon_idx], 0) + 1
+            elif new_cache[mon_idx] != self._cached_team[mon_idx]:
+                gained_mons[new_cache[mon_idx]] = gained_mons.get(new_cache[mon_idx], 0) + 1
+                lost_mons[self._cached_team[mon_idx]] = lost_mons.get(self._cached_team[mon_idx], 0) + 1
+        
+        # account for re-orderings. Any re-ordered mons will have keys present in both dicts
+        for cur_mon in gained_mons:
+            if cur_mon in lost_mons:
+                match_count = min(gained_mons[cur_mon], lost_mons[cur_mon])
+                gained_mons[cur_mon] -= match_count
+                lost_mons[cur_mon] -= match_count
+        
+        # drop any mons that have 0 instances, after accounting for reordering
+        gained_mons:Dict[_MonKey, int] = dict(filter(lambda x:x[1] > 0, gained_mons.items()))
+        lost_mons:Dict[_MonKey, int] = dict(filter(lambda x:x[1] > 0, lost_mons.items()))
+
+        if lost_mons or gained_mons:
+            logger.info(f"Team change detected")
+            logger.info(f"Losing mons: {lost_mons}")
+            logger.info(f"Gaining mons: {gained_mons}")
+            logger.info(f"New team: {new_cache}")
+
+        if self.valid_solo_mon and self._solo_mon_key in lost_mons:
+            found_evolutions = []
+            for test_mon in gained_mons:
+                if (
+                    test_mon.get_dvs() == self._solo_mon_key.get_dvs() and
+                    self._controller._controller.can_evolve_into(test_mon.species)
+                ):
+                    found_evolutions.append(test_mon)
+            
+            if len(found_evolutions) >= 1:
+                if len(found_evolutions) > 1:
+                    err_msg = f"Found multiple new valid solo mons, just taking the first one from the list: {found_evolutions}"
+                    logger.error(err_msg)
+                    self._queue_new_event(EventDefinition(notes=const.RECORDING_ERROR_FRAGMENT + err_msg))
+                self._trigger_evolution(found_evolutions[0])
+            else:
+                self.valid_solo_mon = False
+        elif not self.valid_solo_mon and new_cache:
+            logger.info(f"looking for solo mon species: {self._solo_mon_key.species}")
+            if len(self._cached_team) == 0:
+                # special case: if we had no data previously, then look specifically for the solo mon
+                logger.info(f"Creating mons from empty cache. Prioritizing slot 0: {new_cache[0]}")
+                if self._solo_mon_key.species == new_cache[0].species:
+                    # If this is our first pokemon and the species matches, then allow the DVs to be incorrect
+                    # this is just an attempt to avoid burdening the player unnecessarily if their DVs are wrong in the route file
+                    if self._solo_mon_key != new_cache[0]:
+                        err_msg = f"Expected DV spread: {self._solo_mon_key}, but found solo mon with this DV spread: {new_cache[0]}"
+                        logger.error(err_msg)
+                        self._queue_new_event(EventDefinition(notes=const.RECORDING_ERROR_FRAGMENT + err_msg))
+                    
+                    self.valid_solo_mon = True
+                    self._solo_mon_key = new_cache[0]
+                    self._load_level_up_moves()
+
+            if not self.valid_solo_mon:
+                found_matches = []
+                found_evolutions = []
+                for test_mon in gained_mons:
+                    if test_mon.get_dvs() == self._solo_mon_key.get_dvs():
+                        cur_mon_obj = current_gen_info().pkmn_db().get_pkmn(test_mon[0])
+                        if not cur_mon_obj is None and cur_mon_obj.name == self._solo_mon_key.species:
+                            found_matches.append(test_mon)
+                        elif self._controller._controller.can_evolve_into(test_mon[0]):
+                            found_evolutions.append(test_mon)
+                
+                if len(found_matches) >= 1:
+                    if len(found_matches) > 1:
+                        err_msg = f"Found multiple new valid solo mons, just taking the first one from the list: {found_matches}"
+                        logger.error(err_msg)
+                        self._queue_new_event(EventDefinition(notes=const.RECORDING_ERROR_FRAGMENT + err_msg))
+                    self.valid_solo_mon = True
+                    self._load_level_up_moves()
+                    self._solo_mon_key = found_matches[0]
+                elif len(found_evolutions) >= 1:
+                    if len(found_evolutions) > 1:
+                        err_msg = f"Found multiple new valid solo mons, just taking the first one from the list: {found_evolutions}"
+                        logger.error(err_msg)
+                        self._queue_new_event(EventDefinition(notes=const.RECORDING_ERROR_FRAGMENT + err_msg))
+                    self.valid_solo_mon = True
+                    self._solo_mon_key = found_evolutions[0]
+                    self._trigger_evolution(found_evolutions[0])
+
+        if regenerate_move_cache:
+            if not self.valid_solo_mon:
+                logger.error(f"skipping regeneration of move cache, as no valid solo mon is present")
+            else:
+                self._move_cache_update(generate_events=False)
+        
+        logger.info(f"after team cache update, valid_solo_mon: {self.valid_solo_mon}")
+        self._cached_team = new_cache
+    
+    def update_all_cached_info(self):
         # Updates all the info cached in the machine WITHOUT generating events for it
-        if include_solo_mon:
-            self.register_solo_mon()
-        else:
-            self._move_cache_update(generate_events=False)
+        self.update_team_cache(generate_events=False, regenerate_move_cache=True)
         self._item_cache_update(generate_events=False)
         self._money_cache_update()
         self._controller.entered_new_area(
@@ -116,10 +262,21 @@ class Machine:
         )
     
     def _solo_mon_levelup(self, new_level):
-        for move_name in self._level_up_moves.get(new_level, []):
+        logger.info(f"levelup detected. {self._solo_mon_key.species} leveling up to {new_level}")
+        for move_name in self._level_up_moves.get((self._solo_mon_key.species, new_level), []):
+            logger.info(f"queueing up ignore event of move: {move_name}")
             self._queue_new_event(
-                EventDefinition(learn_move=LearnMoveEventDefinition(move_name, None, const.MOVE_SOURCE_LEVELUP, level=new_level, mon=self._solo_mon_species))
+                EventDefinition(learn_move=LearnMoveEventDefinition(move_name, None, const.MOVE_SOURCE_LEVELUP, level=new_level, mon=self._solo_mon_key.species))
             )
+    
+    def _trigger_evolution(self, new_mon_key:_MonKey):
+        logger.info(f"Evolving into: {new_mon_key.species}")
+        self._solo_mon_key = new_mon_key
+        self._load_level_up_moves()
+        self._queue_new_event(
+            EventDefinition(evolution=EvolutionEventDefinition(new_mon_key.species))
+        )
+        self._solo_mon_levelup(new_mon_key.level)
     
     def _money_cache_update(self):
         new_cache = self._gamehook_client.get(gh_gen_two_const.KEY_PLAYER_MONEY).value
@@ -171,7 +328,7 @@ class Machine:
                 if levelup_source:
                     source = const.MOVE_SOURCE_LEVELUP
                     level = self._gamehook_client.get(gh_gen_two_const.KEY_PLAYER_MON_LEVEL).value
-                    mon = self._solo_mon_species
+                    mon = self._solo_mon_key.species
                 elif tutor_expected:
                     source = const.MOVE_SOURCE_TUTOR
                     level = const.LEVEL_ANY
@@ -197,6 +354,7 @@ class Machine:
                     )
                 )
         
+        logger.info(f"new move cache: {new_cache}")
         self._cached_moves = new_cache
     
     def _get_item_cache(self):
@@ -208,13 +366,18 @@ class Machine:
             if item_type is None:
                 break
             
-            result[item_type] = self._gamehook_client.get(gh_gen_two_const.ALL_KEYS_ITEM_QUANTITY[i]).value
+            if item_type in result:
+                result[item_type] += self._gamehook_client.get(gh_gen_two_const.ALL_KEYS_ITEM_QUANTITY[i]).value
+            else:
+                result[item_type] = self._gamehook_client.get(gh_gen_two_const.ALL_KEYS_ITEM_QUANTITY[i]).value
         
         # load the ball pocket
         for i in range(len(gh_gen_two_const.ALL_KEYS_BALL_TYPE)):
             item_type = self._gamehook_client.get(gh_gen_two_const.ALL_KEYS_BALL_TYPE[i]).value
             if item_type is None:
                 break
+            elif item_type in result:
+                continue
             
             result[item_type] = self._gamehook_client.get(gh_gen_two_const.ALL_KEYS_BALL_QUANTITY[i]).value
 
@@ -223,6 +386,8 @@ class Machine:
             item_type = self._gamehook_client.get(gh_gen_two_const.ALL_KEYS_KEY_ITEMS[i]).value
             if item_type is None:
                 break
+            elif item_type in result:
+                continue
             
             result[item_type] = 1
 
@@ -254,6 +419,7 @@ class Machine:
         self._cached_items = new_cache
 
         if not generate_events:
+            logger.info(f"new cache (not generating events): {new_cache}")
             return
         
         compared = set()
@@ -278,6 +444,12 @@ class Machine:
 
         if len(gained_items) > 0 and sale_expected:
             logger.error(f"Gained the following items when expecting to be losing items to selling... {gained_items}")
+
+        logger.info(f"held item changed? {held_item_changed}")
+        logger.info(f"original cache: {old_cache}")
+        logger.info(f"new cache: {new_cache}")
+        logger.info(f"gained items: {gained_items}")
+        logger.info(f"lost items: {lost_items}")
 
         if not held_item_changed:
             for cur_gained_item, cur_gain_num in gained_items.items():

@@ -66,7 +66,7 @@ class UninitializedState(WatchForResetState):
         if self.machine._player_id == 0:
             self.machine._player_id = None
         
-        self.machine.update_all_cached_info(include_solo_mon=True)
+        self.machine.update_all_cached_info()
     
     @auto_reset
     def transition(self, new_prop:GameHookProperty, prev_prop:GameHookProperty) -> StateType:
@@ -102,7 +102,6 @@ class ResettingState(State):
         if self.machine._player_id is None:
             self.machine._player_id = new_player_id
         elif self.machine._player_id != new_player_id:
-            self.machine._solo_mon_species = None
             self.machine._controller.route_restarted()
 
         self.machine.update_all_cached_info()
@@ -134,6 +133,7 @@ class BattleState(WatchForResetState):
         self._waiting_for_items = False
         self._item_update_delay = 0
         self._loss_detected = False
+        self._evolution_detected = False
         self._held_item_consumed = False
         self._cached_mon_species = ""
         self._cached_mon_level = 0
@@ -152,6 +152,7 @@ class BattleState(WatchForResetState):
         self.is_trainer_battle = self.machine._gamehook_client.get(gh_gen_two_const.KEY_BATTLE_MODE).value == gh_gen_two_const.TRAINER_BATTLE_TYPE
         self._trainer_event_created = False
         self._loss_detected = False
+        self._evolution_detected = False
         self._held_item_consumed = False
         self._cached_mon_species = ""
         self._cached_mon_level = 0
@@ -231,6 +232,8 @@ class BattleState(WatchForResetState):
                 if self._trainer_name.startswith("Champion"):
                     self.machine._queue_new_event(EventDefinition(save=SaveEventDefinition(location="Post-Champion Autosave")))
             if self._waiting_for_moves:
+                if self._evolution_detected:
+                    self.machine.update_team_cache()
                 self.machine._move_cache_update(levelup_source=True)
             if self._waiting_for_items:
                 self.machine._item_cache_update()
@@ -284,6 +287,8 @@ class BattleState(WatchForResetState):
                 if player_mon_pos in self._exp_split[enemy_mon_pos]:
                     self._exp_split[enemy_mon_pos].remove(player_mon_pos)
 
+        elif new_prop.path in gh_gen_two_const.KEY_PLAYER_MON_SPECIES:
+            self._evolution_detected = True
         elif new_prop.path in gh_gen_two_const.ALL_KEYS_PLAYER_MOVES:
             if not self._waiting_for_moves:
                 self._move_update_delay = 2
@@ -296,6 +301,8 @@ class BattleState(WatchForResetState):
             if self._waiting_for_moves:
                 if self._move_update_delay <= 0:
                     self._waiting_for_moves = False
+                    if self._evolution_detected:
+                        self.machine.update_team_cache()
                     self.machine._move_cache_update(levelup_source=True)
                 else:
                     self._move_update_delay -= 1
@@ -363,8 +370,11 @@ class InventoryChangeState(WatchForResetState):
         elif new_prop.path in gh_gen_two_const.ALL_KEYS_ALL_ITEM_FIELDS:
             self._seconds_delay = self.BASE_DELAY
         elif new_prop.path == gh_gen_two_const.KEY_PLAYER_MON_HELD_ITEM:
-            if self.machine._solo_mon_species == self.machine.gh_converter.pkmn_name_convert(prev_prop.value):
+            logger.info(f"changing! mon species? {self.machine.gh_converter.pkmn_name_convert(self.machine._gamehook_client.get(gh_gen_two_const.KEY_PLAYER_MON_SPECIES).value)}")
+            logger.info(f"solo mon species: {self.machine._solo_mon_key.species}")
+            if self.machine._solo_mon_key.species == self.machine.gh_converter.pkmn_name_convert(self.machine._gamehook_client.get(gh_gen_two_const.KEY_PLAYER_MON_SPECIES).value):
                 self._held_item_changed = True
+                logger.info(f"gotem: {self._held_item_changed}")
         elif new_prop.path == gh_gen_two_const.KEY_GAMETIME_SECONDS:
             if self._seconds_delay <= 0:
                 return StateType.OVERWORLD
@@ -391,6 +401,7 @@ class UseRareCandyState(WatchForResetState):
         if next_state.state_type != StateType.RESETTING:
             self.machine._item_cache_update(candy_flag=True)
             self.machine._solo_mon_levelup(self.machine._gamehook_client.get(gh_gen_two_const.KEY_PLAYER_MON_LEVEL).value)
+            self.machine.update_team_cache()
             if self._move_learned:
                 self.machine._move_cache_update(levelup_source=True)
     
@@ -510,6 +521,7 @@ class OverworldState(WatchForResetState):
     
     def _on_enter(self, prev_state: State):
         self.machine._money_cache_update()
+        self.machine.update_team_cache()
         self._waiting_for_registration = False
         self._register_delay = self.BASE_DELAY
         self._waiting_for_new_file = False
@@ -533,7 +545,7 @@ class OverworldState(WatchForResetState):
                 if self._new_file_delay <= 0:
                     self._waiting_for_new_file = False
                     self.machine._controller.route_restarted()
-                    self.machine.update_all_cached_info(include_solo_mon=True)
+                    self.machine.update_all_cached_info()
                 self._new_file_delay -= 1
                 self._wrong_mon_delay -= 1
             
@@ -562,9 +574,9 @@ class OverworldState(WatchForResetState):
         elif new_prop.path == gh_gen_two_const.KEY_PLAYER_MON_SPECIES:
             if not prev_prop.value:
                 self._waiting_for_registration = True
-            elif self.machine._solo_mon_species == self.machine.gh_converter.pkmn_name_convert(prev_prop.value):
+            elif self.machine._solo_mon_key.species == self.machine.gh_converter.pkmn_name_convert(prev_prop.value):
                 self._wrong_mon_in_slot_1 = True
-            elif self.machine._solo_mon_species == self.machine.gh_converter.pkmn_name_convert(new_prop.value):
+            elif self.machine._solo_mon_key.species == self.machine.gh_converter.pkmn_name_convert(new_prop.value):
                 self._wrong_mon_delay = self.BASE_DELAY
                 self._waiting_for_solo_mon_in_slot_1 = True
         elif new_prop.path == gh_gen_two_const.KEY_PLAYER_MON_LEVEL:
@@ -600,7 +612,7 @@ class OverworldState(WatchForResetState):
             if self._waiting_for_registration:
                 if self._register_delay <= 0:
                     self._waiting_for_registration = False
-                    self.machine.register_solo_mon(self.machine._gamehook_client.get(gh_gen_two_const.KEY_PLAYER_MON_SPECIES).value)
+                    self.machine.update_team_cache(regenerate_move_cache=True)
                 self._register_delay -= 1
 
 

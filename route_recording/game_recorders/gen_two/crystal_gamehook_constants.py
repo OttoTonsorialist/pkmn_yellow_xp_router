@@ -27,6 +27,13 @@ class Gen2GameHookConstants:
         self.KEY_PLAYER_MON_HELD_ITEM = "player.team.0.heldItem"
         self.KEY_PLAYER_MON_FRIENDSHIP = "player.team.0.friendship"
 
+        self.ALL_KEYS_PLAYER_TEAM_SPECIES = [f"player.team.{i}.species" for i in range(0, 6)]
+        self.ALL_KEYS_PLAYER_TEAM_LEVEL = [f"player.team.{i}.level" for i in range(0, 6)]
+        self.ALL_KEYS_PLAYER_TEAM_DV_ATTACK = [f"player.team.{i}.dvAttack" for i in range(0, 6)]
+        self.ALL_KEYS_PLAYER_TEAM_DV_DEFENSE = [f"player.team.{i}.dvDefense" for i in range(0, 6)]
+        self.ALL_KEYS_PLAYER_TEAM_DV_SPEED = [f"player.team.{i}.dvSpeed" for i in range(0, 6)]
+        self.ALL_KEYS_PLAYER_TEAM_DV_SPECIAL = [f"player.team.{i}.dvSpecial" for i in range(0, 6)]
+
         self.KEY_PLAYER_MON_MOVE_1 = "player.team.0.move1"
         self.KEY_PLAYER_MON_MOVE_2 = "player.team.0.move2"
         self.KEY_PLAYER_MON_MOVE_3 = "player.team.0.move3"
@@ -182,6 +189,7 @@ class Gen2GameHookConstants:
         self.ALL_KEYS_TO_REGISTER.extend(self.ALL_KEYS_PLAYER_MOVES)
         self.ALL_KEYS_TO_REGISTER.extend(self.ALL_KEYS_STAT_EXP)
         self.ALL_KEYS_TO_REGISTER.extend(self.ALL_KEYS_ALL_ITEM_FIELDS)
+        self.ALL_KEYS_TO_REGISTER.extend(self.ALL_KEYS_PLAYER_TEAM_SPECIES)
 
         self.TRAINER_BATTLE_TYPE = "Trainer"
         self.WILD_BATTLE_TYPE = "Wild"

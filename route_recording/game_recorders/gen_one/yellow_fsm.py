@@ -198,7 +198,7 @@ class Machine:
                 self._trigger_evolution(found_evolutions[0])
             else:
                 self.valid_solo_mon = False
-        elif not self.valid_solo_mon:
+        elif not self.valid_solo_mon and new_cache:
             logger.info(f"looking for solo mon species: {self._solo_mon_key.species}")
             if len(self._cached_team) == 0:
                 # special case: if we had no data previously, then look specifically for the solo mon
