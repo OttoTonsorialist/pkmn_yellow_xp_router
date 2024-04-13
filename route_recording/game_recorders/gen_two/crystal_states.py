@@ -370,8 +370,6 @@ class InventoryChangeState(WatchForResetState):
         elif new_prop.path in gh_gen_two_const.ALL_KEYS_ALL_ITEM_FIELDS:
             self._seconds_delay = self.BASE_DELAY
         elif new_prop.path == gh_gen_two_const.KEY_PLAYER_MON_HELD_ITEM:
-            logger.info(f"changing! mon species? {self.machine.gh_converter.pkmn_name_convert(self.machine._gamehook_client.get(gh_gen_two_const.KEY_PLAYER_MON_SPECIES).value)}")
-            logger.info(f"solo mon species: {self.machine._solo_mon_key.species}")
             if self.machine._solo_mon_key.species == self.machine.gh_converter.pkmn_name_convert(self.machine._gamehook_client.get(gh_gen_two_const.KEY_PLAYER_MON_SPECIES).value):
                 self._held_item_changed = True
                 logger.info(f"gotem: {self._held_item_changed}")

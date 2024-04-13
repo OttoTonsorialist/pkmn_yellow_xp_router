@@ -208,7 +208,7 @@ class Machine:
                     if self._solo_mon_key != new_cache[0]:
                         err_msg = f"Expected DV spread: {self._solo_mon_key}, but found solo mon with this DV spread: {new_cache[0]}"
                         logger.error(err_msg)
-                        self._queue_new_event(EventDefinition(notes=const.RECORDING_ERROR_FRAGMENT + err_msg))
+                        #self._queue_new_event(EventDefinition(notes=const.RECORDING_ERROR_FRAGMENT + err_msg))
                     
                     self.valid_solo_mon = True
                     self._solo_mon_key = new_cache[0]
@@ -419,7 +419,6 @@ class Machine:
         self._cached_items = new_cache
 
         if not generate_events:
-            logger.info(f"new cache (not generating events): {new_cache}")
             return
         
         compared = set()
@@ -444,12 +443,6 @@ class Machine:
 
         if len(gained_items) > 0 and sale_expected:
             logger.error(f"Gained the following items when expecting to be losing items to selling... {gained_items}")
-
-        logger.info(f"held item changed? {held_item_changed}")
-        logger.info(f"original cache: {old_cache}")
-        logger.info(f"new cache: {new_cache}")
-        logger.info(f"gained items: {gained_items}")
-        logger.info(f"lost items: {lost_items}")
 
         if not held_item_changed:
             for cur_gained_item, cur_gain_num in gained_items.items():

@@ -15,17 +15,25 @@ class Gen3GameHookConstants:
         self.ROAR_FLAG = const.RECORDING_ERROR_FRAGMENT + "FLAG TO SIGNAL ROARS NEED TO BE HANDLED. USER SHOULD NEVER SEE THIS"
         self.HELD_CHECK_FLAG = const.RECORDING_ERROR_FRAGMENT + "FLAG TO SIGNAL FOR DEEPER HELD ITEM CHECKING. USER SHOULD NEVER SEE THIS"
 
-        self.KEY_DMA_A = "pointers.dma1"
-        self.KEY_DMA_B = "pointers.dma2"
-        self.KEY_DMA_C = "pointers.dma3"
-        self.KEY_OVERWORLD_MAP = "overworld.mapName"
-        self.KEY_PLAYER_PLAYERID = "player.playerId"
+        self.KEY_DMA_A = "pointers.dma_1"
+        self.KEY_DMA_B = "pointers.dma_2"
+        self.KEY_DMA_C = "pointers.dma_3"
+        self.KEY_OVERWORLD_MAP = "overworld.map_name"
+        self.KEY_PLAYER_PLAYERID = "player.player_id"
         self.KEY_PLAYER_MONEY = "bag.money"
-        self.KEY_PLAYER_MON_EXPPOINTS = "player.team.0.expPoints"
+        self.KEY_PLAYER_MON_EXPPOINTS = "player.team.0.exp"
         self.KEY_PLAYER_MON_LEVEL = "player.team.0.level"
         self.KEY_PLAYER_MON_SPECIES = "player.team.0.species"
-        self.KEY_PLAYER_MON_HELD_ITEM = "player.team.0.itemHeld"
+        self.KEY_PLAYER_MON_HELD_ITEM = "player.team.0.held_item"
         self.KEY_PLAYER_MON_FRIENDSHIP = "player.team.0.friendship"
+
+        self.ALL_KEYS_PLAYER_TEAM_SPECIES = [f"player.team.{i}.species" for i in range(0, 6)]
+        self.ALL_KEYS_PLAYER_TEAM_LEVEL = [f"player.team.{i}.level" for i in range(0, 6)]
+        self.ALL_KEYS_PLAYER_TEAM_IV_ATTACK = [f"player.team.{i}.ivs.attack" for i in range(0, 6)]
+        self.ALL_KEYS_PLAYER_TEAM_IV_DEFENSE = [f"player.team.{i}.ivs.defense" for i in range(0, 6)]
+        self.ALL_KEYS_PLAYER_TEAM_IV_SPEED = [f"player.team.{i}.ivs.speed" for i in range(0, 6)]
+        self.ALL_KEYS_PLAYER_TEAM_IV_SPECIAL_ATTACK = [f"player.team.{i}.ivs.special_attack" for i in range(0, 6)]
+        self.ALL_KEYS_PLAYER_TEAM_IV_SPECIAL_DEFENSE = [f"player.team.{i}.ivs.special_defense" for i in range(0, 6)]
 
         self.KEY_PLAYER_MON_MOVE_1 = "player.team.0.moves.0.move"
         self.KEY_PLAYER_MON_MOVE_2 = "player.team.0.moves.1.move"
@@ -42,8 +50,8 @@ class Gen3GameHookConstants:
         self.KEY_PLAYER_MON_STAT_EXP_ATTACK = "player.team.0.evs.attack"
         self.KEY_PLAYER_MON_STAT_EXP_DEFENSE = "player.team.0.evs.defense"
         self.KEY_PLAYER_MON_STAT_EXP_SPEED = "player.team.0.evs.speed"
-        self.KEY_PLAYER_MON_STAT_EXP_SPECIAL_ATTACK = "player.team.0.evs.specialAttack"
-        self.KEY_PLAYER_MON_STAT_EXP_SPECIAL_DEFENSE = "player.team.0.evs.specialDefense"
+        self.KEY_PLAYER_MON_STAT_EXP_SPECIAL_ATTACK = "player.team.0.evs.special_attack"
+        self.KEY_PLAYER_MON_STAT_EXP_SPECIAL_DEFENSE = "player.team.0.evs.special_defense"
         self.ALL_KEYS_STAT_EXP = [
             self.KEY_PLAYER_MON_STAT_EXP_HP,
             self.KEY_PLAYER_MON_STAT_EXP_ATTACK,
@@ -53,33 +61,33 @@ class Gen3GameHookConstants:
             self.KEY_PLAYER_MON_STAT_EXP_SPECIAL_DEFENSE,
         ]
 
-        self.KEY_GAMETIME_SECONDS = "gameTime.seconds"
-        self.KEY_GAMETIME_FRAMES = "gameTime.frames"
-        self.KEY_BATTLE_FLAG = "battle.turnInfo.type.is_battle"
-        self.KEY_TRAINER_BATTLE_FLAG = "battle.turnInfo.type.trainer"
-        self.KEY_DOUBLE_BATTLE_FLAG = "battle.turnInfo.type.double"
-        self.KEY_TWO_OPPONENTS_BATTLE_FLAG = "battle.turnInfo.type.two_opponents"
-        self.KEY_BATTLE_OUTCOME = "battle.turnInfo.battleOutcome"
-        self.KEY_BATTLE_PLAYER_MON_PARTY_POS = "battle.player.activePokemon.partyPos"
-        self.KEY_BATTLE_PLAYER_MON_HP = "battle.player.activePokemon.stats.hp"
-        self.KEY_BATTLE_ALLY_MON_PARTY_POS = "battle.player.activePokemon2.partyPos"
-        self.KEY_BATTLE_ALLY_MON_HP = "battle.player.activePokemon2.stats.hp"
+        self.KEY_GAMETIME_SECONDS = "game_time.seconds"
+        self.KEY_GAMETIME_FRAMES = "game_time.frames"
+        self.KEY_BATTLE_FLAG = "battle.flags.is_battle"
+        self.KEY_TRAINER_BATTLE_FLAG = "battle.flags.trainer"
+        self.KEY_DOUBLE_BATTLE_FLAG = "battle.flags.double"
+        self.KEY_TWO_OPPONENTS_BATTLE_FLAG = "battle.flags.two_opponents"
+        self.KEY_BATTLE_OUTCOME = "battle.other.battle_outcomes"
+        self.KEY_BATTLE_PLAYER_MON_PARTY_POS = "battle.player.party_position"
+        self.KEY_BATTLE_PLAYER_MON_HP = "battle.player.active_pokemon.stats.hp"
+        self.KEY_BATTLE_ALLY_MON_PARTY_POS = "battle.player.party_position_2"
+        self.KEY_BATTLE_ALLY_MON_HP = "battle.player.active_pokemon_2.stats.hp"
 
         self.KEY_BATTLE_TRAINER_A_NUMBER = "battle.opponent.id"
-        self.KEY_BATTLE_TRAINER_B_NUMBER = "battle.opponent2.id"
-        self.KEY_BATTLE_FIRST_ENEMY_SPECIES = "battle.opponent.activePokemon.species"
-        self.KEY_BATTLE_FIRST_ENEMY_LEVEL = "battle.opponent.activePokemon.level"
-        self.KEY_BATTLE_FIRST_ENEMY_HP = "battle.opponent.activePokemon.stats.hp"
-        self.KEY_BATTLE_FIRST_ENEMY_PARTY_POS = "battle.opponent.activePokemon.partyPos"
-        self.KEY_BATTLE_SECOND_ENEMY_SPECIES = "battle.opponent.activePokemon2.species"
-        self.KEY_BATTLE_SECOND_ENEMY_LEVEL = "battle.opponent.activePokemon2.level"
-        self.KEY_BATTLE_SECOND_ENEMY_HP = "battle.opponent.activePokemon2.stats.hp"
-        self.KEY_BATTLE_SECOND_ENEMY_PARTY_POS = "battle.opponent.activePokemon2.partyPos"
+        self.KEY_BATTLE_TRAINER_B_NUMBER = "battle.opponent_2.id"
+        self.KEY_BATTLE_FIRST_ENEMY_SPECIES = "battle.opponent.active_pokemon.species"
+        self.KEY_BATTLE_FIRST_ENEMY_LEVEL = "battle.opponent.active_pokemon.level"
+        self.KEY_BATTLE_FIRST_ENEMY_HP = "battle.opponent.active_pokemon.stats.hp"
+        self.KEY_BATTLE_FIRST_ENEMY_PARTY_POS = "battle.opponent.party_position"
+        self.KEY_BATTLE_SECOND_ENEMY_SPECIES = "battle.opponent.active_pokemon_2.species"
+        self.KEY_BATTLE_SECOND_ENEMY_LEVEL = "battle.opponent.active_pokemon_2.level"
+        self.KEY_BATTLE_SECOND_ENEMY_HP = "battle.opponent.active_pokemon_2.stats.hp"
+        self.KEY_BATTLE_SECOND_ENEMY_PARTY_POS = "battle.opponent.party_position_2"
 
         self.ALL_KEYS_ENEMY_TEAM_SPECIES = [f"battle.opponent.team.{i}.species" for i in range(0, 6)]
 
-        self.KEY_AUDIO_SOUND_EFFECT_1 = "audio.soundEffect1"
-        self.KEY_AUDIO_SOUND_EFFECT_2 = "audio.soundEffect2"
+        self.KEY_AUDIO_SOUND_EFFECT_1 = "audio.sound_effect_1"
+        self.KEY_AUDIO_SOUND_EFFECT_2 = "audio.sound_effect_2"
         # corresponds to 0x088fcdc4 in little endian bytes, or 143642052
         # expect this value to be in soundEffect1
         self.SAVE_SOUND_EFFECT_BYTES_VALUE = [196, 205, 143, 8]
@@ -87,14 +95,14 @@ class Gen3GameHookConstants:
         # expect this value to be in soundEffect2
         self.HEAL_SOUND_EFFECT_BYTES_VALUE = [200, 220, 144, 8]
 
-        self.KEY_ITEM_QUANTITY_DECRYPTION_KEY = "bag.quantityDecryptionKey"
+        self.KEY_ITEM_QUANTITY_DECRYPTION_KEY = "bag.quantity_decryption_key"
         self.ALL_KEYS_ITEM_TYPE = [f"bag.items.{i}.item" for i in range(0, 30)]
         self.ALL_KEYS_ITEM_QUANTITY = [f"bag.items.{i}.quantity" for i in range(0, 30)]
-        self.ALL_KEYS_BALL_TYPE = [f"bag.pokeBalls.{i}.item" for i in range(0, 16)]
-        self.ALL_KEYS_BALL_QUANTITY = [f"bag.pokeBalls.{i}.quantity" for i in range(0, 16)]
+        self.ALL_KEYS_BALL_TYPE = [f"bag.balls.{i}.item" for i in range(0, 16)]
+        self.ALL_KEYS_BALL_QUANTITY = [f"bag.balls.{i}.quantity" for i in range(0, 16)]
         self.ALL_KEYS_BERRY_TYPE = [f"bag.berries.{i}.item" for i in range(0, 46)]
         self.ALL_KEYS_BERRY_QUANTITY = [f"bag.berries.{i}.quantity" for i in range(0, 46)]
-        self.ALL_KEYS_KEY_ITEMS = [f"bag.keyItems.{i}.item" for i in range(0, 30)]
+        self.ALL_KEYS_KEY_ITEMS = [f"bag.key_items.{i}.item" for i in range(0, 30)]
 
         self.ALL_KEYS_TMHM_TYPE = [f"bag.tmhm.{i}.item" for i in range(0, 64)]
         self.ALL_KEYS_TMHM_QUANTITY = [f"bag.tmhm.{i}.quantity" for i in range(0, 64)]
@@ -144,6 +152,7 @@ class Gen3GameHookConstants:
         self.ALL_KEYS_TO_REGISTER.extend(self.ALL_KEYS_PLAYER_MOVES)
         self.ALL_KEYS_TO_REGISTER.extend(self.ALL_KEYS_STAT_EXP)
         self.ALL_KEYS_TO_REGISTER.extend(self.ALL_KEYS_ALL_ITEM_FIELDS)
+        self.ALL_KEYS_TO_REGISTER.extend(self.ALL_KEYS_PLAYER_TEAM_SPECIES)
 
         # for debugging
         self.ALL_KEYS_TO_REGISTER.extend([self.KEY_DMA_A, self.KEY_DMA_B, self.KEY_DMA_C])

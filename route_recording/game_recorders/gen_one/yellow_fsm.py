@@ -209,7 +209,7 @@ class Machine:
                     if self._solo_mon_key != new_cache[0]:
                         err_msg = f"Expected DV spread: {self._solo_mon_key}, but found solo mon with this DV spread: {new_cache[0]}"
                         logger.error(err_msg)
-                        self._queue_new_event(EventDefinition(notes=const.RECORDING_ERROR_FRAGMENT + err_msg))
+                        #self._queue_new_event(EventDefinition(notes=const.RECORDING_ERROR_FRAGMENT + err_msg))
                     
                     self.valid_solo_mon = True
                     self._solo_mon_key = new_cache[0]
