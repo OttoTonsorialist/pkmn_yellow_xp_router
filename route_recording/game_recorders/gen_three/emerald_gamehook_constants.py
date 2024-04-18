@@ -15,30 +15,30 @@ class Gen3GameHookConstants:
         self.ROAR_FLAG = const.RECORDING_ERROR_FRAGMENT + "FLAG TO SIGNAL ROARS NEED TO BE HANDLED. USER SHOULD NEVER SEE THIS"
         self.HELD_CHECK_FLAG = const.RECORDING_ERROR_FRAGMENT + "FLAG TO SIGNAL FOR DEEPER HELD ITEM CHECKING. USER SHOULD NEVER SEE THIS"
 
-        self.KEY_DMA_A = "pointers.dma_1"
-        self.KEY_DMA_B = "pointers.dma_2"
-        self.KEY_DMA_C = "pointers.dma_3"
-        self.KEY_OVERWORLD_MAP = "overworld.map_name"
-        self.KEY_PLAYER_PLAYERID = "player.player_id"
-        self.KEY_PLAYER_MONEY = "bag.money"
-        self.KEY_PLAYER_MON_EXPPOINTS = "player.team.0.exp"
+        self.KEY_DMA_A = "pointers.dma1"
+        self.KEY_DMA_B = "pointers.dma2"
+        self.KEY_DMA_C = "pointers.dma3"
+        self.KEY_OVERWORLD_MAP = "overworld.mapName"
+        self.KEY_PLAYER_PLAYERID = "player.playerId"
+        self.KEY_PLAYER_MONEY = "player.bag.money"
+        self.KEY_PLAYER_MON_EXPPOINTS = "player.team.0.expPoints"
         self.KEY_PLAYER_MON_LEVEL = "player.team.0.level"
         self.KEY_PLAYER_MON_SPECIES = "player.team.0.species"
-        self.KEY_PLAYER_MON_HELD_ITEM = "player.team.0.held_item"
+        self.KEY_PLAYER_MON_HELD_ITEM = "player.team.0.itemHeld"
         self.KEY_PLAYER_MON_FRIENDSHIP = "player.team.0.friendship"
 
         self.ALL_KEYS_PLAYER_TEAM_SPECIES = [f"player.team.{i}.species" for i in range(0, 6)]
         self.ALL_KEYS_PLAYER_TEAM_LEVEL = [f"player.team.{i}.level" for i in range(0, 6)]
-        self.ALL_KEYS_PLAYER_TEAM_IV_ATTACK = [f"player.team.{i}.ivs.attack" for i in range(0, 6)]
-        self.ALL_KEYS_PLAYER_TEAM_IV_DEFENSE = [f"player.team.{i}.ivs.defense" for i in range(0, 6)]
-        self.ALL_KEYS_PLAYER_TEAM_IV_SPEED = [f"player.team.{i}.ivs.speed" for i in range(0, 6)]
-        self.ALL_KEYS_PLAYER_TEAM_IV_SPECIAL_ATTACK = [f"player.team.{i}.ivs.special_attack" for i in range(0, 6)]
-        self.ALL_KEYS_PLAYER_TEAM_IV_SPECIAL_DEFENSE = [f"player.team.{i}.ivs.special_defense" for i in range(0, 6)]
+        self.ALL_KEYS_PLAYER_TEAM_IV_ATTACK = [f"player.team.{i}.ivAttack" for i in range(0, 6)]
+        self.ALL_KEYS_PLAYER_TEAM_IV_DEFENSE = [f"player.team.{i}.ivDefense" for i in range(0, 6)]
+        self.ALL_KEYS_PLAYER_TEAM_IV_SPEED = [f"player.team.{i}.ivSpeed" for i in range(0, 6)]
+        self.ALL_KEYS_PLAYER_TEAM_IV_SPECIAL_ATTACK = [f"player.team.{i}.ivSpecialAttack" for i in range(0, 6)]
+        self.ALL_KEYS_PLAYER_TEAM_IV_SPECIAL_DEFENSE = [f"player.team.{i}.ivSpecialDefense" for i in range(0, 6)]
 
-        self.KEY_PLAYER_MON_MOVE_1 = "player.team.0.moves.0.move"
-        self.KEY_PLAYER_MON_MOVE_2 = "player.team.0.moves.1.move"
-        self.KEY_PLAYER_MON_MOVE_3 = "player.team.0.moves.2.move"
-        self.KEY_PLAYER_MON_MOVE_4 = "player.team.0.moves.3.move"
+        self.KEY_PLAYER_MON_MOVE_1 = "player.team.0.move1"
+        self.KEY_PLAYER_MON_MOVE_2 = "player.team.0.move2"
+        self.KEY_PLAYER_MON_MOVE_3 = "player.team.0.move3"
+        self.KEY_PLAYER_MON_MOVE_4 = "player.team.0.move4"
         self.ALL_KEYS_PLAYER_MOVES = [
             self.KEY_PLAYER_MON_MOVE_1,
             self.KEY_PLAYER_MON_MOVE_2,
@@ -46,12 +46,12 @@ class Gen3GameHookConstants:
             self.KEY_PLAYER_MON_MOVE_4,
         ]
 
-        self.KEY_PLAYER_MON_STAT_EXP_HP = "player.team.0.evs.hp"
-        self.KEY_PLAYER_MON_STAT_EXP_ATTACK = "player.team.0.evs.attack"
-        self.KEY_PLAYER_MON_STAT_EXP_DEFENSE = "player.team.0.evs.defense"
-        self.KEY_PLAYER_MON_STAT_EXP_SPEED = "player.team.0.evs.speed"
-        self.KEY_PLAYER_MON_STAT_EXP_SPECIAL_ATTACK = "player.team.0.evs.special_attack"
-        self.KEY_PLAYER_MON_STAT_EXP_SPECIAL_DEFENSE = "player.team.0.evs.special_defense"
+        self.KEY_PLAYER_MON_STAT_EXP_HP = "player.team.0.evHp"
+        self.KEY_PLAYER_MON_STAT_EXP_ATTACK = "player.team.0.evAttack"
+        self.KEY_PLAYER_MON_STAT_EXP_DEFENSE = "player.team.0.evDefense"
+        self.KEY_PLAYER_MON_STAT_EXP_SPEED = "player.team.0.evSpeed"
+        self.KEY_PLAYER_MON_STAT_EXP_SPECIAL_ATTACK = "player.team.0.evSpecialAttack"
+        self.KEY_PLAYER_MON_STAT_EXP_SPECIAL_DEFENSE = "player.team.0.evSpecialDefense"
         self.ALL_KEYS_STAT_EXP = [
             self.KEY_PLAYER_MON_STAT_EXP_HP,
             self.KEY_PLAYER_MON_STAT_EXP_ATTACK,
@@ -61,51 +61,50 @@ class Gen3GameHookConstants:
             self.KEY_PLAYER_MON_STAT_EXP_SPECIAL_DEFENSE,
         ]
 
-        self.KEY_GAMETIME_SECONDS = "game_time.seconds"
-        self.KEY_GAMETIME_FRAMES = "game_time.frames"
-        self.KEY_BATTLE_FLAG = "battle.flags.is_battle"
-        self.KEY_TRAINER_BATTLE_FLAG = "battle.flags.trainer"
-        self.KEY_DOUBLE_BATTLE_FLAG = "battle.flags.double"
-        self.KEY_TWO_OPPONENTS_BATTLE_FLAG = "battle.flags.two_opponents"
-        self.KEY_BATTLE_OUTCOME = "battle.other.battle_outcomes"
-        self.KEY_BATTLE_PLAYER_MON_PARTY_POS = "battle.player.party_position"
-        self.KEY_BATTLE_PLAYER_MON_HP = "battle.player.active_pokemon.stats.hp"
-        self.KEY_BATTLE_ALLY_MON_PARTY_POS = "battle.player.party_position_2"
-        self.KEY_BATTLE_ALLY_MON_HP = "battle.player.active_pokemon_2.stats.hp"
+        self.KEY_GAMETIME_SECONDS = "gametime.seconds"
+        self.KEY_GAMETIME_FRAMES = "gametime.frames"
+        self.KEY_BATTLE_FLAG = "battle.type.is_battle"
+        self.KEY_TRAINER_BATTLE_FLAG = "battle.type.trainer"
+        self.KEY_DOUBLE_BATTLE_FLAG = "battle.type.double"
+        self.KEY_TWO_OPPONENTS_BATTLE_FLAG = "battle.type.two_opponents"
+        self.KEY_BATTLE_OUTCOME = "battle.outcome"
+        self.KEY_BATTLE_BACKGROUND_TILES = "battle.turnInfo.battleBackgroundTiles"
+        self.KEY_BATTLE_PLAYER_MON_PARTY_POS = "battle.yourPokemon.partyPos"
+        self.KEY_BATTLE_PLAYER_MON_HP = "battle.yourPokemon.hp"
+        self.KEY_BATTLE_ALLY_MON_PARTY_POS = "battle.yourSecondPokemon.partyPos"
+        self.KEY_BATTLE_ALLY_MON_HP = "battle.yourSecondPokemon.hp"
 
-        self.KEY_BATTLE_TRAINER_A_NUMBER = "battle.opponent.id"
-        self.KEY_BATTLE_TRAINER_B_NUMBER = "battle.opponent_2.id"
-        self.KEY_BATTLE_FIRST_ENEMY_SPECIES = "battle.opponent.active_pokemon.species"
-        self.KEY_BATTLE_FIRST_ENEMY_LEVEL = "battle.opponent.active_pokemon.level"
-        self.KEY_BATTLE_FIRST_ENEMY_HP = "battle.opponent.active_pokemon.stats.hp"
-        self.KEY_BATTLE_FIRST_ENEMY_PARTY_POS = "battle.opponent.party_position"
-        self.KEY_BATTLE_SECOND_ENEMY_SPECIES = "battle.opponent.active_pokemon_2.species"
-        self.KEY_BATTLE_SECOND_ENEMY_LEVEL = "battle.opponent.active_pokemon_2.level"
-        self.KEY_BATTLE_SECOND_ENEMY_HP = "battle.opponent.active_pokemon_2.stats.hp"
-        self.KEY_BATTLE_SECOND_ENEMY_PARTY_POS = "battle.opponent.party_position_2"
+        self.KEY_BATTLE_TRAINER_A_NUMBER = "battle.trainer.opponentAId"
+        self.KEY_BATTLE_TRAINER_B_NUMBER = "battle.trainer.opponentBId"
+        self.KEY_BATTLE_FIRST_ENEMY_SPECIES = "battle.enemyPokemon.species"
+        self.KEY_BATTLE_FIRST_ENEMY_LEVEL = "battle.enemyPokemon.level"
+        self.KEY_BATTLE_FIRST_ENEMY_HP = "battle.enemyPokemon.hp"
+        self.KEY_BATTLE_FIRST_ENEMY_PARTY_POS = "battle.enemyPokemon.partyPos"
+        self.KEY_BATTLE_SECOND_ENEMY_SPECIES = "battle.enemySecondPokemon.species"
+        self.KEY_BATTLE_SECOND_ENEMY_LEVEL = "battle.enemySecondPokemon.level"
+        self.KEY_BATTLE_SECOND_ENEMY_HP = "battle.enemySecondPokemon.hp"
+        self.KEY_BATTLE_SECOND_ENEMY_PARTY_POS = "battle.enemySecondPokemon.partyPos"
 
-        self.ALL_KEYS_ENEMY_TEAM_SPECIES = [f"battle.opponent.team.{i}.species" for i in range(0, 6)]
+        self.ALL_KEYS_ENEMY_TEAM_SPECIES = [f"battle.trainer.team.{i}.species" for i in range(0, 6)]
 
-        self.KEY_AUDIO_SOUND_EFFECT_1 = "audio.sound_effect_1"
-        self.KEY_AUDIO_SOUND_EFFECT_2 = "audio.sound_effect_2"
-        # corresponds to 0x088fcdc4 in little endian bytes, or 143642052
+        self.KEY_AUDIO_SOUND_EFFECT_1 = "audio.soundEffect1"
+        self.KEY_AUDIO_SOUND_EFFECT_2 = "audio.soundEffect2"
         # expect this value to be in soundEffect1
-        self.SAVE_SOUND_EFFECT_BYTES_VALUE = [196, 205, 143, 8]
+        self.SAVE_SOUND_EFFECT_VALUE = 143641472
         # corresponds to 0x0890dcc8 in little endian bytes, or 143711432
         # expect this value to be in soundEffect2
-        self.HEAL_SOUND_EFFECT_BYTES_VALUE = [200, 220, 144, 8]
+        self.HEAL_SOUND_EFFECT_VALUE = 143710852
 
-        self.KEY_ITEM_QUANTITY_DECRYPTION_KEY = "bag.quantity_decryption_key"
-        self.ALL_KEYS_ITEM_TYPE = [f"bag.items.{i}.item" for i in range(0, 30)]
-        self.ALL_KEYS_ITEM_QUANTITY = [f"bag.items.{i}.quantity" for i in range(0, 30)]
-        self.ALL_KEYS_BALL_TYPE = [f"bag.balls.{i}.item" for i in range(0, 16)]
-        self.ALL_KEYS_BALL_QUANTITY = [f"bag.balls.{i}.quantity" for i in range(0, 16)]
-        self.ALL_KEYS_BERRY_TYPE = [f"bag.berries.{i}.item" for i in range(0, 46)]
-        self.ALL_KEYS_BERRY_QUANTITY = [f"bag.berries.{i}.quantity" for i in range(0, 46)]
-        self.ALL_KEYS_KEY_ITEMS = [f"bag.key_items.{i}.item" for i in range(0, 30)]
+        self.ALL_KEYS_ITEM_TYPE = [f"player.bag.items.{i}.item" for i in range(0, 30)]
+        self.ALL_KEYS_ITEM_QUANTITY = [f"player.bag.items.{i}.quantity" for i in range(0, 30)]
+        self.ALL_KEYS_BALL_TYPE = [f"player.bag.pokeBalls.{i}.item" for i in range(0, 16)]
+        self.ALL_KEYS_BALL_QUANTITY = [f"player.bag.pokeBalls.{i}.quantity" for i in range(0, 16)]
+        self.ALL_KEYS_BERRY_TYPE = [f"player.bag.berries.{i}.item" for i in range(0, 46)]
+        self.ALL_KEYS_BERRY_QUANTITY = [f"player.bag.berries.{i}.quantity" for i in range(0, 46)]
+        self.ALL_KEYS_KEY_ITEMS = [f"player.bag.keyItems.{i}.item" for i in range(0, 30)]
 
-        self.ALL_KEYS_TMHM_TYPE = [f"bag.tmhm.{i}.item" for i in range(0, 64)]
-        self.ALL_KEYS_TMHM_QUANTITY = [f"bag.tmhm.{i}.quantity" for i in range(0, 64)]
+        self.ALL_KEYS_TMHM_TYPE = [f"player.bag.tmhm.{i}.item" for i in range(0, 64)]
+        self.ALL_KEYS_TMHM_QUANTITY = [f"player.bag.tmhm.{i}.quantity" for i in range(0, 64)]
 
         self.ALL_KEYS_ALL_ITEM_FIELDS = set([])
         self.ALL_KEYS_ALL_ITEM_FIELDS.update(self.ALL_KEYS_ITEM_TYPE)
@@ -132,6 +131,7 @@ class Gen3GameHookConstants:
             self.KEY_DOUBLE_BATTLE_FLAG,
             self.KEY_TWO_OPPONENTS_BATTLE_FLAG,
             self.KEY_BATTLE_OUTCOME,
+            self.KEY_BATTLE_BACKGROUND_TILES,
             self.KEY_BATTLE_TRAINER_A_NUMBER,
             self.KEY_BATTLE_TRAINER_B_NUMBER,
             self.KEY_BATTLE_PLAYER_MON_HP,

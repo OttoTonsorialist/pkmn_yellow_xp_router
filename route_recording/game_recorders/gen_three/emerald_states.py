@@ -206,6 +206,14 @@ class BattleState(WatchForResetState):
                     self.machine._solo_mon_levelup(new_level)
                     self.original_level = new_level
 
+    class DelayedInitialization(DelayedUpdate):
+        def __init__(self, machine, delay, init_fn):
+            super().__init__(machine, delay)
+            self.init_fn = init_fn
+
+        def _update_helper(self):
+            self.init_fn()
+
     def __init__(self, machine: Machine):
         super().__init__(StateType.BATTLE, machine)
         self.is_trainer_battle = False
@@ -218,6 +226,7 @@ class BattleState(WatchForResetState):
         self._delayed_item_updater = self.DelayedBattleItemsUpdate(self.machine, self.BASE_DELAY)
         self._delayed_held_item_updater = self.DelayedHeldItemUpdate(self.machine, self.BASE_DELAY)
         self._delayed_levelup = self.DelayedLevelUpdate(self.machine, self.BASE_DELAY)
+        self._delayed_initialization = self.DelayedInitialization(self.machine, self.BASE_DELAY, self._battle_ready)
         self._loss_detected = False
         self._cached_first_mon_species = ""
         self._cached_first_mon_level = 0
@@ -238,6 +247,7 @@ class BattleState(WatchForResetState):
         self._delayed_item_updater.reset()
         self._delayed_held_item_updater.reset()
         self._delayed_levelup.reset()
+        self._delayed_initialization.reset()
         self.is_trainer_battle = False
         self._trainer_event_created = False
         self._loss_detected = False
@@ -256,10 +266,8 @@ class BattleState(WatchForResetState):
         self._is_double_battle = False
         self._initial_money = self.machine._gamehook_client.get(gh_gen_three_const.KEY_PLAYER_MONEY).value
         self._init_held_item = None
-
-        if self.machine._gamehook_client.get(gh_gen_three_const.KEY_BATTLE_FLAG).value:
-            self._battle_ready()
         
+        self._delayed_initialization.begin_waiting()
     
     def _get_num_enemy_trainer_pokemon(self):
         # Ideally, this should be pulled from a single property. However that mapped property doesn't work currently
@@ -290,6 +298,10 @@ class BattleState(WatchForResetState):
 
     def _battle_ready(self):
         # to be called after battle is actually initialized
+        if not self.machine._gamehook_client.get(gh_gen_three_const.KEY_BATTLE_FLAG).value:
+            self._delayed_initialization.reset()
+            return
+
         self._battle_started = True
         self._init_held_item = self.machine._gamehook_client.get(gh_gen_three_const.KEY_PLAYER_MON_HELD_ITEM).value
         self._is_double_battle = self.machine._gamehook_client.get(gh_gen_three_const.KEY_DOUBLE_BATTLE_FLAG).value
@@ -297,6 +309,7 @@ class BattleState(WatchForResetState):
         self._delayed_levelup.configure_level(self.machine._gamehook_client.get(gh_gen_three_const.KEY_PLAYER_MON_LEVEL).value)
 
         if self.is_trainer_battle:
+            logger.info(f"trainer battle found")
             self._trainer_name = self.machine._gamehook_client.get(gh_gen_three_const.KEY_BATTLE_TRAINER_A_NUMBER).value
             self._second_trainer_name = self.machine._gamehook_client.get(gh_gen_three_const.KEY_BATTLE_TRAINER_B_NUMBER).value
             if self._second_trainer_name is None or not self.machine._gamehook_client.get(gh_gen_three_const.KEY_TWO_OPPONENTS_BATTLE_FLAG).value:
@@ -332,6 +345,8 @@ class BattleState(WatchForResetState):
                     )
                 )
             )
+        else:
+            logger.info(f"wild battle found")
     
     def _on_exit(self, next_state: State):
         if next_state.state_type != StateType.RESETTING:
@@ -424,7 +439,7 @@ class BattleState(WatchForResetState):
 
         elif new_prop.path == gh_gen_three_const.KEY_BATTLE_FLAG:
             if new_prop.value and not self._battle_started:
-                self._battle_ready()
+                self._delayed_initialization.trigger()
         elif new_prop.path == gh_gen_three_const.KEY_BATTLE_FIRST_ENEMY_HP:
             if new_prop.value == 0:
                 self._cached_first_mon_species = self.machine.gh_converter.pkmn_name_convert(self.machine._gamehook_client.get(gh_gen_three_const.KEY_BATTLE_FIRST_ENEMY_SPECIES).value)
@@ -487,6 +502,7 @@ class BattleState(WatchForResetState):
             self._delayed_item_updater.tick()
             self._delayed_held_item_updater.tick()
             self._delayed_levelup.tick()
+            self._delayed_initialization.tick()
         elif new_prop.path == gh_gen_three_const.KEY_BATTLE_PLAYER_MON_PARTY_POS:
             if new_prop.value >= 0 and new_prop.value < 6:
                 if self.machine._gamehook_client.get(gh_gen_three_const.KEY_BATTLE_FIRST_ENEMY_HP).value > 0:
@@ -524,17 +540,9 @@ class BattleState(WatchForResetState):
                 # or if the enemy trainer switches pokemon (and doesn't only send out new mons on previous death)
                 if real_new_value not in self._enemy_mon_order:
                     self._enemy_mon_order.append(real_new_value)
-        elif new_prop.path == gh_gen_three_const.KEY_BATTLE_OUTCOME:
-            # Kind of stupid, but the money update happens in between the outcome being set and the reload of the overworld
-            # so the easiest thing to do for cleanly exiting the battle state is to flag when the outcome is set
-            # that signifies that the battle is over. Once we know the battle is over, the next dma pointer update
-            # should be caused by the game reloading the overworld. Transition when that occurs
-            if new_prop.value is not None:
-                self._battle_finished = True
-        elif new_prop.path == gh_gen_three_const.KEY_DMA_A or new_prop.path == gh_gen_three_const.KEY_PLAYER_MONEY:
-            if self._battle_finished:
+        elif new_prop.path == gh_gen_three_const.KEY_BATTLE_BACKGROUND_TILES:
+            if new_prop.value == 0:
                 return StateType.OVERWORLD
-
         
         return self.state_type
 
@@ -878,18 +886,27 @@ class OverworldState(WatchForResetState):
             # then this won't change. Theoretically, there's another field, soundEffect1Played that we could hook into, to allow us to detect
             # when the actual changes occur. However, this is gets left on by default, and flickers between off/on so quickly that it sometimes gets
             # missed by gamehook. In practice, this approximation should cover all known edge cases
-            if new_prop.bytes_value == gh_gen_three_const.SAVE_SOUND_EFFECT_BYTES_VALUE:
+            if new_prop.value == gh_gen_three_const.SAVE_SOUND_EFFECT_VALUE:
                 self.machine._queue_new_event(EventDefinition(save=SaveEventDefinition(location=self.machine._gamehook_client.get(gh_gen_three_const.KEY_OVERWORLD_MAP).value)))
         elif new_prop.path == gh_gen_three_const.KEY_AUDIO_SOUND_EFFECT_2:
             # NOTE: same limitations as above
-            if new_prop.bytes_value == gh_gen_three_const.HEAL_SOUND_EFFECT_BYTES_VALUE:
+            if new_prop.value == gh_gen_three_const.HEAL_SOUND_EFFECT_VALUE:
                 self.machine._queue_new_event(EventDefinition(heal=HealEventDefinition(location=self.machine._gamehook_client.get(gh_gen_three_const.KEY_OVERWORLD_MAP).value)))
         elif new_prop.path == gh_gen_three_const.KEY_GAMETIME_SECONDS:
             if self._waiting_for_registration:
                 if self._register_delay <= 0:
                     self._waiting_for_registration = False
-                    self.machine.register_solo_mon(self.machine._gamehook_client.get(gh_gen_three_const.KEY_PLAYER_MON_SPECIES).value)
+                    self.machine.update_team_cache(regenerate_move_cache=True)
                 self._register_delay -= 1
+            elif self._wrong_mon_in_slot_1:
+                if self._wrong_mon_delay <= 0:
+                    self.machine.update_team_cache(regenerate_move_cache=True)
+                    self._wrong_mon_in_slot_1 = (
+                        self.machine._solo_mon_key.species != 
+                        self.machine.gh_converter.pkmn_name_convert(self.machine._gamehook_client.get(gh_gen_three_const.KEY_PLAYER_MON_SPECIES).value)
+                    )
+                self._wrong_mon_delay -= 1
+
             
             if self._validation_delay > 0:
                 self._validation_delay -= 1

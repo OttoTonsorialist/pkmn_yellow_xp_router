@@ -494,7 +494,7 @@ class Machine:
                 )
 
         return expected_event_generated
-    
+
     def register(self, state:State):
         if state.state_type in self._registered_states:
             raise ValueError(f"Cannot have multiple states of type {state.state_type}")
