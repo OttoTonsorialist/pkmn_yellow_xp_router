@@ -140,6 +140,8 @@ class GenThree(CurrentGen):
 
         if version_name == const.EMERALD_VERSION:
             return EmeraldRecorder(recorder_controller, ["Pokemon Emerald"])
+        elif version_name in [const.FIRE_RED_VERSION, const.LEAF_GREEN_VERSION]:
+            return EmeraldRecorder(recorder_controller, ["Pokemon FireRed & LeafGreen"], is_frlg=True)
 
         raise NotImplementedError()
 

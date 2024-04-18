@@ -12,10 +12,15 @@ logger = logging.getLogger(__name__)
 
 
 class EmeraldRecorder(route_recording.recorder.RecorderGameHookClient):
-    def __init__(self, controller:route_recording.recorder.RecorderGameHookClient, expected_names:List[str]):
+    def __init__(self, controller:route_recording.recorder.RecorderGameHookClient, expected_names:List[str], is_frlg=False):
         super().__init__(controller, expected_names)
 
-        self._machine = Machine(controller, self, GameHookConstantConverter())
+        if is_frlg:
+            gh_gen_three_const.configure_for_firered()
+        else:
+            gh_gen_three_const.configure_for_emerald()
+
+        self._machine = Machine(controller, self, GameHookConstantConverter(), is_frlg=is_frlg)
 
         """
         self._machine.register(emerald_states.WatchState(self._machine))

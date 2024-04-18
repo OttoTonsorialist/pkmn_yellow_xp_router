@@ -311,9 +311,12 @@ class BattleState(WatchForResetState):
         if self.is_trainer_battle:
             logger.info(f"trainer battle found")
             self._trainer_name = self.machine._gamehook_client.get(gh_gen_three_const.KEY_BATTLE_TRAINER_A_NUMBER).value
-            self._second_trainer_name = self.machine._gamehook_client.get(gh_gen_three_const.KEY_BATTLE_TRAINER_B_NUMBER).value
-            if self._second_trainer_name is None or not self.machine._gamehook_client.get(gh_gen_three_const.KEY_TWO_OPPONENTS_BATTLE_FLAG).value:
+            if self.machine.is_frlg:
                 self._second_trainer_name = ""
+            else:
+                self._second_trainer_name = self.machine._gamehook_client.get(gh_gen_three_const.KEY_BATTLE_TRAINER_B_NUMBER).value
+                if self._second_trainer_name is None or not self.machine._gamehook_client.get(gh_gen_three_const.KEY_TWO_OPPONENTS_BATTLE_FLAG).value:
+                    self._second_trainer_name = ""
 
             num_enemy_pokemon = self._get_num_enemy_trainer_pokemon()
             self._enemy_pos_lookup = self._get_enemy_pos_lookup()

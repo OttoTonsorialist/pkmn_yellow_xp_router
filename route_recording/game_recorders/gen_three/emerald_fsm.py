@@ -82,8 +82,9 @@ class _MonKey:
 
 
 class Machine:
-    def __init__(self, controller:route_recording.recorder.RecorderController, gamehook_client:route_recording.recorder.RecorderGameHookClient, gh_converter:GameHookConstantConverter):
+    def __init__(self, controller:route_recording.recorder.RecorderController, gamehook_client:route_recording.recorder.RecorderGameHookClient, gh_converter:GameHookConstantConverter, is_frlg=False):
         self._controller = controller
+        self.is_frlg = is_frlg
         self._gamehook_client = gamehook_client
         self.gh_converter = gh_converter
         self.debug_mode = config.is_debug_mode()
