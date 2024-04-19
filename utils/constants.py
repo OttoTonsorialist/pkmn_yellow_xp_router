@@ -5,11 +5,8 @@ import sys
 
 class Constants:
     def __init__(self):
-        self.APP_VERSION = "v3.0h"
-        self.APP_RELEASE_DATE = "2024-Mar-08"
-
-        self.NUZLOCKE_APP_VERSION = "v0.5a"
-        self.NUZLOCKE_APP_RELEASE_DATE = "2023-Apr-01"
+        self.APP_VERSION = "v3.1a"
+        self.APP_RELEASE_DATE = "2024-Apr-19"
 
         self.DEBUG_MODE = False
         self.DEBUG_RECORDING_MODE = False
