@@ -78,12 +78,12 @@ def calc_stat(base_val, level, dv, stat_xp, is_hp=False, is_badge_bosted=False):
     if is_badge_bosted:
         result = badge_boost_single_stat(result)
 
-    return result
+    return min(result, STAT_MAX)
 
 
 def badge_boost_single_stat(cur_stat_val):
     # very basic function, just giving it a name so it's obvious when using the function
-    return math.floor(cur_stat_val * 1.125)
+    return min(math.floor(cur_stat_val * 1.125), STAT_MAX)
 
 
 def get_move_list(initial_moves, learned_moves, target_level, special_moves=None):

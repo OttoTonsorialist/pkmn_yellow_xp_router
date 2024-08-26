@@ -74,6 +74,9 @@ def calculate_gen_two_damage(
     # during a crit, if the stage modifiers are in favor of the attack, calculate badge boosts and stage modifiers
     # during a crit, if the stage modifiers are equal or in favor of the defender, calculate stats without any badge boosts and without any stage modifiers
     ignore_badge_boosts = False
+    if move.name == const.REVERSAL_MOVE_NAME:
+        is_crit = False
+
     if is_crit:
         if move_type in special_types and attacking_stage_modifiers.special_attack_stage <= defending_stage_modifiers.special_defense_stage:
             # stage modifiers do not favor the attacker for a special move: zero out the stage modifiers

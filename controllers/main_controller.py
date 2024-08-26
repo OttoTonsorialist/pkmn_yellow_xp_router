@@ -575,15 +575,16 @@ class MainController:
                     return cur_event_found, prev_result
             else:
                 logger.error(f"Encountered unexpected types walking events: {type(test_obj)}")
-        
+
         return cur_event_found, None
-            
+
     def get_next_event(self, cur_event_id=None, enabled_only=False) -> EventGroup:
         return self._walk_events_helper(
             self._data.root_folder,
             cur_event_id,
             cur_event_id == None,
-            True
+            enabled_only=enabled_only,
+            walk_forward=True
         )[1]
 
     def get_previous_event(self, cur_event_id=None, enabled_only=False) -> EventGroup:
