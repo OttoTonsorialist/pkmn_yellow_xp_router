@@ -22,6 +22,7 @@ from gui.popups.transfer_event_popup import TransferEventWindow
 from gui.popups.custom_gen_popup import CustomGenWindow
 from gui.recorder_status import RecorderStatus
 from gui.route_search_component import RouteSearch
+from gui.setup_summary_window import SetupSummaryWindow
 from route_recording.recorder import RecorderController
 from utils.constants import const
 from utils.config_manager import config
@@ -159,8 +160,10 @@ class MainWindow(tk.Tk):
         button_spacing_cols = []
         button_col_idx = 0
 
-        self.show_summary_btn = custom_components.SimpleButton(self.group_controls, text='Run\nSummary', command=self.open_summary_window, width=15)
-        self.show_summary_btn.grid(row=0, column=button_col_idx, rowspan=2, padx=5, pady=1, sticky=tk.NSEW)
+        self.show_summary_btn = custom_components.SimpleButton(self.group_controls, text='Run Summary', command=self.open_summary_window, width=15)
+        self.show_summary_btn.grid(row=0, column=button_col_idx, padx=5, pady=1, sticky=tk.NSEW)
+        self.show_setup_summary_btn = custom_components.SimpleButton(self.group_controls, text='Setup Summary', command=self.open_setup_summary_window, width=15)
+        self.show_setup_summary_btn.grid(row=1, column=button_col_idx, padx=5, pady=1, sticky=tk.NSEW)
         button_col_idx += 1
 
         button_spacing_cols.append(button_col_idx)
@@ -247,6 +250,7 @@ class MainWindow(tk.Tk):
         self.bind('<Control-D>', self.open_config_window)
         self.bind('<Control-Z>', self.open_app_config_window)
         self.bind('<Control-R>', self.open_summary_window)
+        self.bind('<Control-T>', self.open_setup_summary_window)
         self.bind('<Control-O>', self.open_data_location)
         self.bind('<Control-p>', self.screenshot_battle_summary)
         # detail update function
@@ -269,6 +273,7 @@ class MainWindow(tk.Tk):
         self.event_list.refresh()
         self.new_event_window = None
         self.summary_window = None
+        self.setup_summary_window = None
 
     def run(self):
         # TODO: is this the right place for it?
@@ -462,6 +467,11 @@ class MainWindow(tk.Tk):
         if self.summary_window is None or not tk.Toplevel.winfo_exists(self.summary_window):
             self.summary_window = RouteSummaryWindow(self, self._controller)
         self.summary_window.focus()
+
+    def open_setup_summary_window(self, *args, **kwargs):
+        if self.setup_summary_window is None or not tk.Toplevel.winfo_exists(self.setup_summary_window):
+            self.setup_summary_window = SetupSummaryWindow(self, self._controller)
+        self.setup_summary_window.focus()
 
     def move_group_up(self, event=None):
         self._controller.move_groups_up(self.event_list.get_all_selected_event_ids(allow_event_items=False))
