@@ -30,6 +30,10 @@ STAGE_MOFIDIERS = [
 ]
 
 
+def _clamp_stat(val):
+    return min(max(val, STAT_MIN), STAT_MAX)
+
+
 def calc_battle_stat(base_val, level, dv, stat_xp, stage, is_badge_boosted=False):
     """
     Fully recalculates a stat that has been modified by a stage modifier. This is the
@@ -37,13 +41,11 @@ def calc_battle_stat(base_val, level, dv, stat_xp, stage, is_badge_boosted=False
     and needs to be recalculated
     """
     result = calc_unboosted_stat(base_val, level, dv, stat_xp)
-
     result = modify_stat_by_stage(result, stage)
-
     if is_badge_boosted:
         result = badge_boost_single_stat(result)
-    
-    return result
+
+    return _clamp_stat(result)
 
 
 def modify_stat_by_stage(raw_stat, stage):
@@ -78,12 +80,12 @@ def calc_stat(base_val, level, dv, stat_xp, is_hp=False, is_badge_bosted=False):
     if is_badge_bosted:
         result = badge_boost_single_stat(result)
 
-    return min(result, STAT_MAX)
+    return _clamp_stat(result)
 
 
 def badge_boost_single_stat(cur_stat_val):
     # very basic function, just giving it a name so it's obvious when using the function
-    return min(math.floor(cur_stat_val * 1.125), STAT_MAX)
+    return _clamp_stat(math.floor(cur_stat_val * 1.125))
 
 
 def get_move_list(initial_moves, learned_moves, target_level, special_moves=None):
