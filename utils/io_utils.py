@@ -99,6 +99,16 @@ def change_user_data_location(orig_dir, new_dir) -> bool:
         return False
 
 
+def migrate_dir(orig_dir, new_dir) -> bool:
+    try:
+        shutil.move(orig_dir, new_dir)
+        return True
+    except Exception as e:
+        logger.error(f"Failed to change migrate dir from: {orig_dir} to: {new_dir}")
+        logger.exception(e)
+        return False
+
+
 def open_explorer(path) -> bool:
     try:
         if sys.platform == "linux" or sys.platform == "linux2":

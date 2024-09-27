@@ -40,6 +40,10 @@ class Config:
         self._window_geometry = raw.get(const.CONFIG_WINDOW_GEOMETRY, "")
         self._user_data_dir = raw.get(const.USER_LOCATION_DATA_KEY, io_utils.get_default_user_data_dir())
         const.config_user_data_dir(self._user_data_dir)
+        self._images_dir = raw.get(
+            const.IMAGE_LOCATION_KEY,
+            os.path.join(self._user_data_dir, const.SAVED_IMAGES_FOLDER_NAME),
+        )
 
         self._success_color = raw.get(const.SUCCESS_COLOR_KEY, self.DEFAULT_SUCCESS)
         self._warning_color = raw.get(const.WARNING_COLOR_KEY, self.DEFAULT_WARNING)
@@ -186,6 +190,10 @@ class Config:
         self._notes_visibility = are_notes_visible
         self._save()
 
+    def set_images_dir(self, images_dir):
+        self._images_dir = images_dir
+        self._save()
+
     def get_success_color(self):
         return self._success_color
 
@@ -274,5 +282,8 @@ class Config:
     
     def get_custom_font_name(self):
         return self._custom_font_name
+    
+    def get_images_dir(self):
+        return self._images_dir
 
 config = Config()
