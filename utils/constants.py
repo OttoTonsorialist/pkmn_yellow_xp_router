@@ -5,8 +5,8 @@ import sys
 
 class Constants:
     def __init__(self):
-        self.APP_VERSION = "v3.1c"
-        self.APP_RELEASE_DATE = "2024-Sep-05"
+        self.APP_VERSION = "v3.1d"
+        self.APP_RELEASE_DATE = "2024-Sep-27"
 
         self.DEBUG_MODE = False
         self.DEBUG_RECORDING_MODE = False
@@ -28,7 +28,6 @@ class Constants:
         self._CUSTOM_GENS_FOLDER_NAME = "custom_gens"
         # locations that change based on user data dir
         self.SAVED_ROUTES_DIR = None
-        self.SAVED_IMAGES_DIR = None
         self.OUTDATED_ROUTES_DIR = None
         self.CUSTOM_GENS_DIR = None
         self.ALL_USER_DATA_PATHS = []
