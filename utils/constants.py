@@ -5,8 +5,8 @@ import sys
 
 class Constants:
     def __init__(self):
-        self.APP_VERSION = "v3.1c"
-        self.APP_RELEASE_DATE = "2024-Sep-05"
+        self.APP_VERSION = "v3.1d"
+        self.APP_RELEASE_DATE = "2024-Oct-05"
 
         self.DEBUG_MODE = False
         self.DEBUG_RECORDING_MODE = False
@@ -443,6 +443,7 @@ class Constants:
 
         self.GAME_SAVED_FRAGMENT = "Game Saved: "
         self.RECORDING_ERROR_FRAGMENT = "ERROR RECORDING! "
+        self.BACKPORT_SPECIES_CHECK = "backport"
 
         self.RECORDING_STATUS_DISCONNECTED = "Disconnected"
         self.RECORDING_STATUS_CONNECTED = "Connected"

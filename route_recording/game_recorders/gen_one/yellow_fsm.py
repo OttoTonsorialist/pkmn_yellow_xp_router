@@ -203,7 +203,11 @@ class Machine:
             if len(self._cached_team) == 0:
                 # special case: if we had no data previously, then look specifically for the solo mon
                 logger.info(f"Creating mons from empty cache. Prioritizing slot 0: {new_cache[0]}")
-                if self._solo_mon_key.species == new_cache[0].species:
+                logger.info(f"Is mon backport? {const.BACKPORT_SPECIES_CHECK in new_cache[0].species.lower()} ")
+                if (
+                    self._solo_mon_key.species == new_cache[0].species or
+                    const.BACKPORT_SPECIES_CHECK in new_cache[0].species.lower()
+                ):
                     # If this is our first pokemon and the species matches, then allow the DVs to be incorrect
                     # this is just an attempt to avoid burdening the player unnecessarily if their DVs are wrong in the route file
                     if self._solo_mon_key != new_cache[0]:

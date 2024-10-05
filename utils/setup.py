@@ -25,10 +25,6 @@ def route_startup_check_for_upgrade(main_app:Tk):
     new_app_version, new_asset_url = auto_update.get_new_version_info()
     logger.info(f"Latest version determined to be: {new_app_version}")
 
-    # kinda dumb, but this should have enough delay that when restarting
-    # the parent process should have died already, so we can properly clean it up
-    auto_update.auto_cleanup_old_version()
-
     if not auto_update.is_upgrade_needed(new_app_version, const.APP_VERSION):
         logger.info(f"No upgrade needed")
         return False
@@ -44,29 +40,6 @@ def route_startup_check_for_upgrade(main_app:Tk):
     logger.info(f"User requested auto-update")
     main_app.event_generate(const.FORCE_QUIT_EVENT)
     return True
-
-
-def nuzlocke_startup_check_for_upgrade(main_app:Tk):
-    new_app_version, new_asset_url = auto_update.get_new_version_info(nuzlocke_path=True)
-    logger.info(f"Latest version determined to be: {new_app_version}")
-
-    # kinda dumb, but this should have enough delay that when restarting
-    # the parent process should have died already, so we can properly clean it up
-    auto_update.auto_cleanup_old_version()
-
-    if not auto_update.is_upgrade_needed(new_app_version, const.NUZLOCKE_APP_VERSION):
-        logger.info(f"No upgrade needed")
-        return
-    
-    if not messagebox.askyesno("Update?", f"Found new version {new_app_version}\nDo you want to update?"):
-        logger.info(f"User rejected auto-update")
-        return
-    
-    logger.info(f"User requested auto-update")
-    global flag_to_auto_update
-    flag_to_auto_update = True
-    main_app.event_generate(const.FORCE_QUIT_EVENT)
-
 
 
 def init_base_generations():
