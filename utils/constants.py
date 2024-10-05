@@ -5,7 +5,7 @@ import sys
 
 class Constants:
     def __init__(self):
-        self.APP_VERSION = "v3.1d"
+        self.APP_VERSION = "v3.1e"
         self.APP_RELEASE_DATE = "2024-Oct-05"
 
         self.DEBUG_MODE = False
@@ -13,6 +13,7 @@ class Constants:
         self.APP_NAME = "pkmn_xp_router"
         self.APP_DATA_FOLDER_DEFAULT_NAME = "pkmn_xp_router_data"
         self.USER_LOCATION_DATA_KEY = "user_data_location"
+        self.IMAGE_LOCATION_KEY = "image_export_location"
 
         self.SOURCE_ROOT_PATH = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
         self.GLOBAL_CONFIG_DIR = os.path.realpath(appdirs.user_data_dir(appname=self.APP_NAME, appauthor=self.APP_NAME))
@@ -22,12 +23,11 @@ class Constants:
 
         # internal constants for configurable locations
         self._SAVED_ROUTES_FOLDER_NAME = "saved_routes"
-        self._SAVED_IMAGES_FOLDER_NAME = "images"
+        self.SAVED_IMAGES_FOLDER_NAME = "images"
         self._OUTDATED_ROUTES_FOLDER_NAME = "outdated_routes"
         self._CUSTOM_GENS_FOLDER_NAME = "custom_gens"
         # locations that change based on user data dir
         self.SAVED_ROUTES_DIR = None
-        self.SAVED_IMAGES_DIR = None
         self.OUTDATED_ROUTES_DIR = None
         self.CUSTOM_GENS_DIR = None
         self.ALL_USER_DATA_PATHS = []
@@ -475,13 +475,11 @@ class Constants:
     
     def config_user_data_dir(self, user_data_dir):
         self.SAVED_ROUTES_DIR = os.path.realpath(os.path.join(user_data_dir, self._SAVED_ROUTES_FOLDER_NAME))
-        self.SAVED_IMAGES_DIR = os.path.realpath(os.path.join(user_data_dir, self._SAVED_IMAGES_FOLDER_NAME))
         self.OUTDATED_ROUTES_DIR = os.path.realpath(os.path.join(user_data_dir, self._OUTDATED_ROUTES_FOLDER_NAME))
         self.CUSTOM_GENS_DIR = os.path.realpath(os.path.join(user_data_dir, self._CUSTOM_GENS_FOLDER_NAME))
 
         self.ALL_USER_DATA_PATHS = [
             self.SAVED_ROUTES_DIR,
-            self.SAVED_IMAGES_DIR,
             self.OUTDATED_ROUTES_DIR,
             self.CUSTOM_GENS_DIR
         ]
@@ -489,7 +487,6 @@ class Constants:
     def get_potential_user_data_dirs(self, potential_user_data_dir):
         return [
             (self.SAVED_ROUTES_DIR, os.path.realpath(os.path.join(potential_user_data_dir, self._SAVED_ROUTES_FOLDER_NAME))),
-            (self.SAVED_IMAGES_DIR, os.path.realpath(os.path.join(potential_user_data_dir, self._SAVED_IMAGES_FOLDER_NAME))),
             (self.OUTDATED_ROUTES_DIR, os.path.realpath(os.path.join(potential_user_data_dir, self._OUTDATED_ROUTES_FOLDER_NAME))),
             (self.CUSTOM_GENS_DIR, os.path.realpath(os.path.join(potential_user_data_dir, self._CUSTOM_GENS_FOLDER_NAME))),
         ]

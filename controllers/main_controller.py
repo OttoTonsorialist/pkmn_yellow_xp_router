@@ -7,6 +7,7 @@ from PIL import ImageGrab
 
 from utils.io_utils import sanitize_string
 from utils.constants import const
+from utils.config_manager import config
 from utils import io_utils
 from routing.route_events import EventDefinition, EventFolder, EventGroup, EventItem, TrainerEventDefinition
 import routing.router
@@ -531,11 +532,12 @@ class MainController:
         try:
             if self.is_empty():
                 return
-            full_dir = os.path.join(const.SAVED_IMAGES_DIR, self.get_current_route_name())
-            if not os.path.exists(full_dir):
-                os.makedirs(full_dir)
             
-            out_path = io_utils.get_safe_path_no_collision(full_dir, image_name, ext=".png")
+            out_path = io_utils.get_safe_path_no_collision(
+                config.get_images_dir(),
+                f"{self.get_current_route_name()}_{image_name}",
+                ext=".png",
+            )
             ImageGrab.grab(bbox=bbox).save(out_path)
             self.send_message(f"Saved screenshot to: {out_path}")
         except Exception as e:
