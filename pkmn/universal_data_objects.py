@@ -288,7 +288,7 @@ class StatBlock:
         }
     
     def __repr__(self):
-        return f"HP: {self.hp}, attack: {self.attack}, defense: {self.defense}, special attack: {self.special_attack}, special_defense: {self.special_defense}, speed: {self.speed}"
+        return f"HP: {self.hp}, attack: {self.attack}, defense: {self.defense}, special attack: {self.special_attack}, special_defense: {self.special_defense}, speed: {self.speed}, is_stat_xp: {self._is_stat_xp}"
     
     def calc_level_stats(self, level:int, dvs:StatBlock, stat_xp:StatBlock, badges:BadgeList, nature:Nature, held_item:str) -> StatBlock:
         raise NotImplementedError()

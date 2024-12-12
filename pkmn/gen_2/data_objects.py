@@ -212,7 +212,7 @@ class GenTwoBadgeList(universal_data_objects.BadgeList):
 
 class GenTwoStatBlock(universal_data_objects.StatBlock):
     def __init__(self, hp, attack, defense, special_attack, special_defense, speed, is_stat_xp=False):
-        super().__init__(hp, attack, defense, special_attack, special_defense, speed, is_stat_xp=False)
+        super().__init__(hp, attack, defense, special_attack, special_defense, speed, is_stat_xp=is_stat_xp)
 
         # NOTE: Although GenTwo introduces special attack and special defense as separate stats,
         # GenTwo only has one DV/StatXP val for both special stats, using special_attack for both of them

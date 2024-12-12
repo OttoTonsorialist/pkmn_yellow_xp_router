@@ -115,7 +115,7 @@ class GenOneBadgeList(universal_data_objects.BadgeList):
 
 class GenOneStatBlock(universal_data_objects.StatBlock):
     def __init__(self, hp, attack, defense, special_attack, special_defense, speed, is_stat_xp=False):
-        super().__init__(hp, attack, defense, special_attack, special_defense, speed, is_stat_xp=False)
+        super().__init__(hp, attack, defense, special_attack, special_defense, speed, is_stat_xp=is_stat_xp)
 
         # NOTE: as a general strategy, as GenOne only has one special stat in actuality, this object
         # will use special attack for all "special" calculations. Special defense will still be populated with
