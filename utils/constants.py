@@ -192,6 +192,7 @@ class Constants:
         self.TASK_BLACKOUT = "Blackout"
         self.TASK_EVOLUTION = "Evolution"
         self.TASK_NOTES_ONLY = "Just Notes"
+        self.ERROR_SEARCH = "Invalid Events"
 
         self.ITEM_ROUTE_EVENT_TYPES = [
             self.TASK_GET_FREE_ITEM,
@@ -218,6 +219,8 @@ class Constants:
             self.TASK_BLACKOUT,
             self.TASK_EVOLUTION,
             self.TASK_NOTES_ONLY,
+            # NOTE: not a full type, but we only use this list for populating the search component
+            self.ERROR_SEARCH,
         ]
 
         self.ITEM_TYPE_ALL_ITEMS = "All Items"
@@ -341,6 +344,11 @@ class Constants:
             self.RUBY_VERSION,
             self.SAPPHIRE_VERSION,
             self.EMERALD_VERSION,
+            self.FIRE_RED_VERSION,
+            self.LEAF_GREEN_VERSION,
+        ]
+
+        self.FRLG_VERSIONS = [
             self.FIRE_RED_VERSION,
             self.LEAF_GREEN_VERSION,
         ]

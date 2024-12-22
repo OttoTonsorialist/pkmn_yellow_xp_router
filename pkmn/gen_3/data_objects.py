@@ -35,6 +35,20 @@ STAGE_MOFIDIERS = [
     (8, 2),
 ]
 
+# special table, relying on bulbapedia for values
+# https://bulbapedia.bulbagarden.net/wiki/Prize_money#Core_series_games_2
+BLACKOUT_BASE_VALS = {
+    0: 8,
+    1: 16,
+    2: 32,
+    3: 36,
+    4: 48,
+    5: 60,
+    6: 80,
+    7: 100,
+    8: 120,
+}
+
 
 class GenThreeBadgeList(universal_data_objects.BadgeList):
     def __init__(
@@ -208,6 +222,17 @@ class GenThreeBadgeList(universal_data_objects.BadgeList):
             self.volcano == other.volcano and
             self.earth == other.earth
         )
+
+    def num_badges(self):
+        result = 0
+        for cur_badge in [
+            self.stone, self.knuckle, self.dynamo, self.heat, self.balance, self.feather, self.mind, self.rain,
+            self.boulder, self.cascade, self.thunder, self.rainbow, self.soul, self.marsh, self.volcano, self.earth,
+        ]:
+            if cur_badge:
+                result += 1
+
+        return result
 
 
 class GenThreeStatBlock(universal_data_objects.StatBlock):

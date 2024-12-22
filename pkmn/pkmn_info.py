@@ -136,3 +136,6 @@ class CurrentGen:
     def get_stat_xp_yield(self, pkmn_name:str, exp_split:int, held_item:str) -> universal_data_objects.StatBlock:
         raise NotImplementedError()
 
+    def get_money_after_blackout(self, cur_money:str, mon_level:int, badges:universal_data_objects.BadgeList) -> int:
+        raise NotImplementedError()
+

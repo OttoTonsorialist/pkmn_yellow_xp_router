@@ -1,7 +1,5 @@
 from ast import Dict
 import json
-import copy
-import math
 import os
 import shutil
 from typing import List, Tuple
@@ -10,7 +8,7 @@ import logging
 from pkmn import universal_data_objects
 from pkmn.gen_3 import pkmn_damage_calc
 from pkmn.damage_calc import DamageRange
-from pkmn.gen_3.data_objects import GenThreeBadgeList, GenThreeStatBlock, instantiate_trainer_pokemon, instantiate_wild_pokemon, get_hidden_power_base_power, get_hidden_power_type, VIT_AMT, VIT_CAP
+from pkmn.gen_3.data_objects import GenThreeBadgeList, GenThreeStatBlock, instantiate_trainer_pokemon, instantiate_wild_pokemon, get_hidden_power_base_power, get_hidden_power_type, VIT_AMT, VIT_CAP, BLACKOUT_BASE_VALS
 from pkmn.gen_3.gen_three_constants import gen_three_const
 from pkmn.pkmn_db import ItemDB, MinBattlesDB, PkmnDB, TrainerDB, MoveDB
 from pkmn.pkmn_info import CurrentGen
@@ -280,7 +278,13 @@ class GenThree(CurrentGen):
         if held_item == const.MACHO_BRACE_ITEM_NAME:
             return self.pkmn_db().get_pkmn(pkmn_name).stat_xp_yield.add(self.pkmn_db().get_pkmn(pkmn_name).stat_xp_yield)
         return self.pkmn_db().get_pkmn(pkmn_name).stat_xp_yield
-    
+
+    def get_money_after_blackout(self, cur_money:str, mon_level:int, badges:universal_data_objects.BadgeList) -> int:
+        if self.base_version_name() in const.FRLG_VERSIONS or self.version_name() in const.FRLG_VERSIONS:
+            base_val = BLACKOUT_BASE_VALS.get(badges.num_badges(), 120)
+            return max(0, cur_money - (base_val * mon_level))
+        return cur_money // 2
+
     def _validate_special_types(self, supported_types):
         invalid_types = []
         for cur_type in self._special_types:

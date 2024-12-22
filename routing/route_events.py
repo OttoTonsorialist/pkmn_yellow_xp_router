@@ -970,6 +970,10 @@ class EventGroup:
         return current_gen_info().is_major_fight(self.event_definition.trainer_def.trainer_name)
     
     def do_render(self, search=None, filter_types=None):
+        if filter_types is not None and self.has_errors() and const.ERROR_SEARCH in filter_types:
+            # Workaround to preserve and-ing behavior of search string + filter types
+            return self.event_definition.do_render(search=search)
+
         for learn_move in self.level_up_learn_event_defs:
             # TODO: pretty hacky, but fixing this requires updating the entire way we handle level-up moves
             # TODO: unclear if the change is actually worth it

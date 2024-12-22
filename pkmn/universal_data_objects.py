@@ -93,8 +93,8 @@ class BadgeList:
     
     def copy(self):
         raise NotImplementedError()
-    
-    def to_string(self, verbose=False):
+
+    def num_badges(self) -> int:
         raise NotImplementedError()
 
 class StageModifiers:
