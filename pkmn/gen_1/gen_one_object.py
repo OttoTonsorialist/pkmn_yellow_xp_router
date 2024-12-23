@@ -279,7 +279,10 @@ class GenOne(CurrentGen):
             math.floor(stat_xp_yield.speed / exp_split),
             is_stat_xp=True
         )
-    
+
+    def get_money_after_blackout(self, cur_money:str, mon_level:int, badges:universal_data_objects.BadgeList) -> int:
+        return cur_money // 2
+
     def _validate_special_types(self, supported_types):
         invalid_types = []
         for cur_type in self._special_types:

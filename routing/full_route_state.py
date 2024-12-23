@@ -323,8 +323,10 @@ class RouteState:
 
     def blackout(self):
         inv = self.inventory._copy()
-        inv.cur_money = self.inventory.cur_money // 2
-        # TODO: validate rounding is correct here...
+        inv.cur_money = current_gen_info().get_money_after_blackout(
+            inv.cur_money, self.solo_pkmn.cur_level, self.badges
+        )
+
         return RouteState(
             self.solo_pkmn,
             self.badges,

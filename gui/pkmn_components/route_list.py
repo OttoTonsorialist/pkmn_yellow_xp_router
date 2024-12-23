@@ -139,12 +139,14 @@ class RouteList(custom_components.CustomGridview):
         self.event_generate(const.ROUTE_LIST_REFRESH_EVENT)
     
     def _refresh_recursively(self, parent_id, event_list, to_delete_ids:set):
+        cur_search = self._controller.get_route_search_string()
+        cur_filter = self._controller.get_route_filter_types()
         for event_idx, event_obj in enumerate(event_list):
             semantic_id = self._get_attr_helper(event_obj, self._semantic_id_attr)
 
             if not event_obj.do_render(
-                search=self._controller.get_route_search_string(),
-                filter_types=self._controller.get_route_filter_types(),
+                search=cur_search,
+                filter_types=cur_filter,
             ):
                 continue
 

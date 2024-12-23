@@ -112,6 +112,14 @@ class GenOneBadgeList(universal_data_objects.BadgeList):
             self.earth == other.earth
         )
 
+    def num_badges(self):
+        result = 0
+        for cur_badge in [self.boulder, self.cascade, self.thunder, self.rainbow, self.soul, self.marsh, self.volcano, self.earth]:
+            if cur_badge:
+                result += 1
+
+        return result
+
 
 class GenOneStatBlock(universal_data_objects.StatBlock):
     def __init__(self, hp, attack, defense, special_attack, special_defense, speed, is_stat_xp=False):

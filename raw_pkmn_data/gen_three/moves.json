@@ -3551,7 +3551,7 @@
             "pp": 1,
             "base_power": 50,
             "priority": 0,
-            "type": "Normal",
+            "type": "none",
             "target": "target_single_enemy",
             "effects": [],
             "attack_flavor": [
