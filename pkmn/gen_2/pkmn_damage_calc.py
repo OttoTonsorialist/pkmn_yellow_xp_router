@@ -284,9 +284,10 @@ def calculate_gen_two_damage(
         gen_two_const.EARTHQUAKE_MOVE_NAME,
         gen_two_const.STOMP_MOVE_NAME,
         gen_two_const.PURSUIT_MOVE_NAME,
-        gen_two_const.MAGNITUDE_MOVE_NAME,
     ]:
         double_damage = (gen_two_const.NO_BONUS not in custom_move_data)
+    elif move.name == gen_two_const.MAGNITUDE_MOVE_NAME:
+        double_damage = (gen_two_const.DIG_BONUS in custom_move_data)
     else:
         double_damage = False
 

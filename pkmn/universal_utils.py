@@ -25,6 +25,18 @@ def calc_xp_yield(base_yield, level, is_trainer_battle, exp_split=1):
     return result
 
 
+def calc_level_gain(init_level, init_tnl, final_level, final_tnl):
+    if init_level == final_level:
+        if init_tnl == final_tnl:
+            return ""
+        return f"{(init_tnl - final_tnl) / 100:.1f}"
+    
+    full_levels_gained = final_level - (init_level + 1)
+    partial_gain = (init_tnl + (100 - final_tnl)) / 100
+
+    return f"{full_levels_gained + partial_gain:.1f}"
+
+
 def xp_needed_for_level(target_level, growth_rate):
     if growth_rate == const.GROWTH_RATE_FAST:
         result = (4 * (target_level ** 3)) / 5

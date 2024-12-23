@@ -763,7 +763,7 @@ class EventItem:
     def percent_xp_to_next_level(self):
         if not self.is_enabled():
             return ""
-        return self.final_state.solo_pkmn.percent_xp_to_next_level
+        return self.final_state.solo_pkmn.percent_xp_to_next_level_str
 
     def xp_gain(self):
         if not self.is_enabled():
@@ -775,6 +775,17 @@ class EventItem:
         if not self.is_enabled():
             return ""
         return self.final_state.solo_pkmn.cur_xp
+
+    def level_gain(self):
+        if not self.is_enabled():
+            return ""
+        result = universal_utils.calc_level_gain(
+            self.init_state.solo_pkmn.cur_level,
+            self.init_state.solo_pkmn.percent_xp_to_next_level,
+            self.final_state.solo_pkmn.cur_level,
+            self.final_state.solo_pkmn.percent_xp_to_next_level,
+        )
+        return result if result else ""
 
     def experience_per_second(self):
         return ""
@@ -932,7 +943,7 @@ class EventGroup:
     def percent_xp_to_next_level(self):
         if not self.is_enabled():
             return ""
-        return self.final_state.solo_pkmn.percent_xp_to_next_level
+        return self.final_state.solo_pkmn.percent_xp_to_next_level_str
 
     def xp_gain(self):
         if not self.is_enabled():
@@ -944,6 +955,17 @@ class EventGroup:
         if not self.is_enabled():
             return ""
         return self.final_state.solo_pkmn.cur_xp
+
+    def level_gain(self):
+        if not self.is_enabled():
+            return ""
+        result = universal_utils.calc_level_gain(
+            self.init_state.solo_pkmn.cur_level,
+            self.init_state.solo_pkmn.percent_xp_to_next_level,
+            self.final_state.solo_pkmn.cur_level,
+            self.final_state.solo_pkmn.percent_xp_to_next_level,
+        )
+        return result if result else ""
 
     def experience_per_second(self):
         if not self.is_enabled():
@@ -1101,6 +1123,9 @@ class EventFolder:
         return ""
 
     def total_xp(self):
+        return ""
+
+    def level_gain(self):
         return ""
 
     def experience_per_second(self):
