@@ -401,9 +401,11 @@ class GenThreeStatBlock(universal_data_objects.StatBlock):
         return result
 
     def add(self, other: StatBlock) -> StatBlock:
+        logger.info("Adding gen 3 stat blocks")
         if not self._is_stat_xp:
             return super().add(other)
 
+        logger.info("And it's stat exp too!")
         if not isinstance(other, StatBlock):
             raise ValueError(f"Cannot add type: {type(other)} to StatBlock")
 
@@ -415,7 +417,9 @@ class GenThreeStatBlock(universal_data_objects.StatBlock):
         addable_hp, cur_ev_total = self._get_actual_addable_evs(self.hp, other.hp, cur_ev_total)
         addable_attack, cur_ev_total = self._get_actual_addable_evs(self.attack, other.attack, cur_ev_total)
         addable_defense, cur_ev_total = self._get_actual_addable_evs(self.defense, other.defense, cur_ev_total)
+        logger.info(f"Adding together {self.speed} and {other.speed}, with ev total: {cur_ev_total}")
         addable_speed, cur_ev_total = self._get_actual_addable_evs(self.speed, other.speed, cur_ev_total)
+        logger.info(f"Result is: {addable_speed}, ev total: {cur_ev_total}")
         addable_special_attack, cur_ev_total = self._get_actual_addable_evs(self.special_attack, other.special_attack, cur_ev_total)
         addable_special_defense, cur_ev_total = self._get_actual_addable_evs(self.special_defense, other.special_defense, cur_ev_total)
 

@@ -121,7 +121,10 @@ class CurrentGen:
     def get_vitamin_amount(self) -> int:
         raise NotImplementedError()
     
-    def get_vitamin_cap(self) -> int:
+    def get_vitamin_use_cap(self) -> int:
+        raise NotImplementedError()
+    
+    def get_vitamin_value_cap(self) -> int:
         raise NotImplementedError()
     
     def create_new_custom_gen(self, new_version_name):

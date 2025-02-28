@@ -10,7 +10,7 @@ import logging
 from pkmn import universal_data_objects
 from pkmn.gen_2 import pkmn_damage_calc
 from pkmn.damage_calc import DamageRange
-from pkmn.gen_2.data_objects import GenTwoBadgeList, GenTwoStatBlock, instantiate_trainer_pokemon, instantiate_wild_pokemon, get_hidden_power_base_power, get_hidden_power_type, VIT_AMT, VIT_CAP
+from pkmn.gen_2.data_objects import GenTwoBadgeList, GenTwoStatBlock, instantiate_trainer_pokemon, instantiate_wild_pokemon, get_hidden_power_base_power, get_hidden_power_type, VIT_AMT, VIT_CAP, STAT_XP_CAP
 from pkmn.gen_2.gen_two_constants import gen_two_const
 from pkmn.pkmn_db import ItemDB, MinBattlesDB, PkmnDB, TrainerDB, MoveDB
 from pkmn.pkmn_info import CurrentGen
@@ -244,8 +244,11 @@ class GenTwo(CurrentGen):
     def get_vitamin_amount(self) -> int:
         return VIT_AMT
     
-    def get_vitamin_cap(self) -> int:
+    def get_vitamin_use_cap(self) -> int:
         return VIT_CAP
+    
+    def get_vitamin_value_cap(self) -> int:
+        return STAT_XP_CAP
 
     def create_new_custom_gen(self, new_version_name):
         folder_name = io_utils.get_safe_path_no_collision(const.CUSTOM_GENS_DIR, new_version_name)

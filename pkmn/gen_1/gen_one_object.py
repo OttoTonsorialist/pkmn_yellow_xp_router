@@ -232,8 +232,11 @@ class GenOne(CurrentGen):
     def get_vitamin_amount(self) -> int:
         return pkmn_utils.VIT_AMT
     
-    def get_vitamin_cap(self) -> int:
+    def get_vitamin_use_cap(self) -> int:
         return pkmn_utils.VIT_CAP
+    
+    def get_vitamin_value_cap(self) -> int:
+        return pkmn_utils.STAT_XP_CAP
     
     def create_new_custom_gen(self, new_version_name):
         folder_name = io_utils.get_safe_path_no_collision(const.CUSTOM_GENS_DIR, new_version_name)

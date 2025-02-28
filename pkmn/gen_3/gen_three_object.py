@@ -238,7 +238,10 @@ class GenThree(CurrentGen):
     def get_vitamin_amount(self) -> int:
         return VIT_AMT
     
-    def get_vitamin_cap(self) -> int:
+    def get_vitamin_use_cap(self) -> int:
+        return VIT_CAP
+    
+    def get_vitamin_value_cap(self) -> int:
         return VIT_CAP
 
     def create_new_custom_gen(self, new_version_name):
