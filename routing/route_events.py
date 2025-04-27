@@ -494,10 +494,11 @@ class EventDefinition:
         elif self.trainer_def is not None:
             trainer = self.get_first_trainer_obj()
             second_trainer = self.get_second_trainer_obj()
+            loc_string = f" ({trainer.location})" if trainer.location else ""
             if second_trainer is None:
-                return f"Trainer: {trainer.name} ({trainer.location})"
+                return f"Trainer: {trainer.name}{loc_string}"
             else:
-                return f"Multi: {trainer.name}, {second_trainer.name} ({trainer.location})"
+                return f"Multi: {trainer.name}, {second_trainer.name}{loc_string}"
         elif self.item_event_def is not None:
             return str(self.item_event_def)
         elif self.learn_move is not None:
@@ -525,10 +526,11 @@ class EventDefinition:
         elif self.trainer_def is not None:
             trainer = self.get_first_trainer_obj()
             second_trainer = self.get_second_trainer_obj()
+            loc_string = f" ({trainer.location})" if trainer.location else ""
             if second_trainer is None:
-                return f"Trainer: {trainer.name} ({trainer.location})"
+                return f"Trainer: {trainer.name}{loc_string}"
             else:
-                return f"Multi: {trainer.name}, {second_trainer.name} ({trainer.location})"
+                return f"Multi: {trainer.name}, {second_trainer.name}{loc_string}"
         elif self.item_event_def is not None:
             return str(self.item_event_def)
         elif self.learn_move is not None:

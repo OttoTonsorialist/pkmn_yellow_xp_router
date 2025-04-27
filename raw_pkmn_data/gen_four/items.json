@@ -1,0 +1,3119 @@
+{
+    "items": [
+        {
+            "rom_id": 1,
+            "purchase_price": 0,
+            "key_item": false,
+            "pocket": "Balls",
+            "name": "Master Ball"
+        },
+        {
+            "rom_id": 2,
+            "purchase_price": 1200,
+            "key_item": false,
+            "pocket": "Balls",
+            "name": "Ultra Ball"
+        },
+        {
+            "rom_id": 3,
+            "purchase_price": 600,
+            "key_item": false,
+            "pocket": "Balls",
+            "name": "Great Ball"
+        },
+        {
+            "rom_id": 4,
+            "purchase_price": 200,
+            "key_item": false,
+            "pocket": "Balls",
+            "name": "Poke Ball"
+        },
+        {
+            "rom_id": 5,
+            "purchase_price": 0,
+            "key_item": false,
+            "pocket": "Balls",
+            "name": "Safari Ball"
+        },
+        {
+            "rom_id": 6,
+            "purchase_price": 1000,
+            "key_item": false,
+            "pocket": "Balls",
+            "name": "Net Ball"
+        },
+        {
+            "rom_id": 7,
+            "purchase_price": 1000,
+            "key_item": false,
+            "pocket": "Balls",
+            "name": "Dive Ball"
+        },
+        {
+            "rom_id": 8,
+            "purchase_price": 1000,
+            "key_item": false,
+            "pocket": "Balls",
+            "name": "Nest Ball"
+        },
+        {
+            "rom_id": 9,
+            "purchase_price": 1000,
+            "key_item": false,
+            "pocket": "Balls",
+            "name": "Repeat Ball"
+        },
+        {
+            "rom_id": 10,
+            "purchase_price": 1000,
+            "key_item": false,
+            "pocket": "Balls",
+            "name": "Timer Ball"
+        },
+        {
+            "rom_id": 11,
+            "purchase_price": 1000,
+            "key_item": false,
+            "pocket": "Balls",
+            "name": "Luxury Ball"
+        },
+        {
+            "rom_id": 12,
+            "purchase_price": 200,
+            "key_item": false,
+            "pocket": "Balls",
+            "name": "Premier Ball"
+        },
+        {
+            "rom_id": 13,
+            "purchase_price": 1000,
+            "key_item": false,
+            "pocket": "Balls",
+            "name": "Dusk Ball"
+        },
+        {
+            "rom_id": 14,
+            "purchase_price": 300,
+            "key_item": false,
+            "pocket": "Balls",
+            "name": "Heal Ball"
+        },
+        {
+            "rom_id": 15,
+            "purchase_price": 1000,
+            "key_item": false,
+            "pocket": "Balls",
+            "name": "Quick Ball"
+        },
+        {
+            "rom_id": 16,
+            "purchase_price": 200,
+            "key_item": false,
+            "pocket": "Balls",
+            "name": "Cherish Ball"
+        },
+        {
+            "rom_id": 17,
+            "purchase_price": 300,
+            "key_item": false,
+            "pocket": "Medicine",
+            "name": "Potion"
+        },
+        {
+            "rom_id": 18,
+            "purchase_price": 100,
+            "key_item": false,
+            "pocket": "Medicine",
+            "name": "Antidote"
+        },
+        {
+            "rom_id": 19,
+            "purchase_price": 250,
+            "key_item": false,
+            "pocket": "Medicine",
+            "name": "Burn Heal"
+        },
+        {
+            "rom_id": 20,
+            "purchase_price": 250,
+            "key_item": false,
+            "pocket": "Medicine",
+            "name": "Ice Heal"
+        },
+        {
+            "rom_id": 21,
+            "purchase_price": 250,
+            "key_item": false,
+            "pocket": "Medicine",
+            "name": "Awakening"
+        },
+        {
+            "rom_id": 22,
+            "purchase_price": 200,
+            "key_item": false,
+            "pocket": "Medicine",
+            "name": "Parlyz Heal"
+        },
+        {
+            "rom_id": 23,
+            "purchase_price": 3000,
+            "key_item": false,
+            "pocket": "Medicine",
+            "name": "Full Restore"
+        },
+        {
+            "rom_id": 24,
+            "purchase_price": 2500,
+            "key_item": false,
+            "pocket": "Medicine",
+            "name": "Max Potion"
+        },
+        {
+            "rom_id": 25,
+            "purchase_price": 1200,
+            "key_item": false,
+            "pocket": "Medicine",
+            "name": "Hyper Potion"
+        },
+        {
+            "rom_id": 26,
+            "purchase_price": 700,
+            "key_item": false,
+            "pocket": "Medicine",
+            "name": "Super Potion"
+        },
+        {
+            "rom_id": 27,
+            "purchase_price": 600,
+            "key_item": false,
+            "pocket": "Medicine",
+            "name": "Full Heal"
+        },
+        {
+            "rom_id": 28,
+            "purchase_price": 1500,
+            "key_item": false,
+            "pocket": "Medicine",
+            "name": "Revive"
+        },
+        {
+            "rom_id": 29,
+            "purchase_price": 4000,
+            "key_item": false,
+            "pocket": "Medicine",
+            "name": "Max Revive"
+        },
+        {
+            "rom_id": 30,
+            "purchase_price": 200,
+            "key_item": false,
+            "pocket": "Medicine",
+            "name": "Fresh Water"
+        },
+        {
+            "rom_id": 31,
+            "purchase_price": 300,
+            "key_item": false,
+            "pocket": "Medicine",
+            "name": "Soda Pop"
+        },
+        {
+            "rom_id": 32,
+            "purchase_price": 350,
+            "key_item": false,
+            "pocket": "Medicine",
+            "name": "Lemonade"
+        },
+        {
+            "rom_id": 33,
+            "purchase_price": 500,
+            "key_item": false,
+            "pocket": "Medicine",
+            "name": "Moomoo Milk"
+        },
+        {
+            "rom_id": 34,
+            "purchase_price": 500,
+            "key_item": false,
+            "pocket": "Medicine",
+            "name": "EnergyPowder"
+        },
+        {
+            "rom_id": 35,
+            "purchase_price": 800,
+            "key_item": false,
+            "pocket": "Medicine",
+            "name": "Energy Root"
+        },
+        {
+            "rom_id": 36,
+            "purchase_price": 450,
+            "key_item": false,
+            "pocket": "Medicine",
+            "name": "Heal Powder"
+        },
+        {
+            "rom_id": 37,
+            "purchase_price": 2800,
+            "key_item": false,
+            "pocket": "Medicine",
+            "name": "Revival Herb"
+        },
+        {
+            "rom_id": 38,
+            "purchase_price": 1200,
+            "key_item": false,
+            "pocket": "Medicine",
+            "name": "Ether"
+        },
+        {
+            "rom_id": 39,
+            "purchase_price": 2000,
+            "key_item": false,
+            "pocket": "Medicine",
+            "name": "Max Ether"
+        },
+        {
+            "rom_id": 40,
+            "purchase_price": 3000,
+            "key_item": false,
+            "pocket": "Medicine",
+            "name": "Elixir"
+        },
+        {
+            "rom_id": 41,
+            "purchase_price": 4500,
+            "key_item": false,
+            "pocket": "Medicine",
+            "name": "Max Elixir"
+        },
+        {
+            "rom_id": 42,
+            "purchase_price": 200,
+            "key_item": false,
+            "pocket": "Medicine",
+            "name": "Lava Cookie"
+        },
+        {
+            "rom_id": 43,
+            "purchase_price": 100,
+            "key_item": false,
+            "pocket": "Medicine",
+            "name": "Berry Juice"
+        },
+        {
+            "rom_id": 44,
+            "purchase_price": 200,
+            "key_item": false,
+            "pocket": "Medicine",
+            "name": "Sacred Ash"
+        },
+        {
+            "rom_id": 45,
+            "purchase_price": 9800,
+            "key_item": false,
+            "pocket": "Medicine",
+            "name": "HP Up"
+        },
+        {
+            "rom_id": 46,
+            "purchase_price": 9800,
+            "key_item": false,
+            "pocket": "Medicine",
+            "name": "Protein"
+        },
+        {
+            "rom_id": 47,
+            "purchase_price": 9800,
+            "key_item": false,
+            "pocket": "Medicine",
+            "name": "Iron"
+        },
+        {
+            "rom_id": 48,
+            "purchase_price": 9800,
+            "key_item": false,
+            "pocket": "Medicine",
+            "name": "Carbos"
+        },
+        {
+            "rom_id": 49,
+            "purchase_price": 9800,
+            "key_item": false,
+            "pocket": "Medicine",
+            "name": "Calcium"
+        },
+        {
+            "rom_id": 50,
+            "purchase_price": 4800,
+            "key_item": false,
+            "pocket": "Medicine",
+            "name": "Rare Candy"
+        },
+        {
+            "rom_id": 51,
+            "purchase_price": 9800,
+            "key_item": false,
+            "pocket": "Medicine",
+            "name": "PP Up"
+        },
+        {
+            "rom_id": 52,
+            "purchase_price": 9800,
+            "key_item": false,
+            "pocket": "Medicine",
+            "name": "Zinc"
+        },
+        {
+            "rom_id": 53,
+            "purchase_price": 9800,
+            "key_item": false,
+            "pocket": "Medicine",
+            "name": "PP Max"
+        },
+        {
+            "rom_id": 54,
+            "purchase_price": 200,
+            "key_item": false,
+            "pocket": "Medicine",
+            "name": "Old Gateau"
+        },
+        {
+            "rom_id": 55,
+            "purchase_price": 700,
+            "key_item": false,
+            "pocket": "Battle Items",
+            "name": "Guard Spec."
+        },
+        {
+            "rom_id": 56,
+            "purchase_price": 650,
+            "key_item": false,
+            "pocket": "Battle Items",
+            "name": "Dire Hit"
+        },
+        {
+            "rom_id": 57,
+            "purchase_price": 500,
+            "key_item": false,
+            "pocket": "Battle Items",
+            "name": "X Attack"
+        },
+        {
+            "rom_id": 58,
+            "purchase_price": 550,
+            "key_item": false,
+            "pocket": "Battle Items",
+            "name": "X Defend"
+        },
+        {
+            "rom_id": 59,
+            "purchase_price": 350,
+            "key_item": false,
+            "pocket": "Battle Items",
+            "name": "X Speed"
+        },
+        {
+            "rom_id": 60,
+            "purchase_price": 950,
+            "key_item": false,
+            "pocket": "Battle Items",
+            "name": "X Accuracy"
+        },
+        {
+            "rom_id": 61,
+            "purchase_price": 350,
+            "key_item": false,
+            "pocket": "Battle Items",
+            "name": "X Special"
+        },
+        {
+            "rom_id": 62,
+            "purchase_price": 350,
+            "key_item": false,
+            "pocket": "Battle Items",
+            "name": "X Sp. Def"
+        },
+        {
+            "rom_id": 63,
+            "purchase_price": 1000,
+            "key_item": false,
+            "pocket": "Battle Items",
+            "name": "Poke Doll"
+        },
+        {
+            "rom_id": 64,
+            "purchase_price": 1000,
+            "key_item": false,
+            "pocket": "Battle Items",
+            "name": "Fluffy Tail"
+        },
+        {
+            "rom_id": 65,
+            "purchase_price": 100,
+            "key_item": false,
+            "pocket": "Battle Items",
+            "name": "Blue Flute"
+        },
+        {
+            "rom_id": 66,
+            "purchase_price": 200,
+            "key_item": false,
+            "pocket": "Battle Items",
+            "name": "Yellow Flute"
+        },
+        {
+            "rom_id": 67,
+            "purchase_price": 300,
+            "key_item": false,
+            "pocket": "Battle Items",
+            "name": "Red Flute"
+        },
+        {
+            "rom_id": 68,
+            "purchase_price": 400,
+            "key_item": false,
+            "pocket": "Items",
+            "name": "Black Flute"
+        },
+        {
+            "rom_id": 69,
+            "purchase_price": 500,
+            "key_item": false,
+            "pocket": "Items",
+            "name": "White Flute"
+        },
+        {
+            "rom_id": 70,
+            "purchase_price": 20,
+            "key_item": false,
+            "pocket": "Items",
+            "name": "Shoal Salt"
+        },
+        {
+            "rom_id": 71,
+            "purchase_price": 20,
+            "key_item": false,
+            "pocket": "Items",
+            "name": "Shoal Shell"
+        },
+        {
+            "rom_id": 72,
+            "purchase_price": 200,
+            "key_item": false,
+            "pocket": "Items",
+            "name": "Red Shard"
+        },
+        {
+            "rom_id": 73,
+            "purchase_price": 200,
+            "key_item": false,
+            "pocket": "Items",
+            "name": "Blue Shard"
+        },
+        {
+            "rom_id": 74,
+            "purchase_price": 200,
+            "key_item": false,
+            "pocket": "Items",
+            "name": "Yellow Shard"
+        },
+        {
+            "rom_id": 75,
+            "purchase_price": 200,
+            "key_item": false,
+            "pocket": "Items",
+            "name": "Green Shard"
+        },
+        {
+            "rom_id": 76,
+            "purchase_price": 500,
+            "key_item": false,
+            "pocket": "Items",
+            "name": "Super Repel"
+        },
+        {
+            "rom_id": 77,
+            "purchase_price": 700,
+            "key_item": false,
+            "pocket": "Items",
+            "name": "Max Repel"
+        },
+        {
+            "rom_id": 78,
+            "purchase_price": 550,
+            "key_item": false,
+            "pocket": "Items",
+            "name": "Escape Rope"
+        },
+        {
+            "rom_id": 79,
+            "purchase_price": 350,
+            "key_item": false,
+            "pocket": "Items",
+            "name": "Repel"
+        },
+        {
+            "rom_id": 80,
+            "purchase_price": 2100,
+            "key_item": false,
+            "pocket": "Items",
+            "name": "Sun Stone"
+        },
+        {
+            "rom_id": 81,
+            "purchase_price": 2100,
+            "key_item": false,
+            "pocket": "Items",
+            "name": "Moon Stone"
+        },
+        {
+            "rom_id": 82,
+            "purchase_price": 2100,
+            "key_item": false,
+            "pocket": "Items",
+            "name": "Fire Stone"
+        },
+        {
+            "rom_id": 83,
+            "purchase_price": 2100,
+            "key_item": false,
+            "pocket": "Items",
+            "name": "Thunderstone"
+        },
+        {
+            "rom_id": 84,
+            "purchase_price": 2100,
+            "key_item": false,
+            "pocket": "Items",
+            "name": "Water Stone"
+        },
+        {
+            "rom_id": 85,
+            "purchase_price": 2100,
+            "key_item": false,
+            "pocket": "Items",
+            "name": "Leaf Stone"
+        },
+        {
+            "rom_id": 86,
+            "purchase_price": 500,
+            "key_item": false,
+            "pocket": "Items",
+            "name": "TinyMushroom"
+        },
+        {
+            "rom_id": 87,
+            "purchase_price": 5000,
+            "key_item": false,
+            "pocket": "Items",
+            "name": "Big Mushroom"
+        },
+        {
+            "rom_id": 88,
+            "purchase_price": 1400,
+            "key_item": false,
+            "pocket": "Items",
+            "name": "Pearl"
+        },
+        {
+            "rom_id": 89,
+            "purchase_price": 7500,
+            "key_item": false,
+            "pocket": "Items",
+            "name": "Big Pearl"
+        },
+        {
+            "rom_id": 90,
+            "purchase_price": 2000,
+            "key_item": false,
+            "pocket": "Items",
+            "name": "Stardust"
+        },
+        {
+            "rom_id": 91,
+            "purchase_price": 9800,
+            "key_item": false,
+            "pocket": "Items",
+            "name": "Star Piece"
+        },
+        {
+            "rom_id": 92,
+            "purchase_price": 10000,
+            "key_item": false,
+            "pocket": "Items",
+            "name": "Nugget"
+        },
+        {
+            "rom_id": 93,
+            "purchase_price": 100,
+            "key_item": false,
+            "pocket": "Items",
+            "name": "Heart Scale"
+        },
+        {
+            "rom_id": 94,
+            "purchase_price": 100,
+            "key_item": false,
+            "pocket": "Items",
+            "name": "Honey"
+        },
+        {
+            "rom_id": 95,
+            "purchase_price": 200,
+            "key_item": false,
+            "pocket": "Items",
+            "name": "Growth Mulch"
+        },
+        {
+            "rom_id": 96,
+            "purchase_price": 200,
+            "key_item": false,
+            "pocket": "Items",
+            "name": "Damp Mulch"
+        },
+        {
+            "rom_id": 97,
+            "purchase_price": 200,
+            "key_item": false,
+            "pocket": "Items",
+            "name": "Stable Mulch"
+        },
+        {
+            "rom_id": 98,
+            "purchase_price": 200,
+            "key_item": false,
+            "pocket": "Items",
+            "name": "Gooey Mulch"
+        },
+        {
+            "rom_id": 99,
+            "purchase_price": 1000,
+            "key_item": false,
+            "pocket": "Items",
+            "name": "Root Fossil"
+        },
+        {
+            "rom_id": 100,
+            "purchase_price": 1000,
+            "key_item": false,
+            "pocket": "Items",
+            "name": "Claw Fossil"
+        },
+        {
+            "rom_id": 101,
+            "purchase_price": 1000,
+            "key_item": false,
+            "pocket": "Items",
+            "name": "Helix Fossil"
+        },
+        {
+            "rom_id": 102,
+            "purchase_price": 1000,
+            "key_item": false,
+            "pocket": "Items",
+            "name": "Dome Fossil"
+        },
+        {
+            "rom_id": 103,
+            "purchase_price": 1000,
+            "key_item": false,
+            "pocket": "Items",
+            "name": "Old Amber"
+        },
+        {
+            "rom_id": 104,
+            "purchase_price": 1000,
+            "key_item": false,
+            "pocket": "Items",
+            "name": "Armor Fossil"
+        },
+        {
+            "rom_id": 105,
+            "purchase_price": 1000,
+            "key_item": false,
+            "pocket": "Items",
+            "name": "Skull Fossil"
+        },
+        {
+            "rom_id": 106,
+            "purchase_price": 10000,
+            "key_item": false,
+            "pocket": "Items",
+            "name": "Rare Bone"
+        },
+        {
+            "rom_id": 107,
+            "purchase_price": 2100,
+            "key_item": false,
+            "pocket": "Items",
+            "name": "Shiny Stone"
+        },
+        {
+            "rom_id": 108,
+            "purchase_price": 2100,
+            "key_item": false,
+            "pocket": "Items",
+            "name": "Dusk Stone"
+        },
+        {
+            "rom_id": 109,
+            "purchase_price": 2100,
+            "key_item": false,
+            "pocket": "Items",
+            "name": "Dawn Stone"
+        },
+        {
+            "rom_id": 110,
+            "purchase_price": 2100,
+            "key_item": false,
+            "pocket": "Items",
+            "name": "Oval Stone"
+        },
+        {
+            "rom_id": 111,
+            "purchase_price": 2100,
+            "key_item": false,
+            "pocket": "Items",
+            "name": "Odd Keystone"
+        },
+        {
+            "rom_id": 112,
+            "purchase_price": 10000,
+            "key_item": false,
+            "pocket": "Items",
+            "name": "Griseous Orb"
+        },
+        {
+            "rom_id": 135,
+            "purchase_price": 10000,
+            "key_item": false,
+            "pocket": "Items",
+            "name": "Adamant Orb"
+        },
+        {
+            "rom_id": 136,
+            "purchase_price": 10000,
+            "key_item": false,
+            "pocket": "Items",
+            "name": "Lustrous Orb"
+        },
+        {
+            "rom_id": 137,
+            "purchase_price": 50,
+            "key_item": false,
+            "pocket": "Mail",
+            "name": "Grass Mail"
+        },
+        {
+            "rom_id": 138,
+            "purchase_price": 50,
+            "key_item": false,
+            "pocket": "Mail",
+            "name": "Flame Mail"
+        },
+        {
+            "rom_id": 139,
+            "purchase_price": 50,
+            "key_item": false,
+            "pocket": "Mail",
+            "name": "Bubble Mail"
+        },
+        {
+            "rom_id": 140,
+            "purchase_price": 50,
+            "key_item": false,
+            "pocket": "Mail",
+            "name": "Bloom Mail"
+        },
+        {
+            "rom_id": 141,
+            "purchase_price": 50,
+            "key_item": false,
+            "pocket": "Mail",
+            "name": "Tunnel Mail"
+        },
+        {
+            "rom_id": 142,
+            "purchase_price": 50,
+            "key_item": false,
+            "pocket": "Mail",
+            "name": "Steel Mail"
+        },
+        {
+            "rom_id": 143,
+            "purchase_price": 50,
+            "key_item": false,
+            "pocket": "Mail",
+            "name": "Heart Mail"
+        },
+        {
+            "rom_id": 144,
+            "purchase_price": 50,
+            "key_item": false,
+            "pocket": "Mail",
+            "name": "Snow Mail"
+        },
+        {
+            "rom_id": 145,
+            "purchase_price": 50,
+            "key_item": false,
+            "pocket": "Mail",
+            "name": "Space Mail"
+        },
+        {
+            "rom_id": 146,
+            "purchase_price": 50,
+            "key_item": false,
+            "pocket": "Mail",
+            "name": "Air Mail"
+        },
+        {
+            "rom_id": 147,
+            "purchase_price": 50,
+            "key_item": false,
+            "pocket": "Mail",
+            "name": "Mosaic Mail"
+        },
+        {
+            "rom_id": 148,
+            "purchase_price": 50,
+            "key_item": false,
+            "pocket": "Mail",
+            "name": "Brick Mail"
+        },
+        {
+            "rom_id": 149,
+            "purchase_price": 20,
+            "key_item": false,
+            "pocket": "Berries",
+            "name": "Cheri Berry"
+        },
+        {
+            "rom_id": 150,
+            "purchase_price": 20,
+            "key_item": false,
+            "pocket": "Berries",
+            "name": "Chesto Berry"
+        },
+        {
+            "rom_id": 151,
+            "purchase_price": 20,
+            "key_item": false,
+            "pocket": "Berries",
+            "name": "Pecha Berry"
+        },
+        {
+            "rom_id": 152,
+            "purchase_price": 20,
+            "key_item": false,
+            "pocket": "Berries",
+            "name": "Rawst Berry"
+        },
+        {
+            "rom_id": 153,
+            "purchase_price": 20,
+            "key_item": false,
+            "pocket": "Berries",
+            "name": "Aspear Berry"
+        },
+        {
+            "rom_id": 154,
+            "purchase_price": 20,
+            "key_item": false,
+            "pocket": "Berries",
+            "name": "Leppa Berry"
+        },
+        {
+            "rom_id": 155,
+            "purchase_price": 20,
+            "key_item": false,
+            "pocket": "Berries",
+            "name": "Oran Berry"
+        },
+        {
+            "rom_id": 156,
+            "purchase_price": 20,
+            "key_item": false,
+            "pocket": "Berries",
+            "name": "Persim Berry"
+        },
+        {
+            "rom_id": 157,
+            "purchase_price": 20,
+            "key_item": false,
+            "pocket": "Berries",
+            "name": "Lum Berry"
+        },
+        {
+            "rom_id": 158,
+            "purchase_price": 20,
+            "key_item": false,
+            "pocket": "Berries",
+            "name": "Sitrus Berry"
+        },
+        {
+            "rom_id": 159,
+            "purchase_price": 20,
+            "key_item": false,
+            "pocket": "Berries",
+            "name": "Figy Berry"
+        },
+        {
+            "rom_id": 160,
+            "purchase_price": 20,
+            "key_item": false,
+            "pocket": "Berries",
+            "name": "Wiki Berry"
+        },
+        {
+            "rom_id": 161,
+            "purchase_price": 20,
+            "key_item": false,
+            "pocket": "Berries",
+            "name": "Mago Berry"
+        },
+        {
+            "rom_id": 162,
+            "purchase_price": 20,
+            "key_item": false,
+            "pocket": "Berries",
+            "name": "Aguav Berry"
+        },
+        {
+            "rom_id": 163,
+            "purchase_price": 20,
+            "key_item": false,
+            "pocket": "Berries",
+            "name": "Iapapa Berry"
+        },
+        {
+            "rom_id": 164,
+            "purchase_price": 20,
+            "key_item": false,
+            "pocket": "Berries",
+            "name": "Razz Berry"
+        },
+        {
+            "rom_id": 165,
+            "purchase_price": 20,
+            "key_item": false,
+            "pocket": "Berries",
+            "name": "Bluk Berry"
+        },
+        {
+            "rom_id": 166,
+            "purchase_price": 20,
+            "key_item": false,
+            "pocket": "Berries",
+            "name": "Nanab Berry"
+        },
+        {
+            "rom_id": 167,
+            "purchase_price": 20,
+            "key_item": false,
+            "pocket": "Berries",
+            "name": "Wepear Berry"
+        },
+        {
+            "rom_id": 168,
+            "purchase_price": 20,
+            "key_item": false,
+            "pocket": "Berries",
+            "name": "Pinap Berry"
+        },
+        {
+            "rom_id": 169,
+            "purchase_price": 20,
+            "key_item": false,
+            "pocket": "Berries",
+            "name": "Pomeg Berry"
+        },
+        {
+            "rom_id": 170,
+            "purchase_price": 20,
+            "key_item": false,
+            "pocket": "Berries",
+            "name": "Kelpsy Berry"
+        },
+        {
+            "rom_id": 171,
+            "purchase_price": 20,
+            "key_item": false,
+            "pocket": "Berries",
+            "name": "Qualot Berry"
+        },
+        {
+            "rom_id": 172,
+            "purchase_price": 20,
+            "key_item": false,
+            "pocket": "Berries",
+            "name": "Hondew Berry"
+        },
+        {
+            "rom_id": 173,
+            "purchase_price": 20,
+            "key_item": false,
+            "pocket": "Berries",
+            "name": "Grepa Berry"
+        },
+        {
+            "rom_id": 174,
+            "purchase_price": 20,
+            "key_item": false,
+            "pocket": "Berries",
+            "name": "Tamato Berry"
+        },
+        {
+            "rom_id": 175,
+            "purchase_price": 20,
+            "key_item": false,
+            "pocket": "Berries",
+            "name": "Cornn Berry"
+        },
+        {
+            "rom_id": 176,
+            "purchase_price": 20,
+            "key_item": false,
+            "pocket": "Berries",
+            "name": "Magost Berry"
+        },
+        {
+            "rom_id": 177,
+            "purchase_price": 20,
+            "key_item": false,
+            "pocket": "Berries",
+            "name": "Rabuta Berry"
+        },
+        {
+            "rom_id": 178,
+            "purchase_price": 20,
+            "key_item": false,
+            "pocket": "Berries",
+            "name": "Nomel Berry"
+        },
+        {
+            "rom_id": 179,
+            "purchase_price": 20,
+            "key_item": false,
+            "pocket": "Berries",
+            "name": "Spelon Berry"
+        },
+        {
+            "rom_id": 180,
+            "purchase_price": 20,
+            "key_item": false,
+            "pocket": "Berries",
+            "name": "Pamtre Berry"
+        },
+        {
+            "rom_id": 181,
+            "purchase_price": 20,
+            "key_item": false,
+            "pocket": "Berries",
+            "name": "Watmel Berry"
+        },
+        {
+            "rom_id": 182,
+            "purchase_price": 20,
+            "key_item": false,
+            "pocket": "Berries",
+            "name": "Durin Berry"
+        },
+        {
+            "rom_id": 183,
+            "purchase_price": 20,
+            "key_item": false,
+            "pocket": "Berries",
+            "name": "Belue Berry"
+        },
+        {
+            "rom_id": 184,
+            "purchase_price": 20,
+            "key_item": false,
+            "pocket": "Berries",
+            "name": "Occa Berry"
+        },
+        {
+            "rom_id": 185,
+            "purchase_price": 20,
+            "key_item": false,
+            "pocket": "Berries",
+            "name": "Passho Berry"
+        },
+        {
+            "rom_id": 186,
+            "purchase_price": 20,
+            "key_item": false,
+            "pocket": "Berries",
+            "name": "Wacan Berry"
+        },
+        {
+            "rom_id": 187,
+            "purchase_price": 20,
+            "key_item": false,
+            "pocket": "Berries",
+            "name": "Rindo Berry"
+        },
+        {
+            "rom_id": 188,
+            "purchase_price": 20,
+            "key_item": false,
+            "pocket": "Berries",
+            "name": "Yache Berry"
+        },
+        {
+            "rom_id": 189,
+            "purchase_price": 20,
+            "key_item": false,
+            "pocket": "Berries",
+            "name": "Chople Berry"
+        },
+        {
+            "rom_id": 190,
+            "purchase_price": 20,
+            "key_item": false,
+            "pocket": "Berries",
+            "name": "Kebia Berry"
+        },
+        {
+            "rom_id": 191,
+            "purchase_price": 20,
+            "key_item": false,
+            "pocket": "Berries",
+            "name": "Shuca Berry"
+        },
+        {
+            "rom_id": 192,
+            "purchase_price": 20,
+            "key_item": false,
+            "pocket": "Berries",
+            "name": "Coba Berry"
+        },
+        {
+            "rom_id": 193,
+            "purchase_price": 20,
+            "key_item": false,
+            "pocket": "Berries",
+            "name": "Payapa Berry"
+        },
+        {
+            "rom_id": 194,
+            "purchase_price": 20,
+            "key_item": false,
+            "pocket": "Berries",
+            "name": "Tanga Berry"
+        },
+        {
+            "rom_id": 195,
+            "purchase_price": 20,
+            "key_item": false,
+            "pocket": "Berries",
+            "name": "Charti Berry"
+        },
+        {
+            "rom_id": 196,
+            "purchase_price": 20,
+            "key_item": false,
+            "pocket": "Berries",
+            "name": "Kasib Berry"
+        },
+        {
+            "rom_id": 197,
+            "purchase_price": 20,
+            "key_item": false,
+            "pocket": "Berries",
+            "name": "Haban Berry"
+        },
+        {
+            "rom_id": 198,
+            "purchase_price": 20,
+            "key_item": false,
+            "pocket": "Berries",
+            "name": "Colbur Berry"
+        },
+        {
+            "rom_id": 199,
+            "purchase_price": 20,
+            "key_item": false,
+            "pocket": "Berries",
+            "name": "Babiri Berry"
+        },
+        {
+            "rom_id": 200,
+            "purchase_price": 20,
+            "key_item": false,
+            "pocket": "Berries",
+            "name": "Chilan Berry"
+        },
+        {
+            "rom_id": 201,
+            "purchase_price": 20,
+            "key_item": false,
+            "pocket": "Berries",
+            "name": "Liechi Berry"
+        },
+        {
+            "rom_id": 202,
+            "purchase_price": 20,
+            "key_item": false,
+            "pocket": "Berries",
+            "name": "Ganlon Berry"
+        },
+        {
+            "rom_id": 203,
+            "purchase_price": 20,
+            "key_item": false,
+            "pocket": "Berries",
+            "name": "Salac Berry"
+        },
+        {
+            "rom_id": 204,
+            "purchase_price": 20,
+            "key_item": false,
+            "pocket": "Berries",
+            "name": "Petaya Berry"
+        },
+        {
+            "rom_id": 205,
+            "purchase_price": 20,
+            "key_item": false,
+            "pocket": "Berries",
+            "name": "Apicot Berry"
+        },
+        {
+            "rom_id": 206,
+            "purchase_price": 20,
+            "key_item": false,
+            "pocket": "Berries",
+            "name": "Lansat Berry"
+        },
+        {
+            "rom_id": 207,
+            "purchase_price": 20,
+            "key_item": false,
+            "pocket": "Berries",
+            "name": "Starf Berry"
+        },
+        {
+            "rom_id": 208,
+            "purchase_price": 20,
+            "key_item": false,
+            "pocket": "Berries",
+            "name": "Enigma Berry"
+        },
+        {
+            "rom_id": 209,
+            "purchase_price": 20,
+            "key_item": false,
+            "pocket": "Berries",
+            "name": "Micle Berry"
+        },
+        {
+            "rom_id": 210,
+            "purchase_price": 20,
+            "key_item": false,
+            "pocket": "Berries",
+            "name": "Custap Berry"
+        },
+        {
+            "rom_id": 211,
+            "purchase_price": 20,
+            "key_item": false,
+            "pocket": "Berries",
+            "name": "Jaboca Berry"
+        },
+        {
+            "rom_id": 212,
+            "purchase_price": 20,
+            "key_item": false,
+            "pocket": "Berries",
+            "name": "Rowap Berry"
+        },
+        {
+            "rom_id": 213,
+            "purchase_price": 10,
+            "key_item": false,
+            "pocket": "Items",
+            "name": "BrightPowder"
+        },
+        {
+            "rom_id": 214,
+            "purchase_price": 100,
+            "key_item": false,
+            "pocket": "Items",
+            "name": "White Herb"
+        },
+        {
+            "rom_id": 215,
+            "purchase_price": 3000,
+            "key_item": false,
+            "pocket": "Items",
+            "name": "Macho Brace"
+        },
+        {
+            "rom_id": 216,
+            "purchase_price": 3000,
+            "key_item": false,
+            "pocket": "Items",
+            "name": "Exp. Share"
+        },
+        {
+            "rom_id": 217,
+            "purchase_price": 100,
+            "key_item": false,
+            "pocket": "Items",
+            "name": "Quick Claw"
+        },
+        {
+            "rom_id": 218,
+            "purchase_price": 100,
+            "key_item": false,
+            "pocket": "Items",
+            "name": "Soothe Bell"
+        },
+        {
+            "rom_id": 219,
+            "purchase_price": 100,
+            "key_item": false,
+            "pocket": "Items",
+            "name": "Mental Herb"
+        },
+        {
+            "rom_id": 220,
+            "purchase_price": 100,
+            "key_item": false,
+            "pocket": "Items",
+            "name": "Choice Band"
+        },
+        {
+            "rom_id": 221,
+            "purchase_price": 100,
+            "key_item": false,
+            "pocket": "Items",
+            "name": "King's Rock"
+        },
+        {
+            "rom_id": 222,
+            "purchase_price": 100,
+            "key_item": false,
+            "pocket": "Items",
+            "name": "SilverPowder"
+        },
+        {
+            "rom_id": 223,
+            "purchase_price": 100,
+            "key_item": false,
+            "pocket": "Items",
+            "name": "Amulet Coin"
+        },
+        {
+            "rom_id": 224,
+            "purchase_price": 200,
+            "key_item": false,
+            "pocket": "Items",
+            "name": "Cleanse Tag"
+        },
+        {
+            "rom_id": 225,
+            "purchase_price": 200,
+            "key_item": false,
+            "pocket": "Items",
+            "name": "Soul Dew"
+        },
+        {
+            "rom_id": 226,
+            "purchase_price": 200,
+            "key_item": false,
+            "pocket": "Items",
+            "name": "DeepSeaTooth"
+        },
+        {
+            "rom_id": 227,
+            "purchase_price": 200,
+            "key_item": false,
+            "pocket": "Items",
+            "name": "DeepSeaScale"
+        },
+        {
+            "rom_id": 228,
+            "purchase_price": 200,
+            "key_item": false,
+            "pocket": "Items",
+            "name": "Smoke Ball"
+        },
+        {
+            "rom_id": 229,
+            "purchase_price": 200,
+            "key_item": false,
+            "pocket": "Items",
+            "name": "Everstone"
+        },
+        {
+            "rom_id": 230,
+            "purchase_price": 200,
+            "key_item": false,
+            "pocket": "Items",
+            "name": "Focus Band"
+        },
+        {
+            "rom_id": 231,
+            "purchase_price": 200,
+            "key_item": false,
+            "pocket": "Items",
+            "name": "Lucky Egg"
+        },
+        {
+            "rom_id": 232,
+            "purchase_price": 200,
+            "key_item": false,
+            "pocket": "Items",
+            "name": "Scope Lens"
+        },
+        {
+            "rom_id": 233,
+            "purchase_price": 100,
+            "key_item": false,
+            "pocket": "Items",
+            "name": "Metal Coat"
+        },
+        {
+            "rom_id": 234,
+            "purchase_price": 200,
+            "key_item": false,
+            "pocket": "Items",
+            "name": "Leftovers"
+        },
+        {
+            "rom_id": 235,
+            "purchase_price": 2100,
+            "key_item": false,
+            "pocket": "Items",
+            "name": "Dragon Scale"
+        },
+        {
+            "rom_id": 236,
+            "purchase_price": 100,
+            "key_item": false,
+            "pocket": "Items",
+            "name": "Light Ball"
+        },
+        {
+            "rom_id": 237,
+            "purchase_price": 100,
+            "key_item": false,
+            "pocket": "Items",
+            "name": "Soft Sand"
+        },
+        {
+            "rom_id": 238,
+            "purchase_price": 100,
+            "key_item": false,
+            "pocket": "Items",
+            "name": "Hard Stone"
+        },
+        {
+            "rom_id": 239,
+            "purchase_price": 100,
+            "key_item": false,
+            "pocket": "Items",
+            "name": "Miracle Seed"
+        },
+        {
+            "rom_id": 240,
+            "purchase_price": 100,
+            "key_item": false,
+            "pocket": "Items",
+            "name": "BlackGlasses"
+        },
+        {
+            "rom_id": 241,
+            "purchase_price": 100,
+            "key_item": false,
+            "pocket": "Items",
+            "name": "Black Belt"
+        },
+        {
+            "rom_id": 242,
+            "purchase_price": 100,
+            "key_item": false,
+            "pocket": "Items",
+            "name": "Magnet"
+        },
+        {
+            "rom_id": 243,
+            "purchase_price": 100,
+            "key_item": false,
+            "pocket": "Items",
+            "name": "Mystic Water"
+        },
+        {
+            "rom_id": 244,
+            "purchase_price": 100,
+            "key_item": false,
+            "pocket": "Items",
+            "name": "Sharp Beak"
+        },
+        {
+            "rom_id": 245,
+            "purchase_price": 100,
+            "key_item": false,
+            "pocket": "Items",
+            "name": "Poison Barb"
+        },
+        {
+            "rom_id": 246,
+            "purchase_price": 100,
+            "key_item": false,
+            "pocket": "Items",
+            "name": "NeverMeltIce"
+        },
+        {
+            "rom_id": 247,
+            "purchase_price": 100,
+            "key_item": false,
+            "pocket": "Items",
+            "name": "Spell Tag"
+        },
+        {
+            "rom_id": 248,
+            "purchase_price": 100,
+            "key_item": false,
+            "pocket": "Items",
+            "name": "TwistedSpoon"
+        },
+        {
+            "rom_id": 249,
+            "purchase_price": 9800,
+            "key_item": false,
+            "pocket": "Items",
+            "name": "Charcoal"
+        },
+        {
+            "rom_id": 250,
+            "purchase_price": 100,
+            "key_item": false,
+            "pocket": "Items",
+            "name": "Dragon Fang"
+        },
+        {
+            "rom_id": 251,
+            "purchase_price": 100,
+            "key_item": false,
+            "pocket": "Items",
+            "name": "Silk Scarf"
+        },
+        {
+            "rom_id": 252,
+            "purchase_price": 2100,
+            "key_item": false,
+            "pocket": "Items",
+            "name": "Up-Grade"
+        },
+        {
+            "rom_id": 253,
+            "purchase_price": 200,
+            "key_item": false,
+            "pocket": "Items",
+            "name": "Shell Bell"
+        },
+        {
+            "rom_id": 254,
+            "purchase_price": 9600,
+            "key_item": false,
+            "pocket": "Items",
+            "name": "Sea Incense"
+        },
+        {
+            "rom_id": 255,
+            "purchase_price": 9600,
+            "key_item": false,
+            "pocket": "Items",
+            "name": "Lax Incense"
+        },
+        {
+            "rom_id": 256,
+            "purchase_price": 10,
+            "key_item": false,
+            "pocket": "Items",
+            "name": "Lucky Punch"
+        },
+        {
+            "rom_id": 257,
+            "purchase_price": 10,
+            "key_item": false,
+            "pocket": "Items",
+            "name": "Metal Powder"
+        },
+        {
+            "rom_id": 258,
+            "purchase_price": 500,
+            "key_item": false,
+            "pocket": "Items",
+            "name": "Thick Club"
+        },
+        {
+            "rom_id": 259,
+            "purchase_price": 200,
+            "key_item": false,
+            "pocket": "Items",
+            "name": "Stick"
+        },
+        {
+            "rom_id": 260,
+            "purchase_price": 100,
+            "key_item": false,
+            "pocket": "Items",
+            "name": "Red Scarf"
+        },
+        {
+            "rom_id": 261,
+            "purchase_price": 100,
+            "key_item": false,
+            "pocket": "Items",
+            "name": "Blue Scarf"
+        },
+        {
+            "rom_id": 262,
+            "purchase_price": 100,
+            "key_item": false,
+            "pocket": "Items",
+            "name": "Pink Scarf"
+        },
+        {
+            "rom_id": 263,
+            "purchase_price": 100,
+            "key_item": false,
+            "pocket": "Items",
+            "name": "Green Scarf"
+        },
+        {
+            "rom_id": 264,
+            "purchase_price": 100,
+            "key_item": false,
+            "pocket": "Items",
+            "name": "Yellow Scarf"
+        },
+        {
+            "rom_id": 265,
+            "purchase_price": 200,
+            "key_item": false,
+            "pocket": "Items",
+            "name": "Wide Lens"
+        },
+        {
+            "rom_id": 266,
+            "purchase_price": 200,
+            "key_item": false,
+            "pocket": "Items",
+            "name": "Muscle Band"
+        },
+        {
+            "rom_id": 267,
+            "purchase_price": 200,
+            "key_item": false,
+            "pocket": "Items",
+            "name": "Wise Glasses"
+        },
+        {
+            "rom_id": 268,
+            "purchase_price": 200,
+            "key_item": false,
+            "pocket": "Items",
+            "name": "Expert Belt"
+        },
+        {
+            "rom_id": 269,
+            "purchase_price": 200,
+            "key_item": false,
+            "pocket": "Items",
+            "name": "Light Clay"
+        },
+        {
+            "rom_id": 270,
+            "purchase_price": 200,
+            "key_item": false,
+            "pocket": "Items",
+            "name": "Life Orb"
+        },
+        {
+            "rom_id": 271,
+            "purchase_price": 100,
+            "key_item": false,
+            "pocket": "Items",
+            "name": "Power Herb"
+        },
+        {
+            "rom_id": 272,
+            "purchase_price": 100,
+            "key_item": false,
+            "pocket": "Items",
+            "name": "Toxic Orb"
+        },
+        {
+            "rom_id": 273,
+            "purchase_price": 100,
+            "key_item": false,
+            "pocket": "Items",
+            "name": "Flame Orb"
+        },
+        {
+            "rom_id": 274,
+            "purchase_price": 10,
+            "key_item": false,
+            "pocket": "Items",
+            "name": "Quick Powder"
+        },
+        {
+            "rom_id": 275,
+            "purchase_price": 200,
+            "key_item": false,
+            "pocket": "Items",
+            "name": "Focus Sash"
+        },
+        {
+            "rom_id": 276,
+            "purchase_price": 200,
+            "key_item": false,
+            "pocket": "Items",
+            "name": "Zoom Lens"
+        },
+        {
+            "rom_id": 277,
+            "purchase_price": 200,
+            "key_item": false,
+            "pocket": "Items",
+            "name": "Metronome"
+        },
+        {
+            "rom_id": 278,
+            "purchase_price": 200,
+            "key_item": false,
+            "pocket": "Items",
+            "name": "Iron Ball"
+        },
+        {
+            "rom_id": 279,
+            "purchase_price": 200,
+            "key_item": false,
+            "pocket": "Items",
+            "name": "Lagging Tail"
+        },
+        {
+            "rom_id": 280,
+            "purchase_price": 200,
+            "key_item": false,
+            "pocket": "Items",
+            "name": "Destiny Knot"
+        },
+        {
+            "rom_id": 281,
+            "purchase_price": 200,
+            "key_item": false,
+            "pocket": "Items",
+            "name": "Black Sludge"
+        },
+        {
+            "rom_id": 282,
+            "purchase_price": 200,
+            "key_item": false,
+            "pocket": "Items",
+            "name": "Icy Rock"
+        },
+        {
+            "rom_id": 283,
+            "purchase_price": 200,
+            "key_item": false,
+            "pocket": "Items",
+            "name": "Smooth Rock"
+        },
+        {
+            "rom_id": 284,
+            "purchase_price": 200,
+            "key_item": false,
+            "pocket": "Items",
+            "name": "Heat Rock"
+        },
+        {
+            "rom_id": 285,
+            "purchase_price": 200,
+            "key_item": false,
+            "pocket": "Items",
+            "name": "Damp Rock"
+        },
+        {
+            "rom_id": 286,
+            "purchase_price": 200,
+            "key_item": false,
+            "pocket": "Items",
+            "name": "Grip Claw"
+        },
+        {
+            "rom_id": 287,
+            "purchase_price": 200,
+            "key_item": false,
+            "pocket": "Items",
+            "name": "Choice Scarf"
+        },
+        {
+            "rom_id": 288,
+            "purchase_price": 200,
+            "key_item": false,
+            "pocket": "Items",
+            "name": "Sticky Barb"
+        },
+        {
+            "rom_id": 289,
+            "purchase_price": 3000,
+            "key_item": false,
+            "pocket": "Items",
+            "name": "Power Bracer"
+        },
+        {
+            "rom_id": 290,
+            "purchase_price": 3000,
+            "key_item": false,
+            "pocket": "Items",
+            "name": "Power Belt"
+        },
+        {
+            "rom_id": 291,
+            "purchase_price": 3000,
+            "key_item": false,
+            "pocket": "Items",
+            "name": "Power Lens"
+        },
+        {
+            "rom_id": 292,
+            "purchase_price": 3000,
+            "key_item": false,
+            "pocket": "Items",
+            "name": "Power Band"
+        },
+        {
+            "rom_id": 293,
+            "purchase_price": 3000,
+            "key_item": false,
+            "pocket": "Items",
+            "name": "Power Anklet"
+        },
+        {
+            "rom_id": 294,
+            "purchase_price": 3000,
+            "key_item": false,
+            "pocket": "Items",
+            "name": "Power Weight"
+        },
+        {
+            "rom_id": 295,
+            "purchase_price": 100,
+            "key_item": false,
+            "pocket": "Items",
+            "name": "Shed Shell"
+        },
+        {
+            "rom_id": 296,
+            "purchase_price": 200,
+            "key_item": false,
+            "pocket": "Items",
+            "name": "Big Root"
+        },
+        {
+            "rom_id": 297,
+            "purchase_price": 200,
+            "key_item": false,
+            "pocket": "Items",
+            "name": "Choice Specs"
+        },
+        {
+            "rom_id": 298,
+            "purchase_price": 1000,
+            "key_item": false,
+            "pocket": "Items",
+            "name": "Flame Plate"
+        },
+        {
+            "rom_id": 299,
+            "purchase_price": 1000,
+            "key_item": false,
+            "pocket": "Items",
+            "name": "Splash Plate"
+        },
+        {
+            "rom_id": 300,
+            "purchase_price": 1000,
+            "key_item": false,
+            "pocket": "Items",
+            "name": "Zap Plate"
+        },
+        {
+            "rom_id": 301,
+            "purchase_price": 1000,
+            "key_item": false,
+            "pocket": "Items",
+            "name": "Meadow Plate"
+        },
+        {
+            "rom_id": 302,
+            "purchase_price": 1000,
+            "key_item": false,
+            "pocket": "Items",
+            "name": "Icicle Plate"
+        },
+        {
+            "rom_id": 303,
+            "purchase_price": 1000,
+            "key_item": false,
+            "pocket": "Items",
+            "name": "Fist Plate"
+        },
+        {
+            "rom_id": 304,
+            "purchase_price": 1000,
+            "key_item": false,
+            "pocket": "Items",
+            "name": "Toxic Plate"
+        },
+        {
+            "rom_id": 305,
+            "purchase_price": 1000,
+            "key_item": false,
+            "pocket": "Items",
+            "name": "Earth Plate"
+        },
+        {
+            "rom_id": 306,
+            "purchase_price": 1000,
+            "key_item": false,
+            "pocket": "Items",
+            "name": "Sky Plate"
+        },
+        {
+            "rom_id": 307,
+            "purchase_price": 1000,
+            "key_item": false,
+            "pocket": "Items",
+            "name": "Mind Plate"
+        },
+        {
+            "rom_id": 308,
+            "purchase_price": 1000,
+            "key_item": false,
+            "pocket": "Items",
+            "name": "Insect Plate"
+        },
+        {
+            "rom_id": 309,
+            "purchase_price": 1000,
+            "key_item": false,
+            "pocket": "Items",
+            "name": "Stone Plate"
+        },
+        {
+            "rom_id": 310,
+            "purchase_price": 1000,
+            "key_item": false,
+            "pocket": "Items",
+            "name": "Spooky Plate"
+        },
+        {
+            "rom_id": 311,
+            "purchase_price": 1000,
+            "key_item": false,
+            "pocket": "Items",
+            "name": "Draco Plate"
+        },
+        {
+            "rom_id": 312,
+            "purchase_price": 1000,
+            "key_item": false,
+            "pocket": "Items",
+            "name": "Dread Plate"
+        },
+        {
+            "rom_id": 313,
+            "purchase_price": 1000,
+            "key_item": false,
+            "pocket": "Items",
+            "name": "Iron Plate"
+        },
+        {
+            "rom_id": 314,
+            "purchase_price": 9600,
+            "key_item": false,
+            "pocket": "Items",
+            "name": "Odd Incense"
+        },
+        {
+            "rom_id": 315,
+            "purchase_price": 9600,
+            "key_item": false,
+            "pocket": "Items",
+            "name": "Rock Incense"
+        },
+        {
+            "rom_id": 316,
+            "purchase_price": 9600,
+            "key_item": false,
+            "pocket": "Items",
+            "name": "Full Incense"
+        },
+        {
+            "rom_id": 317,
+            "purchase_price": 9600,
+            "key_item": false,
+            "pocket": "Items",
+            "name": "Wave Incense"
+        },
+        {
+            "rom_id": 318,
+            "purchase_price": 9600,
+            "key_item": false,
+            "pocket": "Items",
+            "name": "Rose Incense"
+        },
+        {
+            "rom_id": 319,
+            "purchase_price": 9600,
+            "key_item": false,
+            "pocket": "Items",
+            "name": "Luck Incense"
+        },
+        {
+            "rom_id": 320,
+            "purchase_price": 9600,
+            "key_item": false,
+            "pocket": "Items",
+            "name": "Pure Incense"
+        },
+        {
+            "rom_id": 321,
+            "purchase_price": 2100,
+            "key_item": false,
+            "pocket": "Items",
+            "name": "Protector"
+        },
+        {
+            "rom_id": 322,
+            "purchase_price": 2100,
+            "key_item": false,
+            "pocket": "Items",
+            "name": "Electirizer"
+        },
+        {
+            "rom_id": 323,
+            "purchase_price": 2100,
+            "key_item": false,
+            "pocket": "Items",
+            "name": "Magmarizer"
+        },
+        {
+            "rom_id": 324,
+            "purchase_price": 2100,
+            "key_item": false,
+            "pocket": "Items",
+            "name": "Dubious Disc"
+        },
+        {
+            "rom_id": 325,
+            "purchase_price": 2100,
+            "key_item": false,
+            "pocket": "Items",
+            "name": "Reaper Cloth"
+        },
+        {
+            "rom_id": 326,
+            "purchase_price": 2100,
+            "key_item": false,
+            "pocket": "Items",
+            "name": "Razor Claw"
+        },
+        {
+            "rom_id": 327,
+            "purchase_price": 2100,
+            "key_item": false,
+            "pocket": "Items",
+            "name": "Razor Fang"
+        },
+        {
+            "rom_id": 328,
+            "purchase_price": 3000,
+            "key_item": false,
+            "pocket": "TMs and HMs",
+            "name": "TM01 Focus Punch"
+        },
+        {
+            "rom_id": 329,
+            "purchase_price": 3000,
+            "key_item": false,
+            "pocket": "TMs and HMs",
+            "name": "TM02 Dragon Claw"
+        },
+        {
+            "rom_id": 330,
+            "purchase_price": 3000,
+            "key_item": false,
+            "pocket": "TMs and HMs",
+            "name": "TM03 Water Pulse"
+        },
+        {
+            "rom_id": 331,
+            "purchase_price": 1500,
+            "key_item": false,
+            "pocket": "TMs and HMs",
+            "name": "TM04 Calm Mind"
+        },
+        {
+            "rom_id": 332,
+            "purchase_price": 1000,
+            "key_item": false,
+            "pocket": "TMs and HMs",
+            "name": "TM05 Roar"
+        },
+        {
+            "rom_id": 333,
+            "purchase_price": 3000,
+            "key_item": false,
+            "pocket": "TMs and HMs",
+            "name": "TM06 Toxic"
+        },
+        {
+            "rom_id": 334,
+            "purchase_price": 2000,
+            "key_item": false,
+            "pocket": "TMs and HMs",
+            "name": "TM07 Hail"
+        },
+        {
+            "rom_id": 335,
+            "purchase_price": 1500,
+            "key_item": false,
+            "pocket": "TMs and HMs",
+            "name": "TM08 Bulk Up"
+        },
+        {
+            "rom_id": 336,
+            "purchase_price": 2000,
+            "key_item": false,
+            "pocket": "TMs and HMs",
+            "name": "TM09 Bullet Seed"
+        },
+        {
+            "rom_id": 337,
+            "purchase_price": 2000,
+            "key_item": false,
+            "pocket": "TMs and HMs",
+            "name": "TM10 Hidden Power"
+        },
+        {
+            "rom_id": 338,
+            "purchase_price": 2000,
+            "key_item": false,
+            "pocket": "TMs and HMs",
+            "name": "TM11 Sunny Day"
+        },
+        {
+            "rom_id": 339,
+            "purchase_price": 1500,
+            "key_item": false,
+            "pocket": "TMs and HMs",
+            "name": "TM12 Taunt"
+        },
+        {
+            "rom_id": 340,
+            "purchase_price": 3000,
+            "key_item": false,
+            "pocket": "TMs and HMs",
+            "name": "TM13 Ice Beam"
+        },
+        {
+            "rom_id": 341,
+            "purchase_price": 5500,
+            "key_item": false,
+            "pocket": "TMs and HMs",
+            "name": "TM14 Blizzard"
+        },
+        {
+            "rom_id": 342,
+            "purchase_price": 7500,
+            "key_item": false,
+            "pocket": "TMs and HMs",
+            "name": "TM15 Hyper Beam"
+        },
+        {
+            "rom_id": 343,
+            "purchase_price": 2000,
+            "key_item": false,
+            "pocket": "TMs and HMs",
+            "name": "TM16 Light Screen"
+        },
+        {
+            "rom_id": 344,
+            "purchase_price": 2000,
+            "key_item": false,
+            "pocket": "TMs and HMs",
+            "name": "TM17 Protect"
+        },
+        {
+            "rom_id": 345,
+            "purchase_price": 2000,
+            "key_item": false,
+            "pocket": "TMs and HMs",
+            "name": "TM18 Rain Dance"
+        },
+        {
+            "rom_id": 346,
+            "purchase_price": 3000,
+            "key_item": false,
+            "pocket": "TMs and HMs",
+            "name": "TM19 Giga Drain"
+        },
+        {
+            "rom_id": 347,
+            "purchase_price": 2000,
+            "key_item": false,
+            "pocket": "TMs and HMs",
+            "name": "TM20 Safeguard"
+        },
+        {
+            "rom_id": 348,
+            "purchase_price": 1000,
+            "key_item": false,
+            "pocket": "TMs and HMs",
+            "name": "TM21 Frustration"
+        },
+        {
+            "rom_id": 349,
+            "purchase_price": 3000,
+            "key_item": false,
+            "pocket": "TMs and HMs",
+            "name": "TM22 Solar Beam"
+        },
+        {
+            "rom_id": 350,
+            "purchase_price": 3000,
+            "key_item": false,
+            "pocket": "TMs and HMs",
+            "name": "TM23 Iron Tail"
+        },
+        {
+            "rom_id": 351,
+            "purchase_price": 3000,
+            "key_item": false,
+            "pocket": "TMs and HMs",
+            "name": "TM24 Thunderbolt"
+        },
+        {
+            "rom_id": 352,
+            "purchase_price": 5500,
+            "key_item": false,
+            "pocket": "TMs and HMs",
+            "name": "TM25 Thunder"
+        },
+        {
+            "rom_id": 353,
+            "purchase_price": 3000,
+            "key_item": false,
+            "pocket": "TMs and HMs",
+            "name": "TM26 Earthquake"
+        },
+        {
+            "rom_id": 354,
+            "purchase_price": 1000,
+            "key_item": false,
+            "pocket": "TMs and HMs",
+            "name": "TM27 Return"
+        },
+        {
+            "rom_id": 355,
+            "purchase_price": 2000,
+            "key_item": false,
+            "pocket": "TMs and HMs",
+            "name": "TM28 Dig"
+        },
+        {
+            "rom_id": 356,
+            "purchase_price": 3000,
+            "key_item": false,
+            "pocket": "TMs and HMs",
+            "name": "TM29 Psychic"
+        },
+        {
+            "rom_id": 357,
+            "purchase_price": 3000,
+            "key_item": false,
+            "pocket": "TMs and HMs",
+            "name": "TM30 Shadow Ball"
+        },
+        {
+            "rom_id": 358,
+            "purchase_price": 3000,
+            "key_item": false,
+            "pocket": "TMs and HMs",
+            "name": "TM31 Brick Break"
+        },
+        {
+            "rom_id": 359,
+            "purchase_price": 1000,
+            "key_item": false,
+            "pocket": "TMs and HMs",
+            "name": "TM32 Double Team"
+        },
+        {
+            "rom_id": 360,
+            "purchase_price": 2000,
+            "key_item": false,
+            "pocket": "TMs and HMs",
+            "name": "TM33 Reflect"
+        },
+        {
+            "rom_id": 361,
+            "purchase_price": 3000,
+            "key_item": false,
+            "pocket": "TMs and HMs",
+            "name": "TM34 Shock Wave"
+        },
+        {
+            "rom_id": 362,
+            "purchase_price": 3000,
+            "key_item": false,
+            "pocket": "TMs and HMs",
+            "name": "TM35 Flamethrower"
+        },
+        {
+            "rom_id": 363,
+            "purchase_price": 3000,
+            "key_item": false,
+            "pocket": "TMs and HMs",
+            "name": "TM36 Sludge Bomb"
+        },
+        {
+            "rom_id": 364,
+            "purchase_price": 2000,
+            "key_item": false,
+            "pocket": "TMs and HMs",
+            "name": "TM37 Sandstorm"
+        },
+        {
+            "rom_id": 365,
+            "purchase_price": 5500,
+            "key_item": false,
+            "pocket": "TMs and HMs",
+            "name": "TM38 Fire Blast"
+        },
+        {
+            "rom_id": 366,
+            "purchase_price": 2000,
+            "key_item": false,
+            "pocket": "TMs and HMs",
+            "name": "TM39 Rock Tomb"
+        },
+        {
+            "rom_id": 367,
+            "purchase_price": 3000,
+            "key_item": false,
+            "pocket": "TMs and HMs",
+            "name": "TM40 Aerial Ace"
+        },
+        {
+            "rom_id": 368,
+            "purchase_price": 1500,
+            "key_item": false,
+            "pocket": "TMs and HMs",
+            "name": "TM41 Torment"
+        },
+        {
+            "rom_id": 369,
+            "purchase_price": 3000,
+            "key_item": false,
+            "pocket": "TMs and HMs",
+            "name": "TM42 Facade"
+        },
+        {
+            "rom_id": 370,
+            "purchase_price": 2000,
+            "key_item": false,
+            "pocket": "TMs and HMs",
+            "name": "TM43 Secret Power"
+        },
+        {
+            "rom_id": 371,
+            "purchase_price": 3000,
+            "key_item": false,
+            "pocket": "TMs and HMs",
+            "name": "TM44 Rest"
+        },
+        {
+            "rom_id": 372,
+            "purchase_price": 3000,
+            "key_item": false,
+            "pocket": "TMs and HMs",
+            "name": "TM45 Attract"
+        },
+        {
+            "rom_id": 373,
+            "purchase_price": 2000,
+            "key_item": false,
+            "pocket": "TMs and HMs",
+            "name": "TM46 Thief"
+        },
+        {
+            "rom_id": 374,
+            "purchase_price": 3000,
+            "key_item": false,
+            "pocket": "TMs and HMs",
+            "name": "TM47 Steel Wing"
+        },
+        {
+            "rom_id": 375,
+            "purchase_price": 3000,
+            "key_item": false,
+            "pocket": "TMs and HMs",
+            "name": "TM48 Skill Swap"
+        },
+        {
+            "rom_id": 376,
+            "purchase_price": 1500,
+            "key_item": false,
+            "pocket": "TMs and HMs",
+            "name": "TM49 Snatch"
+        },
+        {
+            "rom_id": 377,
+            "purchase_price": 5500,
+            "key_item": false,
+            "pocket": "TMs and HMs",
+            "name": "TM50 Overheat"
+        },
+        {
+            "rom_id": 378,
+            "purchase_price": 2000,
+            "key_item": false,
+            "pocket": "TMs and HMs",
+            "name": "TM51 Roost"
+        },
+        {
+            "rom_id": 379,
+            "purchase_price": 5500,
+            "key_item": false,
+            "pocket": "TMs and HMs",
+            "name": "TM52 Focus Blast"
+        },
+        {
+            "rom_id": 380,
+            "purchase_price": 3000,
+            "key_item": false,
+            "pocket": "TMs and HMs",
+            "name": "TM53 Energy Ball"
+        },
+        {
+            "rom_id": 381,
+            "purchase_price": 2000,
+            "key_item": false,
+            "pocket": "TMs and HMs",
+            "name": "TM54 False Swipe"
+        },
+        {
+            "rom_id": 382,
+            "purchase_price": 3000,
+            "key_item": false,
+            "pocket": "TMs and HMs",
+            "name": "TM55 Brine"
+        },
+        {
+            "rom_id": 383,
+            "purchase_price": 2000,
+            "key_item": false,
+            "pocket": "TMs and HMs",
+            "name": "TM56 Fling"
+        },
+        {
+            "rom_id": 384,
+            "purchase_price": 3000,
+            "key_item": false,
+            "pocket": "TMs and HMs",
+            "name": "TM57 Charge Beam"
+        },
+        {
+            "rom_id": 385,
+            "purchase_price": 2000,
+            "key_item": false,
+            "pocket": "TMs and HMs",
+            "name": "TM58 Endure"
+        },
+        {
+            "rom_id": 386,
+            "purchase_price": 3000,
+            "key_item": false,
+            "pocket": "TMs and HMs",
+            "name": "TM59 Dragon Pulse"
+        },
+        {
+            "rom_id": 387,
+            "purchase_price": 3000,
+            "key_item": false,
+            "pocket": "TMs and HMs",
+            "name": "TM60 Drain Punch"
+        },
+        {
+            "rom_id": 388,
+            "purchase_price": 2000,
+            "key_item": false,
+            "pocket": "TMs and HMs",
+            "name": "TM61 Will O Wisp"
+        },
+        {
+            "rom_id": 389,
+            "purchase_price": 3000,
+            "key_item": false,
+            "pocket": "TMs and HMs",
+            "name": "TM62 Silver Wind"
+        },
+        {
+            "rom_id": 390,
+            "purchase_price": 2000,
+            "key_item": false,
+            "pocket": "TMs and HMs",
+            "name": "TM63 Embargo"
+        },
+        {
+            "rom_id": 391,
+            "purchase_price": 7500,
+            "key_item": false,
+            "pocket": "TMs and HMs",
+            "name": "TM64 Explosion"
+        },
+        {
+            "rom_id": 392,
+            "purchase_price": 3000,
+            "key_item": false,
+            "pocket": "TMs and HMs",
+            "name": "TM65 Shadow Claw"
+        },
+        {
+            "rom_id": 393,
+            "purchase_price": 3000,
+            "key_item": false,
+            "pocket": "TMs and HMs",
+            "name": "TM66 Payback"
+        },
+        {
+            "rom_id": 394,
+            "purchase_price": 1000,
+            "key_item": false,
+            "pocket": "TMs and HMs",
+            "name": "TM67 Recycle"
+        },
+        {
+            "rom_id": 395,
+            "purchase_price": 7500,
+            "key_item": false,
+            "pocket": "TMs and HMs",
+            "name": "TM68 Giga Impact"
+        },
+        {
+            "rom_id": 396,
+            "purchase_price": 1500,
+            "key_item": false,
+            "pocket": "TMs and HMs",
+            "name": "TM69 Rock Polish"
+        },
+        {
+            "rom_id": 397,
+            "purchase_price": 1000,
+            "key_item": false,
+            "pocket": "TMs and HMs",
+            "name": "TM70 Flash"
+        },
+        {
+            "rom_id": 398,
+            "purchase_price": 3000,
+            "key_item": false,
+            "pocket": "TMs and HMs",
+            "name": "TM71 Stone Edge"
+        },
+        {
+            "rom_id": 399,
+            "purchase_price": 3000,
+            "key_item": false,
+            "pocket": "TMs and HMs",
+            "name": "TM72 Avalanche"
+        },
+        {
+            "rom_id": 400,
+            "purchase_price": 2000,
+            "key_item": false,
+            "pocket": "TMs and HMs",
+            "name": "TM73 Thunder Wave"
+        },
+        {
+            "rom_id": 401,
+            "purchase_price": 3000,
+            "key_item": false,
+            "pocket": "TMs and HMs",
+            "name": "TM74 Gyro Ball"
+        },
+        {
+            "rom_id": 402,
+            "purchase_price": 1500,
+            "key_item": false,
+            "pocket": "TMs and HMs",
+            "name": "TM75 Swords Dance"
+        },
+        {
+            "rom_id": 403,
+            "purchase_price": 2000,
+            "key_item": false,
+            "pocket": "TMs and HMs",
+            "name": "TM76 Stealth Rock"
+        },
+        {
+            "rom_id": 404,
+            "purchase_price": 1500,
+            "key_item": false,
+            "pocket": "TMs and HMs",
+            "name": "TM77 Psych Up"
+        },
+        {
+            "rom_id": 405,
+            "purchase_price": 1500,
+            "key_item": false,
+            "pocket": "TMs and HMs",
+            "name": "TM78 Captivate"
+        },
+        {
+            "rom_id": 406,
+            "purchase_price": 3000,
+            "key_item": false,
+            "pocket": "TMs and HMs",
+            "name": "TM79 Dark Pulse"
+        },
+        {
+            "rom_id": 407,
+            "purchase_price": 3000,
+            "key_item": false,
+            "pocket": "TMs and HMs",
+            "name": "TM80 Rock Slide"
+        },
+        {
+            "rom_id": 408,
+            "purchase_price": 3000,
+            "key_item": false,
+            "pocket": "TMs and HMs",
+            "name": "TM81 X Scissor"
+        },
+        {
+            "rom_id": 409,
+            "purchase_price": 1000,
+            "key_item": false,
+            "pocket": "TMs and HMs",
+            "name": "TM82 Sleep Talk"
+        },
+        {
+            "rom_id": 410,
+            "purchase_price": 2000,
+            "key_item": false,
+            "pocket": "TMs and HMs",
+            "name": "TM83 Natural Gift"
+        },
+        {
+            "rom_id": 411,
+            "purchase_price": 3000,
+            "key_item": false,
+            "pocket": "TMs and HMs",
+            "name": "TM84 Poison Jab"
+        },
+        {
+            "rom_id": 412,
+            "purchase_price": 3000,
+            "key_item": false,
+            "pocket": "TMs and HMs",
+            "name": "TM85 Dream Eater"
+        },
+        {
+            "rom_id": 413,
+            "purchase_price": 3000,
+            "key_item": false,
+            "pocket": "TMs and HMs",
+            "name": "TM86 Grass Knot"
+        },
+        {
+            "rom_id": 414,
+            "purchase_price": 1500,
+            "key_item": false,
+            "pocket": "TMs and HMs",
+            "name": "TM87 Swagger"
+        },
+        {
+            "rom_id": 415,
+            "purchase_price": 3000,
+            "key_item": false,
+            "pocket": "TMs and HMs",
+            "name": "TM88 Pluck"
+        },
+        {
+            "rom_id": 416,
+            "purchase_price": 3000,
+            "key_item": false,
+            "pocket": "TMs and HMs",
+            "name": "TM89 U Turn"
+        },
+        {
+            "rom_id": 417,
+            "purchase_price": 2000,
+            "key_item": false,
+            "pocket": "TMs and HMs",
+            "name": "TM90 Substitute"
+        },
+        {
+            "rom_id": 418,
+            "purchase_price": 3000,
+            "key_item": false,
+            "pocket": "TMs and HMs",
+            "name": "TM91 Flash Cannon"
+        },
+        {
+            "rom_id": 419,
+            "purchase_price": 5500,
+            "key_item": false,
+            "pocket": "TMs and HMs",
+            "name": "TM92 Trick Room"
+        },
+        {
+            "rom_id": 420,
+            "purchase_price": 0,
+            "key_item": false,
+            "pocket": "TMs and HMs",
+            "name": "HM01 Cut"
+        },
+        {
+            "rom_id": 421,
+            "purchase_price": 0,
+            "key_item": false,
+            "pocket": "TMs and HMs",
+            "name": "HM02 Fly"
+        },
+        {
+            "rom_id": 422,
+            "purchase_price": 0,
+            "key_item": false,
+            "pocket": "TMs and HMs",
+            "name": "HM03 Surf"
+        },
+        {
+            "rom_id": 423,
+            "purchase_price": 0,
+            "key_item": false,
+            "pocket": "TMs and HMs",
+            "name": "HM04 Strength"
+        },
+        {
+            "rom_id": 424,
+            "purchase_price": 0,
+            "key_item": false,
+            "pocket": "TMs and HMs",
+            "name": "HM05 Defog"
+        },
+        {
+            "rom_id": 425,
+            "purchase_price": 0,
+            "key_item": false,
+            "pocket": "TMs and HMs",
+            "name": "HM06 Rock Smash"
+        },
+        {
+            "rom_id": 426,
+            "purchase_price": 0,
+            "key_item": false,
+            "pocket": "TMs and HMs",
+            "name": "HM07 Waterfall"
+        },
+        {
+            "rom_id": 427,
+            "purchase_price": 0,
+            "key_item": false,
+            "pocket": "TMs and HMs",
+            "name": "HM08 Rock Climb"
+        },
+        {
+            "rom_id": 428,
+            "purchase_price": 0,
+            "key_item": true,
+            "pocket": "Key Items",
+            "name": "Explorer Kit"
+        },
+        {
+            "rom_id": 429,
+            "purchase_price": 0,
+            "key_item": true,
+            "pocket": "Key Items",
+            "name": "Loot Sack"
+        },
+        {
+            "rom_id": 430,
+            "purchase_price": 0,
+            "key_item": true,
+            "pocket": "Key Items",
+            "name": "Rule Book"
+        },
+        {
+            "rom_id": 431,
+            "purchase_price": 0,
+            "key_item": true,
+            "pocket": "Key Items",
+            "name": "Poke Radar"
+        },
+        {
+            "rom_id": 432,
+            "purchase_price": 0,
+            "key_item": true,
+            "pocket": "Key Items",
+            "name": "Point Card"
+        },
+        {
+            "rom_id": 433,
+            "purchase_price": 0,
+            "key_item": true,
+            "pocket": "Key Items",
+            "name": "Journal"
+        },
+        {
+            "rom_id": 434,
+            "purchase_price": 0,
+            "key_item": true,
+            "pocket": "Key Items",
+            "name": "Seal Case"
+        },
+        {
+            "rom_id": 435,
+            "purchase_price": 0,
+            "key_item": true,
+            "pocket": "Key Items",
+            "name": "Fashion Case"
+        },
+        {
+            "rom_id": 436,
+            "purchase_price": 0,
+            "key_item": true,
+            "pocket": "Key Items",
+            "name": "Seal Bag"
+        },
+        {
+            "rom_id": 437,
+            "purchase_price": 0,
+            "key_item": true,
+            "pocket": "Key Items",
+            "name": "Pal Pad"
+        },
+        {
+            "rom_id": 438,
+            "purchase_price": 0,
+            "key_item": true,
+            "pocket": "Key Items",
+            "name": "Works Key"
+        },
+        {
+            "rom_id": 439,
+            "purchase_price": 0,
+            "key_item": true,
+            "pocket": "Key Items",
+            "name": "Old Charm"
+        },
+        {
+            "rom_id": 440,
+            "purchase_price": 0,
+            "key_item": true,
+            "pocket": "Key Items",
+            "name": "Galactic Key"
+        },
+        {
+            "rom_id": 441,
+            "purchase_price": 0,
+            "key_item": true,
+            "pocket": "Key Items",
+            "name": "Red Chain"
+        },
+        {
+            "rom_id": 442,
+            "purchase_price": 0,
+            "key_item": true,
+            "pocket": "Key Items",
+            "name": "Town Map"
+        },
+        {
+            "rom_id": 443,
+            "purchase_price": 0,
+            "key_item": true,
+            "pocket": "Key Items",
+            "name": "Vs. Seeker"
+        },
+        {
+            "rom_id": 444,
+            "purchase_price": 0,
+            "key_item": true,
+            "pocket": "Key Items",
+            "name": "Coin Case"
+        },
+        {
+            "rom_id": 445,
+            "purchase_price": 0,
+            "key_item": true,
+            "pocket": "Key Items",
+            "name": "Old Rod"
+        },
+        {
+            "rom_id": 446,
+            "purchase_price": 0,
+            "key_item": true,
+            "pocket": "Key Items",
+            "name": "Good Rod"
+        },
+        {
+            "rom_id": 447,
+            "purchase_price": 0,
+            "key_item": true,
+            "pocket": "Key Items",
+            "name": "Super Rod"
+        },
+        {
+            "rom_id": 448,
+            "purchase_price": 0,
+            "key_item": true,
+            "pocket": "Key Items",
+            "name": "Sprayduck"
+        },
+        {
+            "rom_id": 449,
+            "purchase_price": 0,
+            "key_item": true,
+            "pocket": "Key Items",
+            "name": "Poffin Case"
+        },
+        {
+            "rom_id": 450,
+            "purchase_price": 0,
+            "key_item": true,
+            "pocket": "Key Items",
+            "name": "Bicycle"
+        },
+        {
+            "rom_id": 451,
+            "purchase_price": 0,
+            "key_item": true,
+            "pocket": "Key Items",
+            "name": "Suite Key"
+        },
+        {
+            "rom_id": 452,
+            "purchase_price": 0,
+            "key_item": true,
+            "pocket": "Key Items",
+            "name": "Oak's Letter"
+        },
+        {
+            "rom_id": 453,
+            "purchase_price": 0,
+            "key_item": true,
+            "pocket": "Key Items",
+            "name": "Lunar Wing"
+        },
+        {
+            "rom_id": 454,
+            "purchase_price": 0,
+            "key_item": true,
+            "pocket": "Key Items",
+            "name": "Member Card"
+        },
+        {
+            "rom_id": 455,
+            "purchase_price": 0,
+            "key_item": true,
+            "pocket": "Key Items",
+            "name": "Azure Flute"
+        },
+        {
+            "rom_id": 456,
+            "purchase_price": 0,
+            "key_item": true,
+            "pocket": "Key Items",
+            "name": "S.S. Ticket"
+        },
+        {
+            "rom_id": 457,
+            "purchase_price": 0,
+            "key_item": true,
+            "pocket": "Key Items",
+            "name": "Contest Pass"
+        },
+        {
+            "rom_id": 458,
+            "purchase_price": 0,
+            "key_item": true,
+            "pocket": "Key Items",
+            "name": "Magma Stone"
+        },
+        {
+            "rom_id": 459,
+            "purchase_price": 0,
+            "key_item": true,
+            "pocket": "Key Items",
+            "name": "Parcel"
+        },
+        {
+            "rom_id": 460,
+            "purchase_price": 0,
+            "key_item": true,
+            "pocket": "Key Items",
+            "name": "Coupon 1"
+        },
+        {
+            "rom_id": 461,
+            "purchase_price": 0,
+            "key_item": true,
+            "pocket": "Key Items",
+            "name": "Coupon 2"
+        },
+        {
+            "rom_id": 462,
+            "purchase_price": 0,
+            "key_item": true,
+            "pocket": "Key Items",
+            "name": "Coupon 3"
+        },
+        {
+            "rom_id": 463,
+            "purchase_price": 0,
+            "key_item": true,
+            "pocket": "Key Items",
+            "name": "Storage Key"
+        },
+        {
+            "rom_id": 464,
+            "purchase_price": 0,
+            "key_item": true,
+            "pocket": "Key Items",
+            "name": "SecretPotion"
+        },
+        {
+            "rom_id": 465,
+            "purchase_price": 0,
+            "key_item": true,
+            "pocket": "Key Items",
+            "name": "Vs. Recorder"
+        },
+        {
+            "rom_id": 466,
+            "purchase_price": 0,
+            "key_item": true,
+            "pocket": "Key Items",
+            "name": "Gracidea"
+        },
+        {
+            "rom_id": 467,
+            "purchase_price": 0,
+            "key_item": true,
+            "pocket": "Key Items",
+            "name": "Secret Key"
+        }
+    ]
+}

@@ -5,6 +5,7 @@ import sys
 import threading
 import logging
 
+from pkmn.gen_4 import gen_four_object
 from utils.constants import const
 
 from tkinter import Tk, messagebox
@@ -56,5 +57,11 @@ def init_base_generations():
     gen_factory._gen_factory.register_gen(gen_three_object.gen_three_emerald, const.EMERALD_VERSION)
     gen_factory._gen_factory.register_gen(gen_three_object.gen_three_fire_red, const.FIRE_RED_VERSION)
     gen_factory._gen_factory.register_gen(gen_three_object.gen_three_leaf_green, const.LEAF_GREEN_VERSION)
+
+    gen_factory._gen_factory.register_gen(gen_four_object.gen_four_platinum, const.PLATINUM_VERSION)
+    gen_factory._gen_factory.register_gen(gen_four_object.gen_four_diamond, const.DIAMOND_VERSION)
+    gen_factory._gen_factory.register_gen(gen_four_object.gen_four_pearl, const.PEARL_VERSION)
+    gen_factory._gen_factory.register_gen(gen_four_object.gen_four_heartgold, const.HEART_GOLD_VERSION)
+    gen_factory._gen_factory.register_gen(gen_four_object.gen_four_soulsilver, const.SOUL_SILVER_VERSION)
 
     gen_factory.change_version(const.YELLOW_VERSION)

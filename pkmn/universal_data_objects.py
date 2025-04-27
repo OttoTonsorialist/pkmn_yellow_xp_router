@@ -455,7 +455,8 @@ class Move:
         move_type:str,
         effects,
         attack_flavor:List[str],
-        targeting:str=""
+        targeting:str="",
+        category:str="",
     ):
         self.name = name
         self.accuracy = accuracy
@@ -465,6 +466,7 @@ class Move:
         self.effects = effects
         self.attack_flavor = attack_flavor
         self.targeting = targeting
+        self.category = category
 
 
 class TrainerTimingStats:

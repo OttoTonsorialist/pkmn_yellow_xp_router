@@ -3,9 +3,9 @@ import logging
 from typing import Dict, List
 
 from pkmn import universal_data_objects, damage_calc
-from pkmn.gen_3.data_objects import GenThreeBadgeList, get_hidden_power_type, get_hidden_power_base_power
+from pkmn.gen_4.data_objects import get_hidden_power_type, get_hidden_power_base_power
 from utils.constants import const
-from pkmn.gen_3.gen_three_constants import gen_three_const
+from pkmn.gen_4.gen_four_constants import gen_four_const
 
 
 logger = logging.getLogger(__name__)
@@ -20,7 +20,9 @@ def get_crit_rate(cur_mon:universal_data_objects.EnemyPkmn, move:universal_data_
     stage = 0
     if const.FLAVOR_HIGH_CRIT in move.attack_flavor:
         stage += 1
-    if move.name == gen_three_const.NATURE_POWER_MOVE_NAME and custom_move_data == gen_three_const.LONG_GRASS_TERRAIN:
+    if move.name == gen_four_const.NATURE_POWER_MOVE_NAME and custom_move_data == gen_four_const.LONG_GRASS_TERRAIN:
+        stage += 1
+    if cur_mon.ability == gen_four_const.SUPER_LUCK_ABILITY:
         stage += 1
 
     if stage == 0:
@@ -35,15 +37,18 @@ def get_crit_rate(cur_mon:universal_data_objects.EnemyPkmn, move:universal_data_
     return (1/2)
 
 
-def get_move_accuracy(pkmn:universal_data_objects.EnemyPkmn, move:universal_data_objects.Move, custom_move_data:str, defending_pkmn:universal_data_objects.EnemyPkmn, weather:str, special_types:List[str]):
-    if move.name == gen_three_const.NATURE_POWER_MOVE_NAME:
-        if custom_move_data == gen_three_const.TALL_GRASS_TERRAIN:
+def get_move_accuracy(pkmn:universal_data_objects.EnemyPkmn, move:universal_data_objects.Move, custom_move_data:str, defending_pkmn:universal_data_objects.EnemyPkmn, weather:str):
+    if pkmn.ability == gen_four_const.NO_GUARD_ABILITY or defending_pkmn.ability == gen_four_const.NO_GUARD_ABILITY:
+        return None
+
+    if move.name == gen_four_const.NATURE_POWER_MOVE_NAME:
+        if custom_move_data == gen_four_const.TALL_GRASS_TERRAIN:
             result = 75
-        elif custom_move_data == gen_three_const.LONG_GRASS_TERRAIN:
+        elif custom_move_data == gen_four_const.LONG_GRASS_TERRAIN:
             result = 95
-        elif custom_move_data == gen_three_const.UNDERWATER_TERRAIN:
+        elif custom_move_data == gen_four_const.UNDERWATER_TERRAIN:
             result = 80
-        elif custom_move_data == gen_three_const.PLAIN_TERRAIN:
+        elif custom_move_data == gen_four_const.PLAIN_TERRAIN:
             result = None
         result = 100
     else:
@@ -52,34 +57,33 @@ def get_move_accuracy(pkmn:universal_data_objects.EnemyPkmn, move:universal_data
     if result is None:
         return None
     
-    if pkmn.ability == gen_three_const.COMPOUND_EYES_ABILITY:
+    if pkmn.ability == gen_four_const.COMPOUND_EYES_ABILITY:
         result = min(
             math.floor(result * 1.3),
             100
         )
-    elif pkmn.ability == gen_three_const.HUSTLE_ABILITY:
-        is_physical = False
-        if move.name == gen_three_const.NATURE_POWER_MOVE_NAME:
-            is_physical = custom_move_data in [gen_three_const.PLAIN_TERRAIN, gen_three_const.SAND_TERRAIN, gen_three_const.CAVE_TERRAIN, gen_three_const.ROCK_TERRAIN]
-        elif move.move_type not in special_types:
-            is_physical = True
-
+    elif pkmn.ability == gen_four_const.HUSTLE_ABILITY:
+        is_physical = move.category == const.CATEGORY_PHYSICAL
+        if move.name == gen_four_const.NATURE_POWER_MOVE_NAME:
+            is_physical = custom_move_data in [gen_four_const.SAND_TERRAIN, gen_four_const.CAVE_TERRAIN, gen_four_const.TALL_GRASS_TERRAIN]
         if is_physical:
             result = math.floor(result * 3277 / 4096)
     
-    if defending_pkmn.ability == gen_three_const.SAND_VEIL_ABILITY and weather == const.WEATHER_SANDSTORM:
+    if defending_pkmn.ability == gen_four_const.SAND_VEIL_ABILITY and weather == const.WEATHER_SANDSTORM:
+        result = math.floor(result * 3277 / 4096)
+
+    if defending_pkmn.ability == gen_four_const.SNOW_CLOAK_ABILITY and weather == const.WEATHER_SANDSTORM:
         result = math.floor(result * 3277 / 4096)
 
     return result
 
 
-def calculate_gen_three_damage(
+def calculate_gen_four_damage(
     attacking_pkmn:universal_data_objects.EnemyPkmn,
     attacking_species:universal_data_objects.PokemonSpecies,
     move:universal_data_objects.Move,
     defending_pkmn:universal_data_objects.EnemyPkmn,
     defending_species:universal_data_objects.PokemonSpecies,
-    special_types:List[str],
     type_chart:Dict[str, Dict[str, str]],
     held_item_boost_table:Dict[str, str],
     attacking_stage_modifiers:universal_data_objects.StageModifiers=None,
@@ -97,22 +101,108 @@ def calculate_gen_three_damage(
     else:
         move_type = move.move_type
         base_power = move.base_power
-
+    
     if base_power is None or base_power == 0:
         return None
     
+    attacking_ability = attacking_pkmn.ability
+    defending_ability = defending_pkmn.ability
+
+    # TODO: technically inaccurate data if in a doubles battle, and either of the other mons outside the equation have these abilities. Wtv
+    # It doesn't actually ever happen in vanilla games, so we're just fully ignoring it
+    is_weather_active = False
     if (
-        type_chart.get(move_type).get(defending_species.first_type) == const.IMMUNE or
-        type_chart.get(move_type).get(defending_species.second_type) == const.IMMUNE
+        defending_ability not in [gen_four_const.AIR_LOCK_ABILITY, gen_four_const.CLOUD_NINE_ABILITY] and
+        attacking_ability not in [gen_four_const.AIR_LOCK_ABILITY, gen_four_const.CLOUD_NINE_ABILITY]
+    ):
+        is_weather_active = (weather != const.WEATHER_NONE)
+
+    # Need to resolve any moves/abilities that change move type as early as possible
+    if move.name == gen_four_const.NATURE_POWER_MOVE_NAME:
+        # TODO: nature power emulates 2 moves that have possible bonus damage: earthquake, and surf. We're just fully ignoring those for now
+        # TODO: should i just... pull the move info directly, instead of hard-coding it like this? idk
+        if custom_move_data == gen_four_const.PLAIN_TERRAIN:
+            base_power = 60
+            move_type = const.TYPE_NORMAL
+        elif custom_move_data == gen_four_const.SAND_TERRAIN:
+            base_power = 100
+            move_type = const.TYPE_GROUND
+        elif custom_move_data == gen_four_const.CAVE_TERRAIN:
+            base_power = 80
+            move_type = const.TYPE_GHOST
+        elif custom_move_data == gen_four_const.ROCK_TERRAIN:
+            base_power = 75
+            move_type = const.TYPE_ROCK
+        elif custom_move_data == gen_four_const.TALL_GRASS_TERRAIN:
+            # ugly, but wtv. This turns into stun spore
+            return None
+        elif custom_move_data == gen_four_const.LONG_GRASS_TERRAIN:
+            base_power = 55
+            move_type = const.TYPE_GRASS
+        elif custom_move_data == gen_four_const.POND_WATER_TERRAIN:
+            base_power = 65
+            move_type = const.TYPE_WATER
+        elif custom_move_data == gen_four_const.SEA_WATER_TERRAIN:
+            base_power = 95
+            move_type = const.TYPE_WATER
+        elif custom_move_data == gen_four_const.UNDERWATER_TERRAIN:
+            base_power = 120
+            move_type = const.TYPE_WATER
+    elif move.name == gen_four_const.WEATHER_BALL_MOVE_NAME and is_weather_active:
+        base_power *= 2
+        if weather == const.WEATHER_SUN:
+            move_type = const.TYPE_FIRE
+        elif weather == const.WEATHER_RAIN:
+            move_type = const.TYPE_WATER
+        elif weather == const.WEATHER_HAIL:
+            move_type = const.TYPE_ICE
+        elif weather == const.WEATHER_SANDSTORM:
+            move_type = const.TYPE_ROCK
+
+    if (
+        attacking_ability == gen_four_const.TECHNICIAN_ABILITY and
+        base_power <= 60
+    ):
+        base_power = math.floor(60 * 1.5)
+
+    if attacking_ability == gen_four_const.NORMALIZE_ABILITY:
+        move_type = const.TYPE_NORMAL
+    
+    if move.name == gen_four_const.PUNISHMENT_MOVE_NAME:
+        num_buffs = 0
+        for cur_stage in [
+            defending_stage_modifiers.attack_stage,
+            defending_stage_modifiers.defense_stage,
+            defending_stage_modifiers.special_attack_stage,
+            defending_stage_modifiers.special_defense_stage,
+            defending_stage_modifiers.speed_stage,
+        ]:
+            if cur_stage > 0:
+                num_buffs += cur_stage
+        
+        num_buffs = min(num_buffs, 7)
+        base_power += (num_buffs * 20)
+
+    is_scrappy_active = (
+        (defending_species.first_type == const.TYPE_GHOST or defending_species.second_type == const.TYPE_GHOST) and
+        attacking_ability == gen_four_const.SCRAPPY_ABILITY
+    )
+    
+    if (
+        (
+            type_chart.get(move_type).get(defending_species.first_type) == const.IMMUNE or
+            type_chart.get(move_type).get(defending_species.second_type) == const.IMMUNE
+        ) and
+        (not is_scrappy_active)
     ):
         return None
     elif (
-        defending_pkmn.ability == gen_three_const.LEVITATE_ABILITY and
+        defending_ability == gen_four_const.LEVITATE_ABILITY and
         move_type == const.TYPE_GROUND
     ):
         return None
     elif (
-        defending_pkmn.ability == gen_three_const.DAMP_ABILITY and
+        defending_ability == gen_four_const.DAMP_ABILITY and
         (
             move.name == const.SELFDESTRUCT_MOVE_NAME or
             move.name == const.EXPLOSION_MOVE_NAME
@@ -121,23 +211,29 @@ def calculate_gen_three_damage(
         return None
     elif (
         (
-            defending_pkmn.ability == gen_three_const.VOLT_ABOSRB_ABILITY or
-            defending_pkmn.ability == gen_three_const.LIGHTNING_ROD_ABILITY
+            defending_ability == gen_four_const.VOLT_ABOSRB_ABILITY or
+            defending_ability == gen_four_const.LIGHTNING_ROD_ABILITY or
+            defending_ability == gen_four_const.MOTOR_DRIVE_ABILITY
         ) and
         move_type == const.TYPE_ELECTRIC
     ):
         return None
     elif (
-        defending_pkmn.ability == gen_three_const.WATER_ABSORB_ABILITY and
+        defending_ability == gen_four_const.WATER_ABSORB_ABILITY and
         move_type == const.TYPE_WATER
     ):
         return None
     elif (
-        defending_pkmn.ability == gen_three_const.FLASH_FIRE_ABILITY and
+        defending_ability == gen_four_const.FLASH_FIRE_ABILITY and
         move_type == const.TYPE_FIRE
     ):
         return None
-    elif defending_pkmn.ability == gen_three_const.WONDER_GUARD_ABILITY:
+    elif (
+        defending_ability == gen_four_const.DRY_SKIN_ABILITY and
+        move_type == const.TYPE_WATER
+    ):
+        return None
+    elif defending_ability == gen_four_const.WONDER_GUARD_ABILITY:
         first_effectiveness = type_chart.get(move_type).get(defending_species.first_type)
         second_effectiveness = type_chart.get(move_type).get(defending_species.second_type)
         # if either is immune, then shedinja is immune
@@ -163,101 +259,69 @@ def calculate_gen_three_damage(
         psywave_upper_limit = math.floor(attacking_pkmn.level * 1.5)
         return damage_calc.DamageRange({x:1 for x in range(1, psywave_upper_limit)})
 
-    # TODO: technically inaccurate data if in a doubles battle, and either of the other mons outside the equation have these abilities. Wtv
-    # It doesn't actually ever happen in vanilla games, so we're just fully ignoring it
-    is_weather_active = False
-    if (
-        defending_pkmn.ability not in [gen_three_const.AIR_LOCK_ABILITY, gen_three_const.CLOUD_NINE_ABILITY] and
-        attacking_pkmn.ability not in [gen_three_const.AIR_LOCK_ABILITY, gen_three_const.CLOUD_NINE_ABILITY]
-    ):
-        is_weather_active = (weather != const.WEATHER_NONE)
-
     # TODO: low kick. ughhhhh
     # TODO: present. ughhhhh
     # Handle base_power and move_type override cases first
-    if move.name == gen_three_const.MAGNITUDE_MOVE_NAME:
-        if gen_three_const.MAGNITUDE_4 in custom_move_data:
+    if move.name == gen_four_const.MAGNITUDE_MOVE_NAME:
+        if gen_four_const.MAGNITUDE_4 in custom_move_data:
             base_power = 10
-        elif gen_three_const.MAGNITUDE_5 in custom_move_data:
+        elif gen_four_const.MAGNITUDE_5 in custom_move_data:
             base_power = 30
-        elif gen_three_const.MAGNITUDE_6 in custom_move_data:
+        elif gen_four_const.MAGNITUDE_6 in custom_move_data:
             base_power = 50
-        elif gen_three_const.MAGNITUDE_7 in custom_move_data:
+        elif gen_four_const.MAGNITUDE_7 in custom_move_data:
             base_power = 70
-        elif gen_three_const.MAGNITUDE_8 in custom_move_data:
+        elif gen_four_const.MAGNITUDE_8 in custom_move_data:
             base_power = 90
-        elif gen_three_const.MAGNITUDE_9 in custom_move_data:
+        elif gen_four_const.MAGNITUDE_9 in custom_move_data:
             base_power = 110
-        elif gen_three_const.MAGNITUDE_10 in custom_move_data:
+        elif gen_four_const.MAGNITUDE_10 in custom_move_data:
             base_power = 150
     elif move.name in [const.FLAIL_MOVE_NAME, const.REVERSAL_MOVE_NAME]:
-        if gen_three_const.FLAIL_FULL_HP in custom_move_data:
+        if gen_four_const.FLAIL_FULL_HP in custom_move_data:
             base_power = 20
-        elif gen_three_const.FLAIL_HALF_HP in custom_move_data:
+        elif gen_four_const.FLAIL_HALF_HP in custom_move_data:
             base_power = 40
-        elif gen_three_const.FLAIL_QUARTER_HP in custom_move_data:
+        elif gen_four_const.FLAIL_QUARTER_HP in custom_move_data:
             base_power = 80
-        elif gen_three_const.FLAIL_TEN_PERCENT_HP in custom_move_data:
+        elif gen_four_const.FLAIL_TEN_PERCENT_HP in custom_move_data:
             base_power = 100
-        elif gen_three_const.FLAIL_FIVE_PERCENT_HP in custom_move_data:
+        elif gen_four_const.FLAIL_FIVE_PERCENT_HP in custom_move_data:
             base_power = 150
-        elif gen_three_const.FLAIL_MIN_HP in custom_move_data:
+        elif gen_four_const.FLAIL_MIN_HP in custom_move_data:
             base_power = 200
-    elif move.name == gen_three_const.RETURN_MOVE_NAME:
+    elif move.name == gen_four_const.RETURN_MOVE_NAME:
         try:
             base_power = int(custom_move_data)
         except Exception as e:
             logger.warning(f"Failed to convert return move power to an int: {custom_move_data}")
-    elif move.name == gen_three_const.ERUPTION_MOVE_NAME:
+    elif move.name == gen_four_const.ERUPTION_MOVE_NAME:
         try:
             base_power = math.floor(base_power * int(custom_move_data) / 100.0)
         except Exception as e:
             logger.warning(f"Failed to convert return move power to an int: {custom_move_data}")
-    elif move.name == gen_three_const.WATER_SPOUT_MOVE_NAME:
+    elif move.name == gen_four_const.WATER_SPOUT_MOVE_NAME:
         try:
             base_power = math.floor(base_power * int(custom_move_data) / 100.0)
         except Exception as e:
             logger.warning(f"Failed to convert return move power to an int: {custom_move_data}")
-    elif move.name == gen_three_const.NATURE_POWER_MOVE_NAME:
-        # TODO: nature power emulates 2 moves that have possible bonus damage: earthquake, and surf. We're just fully ignoring those for now
-        # TODO: should i just... pull the move info directly, instead of hard-coding it like this? idk
-        if custom_move_data == gen_three_const.PLAIN_TERRAIN:
+    elif (
+        move.name == gen_four_const.CRUSH_GRIP_MOVE_NAME or
+        move.name == gen_four_const.WRING_OUT_MOVE_NAME
+    ):
+        try:
+            base_power = math.floor(1 + (120 * int(custom_move_data)))
+        except Exception as e:
+            logger.warning(f"Failed to convert return move power to an int: {custom_move_data}")
+    elif move.name == gen_four_const.TRUMP_CARD_MOVE_NAME:
+        if custom_move_data == "3":
+            base_power = 50
+        elif custom_move_data == "2":
             base_power = 60
-            move_type = const.TYPE_NORMAL
-        elif custom_move_data == gen_three_const.SAND_TERRAIN:
-            base_power = 100
-            move_type = const.TYPE_GROUND
-        elif custom_move_data == gen_three_const.CAVE_TERRAIN:
+        elif custom_move_data == "1":
             base_power = 80
-            move_type = const.TYPE_GHOST
-        elif custom_move_data == gen_three_const.ROCK_TERRAIN:
-            base_power = 75
-            move_type = const.TYPE_ROCK
-        elif custom_move_data == gen_three_const.TALL_GRASS_TERRAIN:
-            # ugly, but wtv. This turns into stun spore
-            return None
-        elif custom_move_data == gen_three_const.LONG_GRASS_TERRAIN:
-            base_power = 55
-            move_type = const.TYPE_GRASS
-        elif custom_move_data == gen_three_const.POND_WATER_TERRAIN:
-            base_power = 65
-            move_type = const.TYPE_WATER
-        elif custom_move_data == gen_three_const.SEA_WATER_TERRAIN:
-            base_power = 95
-            move_type = const.TYPE_WATER
-        elif custom_move_data == gen_three_const.UNDERWATER_TERRAIN:
-            base_power = 120
-            move_type = const.TYPE_WATER
-    elif move.name == gen_three_const.WEATHER_BALL_MOVE_NAME and is_weather_active:
-        base_power *= 2
-        if weather == const.WEATHER_SUN:
-            move_type = const.TYPE_FIRE
-        elif weather == const.WEATHER_RAIN:
-            move_type = const.TYPE_WATER
-        elif weather == const.WEATHER_HAIL:
-            move_type = const.TYPE_ICE
-        elif weather == const.WEATHER_SANDSTORM:
-            move_type = const.TYPE_ROCK
+        elif custom_move_data == "0":
+            base_power = 200
     
     if attacking_stage_modifiers is None:
         attacking_stage_modifiers = universal_data_objects.StageModifiers()
@@ -266,7 +330,7 @@ def calculate_gen_three_damage(
 
     # when a crit occurs, always ignore negative modifiers for the attacking pokemon, and always ignore positive modifiers for the defensive pokemon
     if is_crit:
-        if move_type in special_types:
+        if move.category == const.CATEGORY_PHYSICAL:
             if attacking_stage_modifiers.special_attack_stage < 0:
                 attacking_stage_modifiers = universal_data_objects.StageModifiers()
             if defending_stage_modifiers.special_defense_stage > 0:
@@ -280,78 +344,114 @@ def calculate_gen_three_damage(
     attacking_battle_stats = attacking_pkmn.get_battle_stats(attacking_stage_modifiers)
     defending_battle_stats = defending_pkmn.get_battle_stats(defending_stage_modifiers)
 
-    if attacking_pkmn.name == gen_three_const.MAROWAK_NAME and attacking_pkmn.held_item == gen_three_const.THICK_CLUB_NAME:
+    # NOTE: for now, just ignoring the "edge case" of: what if the mon for mon-specific unique items has klutz?
+    # it never occurs in normal gameplay, and would require a hack. so, wtv
+    if attacking_pkmn.name == gen_four_const.MAROWAK_NAME and attacking_pkmn.held_item == gen_four_const.THICK_CLUB_NAME:
         attacking_battle_stats.attack *= 2
-    elif attacking_pkmn.name == gen_three_const.PIKACHU_NAME and attacking_pkmn.held_item == gen_three_const.LIGHT_BALL_NAME:
+    elif attacking_pkmn.name == gen_four_const.PIKACHU_NAME and attacking_pkmn.held_item == gen_four_const.LIGHT_BALL_NAME:
         attacking_battle_stats.special_attack *= 2
-    elif attacking_pkmn.name == gen_three_const.CLAMPERL_NAME and attacking_pkmn.held_item == gen_three_const.DEEP_SEA_TOOTH_NAME:
+    elif attacking_pkmn.name == gen_four_const.CLAMPERL_NAME and attacking_pkmn.held_item == gen_four_const.DEEP_SEA_TOOTH_NAME:
         attacking_battle_stats.special_attack *= 2
-    elif attacking_pkmn.name == gen_three_const.CLAMPERL_NAME and attacking_pkmn.held_item == gen_three_const.DEEP_SEA_SCALE_NAME:
+    elif attacking_pkmn.name == gen_four_const.CLAMPERL_NAME and attacking_pkmn.held_item == gen_four_const.DEEP_SEA_SCALE_NAME:
         attacking_battle_stats.special_defense *= 2
     elif (
-        (attacking_pkmn.name == gen_three_const.LATIOS_NAME or attacking_pkmn.name == gen_three_const.LATIAS_NAME) and
-        attacking_pkmn.held_item == gen_three_const.DEEP_SEA_SCALE_NAME
+        (attacking_pkmn.name == gen_four_const.LATIOS_NAME or attacking_pkmn.name == gen_four_const.LATIAS_NAME) and
+        attacking_pkmn.held_item == gen_four_const.DEEP_SEA_SCALE_NAME
     ):
         attacking_battle_stats.special_attack = math.floor(attacking_battle_stats.special_attack * 1.5)
         attacking_battle_stats.special_defense = math.floor(attacking_battle_stats.special_defense * 1.5)
 
     if (
-        (defending_pkmn.name == gen_three_const.LATIOS_NAME or defending_pkmn.name == gen_three_const.LATIAS_NAME) and
-        defending_pkmn.held_item == gen_three_const.DEEP_SEA_SCALE_NAME
+        (defending_pkmn.name == gen_four_const.LATIOS_NAME or defending_pkmn.name == gen_four_const.LATIAS_NAME) and
+        defending_pkmn.held_item == gen_four_const.DEEP_SEA_SCALE_NAME
     ):
         defending_battle_stats.special_attack = math.floor(defending_battle_stats.special_attack * 1.5)
         defending_battle_stats.special_defense = math.floor(defending_battle_stats.special_defense * 1.5)
-    elif defending_pkmn.name == gen_three_const.DITTO_NAME and defending_pkmn.held_item == gen_three_const.METAL_POWDER_NAME:
+    elif defending_pkmn.name == gen_four_const.DITTO_NAME and defending_pkmn.held_item == gen_four_const.METAL_POWDER_NAME:
         # this should only apply while transformed... but also like, we don't support transforming in the app rn lmao
         defending_battle_stats.defense *= 2
     
-    if attacking_pkmn.ability == gen_three_const.HUSTLE_ABILITY:
+    if attacking_ability == gen_four_const.HUSTLE_ABILITY:
         attacking_battle_stats.attack = math.floor(attacking_battle_stats.attack * 1.5)
 
     if (
-        attacking_pkmn.ability == gen_three_const.HUGE_POWER_ABILITY or
-        attacking_pkmn.ability == gen_three_const.PURE_POWER_ABILITY
+        attacking_ability == gen_four_const.HUGE_POWER_ABILITY or
+        attacking_ability == gen_four_const.PURE_POWER_ABILITY
     ):
         attacking_battle_stats.attack = math.floor(attacking_battle_stats.attack * 2)
     
-    if attacking_pkmn.held_item == gen_three_const.CHOICE_BAND_NAME:
+    if (
+        attacking_pkmn.held_item == gen_four_const.CHOICE_BAND_NAME and
+        attacking_ability != gen_four_const.KLUTZ_ABILITY
+    ):
         attacking_battle_stats.attack = math.floor(attacking_battle_stats.attack * 1.5)
+
+    if (
+        attacking_pkmn.held_item == gen_four_const.CHOICE_SPECS_NAME and
+        attacking_ability != gen_four_const.KLUTZ_ABILITY
+    ):
+        attacking_battle_stats.special_attack = math.floor(attacking_battle_stats.special_attack * 1.5)
     
-    if defending_pkmn.ability == gen_three_const.THICK_FAT_ABILITY and move_type in [const.TYPE_FIRE, const.TYPE_ICE]:
+    if defending_ability == gen_four_const.THICK_FAT_ABILITY and move_type in [const.TYPE_FIRE, const.TYPE_ICE]:
         # oddity: this is technically how the actual code does it, despite it being a bit weird
         # When thick fat is applicable, it debuffs the special attack (technically before applying stages, but wtv)
         attacking_battle_stats.special_attack = math.floor(attacking_battle_stats.special_attack / 2)
-        # I'm paranoid, since physical/special types are technically editable in a custom gen
         attacking_battle_stats.attack = math.floor(attacking_battle_stats.attack / 2)
+
+    if defending_ability == gen_four_const.HEATPROOF_ABILITY and move_type == const.TYPE_FIRE:
+        # seems to reuse the same code as thick-fat (based on bulbapedia's description)
+        attacking_battle_stats.special_attack = math.floor(attacking_battle_stats.special_attack / 2)
+        attacking_battle_stats.attack = math.floor(attacking_battle_stats.attack / 2)
+    
+    if (
+        defending_ability == gen_four_const.FLOWER_GIFT_ABILITY and
+        is_weather_active and
+        weather == const.WEATHER_SUN
+    ):
+        defending_battle_stats.special_attack = math.floor(defending_battle_stats.special_attack * 1.5)
+        defending_battle_stats.special_defense = math.floor(defending_battle_stats.special_attack * 1.5)
+    elif (
+        attacking_ability == gen_four_const.FLOWER_GIFT_ABILITY and
+        is_weather_active and
+        weather == const.WEATHER_SUN
+    ):
+        attacking_battle_stats.special_attack = math.floor(attacking_battle_stats.special_attack * 1.5)
+        attacking_battle_stats.special_defense = math.floor(attacking_battle_stats.special_attack * 1.5)
+    elif (
+        attacking_ability == gen_four_const.SOLAR_POWER_ABILITY and
+        is_weather_active and
+        weather == const.WEATHER_SUN
+    ):
+        attacking_battle_stats.special_attack = math.floor(attacking_battle_stats.special_attack * 1.5)
     
     # NOTE: ignoring plus/minus abilities. They would modify special attack here, if ever relevant
 
     # TODO: bunch of abilities below that have a conditional activation. Need to figure out how to implement them properly
     # until then, they're just fully disabled
-    if defending_pkmn.ability == gen_three_const.MARVEL_SCALE_ABILITY and False:
+    if defending_ability == gen_four_const.MARVEL_SCALE_ABILITY and False:
         defending_battle_stats.defense = math.floor(defending_battle_stats.defense * 1.5)
-    if attacking_pkmn.ability == gen_three_const.GUTS_ABILITY and False:
+    if attacking_ability == gen_four_const.GUTS_ABILITY and False:
         attacking_battle_stats.attack = math.floor(attacking_battle_stats.attack * 1.5)
-    if attacking_pkmn.ability == gen_three_const.OVERGROW_ABILITY and move_type == const.TYPE_GRASS and False:
+    if attacking_ability == gen_four_const.OVERGROW_ABILITY and move_type == const.TYPE_GRASS and False:
         base_power = math.floor(base_power * 1.5)
-    if attacking_pkmn.ability == gen_three_const.BLAZE_ABILITY and move_type == const.TYPE_FIRE and False:
+    if attacking_ability == gen_four_const.BLAZE_ABILITY and move_type == const.TYPE_FIRE and False:
         base_power = math.floor(base_power * 1.5)
-    if attacking_pkmn.ability == gen_three_const.TORRENT_ABILITY and move_type == const.TYPE_WATER and False:
+    if attacking_ability == gen_four_const.TORRENT_ABILITY and move_type == const.TYPE_WATER and False:
         base_power = math.floor(base_power * 1.5)
-    if attacking_pkmn.ability == gen_three_const.SWARM_ABILITY and move_type == const.TYPE_BUG and False:
+    if attacking_ability == gen_four_const.SWARM_ABILITY and move_type == const.TYPE_BUG and False:
         base_power = math.floor(base_power * 1.5)
     
-    if move_type in special_types:
+    if move.category == const.CATEGORY_SPECIAL:
         attacking_stat = attacking_battle_stats.special_attack
         defending_stat = defending_battle_stats.special_defense
-        if defender_has_light_screen and not is_crit and move.name != gen_three_const.BRICK_BREAK_MOVE_NAME:
+        if defender_has_light_screen and not is_crit and move.name != gen_four_const.BRICK_BREAK_MOVE_NAME:
             screen_active = True
         else:
             screen_active = False
     else:
         attacking_stat = attacking_battle_stats.attack
         defending_stat = defending_battle_stats.defense
-        if defender_has_reflect and not is_crit and move.name != gen_three_const.BRICK_BREAK_MOVE_NAME:
+        if defender_has_reflect and not is_crit and move.name != gen_four_const.BRICK_BREAK_MOVE_NAME:
             screen_active = True
         else:
             screen_active = False
@@ -363,8 +463,11 @@ def calculate_gen_three_damage(
     if move.name == const.FUTURE_SIGHT_MOVE_NAME:
         is_stab = False
 
-    if held_item_boost_table.get(attacking_pkmn.held_item) == move_type:
-        attacking_stat = math.floor(attacking_stat * 1.1)
+    if (
+        held_item_boost_table.get(attacking_pkmn.held_item) == move_type and
+        attacking_ability != gen_four_const.KLUTZ_ABILITY
+    ):
+        attacking_stat = math.floor(attacking_stat * 1.2)
 
     # begin actual formula
     temp = 2 * attacking_pkmn.level
@@ -415,14 +518,17 @@ def calculate_gen_three_damage(
     if (
         is_crit and 
         move.name not in [const.SPIT_UP_MOVE_NAME, const.DOOM_DESIRE_MOVE_NAME, const.FUTURE_SIGHT_MOVE_NAME] and
-        defending_pkmn.ability not in [gen_three_const.BATTLE_ARMOR_ABILITY, gen_three_const.SHELL_ARMOR_ABILITY]
+        defending_ability not in [gen_four_const.BATTLE_ARMOR_ABILITY, gen_four_const.SHELL_ARMOR_ABILITY]
     ):
-        temp *= 2
+        if attacking_ability == gen_four_const.SNIPER_ABILITY:
+            temp *= 3
+        else:
+            temp *= 2
     
     # handle all the special moves that may affect the damage formula in other ways
     move_modifier = 1
 
-    if move.name == gen_three_const.ROLLOUT_MOVE_NAME:
+    if move.name == gen_four_const.ROLLOUT_MOVE_NAME:
         # ugh, dumb hack. String is either just an int, or the special case of last turn + defense curl
         try:
             num_rollout_turns = int(custom_move_data)
@@ -430,34 +536,39 @@ def calculate_gen_three_damage(
             num_rollout_turns = 6
         
         move_modifier = math.pow(2, num_rollout_turns)
-    elif move.name == gen_three_const.FURY_CUTTER_MOVE_NAME:
+    elif move.name == gen_four_const.FURY_CUTTER_MOVE_NAME:
         move_modifier = math.pow(2, int(custom_move_data))
-    elif move.name == gen_three_const.RAGE_MOVE_NAME:
+    elif move.name == gen_four_const.RAGE_MOVE_NAME:
         move_modifier = int(custom_move_data)
-    elif move.name == gen_three_const.TRIPLE_KICK_MOVE_NAME:
+    elif move.name == gen_four_const.TRIPLE_KICK_MOVE_NAME:
         move_modifier = int(custom_move_data)
-    elif move.name == gen_three_const.SPIT_UP_MOVE_NAME:
+    elif move.name == gen_four_const.SPIT_UP_MOVE_NAME:
         move_modifier = int(custom_move_data)
     
     temp *= move_modifier
 
     if move.name in [
-        gen_three_const.GUST_MOVE_NAME,
-        gen_three_const.TWISTER_MOVE_NAME,
-        gen_three_const.SURF_MOVE_NAME,
-        gen_three_const.WHIRLPOOL_MOVE_NAME,
-        gen_three_const.EARTHQUAKE_MOVE_NAME,
-        gen_three_const.MAGNITUDE_MOVE_NAME,
-        gen_three_const.PURSUIT_MOVE_NAME,
-        gen_three_const.STOMP_MOVE_NAME,
-        gen_three_const.EXTRASENSORY_MOVE_NAME,
-        gen_three_const.ASTONISH_MOVE_NAME,
-        gen_three_const.NEEDLE_ARM_MOVE_NAME,
-        gen_three_const.FACADE_MOVE_NAME,
-        gen_three_const.SMELLING_SALT_MOVE_NAME,
-        gen_three_const.REVENGE_MOVE_NAME,
+        gen_four_const.GUST_MOVE_NAME,
+        gen_four_const.TWISTER_MOVE_NAME,
+        gen_four_const.SURF_MOVE_NAME,
+        gen_four_const.WHIRLPOOL_MOVE_NAME,
+        gen_four_const.EARTHQUAKE_MOVE_NAME,
+        gen_four_const.MAGNITUDE_MOVE_NAME,
+        gen_four_const.PURSUIT_MOVE_NAME,
+        gen_four_const.STOMP_MOVE_NAME,
+        gen_four_const.EXTRASENSORY_MOVE_NAME,
+        gen_four_const.ASTONISH_MOVE_NAME,
+        gen_four_const.NEEDLE_ARM_MOVE_NAME,
+        gen_four_const.FACADE_MOVE_NAME,
+        gen_four_const.SMELLING_SALT_MOVE_NAME,
+        gen_four_const.REVENGE_MOVE_NAME,
+        gen_four_const.ASSURANCE_MOVE_NAME,
+        gen_four_const.AVALANCHE_MOVE_NAME,
+        gen_four_const.BRINE_MOVE_NAME,
+        gen_four_const.PAYBACK_MOVE_NAME,
+        gen_four_const.WAKE_UP_SLAP_MOVE_NAME,
     ]:
-        double_damage = custom_move_data and (gen_three_const.NO_BONUS not in custom_move_data)
+        double_damage = custom_move_data and (gen_four_const.NO_BONUS not in custom_move_data)
     else:
         double_damage = False
 
@@ -475,15 +586,40 @@ def calculate_gen_three_damage(
         temp *= 2
 
     if is_stab:
-        temp = math.floor(temp * 1.5)
+        if attacking_ability == gen_four_const.ADAPTABILITY_ABILITY:
+            temp = math.floor(temp * 2)
+        else:
+            temp = math.floor(temp * 1.5)
 
+    is_tinted_lens_active = False
     for test_type in type_chart.get(move_type):
         if test_type == defending_species.first_type or test_type == defending_species.second_type:
             effectiveness = type_chart.get(move_type).get(test_type)
             if effectiveness == const.SUPER_EFFECTIVE:
-                temp *= 2
+                if (
+                    defending_ability == gen_four_const.FILTER_ABILITY or
+                    defending_ability == gen_four_const.SOLID_ROCK_ABILITY
+                ):
+                    temp = math.floor(temp * 1.5)
+                else:
+                    temp *= 2
             elif effectiveness == const.NOT_VERY_EFFECTIVE:
+                if attacking_ability == gen_four_const.TINTED_LENS_ABILITY:
+                    is_tinted_lens_active = True
                 temp = math.floor(temp / 2)
+    
+    # doing all this so that we guarantee that you only get one tinted lens boost if the move is doubly resisted
+    if is_tinted_lens_active:
+        temp *= 2
+
+    # NOTE: I don't really know where in the formula gen 4 multipliers go
+    # So, just throwing them at the end
+    if (
+        defending_ability == gen_four_const.DRY_SKIN_ABILITY and
+        move.move_type == const.TYPE_FIRE
+    ):
+        temp = math.floor(temp * 1.3)
+
     
     if temp <= 0:
         # damage must be at least 1
@@ -523,13 +659,12 @@ def calculate_gen_three_damage(
                 # Currently forcing "crit" calculations to assume only one crit out of all strikes
                 # So, when calculating full damage, need to get the damage of a single non-crit strike as well
                 # intentionally overwriting custom_move_data to make sure we get the damage of only a single strike
-                other_damage = calculate_gen_three_damage(
+                other_damage = calculate_gen_four_damage(
                     attacking_pkmn,
                     attacking_species,
                     move,
                     defending_pkmn,
                     defending_species,
-                    special_types,
                     type_chart,
                     held_item_boost_table,
                     attacking_stage_modifiers,

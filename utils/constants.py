@@ -59,6 +59,8 @@ class Constants:
 
         self.SPECIES_KEY = "species"
         self.NAME_KEY = "name"
+        self.STATS_KEY = "stats"
+        self.BASE_STATS_KEY = "base_stats"
         self.BASE_HP_KEY = "base_hp"
         self.BASE_ATK_KEY = "base_atk"
         self.BASE_DEF_KEY = "base_def"
@@ -67,6 +69,7 @@ class Constants:
         self.OLD_BASE_SPD_KEY = "base_spd"
         self.BASE_SPE_KEY = "base_spe"
         self.BASE_SPC_KEY = "base_spc"
+        self.EV_YIELD_KEY = "ev_yield"
         self.EV_YIELD_HP_KEY = "ev_yield_hp"
         self.EV_YIELD_ATK_KEY = "ev_yield_atk"
         self.EV_YIELD_DEF_KEY = "ev_yield_def"
@@ -77,16 +80,20 @@ class Constants:
         self.SECOND_TYPE_KEY = "type_2"
         self.CATCH_RATE_KEY = "catch_rate"
         self.BASE_XP_KEY = "base_xp"
+        self.BASE_EXPERIENCE_KEY = "base_experience"
         self.INITIAL_MOVESET_KEY = "initial_moveset"
         self.LEARNED_MOVESET_KEY = "levelup_moveset"
+        self.LEVEL_UP_MOVESET_KEY = "level_up_learnset"
         self.GROWTH_RATE_KEY = "growth_rate"
         self.TM_HM_LEARNSET_KEY = "tm_hm_learnset"
         self.DVS_KEY = "dv"
         self.IVS_KEY = "iv"
+        self.IVS_PLURAL_KEY = "ivs"
         self.HELD_ITEM_KEY = "held_item"
         self.ABILITY_KEY = "ability"
         self.ABILITY_LIST_KEY = "abilities"
         self.STAT_KEY = "stat"
+        self.STATS_KEY = "stats"
         self.MODIFIER_KEY = "modifier"
         self.TARGET_KEY = "target"
         self.NATURE_KEY = "nature"
@@ -101,6 +108,7 @@ class Constants:
         # TODO: remove
         # unified special, for gen 1 only
         self.SPC = "spc"
+        self.EXPERIENCE_YIELD_KEY = "experience_yield"
         self.XP = "xp"
         self.MOVES = "moves"
         # less common, still stats
@@ -116,8 +124,10 @@ class Constants:
         self.TRAINER_NAME = "trainer_name"
         self.SECOND_TRAINER_NAME = "second_trainer_name"
         self.TRAINER_CLASS = "trainer_class"
+        self.ROM_ID = "rom_id"
         self.TRAINER_ID = "trainer_id"
         self.TRAINER_LOC = "trainer_location"
+        self.TRAINER_PARTY = "party"
         self.TRAINER_POKEMON = "pokemon"
         self.TRAINER_REFIGHTABLE = "refightable"
         self.TRAINER_DOUBLE_BATTLE = "is_double_battle"
@@ -138,12 +148,17 @@ class Constants:
         self.BY_STONE_KEY = "by_stone"
 
         self.MOVE_TYPE = "type"
+        self.POWER = "power"
         self.BASE_POWER = "base_power"
         self.MOVE_PP = "pp"
         self.MOVE_ACCURACY = "accuracy"
         self.MOVE_EFFECTS = "effects"
+        self.MOVE_EFFECT = "effect"
         self.MOVE_FLAVOR = "attack_flavor"
         self.MOVE_TARGET = "target"
+        self.MOVE_CATEGORY = "category"
+        self.CATEGORY_PHYSICAL = "Physical"
+        self.CATEGORY_SPECIAL = "Special"
 
         self.GROWTH_RATE_FAST = "growth_fast"
         self.GROWTH_RATE_MEDIUM_FAST = "growth_medium_fast"
@@ -257,7 +272,7 @@ class Constants:
         self.EVENT_TAG_IMPORTANT = "important"
         self.EVENT_TAG_ERRORS = "errors"
 
-        self.MOVE_KEY = "move_name"
+        self.MOVE_KEY = "move"
         self.MOVE_DEST_KEY = "destination_slot"
         self.MOVE_SOURCE_KEY = "source"
         self.MOVE_LEVEL_KEY = "level_learned"
@@ -334,6 +349,13 @@ class Constants:
         self.FIRE_RED_VERSION = "FireRed"
         self.LEAF_GREEN_VERSION = "LeafGreen"
 
+        self.DIAMOND_VERSION = "Diamond"
+        self.PEARL_VERSION = "Pearl"
+        self.PLATINUM_VERSION = "Platinum"
+
+        self.HEART_GOLD_VERSION = "HeartGold"
+        self.SOUL_SILVER_VERSION = "SoulSilver"
+
         self.VERSION_LIST = [
             self.YELLOW_VERSION,
             self.RED_VERSION,
@@ -346,6 +368,11 @@ class Constants:
             self.EMERALD_VERSION,
             self.FIRE_RED_VERSION,
             self.LEAF_GREEN_VERSION,
+            self.DIAMOND_VERSION,
+            self.PEARL_VERSION,
+            self.PLATINUM_VERSION,
+            self.HEART_GOLD_VERSION,
+            self.SOUL_SILVER_VERSION,
         ]
 
         self.FRLG_VERSIONS = [
@@ -368,6 +395,13 @@ class Constants:
 
             self.FIRE_RED_VERSION: "#ff7327",
             self.LEAF_GREEN_VERSION: "#00dd00",
+
+            self.DIAMOND_VERSION: "#90beed",
+            self.PEARL_VERSION: "#e9aacc",
+            self.PLATINUM_VERSION: "#a0a08d",
+
+            self.HEART_GOLD_VERSION: "#e8b502",
+            self.SOUL_SILVER_VERSION: "#c8d2e0",
         }
 
         self.NO_SAVED_ROUTES = "No Saved Routes"
@@ -442,6 +476,7 @@ class Constants:
         self.WEATHER_SUN = "Harsh Sunlight"
         self.WEATHER_SANDSTORM = "Sandstorm"
         self.WEATHER_HAIL = "Hail"
+        self.WEATHER_FOG = "Fog"
 
         # timing defaults
         self.DEFAULT_INTRO_TIME = 4.69
