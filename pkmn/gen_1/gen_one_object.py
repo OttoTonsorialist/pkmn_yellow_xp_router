@@ -193,6 +193,9 @@ class GenOne(CurrentGen):
         result = [self._move_db.get_move(x).name for x in self._move_db.stat_mod_moves.keys()]
         result.extend([self._move_db.get_move(x).name for x in self._move_db.field_moves.keys()])
         return sorted(result)
+
+    def get_field_moves(self):
+        return []
     
     def get_fight_reward(self, trainer_name) -> str:
         return self._fight_rewards.get(trainer_name)

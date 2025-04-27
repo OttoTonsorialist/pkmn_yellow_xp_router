@@ -136,6 +136,8 @@ class Constants:
         self.VERBOSE_KEY = "verbose"
         self.SETUP_MOVES_KEY = "setup_moves"
         self.ENEMY_SETUP_MOVES_KEY = "enemy_setup_moves"
+        self.PLAYER_FIELD_MOVES_KEY = "player_field_moves"
+        self.ENEMY_FIELD_MOVES_KEY = "enemy_field_moves"
         self.MIMIC_SELECTION = "mimic_selection"
         self.CUSTOM_MOVE_DATA = "custom_move_data"
         self.EXP_SPLIT = "exp_split"

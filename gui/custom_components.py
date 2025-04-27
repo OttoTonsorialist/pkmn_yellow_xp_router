@@ -295,8 +295,10 @@ class SimpleOptionMenu(ttk.Combobox):
         self.cur_options = option_list
         self.config(values=self.cur_options)
 
-        if default_val is None:
+        if default_val is None and option_list:
             default_val = option_list[0]
+        elif default_val is None:
+            default_val = ""
         self._val.set(default_val)
 
 

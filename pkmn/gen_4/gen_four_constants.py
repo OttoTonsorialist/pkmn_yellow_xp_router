@@ -247,7 +247,7 @@ class GenFourConstants:
             self.TRUMP_CARD_MOVE_NAME: [str(x) if x < 4 else f"{x}+" for x in range(4, 0, -1)],
             self.WAKE_UP_SLAP_MOVE_NAME: [self.NO_BONUS, self.SLEEPING_BONUS],
             self.CRUSH_GRIP_MOVE_NAME: [str(x) for x in range(100, 0, -1)],
-            self.WRING_OUT_MOVE_NAME_MOVE_NAME: [str(x) for x in range(100, 0, -1)],
+            self.WRING_OUT_MOVE_NAME: [str(x) for x in range(100, 0, -1)],
         }
 
 

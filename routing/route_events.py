@@ -195,7 +195,22 @@ class LearnMoveEventDefinition:
 
 
 class TrainerEventDefinition:
-    def __init__(self, trainer_name, second_trainer_name="", verbose_export=False, setup_moves=None, mimic_selection="", custom_move_data=None, enemy_setup_moves=None, exp_split=None, weather=const.WEATHER_NONE, pay_day_amount=0, mon_order=None):
+    def __init__(
+            self,
+            trainer_name,
+            second_trainer_name="",
+            verbose_export=False,
+            setup_moves=None,
+            mimic_selection="",
+            custom_move_data=None,
+            enemy_setup_moves=None,
+            player_field_moves=None,
+            enemy_field_moves=None,
+            exp_split=None,
+            weather=const.WEATHER_NONE,
+            pay_day_amount=0,
+            mon_order=None,
+        ):
         self.trainer_name = trainer_name
         self.second_trainer_name = second_trainer_name
         self.verbose_export = verbose_export
@@ -209,6 +224,12 @@ class TrainerEventDefinition:
         if enemy_setup_moves is None:
             enemy_setup_moves = []
         self.enemy_setup_moves = enemy_setup_moves
+        if player_field_moves is None:
+            player_field_moves = []
+        self.player_field_moves = player_field_moves
+        if enemy_field_moves is None:
+            enemy_field_moves = []
+        self.enemy_field_moves = enemy_field_moves
         if exp_split is None:
             exp_split = []
         self.exp_split = exp_split
@@ -225,6 +246,8 @@ class TrainerEventDefinition:
             const.VERBOSE_KEY: self.verbose_export,
             const.SETUP_MOVES_KEY: self.setup_moves,
             const.ENEMY_SETUP_MOVES_KEY: self.enemy_setup_moves,
+            const.PLAYER_FIELD_MOVES_KEY: self.player_field_moves,
+            const.ENEMY_FIELD_MOVES_KEY: self.enemy_field_moves,
             const.MIMIC_SELECTION: self.mimic_selection,
             const.CUSTOM_MOVE_DATA: self.custom_move_data,
             const.EXP_SPLIT: self.exp_split,
@@ -255,6 +278,8 @@ class TrainerEventDefinition:
             mimic_selection=raw_val[const.MIMIC_SELECTION],
             custom_move_data=raw_val.get(const.CUSTOM_MOVE_DATA),
             enemy_setup_moves=raw_val.get(const.ENEMY_SETUP_MOVES_KEY),
+            player_field_moves=raw_val.get(const.PLAYER_FIELD_MOVES_KEY),
+            enemy_field_moves=raw_val.get(const.ENEMY_FIELD_MOVES_KEY),
             exp_split=raw_val.get(const.EXP_SPLIT),
             weather=raw_val.get(const.WEATHER, const.WEATHER_NONE),
             pay_day_amount=raw_val.get(const.PAY_DAY_AMOUNT, 0),

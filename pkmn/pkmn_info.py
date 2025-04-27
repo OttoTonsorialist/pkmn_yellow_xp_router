@@ -97,6 +97,9 @@ class CurrentGen:
     def get_stat_modifer_moves(self) -> List[str]:
         raise NotImplementedError()
     
+    def get_field_moves(self) -> List[str]:
+        raise NotImplementedError()
+    
     def get_fight_reward(self, trainer_name) -> str:
         raise NotImplementedError()
 

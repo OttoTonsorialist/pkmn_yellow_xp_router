@@ -457,6 +457,7 @@ class Move:
         attack_flavor:List[str],
         targeting:str="",
         category:str="",
+        has_field_effect:bool=False,
     ):
         self.name = name
         self.accuracy = accuracy
@@ -467,6 +468,7 @@ class Move:
         self.attack_flavor = attack_flavor
         self.targeting = targeting
         self.category = category
+        self.has_field_effect = has_field_effect
 
 
 class TrainerTimingStats:
@@ -512,15 +514,42 @@ class FieldStatus:
         self,
         light_screen=False,
         reflect=False,
+        gravity=False,
+        magnet_rise=False,
+        miracle_eye=False,
+        power_trick=False,
+        roost=False,
+        tailwind=False,
+        trick_room=False,
+        worry_seed=False,
+        gastro_acid=False,
     ):
         # TODO: do we need a gen-unique version of this? Currently only supporting things that are present in all gens, so not the biggest deal
         self.light_screen = light_screen
         self.reflect = reflect
+        self.gravity = gravity
+        self.magnet_rise = magnet_rise
+        self.miracle_eye = miracle_eye
+        self.power_trick = power_trick
+        self.roost = roost
+        self.tailwind = tailwind
+        self.trick_room = trick_room
+        self.worry_seed = worry_seed
+        self.gastro_acid = gastro_acid
     
     def _copy(self):
         return FieldStatus(
             light_screen=self.light_screen,
             reflect=self.reflect,
+            gravity=self.gravity,
+            magnet_rise=self.magnet_rise,
+            miracle_eye=self.miracle_eye,
+            power_trick=self.power_trick,
+            roost=self.roost,
+            tailwind=self.tailwind,
+            trick_room=self.trick_room,
+            worry_seed=self.worry_seed,
+            gastro_acid=self.gastro_acid,
         )
     
     def apply_move(self, move:Move) -> FieldStatus:
@@ -531,5 +560,23 @@ class FieldStatus:
             result.light_screen = True
         elif sanitize_string(move.name) == "reflect":
             result.reflect = True
+        elif sanitize_string(move.name) == "gravity":
+            result.gravity = True
+        elif sanitize_string(move.name) == "magnetrise":
+            result.magnet_rise = True
+        elif sanitize_string(move.name) == "miracleeye":
+            result.miracle_eye = True
+        elif sanitize_string(move.name) == "powertrick":
+            result.power_trick = True
+        elif sanitize_string(move.name) == "roost":
+            result.roost = True
+        elif sanitize_string(move.name) == "tailwind":
+            result.tailwind = True
+        elif sanitize_string(move.name) == "trickroom":
+            result.trick_room = True
+        elif sanitize_string(move.name) == "worryseed":
+            result.worry_seed = True
+        elif sanitize_string(move.name) == "gastroacid":
+            result.gastro_acid = True
 
         return result

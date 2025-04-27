@@ -130,6 +130,7 @@ class EventDetails(ttk.Frame):
         self._battle_summary_controller.load_empty()
         self.battle_summary_frame.configure_weather(current_gen_info().get_valid_weather())
         self.battle_summary_frame.configure_setup_moves(current_gen_info().get_stat_modifer_moves())
+        self.battle_summary_frame.configure_field_moves(current_gen_info().get_field_moves())
     
     def _handle_auto_switch_toggle(self, *args, **kwargs):
         config.set_auto_switch(self.auto_change_tab_checkbox.is_checked())

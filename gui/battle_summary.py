@@ -54,6 +54,12 @@ class BattleSummary(ttk.Frame):
         self.enemy_setup_moves = SetupMovesSummary(self._setup_half, callback=self._enemy_setup_move_callback, is_player=False)
         self.enemy_setup_moves.grid(row=1, column=0, sticky=tk.EW)
 
+        self.player_field_moves = SetupMovesSummary(self._setup_half, callback=self._player_field_move_callback, is_field=True)
+        self.player_field_moves.grid(row=2, column=0, sticky=tk.EW)
+
+        self.enemy_field_moves = SetupMovesSummary(self._setup_half, callback=self._enemy_field_move_callback, is_player=False, is_field=True)
+        self.enemy_field_moves.grid(row=3, column=0, sticky=tk.EW)
+
         self.config_button = custom_components.SimpleButton(self._weather_half, text="Configure/Help", command=self._launch_config_popup)
         self.config_button.grid(row=0, column=0, sticky=tk.EW, padx=10, pady=(0, 2))
 
@@ -84,6 +90,16 @@ class BattleSummary(ttk.Frame):
     def configure_setup_moves(self, possible_setup_moves):
         self.setup_moves.configure_moves(possible_setup_moves)
         self.enemy_setup_moves.configure_moves(possible_setup_moves)
+
+    def configure_field_moves(self, possible_field_moves):
+        self.player_field_moves.configure_moves(possible_field_moves)
+        self.enemy_field_moves.configure_moves(possible_field_moves)
+        if possible_field_moves:
+            self.player_field_moves.grid(row=2, column=0, sticky=tk.EW)
+            self.enemy_field_moves.grid(row=3, column=0, sticky=tk.EW)
+        else:
+            self.player_field_moves.grid_forget()
+            self.enemy_field_moves.grid_forget()
     
     def hide_contents(self):
         self.should_render = False
@@ -109,6 +125,12 @@ class BattleSummary(ttk.Frame):
 
     def _enemy_setup_move_callback(self, *args, **kwargs):
         self._controller.update_enemy_setup_moves(self.enemy_setup_moves._move_list.copy())
+        
+    def _player_field_move_callback(self, *args, **kwargs):
+        self._controller.update_player_field_moves(self.player_field_moves._move_list.copy())
+
+    def _enemy_field_move_callback(self, *args, **kwargs):
+        self._controller.update_enemy_field_moves(self.enemy_field_moves._move_list.copy())
     
     def set_team(
         self,
@@ -140,7 +162,9 @@ class BattleSummary(ttk.Frame):
 
         self.weather_status.set_weather(self._controller.get_weather())
         self.setup_moves.set_move_list(self._controller.get_player_setup_moves())
+        self.player_field_moves.set_move_list(self._controller.get_player_field_moves())
         self.enemy_setup_moves.set_move_list(self._controller.get_enemy_setup_moves())
+        self.enemy_field_moves.set_move_list(self._controller.get_enemy_field_moves())
         for idx in range(6):
             player_info = self._controller.get_pkmn_info(idx, True)
             enemy_info = self._controller.get_pkmn_info(idx, False)
@@ -157,13 +181,14 @@ class BattleSummary(ttk.Frame):
 
 
 class SetupMovesSummary(ttk.Frame):
-    def __init__(self, *args, callback=None, is_player=True, **kwargs):
+    def __init__(self, *args, callback=None, is_player=True, is_field=False, **kwargs):
         super().__init__(*args, **kwargs)
 
         self._callback = callback
         self._move_list = []
 
-        self.reset_button = custom_components.SimpleButton(self, text="Reset Setup", command=self._reset)
+        type_text = "  Field" if is_field else "Setup"
+        self.reset_button = custom_components.SimpleButton(self, text=f"Reset {type_text}", command=self._reset)
         self.reset_button.grid(row=0, column=0, padx=2)
 
         self.setup_label = ttk.Label(self, text="Move:")
@@ -175,11 +200,8 @@ class SetupMovesSummary(ttk.Frame):
         self.add_button = custom_components.SimpleButton(self, text="Apply Move", command=self._add_setup_move)
         self.add_button.grid(row=0, column=3, padx=2)
 
-        if is_player:
-            label_text = "Player Setup:"
-        else:
-            label_text = "Enemy Setup:"
-        self.extra_label = ttk.Label(self, text=label_text)
+        agent_text = "Player" if is_player else "Enemy"
+        self.extra_label = ttk.Label(self, text=f"{agent_text} {type_text}:")
         self.extra_label.grid(row=0, column=4, padx=2)
 
         self.move_list_label = ttk.Label(self)
@@ -199,14 +221,6 @@ class SetupMovesSummary(ttk.Frame):
     def set_move_list(self, new_moves, trigger_update=False):
         self._move_list = new_moves
         self._move_list_updated(trigger_update=trigger_update)
-    
-    def get_stage_modifiers(self):
-        result = universal_data_objects.StageModifiers()
-
-        for cur_move in self._move_list:
-            result = result.apply_stat_mod(current_gen_info().move_db().get_stat_mod(cur_move))
-        
-        return result
     
     def _move_list_updated(self, trigger_update=True):
         to_display = ", ".join(self._move_list)
