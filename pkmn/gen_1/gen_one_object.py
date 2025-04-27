@@ -191,7 +191,7 @@ class GenOne(CurrentGen):
     
     def get_stat_modifer_moves(self) -> List[str]:
         result = [self._move_db.get_move(x).name for x in self._move_db.stat_mod_moves.keys()]
-        result.extend([self._move_db.get_move(x).name for x in self._move_db.field_moves.keys()])
+        result.extend([self._move_db.get_move(x).name for x in self._move_db.old_hacky_field_moves.keys()])
         return sorted(result)
 
     def get_field_moves(self):
