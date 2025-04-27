@@ -269,7 +269,7 @@ class MoveDB:
         reflect_move = self._data.get("reflect")
         if not reflect_move is None:
             self.field_moves[sanitize_string(reflect_move.name)] = reflect_move
-            self.old_hacky_field_moves[sanitize_string(lightscreen_move.name)] = lightscreen_move
+            self.old_hacky_field_moves[sanitize_string(reflect_move.name)] = reflect_move
 
         for cur_move in self._data.values():
             if cur_move.has_field_effect:
