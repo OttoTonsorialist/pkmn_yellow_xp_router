@@ -310,7 +310,8 @@ class PokemonSpecies:
         levelup_moves:List[Tuple[int, str]],
         tmhm_moves:List[str],
         stat_xp_yield:StatBlock,
-        abilities:List[str]
+        abilities:List[str],
+        weight:float=None,
     ):
         self.name = name
         self.growth_rate = growth_rate
@@ -323,6 +324,7 @@ class PokemonSpecies:
         self.tmhm_moves = tmhm_moves
         self.stat_xp_yield = stat_xp_yield
         self.abilities = abilities
+        self.weight = weight
 
 
 class EnemyPkmn:

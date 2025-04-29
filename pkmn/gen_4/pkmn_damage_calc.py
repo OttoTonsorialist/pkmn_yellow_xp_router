@@ -359,6 +359,22 @@ def calculate_gen_four_damage(
             base_power = 80
         elif custom_move_data == "0":
             base_power = 200
+    elif move.name in [gen_four_const.LOW_KICK_MOVE_NAME, gen_four_const.GRASS_KNOW_MOVE_NAME]:
+        if defending_species.weight is None:
+            base_power = 1
+            logger.warning(f"Undefined weight for species: {defending_species.name}")
+        elif defending_species.weight < 10:
+            base_power = 20
+        elif defending_species.weight < 25:
+            base_power = 40
+        elif defending_species.weight < 50:
+            base_power = 60
+        elif defending_species.weight < 100:
+            base_power = 80
+        elif defending_species.weight < 200:
+            base_power = 100
+        else:
+            base_power = 120
 
     # NOTE: for now, just ignoring the "edge case" of: what if the mon for mon-specific unique items has klutz?
     # it never occurs in normal gameplay, and would require a hack. so, wtv

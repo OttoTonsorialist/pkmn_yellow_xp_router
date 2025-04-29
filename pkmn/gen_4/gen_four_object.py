@@ -359,6 +359,7 @@ def _load_pkmn_db(path):
                 cur_pkmn[const.EV_YIELD_KEY][const.SPEED],
             ),
             cur_pkmn[const.ABILITY_LIST_KEY],
+            weight=cur_pkmn[const.WEIGHT_KEY],
         )
 
     return result

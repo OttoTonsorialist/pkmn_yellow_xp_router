@@ -92,6 +92,7 @@ class Constants:
         self.HELD_ITEM_KEY = "held_item"
         self.ABILITY_KEY = "ability"
         self.ABILITY_LIST_KEY = "abilities"
+        self.WEIGHT_KEY = "weight"
         self.STAT_KEY = "stat"
         self.STATS_KEY = "stats"
         self.MODIFIER_KEY = "modifier"

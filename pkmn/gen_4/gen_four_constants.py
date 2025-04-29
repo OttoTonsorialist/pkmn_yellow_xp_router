@@ -207,6 +207,8 @@ class GenFourConstants:
         self.CRUSH_GRIP_MOVE_NAME = "Crush Grip"
         self.WRING_OUT_MOVE_NAME = "Wring Out"
         self.GYRO_BALL_MOVE_NAME = "Gyro Ball"
+        self.LOW_KICK_MOVE_NAME = "Low Kick"
+        self.GRASS_KNOW_MOVE_NAME = "Grass Knot"
 
         self.CUSTOM_MOVE_DATA = {
             self.MAGNITUDE_MOVE_NAME: [
