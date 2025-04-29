@@ -1272,7 +1272,7 @@
                 {
                     "chance": 10,
                     "modifier": -1,
-                    "stat": "spd",
+                    "stat": "spe",
                     "target": "enemy"
                 }
             ],
@@ -1693,7 +1693,7 @@
                 {
                     "chance": 100,
                     "modifier": -1,
-                    "stat": "spd",
+                    "stat": "spe",
                     "target": "enemy"
                 }
             ],
@@ -2823,7 +2823,7 @@
                 {
                     "chance": 10,
                     "modifier": -1,
-                    "stat": "spd",
+                    "stat": "spe",
                     "target": "enemy"
                 }
             ],
@@ -3114,7 +3114,7 @@
                 {
                     "chance": 10,
                     "modifier": -1,
-                    "stat": "spd",
+                    "stat": "spe",
                     "target": "enemy"
                 }
             ],
@@ -3742,7 +3742,7 @@
                 {
                     "chance": 100,
                     "modifier": -1,
-                    "stat": "spd",
+                    "stat": "spe",
                     "target": "self"
                 },
                 {
@@ -3841,7 +3841,7 @@
                 {
                     "chance": 100,
                     "modifier": -2,
-                    "stat": "spd",
+                    "stat": "spe",
                     "target": "enemy"
                 }
             ],
@@ -3967,7 +3967,7 @@
                 {
                     "chance": 100,
                     "modifier": -2,
-                    "stat": "spd",
+                    "stat": "spe",
                     "target": "enemy"
                 }
             ],
@@ -4238,7 +4238,7 @@
                 {
                     "chance": 100,
                     "modifier": -1,
-                    "stat": "spd",
+                    "stat": "spe",
                     "target": "enemy"
                 }
             ],
@@ -6848,7 +6848,7 @@
                 {
                     "chance": 100,
                     "modifier": -1,
-                    "stat": "spd",
+                    "stat": "spe",
                     "target": "enemy"
                 }
             ],
@@ -7405,7 +7405,7 @@
                 {
                     "chance": 100,
                     "modifier": -1,
-                    "stat": "spd",
+                    "stat": "spe",
                     "target": "enemy"
                 }
             ],

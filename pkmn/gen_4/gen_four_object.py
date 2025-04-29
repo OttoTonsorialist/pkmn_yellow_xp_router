@@ -284,7 +284,22 @@ class GenFour(CurrentGen):
     def get_stat_xp_yield(self, pkmn_name:str, exp_split:int, held_item:str) -> universal_data_objects.StatBlock:
         if held_item == const.MACHO_BRACE_ITEM_NAME:
             return self.pkmn_db().get_pkmn(pkmn_name).stat_xp_yield.add(self.pkmn_db().get_pkmn(pkmn_name).stat_xp_yield)
-        return self.pkmn_db().get_pkmn(pkmn_name).stat_xp_yield
+
+        result = self.pkmn_db().get_pkmn(pkmn_name).stat_xp_yield
+        if held_item == const.POWER_WEIGHT_ITEM_NAME:
+            return result.add(GenFourStatBlock(4, 0, 0, 0, 0, 0, is_stat_xp=True))
+        elif held_item == const.POWER_BRACER_ITEM_NAME:
+            return result.add(GenFourStatBlock(0, 4, 0, 0, 0, 0, is_stat_xp=True))
+        elif held_item == const.POWER_BELT_ITEM_NAME:
+            return result.add(GenFourStatBlock(0, 0, 4, 0, 0, 0, is_stat_xp=True))
+        elif held_item == const.POWER_LENS_ITEM_NAME:
+            return result.add(GenFourStatBlock(0, 0, 0, 4, 0, 0, is_stat_xp=True))
+        elif held_item == const.POWER_BAND_ITEM_NAME:
+            return result.add(GenFourStatBlock(0, 0, 0, 0, 4, 0, is_stat_xp=True))
+        elif held_item == const.POWER_ANKLET_ITEM_NAME:
+            return result.add(GenFourStatBlock(0, 0, 0, 0, 0, 4, is_stat_xp=True))
+        
+        return result
 
     def get_money_after_blackout(self, cur_money:str, mon_level:int, badges:universal_data_objects.BadgeList) -> int:
         base_val = BLACKOUT_BASE_VALS.get(badges.num_badges(), 120)
@@ -462,8 +477,8 @@ def _load_move_db(path):
             raw_move[const.MOVE_PP],
             raw_move[const.POWER],
             raw_move[const.MOVE_TYPE],
-            raw_move[const.MOVE_EFFECT],
-            [],
+            raw_move[const.MOVE_EFFECTS],
+            raw_move[const.MOVE_FLAVOR],
             targeting=raw_move[const.MOVE_TARGET],
             category=raw_move[const.MOVE_CATEGORY],
         )

@@ -393,7 +393,8 @@ class GenFourStatBlock(universal_data_objects.StatBlock):
             stage_modifiers.speed_stage,
             nature_raised=nature.is_stat_raised(const.SPEED),
             nature_lowered=nature.is_stat_lowered(const.SPEED),
-            macho_brace=held_item == const.MACHO_BRACE_ITEM_NAME
+            slowed_speed=(held_item in const.SPEED_SLOWING_ITEMS),
+            choice_scarf=held_item == const.CHOICE_SCARF_ITEM_NAME,
         )
 
         result.special_attack = calc_battle_stat(
@@ -457,15 +458,17 @@ class GenFourStatBlock(universal_data_objects.StatBlock):
         return actual_new_ev, (cur_total_ev + actual_new_ev)
 
 
-def calc_battle_stat(base_val, level, dv, stat_xp, stage, nature_raised=False, nature_lowered=False, macho_brace=False):
+def calc_battle_stat(base_val, level, dv, stat_xp, stage, nature_raised=False, nature_lowered=False, slowed_speed=False, choice_scarf=False):
     """
     Fully recalculates a stat that has been modified by a stage modifier. This is the
     primary function that should be used when a pokemon's stat's stage has changed, 
     and needs to be recalculated
     """
     result = calc_unboosted_stat(base_val, level, dv, stat_xp, nature_raised=nature_raised, nature_lowered=nature_lowered)
-    if macho_brace:
+    if slowed_speed:
         result = math.floor(result / 2)
+    if choice_scarf:
+        result = math.floor(result * 1.5)
 
     return modify_stat_by_stage(result, stage)
 

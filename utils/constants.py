@@ -447,6 +447,22 @@ class Constants:
         self.SOLAR_BEAM_MOVE_NAME = "SolarBeam"
         self.AMULET_COIN_ITEM_NAME = "Amulet Coin"
         self.MACHO_BRACE_ITEM_NAME = "Macho Brace"
+        self.POWER_ANKLET_ITEM_NAME = "Power Anklet"
+        self.POWER_BAND_ITEM_NAME = "Power Band"
+        self.POWER_BELT_ITEM_NAME = "Power Belt"
+        self.POWER_BRACER_ITEM_NAME = "Power Bracer"
+        self.POWER_LENS_ITEM_NAME = "Power Lens"
+        self.POWER_WEIGHT_ITEM_NAME = "Power Weight"
+        self.CHOICE_SCARF_ITEM_NAME = "Choice Scarf"
+        self.SPEED_SLOWING_ITEMS = [
+            self.MACHO_BRACE_ITEM_NAME,
+            self.POWER_ANKLET_ITEM_NAME,
+            self.POWER_BAND_ITEM_NAME,
+            self.POWER_BELT_ITEM_NAME,
+            self.POWER_BRACER_ITEM_NAME,
+            self.POWER_LENS_ITEM_NAME,
+            self.POWER_WEIGHT_ITEM_NAME,
+        ]
 
         self.TARGETING_BOTH_ENEMIES = "target_both_enemies"
 
