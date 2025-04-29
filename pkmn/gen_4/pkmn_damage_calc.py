@@ -105,8 +105,16 @@ def calculate_gen_four_damage(
     if base_power is None or base_power == 0:
         return None
     
+    attacking_mon_first_type = attacking_species.first_type
+    attacking_mon_second_type = attacking_species.second_type
     attacking_ability = attacking_pkmn.ability
     defending_ability = defending_pkmn.ability
+
+    if attacking_ability == gen_four_const.MULTITYPE_ABILITY:
+        new_type = gen_four_const.PLATE_TYPE_LOOKUP.get(attacking_pkmn.held_item)
+        if new_type:
+            attacking_mon_first_type = new_type
+            attacking_mon_second_type = new_type
 
     # TODO: technically inaccurate data if in a doubles battle, and either of the other mons outside the equation have these abilities. Wtv
     # It doesn't actually ever happen in vanilla games, so we're just fully ignoring it
@@ -167,6 +175,11 @@ def calculate_gen_four_damage(
 
     if attacking_ability == gen_four_const.NORMALIZE_ABILITY:
         move_type = const.TYPE_NORMAL
+    
+    if move.name == gen_four_const.JUDGMENT_MOVE_NAME:
+        new_type = gen_four_const.PLATE_TYPE_LOOKUP.get(attacking_pkmn.held_item)
+        if new_type:
+            move_type = new_type
     
     if move.name == gen_four_const.PUNISHMENT_MOVE_NAME:
         num_buffs = 0
@@ -258,6 +271,27 @@ def calculate_gen_four_damage(
     elif const.FLAVOR_PSYWAVE in move.attack_flavor:
         psywave_upper_limit = math.floor(attacking_pkmn.level * 1.5)
         return damage_calc.DamageRange({x:1 for x in range(1, psywave_upper_limit)})
+    
+    if attacking_stage_modifiers is None:
+        attacking_stage_modifiers = universal_data_objects.StageModifiers()
+    if defending_stage_modifiers is None:
+        defending_stage_modifiers = universal_data_objects.StageModifiers()
+
+    # when a crit occurs, always ignore negative modifiers for the attacking pokemon, and always ignore positive modifiers for the defensive pokemon
+    if is_crit:
+        if move.category == const.CATEGORY_PHYSICAL:
+            if attacking_stage_modifiers.special_attack_stage < 0:
+                attacking_stage_modifiers = universal_data_objects.StageModifiers()
+            if defending_stage_modifiers.special_defense_stage > 0:
+                defending_stage_modifiers = universal_data_objects.StageModifiers()
+        else:
+            if attacking_stage_modifiers.attack_stage < 0:
+                attacking_stage_modifiers = universal_data_objects.StageModifiers()
+            if defending_stage_modifiers.defense_stage > 0:
+                defending_stage_modifiers = universal_data_objects.StageModifiers()
+
+    attacking_battle_stats = attacking_pkmn.get_battle_stats(attacking_stage_modifiers)
+    defending_battle_stats = defending_pkmn.get_battle_stats(defending_stage_modifiers)
 
     # TODO: low kick. ughhhhh
     # TODO: present. ughhhhh
@@ -313,6 +347,9 @@ def calculate_gen_four_damage(
             base_power = math.floor(1 + (120 * int(custom_move_data)))
         except Exception as e:
             logger.warning(f"Failed to convert return move power to an int: {custom_move_data}")
+    elif move.name == gen_four_const.GYRO_BALL_MOVE_NAME:
+        base_power = math.floor(1 + ((25 * attacking_battle_stats.speed) / defending_battle_stats.speed))
+        base_power = min(base_power, 150)
     elif move.name == gen_four_const.TRUMP_CARD_MOVE_NAME:
         if custom_move_data == "3":
             base_power = 50
@@ -322,27 +359,6 @@ def calculate_gen_four_damage(
             base_power = 80
         elif custom_move_data == "0":
             base_power = 200
-    
-    if attacking_stage_modifiers is None:
-        attacking_stage_modifiers = universal_data_objects.StageModifiers()
-    if defending_stage_modifiers is None:
-        defending_stage_modifiers = universal_data_objects.StageModifiers()
-
-    # when a crit occurs, always ignore negative modifiers for the attacking pokemon, and always ignore positive modifiers for the defensive pokemon
-    if is_crit:
-        if move.category == const.CATEGORY_PHYSICAL:
-            if attacking_stage_modifiers.special_attack_stage < 0:
-                attacking_stage_modifiers = universal_data_objects.StageModifiers()
-            if defending_stage_modifiers.special_defense_stage > 0:
-                defending_stage_modifiers = universal_data_objects.StageModifiers()
-        else:
-            if attacking_stage_modifiers.attack_stage < 0:
-                attacking_stage_modifiers = universal_data_objects.StageModifiers()
-            if defending_stage_modifiers.defense_stage > 0:
-                defending_stage_modifiers = universal_data_objects.StageModifiers()
-
-    attacking_battle_stats = attacking_pkmn.get_battle_stats(attacking_stage_modifiers)
-    defending_battle_stats = defending_pkmn.get_battle_stats(defending_stage_modifiers)
 
     # NOTE: for now, just ignoring the "edge case" of: what if the mon for mon-specific unique items has klutz?
     # it never occurs in normal gameplay, and would require a hack. so, wtv
@@ -459,13 +475,31 @@ def calculate_gen_four_damage(
     if  move.name == const.EXPLOSION_MOVE_NAME or move.name == const.SELFDESTRUCT_MOVE_NAME:
         defending_stat = max(math.floor(defending_stat / 2), 1)
 
-    is_stab = (attacking_species.first_type == move_type) or (attacking_species.second_type == move_type)
+    is_stab = (attacking_mon_first_type == move_type) or (attacking_mon_second_type == move_type)
     if move.name == const.FUTURE_SIGHT_MOVE_NAME:
         is_stab = False
 
     if (
         held_item_boost_table.get(attacking_pkmn.held_item) == move_type and
         attacking_ability != gen_four_const.KLUTZ_ABILITY
+    ):
+        attacking_stat = math.floor(attacking_stat * 1.2)
+    elif (
+        attacking_pkmn.name == gen_four_const.DIALGA_NAME and
+        attacking_pkmn.held_item == gen_four_const.ADAMANT_ORB_NAME and
+        (move.move_type == const.TYPE_DRAGON or move.move_type == const.TYPE_STEEL)
+    ):
+        attacking_stat = math.floor(attacking_stat * 1.2)
+    elif (
+        attacking_pkmn.name == gen_four_const.PALKIA_NAME and
+        attacking_pkmn.held_item == gen_four_const.LUSTROUS_ORB_NAME and
+        (move.move_type == const.TYPE_DRAGON or move.move_type == const.TYPE_WATER)
+    ):
+        attacking_stat = math.floor(attacking_stat * 1.2)
+    elif (
+        attacking_pkmn.name == gen_four_const.GIRATINA_NAME and
+        attacking_pkmn.held_item == gen_four_const.GRISEOUS_ORB_NAME and
+        (move.move_type == const.TYPE_DRAGON or move.move_type == const.TYPE_GHOST)
     ):
         attacking_stat = math.floor(attacking_stat * 1.2)
 

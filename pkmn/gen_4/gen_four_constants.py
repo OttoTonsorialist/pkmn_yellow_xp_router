@@ -64,6 +64,32 @@ class GenFourConstants:
         self.LATIAS_NAME = "Latias"
         self.SOULD_DEW_NAME = "Soul Dew"
 
+        self.DIALGA_NAME = "Dialga"
+        self.ADAMANT_ORB_NAME = "Adamant Orb"
+        self.PALKIA_NAME = "Palkia"
+        self.LUSTROUS_ORB_NAME = "Lustrous Orb"
+        self.GIRATINA_NAME = "Giratina"
+        self.GRISEOUS_ORB_NAME = "Griseous Orb"
+
+        self.PLATE_TYPE_LOOKUP = {
+            "Draco Plate": const.TYPE_DRAGON,
+            "Dread Plate": const.TYPE_DARK,
+            "Earth Plate": const.TYPE_DARK,
+            "Fist Plate": const.TYPE_FIGHTING,
+            "Flame Plate": const.TYPE_FIRE,
+            "Icicle Plate": const.TYPE_ICE,
+            "Insect Plate": const.TYPE_BUG,
+            "Iron Plate": const.TYPE_STEEL,
+            "Meadow Plate": const.TYPE_GRASS,
+            "Mind Plate": const.TYPE_PSYCHIC,
+            "Sky Plate": const.TYPE_FLYING,
+            "Splash Plate": const.TYPE_WATER,
+            "Spooky Plate": const.TYPE_GHOST,
+            "Stone Plate": const.TYPE_ROCK,
+            "Toxic Plate": const.TYPE_POISON,
+            "Zap Plate": const.TYPE_ELECTRIC,
+        }
+
         self.COMPOUND_EYES_ABILITY = "Compound Eyes"
         self.LEVITATE_ABILITY = "Levitate"
         self.DAMP_ABILITY = "Damp"
@@ -104,6 +130,7 @@ class GenFourConstants:
         self.SOLAR_POWER_ABILITY = "Solar Power"
         self.TECHNICIAN_ABILITY = "Technician"
         self.TINTED_LENS_ABILITY = "Tinted Lens"
+        self.MULTITYPE_ABILITY = "Multitype"
 
         self.NO_BONUS = "No Bonus"
         self.DIG_BONUS = "Dig Bonus"
@@ -174,10 +201,12 @@ class GenFourConstants:
         self.BRINE_MOVE_NAME = "Brine"
         self.PAYBACK_MOVE_NAME = "Payback"
         self.PUNISHMENT_MOVE_NAME = "Punishment"
+        self.JUDGMENT_MOVE_NAME = "Judgment"
         self.TRUMP_CARD_MOVE_NAME = "Trump Card"
         self.WAKE_UP_SLAP_MOVE_NAME = "Wake-Up Slap"
         self.CRUSH_GRIP_MOVE_NAME = "Crush Grip"
-        self.WRING_OUT_MOVE_NAME = "Wring OUt"
+        self.WRING_OUT_MOVE_NAME = "Wring Out"
+        self.GYRO_BALL_MOVE_NAME = "Gyro Ball"
 
         self.CUSTOM_MOVE_DATA = {
             self.MAGNITUDE_MOVE_NAME: [
