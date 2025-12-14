@@ -271,5 +271,3 @@ class EventDetails(ttk.Frame):
             self._battle_summary_controller.take_screenshot(
                 tk_utils.get_bounding_box(self.battle_summary_frame)
             )
-            
-    

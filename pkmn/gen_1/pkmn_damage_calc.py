@@ -33,7 +33,9 @@ def calculate_gen_one_damage(
     is_crit:bool=False,
     defender_has_light_screen:bool=False,
     defender_has_reflect:bool=False,
-    custom_move_data:str=""
+    custom_move_data:str="",
+    attacking_battle_stats:universal_data_objects.StatBlock=None,
+    defending_battle_stats:universal_data_objects.StatBlock=None,
 ):
     if move.base_power is None or move.base_power == 0:
         return None
@@ -46,14 +48,16 @@ def calculate_gen_one_damage(
     elif const.FLAVOR_PSYWAVE in move.attack_flavor:
         psywave_upper_limit = math.floor(attacking_pkmn.level * 1.5)
         return damage_calc.DamageRange({x:1 for x in range(1, psywave_upper_limit)})
-    
+
     if attacking_stage_modifiers is None:
         attacking_stage_modifiers = universal_data_objects.StageModifiers()
+    if attacking_battle_stats is None:
+        attacking_battle_stats = attacking_pkmn.get_battle_stats(attacking_stage_modifiers, is_crit=is_crit)
+
     if defending_stage_modifiers is None:
         defending_stage_modifiers = universal_data_objects.StageModifiers()
-
-    attacking_battle_stats = attacking_pkmn.get_battle_stats(attacking_stage_modifiers, is_crit=is_crit)
-    defending_battle_stats = defending_pkmn.get_battle_stats(defending_stage_modifiers, is_crit=is_crit)
+    if defending_battle_stats is None:
+        defending_battle_stats = defending_pkmn.get_battle_stats(defending_stage_modifiers, is_crit=is_crit)
 
     first_type_effectiveness = type_chart.get(move.move_type).get(defending_species.first_type)
     second_type_effectiveness = None

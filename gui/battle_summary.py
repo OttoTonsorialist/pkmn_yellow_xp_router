@@ -33,6 +33,7 @@ class BattleSummary(ttk.Frame):
         self._enemy_stage_modifiers:universal_data_objects.StageModifiers = universal_data_objects.StageModifiers()
         self._mimic_selection = ""
         self._custom_move_data = None
+        self._loading = False
 
         self._base_frame = ttk.Frame(self)
         self._base_frame.grid(row=0, column=0, sticky=tk.NSEW)
@@ -49,7 +50,10 @@ class BattleSummary(ttk.Frame):
         self._top_bar.columnconfigure(0, weight=1)
 
         self.setup_moves = SetupMovesSummary(self._setup_half, callback=self._player_setup_move_callback)
-        self.setup_moves.grid(row=0, column=0, sticky=tk.EW, pady=(0, 2))
+        self.setup_moves.grid(row=0, column=0, pady=(0, 2))
+
+        self.transform_checkbox = custom_components.CheckboxLabel(self._setup_half, text="Transform:", toggle_command=self._player_transform_callback, flip=True)
+        self.transform_checkbox.grid(row=0, column=1, sticky=tk.EW)
 
         self.enemy_setup_moves = SetupMovesSummary(self._setup_half, callback=self._enemy_setup_move_callback, is_player=False)
         self.enemy_setup_moves.grid(row=1, column=0, sticky=tk.EW)
@@ -94,22 +98,26 @@ class BattleSummary(ttk.Frame):
         self._base_frame.grid_forget()
         self._on_full_refresh()
         self._base_frame.grid(row=0, column=0, sticky=tk.NSEW)
-    
+
     def _launch_config_popup(self, *args, **kwargs):
         BattleConfigWindow(self.winfo_toplevel(), battle_controller=self._controller)
-    
+
     def _weather_callback(self, *args, **kwargs):
         self._controller.update_weather(self.weather_status.get_weather())
-        
+
     def _candy_callback(self, *args, **kwargs):
         self._controller.update_prefight_candies(self.candy_summary.get_prefight_candy_count())
-        
+
     def _player_setup_move_callback(self, *args, **kwargs):
         self._controller.update_player_setup_moves(self.setup_moves._move_list.copy())
 
+    def _player_transform_callback(self, *args, **kwargs):
+        if not self._loading:
+            self._controller.update_player_transform(self.transform_checkbox.is_checked())
+
     def _enemy_setup_move_callback(self, *args, **kwargs):
         self._controller.update_enemy_setup_moves(self.enemy_setup_moves._move_list.copy())
-    
+
     def set_team(
         self,
         enemy_pkmn:List[universal_data_objects.EnemyPkmn],
@@ -127,6 +135,7 @@ class BattleSummary(ttk.Frame):
         if not self.should_render:
             return
 
+        self._loading = True
         self.candy_summary.set_candy_count(self._controller.get_prefight_candy_count())
         if not self._controller.can_support_prefight_candies():
             self.candy_summary.disable()
@@ -138,6 +147,7 @@ class BattleSummary(ttk.Frame):
         else:
             self.double_label.configure(text="Single Battle")
 
+        self.transform_checkbox.set_checked(self._controller.is_player_transformed())
         self.weather_status.set_weather(self._controller.get_weather())
         self.setup_moves.set_move_list(self._controller.get_player_setup_moves())
         self.enemy_setup_moves.set_move_list(self._controller.get_enemy_setup_moves())
@@ -154,6 +164,8 @@ class BattleSummary(ttk.Frame):
                     self._mon_pairs[idx].grid(row=idx + 2, column=0, sticky=tk.EW)
                     self._did_draw_mon_pairs[idx] = True
                 self._mon_pairs[idx].update_rendering()
+
+        self._loading = False
 
 
 class SetupMovesSummary(ttk.Frame):

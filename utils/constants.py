@@ -132,6 +132,7 @@ class Constants:
         self.WEATHER = "weather"
         self.PAY_DAY_AMOUNT = "pay_day_amount"
         self.MON_ORDER = "mon_order"
+        self.TRANSFORMED = "transformed"
         self.PLAYER_KEY = "player"
         self.ENEMY_KEY = "enemy"
         self.EVOLVED_SPECIES = "evolved_species"

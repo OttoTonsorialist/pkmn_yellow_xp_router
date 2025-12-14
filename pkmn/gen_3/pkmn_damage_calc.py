@@ -266,8 +266,10 @@ def calculate_gen_three_damage(
             if defending_stage_modifiers.defense_stage > 0:
                 defending_stage_modifiers = universal_data_objects.StageModifiers()
 
-    attacking_battle_stats = attacking_pkmn.get_battle_stats(attacking_stage_modifiers)
-    defending_battle_stats = defending_pkmn.get_battle_stats(defending_stage_modifiers)
+    if attacking_battle_stats is None:
+        attacking_battle_stats = attacking_pkmn.get_battle_stats(attacking_stage_modifiers)
+    if defending_battle_stats is None:
+        defending_battle_stats = defending_pkmn.get_battle_stats(defending_stage_modifiers)
 
     if attacking_pkmn.name == gen_three_const.MAROWAK_NAME and attacking_pkmn.held_item == gen_three_const.THICK_CLUB_NAME:
         attacking_battle_stats.attack *= 2
