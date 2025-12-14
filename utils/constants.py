@@ -162,6 +162,7 @@ class Constants:
         self.MOVE_CATEGORY = "category"
         self.CATEGORY_PHYSICAL = "Physical"
         self.CATEGORY_SPECIAL = "Special"
+        self.MOVE_HAS_FIELD_EFFECT = "has_field_effect"
 
         self.GROWTH_RATE_FAST = "growth_fast"
         self.GROWTH_RATE_MEDIUM_FAST = "growth_medium_fast"

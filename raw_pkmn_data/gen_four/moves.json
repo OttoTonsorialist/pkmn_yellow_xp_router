@@ -19,7 +19,8 @@
         "affected_by_kings_rock": false,
         "description": "The user hurls up its stomach acids on the foe. The fluid eliminates the effect of the foe\u2019s ability.",
         "attack_flavor": [],
-        "effects": []
+        "effects": [],
+        "has_field_effect": true
     },
     "Taunt": {
         "rom_id": 269,
@@ -46,7 +47,8 @@
                 "status": "Taunt",
                 "chance": 100
             }
-        ]
+        ],
+        "has_field_effect": false
     },
     "Metal Burst": {
         "rom_id": 368,
@@ -68,7 +70,8 @@
         "affected_by_kings_rock": false,
         "description": "The user retaliates against the foe that last inflicted damage on it with much greater power.",
         "attack_flavor": [],
-        "effects": []
+        "effects": [],
+        "has_field_effect": false
     },
     "Pursuit": {
         "rom_id": 228,
@@ -92,7 +95,8 @@
         "attack_flavor": [
             "pursuit"
         ],
-        "effects": []
+        "effects": [],
+        "has_field_effect": false
     },
     "Thunder": {
         "rom_id": 87,
@@ -121,7 +125,8 @@
                 "status": "Paralysis",
                 "chance": 30
             }
-        ]
+        ],
+        "has_field_effect": false
     },
     "Blaze Kick": {
         "rom_id": 299,
@@ -150,7 +155,8 @@
                 "status": "Burn",
                 "chance": 10
             }
-        ]
+        ],
+        "has_field_effect": false
     },
     "Spider Web": {
         "rom_id": 169,
@@ -174,7 +180,8 @@
         "attack_flavor": [
             "mean_look"
         ],
-        "effects": []
+        "effects": [],
+        "has_field_effect": false
     },
     "Arm Thrust": {
         "rom_id": 292,
@@ -198,7 +205,8 @@
         "attack_flavor": [
             "multi_hit"
         ],
-        "effects": []
+        "effects": [],
+        "has_field_effect": false
     },
     "Worry Seed": {
         "rom_id": 388,
@@ -220,7 +228,8 @@
         "affected_by_kings_rock": false,
         "description": "A seed that causes worry is planted on the foe. It prevents sleep by making its ability Insomnia.",
         "attack_flavor": [],
-        "effects": []
+        "effects": [],
+        "has_field_effect": true
     },
     "Refresh": {
         "rom_id": 287,
@@ -244,7 +253,8 @@
         "attack_flavor": [
             "refresh"
         ],
-        "effects": []
+        "effects": [],
+        "has_field_effect": false
     },
     "Energy Ball": {
         "rom_id": 412,
@@ -266,14 +276,8 @@
         "affected_by_kings_rock": false,
         "description": "The user draws power from nature and fires it at the foe. It may also lower the target\u2019s Sp. Def.",
         "attack_flavor": [],
-        "effects": [
-            {
-                "chance": 10,
-                "modifier": -1,
-                "stat": "spd",
-                "target": "enemy"
-            }
-        ]
+        "effects": [],
+        "has_field_effect": false
     },
     "Wood Hammer": {
         "rom_id": 452,
@@ -294,10 +298,9 @@
         "affected_by_mirror_move": true,
         "affected_by_kings_rock": true,
         "description": "The user slams its rugged body into the foe to attack. The user also sustains serious damage.",
-        "attack_flavor": [
-            "third_recoil"
-        ],
-        "effects": []
+        "attack_flavor": [],
+        "effects": [],
+        "has_field_effect": false
     },
     "Sketch": {
         "rom_id": 166,
@@ -321,7 +324,8 @@
         "attack_flavor": [
             "sketch"
         ],
-        "effects": []
+        "effects": [],
+        "has_field_effect": false
     },
     "Selfdestruct": {
         "rom_id": 120,
@@ -345,7 +349,8 @@
         "attack_flavor": [
             "self_destruct_explosion"
         ],
-        "effects": []
+        "effects": [],
+        "has_field_effect": false
     },
     "Acupressure": {
         "rom_id": 367,
@@ -367,7 +372,8 @@
         "affected_by_kings_rock": false,
         "description": "The user applies pressure to stress points, sharply boosting one of its stats.",
         "attack_flavor": [],
-        "effects": []
+        "effects": [],
+        "has_field_effect": false
     },
     "Gust": {
         "rom_id": 16,
@@ -391,7 +397,8 @@
         "attack_flavor": [
             "bonus_fly_damage"
         ],
-        "effects": []
+        "effects": [],
+        "has_field_effect": false
     },
     "Transform": {
         "rom_id": 144,
@@ -415,7 +422,8 @@
         "attack_flavor": [
             "transform"
         ],
-        "effects": []
+        "effects": [],
+        "has_field_effect": false
     },
     "Aura Sphere": {
         "rom_id": 396,
@@ -437,7 +445,8 @@
         "affected_by_kings_rock": true,
         "description": "The user looses a blast of aura power from deep within its body. This move is certain to hit.",
         "attack_flavor": [],
-        "effects": []
+        "effects": [],
+        "has_field_effect": false
     },
     "Dragon Claw": {
         "rom_id": 337,
@@ -459,7 +468,8 @@
         "affected_by_kings_rock": true,
         "description": "The user slashes the foe with huge, sharp claws.  ",
         "attack_flavor": [],
-        "effects": []
+        "effects": [],
+        "has_field_effect": false
     },
     "Stone Edge": {
         "rom_id": 444,
@@ -480,10 +490,9 @@
         "affected_by_mirror_move": true,
         "affected_by_kings_rock": true,
         "description": "The user stabs the foe with a sharpened stone. It has a high critical-hit ratio. ",
-        "attack_flavor": [
-            "high_crit"
-        ],
-        "effects": []
+        "attack_flavor": [],
+        "effects": [],
+        "has_field_effect": false
     },
     "Psychic": {
         "rom_id": 94,
@@ -512,7 +521,8 @@
                 "stat": "spd",
                 "target": "enemy"
             }
-        ]
+        ],
+        "has_field_effect": false
     },
     "Splash": {
         "rom_id": 150,
@@ -534,7 +544,8 @@
         "affected_by_kings_rock": false,
         "description": "The user just flops and splashes around to no effect at all...  ",
         "attack_flavor": [],
-        "effects": []
+        "effects": [],
+        "has_field_effect": false
     },
     "Lovely Kiss": {
         "rom_id": 142,
@@ -561,7 +572,8 @@
                 "status": "Sleep",
                 "chance": 100
             }
-        ]
+        ],
+        "has_field_effect": false
     },
     "Rollout": {
         "rom_id": 205,
@@ -585,7 +597,8 @@
         "attack_flavor": [
             "rollout"
         ],
-        "effects": []
+        "effects": [],
+        "has_field_effect": false
     },
     "Belly Drum": {
         "rom_id": 187,
@@ -616,7 +629,8 @@
                 "stat": "atk",
                 "target": "self"
             }
-        ]
+        ],
+        "has_field_effect": false
     },
     "Trick Room": {
         "rom_id": 433,
@@ -638,7 +652,8 @@
         "affected_by_kings_rock": false,
         "description": "The user creates a bizarre area in which slower Pok\u00e9mon get to move first for five turns.",
         "attack_flavor": [],
-        "effects": []
+        "effects": [],
+        "has_field_effect": true
     },
     "Pluck": {
         "rom_id": 365,
@@ -660,7 +675,8 @@
         "affected_by_kings_rock": true,
         "description": "The user pecks the foe. If the foe is holding a Berry, the user plucks it and gains its effect.",
         "attack_flavor": [],
-        "effects": []
+        "effects": [],
+        "has_field_effect": false
     },
     "Flatter": {
         "rom_id": 260,
@@ -693,7 +709,8 @@
                 "stat": "spa",
                 "target": "enemy"
             }
-        ]
+        ],
+        "has_field_effect": false
     },
     "Extrasensory": {
         "rom_id": 326,
@@ -722,7 +739,8 @@
                 "chance": 10,
                 "flinch": true
             }
-        ]
+        ],
+        "has_field_effect": false
     },
     "Stealth Rock": {
         "rom_id": 446,
@@ -744,7 +762,8 @@
         "affected_by_kings_rock": false,
         "description": "The user lays a trap of levitating stones around the foe. The trap hurts foes that switch into battle.",
         "attack_flavor": [],
-        "effects": []
+        "effects": [],
+        "has_field_effect": false
     },
     "Nature Power": {
         "rom_id": 267,
@@ -768,7 +787,8 @@
         "attack_flavor": [
             "nature_power"
         ],
-        "effects": []
+        "effects": [],
+        "has_field_effect": false
     },
     "Supersonic": {
         "rom_id": 48,
@@ -795,7 +815,8 @@
                 "status": "Confusion",
                 "chance": 100
             }
-        ]
+        ],
+        "has_field_effect": false
     },
     "Pain Split": {
         "rom_id": 220,
@@ -819,7 +840,8 @@
         "attack_flavor": [
             "pain_split"
         ],
-        "effects": []
+        "effects": [],
+        "has_field_effect": false
     },
     "Aerial Ace": {
         "rom_id": 332,
@@ -843,7 +865,8 @@
         "attack_flavor": [
             "always_hit"
         ],
-        "effects": []
+        "effects": [],
+        "has_field_effect": false
     },
     "Icy Wind": {
         "rom_id": 196,
@@ -869,10 +892,11 @@
             {
                 "chance": 100,
                 "modifier": -1,
-                "stat": "spe",
+                "stat": "spd",
                 "target": "enemy"
             }
-        ]
+        ],
+        "has_field_effect": false
     },
     "Swagger": {
         "rom_id": 207,
@@ -905,7 +929,8 @@
                 "stat": "atk",
                 "target": "enemy"
             }
-        ]
+        ],
+        "has_field_effect": false
     },
     "Heal Bell": {
         "rom_id": 215,
@@ -929,7 +954,8 @@
         "attack_flavor": [
             "heal_bell"
         ],
-        "effects": []
+        "effects": [],
+        "has_field_effect": false
     },
     "Bonemerang": {
         "rom_id": 155,
@@ -953,7 +979,8 @@
         "attack_flavor": [
             "two_hit"
         ],
-        "effects": []
+        "effects": [],
+        "has_field_effect": false
     },
     "Wing Attack": {
         "rom_id": 17,
@@ -975,7 +1002,8 @@
         "affected_by_kings_rock": true,
         "description": "The foe is struck with large, imposing wings spread wide to inflict damage. ",
         "attack_flavor": [],
-        "effects": []
+        "effects": [],
+        "has_field_effect": false
     },
     "Night Shade": {
         "rom_id": 101,
@@ -999,7 +1027,8 @@
         "attack_flavor": [
             "level_damage"
         ],
-        "effects": []
+        "effects": [],
+        "has_field_effect": false
     },
     "Constrict": {
         "rom_id": 132,
@@ -1025,10 +1054,11 @@
             {
                 "chance": 10,
                 "modifier": -1,
-                "stat": "spe",
+                "stat": "spd",
                 "target": "enemy"
             }
-        ]
+        ],
+        "has_field_effect": false
     },
     "Needle Arm": {
         "rom_id": 302,
@@ -1057,7 +1087,8 @@
                 "chance": 30,
                 "flinch": true
             }
-        ]
+        ],
+        "has_field_effect": false
     },
     "Lick": {
         "rom_id": 122,
@@ -1084,7 +1115,8 @@
                 "status": "Paralysis",
                 "chance": 30
             }
-        ]
+        ],
+        "has_field_effect": false
     },
     "Sing": {
         "rom_id": 47,
@@ -1111,7 +1143,8 @@
                 "status": "Sleep",
                 "chance": 100
             }
-        ]
+        ],
+        "has_field_effect": false
     },
     "Ominous Wind": {
         "rom_id": 466,
@@ -1132,15 +1165,9 @@
         "affected_by_mirror_move": true,
         "affected_by_kings_rock": true,
         "description": "The user creates a gust of repulsive wind. It may also raise all the user\u2019s stats at once.",
-        "attack_flavor": [
-            {
-                "chance": 10,
-                "modifier": 1,
-                "stat": "omni",
-                "target": "self"
-            }
-        ],
-        "effects": []
+        "attack_flavor": [],
+        "effects": [],
+        "has_field_effect": false
     },
     "Scary Face": {
         "rom_id": 184,
@@ -1166,10 +1193,11 @@
             {
                 "chance": 100,
                 "modifier": -2,
-                "stat": "spe",
+                "stat": "spd",
                 "target": "enemy"
             }
-        ]
+        ],
+        "has_field_effect": false
     },
     "Muddy Water": {
         "rom_id": 330,
@@ -1198,7 +1226,8 @@
                 "stat": "acc",
                 "target": "enemy"
             }
-        ]
+        ],
+        "has_field_effect": false
     },
     "Present": {
         "rom_id": 217,
@@ -1222,7 +1251,8 @@
         "attack_flavor": [
             "present"
         ],
-        "effects": []
+        "effects": [],
+        "has_field_effect": false
     },
     "Water Spout": {
         "rom_id": 323,
@@ -1246,7 +1276,8 @@
         "attack_flavor": [
             "eruption"
         ],
-        "effects": []
+        "effects": [],
+        "has_field_effect": false
     },
     "Psycho Boost": {
         "rom_id": 354,
@@ -1275,7 +1306,8 @@
                 "stat": "spa",
                 "target": "self"
             }
-        ]
+        ],
+        "has_field_effect": false
     },
     "Hammer Arm": {
         "rom_id": 359,
@@ -1297,14 +1329,8 @@
         "affected_by_kings_rock": true,
         "description": "The user swings and hits with its strong and heavy fist. It lowers the user\u2019s Speed, however.",
         "attack_flavor": [],
-        "effects": [
-            {
-                "chance": 100,
-                "modifier": -1,
-                "stat": "spe",
-                "target": "self"
-            }
-        ]
+        "effects": [],
+        "has_field_effect": false
     },
     "Shadow Sneak": {
         "rom_id": 425,
@@ -1326,7 +1352,8 @@
         "affected_by_kings_rock": true,
         "description": "The user extends its shadow and attacks the foe from behind. This move always goes first.",
         "attack_flavor": [],
-        "effects": []
+        "effects": [],
+        "has_field_effect": false
     },
     "Barrage": {
         "rom_id": 140,
@@ -1350,7 +1377,8 @@
         "attack_flavor": [
             "multi_hit"
         ],
-        "effects": []
+        "effects": [],
+        "has_field_effect": false
     },
     "Volt Tackle": {
         "rom_id": 344,
@@ -1374,7 +1402,8 @@
         "attack_flavor": [
             "third_recoil"
         ],
-        "effects": []
+        "effects": [],
+        "has_field_effect": false
     },
     "Softboiled": {
         "rom_id": 135,
@@ -1398,7 +1427,8 @@
         "attack_flavor": [
             "recover"
         ],
-        "effects": []
+        "effects": [],
+        "has_field_effect": false
     },
     "Curse": {
         "rom_id": 174,
@@ -1426,7 +1456,7 @@
             {
                 "chance": 100,
                 "modifier": -1,
-                "stat": "spe",
+                "stat": "spd",
                 "target": "self"
             },
             {
@@ -1441,7 +1471,8 @@
                 "stat": "def",
                 "target": "self"
             }
-        ]
+        ],
+        "has_field_effect": false
     },
     "Poison Tail": {
         "rom_id": 342,
@@ -1470,7 +1501,8 @@
                 "status": "Poison",
                 "chance": 10
             }
-        ]
+        ],
+        "has_field_effect": false
     },
     "Struggle": {
         "rom_id": 165,
@@ -1494,7 +1526,8 @@
         "attack_flavor": [
             "quarter_recoil"
         ],
-        "effects": []
+        "effects": [],
+        "has_field_effect": false
     },
     "False Swipe": {
         "rom_id": 206,
@@ -1518,7 +1551,8 @@
         "attack_flavor": [
             "false_swipe"
         ],
-        "effects": []
+        "effects": [],
+        "has_field_effect": false
     },
     "Knock Off": {
         "rom_id": 282,
@@ -1542,7 +1576,8 @@
         "attack_flavor": [
             "knock_off"
         ],
-        "effects": []
+        "effects": [],
+        "has_field_effect": false
     },
     "Confusion": {
         "rom_id": 93,
@@ -1569,7 +1604,8 @@
                 "status": "Confusion",
                 "chance": 10
             }
-        ]
+        ],
+        "has_field_effect": false
     },
     "Mud Sport": {
         "rom_id": 300,
@@ -1596,7 +1632,8 @@
                 "status": "Mud Sport",
                 "chance": 100
             }
-        ]
+        ],
+        "has_field_effect": false
     },
     "Dig": {
         "rom_id": 91,
@@ -1620,7 +1657,8 @@
         "attack_flavor": [
             "two_turn_semi_invulnerable"
         ],
-        "effects": []
+        "effects": [],
+        "has_field_effect": false
     },
     "Sunny Day": {
         "rom_id": 241,
@@ -1644,7 +1682,8 @@
         "attack_flavor": [
             "sunny_day"
         ],
-        "effects": []
+        "effects": [],
+        "has_field_effect": false
     },
     "Rock Slide": {
         "rom_id": 157,
@@ -1671,7 +1710,8 @@
                 "flinch": true,
                 "chance": 30
             }
-        ]
+        ],
+        "has_field_effect": false
     },
     "Double-Edge": {
         "rom_id": 38,
@@ -1695,7 +1735,8 @@
         "attack_flavor": [
             "third_recoil"
         ],
-        "effects": []
+        "effects": [],
+        "has_field_effect": false
     },
     "Bullet Seed": {
         "rom_id": 331,
@@ -1719,7 +1760,8 @@
         "attack_flavor": [
             "multi_hit"
         ],
-        "effects": []
+        "effects": [],
+        "has_field_effect": false
     },
     "Light Screen": {
         "rom_id": 113,
@@ -1746,7 +1788,8 @@
                 "status": "Light Screen",
                 "chance": 100
             }
-        ]
+        ],
+        "has_field_effect": true
     },
     "Rapid Spin": {
         "rom_id": 229,
@@ -1770,7 +1813,8 @@
         "attack_flavor": [
             "rapid_spin"
         ],
-        "effects": []
+        "effects": [],
+        "has_field_effect": false
     },
     "Take Down": {
         "rom_id": 36,
@@ -1794,7 +1838,8 @@
         "attack_flavor": [
             "quarter_recoil"
         ],
-        "effects": []
+        "effects": [],
+        "has_field_effect": false
     },
     "Fake Out": {
         "rom_id": 252,
@@ -1818,7 +1863,8 @@
         "attack_flavor": [
             "fake_out"
         ],
-        "effects": []
+        "effects": [],
+        "has_field_effect": false
     },
     "Iron Tail": {
         "rom_id": 231,
@@ -1847,7 +1893,8 @@
                 "stat": "def",
                 "target": "enemy"
             }
-        ]
+        ],
+        "has_field_effect": false
     },
     "Power Whip": {
         "rom_id": 438,
@@ -1869,7 +1916,8 @@
         "affected_by_kings_rock": true,
         "description": "The user violently whirls its vines or tentacles to harshly lash the foe. ",
         "attack_flavor": [],
-        "effects": []
+        "effects": [],
+        "has_field_effect": false
     },
     "Charm": {
         "rom_id": 204,
@@ -1898,7 +1946,8 @@
                 "stat": "atk",
                 "target": "enemy"
             }
-        ]
+        ],
+        "has_field_effect": false
     },
     "Spikes": {
         "rom_id": 191,
@@ -1922,7 +1971,8 @@
         "attack_flavor": [
             "spikes"
         ],
-        "effects": []
+        "effects": [],
+        "has_field_effect": false
     },
     "Metronome": {
         "rom_id": 118,
@@ -1946,7 +1996,8 @@
         "attack_flavor": [
             "metronome"
         ],
-        "effects": []
+        "effects": [],
+        "has_field_effect": false
     },
     "Baton Pass": {
         "rom_id": 226,
@@ -1970,7 +2021,8 @@
         "attack_flavor": [
             "baton_pass"
         ],
-        "effects": []
+        "effects": [],
+        "has_field_effect": false
     },
     "Cotton Spore": {
         "rom_id": 178,
@@ -1996,10 +2048,11 @@
             {
                 "chance": 100,
                 "modifier": -2,
-                "stat": "spe",
+                "stat": "spd",
                 "target": "enemy"
             }
-        ]
+        ],
+        "has_field_effect": false
     },
     "Rolling Kick": {
         "rom_id": 27,
@@ -2026,7 +2079,8 @@
                 "flinch": true,
                 "chance": 30
             }
-        ]
+        ],
+        "has_field_effect": false
     },
     "Razor Wind": {
         "rom_id": 13,
@@ -2050,7 +2104,8 @@
         "attack_flavor": [
             "two_turn"
         ],
-        "effects": []
+        "effects": [],
+        "has_field_effect": false
     },
     "Swallow": {
         "rom_id": 256,
@@ -2074,7 +2129,8 @@
         "attack_flavor": [
             "swallow"
         ],
-        "effects": []
+        "effects": [],
+        "has_field_effect": false
     },
     "Zen Headbutt": {
         "rom_id": 428,
@@ -2096,12 +2152,8 @@
         "affected_by_kings_rock": true,
         "description": "The user focuses its willpower to its head and rams the foe. It may also make the target flinch.",
         "attack_flavor": [],
-        "effects": [
-            {
-                "chance": 20,
-                "flinch": true
-            }
-        ]
+        "effects": [],
+        "has_field_effect": false
     },
     "Brick Break": {
         "rom_id": 280,
@@ -2125,7 +2177,8 @@
         "attack_flavor": [
             "brick_break"
         ],
-        "effects": []
+        "effects": [],
+        "has_field_effect": false
     },
     "Stomp": {
         "rom_id": 23,
@@ -2154,7 +2207,8 @@
                 "chance": 30,
                 "flinch": true
             }
-        ]
+        ],
+        "has_field_effect": false
     },
     "Flamethrower": {
         "rom_id": 53,
@@ -2181,7 +2235,8 @@
                 "status": "Burn",
                 "chance": 10
             }
-        ]
+        ],
+        "has_field_effect": false
     },
     "Super Fang": {
         "rom_id": 162,
@@ -2205,7 +2260,8 @@
         "attack_flavor": [
             "super_fang"
         ],
-        "effects": []
+        "effects": [],
+        "has_field_effect": false
     },
     "Water Pulse": {
         "rom_id": 352,
@@ -2232,7 +2288,8 @@
                 "status": "Confusion",
                 "chance": 20
             }
-        ]
+        ],
+        "has_field_effect": false
     },
     "Bug Buzz": {
         "rom_id": 405,
@@ -2254,14 +2311,8 @@
         "affected_by_kings_rock": false,
         "description": "The user vibrates its wings to generate a damaging sound wave. It may also lower the foe\u2019s Sp. Def stat.",
         "attack_flavor": [],
-        "effects": [
-            {
-                "chance": 10,
-                "modifier": -1,
-                "stat": "spd",
-                "target": "enemy"
-            }
-        ]
+        "effects": [],
+        "has_field_effect": false
     },
     "Mirror Coat": {
         "rom_id": 243,
@@ -2285,7 +2336,8 @@
         "attack_flavor": [
             "mirror_coat"
         ],
-        "effects": []
+        "effects": [],
+        "has_field_effect": false
     },
     "Natural Gift": {
         "rom_id": 363,
@@ -2307,7 +2359,8 @@
         "affected_by_kings_rock": false,
         "description": "The user draws power to attack by using its held Berry. The Berry determines its type and power.",
         "attack_flavor": [],
-        "effects": []
+        "effects": [],
+        "has_field_effect": false
     },
     "Meditate": {
         "rom_id": 96,
@@ -2336,7 +2389,8 @@
                 "stat": "atk",
                 "target": "self"
             }
-        ]
+        ],
+        "has_field_effect": false
     },
     "Night Slash": {
         "rom_id": 400,
@@ -2357,10 +2411,9 @@
         "affected_by_mirror_move": true,
         "affected_by_kings_rock": true,
         "description": "The user slashes the foe the instant an opportunity arises. It has a high critical-hit ratio.",
-        "attack_flavor": [
-            "high_crit"
-        ],
-        "effects": []
+        "attack_flavor": [],
+        "effects": [],
+        "has_field_effect": false
     },
     "Feint": {
         "rom_id": 364,
@@ -2382,7 +2435,8 @@
         "affected_by_kings_rock": false,
         "description": "An attack that hits a foe using Protect or Detect. It also lifts the effects of those moves.",
         "attack_flavor": [],
-        "effects": []
+        "effects": [],
+        "has_field_effect": false
     },
     "SmellingSalt": {
         "rom_id": 265,
@@ -2406,7 +2460,8 @@
         "attack_flavor": [
             "smelling_salt"
         ],
-        "effects": []
+        "effects": [],
+        "has_field_effect": false
     },
     "Metal Claw": {
         "rom_id": 232,
@@ -2435,7 +2490,8 @@
                 "stat": "atk",
                 "target": "self"
             }
-        ]
+        ],
+        "has_field_effect": false
     },
     "Gunk Shot": {
         "rom_id": 441,
@@ -2457,12 +2513,8 @@
         "affected_by_kings_rock": true,
         "description": "The user shoots filthy garbage at the foe to attack. It may also poison the target.",
         "attack_flavor": [],
-        "effects": [
-            {
-                "status": "Poison",
-                "chance": 30
-            }
-        ]
+        "effects": [],
+        "has_field_effect": false
     },
     "Gyro Ball": {
         "rom_id": 360,
@@ -2484,7 +2536,8 @@
         "affected_by_kings_rock": true,
         "description": "The user tackles the foe with a high-speed spin. The slower the user, the greater the damage.",
         "attack_flavor": [],
-        "effects": []
+        "effects": [],
+        "has_field_effect": false
     },
     "Barrier": {
         "rom_id": 112,
@@ -2513,7 +2566,8 @@
                 "stat": "def",
                 "target": "self"
             }
-        ]
+        ],
+        "has_field_effect": false
     },
     "Skull Bash": {
         "rom_id": 130,
@@ -2544,7 +2598,8 @@
                 "stat": "def",
                 "target": "self"
             }
-        ]
+        ],
+        "has_field_effect": false
     },
     "Pay Day": {
         "rom_id": 6,
@@ -2568,7 +2623,8 @@
         "attack_flavor": [
             "scatter_coins"
         ],
-        "effects": []
+        "effects": [],
+        "has_field_effect": false
     },
     "Thunderbolt": {
         "rom_id": 85,
@@ -2595,7 +2651,8 @@
                 "status": "Paralysis",
                 "chance": 10
             }
-        ]
+        ],
+        "has_field_effect": false
     },
     "Mirror Move": {
         "rom_id": 119,
@@ -2619,7 +2676,8 @@
         "attack_flavor": [
             "mirror_move"
         ],
-        "effects": []
+        "effects": [],
+        "has_field_effect": false
     },
     "Tail Whip": {
         "rom_id": 39,
@@ -2648,7 +2706,8 @@
                 "stat": "def",
                 "target": "enemy"
             }
-        ]
+        ],
+        "has_field_effect": false
     },
     "Embargo": {
         "rom_id": 373,
@@ -2670,7 +2729,8 @@
         "affected_by_kings_rock": false,
         "description": "It prevents the foe from using its held item. Its Trainer is also prevented from using items on it.",
         "attack_flavor": [],
-        "effects": []
+        "effects": [],
+        "has_field_effect": false
     },
     "Defense Curl": {
         "rom_id": 111,
@@ -2701,7 +2761,8 @@
                 "stat": "def",
                 "target": "self"
             }
-        ]
+        ],
+        "has_field_effect": false
     },
     "Aeroblast": {
         "rom_id": 177,
@@ -2725,7 +2786,8 @@
         "attack_flavor": [
             "high_crit"
         ],
-        "effects": []
+        "effects": [],
+        "has_field_effect": false
     },
     "Last Resort": {
         "rom_id": 387,
@@ -2747,7 +2809,8 @@
         "affected_by_kings_rock": true,
         "description": "This move can be used only after the user has used all the other moves it knows in the battle.",
         "attack_flavor": [],
-        "effects": []
+        "effects": [],
+        "has_field_effect": false
     },
     "Meteor Mash": {
         "rom_id": 309,
@@ -2776,7 +2839,8 @@
                 "stat": "atk",
                 "target": "self"
             }
-        ]
+        ],
+        "has_field_effect": false
     },
     "Horn Attack": {
         "rom_id": 30,
@@ -2798,7 +2862,8 @@
         "affected_by_kings_rock": true,
         "description": "The foe is jabbed with a sharply pointed horn to inflict damage. ",
         "attack_flavor": [],
-        "effects": []
+        "effects": [],
+        "has_field_effect": false
     },
     "Torment": {
         "rom_id": 259,
@@ -2822,7 +2887,8 @@
         "attack_flavor": [
             "torment"
         ],
-        "effects": []
+        "effects": [],
+        "has_field_effect": false
     },
     "Quick Attack": {
         "rom_id": 98,
@@ -2844,7 +2910,8 @@
         "affected_by_kings_rock": true,
         "description": "The user lunges at the foe at a speed that makes it almost invisible. It is sure to strike first.",
         "attack_flavor": [],
-        "effects": []
+        "effects": [],
+        "has_field_effect": false
     },
     "Whirlpool": {
         "rom_id": 250,
@@ -2868,7 +2935,8 @@
         "attack_flavor": [
             "trap"
         ],
-        "effects": []
+        "effects": [],
+        "has_field_effect": false
     },
     "Peck": {
         "rom_id": 64,
@@ -2890,7 +2958,8 @@
         "affected_by_kings_rock": true,
         "description": "The foe is jabbed with a sharply pointed beak or horn. ",
         "attack_flavor": [],
-        "effects": []
+        "effects": [],
+        "has_field_effect": false
     },
     "Cosmic Power": {
         "rom_id": 322,
@@ -2925,7 +2994,8 @@
                 "stat": "spd",
                 "target": "self"
             }
-        ]
+        ],
+        "has_field_effect": false
     },
     "Gravity": {
         "rom_id": 356,
@@ -2947,7 +3017,8 @@
         "affected_by_kings_rock": false,
         "description": "Gravity is intensified for five turns, making moves involving flying unusable and negating Levitation.",
         "attack_flavor": [],
-        "effects": []
+        "effects": [],
+        "has_field_effect": true
     },
     "Healing Wish": {
         "rom_id": 361,
@@ -2969,7 +3040,8 @@
         "affected_by_kings_rock": false,
         "description": "The user faints. In return, the Pok\u00e9mon taking its place will have its HP restored and status cured.",
         "attack_flavor": [],
-        "effects": []
+        "effects": [],
+        "has_field_effect": false
     },
     "Substitute": {
         "rom_id": 164,
@@ -2993,7 +3065,8 @@
         "attack_flavor": [
             "substitute"
         ],
-        "effects": []
+        "effects": [],
+        "has_field_effect": false
     },
     "Strength": {
         "rom_id": 70,
@@ -3015,7 +3088,8 @@
         "affected_by_kings_rock": true,
         "description": "The foe is slugged with a punch thrown at maximum power. It can also be used to move boulders.",
         "attack_flavor": [],
-        "effects": []
+        "effects": [],
+        "has_field_effect": false
     },
     "Draco Meteor": {
         "rom_id": 434,
@@ -3037,14 +3111,8 @@
         "affected_by_kings_rock": true,
         "description": "Comets are summoned down from the sky. The attack\u2019s recoil sharply reduces the user\u2019s Sp. Atk stat.",
         "attack_flavor": [],
-        "effects": [
-            {
-                "chance": 100,
-                "modifier": -2,
-                "stat": "spa",
-                "target": "self"
-            }
-        ]
+        "effects": [],
+        "has_field_effect": false
     },
     "Captivate": {
         "rom_id": 445,
@@ -3066,14 +3134,8 @@
         "affected_by_kings_rock": false,
         "description": "If it is the opposite gender of the user, the foe is charmed into sharply lowering its Sp. Atk stat.",
         "attack_flavor": [],
-        "effects": [
-            {
-                "chance": 100,
-                "modifier": -2,
-                "stat": "spa",
-                "target": "enemy"
-            }
-        ]
+        "effects": [],
+        "has_field_effect": false
     },
     "Heart Swap": {
         "rom_id": 391,
@@ -3095,7 +3157,8 @@
         "affected_by_kings_rock": false,
         "description": "The user employs its psychic power to switch stat changes with the foe. ",
         "attack_flavor": [],
-        "effects": []
+        "effects": [],
+        "has_field_effect": false
     },
     "Spark": {
         "rom_id": 209,
@@ -3122,7 +3185,8 @@
                 "status": "Paralysis",
                 "chance": 30
             }
-        ]
+        ],
+        "has_field_effect": false
     },
     "Spore": {
         "rom_id": 147,
@@ -3149,7 +3213,8 @@
                 "status": "Sleep",
                 "chance": 100
             }
-        ]
+        ],
+        "has_field_effect": false
     },
     "Dizzy Punch": {
         "rom_id": 146,
@@ -3176,7 +3241,8 @@
                 "status": "Confusion",
                 "chance": 20
             }
-        ]
+        ],
+        "has_field_effect": false
     },
     "Block": {
         "rom_id": 335,
@@ -3200,7 +3266,8 @@
         "attack_flavor": [
             "mean_look"
         ],
-        "effects": []
+        "effects": [],
+        "has_field_effect": false
     },
     "Reflect": {
         "rom_id": 115,
@@ -3227,7 +3294,8 @@
                 "status": "Reflect",
                 "chance": 100
             }
-        ]
+        ],
+        "has_field_effect": true
     },
     "Crush Grip": {
         "rom_id": 462,
@@ -3249,7 +3317,8 @@
         "affected_by_kings_rock": true,
         "description": "The foe is crushed with great force. The attack is more powerful the more HP the foe has left.",
         "attack_flavor": [],
-        "effects": []
+        "effects": [],
+        "has_field_effect": false
     },
     "Focus Blast": {
         "rom_id": 411,
@@ -3271,14 +3340,8 @@
         "affected_by_kings_rock": false,
         "description": "The user heightens its mental focus and unleashes its power. It may also lower the target\u2019s Sp. Def.",
         "attack_flavor": [],
-        "effects": [
-            {
-                "chance": 10,
-                "modifier": -1,
-                "stat": "spd",
-                "target": "enemy"
-            }
-        ]
+        "effects": [],
+        "has_field_effect": false
     },
     "Sludge": {
         "rom_id": 124,
@@ -3305,7 +3368,8 @@
                 "status": "Poison",
                 "chance": 30
             }
-        ]
+        ],
+        "has_field_effect": false
     },
     "Hyper Beam": {
         "rom_id": 63,
@@ -3329,7 +3393,8 @@
         "attack_flavor": [
             "recharge"
         ],
-        "effects": []
+        "effects": [],
+        "has_field_effect": false
     },
     "Poison Fang": {
         "rom_id": 305,
@@ -3356,7 +3421,8 @@
                 "status": "Toxic",
                 "chance": 30
             }
-        ]
+        ],
+        "has_field_effect": false
     },
     "Tail Glow": {
         "rom_id": 294,
@@ -3385,7 +3451,8 @@
                 "stat": "spa",
                 "target": "self"
             }
-        ]
+        ],
+        "has_field_effect": false
     },
     "Crunch": {
         "rom_id": 242,
@@ -3414,7 +3481,8 @@
                 "stat": "spd",
                 "target": "enemy"
             }
-        ]
+        ],
+        "has_field_effect": false
     },
     "Mimic": {
         "rom_id": 102,
@@ -3438,7 +3506,8 @@
         "attack_flavor": [
             "mimic"
         ],
-        "effects": []
+        "effects": [],
+        "has_field_effect": false
     },
     "PoisonPowder": {
         "rom_id": 77,
@@ -3465,7 +3534,8 @@
                 "status": "Poison",
                 "chance": 100
             }
-        ]
+        ],
+        "has_field_effect": false
     },
     "Psycho Shift": {
         "rom_id": 375,
@@ -3487,7 +3557,8 @@
         "affected_by_kings_rock": false,
         "description": "Using its psychic power of suggestion, the user transfers its status problems to the target.",
         "attack_flavor": [],
-        "effects": []
+        "effects": [],
+        "has_field_effect": false
     },
     "Spit Up": {
         "rom_id": 255,
@@ -3511,7 +3582,8 @@
         "attack_flavor": [
             "spit_up"
         ],
-        "effects": []
+        "effects": [],
+        "has_field_effect": false
     },
     "Blast Burn": {
         "rom_id": 307,
@@ -3535,7 +3607,8 @@
         "attack_flavor": [
             "recharge"
         ],
-        "effects": []
+        "effects": [],
+        "has_field_effect": false
     },
     "Air Slash": {
         "rom_id": 403,
@@ -3557,12 +3630,8 @@
         "affected_by_kings_rock": true,
         "description": "The user attacks with a blade of air that slices even the sky. It may also make the target flinch.",
         "attack_flavor": [],
-        "effects": [
-            {
-                "chance": 10,
-                "flinch": true
-            }
-        ]
+        "effects": [],
+        "has_field_effect": false
     },
     "Power Swap": {
         "rom_id": 384,
@@ -3584,7 +3653,8 @@
         "affected_by_kings_rock": false,
         "description": "The user employs its psychic power to switch changes to its Attack and Sp. Atk with the foe.",
         "attack_flavor": [],
-        "effects": []
+        "effects": [],
+        "has_field_effect": false
     },
     "Imprison": {
         "rom_id": 286,
@@ -3608,7 +3678,8 @@
         "attack_flavor": [
             "imprison"
         ],
-        "effects": []
+        "effects": [],
+        "has_field_effect": false
     },
     "ViceGrip": {
         "rom_id": 11,
@@ -3630,7 +3701,8 @@
         "affected_by_kings_rock": true,
         "description": "Huge, impressive pincers grip and squeeze the foe.  ",
         "attack_flavor": [],
-        "effects": []
+        "effects": [],
+        "has_field_effect": false
     },
     "Fire Punch": {
         "rom_id": 7,
@@ -3657,7 +3729,8 @@
                 "status": "Burn",
                 "chance": 10
             }
-        ]
+        ],
+        "has_field_effect": false
     },
     "Morning Sun": {
         "rom_id": 234,
@@ -3681,7 +3754,8 @@
         "attack_flavor": [
             "weather_heal"
         ],
-        "effects": []
+        "effects": [],
+        "has_field_effect": false
     },
     "Petal Dance": {
         "rom_id": 80,
@@ -3705,7 +3779,8 @@
         "attack_flavor": [
             "rampage"
         ],
-        "effects": []
+        "effects": [],
+        "has_field_effect": false
     },
     "Dragon Rage": {
         "rom_id": 82,
@@ -3729,7 +3804,8 @@
         "attack_flavor": [
             "fixed_damage"
         ],
-        "effects": []
+        "effects": [],
+        "has_field_effect": false
     },
     "Assist": {
         "rom_id": 274,
@@ -3753,7 +3829,8 @@
         "attack_flavor": [
             "assist"
         ],
-        "effects": []
+        "effects": [],
+        "has_field_effect": false
     },
     "Poison Gas": {
         "rom_id": 139,
@@ -3780,7 +3857,8 @@
                 "status": "Poison",
                 "chance": 100
             }
-        ]
+        ],
+        "has_field_effect": false
     },
     "Cut": {
         "rom_id": 15,
@@ -3802,7 +3880,8 @@
         "affected_by_kings_rock": true,
         "description": "The foe is cut with a scythe or a claw. It can also be used to cut down thin trees.",
         "attack_flavor": [],
-        "effects": []
+        "effects": [],
+        "has_field_effect": false
     },
     "Magnet Rise": {
         "rom_id": 393,
@@ -3824,7 +3903,8 @@
         "affected_by_kings_rock": false,
         "description": "The user levitates using electrically generated magnetism for five turns. ",
         "attack_flavor": [],
-        "effects": []
+        "effects": [],
+        "has_field_effect": true
     },
     "Shadow Force": {
         "rom_id": 467,
@@ -3845,10 +3925,9 @@
         "affected_by_mirror_move": true,
         "affected_by_kings_rock": true,
         "description": "The user disappears, then strikes the foe on the second turn. It hits even if the foe used Protect.",
-        "attack_flavor": [
-            "two_turn_semi_invulnerable"
-        ],
-        "effects": []
+        "attack_flavor": [],
+        "effects": [],
+        "has_field_effect": false
     },
     "Fling": {
         "rom_id": 374,
@@ -3870,7 +3949,8 @@
         "affected_by_kings_rock": false,
         "description": "The user flings its held item at the foe to attack. Its power and effects depend on the item.",
         "attack_flavor": [],
-        "effects": []
+        "effects": [],
+        "has_field_effect": false
     },
     "Will-O-Wisp": {
         "rom_id": 261,
@@ -3897,7 +3977,8 @@
                 "status": "Burn",
                 "chance": 100
             }
-        ]
+        ],
+        "has_field_effect": false
     },
     "Egg Bomb": {
         "rom_id": 121,
@@ -3919,7 +4000,8 @@
         "affected_by_kings_rock": true,
         "description": "A large egg is hurled with maximum force at the foe to inflict damage. ",
         "attack_flavor": [],
-        "effects": []
+        "effects": [],
+        "has_field_effect": false
     },
     "Odor Sleuth": {
         "rom_id": 316,
@@ -3943,7 +4025,8 @@
         "attack_flavor": [
             "foresight"
         ],
-        "effects": []
+        "effects": [],
+        "has_field_effect": false
     },
     "Seismic Toss": {
         "rom_id": 69,
@@ -3967,7 +4050,8 @@
         "attack_flavor": [
             "level_damage"
         ],
-        "effects": []
+        "effects": [],
+        "has_field_effect": false
     },
     "Fissure": {
         "rom_id": 90,
@@ -3991,7 +4075,8 @@
         "attack_flavor": [
             "one_hit_ko"
         ],
-        "effects": []
+        "effects": [],
+        "has_field_effect": false
     },
     "Sand Tomb": {
         "rom_id": 328,
@@ -4015,7 +4100,8 @@
         "attack_flavor": [
             "trap"
         ],
-        "effects": []
+        "effects": [],
+        "has_field_effect": false
     },
     "Sharpen": {
         "rom_id": 159,
@@ -4044,7 +4130,8 @@
                 "stat": "atk",
                 "target": "self"
             }
-        ]
+        ],
+        "has_field_effect": false
     },
     "Drain Punch": {
         "rom_id": 409,
@@ -4066,7 +4153,8 @@
         "affected_by_kings_rock": true,
         "description": "An energy-draining punch. The user\u2019s HP is restored by half the damage taken by the target.",
         "attack_flavor": [],
-        "effects": []
+        "effects": [],
+        "has_field_effect": false
     },
     "Spike Cannon": {
         "rom_id": 131,
@@ -4090,7 +4178,8 @@
         "attack_flavor": [
             "multi_hit"
         ],
-        "effects": []
+        "effects": [],
+        "has_field_effect": false
     },
     "Mist Ball": {
         "rom_id": 296,
@@ -4119,7 +4208,8 @@
                 "stat": "spa",
                 "target": "enemy"
             }
-        ]
+        ],
+        "has_field_effect": false
     },
     "Leaf Blade": {
         "rom_id": 348,
@@ -4143,7 +4233,8 @@
         "attack_flavor": [
             "high_crit"
         ],
-        "effects": []
+        "effects": [],
+        "has_field_effect": false
     },
     "Close Combat": {
         "rom_id": 370,
@@ -4165,20 +4256,8 @@
         "affected_by_kings_rock": true,
         "description": "The user fights the foe in close without guarding itself. It also cuts the user\u2019s Defense and Sp. Def.",
         "attack_flavor": [],
-        "effects": [
-            {
-                "chance": 100,
-                "modifier": -1,
-                "stat": "def",
-                "target": "self"
-            },
-            {
-                "chance": 100,
-                "modifier": -1,
-                "stat": "spd",
-                "target": "self"
-            }
-        ]
+        "effects": [],
+        "has_field_effect": false
     },
     "Pin Missile": {
         "rom_id": 42,
@@ -4202,7 +4281,8 @@
         "attack_flavor": [
             "multi_hit"
         ],
-        "effects": []
+        "effects": [],
+        "has_field_effect": false
     },
     "Clamp": {
         "rom_id": 128,
@@ -4226,7 +4306,8 @@
         "attack_flavor": [
             "trap"
         ],
-        "effects": []
+        "effects": [],
+        "has_field_effect": false
     },
     "Flail": {
         "rom_id": 175,
@@ -4250,7 +4331,8 @@
         "attack_flavor": [
             "reversal"
         ],
-        "effects": []
+        "effects": [],
+        "has_field_effect": false
     },
     "Power Trick": {
         "rom_id": 379,
@@ -4272,7 +4354,8 @@
         "affected_by_kings_rock": false,
         "description": "The user employs its psychic power to switch its Attack with its Defense stat.",
         "attack_flavor": [],
-        "effects": []
+        "effects": [],
+        "has_field_effect": true
     },
     "Signal Beam": {
         "rom_id": 324,
@@ -4299,7 +4382,8 @@
                 "status": "Confusion",
                 "chance": 10
             }
-        ]
+        ],
+        "has_field_effect": false
     },
     "Sky Attack": {
         "rom_id": 143,
@@ -4329,7 +4413,8 @@
                 "flinch": true,
                 "chance": 30
             }
-        ]
+        ],
+        "has_field_effect": false
     },
     "Wish": {
         "rom_id": 273,
@@ -4353,7 +4438,8 @@
         "attack_flavor": [
             "wish"
         ],
-        "effects": []
+        "effects": [],
+        "has_field_effect": false
     },
     "Bullet Punch": {
         "rom_id": 418,
@@ -4375,7 +4461,8 @@
         "affected_by_kings_rock": true,
         "description": "The user strikes with a tough punch as fast as a bullet. This move always goes first.",
         "attack_flavor": [],
-        "effects": []
+        "effects": [],
+        "has_field_effect": false
     },
     "Brine": {
         "rom_id": 362,
@@ -4397,7 +4484,8 @@
         "affected_by_kings_rock": true,
         "description": "If the foe\u2019s HP is down to about half, this attack will hit with double the power.",
         "attack_flavor": [],
-        "effects": []
+        "effects": [],
+        "has_field_effect": false
     },
     "Sand-Attack": {
         "rom_id": 28,
@@ -4426,7 +4514,8 @@
                 "stat": "acc",
                 "target": "enemy"
             }
-        ]
+        ],
+        "has_field_effect": false
     },
     "Brave Bird": {
         "rom_id": 413,
@@ -4448,7 +4537,8 @@
         "affected_by_kings_rock": true,
         "description": "The user tucks in its wings and charges from a low altitude. The user also takes serious damage.",
         "attack_flavor": [],
-        "effects": []
+        "effects": [],
+        "has_field_effect": false
     },
     "Low Kick": {
         "rom_id": 67,
@@ -4472,7 +4562,8 @@
         "attack_flavor": [
             "weight_damage"
         ],
-        "effects": []
+        "effects": [],
+        "has_field_effect": false
     },
     "Bite": {
         "rom_id": 44,
@@ -4499,7 +4590,8 @@
                 "flinch": true,
                 "chance": 30
             }
-        ]
+        ],
+        "has_field_effect": false
     },
     "Zap Cannon": {
         "rom_id": 192,
@@ -4526,7 +4618,8 @@
                 "status": "Paralysis",
                 "chance": 100
             }
-        ]
+        ],
+        "has_field_effect": false
     },
     "Hyper Fang": {
         "rom_id": 158,
@@ -4553,7 +4646,8 @@
                 "flinch": true,
                 "chance": 10
             }
-        ]
+        ],
+        "has_field_effect": false
     },
     "Roar of Time": {
         "rom_id": 459,
@@ -4574,10 +4668,9 @@
         "affected_by_mirror_move": true,
         "affected_by_kings_rock": true,
         "description": "The user blasts the foe with power that distorts even time. The user must rest on the next turn.",
-        "attack_flavor": [
-            "recharge"
-        ],
-        "effects": []
+        "attack_flavor": [],
+        "effects": [],
+        "has_field_effect": false
     },
     "Discharge": {
         "rom_id": 435,
@@ -4599,12 +4692,8 @@
         "affected_by_kings_rock": true,
         "description": "A flare of electricity is loosed to strike all Pok\u00e9mon in battle. It may also cause paralysis.",
         "attack_flavor": [],
-        "effects": [
-            {
-                "status": "Paralysis",
-                "chance": 30
-            }
-        ]
+        "effects": [],
+        "has_field_effect": false
     },
     "Dark Void": {
         "rom_id": 464,
@@ -4626,7 +4715,8 @@
         "affected_by_kings_rock": false,
         "description": "The foe is dragged into a world of total darkness that puts it to sleep. ",
         "attack_flavor": [],
-        "effects": []
+        "effects": [],
+        "has_field_effect": false
     },
     "Rock Tomb": {
         "rom_id": 317,
@@ -4652,10 +4742,11 @@
             {
                 "chance": 100,
                 "modifier": -1,
-                "stat": "spe",
+                "stat": "spd",
                 "target": "enemy"
             }
-        ]
+        ],
+        "has_field_effect": false
     },
     "Leech Life": {
         "rom_id": 141,
@@ -4679,7 +4770,8 @@
         "attack_flavor": [
             "drain_hp"
         ],
-        "effects": []
+        "effects": [],
+        "has_field_effect": false
     },
     "Heal Order": {
         "rom_id": 456,
@@ -4701,7 +4793,8 @@
         "affected_by_kings_rock": false,
         "description": "The user calls out its underlings to heal it. The user regains up to half of its max HP.",
         "attack_flavor": [],
-        "effects": []
+        "effects": [],
+        "has_field_effect": false
     },
     "Acid": {
         "rom_id": 51,
@@ -4730,7 +4823,8 @@
                 "stat": "def",
                 "target": "enemy"
             }
-        ]
+        ],
+        "has_field_effect": false
     },
     "Foresight": {
         "rom_id": 193,
@@ -4754,7 +4848,8 @@
         "attack_flavor": [
             "foresight"
         ],
-        "effects": []
+        "effects": [],
+        "has_field_effect": false
     },
     "Hyper Voice": {
         "rom_id": 304,
@@ -4776,7 +4871,8 @@
         "affected_by_kings_rock": false,
         "description": "The user lets loose a horribly echoing shout with the power to inflict damage.",
         "attack_flavor": [],
-        "effects": []
+        "effects": [],
+        "has_field_effect": false
     },
     "Sleep Talk": {
         "rom_id": 214,
@@ -4800,7 +4896,8 @@
         "attack_flavor": [
             "sleep_talk"
         ],
-        "effects": []
+        "effects": [],
+        "has_field_effect": false
     },
     "Rage": {
         "rom_id": 99,
@@ -4824,7 +4921,8 @@
         "attack_flavor": [
             "rage"
         ],
-        "effects": []
+        "effects": [],
+        "has_field_effect": false
     },
     "Defog": {
         "rom_id": 432,
@@ -4846,14 +4944,8 @@
         "affected_by_kings_rock": false,
         "description": "Obstacles are moved, reducing the foe\u2019s evasion stat. It can also be used to clear deep fog, etc.",
         "attack_flavor": [],
-        "effects": [
-            {
-                "chance": 100,
-                "modifier": -1,
-                "stat": "ev",
-                "target": "enemy"
-            }
-        ]
+        "effects": [],
+        "has_field_effect": false
     },
     "Pound": {
         "rom_id": 1,
@@ -4875,7 +4967,8 @@
         "affected_by_kings_rock": true,
         "description": "The foe is physically pounded with a long tail or a foreleg, etc. ",
         "attack_flavor": [],
-        "effects": []
+        "effects": [],
+        "has_field_effect": false
     },
     "Flame Wheel": {
         "rom_id": 172,
@@ -4899,7 +4992,8 @@
         "attack_flavor": [
             "self_thaw"
         ],
-        "effects": []
+        "effects": [],
+        "has_field_effect": false
     },
     "Psybeam": {
         "rom_id": 60,
@@ -4926,7 +5020,8 @@
                 "status": "Confusion",
                 "chance": 10
             }
-        ]
+        ],
+        "has_field_effect": false
     },
     "Hail": {
         "rom_id": 258,
@@ -4950,7 +5045,8 @@
         "attack_flavor": [
             "hail"
         ],
-        "effects": []
+        "effects": [],
+        "has_field_effect": false
     },
     "Thunder Wave": {
         "rom_id": 86,
@@ -4977,7 +5073,8 @@
                 "status": "Paralysis",
                 "chance": 100
             }
-        ]
+        ],
+        "has_field_effect": false
     },
     "Toxic Spikes": {
         "rom_id": 390,
@@ -4999,7 +5096,8 @@
         "affected_by_kings_rock": false,
         "description": "The user lays a trap of poison spikes at the foe\u2019s feet. They poison foes that switch into battle.",
         "attack_flavor": [],
-        "effects": []
+        "effects": [],
+        "has_field_effect": false
     },
     "Mach Punch": {
         "rom_id": 183,
@@ -5021,7 +5119,8 @@
         "affected_by_kings_rock": true,
         "description": "The user throws a punch at blinding speed. It is certain to strike first.",
         "attack_flavor": [],
-        "effects": []
+        "effects": [],
+        "has_field_effect": false
     },
     "BubbleBeam": {
         "rom_id": 61,
@@ -5047,10 +5146,11 @@
             {
                 "chance": 10,
                 "modifier": -1,
-                "stat": "spe",
+                "stat": "spd",
                 "target": "enemy"
             }
-        ]
+        ],
+        "has_field_effect": false
     },
     "Glare": {
         "rom_id": 137,
@@ -5077,7 +5177,8 @@
                 "status": "Paralysis",
                 "chance": 100
             }
-        ]
+        ],
+        "has_field_effect": false
     },
     "Flash": {
         "rom_id": 148,
@@ -5106,7 +5207,8 @@
                 "stat": "acc",
                 "target": "enemy"
             }
-        ]
+        ],
+        "has_field_effect": false
     },
     "Horn Drill": {
         "rom_id": 32,
@@ -5130,7 +5232,8 @@
         "attack_flavor": [
             "one_hit_ko"
         ],
-        "effects": []
+        "effects": [],
+        "has_field_effect": false
     },
     "Reversal": {
         "rom_id": 179,
@@ -5154,7 +5257,8 @@
         "attack_flavor": [
             "reversal"
         ],
-        "effects": []
+        "effects": [],
+        "has_field_effect": false
     },
     "Perish Song": {
         "rom_id": 195,
@@ -5178,7 +5282,8 @@
         "attack_flavor": [
             "perish_song"
         ],
-        "effects": []
+        "effects": [],
+        "has_field_effect": false
     },
     "Fury Swipes": {
         "rom_id": 154,
@@ -5202,7 +5307,8 @@
         "attack_flavor": [
             "multi_hit"
         ],
-        "effects": []
+        "effects": [],
+        "has_field_effect": false
     },
     "Chatter": {
         "rom_id": 448,
@@ -5224,7 +5330,8 @@
         "affected_by_kings_rock": false,
         "description": "The user attacks using a sound wave based on words it has learned. It may also confuse the foe.",
         "attack_flavor": [],
-        "effects": []
+        "effects": [],
+        "has_field_effect": false
     },
     "Tailwind": {
         "rom_id": 366,
@@ -5246,7 +5353,8 @@
         "affected_by_kings_rock": false,
         "description": "The user whips up a turbulent whirlwind that ups the Speed of all party Pok\u00e9mon for three turns.",
         "attack_flavor": [],
-        "effects": []
+        "effects": [],
+        "has_field_effect": true
     },
     "Bubble": {
         "rom_id": 145,
@@ -5272,10 +5380,11 @@
             {
                 "chance": 10,
                 "modifier": -1,
-                "stat": "spe",
+                "stat": "spd",
                 "target": "enemy"
             }
-        ]
+        ],
+        "has_field_effect": false
     },
     "Haze": {
         "rom_id": 114,
@@ -5299,7 +5408,8 @@
         "attack_flavor": [
             "haze"
         ],
-        "effects": []
+        "effects": [],
+        "has_field_effect": false
     },
     "Wake-Up Slap": {
         "rom_id": 358,
@@ -5321,7 +5431,8 @@
         "affected_by_kings_rock": true,
         "description": "This attack inflicts high damage on a sleeping foe. It also wakes the foe up, however.",
         "attack_flavor": [],
-        "effects": []
+        "effects": [],
+        "has_field_effect": false
     },
     "Psych Up": {
         "rom_id": 244,
@@ -5345,7 +5456,8 @@
         "attack_flavor": [
             "psych_up"
         ],
-        "effects": []
+        "effects": [],
+        "has_field_effect": false
     },
     "Air Cutter": {
         "rom_id": 314,
@@ -5369,7 +5481,8 @@
         "attack_flavor": [
             "high_crit"
         ],
-        "effects": []
+        "effects": [],
+        "has_field_effect": false
     },
     "Stun Spore": {
         "rom_id": 78,
@@ -5396,7 +5509,8 @@
                 "status": "Paralysis",
                 "chance": 100
             }
-        ]
+        ],
+        "has_field_effect": false
     },
     "Judgment": {
         "rom_id": 449,
@@ -5418,7 +5532,8 @@
         "affected_by_kings_rock": true,
         "description": "The user releases countless shots of light. Its type varies with the kind of Plate the user is holding.",
         "attack_flavor": [],
-        "effects": []
+        "effects": [],
+        "has_field_effect": false
     },
     "Mud Shot": {
         "rom_id": 341,
@@ -5444,10 +5559,11 @@
             {
                 "chance": 100,
                 "modifier": -1,
-                "stat": "spe",
+                "stat": "spd",
                 "target": "enemy"
             }
-        ]
+        ],
+        "has_field_effect": false
     },
     "Twister": {
         "rom_id": 239,
@@ -5476,7 +5592,8 @@
                 "flinch": true,
                 "chance": 20
             }
-        ]
+        ],
+        "has_field_effect": false
     },
     "Return": {
         "rom_id": 216,
@@ -5500,7 +5617,8 @@
         "attack_flavor": [
             "return"
         ],
-        "effects": []
+        "effects": [],
+        "has_field_effect": false
     },
     "Amnesia": {
         "rom_id": 133,
@@ -5529,7 +5647,8 @@
                 "stat": "spd",
                 "target": "self"
             }
-        ]
+        ],
+        "has_field_effect": false
     },
     "Snatch": {
         "rom_id": 289,
@@ -5553,7 +5672,8 @@
         "attack_flavor": [
             "snatch"
         ],
-        "effects": []
+        "effects": [],
+        "has_field_effect": false
     },
     "Secret Power": {
         "rom_id": 290,
@@ -5580,7 +5700,8 @@
                 "status": "Secret Power",
                 "chance": 30
             }
-        ]
+        ],
+        "has_field_effect": false
     },
     "Twineedle": {
         "rom_id": 41,
@@ -5609,7 +5730,8 @@
                 "status": "Poison",
                 "chance": 20
             }
-        ]
+        ],
+        "has_field_effect": false
     },
     "Aqua Tail": {
         "rom_id": 401,
@@ -5631,7 +5753,8 @@
         "affected_by_kings_rock": true,
         "description": "The user attacks by swinging its tail as if it were a vicious wave in a raging storm. ",
         "attack_flavor": [],
-        "effects": []
+        "effects": [],
+        "has_field_effect": false
     },
     "Spacial Rend": {
         "rom_id": 460,
@@ -5652,10 +5775,9 @@
         "affected_by_mirror_move": true,
         "affected_by_kings_rock": true,
         "description": "The user tears the foe along with the space around it. This move has a high critical-hit ratio.",
-        "attack_flavor": [
-            "high_crit"
-        ],
-        "effects": []
+        "attack_flavor": [],
+        "effects": [],
+        "has_field_effect": false
     },
     "Mist": {
         "rom_id": 54,
@@ -5679,7 +5801,8 @@
         "attack_flavor": [
             "stat_protection"
         ],
-        "effects": []
+        "effects": [],
+        "has_field_effect": false
     },
     "ExtremeSpeed": {
         "rom_id": 245,
@@ -5701,7 +5824,8 @@
         "affected_by_kings_rock": true,
         "description": "The user charges the foe at blinding speed. This attack always goes before any other move.",
         "attack_flavor": [],
-        "effects": []
+        "effects": [],
+        "has_field_effect": false
     },
     "Ice Shard": {
         "rom_id": 420,
@@ -5723,7 +5847,8 @@
         "affected_by_kings_rock": true,
         "description": "The user flash freezes chunks of ice and hurls them. This move always goes first.",
         "attack_flavor": [],
-        "effects": []
+        "effects": [],
+        "has_field_effect": false
     },
     "Comet Punch": {
         "rom_id": 4,
@@ -5747,7 +5872,8 @@
         "attack_flavor": [
             "multi_hit"
         ],
-        "effects": []
+        "effects": [],
+        "has_field_effect": false
     },
     "Trump Card": {
         "rom_id": 376,
@@ -5769,7 +5895,8 @@
         "affected_by_kings_rock": true,
         "description": "The fewer PP this move has, the more power it has for attack. ",
         "attack_flavor": [],
-        "effects": []
+        "effects": [],
+        "has_field_effect": false
     },
     "Superpower": {
         "rom_id": 276,
@@ -5804,7 +5931,8 @@
                 "stat": "def",
                 "target": "self"
             }
-        ]
+        ],
+        "has_field_effect": false
     },
     "Miracle Eye": {
         "rom_id": 357,
@@ -5826,7 +5954,8 @@
         "affected_by_kings_rock": false,
         "description": "Enables the user to hit a Dark type with any type of move. It also enables the user to hit an evasive foe.",
         "attack_flavor": [],
-        "effects": []
+        "effects": [],
+        "has_field_effect": true
     },
     "Shadow Ball": {
         "rom_id": 247,
@@ -5855,7 +5984,8 @@
                 "stat": "spd",
                 "target": "enemy"
             }
-        ]
+        ],
+        "has_field_effect": false
     },
     "Weather Ball": {
         "rom_id": 311,
@@ -5879,7 +6009,8 @@
         "attack_flavor": [
             "weather_ball"
         ],
-        "effects": []
+        "effects": [],
+        "has_field_effect": false
     },
     "Fire Blast": {
         "rom_id": 126,
@@ -5906,7 +6037,8 @@
                 "status": "Burn",
                 "chance": 10
             }
-        ]
+        ],
+        "has_field_effect": false
     },
     "Lock-On": {
         "rom_id": 199,
@@ -5930,7 +6062,8 @@
         "attack_flavor": [
             "lock_on"
         ],
-        "effects": []
+        "effects": [],
+        "has_field_effect": false
     },
     "Ice Fang": {
         "rom_id": 423,
@@ -5952,16 +6085,8 @@
         "affected_by_kings_rock": true,
         "description": "The user bites with cold-infused fangs. It may also make the foe flinch or freeze. ",
         "attack_flavor": [],
-        "effects": [
-            {
-                "chance": 10,
-                "flinch": true
-            },
-            {
-                "status": "Freeze",
-                "chance": 10
-            }
-        ]
+        "effects": [],
+        "has_field_effect": false
     },
     "Triple Kick": {
         "rom_id": 167,
@@ -5985,7 +6110,8 @@
         "attack_flavor": [
             "triple_kick"
         ],
-        "effects": []
+        "effects": [],
+        "has_field_effect": false
     },
     "Teeter Dance": {
         "rom_id": 298,
@@ -6014,7 +6140,8 @@
                 "status": "Confusion",
                 "chance": 100
             }
-        ]
+        ],
+        "has_field_effect": false
     },
     "Charge": {
         "rom_id": 268,
@@ -6038,7 +6165,8 @@
         "attack_flavor": [
             "charge"
         ],
-        "effects": []
+        "effects": [],
+        "has_field_effect": false
     },
     "Revenge": {
         "rom_id": 279,
@@ -6062,7 +6190,8 @@
         "attack_flavor": [
             "revenge"
         ],
-        "effects": []
+        "effects": [],
+        "has_field_effect": false
     },
     "DynamicPunch": {
         "rom_id": 223,
@@ -6089,7 +6218,8 @@
                 "status": "Confusion",
                 "chance": 100
             }
-        ]
+        ],
+        "has_field_effect": false
     },
     "Bone Rush": {
         "rom_id": 198,
@@ -6113,7 +6243,8 @@
         "attack_flavor": [
             "multi_hit"
         ],
-        "effects": []
+        "effects": [],
+        "has_field_effect": false
     },
     "Fury Cutter": {
         "rom_id": 210,
@@ -6137,7 +6268,8 @@
         "attack_flavor": [
             "fury_cutter"
         ],
-        "effects": []
+        "effects": [],
+        "has_field_effect": false
     },
     "Recycle": {
         "rom_id": 278,
@@ -6161,7 +6293,8 @@
         "attack_flavor": [
             "recycle"
         ],
-        "effects": []
+        "effects": [],
+        "has_field_effect": false
     },
     "DragonBreath": {
         "rom_id": 225,
@@ -6188,7 +6321,8 @@
                 "status": "Paralysis",
                 "chance": 30
             }
-        ]
+        ],
+        "has_field_effect": false
     },
     "Charge Beam": {
         "rom_id": 451,
@@ -6210,14 +6344,8 @@
         "affected_by_kings_rock": true,
         "description": "The user fires a concentrated bundle of electricity. It may also raise the user\u2019s Sp. Atk stat.",
         "attack_flavor": [],
-        "effects": [
-            {
-                "chance": 70,
-                "modifier": 1,
-                "stat": "spa",
-                "target": "self"
-            }
-        ]
+        "effects": [],
+        "has_field_effect": false
     },
     "Headbutt": {
         "rom_id": 29,
@@ -6244,7 +6372,8 @@
                 "flinch": true,
                 "chance": 30
             }
-        ]
+        ],
+        "has_field_effect": false
     },
     "Magnitude": {
         "rom_id": 222,
@@ -6269,7 +6398,8 @@
             "bonus_dig_damage",
             "magnitude"
         ],
-        "effects": []
+        "effects": [],
+        "has_field_effect": false
     },
     "Conversion 2": {
         "rom_id": 176,
@@ -6293,7 +6423,8 @@
         "attack_flavor": [
             "conversion_2"
         ],
-        "effects": []
+        "effects": [],
+        "has_field_effect": false
     },
     "Sandstorm": {
         "rom_id": 201,
@@ -6317,7 +6448,8 @@
         "attack_flavor": [
             "sandstorm"
         ],
-        "effects": []
+        "effects": [],
+        "has_field_effect": false
     },
     "Swift": {
         "rom_id": 129,
@@ -6341,7 +6473,8 @@
         "attack_flavor": [
             "always_hit"
         ],
-        "effects": []
+        "effects": [],
+        "has_field_effect": false
     },
     "Defend Order": {
         "rom_id": 455,
@@ -6363,20 +6496,8 @@
         "affected_by_kings_rock": false,
         "description": "The user calls out its underlings to shield its body, raising its Defense and Sp. Def stats.",
         "attack_flavor": [],
-        "effects": [
-            {
-                "chance": 100,
-                "modifier": 1,
-                "stat": "def",
-                "target": "self"
-            },
-            {
-                "chance": 100,
-                "modifier": 1,
-                "stat": "spd",
-                "target": "self"
-            }
-        ]
+        "effects": [],
+        "has_field_effect": false
     },
     "Ice Beam": {
         "rom_id": 58,
@@ -6403,7 +6524,8 @@
                 "status": "Freeze",
                 "chance": 10
             }
-        ]
+        ],
+        "has_field_effect": false
     },
     "Dragon Pulse": {
         "rom_id": 406,
@@ -6425,7 +6547,8 @@
         "affected_by_kings_rock": true,
         "description": "The foe is attacked with a shock wave generated by the user\u2019s gaping mouth. ",
         "attack_flavor": [],
-        "effects": []
+        "effects": [],
+        "has_field_effect": false
     },
     "Toxic": {
         "rom_id": 92,
@@ -6452,7 +6575,8 @@
                 "status": "Toxic",
                 "chance": 100
             }
-        ]
+        ],
+        "has_field_effect": false
     },
     "X-Scissor": {
         "rom_id": 404,
@@ -6474,7 +6598,8 @@
         "affected_by_kings_rock": true,
         "description": "The user slashes at the foe by crossing its scythes or claws as if they were a pair of scissors.",
         "attack_flavor": [],
-        "effects": []
+        "effects": [],
+        "has_field_effect": false
     },
     "Iron Defense": {
         "rom_id": 334,
@@ -6503,7 +6628,8 @@
                 "stat": "def",
                 "target": "self"
             }
-        ]
+        ],
+        "has_field_effect": false
     },
     "Bide": {
         "rom_id": 117,
@@ -6527,7 +6653,8 @@
         "attack_flavor": [
             "bide"
         ],
-        "effects": []
+        "effects": [],
+        "has_field_effect": false
     },
     "Waterfall": {
         "rom_id": 127,
@@ -6549,7 +6676,8 @@
         "affected_by_kings_rock": true,
         "description": "The user charges the foe at an awesome speed. It can also be used to climb a waterfall.",
         "attack_flavor": [],
-        "effects": []
+        "effects": [],
+        "has_field_effect": false
     },
     "Flash Cannon": {
         "rom_id": 430,
@@ -6571,14 +6699,8 @@
         "affected_by_kings_rock": true,
         "description": "The user gathers all its light energy and releases it at once. It may also lower the foe\u2019s Sp. Def stat.",
         "attack_flavor": [],
-        "effects": [
-            {
-                "chance": 10,
-                "modifier": -1,
-                "stat": "spd",
-                "target": "enemy"
-            }
-        ]
+        "effects": [],
+        "has_field_effect": false
     },
     "Withdraw": {
         "rom_id": 110,
@@ -6607,7 +6729,8 @@
                 "stat": "def",
                 "target": "self"
             }
-        ]
+        ],
+        "has_field_effect": false
     },
     "Iron Head": {
         "rom_id": 442,
@@ -6629,12 +6752,8 @@
         "affected_by_kings_rock": true,
         "description": "The foe slams the target with its steel-hard head. It may also make the target flinch.",
         "attack_flavor": [],
-        "effects": [
-            {
-                "chance": 30,
-                "flinch": true
-            }
-        ]
+        "effects": [],
+        "has_field_effect": false
     },
     "Counter": {
         "rom_id": 68,
@@ -6658,7 +6777,8 @@
         "attack_flavor": [
             "counter"
         ],
-        "effects": []
+        "effects": [],
+        "has_field_effect": false
     },
     "Camouflage": {
         "rom_id": 293,
@@ -6682,7 +6802,8 @@
         "attack_flavor": [
             "camouflage"
         ],
-        "effects": []
+        "effects": [],
+        "has_field_effect": false
     },
     "Steel Wing": {
         "rom_id": 211,
@@ -6711,7 +6832,8 @@
                 "stat": "def",
                 "target": "self"
             }
-        ]
+        ],
+        "has_field_effect": false
     },
     "Bone Club": {
         "rom_id": 125,
@@ -6738,7 +6860,8 @@
                 "flinch": true,
                 "chance": 10
             }
-        ]
+        ],
+        "has_field_effect": false
     },
     "Magical Leaf": {
         "rom_id": 345,
@@ -6762,7 +6885,8 @@
         "attack_flavor": [
             "always_hit"
         ],
-        "effects": []
+        "effects": [],
+        "has_field_effect": false
     },
     "Force Palm": {
         "rom_id": 395,
@@ -6784,12 +6908,8 @@
         "affected_by_kings_rock": true,
         "description": "The foe is attacked with a shock wave. It may also leave the target paralyzed. ",
         "attack_flavor": [],
-        "effects": [
-            {
-                "status": "Paralysis",
-                "chance": 30
-            }
-        ]
+        "effects": [],
+        "has_field_effect": false
     },
     "Trick": {
         "rom_id": 271,
@@ -6813,7 +6933,8 @@
         "attack_flavor": [
             "trick"
         ],
-        "effects": []
+        "effects": [],
+        "has_field_effect": false
     },
     "Rock Climb": {
         "rom_id": 431,
@@ -6835,7 +6956,8 @@
         "affected_by_kings_rock": true,
         "description": "A charging attack that may also leave the foe confused. It can also be used to scale rocky walls.",
         "attack_flavor": [],
-        "effects": []
+        "effects": [],
+        "has_field_effect": false
     },
     "Dragon Rush": {
         "rom_id": 407,
@@ -6857,12 +6979,8 @@
         "affected_by_kings_rock": true,
         "description": "The user tackles the foe while exhibiting overwhelming menace. It may also make the target flinch.",
         "attack_flavor": [],
-        "effects": [
-            {
-                "chance": 20,
-                "flinch": true
-            }
-        ]
+        "effects": [],
+        "has_field_effect": false
     },
     "Sky Uppercut": {
         "rom_id": 327,
@@ -6886,7 +7004,8 @@
         "attack_flavor": [
             "hits_air_semi_invulnerable"
         ],
-        "effects": []
+        "effects": [],
+        "has_field_effect": false
     },
     "Crush Claw": {
         "rom_id": 306,
@@ -6915,7 +7034,8 @@
                 "stat": "def",
                 "target": "enemy"
             }
-        ]
+        ],
+        "has_field_effect": false
     },
     "Magma Storm": {
         "rom_id": 463,
@@ -6937,7 +7057,8 @@
         "affected_by_kings_rock": true,
         "description": "The foe becomes trapped within a maelstrom of fire that rages for two to five turns.",
         "attack_flavor": [],
-        "effects": []
+        "effects": [],
+        "has_field_effect": false
     },
     "Fury Attack": {
         "rom_id": 31,
@@ -6961,7 +7082,8 @@
         "attack_flavor": [
             "multi_hit"
         ],
-        "effects": []
+        "effects": [],
+        "has_field_effect": false
     },
     "Ingrain": {
         "rom_id": 275,
@@ -6988,7 +7110,8 @@
                 "status": "Ingrain",
                 "chance": 100
             }
-        ]
+        ],
+        "has_field_effect": false
     },
     "Guillotine": {
         "rom_id": 12,
@@ -7012,7 +7135,8 @@
         "attack_flavor": [
             "one_hit_ko"
         ],
-        "effects": []
+        "effects": [],
+        "has_field_effect": false
     },
     "Heal Block": {
         "rom_id": 377,
@@ -7034,7 +7158,8 @@
         "affected_by_kings_rock": false,
         "description": "The user prevents the foe from using any HP-recovery moves for five turns. ",
         "attack_flavor": [],
-        "effects": []
+        "effects": [],
+        "has_field_effect": false
     },
     "Water Sport": {
         "rom_id": 346,
@@ -7061,7 +7186,8 @@
                 "status": "Water Sport",
                 "chance": 100
             }
-        ]
+        ],
+        "has_field_effect": false
     },
     "Poison Sting": {
         "rom_id": 40,
@@ -7088,7 +7214,8 @@
                 "status": "Poison",
                 "chance": 30
             }
-        ]
+        ],
+        "has_field_effect": false
     },
     "Synthesis": {
         "rom_id": 235,
@@ -7112,7 +7239,8 @@
         "attack_flavor": [
             "weather_heal"
         ],
-        "effects": []
+        "effects": [],
+        "has_field_effect": false
     },
     "Whirlwind": {
         "rom_id": 18,
@@ -7136,7 +7264,8 @@
         "attack_flavor": [
             "force_switch"
         ],
-        "effects": []
+        "effects": [],
+        "has_field_effect": false
     },
     "Doom Desire": {
         "rom_id": 353,
@@ -7160,7 +7289,8 @@
         "attack_flavor": [
             "future_sight"
         ],
-        "effects": []
+        "effects": [],
+        "has_field_effect": false
     },
     "Screech": {
         "rom_id": 103,
@@ -7189,7 +7319,8 @@
                 "stat": "def",
                 "target": "enemy"
             }
-        ]
+        ],
+        "has_field_effect": false
     },
     "Attack Order": {
         "rom_id": 454,
@@ -7210,10 +7341,9 @@
         "affected_by_mirror_move": true,
         "affected_by_kings_rock": true,
         "description": "The user calls out its underlings to pummel the foe. It has a high critical-hit ratio.",
-        "attack_flavor": [
-            "high_crit"
-        ],
-        "effects": []
+        "attack_flavor": [],
+        "effects": [],
+        "has_field_effect": false
     },
     "Sucker Punch": {
         "rom_id": 389,
@@ -7235,7 +7365,8 @@
         "affected_by_kings_rock": true,
         "description": "This move enables the user to attack first. It fails if the foe is not readying an attack, however.",
         "attack_flavor": [],
-        "effects": []
+        "effects": [],
+        "has_field_effect": false
     },
     "Nightmare": {
         "rom_id": 171,
@@ -7259,7 +7390,8 @@
         "attack_flavor": [
             "nightmare"
         ],
-        "effects": []
+        "effects": [],
+        "has_field_effect": false
     },
     "Ember": {
         "rom_id": 52,
@@ -7286,7 +7418,8 @@
                 "status": "Burn",
                 "chance": 10
             }
-        ]
+        ],
+        "has_field_effect": false
     },
     "Fake Tears": {
         "rom_id": 313,
@@ -7315,7 +7448,8 @@
                 "stat": "spd",
                 "target": "enemy"
             }
-        ]
+        ],
+        "has_field_effect": false
     },
     "Thief": {
         "rom_id": 168,
@@ -7339,7 +7473,8 @@
         "attack_flavor": [
             "thief"
         ],
-        "effects": []
+        "effects": [],
+        "has_field_effect": false
     },
     "Giga Impact": {
         "rom_id": 416,
@@ -7360,10 +7495,9 @@
         "affected_by_mirror_move": true,
         "affected_by_kings_rock": true,
         "description": "The user charges at the foe using every bit of its power. The user must rest on the next turn.",
-        "attack_flavor": [
-            "recharge"
-        ],
-        "effects": []
+        "attack_flavor": [],
+        "effects": [],
+        "has_field_effect": false
     },
     "Fire Spin": {
         "rom_id": 83,
@@ -7387,7 +7521,8 @@
         "attack_flavor": [
             "trap"
         ],
-        "effects": []
+        "effects": [],
+        "has_field_effect": false
     },
     "String Shot": {
         "rom_id": 81,
@@ -7413,10 +7548,11 @@
             {
                 "chance": 100,
                 "modifier": -1,
-                "stat": "spe",
+                "stat": "spd",
                 "target": "enemy"
             }
-        ]
+        ],
+        "has_field_effect": false
     },
     "Shock Wave": {
         "rom_id": 351,
@@ -7440,7 +7576,8 @@
         "attack_flavor": [
             "always_hit"
         ],
-        "effects": []
+        "effects": [],
+        "has_field_effect": false
     },
     "Facade": {
         "rom_id": 263,
@@ -7464,7 +7601,8 @@
         "attack_flavor": [
             "facade"
         ],
-        "effects": []
+        "effects": [],
+        "has_field_effect": false
     },
     "Flare Blitz": {
         "rom_id": 394,
@@ -7485,10 +7623,9 @@
         "affected_by_mirror_move": true,
         "affected_by_kings_rock": false,
         "description": "The user cloaks itself in fire and charges at the foe. The user sustains serious damage, too.",
-        "attack_flavor": [
-            "third_recoil"
-        ],
-        "effects": []
+        "attack_flavor": [],
+        "effects": [],
+        "has_field_effect": false
     },
     "Wring Out": {
         "rom_id": 378,
@@ -7510,7 +7647,8 @@
         "affected_by_kings_rock": true,
         "description": "The user powerfully wrings the foe. The more HP the foe has, the greater this attack\u2019s power.",
         "attack_flavor": [],
-        "effects": []
+        "effects": [],
+        "has_field_effect": false
     },
     "Explosion": {
         "rom_id": 153,
@@ -7534,7 +7672,8 @@
         "attack_flavor": [
             "self_destruct_explosion"
         ],
-        "effects": []
+        "effects": [],
+        "has_field_effect": false
     },
     "Surf": {
         "rom_id": 57,
@@ -7556,7 +7695,8 @@
         "affected_by_kings_rock": true,
         "description": "It swamps the entire battlefield with a giant wave. It can also be used for crossing water.",
         "attack_flavor": [],
-        "effects": []
+        "effects": [],
+        "has_field_effect": false
     },
     "Powder Snow": {
         "rom_id": 181,
@@ -7583,7 +7723,8 @@
                 "status": "Freeze",
                 "chance": 10
             }
-        ]
+        ],
+        "has_field_effect": false
     },
     "Hydro Cannon": {
         "rom_id": 308,
@@ -7607,7 +7748,8 @@
         "attack_flavor": [
             "recharge"
         ],
-        "effects": []
+        "effects": [],
+        "has_field_effect": false
     },
     "SmokeScreen": {
         "rom_id": 108,
@@ -7636,7 +7778,8 @@
                 "stat": "acc",
                 "target": "enemy"
             }
-        ]
+        ],
+        "has_field_effect": false
     },
     "Lucky Chant": {
         "rom_id": 381,
@@ -7658,7 +7801,8 @@
         "affected_by_kings_rock": false,
         "description": "The user chants an incantation toward the sky, preventing the foe from landing critical hits.",
         "attack_flavor": [],
-        "effects": []
+        "effects": [],
+        "has_field_effect": false
     },
     "Body Slam": {
         "rom_id": 34,
@@ -7685,7 +7829,8 @@
                 "status": "Paralysis",
                 "chance": 30
             }
-        ]
+        ],
+        "has_field_effect": false
     },
     "Karate Chop": {
         "rom_id": 2,
@@ -7709,7 +7854,8 @@
         "attack_flavor": [
             "high_crit"
         ],
-        "effects": []
+        "effects": [],
+        "has_field_effect": false
     },
     "Frenzy Plant": {
         "rom_id": 338,
@@ -7733,7 +7879,8 @@
         "attack_flavor": [
             "recharge"
         ],
-        "effects": []
+        "effects": [],
+        "has_field_effect": false
     },
     "Agility": {
         "rom_id": 97,
@@ -7762,7 +7909,8 @@
                 "stat": "spe",
                 "target": "self"
             }
-        ]
+        ],
+        "has_field_effect": false
     },
     "ThunderPunch": {
         "rom_id": 9,
@@ -7789,7 +7937,8 @@
                 "status": "Paralysis",
                 "chance": 10
             }
-        ]
+        ],
+        "has_field_effect": false
     },
     "Attract": {
         "rom_id": 213,
@@ -7813,7 +7962,8 @@
         "attack_flavor": [
             "attract"
         ],
-        "effects": []
+        "effects": [],
+        "has_field_effect": false
     },
     "Vacuum Wave": {
         "rom_id": 410,
@@ -7835,7 +7985,8 @@
         "affected_by_kings_rock": true,
         "description": "The user whirls its fists to send a wave of pure vacuum at the foe. This move always goes first.",
         "attack_flavor": [],
-        "effects": []
+        "effects": [],
+        "has_field_effect": false
     },
     "Mega Kick": {
         "rom_id": 25,
@@ -7857,7 +8008,8 @@
         "affected_by_kings_rock": true,
         "description": "The foe is attacked by a kick launched with muscle-packed power. ",
         "attack_flavor": [],
-        "effects": []
+        "effects": [],
+        "has_field_effect": false
     },
     "Memento": {
         "rom_id": 262,
@@ -7894,7 +8046,8 @@
                 "stat": "spa",
                 "target": "enemy"
             }
-        ]
+        ],
+        "has_field_effect": false
     },
     "Vine Whip": {
         "rom_id": 22,
@@ -7916,7 +8069,8 @@
         "affected_by_kings_rock": true,
         "description": "The foe is struck with slender, whiplike vines to inflict damage. ",
         "attack_flavor": [],
-        "effects": []
+        "effects": [],
+        "has_field_effect": false
     },
     "Grass Knot": {
         "rom_id": 447,
@@ -7937,10 +8091,9 @@
         "affected_by_mirror_move": true,
         "affected_by_kings_rock": true,
         "description": "The user snares the foe with grass and trips it. The heavier the foe, the greater the damage.",
-        "attack_flavor": [
-            "weight_damage"
-        ],
-        "effects": []
+        "attack_flavor": [],
+        "effects": [],
+        "has_field_effect": false
     },
     "Growth": {
         "rom_id": 74,
@@ -7969,7 +8122,8 @@
                 "stat": "spa",
                 "target": "self"
             }
-        ]
+        ],
+        "has_field_effect": false
     },
     "Magnet Bomb": {
         "rom_id": 443,
@@ -7991,7 +8145,8 @@
         "affected_by_kings_rock": true,
         "description": "The user launches a steel bomb that sticks to the target. This attack will not miss.",
         "attack_flavor": [],
-        "effects": []
+        "effects": [],
+        "has_field_effect": false
     },
     "Covet": {
         "rom_id": 343,
@@ -8015,7 +8170,8 @@
         "attack_flavor": [
             "thief"
         ],
-        "effects": []
+        "effects": [],
+        "has_field_effect": false
     },
     "Recover": {
         "rom_id": 105,
@@ -8039,7 +8195,8 @@
         "attack_flavor": [
             "recover"
         ],
-        "effects": []
+        "effects": [],
+        "has_field_effect": false
     },
     "Rock Smash": {
         "rom_id": 249,
@@ -8068,7 +8225,8 @@
                 "stat": "def",
                 "target": "enemy"
             }
-        ]
+        ],
+        "has_field_effect": false
     },
     "Hi Jump Kick": {
         "rom_id": 136,
@@ -8092,7 +8250,8 @@
         "attack_flavor": [
             "miss_recoil_damage"
         ],
-        "effects": []
+        "effects": [],
+        "has_field_effect": false
     },
     "Kinesis": {
         "rom_id": 134,
@@ -8121,7 +8280,8 @@
                 "stat": "acc",
                 "target": "enemy"
             }
-        ]
+        ],
+        "has_field_effect": false
     },
     "Copycat": {
         "rom_id": 383,
@@ -8143,7 +8303,8 @@
         "affected_by_kings_rock": false,
         "description": "The user mimics the move used immediately before it. The move fails if no other move has been used yet.",
         "attack_flavor": [],
-        "effects": []
+        "effects": [],
+        "has_field_effect": false
     },
     "Thrash": {
         "rom_id": 37,
@@ -8167,7 +8328,8 @@
         "attack_flavor": [
             "rampage"
         ],
-        "effects": []
+        "effects": [],
+        "has_field_effect": false
     },
     "Avalanche": {
         "rom_id": 419,
@@ -8189,7 +8351,8 @@
         "affected_by_kings_rock": true,
         "description": "An attack move that inflicts double the damage if the user has been hurt by the foe in the same turn.",
         "attack_flavor": [],
-        "effects": []
+        "effects": [],
+        "has_field_effect": false
     },
     "Tri Attack": {
         "rom_id": 161,
@@ -8226,7 +8389,8 @@
                 "status": "Burn",
                 "chance": 6.3
             }
-        ]
+        ],
+        "has_field_effect": false
     },
     "Encore": {
         "rom_id": 227,
@@ -8250,7 +8414,8 @@
         "attack_flavor": [
             "encore"
         ],
-        "effects": []
+        "effects": [],
+        "has_field_effect": false
     },
     "Rest": {
         "rom_id": 156,
@@ -8274,7 +8439,8 @@
         "attack_flavor": [
             "rest"
         ],
-        "effects": []
+        "effects": [],
+        "has_field_effect": false
     },
     "Smog": {
         "rom_id": 123,
@@ -8301,7 +8467,8 @@
                 "status": "Poison",
                 "chance": 40
             }
-        ]
+        ],
+        "has_field_effect": false
     },
     "Wrap": {
         "rom_id": 35,
@@ -8325,7 +8492,8 @@
         "attack_flavor": [
             "trap"
         ],
-        "effects": []
+        "effects": [],
+        "has_field_effect": false
     },
     "Double Kick": {
         "rom_id": 24,
@@ -8349,7 +8517,8 @@
         "attack_flavor": [
             "two_hit"
         ],
-        "effects": []
+        "effects": [],
+        "has_field_effect": false
     },
     "Protect": {
         "rom_id": 182,
@@ -8373,7 +8542,8 @@
         "attack_flavor": [
             "protect"
         ],
-        "effects": []
+        "effects": [],
+        "has_field_effect": false
     },
     "Growl": {
         "rom_id": 45,
@@ -8402,7 +8572,8 @@
                 "stat": "atk",
                 "target": "enemy"
             }
-        ]
+        ],
+        "has_field_effect": false
     },
     "Psycho Cut": {
         "rom_id": 427,
@@ -8423,10 +8594,9 @@
         "affected_by_mirror_move": true,
         "affected_by_kings_rock": true,
         "description": "The user tears at the foe with blades formed by psychic power. It has a high critical-hit ratio.",
-        "attack_flavor": [
-            "high_crit"
-        ],
-        "effects": []
+        "attack_flavor": [],
+        "effects": [],
+        "has_field_effect": false
     },
     "Dive": {
         "rom_id": 291,
@@ -8450,7 +8620,8 @@
         "attack_flavor": [
             "two_turn_semi_invulnerable"
         ],
-        "effects": []
+        "effects": [],
+        "has_field_effect": false
     },
     "Frustration": {
         "rom_id": 218,
@@ -8474,7 +8645,8 @@
         "attack_flavor": [
             "frustration"
         ],
-        "effects": []
+        "effects": [],
+        "has_field_effect": false
     },
     "U-turn": {
         "rom_id": 369,
@@ -8496,7 +8668,8 @@
         "affected_by_kings_rock": true,
         "description": "After making its attack, the user rushes back to switch places with a party Pok\u00e9mon in waiting.",
         "attack_flavor": [],
-        "effects": []
+        "effects": [],
+        "has_field_effect": false
     },
     "Seed Bomb": {
         "rom_id": 402,
@@ -8518,7 +8691,8 @@
         "affected_by_kings_rock": true,
         "description": "The user slams a barrage of hard- shelled seeds down on the foe from above.",
         "attack_flavor": [],
-        "effects": []
+        "effects": [],
+        "has_field_effect": false
     },
     "Earthquake": {
         "rom_id": 89,
@@ -8542,7 +8716,8 @@
         "attack_flavor": [
             "bonus_dig_damage"
         ],
-        "effects": []
+        "effects": [],
+        "has_field_effect": false
     },
     "Howl": {
         "rom_id": 336,
@@ -8571,7 +8746,8 @@
                 "stat": "atk",
                 "target": "self"
             }
-        ]
+        ],
+        "has_field_effect": false
     },
     "Hidden Power": {
         "rom_id": 237,
@@ -8595,7 +8771,8 @@
         "attack_flavor": [
             "hidden_power"
         ],
-        "effects": []
+        "effects": [],
+        "has_field_effect": false
     },
     "Minimize": {
         "rom_id": 107,
@@ -8626,7 +8803,8 @@
                 "stat": "ev",
                 "target": "self"
             }
-        ]
+        ],
+        "has_field_effect": false
     },
     "Tickle": {
         "rom_id": 321,
@@ -8661,7 +8839,8 @@
                 "stat": "def",
                 "target": "enemy"
             }
-        ]
+        ],
+        "has_field_effect": false
     },
     "Safeguard": {
         "rom_id": 219,
@@ -8685,7 +8864,8 @@
         "attack_flavor": [
             "safeguard"
         ],
-        "effects": []
+        "effects": [],
+        "has_field_effect": false
     },
     "Power Gem": {
         "rom_id": 408,
@@ -8707,7 +8887,8 @@
         "affected_by_kings_rock": true,
         "description": "The user attacks with a ray of light that sparkles as if it were made of gemstones. ",
         "attack_flavor": [],
-        "effects": []
+        "effects": [],
+        "has_field_effect": false
     },
     "Poison Jab": {
         "rom_id": 398,
@@ -8729,12 +8910,8 @@
         "affected_by_kings_rock": true,
         "description": "The foe is stabbed with a tentacle or arm steeped in poison. It may also poison the foe.",
         "attack_flavor": [],
-        "effects": [
-            {
-                "status": "Poison",
-                "chance": 30
-            }
-        ]
+        "effects": [],
+        "has_field_effect": false
     },
     "Earth Power": {
         "rom_id": 414,
@@ -8756,14 +8933,8 @@
         "affected_by_kings_rock": true,
         "description": "The user makes the ground under the foe erupt with power. It may also lower the target\u2019s Sp. Def.",
         "attack_flavor": [],
-        "effects": [
-            {
-                "chance": 10,
-                "modifier": -1,
-                "stat": "spd",
-                "target": "enemy"
-            }
-        ]
+        "effects": [],
+        "has_field_effect": false
     },
     "Harden": {
         "rom_id": 106,
@@ -8792,7 +8963,8 @@
                 "stat": "def",
                 "target": "self"
             }
-        ]
+        ],
+        "has_field_effect": false
     },
     "Endure": {
         "rom_id": 203,
@@ -8816,7 +8988,8 @@
         "attack_flavor": [
             "endure"
         ],
-        "effects": []
+        "effects": [],
+        "has_field_effect": false
     },
     "Psywave": {
         "rom_id": 149,
@@ -8840,7 +9013,8 @@
         "attack_flavor": [
             "psywave"
         ],
-        "effects": []
+        "effects": [],
+        "has_field_effect": false
     },
     "Hypnosis": {
         "rom_id": 95,
@@ -8867,7 +9041,8 @@
                 "status": "Sleep",
                 "chance": 100
             }
-        ]
+        ],
+        "has_field_effect": false
     },
     "Role Play": {
         "rom_id": 272,
@@ -8891,7 +9066,8 @@
         "attack_flavor": [
             "role_play"
         ],
-        "effects": []
+        "effects": [],
+        "has_field_effect": false
     },
     "Mega Drain": {
         "rom_id": 72,
@@ -8915,7 +9091,8 @@
         "attack_flavor": [
             "drain_hp"
         ],
-        "effects": []
+        "effects": [],
+        "has_field_effect": false
     },
     "Ice Punch": {
         "rom_id": 8,
@@ -8942,7 +9119,8 @@
                 "status": "Freeze",
                 "chance": 10
             }
-        ]
+        ],
+        "has_field_effect": false
     },
     "Payback": {
         "rom_id": 371,
@@ -8964,7 +9142,8 @@
         "affected_by_kings_rock": true,
         "description": "If the user can use this attack after the foe attacks, its power is doubled. ",
         "attack_flavor": [],
-        "effects": []
+        "effects": [],
+        "has_field_effect": false
     },
     "Rock Polish": {
         "rom_id": 397,
@@ -8985,15 +9164,9 @@
         "affected_by_mirror_move": false,
         "affected_by_kings_rock": false,
         "description": "The user polishes its body to reduce drag. It can sharply raise the Speed stat. ",
-        "attack_flavor": [
-            {
-                "chance": 100,
-                "modifier": 2,
-                "stat": "spe",
-                "target": "self"
-            }
-        ],
-        "effects": []
+        "attack_flavor": [],
+        "effects": [],
+        "has_field_effect": false
     },
     "Ice Ball": {
         "rom_id": 301,
@@ -9017,7 +9190,8 @@
         "attack_flavor": [
             "rollout"
         ],
-        "effects": []
+        "effects": [],
+        "has_field_effect": false
     },
     "Fire Fang": {
         "rom_id": 424,
@@ -9039,16 +9213,8 @@
         "affected_by_kings_rock": true,
         "description": "The user bites with flame-cloaked fangs. It may also make the foe flinch or sustain a burn.",
         "attack_flavor": [],
-        "effects": [
-            {
-                "chance": 10,
-                "flinch": true
-            },
-            {
-                "status": "Burn",
-                "chance": 10
-            }
-        ]
+        "effects": [],
+        "has_field_effect": false
     },
     "Double Team": {
         "rom_id": 104,
@@ -9077,7 +9243,8 @@
                 "stat": "ev",
                 "target": "self"
             }
-        ]
+        ],
+        "has_field_effect": false
     },
     "Seed Flare": {
         "rom_id": 465,
@@ -9098,15 +9265,9 @@
         "affected_by_mirror_move": true,
         "affected_by_kings_rock": true,
         "description": "The user generates a shock wave from within its body. It may also lower the target\u2019s Sp. Def.",
-        "attack_flavor": [
-            {
-                "chance": 40,
-                "modifier": -2,
-                "stat": "spd",
-                "target": "enemy"
-            }
-        ],
-        "effects": []
+        "attack_flavor": [],
+        "effects": [],
+        "has_field_effect": false
     },
     "Vital Throw": {
         "rom_id": 233,
@@ -9130,7 +9291,8 @@
         "attack_flavor": [
             "always_hit"
         ],
-        "effects": []
+        "effects": [],
+        "has_field_effect": false
     },
     "Double Hit": {
         "rom_id": 458,
@@ -9151,10 +9313,9 @@
         "affected_by_mirror_move": true,
         "affected_by_kings_rock": true,
         "description": "The user slams the foe with a tail, etc. The target is hit twice in a row. ",
-        "attack_flavor": [
-            "two_hit"
-        ],
-        "effects": []
+        "attack_flavor": [],
+        "effects": [],
+        "has_field_effect": false
     },
     "DoubleSlap": {
         "rom_id": 3,
@@ -9178,7 +9339,8 @@
         "attack_flavor": [
             "multi_hit"
         ],
-        "effects": []
+        "effects": [],
+        "has_field_effect": false
     },
     "Leaf Storm": {
         "rom_id": 437,
@@ -9200,14 +9362,8 @@
         "affected_by_kings_rock": true,
         "description": "A storm of sharp leaves is whipped up. The attack\u2019s recoil sharply reduces the user\u2019s Sp. Atk stat.",
         "attack_flavor": [],
-        "effects": [
-            {
-                "chance": 100,
-                "modifier": -2,
-                "stat": "spa",
-                "target": "self"
-            }
-        ]
+        "effects": [],
+        "has_field_effect": false
     },
     "Guard Swap": {
         "rom_id": 385,
@@ -9229,7 +9385,8 @@
         "affected_by_kings_rock": false,
         "description": "The user employs its psychic power to switch changes to its Defense and Sp. Def with the foe.",
         "attack_flavor": [],
-        "effects": []
+        "effects": [],
+        "has_field_effect": false
     },
     "Sheer Cold": {
         "rom_id": 329,
@@ -9253,7 +9410,8 @@
         "attack_flavor": [
             "one_hit_ko"
         ],
-        "effects": []
+        "effects": [],
+        "has_field_effect": false
     },
     "Dream Eater": {
         "rom_id": 138,
@@ -9278,7 +9436,8 @@
             "dream_eater",
             "drain_hp"
         ],
-        "effects": []
+        "effects": [],
+        "has_field_effect": false
     },
     "Overheat": {
         "rom_id": 315,
@@ -9307,7 +9466,8 @@
                 "stat": "spa",
                 "target": "self"
             }
-        ]
+        ],
+        "has_field_effect": false
     },
     "Rock Blast": {
         "rom_id": 350,
@@ -9331,7 +9491,8 @@
         "attack_flavor": [
             "multi_hit"
         ],
-        "effects": []
+        "effects": [],
+        "has_field_effect": false
     },
     "Endeavor": {
         "rom_id": 283,
@@ -9355,7 +9516,8 @@
         "attack_flavor": [
             "endeavor"
         ],
-        "effects": []
+        "effects": [],
+        "has_field_effect": false
     },
     "Follow Me": {
         "rom_id": 266,
@@ -9379,7 +9541,8 @@
         "attack_flavor": [
             "follow_me"
         ],
-        "effects": []
+        "effects": [],
+        "has_field_effect": false
     },
     "Mud-Slap": {
         "rom_id": 189,
@@ -9408,7 +9571,8 @@
                 "stat": "acc",
                 "target": "enemy"
             }
-        ]
+        ],
+        "has_field_effect": false
     },
     "Jump Kick": {
         "rom_id": 26,
@@ -9432,7 +9596,8 @@
         "attack_flavor": [
             "miss_recoil_damage"
         ],
-        "effects": []
+        "effects": [],
+        "has_field_effect": false
     },
     "Switcheroo": {
         "rom_id": 415,
@@ -9454,7 +9619,8 @@
         "affected_by_kings_rock": false,
         "description": "The user trades held items with the foe faster than the eye can follow. ",
         "attack_flavor": [],
-        "effects": []
+        "effects": [],
+        "has_field_effect": false
     },
     "Hydro Pump": {
         "rom_id": 56,
@@ -9476,7 +9642,8 @@
         "affected_by_kings_rock": true,
         "description": "The foe is blasted by a huge volume of water launched under great pressure. ",
         "attack_flavor": [],
-        "effects": []
+        "effects": [],
+        "has_field_effect": false
     },
     "Assurance": {
         "rom_id": 372,
@@ -9498,7 +9665,8 @@
         "affected_by_kings_rock": true,
         "description": "If the foe has already taken some damage in the same turn, this attack\u2019s power is doubled.",
         "attack_flavor": [],
-        "effects": []
+        "effects": [],
+        "has_field_effect": false
     },
     "Head Smash": {
         "rom_id": 457,
@@ -9519,10 +9687,9 @@
         "affected_by_mirror_move": true,
         "affected_by_kings_rock": true,
         "description": "The user delivers a life-endangering head butt at full power. The user also takes terrible damage.",
-        "attack_flavor": [
-            "half_recoil"
-        ],
-        "effects": []
+        "attack_flavor": [],
+        "effects": [],
+        "has_field_effect": false
     },
     "ThunderShock": {
         "rom_id": 84,
@@ -9549,7 +9716,8 @@
                 "status": "Paralysis",
                 "chance": 10
             }
-        ]
+        ],
+        "has_field_effect": false
     },
     "Moonlight": {
         "rom_id": 236,
@@ -9573,7 +9741,8 @@
         "attack_flavor": [
             "weather_heal"
         ],
-        "effects": []
+        "effects": [],
+        "has_field_effect": false
     },
     "Cross Poison": {
         "rom_id": 440,
@@ -9594,15 +9763,9 @@
         "affected_by_mirror_move": true,
         "affected_by_kings_rock": true,
         "description": "A slashing attack that may also leave the target poisoned. It has a high critical-hit ratio.",
-        "attack_flavor": [
-            "high_crit"
-        ],
-        "effects": [
-            {
-                "status": "Poison",
-                "chance": 30
-            }
-        ]
+        "attack_flavor": [],
+        "effects": [],
+        "has_field_effect": false
     },
     "Mud Bomb": {
         "rom_id": 426,
@@ -9624,14 +9787,8 @@
         "affected_by_kings_rock": true,
         "description": "The user launches a hard-packed mud ball to attack. It may also lower the target\u2019s accuracy.",
         "attack_flavor": [],
-        "effects": [
-            {
-                "chance": 30,
-                "modifier": -1,
-                "stat": "acc",
-                "target": "enemy"
-            }
-        ]
+        "effects": [],
+        "has_field_effect": false
     },
     "Swords Dance": {
         "rom_id": 14,
@@ -9660,7 +9817,8 @@
                 "stat": "atk",
                 "target": "self"
             }
-        ]
+        ],
+        "has_field_effect": false
     },
     "Icicle Spear": {
         "rom_id": 333,
@@ -9684,7 +9842,8 @@
         "attack_flavor": [
             "multi_hit"
         ],
-        "effects": []
+        "effects": [],
+        "has_field_effect": false
     },
     "Tackle": {
         "rom_id": 33,
@@ -9706,7 +9865,8 @@
         "affected_by_kings_rock": true,
         "description": "A physical attack in which the user charges and slams into the foe with its whole body.",
         "attack_flavor": [],
-        "effects": []
+        "effects": [],
+        "has_field_effect": false
     },
     "Teleport": {
         "rom_id": 100,
@@ -9730,7 +9890,8 @@
         "attack_flavor": [
             "end_wild_battle"
         ],
-        "effects": []
+        "effects": [],
+        "has_field_effect": false
     },
     "Outrage": {
         "rom_id": 200,
@@ -9754,7 +9915,8 @@
         "attack_flavor": [
             "rampage"
         ],
-        "effects": []
+        "effects": [],
+        "has_field_effect": false
     },
     "Focus Energy": {
         "rom_id": 116,
@@ -9778,7 +9940,8 @@
         "attack_flavor": [
             "focus_energy"
         ],
-        "effects": []
+        "effects": [],
+        "has_field_effect": false
     },
     "AncientPower": {
         "rom_id": 246,
@@ -9807,7 +9970,8 @@
                 "stat": "omni",
                 "target": "self"
             }
-        ]
+        ],
+        "has_field_effect": false
     },
     "Conversion": {
         "rom_id": 160,
@@ -9831,7 +9995,8 @@
         "attack_flavor": [
             "conversion"
         ],
-        "effects": []
+        "effects": [],
+        "has_field_effect": false
     },
     "Calm Mind": {
         "rom_id": 347,
@@ -9866,7 +10031,8 @@
                 "stat": "spd",
                 "target": "self"
             }
-        ]
+        ],
+        "has_field_effect": false
     },
     "Absorb": {
         "rom_id": 71,
@@ -9890,7 +10056,8 @@
         "attack_flavor": [
             "drain_hp"
         ],
-        "effects": []
+        "effects": [],
+        "has_field_effect": false
     },
     "Shadow Punch": {
         "rom_id": 325,
@@ -9914,7 +10081,8 @@
         "attack_flavor": [
             "always_hit"
         ],
-        "effects": []
+        "effects": [],
+        "has_field_effect": false
     },
     "Dragon Dance": {
         "rom_id": 349,
@@ -9949,7 +10117,8 @@
                 "stat": "atk",
                 "target": "self"
             }
-        ]
+        ],
+        "has_field_effect": false
     },
     "Helping Hand": {
         "rom_id": 270,
@@ -9973,7 +10142,8 @@
         "attack_flavor": [
             "helping_hand"
         ],
-        "effects": []
+        "effects": [],
+        "has_field_effect": false
     },
     "Mean Look": {
         "rom_id": 212,
@@ -9997,7 +10167,8 @@
         "attack_flavor": [
             "mean_look"
         ],
-        "effects": []
+        "effects": [],
+        "has_field_effect": false
     },
     "Nasty Plot": {
         "rom_id": 417,
@@ -10019,14 +10190,8 @@
         "affected_by_kings_rock": false,
         "description": "The user stimulates its brain by thinking bad thoughts. It sharply raises the user\u2019s Sp. Atk.",
         "attack_flavor": [],
-        "effects": [
-            {
-                "chance": 100,
-                "modifier": 2,
-                "stat": "spa",
-                "target": "self"
-            }
-        ]
+        "effects": [],
+        "has_field_effect": false
     },
     "Sludge Bomb": {
         "rom_id": 188,
@@ -10053,7 +10218,8 @@
                 "status": "Poison",
                 "chance": 30
             }
-        ]
+        ],
+        "has_field_effect": false
     },
     "Aromatherapy": {
         "rom_id": 312,
@@ -10077,7 +10243,8 @@
         "attack_flavor": [
             "heal_bell"
         ],
-        "effects": []
+        "effects": [],
+        "has_field_effect": false
     },
     "Heat Wave": {
         "rom_id": 257,
@@ -10104,7 +10271,8 @@
                 "status": "Burn",
                 "chance": 10
             }
-        ]
+        ],
+        "has_field_effect": false
     },
     "Megahorn": {
         "rom_id": 224,
@@ -10126,7 +10294,8 @@
         "affected_by_kings_rock": true,
         "description": "Utilizing its tough and impressive horn, the user rams into the foe  with no letup. ",
         "attack_flavor": [],
-        "effects": []
+        "effects": [],
+        "has_field_effect": false
     },
     "Rain Dance": {
         "rom_id": 240,
@@ -10150,7 +10319,8 @@
         "attack_flavor": [
             "rain_dance"
         ],
-        "effects": []
+        "effects": [],
+        "has_field_effect": false
     },
     "Water Gun": {
         "rom_id": 55,
@@ -10172,7 +10342,8 @@
         "affected_by_kings_rock": true,
         "description": "The foe is blasted with a forceful shot of water.  ",
         "attack_flavor": [],
-        "effects": []
+        "effects": [],
+        "has_field_effect": false
     },
     "Fly": {
         "rom_id": 19,
@@ -10196,7 +10367,8 @@
         "attack_flavor": [
             "two_turn_semi_invulnerable"
         ],
-        "effects": []
+        "effects": [],
+        "has_field_effect": false
     },
     "Sweet Scent": {
         "rom_id": 230,
@@ -10225,7 +10397,8 @@
                 "stat": "ev",
                 "target": "enemy"
             }
-        ]
+        ],
+        "has_field_effect": false
     },
     "Me First": {
         "rom_id": 382,
@@ -10247,7 +10420,8 @@
         "affected_by_kings_rock": false,
         "description": "The user tries to cut ahead of the foe to steal and use the foe\u2019s intended move with greater power.",
         "attack_flavor": [],
-        "effects": []
+        "effects": [],
+        "has_field_effect": false
     },
     "Astonish": {
         "rom_id": 310,
@@ -10276,7 +10450,8 @@
                 "chance": 30,
                 "flinch": true
             }
-        ]
+        ],
+        "has_field_effect": false
     },
     "Roost": {
         "rom_id": 355,
@@ -10298,7 +10473,8 @@
         "affected_by_kings_rock": false,
         "description": "The user lands and rests its body. It restores the user\u2019s HP by up to half of its max HP.",
         "attack_flavor": [],
-        "effects": []
+        "effects": [],
+        "has_field_effect": true
     },
     "GrassWhistle": {
         "rom_id": 320,
@@ -10325,7 +10501,8 @@
                 "status": "Sleep",
                 "chance": 100
             }
-        ]
+        ],
+        "has_field_effect": false
     },
     "Thunder Fang": {
         "rom_id": 422,
@@ -10347,16 +10524,8 @@
         "affected_by_kings_rock": true,
         "description": "The user bites with electrified fangs. It may also make the foe flinch or become paralyzed.",
         "attack_flavor": [],
-        "effects": [
-            {
-                "chance": 10,
-                "flinch": true
-            },
-            {
-                "status": "Paralysis",
-                "chance": 10
-            }
-        ]
+        "effects": [],
+        "has_field_effect": false
     },
     "Octazooka": {
         "rom_id": 190,
@@ -10385,7 +10554,8 @@
                 "stat": "acc",
                 "target": "enemy"
             }
-        ]
+        ],
+        "has_field_effect": false
     },
     "Sweet Kiss": {
         "rom_id": 186,
@@ -10412,7 +10582,8 @@
                 "status": "Confusion",
                 "chance": 100
             }
-        ]
+        ],
+        "has_field_effect": false
     },
     "Mirror Shot": {
         "rom_id": 429,
@@ -10434,14 +10605,8 @@
         "affected_by_kings_rock": true,
         "description": "The user looses a flash of energy from its polished body. It may also lower the target\u2019s accuracy.",
         "attack_flavor": [],
-        "effects": [
-            {
-                "chance": 30,
-                "modifier": -1,
-                "stat": "acc",
-                "target": "enemy"
-            }
-        ]
+        "effects": [],
+        "has_field_effect": false
     },
     "Destiny Bond": {
         "rom_id": 194,
@@ -10465,7 +10630,8 @@
         "attack_flavor": [
             "destiny_bond"
         ],
-        "effects": []
+        "effects": [],
+        "has_field_effect": false
     },
     "Leer": {
         "rom_id": 43,
@@ -10494,7 +10660,8 @@
                 "stat": "def",
                 "target": "enemy"
             }
-        ]
+        ],
+        "has_field_effect": false
     },
     "Roar": {
         "rom_id": 46,
@@ -10518,7 +10685,8 @@
         "attack_flavor": [
             "force_switch"
         ],
-        "effects": []
+        "effects": [],
+        "has_field_effect": false
     },
     "Slash": {
         "rom_id": 163,
@@ -10542,7 +10710,8 @@
         "attack_flavor": [
             "high_crit"
         ],
-        "effects": []
+        "effects": [],
+        "has_field_effect": false
     },
     "Magic Coat": {
         "rom_id": 277,
@@ -10566,7 +10735,8 @@
         "attack_flavor": [
             "magic_coat"
         ],
-        "effects": []
+        "effects": [],
+        "has_field_effect": false
     },
     "Slam": {
         "rom_id": 21,
@@ -10588,7 +10758,8 @@
         "affected_by_kings_rock": true,
         "description": "The foe is slammed with a long tail, vines, etc., to inflict damage. ",
         "attack_flavor": [],
-        "effects": []
+        "effects": [],
+        "has_field_effect": false
     },
     "Giga Drain": {
         "rom_id": 202,
@@ -10612,7 +10783,8 @@
         "attack_flavor": [
             "drain_hp"
         ],
-        "effects": []
+        "effects": [],
+        "has_field_effect": false
     },
     "Milk Drink": {
         "rom_id": 208,
@@ -10636,7 +10808,8 @@
         "attack_flavor": [
             "recover"
         ],
-        "effects": []
+        "effects": [],
+        "has_field_effect": false
     },
     "Bind": {
         "rom_id": 20,
@@ -10660,7 +10833,8 @@
         "attack_flavor": [
             "trap"
         ],
-        "effects": []
+        "effects": [],
+        "has_field_effect": false
     },
     "Slack Off": {
         "rom_id": 303,
@@ -10684,7 +10858,8 @@
         "attack_flavor": [
             "recover"
         ],
-        "effects": []
+        "effects": [],
+        "has_field_effect": false
     },
     "Bug Bite": {
         "rom_id": 450,
@@ -10706,7 +10881,8 @@
         "affected_by_kings_rock": true,
         "description": "The user bites the foe. If the foe is holding a Berry, the user eats it and gains its effect.",
         "attack_flavor": [],
-        "effects": []
+        "effects": [],
+        "has_field_effect": false
     },
     "Confuse Ray": {
         "rom_id": 109,
@@ -10733,7 +10909,8 @@
                 "status": "Confusion",
                 "chance": 100
             }
-        ]
+        ],
+        "has_field_effect": false
     },
     "Bulk Up": {
         "rom_id": 339,
@@ -10768,7 +10945,8 @@
                 "stat": "atk",
                 "target": "self"
             }
-        ]
+        ],
+        "has_field_effect": false
     },
     "Yawn": {
         "rom_id": 281,
@@ -10795,7 +10973,8 @@
                 "status": "Yawn",
                 "chance": 100
             }
-        ]
+        ],
+        "has_field_effect": false
     },
     "Skill Swap": {
         "rom_id": 285,
@@ -10819,7 +10998,8 @@
         "attack_flavor": [
             "skill_swap"
         ],
-        "effects": []
+        "effects": [],
+        "has_field_effect": false
     },
     "Snore": {
         "rom_id": 173,
@@ -10848,7 +11028,8 @@
                 "flinch": true,
                 "chance": 30
             }
-        ]
+        ],
+        "has_field_effect": false
     },
     "Bounce": {
         "rom_id": 340,
@@ -10877,7 +11058,8 @@
                 "chance": 30,
                 "flinch": true
             }
-        ]
+        ],
+        "has_field_effect": false
     },
     "FeatherDance": {
         "rom_id": 297,
@@ -10906,7 +11088,8 @@
                 "stat": "atk",
                 "target": "enemy"
             }
-        ]
+        ],
+        "has_field_effect": false
     },
     "SonicBoom": {
         "rom_id": 49,
@@ -10930,7 +11113,8 @@
         "attack_flavor": [
             "fixed_damage"
         ],
-        "effects": []
+        "effects": [],
+        "has_field_effect": false
     },
     "Stockpile": {
         "rom_id": 254,
@@ -10954,7 +11138,8 @@
         "attack_flavor": [
             "stockpile"
         ],
-        "effects": []
+        "effects": [],
+        "has_field_effect": false
     },
     "Grudge": {
         "rom_id": 288,
@@ -10978,7 +11163,8 @@
         "attack_flavor": [
             "grudge"
         ],
-        "effects": []
+        "effects": [],
+        "has_field_effect": false
     },
     "SolarBeam": {
         "rom_id": 76,
@@ -11002,7 +11188,8 @@
         "attack_flavor": [
             "two_turn"
         ],
-        "effects": []
+        "effects": [],
+        "has_field_effect": false
     },
     "Lunar Dance": {
         "rom_id": 461,
@@ -11024,7 +11211,8 @@
         "affected_by_kings_rock": false,
         "description": "The user faints. In return, the Pok\u00e9mon taking its place will have its status and HP fully restored.",
         "attack_flavor": [],
-        "effects": []
+        "effects": [],
+        "has_field_effect": false
     },
     "Aqua Ring": {
         "rom_id": 392,
@@ -11046,7 +11234,8 @@
         "affected_by_kings_rock": false,
         "description": "The user envelops itself in a veil made of water. It regains some HP on every turn.",
         "attack_flavor": [],
-        "effects": []
+        "effects": [],
+        "has_field_effect": false
     },
     "Submission": {
         "rom_id": 66,
@@ -11070,7 +11259,8 @@
         "attack_flavor": [
             "quarter_recoil"
         ],
-        "effects": []
+        "effects": [],
+        "has_field_effect": false
     },
     "Sleep Powder": {
         "rom_id": 79,
@@ -11097,7 +11287,8 @@
                 "status": "Sleep",
                 "chance": 100
             }
-        ]
+        ],
+        "has_field_effect": false
     },
     "Blizzard": {
         "rom_id": 59,
@@ -11124,7 +11315,8 @@
                 "status": "Freeze",
                 "chance": 10
             }
-        ]
+        ],
+        "has_field_effect": false
     },
     "Detect": {
         "rom_id": 197,
@@ -11148,7 +11340,8 @@
         "attack_flavor": [
             "protect"
         ],
-        "effects": []
+        "effects": [],
+        "has_field_effect": false
     },
     "Sacred Fire": {
         "rom_id": 221,
@@ -11177,7 +11370,8 @@
                 "chance": 50,
                 "status": "Burn"
             }
-        ]
+        ],
+        "has_field_effect": false
     },
     "Leech Seed": {
         "rom_id": 73,
@@ -11204,7 +11398,8 @@
                 "status": "Leech Seed",
                 "chance": 100
             }
-        ]
+        ],
+        "has_field_effect": false
     },
     "Metal Sound": {
         "rom_id": 319,
@@ -11233,7 +11428,8 @@
                 "stat": "spd",
                 "target": "enemy"
             }
-        ]
+        ],
+        "has_field_effect": false
     },
     "Future Sight": {
         "rom_id": 248,
@@ -11257,7 +11453,8 @@
         "attack_flavor": [
             "future_sight"
         ],
-        "effects": []
+        "effects": [],
+        "has_field_effect": false
     },
     "Mega Punch": {
         "rom_id": 5,
@@ -11279,7 +11476,8 @@
         "affected_by_kings_rock": true,
         "description": "The foe is slugged by a punch thrown with muscle-packed power. ",
         "attack_flavor": [],
-        "effects": []
+        "effects": [],
+        "has_field_effect": false
     },
     "Faint Attack": {
         "rom_id": 185,
@@ -11303,7 +11501,8 @@
         "attack_flavor": [
             "always_hit"
         ],
-        "effects": []
+        "effects": [],
+        "has_field_effect": false
     },
     "Crabhammer": {
         "rom_id": 152,
@@ -11327,7 +11526,8 @@
         "attack_flavor": [
             "high_crit"
         ],
-        "effects": []
+        "effects": [],
+        "has_field_effect": false
     },
     "Dark Pulse": {
         "rom_id": 399,
@@ -11349,12 +11549,8 @@
         "affected_by_kings_rock": true,
         "description": "The user releases a horrible aura imbued with dark thoughts. It may also make the target flinch.",
         "attack_flavor": [],
-        "effects": [
-            {
-                "chance": 20,
-                "flinch": true
-            }
-        ]
+        "effects": [],
+        "has_field_effect": false
     },
     "Spite": {
         "rom_id": 180,
@@ -11378,7 +11574,8 @@
         "attack_flavor": [
             "spite"
         ],
-        "effects": []
+        "effects": [],
+        "has_field_effect": false
     },
     "Eruption": {
         "rom_id": 284,
@@ -11402,7 +11599,8 @@
         "attack_flavor": [
             "eruption"
         ],
-        "effects": []
+        "effects": [],
+        "has_field_effect": false
     },
     "Silver Wind": {
         "rom_id": 318,
@@ -11431,7 +11629,8 @@
                 "stat": "omni",
                 "target": "self"
             }
-        ]
+        ],
+        "has_field_effect": false
     },
     "Lava Plume": {
         "rom_id": 436,
@@ -11453,12 +11652,8 @@
         "affected_by_kings_rock": true,
         "description": "An inferno of scarlet flames washes over all Pok\u00e9mon in battle. It may also inflict burns.",
         "attack_flavor": [],
-        "effects": [
-            {
-                "status": "Burn",
-                "chance": 30
-            }
-        ]
+        "effects": [],
+        "has_field_effect": false
     },
     "Beat Up": {
         "rom_id": 251,
@@ -11482,7 +11677,8 @@
         "attack_flavor": [
             "beat_up"
         ],
-        "effects": []
+        "effects": [],
+        "has_field_effect": false
     },
     "Focus Punch": {
         "rom_id": 264,
@@ -11506,7 +11702,8 @@
         "attack_flavor": [
             "focus_punch"
         ],
-        "effects": []
+        "effects": [],
+        "has_field_effect": false
     },
     "Aurora Beam": {
         "rom_id": 62,
@@ -11535,7 +11732,8 @@
                 "stat": "atk",
                 "target": "enemy"
             }
-        ]
+        ],
+        "has_field_effect": false
     },
     "Razor Leaf": {
         "rom_id": 75,
@@ -11559,7 +11757,8 @@
         "attack_flavor": [
             "high_crit"
         ],
-        "effects": []
+        "effects": [],
+        "has_field_effect": false
     },
     "Scratch": {
         "rom_id": 10,
@@ -11581,7 +11780,8 @@
         "affected_by_kings_rock": true,
         "description": "Hard, pointed, and sharp claws rake the foe to inflict damage.  ",
         "attack_flavor": [],
-        "effects": []
+        "effects": [],
+        "has_field_effect": false
     },
     "Drill Peck": {
         "rom_id": 65,
@@ -11603,7 +11803,8 @@
         "affected_by_kings_rock": true,
         "description": "A corkscrewing attack with the sharp beak acting as a drill. ",
         "attack_flavor": [],
-        "effects": []
+        "effects": [],
+        "has_field_effect": false
     },
     "Rock Wrecker": {
         "rom_id": 439,
@@ -11624,10 +11825,9 @@
         "affected_by_mirror_move": true,
         "affected_by_kings_rock": true,
         "description": "The user launches a huge boulder at the foe to attack. It must rest on the next turn, however.",
-        "attack_flavor": [
-            "recharge"
-        ],
-        "effects": []
+        "attack_flavor": [],
+        "effects": [],
+        "has_field_effect": false
     },
     "Luster Purge": {
         "rom_id": 295,
@@ -11656,7 +11856,8 @@
                 "stat": "spd",
                 "target": "enemy"
             }
-        ]
+        ],
+        "has_field_effect": false
     },
     "Cross Chop": {
         "rom_id": 238,
@@ -11680,7 +11881,8 @@
         "attack_flavor": [
             "high_crit"
         ],
-        "effects": []
+        "effects": [],
+        "has_field_effect": false
     },
     "Punishment": {
         "rom_id": 386,
@@ -11702,7 +11904,8 @@
         "affected_by_kings_rock": true,
         "description": "This attack\u2019s power increases the more the foe has powered up with stat changes. ",
         "attack_flavor": [],
-        "effects": []
+        "effects": [],
+        "has_field_effect": false
     },
     "Disable": {
         "rom_id": 50,
@@ -11729,7 +11932,8 @@
                 "status": "Disable",
                 "chance": 100
             }
-        ]
+        ],
+        "has_field_effect": false
     },
     "Mind Reader": {
         "rom_id": 170,
@@ -11753,7 +11957,8 @@
         "attack_flavor": [
             "lock_on"
         ],
-        "effects": []
+        "effects": [],
+        "has_field_effect": false
     },
     "Shadow Claw": {
         "rom_id": 421,
@@ -11774,10 +11979,9 @@
         "affected_by_mirror_move": true,
         "affected_by_kings_rock": true,
         "description": "The user slashes with a sharp claw made from shadows. It has a high critical-hit ratio.",
-        "attack_flavor": [
-            "high_crit"
-        ],
-        "effects": []
+        "attack_flavor": [],
+        "effects": [],
+        "has_field_effect": false
     },
     "Aqua Jet": {
         "rom_id": 453,
@@ -11799,7 +12003,8 @@
         "affected_by_kings_rock": true,
         "description": "The user lunges at the foe at a speed that makes it almost invisible. It is sure to strike first.",
         "attack_flavor": [],
-        "effects": []
+        "effects": [],
+        "has_field_effect": false
     },
     "Rock Throw": {
         "rom_id": 88,
@@ -11821,7 +12026,8 @@
         "affected_by_kings_rock": true,
         "description": "The user picks up and throws a small rock at the foe to attack. ",
         "attack_flavor": [],
-        "effects": []
+        "effects": [],
+        "has_field_effect": false
     },
     "Uproar": {
         "rom_id": 253,
@@ -11845,7 +12051,8 @@
         "attack_flavor": [
             "uproar"
         ],
-        "effects": []
+        "effects": [],
+        "has_field_effect": false
     },
     "Acid Armor": {
         "rom_id": 151,
@@ -11874,6 +12081,7 @@
                 "stat": "def",
                 "target": "self"
             }
-        ]
+        ],
+        "has_field_effect": false
     }
 }

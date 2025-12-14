@@ -482,6 +482,7 @@ def _load_move_db(path):
             raw_move[const.MOVE_FLAVOR],
             targeting=raw_move[const.MOVE_TARGET],
             category=raw_move[const.MOVE_CATEGORY],
+            has_field_effect=raw_move[const.MOVE_HAS_FIELD_EFFECT],
         )
     
     return result
