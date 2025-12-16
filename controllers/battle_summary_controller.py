@@ -343,9 +343,17 @@ class BattleSummaryController:
             if self._is_player_transformed:
                 attacking_mon = self._transformed_mon_list[mon_idx]
                 attacking_mon_stats = attacking_mon.cur_stats
+                if current_gen_info().get_generation() == 1:
+                    crit_mon = self._original_player_mon_list[mon_idx]
+                    crit_mon_stats = None
+                else:
+                    crit_mon = attacking_mon
+                    crit_mon_stats = attacking_mon_stats
             else:
                 attacking_mon = self._original_player_mon_list[mon_idx]
                 attacking_mon_stats = None
+                crit_mon = attacking_mon
+                crit_mon_stats = attacking_mon_stats
             attacking_stage_modifiers = self._player_stage_modifier
             attacking_field_status = self._player_field_status
             defending_mon = self._original_enemy_mon_list[mon_idx]
@@ -356,6 +364,8 @@ class BattleSummaryController:
         else:
             attacking_mon = self._original_enemy_mon_list[mon_idx]
             attacking_mon_stats = None
+            crit_mon = attacking_mon
+            crit_mon_stats = attacking_mon_stats
             attacking_stage_modifiers = self._enemy_stage_modifier
             attacking_field_status = self._enemy_field_status
             if self._is_player_transformed:
@@ -406,7 +416,7 @@ class BattleSummaryController:
             defending_battle_stats=defending_mon_stats,
         )
         crit_ranges = current_gen_info().calculate_damage(
-            attacking_mon,
+            crit_mon,
             move,
             defending_mon,
             attacking_stage_modifiers=attacking_stage_modifiers,
@@ -417,7 +427,7 @@ class BattleSummaryController:
             is_crit=True,
             weather=self._weather,
             is_double_battle=self._double_battle_flag,
-            attacking_battle_stats=attacking_mon_stats,
+            attacking_battle_stats=crit_mon_stats,
             defending_battle_stats=defending_mon_stats,
         )
         if normal_ranges is not None and crit_ranges is not None:
