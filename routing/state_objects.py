@@ -227,8 +227,8 @@ class SoloPokemon:
             logger.info(f"Unrealized StatXP {self.unrealized_stat_xp}")
 
         if self.xp_to_next_level <= 0:
-            self.percent_xp_to_next_level_str = 0
-            self.percent_xp_to_next_level = f"N/A"
+            self.percent_xp_to_next_level = 0
+            self.percent_xp_to_next_level_str = f"N/A"
         else:
             last_level_xp = pkmn.universal_utils.level_lookups[self.species_def.growth_rate].get_xp_for_level(self.cur_level)
             self.percent_xp_to_next_level = int((self.xp_to_next_level / (self.cur_xp + self.xp_to_next_level - last_level_xp)) * 100)
