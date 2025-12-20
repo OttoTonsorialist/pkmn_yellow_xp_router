@@ -340,12 +340,30 @@ class BattleSummaryController:
         move_display_name:str=None,
     ):
         if is_player_mon:
+            # TODO: gross hacky transform support. Somehow we should figure out how to offload some of this logic back into the generation objects...
+            # but I'm not sure how, currently...
             if self._is_player_transformed:
                 attacking_mon = self._transformed_mon_list[mon_idx]
                 attacking_mon_stats = attacking_mon.cur_stats
                 if current_gen_info().get_generation() == 1:
-                    crit_mon = self._original_player_mon_list[mon_idx]
+                    if attacking_mon.level > self._transformed_mon_list[0].level:
+                        attacking_mon.badges = copy.deepcopy(self._original_player_mon_list[0].badges)
+                        attacking_mon_stats = attacking_mon.get_battle_stats(StageModifiers())
+                    orig_player_mon = self._original_player_mon_list[mon_idx]
+                    crit_mon = copy.deepcopy(attacking_mon)
+                    crit_mon.level = orig_player_mon.level
+                    crit_mon.base_stats = orig_player_mon.base_stats
+                    crit_mon.stat_xp = orig_player_mon.stat_xp
+                    crit_mon.dvs = orig_player_mon.dvs
+                    crit_mon.badges = None
                     crit_mon_stats = None
+                elif current_gen_info().get_generation() == 2:
+                    crit_mon = attacking_mon
+                    crit_mon_stats = attacking_mon_stats
+
+                    if attacking_mon.level > self._transformed_mon_list[0].level:
+                        attacking_mon_stats = self._original_player_mon_list[mon_idx].get_battle_stats(self._player_stage_modifier)
+                        crit_mon_stats = self._original_player_mon_list[mon_idx].get_battle_stats(self._player_stage_modifier, is_crit=True)
                 else:
                     crit_mon = attacking_mon
                     crit_mon_stats = attacking_mon_stats

@@ -78,7 +78,9 @@ def calculate_gen_three_damage(
     defender_has_reflect:bool=False,
     custom_move_data:str="",
     weather:str=const.WEATHER_NONE,
-    is_double_battle:bool=False
+    is_double_battle:bool=False,
+    attacking_battle_stats:universal_data_objects.StatBlock=None,
+    defending_battle_stats:universal_data_objects.StatBlock=None,
 ):
     if move.name == const.HIDDEN_POWER_MOVE_NAME:
         move_type = get_hidden_power_type(attacking_pkmn.dvs)
