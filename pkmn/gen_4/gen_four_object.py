@@ -130,17 +130,6 @@ class GenFour(CurrentGen):
         return self._min_battles_db
 
     def get_recorder_client(self, recorder_controller:RecorderController) -> RecorderGameHookClient:
-        version_name = self._base_version_name
-        if version_name is None:
-            version_name = self._version_name
-
-        if version_name == const.PLATINUM_VERSION:
-            return EmeraldRecorder(recorder_controller, ["Pokemon Emerald"])
-        elif version_name in [const.DIAMOND_VERSION, const.PEARL_VERSION]:
-            return EmeraldRecorder(recorder_controller, ["Pokemon Diamond & Pearl"], is_frlg=True)
-        elif version_name in [const.HEART_GOLD_VERSION, const.SOUL_SILVER_VERSION]:
-            return EmeraldRecorder(recorder_controller, ["Pokemon HeartGold & SoulSilver"], is_frlg=True)
-
         raise NotImplementedError()
 
     def create_trainer_pkmn(self, pkmn_name, pkmn_level):
