@@ -240,20 +240,20 @@ class CheckboxLabel(ttk.Frame):
 
     def is_checked(self):
         return self._var.get()
-    
+
     def set_checked(self, val):
         self._var.set(val)
-    
+
     def toggle_checked(self, *args, **kwargs):
         self._var.set(not self._var.get())
-    
+
     def _did_toggle(self, *args, **kwargs):
         if self.toggle_command is not None:
             self.toggle_command()
-    
+
     def enable(self):
         self._checkbox.configure(state="normal")
-    
+
     def disable(self):
         self._checkbox.configure(state="disabled")
 

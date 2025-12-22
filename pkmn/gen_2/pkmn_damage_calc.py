@@ -38,6 +38,8 @@ def calculate_gen_two_damage(
     defender_has_reflect:bool=False,
     custom_move_data:str="",
     weather:str=const.WEATHER_NONE,
+    attacking_battle_stats:universal_data_objects.StatBlock=None,
+    defending_battle_stats:universal_data_objects.StatBlock=None,
 ):
     if move.name == const.HIDDEN_POWER_MOVE_NAME:
         move_type = get_hidden_power_type(attacking_pkmn.dvs)
@@ -89,8 +91,10 @@ def calculate_gen_two_damage(
             attacking_stage_modifiers = universal_data_objects.StageModifiers()
             defending_stage_modifiers = universal_data_objects.StageModifiers()
 
-    attacking_battle_stats = attacking_pkmn.get_battle_stats(attacking_stage_modifiers, is_crit=ignore_badge_boosts)
-    defending_battle_stats = defending_pkmn.get_battle_stats(defending_stage_modifiers, is_crit=ignore_badge_boosts)
+    if attacking_battle_stats is None:
+        attacking_battle_stats = attacking_pkmn.get_battle_stats(attacking_stage_modifiers, is_crit=ignore_badge_boosts)
+    if defending_battle_stats is None:
+        defending_battle_stats = defending_pkmn.get_battle_stats(defending_stage_modifiers, is_crit=ignore_badge_boosts)
 
     if attacking_pkmn.name == gen_two_const.MAROWAK_NAME and attacking_pkmn.held_item == gen_two_const.THICK_CLUB_NAME:
         attacking_battle_stats.attack *= 2
@@ -284,9 +288,10 @@ def calculate_gen_two_damage(
         gen_two_const.EARTHQUAKE_MOVE_NAME,
         gen_two_const.STOMP_MOVE_NAME,
         gen_two_const.PURSUIT_MOVE_NAME,
-        gen_two_const.MAGNITUDE_MOVE_NAME,
     ]:
         double_damage = (gen_two_const.NO_BONUS not in custom_move_data)
+    elif move.name == gen_two_const.MAGNITUDE_MOVE_NAME:
+        double_damage = (gen_two_const.DIG_BONUS in custom_move_data)
     else:
         double_damage = False
 

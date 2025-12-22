@@ -238,6 +238,7 @@ class BattleState(WatchForResetState):
         self._battle_started = False
         self._battle_finished = False
         self._is_double_battle = False
+        self._is_tutorial_battle = False
         self._initial_money = 0
         self._init_held_item = None
     
@@ -264,6 +265,7 @@ class BattleState(WatchForResetState):
         self._battle_started = False
         self._battle_finished = False
         self._is_double_battle = False
+        self._is_tutorial_battle = False
         self._initial_money = self.machine._gamehook_client.get(gh_gen_three_const.KEY_PLAYER_MONEY).value
         self._init_held_item = None
         
@@ -305,10 +307,13 @@ class BattleState(WatchForResetState):
         self._battle_started = True
         self._init_held_item = self.machine._gamehook_client.get(gh_gen_three_const.KEY_PLAYER_MON_HELD_ITEM).value
         self._is_double_battle = self.machine._gamehook_client.get(gh_gen_three_const.KEY_DOUBLE_BATTLE_FLAG).value
+        self._is_tutorial_battle = self.machine._gamehook_client.get(gh_gen_three_const.KEY_TUTORIAL_BATTLE_FLAG).value
         self.is_trainer_battle = self.machine._gamehook_client.get(gh_gen_three_const.KEY_TRAINER_BATTLE_FLAG).value
         self._delayed_levelup.configure_level(self.machine._gamehook_client.get(gh_gen_three_const.KEY_PLAYER_MON_LEVEL).value)
 
-        if self.is_trainer_battle:
+        if self._is_tutorial_battle:
+            logger.info(f"tutorial fight found")
+        elif self.is_trainer_battle:
             logger.info(f"trainer battle found")
             self._trainer_name = self.machine._gamehook_client.get(gh_gen_three_const.KEY_BATTLE_TRAINER_A_NUMBER).value
             if self.machine.is_frlg:
@@ -408,6 +413,14 @@ class BattleState(WatchForResetState):
 
     @auto_reset
     def transition(self, new_prop: GameHookProperty, prev_prop: GameHookProperty) -> StateType:
+        if new_prop.path == gh_gen_three_const.KEY_BATTLE_BACKGROUND_TILES:
+            if new_prop.value == 0:
+                return StateType.OVERWORLD
+
+        # don't actually track anything during the tutorial battle
+        if self._is_tutorial_battle:
+            return self.state_type
+
         if new_prop.path == gh_gen_three_const.KEY_PLAYER_MON_EXPPOINTS:
             if self._cached_first_mon_species or self._cached_first_mon_level:
                 if self.is_trainer_battle:
@@ -543,9 +556,6 @@ class BattleState(WatchForResetState):
                 # or if the enemy trainer switches pokemon (and doesn't only send out new mons on previous death)
                 if real_new_value not in self._enemy_mon_order:
                     self._enemy_mon_order.append(real_new_value)
-        elif new_prop.path == gh_gen_three_const.KEY_BATTLE_BACKGROUND_TILES:
-            if new_prop.value == 0:
-                return StateType.OVERWORLD
         
         return self.state_type
 

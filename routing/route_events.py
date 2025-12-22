@@ -210,6 +210,7 @@ class TrainerEventDefinition:
             weather=const.WEATHER_NONE,
             pay_day_amount=0,
             mon_order=None,
+            transformed=False,
         ):
         self.trainer_name = trainer_name
         self.second_trainer_name = second_trainer_name
@@ -238,6 +239,7 @@ class TrainerEventDefinition:
         if mon_order is None:
             mon_order = []
         self.mon_order = mon_order
+        self.transformed = transformed
 
     def serialize(self):
         return {
@@ -254,6 +256,7 @@ class TrainerEventDefinition:
             const.WEATHER: self.weather,
             const.PAY_DAY_AMOUNT: self.pay_day_amount,
             const.MON_ORDER: self.mon_order,
+            const.TRANSFORMED: self.transformed,
         }
     
     @staticmethod
@@ -285,6 +288,7 @@ class TrainerEventDefinition:
             pay_day_amount=raw_val.get(const.PAY_DAY_AMOUNT, 0),
             mon_order=raw_val.get(const.MON_ORDER),
             second_trainer_name=raw_val.get(const.SECOND_TRAINER_NAME, ""),
+            transformed=raw_val.get(const.TRANSFORMED, False),
         )
     
     def __str__(self):
@@ -790,7 +794,7 @@ class EventItem:
     def percent_xp_to_next_level(self):
         if not self.is_enabled():
             return ""
-        return self.final_state.solo_pkmn.percent_xp_to_next_level
+        return self.final_state.solo_pkmn.percent_xp_to_next_level_str
 
     def xp_gain(self):
         if not self.is_enabled():
@@ -802,6 +806,17 @@ class EventItem:
         if not self.is_enabled():
             return ""
         return self.final_state.solo_pkmn.cur_xp
+
+    def level_gain(self):
+        if not self.is_enabled():
+            return ""
+        result = universal_utils.calc_level_gain(
+            self.init_state.solo_pkmn.cur_level,
+            self.init_state.solo_pkmn.percent_xp_to_next_level,
+            self.final_state.solo_pkmn.cur_level,
+            self.final_state.solo_pkmn.percent_xp_to_next_level,
+        )
+        return result if result else ""
 
     def experience_per_second(self):
         return ""
@@ -959,7 +974,7 @@ class EventGroup:
     def percent_xp_to_next_level(self):
         if not self.is_enabled():
             return ""
-        return self.final_state.solo_pkmn.percent_xp_to_next_level
+        return self.final_state.solo_pkmn.percent_xp_to_next_level_str
 
     def xp_gain(self):
         if not self.is_enabled():
@@ -971,6 +986,17 @@ class EventGroup:
         if not self.is_enabled():
             return ""
         return self.final_state.solo_pkmn.cur_xp
+
+    def level_gain(self):
+        if not self.is_enabled():
+            return ""
+        result = universal_utils.calc_level_gain(
+            self.init_state.solo_pkmn.cur_level,
+            self.init_state.solo_pkmn.percent_xp_to_next_level,
+            self.final_state.solo_pkmn.cur_level,
+            self.final_state.solo_pkmn.percent_xp_to_next_level,
+        )
+        return result if result else ""
 
     def experience_per_second(self):
         if not self.is_enabled():
@@ -1132,6 +1158,9 @@ class EventFolder:
         return ""
 
     def total_xp(self):
+        return ""
+
+    def level_gain(self):
         return ""
 
     def experience_per_second(self):

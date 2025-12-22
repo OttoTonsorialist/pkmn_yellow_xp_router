@@ -5,8 +5,8 @@ import sys
 
 class Constants:
     def __init__(self):
-        self.APP_VERSION = "v3.1e"
-        self.APP_RELEASE_DATE = "2024-Oct-05"
+        self.APP_VERSION = "v3.1k"
+        self.APP_RELEASE_DATE = "2025-Dec-20"
 
         self.DEBUG_MODE = False
         self.DEBUG_RECORDING_MODE = False
@@ -145,6 +145,7 @@ class Constants:
         self.WEATHER = "weather"
         self.PAY_DAY_AMOUNT = "pay_day_amount"
         self.MON_ORDER = "mon_order"
+        self.TRANSFORMED = "transformed"
         self.PLAYER_KEY = "player"
         self.ENEMY_KEY = "enemy"
         self.EVOLVED_SPECIES = "evolved_species"

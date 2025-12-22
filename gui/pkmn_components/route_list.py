@@ -21,6 +21,7 @@ class RouteList(custom_components.CustomGridview):
                 custom_components.CustomGridview.CustomColumn('Exp Gain', 'xp_gain', width=80),
                 custom_components.CustomGridview.CustomColumn('ToNextLevel', 'xp_to_next_level', width=80),
                 custom_components.CustomGridview.CustomColumn('% TNL', 'percent_xp_to_next_level', width=80),
+                custom_components.CustomGridview.CustomColumn('LvlsGained', 'level_gain', width=80),
                 custom_components.CustomGridview.CustomColumn('event_id', 'group_id', hidden=True),
             ],
             text_field_attr='name',

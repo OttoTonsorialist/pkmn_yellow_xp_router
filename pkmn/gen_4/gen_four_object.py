@@ -167,6 +167,8 @@ class GenFour(CurrentGen):
         custom_move_data:str="",
         weather:str=const.WEATHER_NONE,
         is_double_battle:bool=False,
+        attacking_battle_stats:universal_data_objects.StatBlock=None,
+        defending_battle_stats:universal_data_objects.StatBlock=None,
     ) -> DamageRange:
         return pkmn_damage_calc.calculate_gen_four_damage(
             attacking_pkmn,
@@ -184,6 +186,8 @@ class GenFour(CurrentGen):
             custom_move_data=custom_move_data,
             weather=weather,
             is_double_battle=is_double_battle,
+            attacking_battle_stats=attacking_battle_stats,
+            defending_battle_stats=defending_battle_stats,
         )
     
     def make_stat_block(self, hp, attack, defense, special_attack, special_defense, speed, is_stat_xp=False) -> universal_data_objects.StatBlock:

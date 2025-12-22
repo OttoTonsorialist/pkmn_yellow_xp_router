@@ -56,6 +56,7 @@ class Gen3GameHookConstants:
         self.KEY_TRAINER_BATTLE_FLAG = "battle.type.trainer"
         self.KEY_DOUBLE_BATTLE_FLAG = "battle.type.double"
         self.KEY_TWO_OPPONENTS_BATTLE_FLAG = "battle.type.two_opponents"
+        self.KEY_TUTORIAL_BATTLE_FLAG = "battle.type.old_man_tutorial"
         self.KEY_BATTLE_OUTCOME = "battle.outcome"
         self.KEY_BATTLE_BACKGROUND_TILES = "battle.turnInfo.battleBackgroundTiles"
         self.KEY_BATTLE_PLAYER_MON_PARTY_POS = "battle.yourPokemon.partyPos"
@@ -180,6 +181,8 @@ class Gen3GameHookConstants:
         # truly vile and horrific code
         if hasattr(self, "KEY_TWO_OPPONENTS_BATTLE_FLAG"):
             delattr(self, "KEY_TWO_OPPONENTS_BATTLE_FLAG")
+        if hasattr(self, "KEY_TUTORIAL_BATTLE_FLAG"):
+            delattr(self, "KEY_TUTORIAL_BATTLE_FLAG")
         if hasattr(self, "KEY_BATTLE_TRAINER_B_NUMBER"):
             delattr(self, "KEY_BATTLE_TRAINER_B_NUMBER")
         self._define_derived_constant()

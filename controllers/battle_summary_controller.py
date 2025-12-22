@@ -5,9 +5,8 @@ import logging
 from typing import Dict, List, Tuple
 from controllers.main_controller import MainController
 from pkmn.damage_calc import DamageRange, find_kill
-from pkmn.universal_data_objects import BadgeList, EnemyPkmn, FieldStatus, Move, StageModifiers
+from pkmn.universal_data_objects import EnemyPkmn, FieldStatus, StageModifiers
 from routing.full_route_state import RouteState
-from routing.state_objects import SoloPokemon
 from utils.config_manager import config
 
 from utils.constants import const
@@ -67,6 +66,8 @@ class BattleSummaryController:
         self._original_player_mon_list:List[EnemyPkmn] = []
         self._player_setup_move_list:List[str] = []
         self._player_field_move_list:List[str] = []
+        self._is_player_transformed:bool = False
+        self._transformed_mon_list:List[EnemyPkmn] = []
         self._original_enemy_mon_list:List[EnemyPkmn] = []
         self._enemy_setup_move_list:List[str] = []
         self._enemy_field_move_list:List[str] = []
@@ -188,6 +189,10 @@ class BattleSummaryController:
         self._player_field_move_list = new_field_moves
         self._full_refresh()
     
+    def update_player_transform(self, is_transformed):
+        self._is_player_transformed = is_transformed
+        self._full_refresh()
+
     def update_prefight_candies(self, num_candies):
         if self._event_group_id is None:
             return
@@ -268,8 +273,13 @@ class BattleSummaryController:
 
         can_mimic_yet = False
         for mon_idx in range(len(self._original_player_mon_list)):
-            player_mon = self._original_player_mon_list[mon_idx]
-            player_stats = player_mon.get_battle_stats(self._player_stage_modifier)
+            if self._is_player_transformed:
+                player_mon = self._transformed_mon_list[mon_idx]
+                player_stats = player_mon.cur_stats
+            else:
+                player_mon = self._original_player_mon_list[mon_idx]
+                player_stats = player_mon.get_battle_stats(self._player_stage_modifier)
+
             enemy_mon = self._original_enemy_mon_list[mon_idx]
             enemy_stats = enemy_mon.get_battle_stats(self._enemy_stage_modifier)
 
@@ -340,18 +350,58 @@ class BattleSummaryController:
         move_display_name:str=None,
     ):
         if is_player_mon:
-            attacking_mon = self._original_player_mon_list[mon_idx]
+            # TODO: gross hacky transform support. Somehow we should figure out how to offload some of this logic back into the generation objects...
+            # but I'm not sure how, currently...
+            if self._is_player_transformed:
+                attacking_mon = self._transformed_mon_list[mon_idx]
+                attacking_mon_stats = attacking_mon.cur_stats
+                if current_gen_info().get_generation() == 1:
+                    if attacking_mon.level > self._transformed_mon_list[0].level:
+                        attacking_mon.badges = copy.deepcopy(self._original_player_mon_list[0].badges)
+                        attacking_mon_stats = attacking_mon.get_battle_stats(StageModifiers())
+                    orig_player_mon = self._original_player_mon_list[mon_idx]
+                    crit_mon = copy.deepcopy(attacking_mon)
+                    crit_mon.level = orig_player_mon.level
+                    crit_mon.base_stats = orig_player_mon.base_stats
+                    crit_mon.stat_xp = orig_player_mon.stat_xp
+                    crit_mon.dvs = orig_player_mon.dvs
+                    crit_mon.badges = None
+                    crit_mon_stats = None
+                elif current_gen_info().get_generation() == 2:
+                    crit_mon = attacking_mon
+                    crit_mon_stats = attacking_mon_stats
+
+                    if attacking_mon.level > self._transformed_mon_list[0].level:
+                        attacking_mon_stats = self._original_player_mon_list[mon_idx].get_battle_stats(self._player_stage_modifier)
+                        crit_mon_stats = self._original_player_mon_list[mon_idx].get_battle_stats(self._player_stage_modifier, is_crit=True)
+                else:
+                    crit_mon = attacking_mon
+                    crit_mon_stats = attacking_mon_stats
+            else:
+                attacking_mon = self._original_player_mon_list[mon_idx]
+                attacking_mon_stats = None
+                crit_mon = attacking_mon
+                crit_mon_stats = attacking_mon_stats
             attacking_stage_modifiers = self._player_stage_modifier
             attacking_field_status = self._player_field_status
             defending_mon = self._original_enemy_mon_list[mon_idx]
+            defending_mon_stats = None
             defending_stage_modifiers = self._enemy_stage_modifier
             defending_field_status = self._enemy_field_status
             custom_lookup_key = const.PLAYER_KEY
         else:
             attacking_mon = self._original_enemy_mon_list[mon_idx]
+            attacking_mon_stats = None
+            crit_mon = attacking_mon
+            crit_mon_stats = attacking_mon_stats
             attacking_stage_modifiers = self._enemy_stage_modifier
             attacking_field_status = self._enemy_field_status
-            defending_mon = self._original_player_mon_list[mon_idx]
+            if self._is_player_transformed:
+                defending_mon = self._transformed_mon_list[mon_idx]
+                defending_mon_stats = defending_mon.cur_stats
+            else:
+                defending_mon = self._original_player_mon_list[mon_idx]
+                defending_mon_stats = None
             defending_stage_modifiers = self._player_stage_modifier
             defending_field_status = self._player_field_status
             custom_lookup_key = const.ENEMY_KEY
@@ -390,9 +440,11 @@ class BattleSummaryController:
             custom_move_data=custom_data_selection,
             weather=self._weather,
             is_double_battle=self._double_battle_flag,
+            attacking_battle_stats=attacking_mon_stats,
+            defending_battle_stats=defending_mon_stats,
         )
         crit_ranges = current_gen_info().calculate_damage(
-            attacking_mon,
+            crit_mon,
             move,
             defending_mon,
             attacking_stage_modifiers=attacking_stage_modifiers,
@@ -403,6 +455,8 @@ class BattleSummaryController:
             is_crit=True,
             weather=self._weather,
             is_double_battle=self._double_battle_flag,
+            attacking_battle_stats=crit_mon_stats,
+            defending_battle_stats=defending_mon_stats,
         )
         if normal_ranges is not None and crit_ranges is not None:
             if config.do_ignore_accuracy():
@@ -454,6 +508,7 @@ class BattleSummaryController:
         self._weather = trainer_def.weather
         self._double_battle_flag = trainer_obj.double_battle or second_trainer_obj is not None
         self._mimic_selection = trainer_def.mimic_selection
+        self._is_player_transformed = trainer_def.transformed
         self._player_setup_move_list = trainer_def.setup_moves.copy()
         self._player_field_move_list = trainer_def.player_field_moves.copy()
         self._player_stage_modifier = self._calc_stage_modifier(self._player_setup_move_list)
@@ -471,6 +526,7 @@ class BattleSummaryController:
             self._custom_move_data = [copy.deepcopy(x.custom_move_data) for x in event_group.event_definition.get_pokemon_list()]
 
         self._original_player_mon_list = []
+        self._transformed_mon_list = []
         self._original_enemy_mon_list = []
 
         # NOTE: kind of weird, but basically we want to iterate over all the pokemon we want to fight, and then get the appropriate
@@ -486,14 +542,19 @@ class BattleSummaryController:
 
                 if cur_event_item.to_defeat_mon == cur_pkmn:
                     self._original_enemy_mon_list.append(cur_pkmn)
+                    self._transformed_mon_list.append(
+                        copy.deepcopy(event_group.event_definition.get_pokemon_list()[0])
+                    )
                     self._original_player_mon_list.append(
                         cur_event_item.init_state.solo_pkmn.get_pkmn_obj(
                             cur_event_item.init_state.badges,
                             stage_modifiers=self._player_stage_modifier
                         )
                     )
+                    self._transformed_mon_list[-1].level = self._original_player_mon_list[-1].level
+                    self._transformed_mon_list[-1].cur_stats.hp = self._original_player_mon_list[-1].cur_stats.hp
                     break
-        
+
         self._full_refresh(is_load=True)
 
     def load_from_state(self, init_state:RouteState, enemy_mons:List[EnemyPkmn], trainer_name:str=None):
@@ -506,6 +567,7 @@ class BattleSummaryController:
         self._second_trainer_name = ""
         self._weather = const.WEATHER_NONE
         self._mimic_selection = ""
+        self._is_player_transformed = False
         self._player_setup_move_list = []
         self._player_field_move_list = []
         self._enemy_setup_move_list = []
@@ -521,7 +583,12 @@ class BattleSummaryController:
         cur_state = init_state
         for cur_enemy in enemy_mons:
             self._original_enemy_mon_list.append(cur_enemy)
+            self._transformed_mon_list.append(
+                copy.deepcopy(enemy_mons[0])
+            )
             self._original_player_mon_list.append(cur_state.solo_pkmn.get_pkmn_obj(cur_state.badges))
+            self._transformed_mon_list[-1].level = self._original_player_mon_list[-1].level
+            self._transformed_mon_list[-1].cur_stats.hp = self._original_player_mon_list[-1].cur_stats.hp
 
             cur_state = cur_state.defeat_pkmn(cur_enemy)[0]
         
@@ -540,12 +607,14 @@ class BattleSummaryController:
         self._weather = const.WEATHER_NONE
         self._double_battle_flag = False
         self._mimic_selection = ""
+        self._is_player_transformed = False
         self._player_setup_move_list = []
         self._player_field_move_list = []
         self._enemy_setup_move_list = []
         self._enemy_field_move_list = []
         self._custom_move_data = []
         self._original_player_mon_list = []
+        self._transformed_mon_list = []
         self._original_enemy_mon_list = []
         self._cached_definition_order = []
         self._full_refresh(is_load=True)
@@ -581,9 +650,10 @@ class BattleSummaryController:
             enemy_field_moves=self._enemy_field_move_list,
             mimic_selection=self._mimic_selection,
             custom_move_data=final_custom_move_data,
-            weather=self._weather
+            weather=self._weather,
+            transformed=self._is_player_transformed,
         )
-    
+
     def get_pkmn_info(self, pkmn_idx, is_player_mon) -> PkmnRenderInfo:
         if is_player_mon:
             cur_data = self._player_pkmn_matchup_data
@@ -623,6 +693,9 @@ class BattleSummaryController:
     
     def is_double_battle(self) -> bool:
         return self._double_battle_flag
+
+    def is_player_transformed(self) -> bool:
+        return self._is_player_transformed
 
     @staticmethod
     def _is_move_better(new_move:MoveRenderInfo, prev_move:MoveRenderInfo, strat:str, other_mon:PkmnRenderInfo) -> bool:
