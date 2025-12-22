@@ -167,7 +167,8 @@ class GenOneStatBlock(universal_data_objects.StatBlock):
         badges:GenOneBadgeList,
         nature:universal_data_objects.Nature,
         held_item:str,
-        is_crit=False
+        is_crit=False,
+        field_status:universal_data_objects.FieldStatus=None,
     ) -> GenOneStatBlock:
         # TODO: this does not properly replicate any of the jank regarding para/burn/full heal/etc.
         # TODO: need to add support for those stat modifiers (both intended any glitched) in the future

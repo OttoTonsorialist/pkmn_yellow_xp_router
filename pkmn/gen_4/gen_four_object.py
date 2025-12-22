@@ -169,8 +169,8 @@ class GenFour(CurrentGen):
             self._held_item_boosts,
             attacking_stage_modifiers=attacking_stage_modifiers,
             defending_stage_modifiers=defending_stage_modifiers,
-            defender_has_light_screen=defending_field is not None and defending_field.light_screen,
-            defender_has_reflect=defending_field is not None and defending_field.reflect,
+            attacking_field=attacking_field,
+            defending_field=defending_field,
             is_crit=is_crit,
             custom_move_data=custom_move_data,
             weather=weather,
@@ -194,9 +194,10 @@ class GenFour(CurrentGen):
         return sorted(result)
 
     def get_field_moves(self):
-        return sorted(
-            [self._move_db.get_move(x).name for x in self._move_db.field_moves.keys()]
-        )
+        result = [self._move_db.get_move(x).name for x in self._move_db.field_moves.keys()]
+        # NOTE: kind of doing a weird cheat, since this is an ability, not a move. but whatever
+        result.append(gen_four_const.SLOW_START_ABILITY)
+        return sorted(result)
     
     def get_fight_reward(self, trainer_name) -> str:
         return self._fight_rewards.get(trainer_name)

@@ -278,10 +278,10 @@ class BattleSummaryController:
                 player_stats = player_mon.cur_stats
             else:
                 player_mon = self._original_player_mon_list[mon_idx]
-                player_stats = player_mon.get_battle_stats(self._player_stage_modifier)
+                player_stats = player_mon.get_battle_stats(self._player_stage_modifier, mon_field=self._player_field_status)
 
             enemy_mon = self._original_enemy_mon_list[mon_idx]
-            enemy_stats = enemy_mon.get_battle_stats(self._enemy_stage_modifier)
+            enemy_stats = enemy_mon.get_battle_stats(self._enemy_stage_modifier, mon_field=self._enemy_field_status)
 
             self._player_pkmn_matchup_data.append(
                 PkmnRenderInfo(player_mon.name, player_mon.level, player_stats.speed, enemy_mon.name, enemy_mon.level, enemy_stats.speed, enemy_mon.cur_stats.hp)
@@ -796,8 +796,8 @@ class BattleSummaryController:
         else:
             move_list = self._enemy_field_move_list + self._enemy_setup_move_list
 
-        for cur_move in move_list:
-            result = result.apply_move(current_gen_info().move_db().get_move(cur_move))
+        for cur_move_name in move_list:
+            result = result.apply_move(cur_move_name)
         
         return result
     

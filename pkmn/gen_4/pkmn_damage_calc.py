@@ -1,9 +1,10 @@
 import math
 import logging
+import copy
 from typing import Dict, List
 
 from pkmn import universal_data_objects, damage_calc
-from pkmn.gen_4.data_objects import get_hidden_power_type, get_hidden_power_base_power
+from pkmn.gen_4.data_objects import get_hidden_power_type, get_hidden_power_base_power, modify_stat_by_stage
 from utils.constants import const
 from pkmn.gen_4.gen_four_constants import gen_four_const
 
@@ -37,7 +38,13 @@ def get_crit_rate(cur_mon:universal_data_objects.EnemyPkmn, move:universal_data_
     return (1/2)
 
 
-def get_move_accuracy(pkmn:universal_data_objects.EnemyPkmn, move:universal_data_objects.Move, custom_move_data:str, defending_pkmn:universal_data_objects.EnemyPkmn, weather:str):
+def get_move_accuracy(
+    pkmn:universal_data_objects.EnemyPkmn,
+    move:universal_data_objects.Move,
+    custom_move_data:str,
+    defending_pkmn:universal_data_objects.EnemyPkmn,
+    weather:str,
+):
     if pkmn.ability == gen_four_const.NO_GUARD_ABILITY or defending_pkmn.ability == gen_four_const.NO_GUARD_ABILITY:
         return None
 
@@ -88,9 +95,9 @@ def calculate_gen_four_damage(
     held_item_boost_table:Dict[str, str],
     attacking_stage_modifiers:universal_data_objects.StageModifiers=None,
     defending_stage_modifiers:universal_data_objects.StageModifiers=None,
+    attacking_field:universal_data_objects.FieldStatus=None,
+    defending_field:universal_data_objects.FieldStatus=None,
     is_crit:bool=False,
-    defender_has_light_screen:bool=False,
-    defender_has_reflect:bool=False,
     custom_move_data:str="",
     weather:str=const.WEATHER_NONE,
     is_double_battle:bool=False,
@@ -111,6 +118,16 @@ def calculate_gen_four_damage(
     attacking_mon_second_type = attacking_species.second_type
     attacking_ability = attacking_pkmn.ability
     defending_ability = defending_pkmn.ability
+
+    if attacking_field.worry_seed:
+        attacking_ability = gen_four_const.INSOMNIA_ABILITY
+    elif attacking_field.gastro_acid:
+        attacking_ability = ""
+
+    if defending_field.worry_seed:
+        defending_ability = gen_four_const.INSOMNIA_ABILITY
+    elif defending_field.gastro_acid:
+        defending_ability = ""
 
     if attacking_ability == gen_four_const.MULTITYPE_ABILITY:
         new_type = gen_four_const.PLATE_TYPE_LOOKUP.get(attacking_pkmn.held_item)
@@ -200,20 +217,37 @@ def calculate_gen_four_damage(
 
     is_scrappy_active = (
         (defending_species.first_type == const.TYPE_GHOST or defending_species.second_type == const.TYPE_GHOST) and
+        (move.move_type == const.TYPE_NORMAL or move.move_type == const.TYPE_FIGHTING) and
         attacking_ability == gen_four_const.SCRAPPY_ABILITY
     )
+
+    ignore_ground_immunity = (
+        (defending_species.first_type == const.TYPE_FLYING or defending_species.second_type == const.TYPE_FLYING) and
+        move.move_type == const.TYPE_GROUND and
+        (defending_field.gravity or defending_field.roost)
+    )
+
+    ignore_dark_immunity = (
+        (defending_species.first_type == const.TYPE_DARK or defending_species.second_type == const.TYPE_DARK) and
+        move.move_type == const.TYPE_PSYCHIC and
+        defending_field.miracle_eye
+    )
+
     
     if (
         (
             type_chart.get(move_type).get(defending_species.first_type) == const.IMMUNE or
             type_chart.get(move_type).get(defending_species.second_type) == const.IMMUNE
         ) and
-        (not is_scrappy_active)
+        (not is_scrappy_active) and
+        (not ignore_ground_immunity) and
+        (not ignore_dark_immunity)
     ):
         return None
     elif (
         defending_ability == gen_four_const.LEVITATE_ABILITY and
-        move_type == const.TYPE_GROUND
+        move_type == const.TYPE_GROUND and
+        (not ignore_ground_immunity)
     ):
         return None
     elif (
@@ -264,6 +298,11 @@ def calculate_gen_four_damage(
         ):
             return None
         # we are left with only the cases where at least one is super effective, and the other is either neutral or super effective
+    elif (
+        defending_field.magnet_rise and
+        move.move_type == const.TYPE_GROUND
+    ):
+        return None
     
     # special move interactions
     if const.FLAVOR_FIXED_DAMAGE in move.attack_flavor:
@@ -293,12 +332,11 @@ def calculate_gen_four_damage(
                 defending_stage_modifiers = universal_data_objects.StageModifiers()
 
     if attacking_battle_stats is None:
-        attacking_battle_stats = attacking_pkmn.get_battle_stats(attacking_stage_modifiers)
+        attacking_battle_stats = attacking_pkmn.get_battle_stats(attacking_stage_modifiers, mon_field=attacking_field)
 
     if defending_battle_stats is None:
-        defending_battle_stats = defending_pkmn.get_battle_stats(defending_stage_modifiers)
+        defending_battle_stats = defending_pkmn.get_battle_stats(defending_stage_modifiers, mon_field=defending_field)
 
-    # TODO: low kick. ughhhhh
     # TODO: present. ughhhhh
     # Handle base_power and move_type override cases first
     if move.name == gen_four_const.MAGNITUDE_MOVE_NAME:
@@ -481,14 +519,14 @@ def calculate_gen_four_damage(
     if move.category == const.CATEGORY_SPECIAL:
         attacking_stat = attacking_battle_stats.special_attack
         defending_stat = defending_battle_stats.special_defense
-        if defender_has_light_screen and not is_crit and move.name != gen_four_const.BRICK_BREAK_MOVE_NAME:
+        if defending_field.light_screen and not is_crit and move.name != gen_four_const.BRICK_BREAK_MOVE_NAME:
             screen_active = True
         else:
             screen_active = False
     else:
         attacking_stat = attacking_battle_stats.attack
         defending_stat = defending_battle_stats.defense
-        if defender_has_reflect and not is_crit and move.name != gen_four_const.BRICK_BREAK_MOVE_NAME:
+        if defending_field.reflect and not is_crit and move.name != gen_four_const.BRICK_BREAK_MOVE_NAME:
             screen_active = True
         else:
             screen_active = False
@@ -724,8 +762,10 @@ def calculate_gen_four_damage(
                     held_item_boost_table,
                     attacking_stage_modifiers,
                     defending_stage_modifiers,
-                    defender_has_light_screen=defender_has_light_screen,
-                    defender_has_reflect=defender_has_reflect,
+                    attacking_field=attacking_field,
+                    defending_field=defending_field,
+                    weather=weather,
+                    is_double_battle=is_double_battle,
                     custom_move_data=""
                 )
             else:

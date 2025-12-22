@@ -131,6 +131,8 @@ class GenFourConstants:
         self.TECHNICIAN_ABILITY = "Technician"
         self.TINTED_LENS_ABILITY = "Tinted Lens"
         self.MULTITYPE_ABILITY = "Multitype"
+        self.INSOMNIA_ABILITY = "Insomnia"
+        self.SLOW_START_ABILITY = "Slow Start"
 
         self.NO_BONUS = "No Bonus"
         self.DIG_BONUS = "Dig Bonus"

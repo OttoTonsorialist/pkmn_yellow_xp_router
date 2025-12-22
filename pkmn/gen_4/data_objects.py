@@ -357,20 +357,23 @@ class GenFourStatBlock(universal_data_objects.StatBlock):
         badges:GenFourBadgeList,
         nature:Nature,
         held_item:str,
-        is_crit=False
+        is_crit=False,
+        field_status:universal_data_objects.FieldStatus=None,
     ) -> GenFourStatBlock:
         # create a result object, to populate
         result = GenFourStatBlock(
             calc_stat(self.hp, level, stat_dv.hp, stat_xp.hp, is_hp=True),
             0, 0, 0, 0, 0
         )
+        if field_status is None:
+            field_status = universal_data_objects.FieldStatus()
 
         result.attack = calc_battle_stat(
             self.attack,
             level,
             stat_dv.attack,
             stat_xp.attack,
-            stage_modifiers.attack_stage,
+            0,
             nature_raised=nature.is_stat_raised(const.ATTACK),
             nature_lowered=nature.is_stat_lowered(const.ATTACK),
         )
@@ -402,7 +405,7 @@ class GenFourStatBlock(universal_data_objects.StatBlock):
             level,
             stat_dv.special_attack,
             stat_xp.special_attack,
-            stage_modifiers.special_attack_stage,
+            0,
             nature_raised=nature.is_stat_raised(const.SPECIAL_ATTACK),
             nature_lowered=nature.is_stat_lowered(const.SPECIAL_ATTACK),
         )
@@ -416,6 +419,23 @@ class GenFourStatBlock(universal_data_objects.StatBlock):
             nature_raised=nature.is_stat_raised(const.SPECIAL_DEFENSE),
             nature_lowered=nature.is_stat_lowered(const.SPECIAL_DEFENSE),
         )
+
+        if field_status.power_trick:
+            result.attack, result.special_attack = result.special_attack, result.attack
+
+        if field_status.slow_start:
+            result.attack = int(result.attack / 2)
+            result.special_attack = int(result.special_attack / 2)
+            result.speed = int(result.speed / 2)
+
+        result.attack = modify_stat_by_stage(result.attack, stage_modifiers.attack_stage)
+        result.special_attack = modify_stat_by_stage(result.special_attack, stage_modifiers.special_attack_stage)
+
+        if field_status.tailwind:
+            result.speed *= 2
+
+        if field_status.trick_room:
+            result.speed = (10_000 - result.speed) % 8_192
 
         return result
 

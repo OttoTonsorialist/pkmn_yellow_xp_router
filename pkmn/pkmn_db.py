@@ -261,12 +261,12 @@ class MoveDB:
         self.field_moves:Dict[str, universal_data_objects.Move] = {}
         # weird thing, just keeping it around to make sure stuff goes to the right dropdowns :(
         self.old_hacky_field_moves:Dict[str, universal_data_objects.Move] = {}
-        lightscreen_move = self._data.get("lightscreen")
+        lightscreen_move = self._data.get(const.LIGHTSCREEN_SANITIZED_MOVE_NAME)
         if not lightscreen_move is None:
             self.field_moves[sanitize_string(lightscreen_move.name)] = lightscreen_move
             self.old_hacky_field_moves[sanitize_string(lightscreen_move.name)] = lightscreen_move
 
-        reflect_move = self._data.get("reflect")
+        reflect_move = self._data.get(const.REFLECT_SANITIZED_MOVE_NAME)
         if not reflect_move is None:
             self.field_moves[sanitize_string(reflect_move.name)] = reflect_move
             self.old_hacky_field_moves[sanitize_string(reflect_move.name)] = reflect_move

@@ -293,7 +293,7 @@ class StatBlock:
     def calc_level_stats(self, level:int, dvs:StatBlock, stat_xp:StatBlock, badges:BadgeList, nature:Nature, held_item:str) -> StatBlock:
         raise NotImplementedError()
     
-    def calc_battle_stats(self, level:int, dvs:StatBlock, stat_xp:StatBlock, stage_modifiers:StageModifiers, badges:BadgeList, nature:Nature, held_item:str, is_crit=False) -> StatBlock:
+    def calc_battle_stats(self, level:int, dvs:StatBlock, stat_xp:StatBlock, stage_modifiers:StageModifiers, badges:BadgeList, nature:Nature, held_item:str, is_crit=False, mon_field:FieldStatus=None) -> StatBlock:
         raise NotImplementedError()
 
 
@@ -393,7 +393,7 @@ class EnemyPkmn:
             return f"Lv {self.level}: {self.name} (Held: {self.held_item}, Nature: {self.nature}) ({self.cur_stats.hp}, {self.cur_stats.attack}, {self.cur_stats.defense}, {self.cur_stats.special_attack}, {self.cur_stats.special_defense}, {self.cur_stats.speed}), ({self.move_list})"
         return f"Lv {self.level}: {self.name}"
 
-    def get_battle_stats(self, stages:StageModifiers, is_crit:bool=False) -> StatBlock:
+    def get_battle_stats(self, stages:StageModifiers, is_crit:bool=False, mon_field:FieldStatus=None) -> StatBlock:
         return self.base_stats.calc_battle_stats(
             self.level,
             self.dvs,
@@ -402,7 +402,8 @@ class EnemyPkmn:
             self.badges,
             self.nature,
             self.held_item,
-            is_crit
+            is_crit,
+            mon_field,
         )
 
 
@@ -525,6 +526,7 @@ class FieldStatus:
         trick_room=False,
         worry_seed=False,
         gastro_acid=False,
+        slow_start=False,
     ):
         # TODO: do we need a gen-unique version of this? Currently only supporting things that are present in all gens, so not the biggest deal
         self.light_screen = light_screen
@@ -538,6 +540,7 @@ class FieldStatus:
         self.trick_room = trick_room
         self.worry_seed = worry_seed
         self.gastro_acid = gastro_acid
+        self.slow_start = slow_start
     
     def _copy(self):
         return FieldStatus(
@@ -552,33 +555,35 @@ class FieldStatus:
             trick_room=self.trick_room,
             worry_seed=self.worry_seed,
             gastro_acid=self.gastro_acid,
+            slow_start=self.slow_start,
         )
     
-    def apply_move(self, move:Move) -> FieldStatus:
-        # TODO: extract out field effects to be uniquely parseable from other effect
-        # TODO: for now, just hacking in support for reflect/light screen
+    def apply_move(self, move_name:str) -> FieldStatus:
+        # TODO: should ideally start using some property on the move, instead of just the move name?
         result = self._copy()
-        if sanitize_string(move.name) == "lightscreen":
+        if sanitize_string(move_name) == const.LIGHTSCREEN_SANITIZED_MOVE_NAME:
             result.light_screen = True
-        elif sanitize_string(move.name) == "reflect":
+        elif sanitize_string(move_name) == const.REFLECT_SANITIZED_MOVE_NAME:
             result.reflect = True
-        elif sanitize_string(move.name) == "gravity":
+        elif sanitize_string(move_name) == const.GRAVITY_SANITIZED_MOVE_NAME:
             result.gravity = True
-        elif sanitize_string(move.name) == "magnetrise":
+        elif sanitize_string(move_name) == const.MAGNET_RISE_SANITIZED_MOVE_NAME:
             result.magnet_rise = True
-        elif sanitize_string(move.name) == "miracleeye":
+        elif sanitize_string(move_name) == const.MIRACLE_EYE_SANITIZED_MOVE_NAME:
             result.miracle_eye = True
-        elif sanitize_string(move.name) == "powertrick":
+        elif sanitize_string(move_name) == const.POWER_TRICK_SANITIZED_MOVE_NAME:
             result.power_trick = True
-        elif sanitize_string(move.name) == "roost":
+        elif sanitize_string(move_name) == const.ROOST_SANITIZED_MOVE_NAME:
             result.roost = True
-        elif sanitize_string(move.name) == "tailwind":
+        elif sanitize_string(move_name) == const.TAILWIND_SANITIZED_MOVE_NAME:
             result.tailwind = True
-        elif sanitize_string(move.name) == "trickroom":
+        elif sanitize_string(move_name) == const.TRICK_ROOM_SANITIZED_MOVE_NAME:
             result.trick_room = True
-        elif sanitize_string(move.name) == "worryseed":
+        elif sanitize_string(move_name) == const.WORRY_SEED_SANITIZED_MOVE_NAME:
             result.worry_seed = True
-        elif sanitize_string(move.name) == "gastroacid":
+        elif sanitize_string(move_name) == const.GASTRO_ACID_SANITIZED_MOVE_NAME:
             result.gastro_acid = True
+        elif sanitize_string(move_name) == const.SLOW_START_SANITIZED_NAME:
+            result.slow_start = True
 
         return result

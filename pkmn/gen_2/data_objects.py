@@ -279,7 +279,8 @@ class GenTwoStatBlock(universal_data_objects.StatBlock):
         badges:GenTwoBadgeList,
         nature:universal_data_objects.Nature,
         held_item:str,
-        is_crit=False
+        is_crit=False,
+        field_status:universal_data_objects.FieldStatus=None,
     ) -> GenTwoStatBlock:
         if is_crit:
             # NOTE: Right now, we are relying on the damage calculator in pkmn_damage_calc to determine
