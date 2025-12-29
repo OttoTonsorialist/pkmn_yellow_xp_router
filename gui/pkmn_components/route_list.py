@@ -65,19 +65,19 @@ class RouteList(custom_components.CustomGridview):
                 cur_obj.expanded = False
 
             self.refresh()
-    
+
     def checkbox_item_callback_fn(self, item_id, new_state):
         raw_obj = self._controller.get_event_by_id(self._get_route_id_from_item_id(item_id))
         raw_obj.set_enabled_status(new_state == self.CHECKED_TAG or new_state == self.TRISTATE_TAG)
         self._controller.update_existing_event(raw_obj.group_id, raw_obj.event_definition)
-    
+
     def _get_route_id_from_item_id(self, iid):
         try:
             # super ugly. extract the value of the 'group_id' column. right now this is the last column, so just hard coding the index
             return int(self.item(iid)['values'][-1])
         except (ValueError, IndexError):
             return -1
-    
+
     def set_all_selected_event_ids(self, event_ids):
         new_selection = []
         try:
@@ -89,7 +89,7 @@ class RouteList(custom_components.CustomGridview):
             # This *should* only happen in the case that events are selected which are currently hidden by filters
             # So, just ignore and carry on
             pass
-    
+
     def scroll_to_selected_events(self):
         try:
             if self.selection():
@@ -99,7 +99,7 @@ class RouteList(custom_components.CustomGridview):
             # in that case, the controller moves faster than the event list, so the event to select it fires before it exists
             # ...maybe. I'm not totally sure. But everything seems fine, so ignore these errors for now
             pass
-    
+
     def get_all_selected_event_ids(self, allow_event_items=True):
         temp = set(self.selection())
         result = []
@@ -113,7 +113,7 @@ class RouteList(custom_components.CustomGridview):
             # we basically say that you have selected the container, and thus do not need to select any of the child objects
             if self.parent(cur_iid) in temp:
                 continue
-            
+
             result.append(cur_route_id)
 
         return result

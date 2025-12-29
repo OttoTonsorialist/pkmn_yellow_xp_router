@@ -20,16 +20,16 @@ class InventoryEventDefinition:
         self.item_amount = item_amount
         self.is_acquire = is_acquire
         self.with_money = with_money
-    
+
     def serialize(self):
         return [self.item_name, self.item_amount, self.is_acquire, self.with_money]
-    
+
     @staticmethod
     def deserialize(raw_val):
         if not raw_val:
             return None
         return InventoryEventDefinition(raw_val[0], raw_val[1], raw_val[2], raw_val[3])
-    
+
     def __str__(self):
         if self.is_acquire and self.with_money:
             action = "Purchase"
@@ -39,7 +39,7 @@ class InventoryEventDefinition:
             action = "Sell"
         else:
             action = "Use/Drop"
-        
+
         return f"{action} {self.item_name} x{self.item_amount}"
 
 
@@ -58,7 +58,7 @@ class HoldItemEventDefinition:
         if len(raw_val) == 1:
             return HoldItemEventDefinition(raw_val[0])
         return HoldItemEventDefinition(raw_val[0], consumed=raw_val[1])
-    
+
     def __str__(self):
         return f"Hold {self.item_name}"
 
@@ -70,7 +70,7 @@ class VitaminEventDefinition:
 
     def serialize(self):
         return [self.vitamin, self.amount]
-    
+
     @staticmethod
     def deserialize(raw_val):
         if not raw_val:
@@ -80,7 +80,7 @@ class VitaminEventDefinition:
             return VitaminEventDefinition(raw_val, 1)
         else:
             return VitaminEventDefinition(raw_val[0], raw_val[1])
-    
+
     def __str__(self):
         return f"Vitamin {self.vitamin}, x{self.amount}"
 
@@ -91,7 +91,7 @@ class RareCandyEventDefinition:
 
     def serialize(self):
         return self.amount
-    
+
     @staticmethod
     def deserialize(raw_val):
         if not raw_val:
@@ -100,7 +100,7 @@ class RareCandyEventDefinition:
         if raw_val is True:
             raw_val = 1
         return RareCandyEventDefinition(raw_val)
-    
+
     def __str__(self):
         return f"Rare Candy, x{self.amount}"
 
@@ -114,7 +114,7 @@ class WildPkmnEventDefinition:
 
     def serialize(self):
         return [self.name, self.level, self.quantity, self.trainer_pkmn]
-    
+
     @staticmethod
     def deserialize(raw_val):
         if not raw_val:
@@ -123,7 +123,7 @@ class WildPkmnEventDefinition:
             return WildPkmnEventDefinition(raw_val[0], raw_val[1])
         else:
             return WildPkmnEventDefinition(raw_val[0], raw_val[1], quantity=raw_val[2], trainer_pkmn=raw_val[3])
-    
+
     def __str__(self):
         prefix = "TrainerPkmn" if self.trainer_pkmn else "WildPkmn"
         return f"{prefix} {self.name}, LV: {self.level}"
@@ -145,20 +145,20 @@ class LearnMoveEventDefinition:
             const.MOVE_LEVEL_KEY: self.level,
             const.MOVE_MON_KEY: self.mon
         }
-    
+
     def get_level_up_key(self):
         return (
             sanitize_string(self.mon),
             int(self.level),
             sanitize_string(self.move_to_learn),
         )
-    
+
     def matches_level_up_move(self, level:int, mon:str):
         return (
             level == self.level and
             sanitize_string(self.mon) == sanitize_string(mon)
         )
-    
+
     @staticmethod
     def deserialize(raw_val, mon_default=None):
         if not raw_val:
@@ -179,7 +179,7 @@ class LearnMoveEventDefinition:
                 level=raw_val[const.MOVE_LEVEL_KEY],
                 mon=mon_val
             )
-    
+
     def __str__(self):
         try:
             if self.destination is None:
@@ -258,14 +258,14 @@ class TrainerEventDefinition:
             const.MON_ORDER: self.mon_order,
             const.TRANSFORMED: self.transformed,
         }
-    
+
     @staticmethod
     def deserialize(raw_val):
         if not raw_val:
             return None
         if isinstance(raw_val, str):
             return TrainerEventDefinition(raw_val)
-        
+
         if isinstance(raw_val, list):
             trainer_name = raw_val[0]
             verbose_export = raw_val[1]
@@ -290,7 +290,7 @@ class TrainerEventDefinition:
             second_trainer_name=raw_val.get(const.SECOND_TRAINER_NAME, ""),
             transformed=raw_val.get(const.TRANSFORMED, False),
         )
-    
+
     def __str__(self):
         return f"Trainer {self.trainer_name}"
 
@@ -298,16 +298,16 @@ class TrainerEventDefinition:
 class SaveEventDefinition:
     def __init__(self, location=""):
         self.location = location
-    
+
     def serialize(self):
         return [self.location]
-    
+
     @staticmethod
     def deserialize(raw_val):
         if not raw_val:
             return None
         return SaveEventDefinition(raw_val[0])
-    
+
     def __str__(self):
         if self.location:
             return f"Game Saved at: {self.location}"
@@ -317,16 +317,16 @@ class SaveEventDefinition:
 class HealEventDefinition:
     def __init__(self, location=""):
         self.location = location
-    
+
     def serialize(self):
         return [self.location]
-    
+
     @staticmethod
     def deserialize(raw_val):
         if not raw_val:
             return None
         return HealEventDefinition(raw_val[0])
-    
+
     def __str__(self):
         if self.location:
             return f"PkmnCenter Heal at: {self.location}"
@@ -336,16 +336,16 @@ class HealEventDefinition:
 class BlackoutEventDefinition:
     def __init__(self, location=""):
         self.location = location
-    
+
     def serialize(self):
         return [self.location]
-    
+
     @staticmethod
     def deserialize(raw_val):
         if not raw_val:
             return None
         return BlackoutEventDefinition(raw_val[0])
-    
+
     def __str__(self):
         if self.location:
             return f"Black Out back to: {self.location}"
@@ -356,13 +356,13 @@ class EvolutionEventDefinition:
     def __init__(self, evolved_species, by_stone=None):
         self.evolved_species = evolved_species
         self.by_stone = by_stone
-    
+
     def serialize(self):
         return {
             const.EVOLVED_SPECIES: self.evolved_species,
             const.BY_STONE_KEY: self.by_stone,
         }
-    
+
     @staticmethod
     def deserialize(raw_val):
         if not raw_val:
@@ -371,7 +371,7 @@ class EvolutionEventDefinition:
             raw_val[const.EVOLVED_SPECIES],
             by_stone=raw_val[const.BY_STONE_KEY]
         )
-    
+
     def __str__(self):
         return f"Evolve into: {self.evolved_species}"
 
@@ -412,7 +412,7 @@ class EventDefinition:
             if self._second_trainer_obj is None:
                 raise ValueError(f"Could not find trainer object for trainer named: '{self.trainer_def.second_trainer_name}', from trainer_db for version: {current_gen_info().version_name()}")
         return self._second_trainer_obj
-    
+
     def get_wild_pkmn(self):
         if self._wild_pkmn is None and self.wild_pkmn_info is not None:
             if self.wild_pkmn_info.trainer_pkmn:
@@ -420,7 +420,7 @@ class EventDefinition:
             else:
                 self._wild_pkmn = current_gen_info().create_wild_pkmn(self.wild_pkmn_info.name, self.wild_pkmn_info.level)
         return self._wild_pkmn
-    
+
     def get_pokemon_list(self, definition_order=False, include_definition_idx=False):
         wild_pkmn = self.get_wild_pkmn()
         if wild_pkmn is not None:
@@ -429,11 +429,11 @@ class EventDefinition:
             if include_definition_idx:
                 return [(x, wild_pkmn) for x in range(self.wild_pkmn_info.quantity)]
             return [wild_pkmn for _ in range(self.wild_pkmn_info.quantity)]
-        
+
         trainer = self.get_first_trainer_obj()
         if trainer is None:
             return []
-        
+
         second_trainer = self.get_second_trainer_obj()
         if second_trainer is None:
             pkmn_list = trainer.pkmn
@@ -477,7 +477,7 @@ class EventDefinition:
         if include_definition_idx:
             return [(mon_order[x] - 1, result[x]) for x in range(len(result))]
         return result
-    
+
     def get_event_type(self):
         if self.rare_candy is not None:
             return const.TASK_RARE_CANDY
@@ -510,7 +510,7 @@ class EventDefinition:
             return const.TASK_BLACKOUT
         elif self.evolution is not None:
             return const.TASK_EVOLUTION
-        
+
         return const.TASK_NOTES_ONLY
 
     def get_item_label(self):
@@ -542,9 +542,9 @@ class EventDefinition:
             return str(self.blackout)
         elif self.evolution is not None:
             return str(self.evolution)
-        
+
         return f"Notes: {self.notes}"
-    
+
     def get_label(self):
         if self.rare_candy is not None:
             return str(self.rare_candy)
@@ -574,22 +574,22 @@ class EventDefinition:
             return str(self.blackout)
         elif self.evolution is not None:
             return str(self.evolution)
-        
+
         return f"Notes: {self.notes}"
-    
+
     def is_highlighted(self):
         return const.HIGHLIGHT_LABEL in self.tags
-    
+
     def experience_per_second(self):
         if self.trainer_def is None:
             return ""
-        
+
         return universal_utils.experience_per_second(
             current_gen_info().get_trainer_timing_info(),
             self.get_pokemon_list()
         )
-        
-    
+
+
     def do_render(self, search=None, filter_types=None):
         if filter_types is not None:
             if self.get_event_type() not in filter_types:
@@ -603,17 +603,16 @@ class EventDefinition:
                 return False
 
         return True
-    
+
     def toggle_highlight(self):
         if const.HIGHLIGHT_LABEL in self.tags:
             self.tags.remove(const.HIGHLIGHT_LABEL)
         else:
             self.tags.append(const.HIGHLIGHT_LABEL)
-    
+
     def __str__(self):
         return self.get_label()
 
-    
     def serialize(self):
         result = {const.ENABLED_KEY: self.enabled, const.TAGS_KEY: self.tags}
         if self.notes:
@@ -641,8 +640,8 @@ class EventDefinition:
             result.update({const.TASK_BLACKOUT: self.blackout.serialize()})
         elif self.evolution is not None:
             result.update({const.TASK_EVOLUTION: self.evolution.serialize()})
-        
-        return result    
+
+        return result
 
     @staticmethod
     def deserialize(raw_val):
@@ -692,10 +691,10 @@ class EventItem:
 
         if cur_state is not None:
             self.apply(cur_state)
-    
+
     def contains_id(self, id_val):
         return self.group_id == id_val
-    
+
     def apply(self, cur_state):
         self.init_state = cur_state
         self._enabled = self.event_definition.enabled
@@ -777,7 +776,6 @@ class EventItem:
         if self.event_definition.notes and self.event_definition.notes.startswith(const.RECORDING_ERROR_FRAGMENT):
             self.error_message = self.event_definition.notes
 
-
     def get_pkmn_after_levelups(self):
         return ""
 
@@ -785,7 +783,7 @@ class EventItem:
         if not self.is_enabled():
             return ""
         return self.final_state.solo_pkmn.cur_level
-    
+
     def xp_to_next_level(self):
         if not self.is_enabled():
             return ""
@@ -826,15 +824,37 @@ class EventItem:
 
     def is_enabled(self):
         return self._enabled and self.parent.is_enabled()
-    
+
     def is_major_fight(self):
         return False
-    
+
     def get_tags(self):
         if self.has_errors():
             return [const.EVENT_TAG_ERRORS]
 
         return []
+
+    def serialize_metadata(self, deep=False):
+        return {
+            "definition": self.event_definition.serialize(),
+            "group_id": self.group_id,
+            "parent_group_id": self.parent.group_id,
+            "children_ids": [],
+            "children": [],
+            "pkmn_after_levelups": self.get_pkmn_after_levelups(),
+            "pkmn_level": self.pkmn_level(),
+            "xp_to_next_level": self.xp_to_next_level(),
+            "percent_xp_to_next_level": self.percent_xp_to_next_level(),
+            "xp_gain": self.xp_gain(),
+            "total_xp": self.total_xp(),
+            "level_gain": self.level_gain(),
+            "experience_per_second": self.experience_per_second(),
+            "has_errors": self.has_errors(),
+            "is_enabled": self.is_enabled(),
+            "is_major_fight": self.is_major_fight(),
+            "tags": self.get_tags(),
+            "name": self.__repr__(),
+        }
 
 
 class EventGroup:
@@ -853,7 +873,7 @@ class EventGroup:
         self.pkmn_after_levelups = []
         self.error_messages = []
         self.level_up_learn_event_defs = []
-    
+
     def apply(self, cur_state:RouteState, level_up_learn_event_defs=None):
         try:
             self.name = self.event_definition.get_label()
@@ -890,11 +910,11 @@ class EventGroup:
                         pay_day_amount = 0
                     else:
                         pay_day_amount = self.event_definition.trainer_def.pay_day_amount
-                    
+
                     defeating_trainer = order_idx == (len(pkmn_to_fight) - 1)
                     self.event_items.append(EventItem(self, self.event_definition, to_defeat_mon=cur_pkmn, cur_state=cur_state, exp_split_num=exp_split, pay_day_amount=pay_day_amount, defeating_trainer=defeating_trainer))
                     pkmn_counter[cur_pkmn.name] = pkmn_counter.get(cur_pkmn.name, 0) + 1
-                    
+
                     next_state = self.event_items[-1].final_state
                     # when a level up occurs
                     if next_state.solo_pkmn.cur_level != cur_state.solo_pkmn.cur_level:
@@ -911,7 +931,7 @@ class EventGroup:
                         else:
                             self.pkmn_after_levelups.append("after_final_pkmn")
                     cur_state = next_state
-            
+
             elif self.event_definition.rare_candy is not None:
                 if self.event_definition.rare_candy.amount <= 0:
                     #  if there are no candies, create a dummy empty notes event just to keep things happy
@@ -937,10 +957,10 @@ class EventGroup:
                 self.event_items.append(EventItem(self, self.event_definition, cur_state=cur_state))
                 if self.level_up_learn_event_defs:
                     self.event_items.append(EventItem(self, EventDefinition(learn_move=self.level_up_learn_event_defs[0]), cur_state=self.event_items[0].final_state))
-                
+
             if len(self.event_items) == 0:
                 raise ValueError(f"Something went wrong generating event group: {self.event_definition}")
-            
+
             self.error_messages = [x.error_message for x in self.event_items if x.error_message]
             if self.error_messages:
                 self.name = ", ".join(self.error_messages)
@@ -951,13 +971,13 @@ class EventGroup:
         except Exception:
             logger.error(f"Encountered exception with event {self}")
             raise
-    
+
     def contains_id(self, id_val):
         if self.group_id == id_val:
             return True
-        
+
         return any([x.contains_id(id_val) for x in self.event_items])
-    
+
     def get_pkmn_after_levelups(self):
         return ",".join(self.pkmn_after_levelups)
 
@@ -965,7 +985,7 @@ class EventGroup:
         if not self.is_enabled():
             return ""
         return self.final_state.solo_pkmn.cur_level
-    
+
     def xp_to_next_level(self):
         if not self.is_enabled():
             return ""
@@ -1005,10 +1025,10 @@ class EventGroup:
 
     def serialize(self):
         return self.event_definition.serialize()
-    
+
     def has_errors(self):
         return len(self.error_messages) != 0
-    
+
     def is_enabled(self):
         return self._enabled and self.parent.is_enabled()
 
@@ -1021,7 +1041,7 @@ class EventGroup:
         if current_gen_info() is None:
             return False
         return current_gen_info().is_major_fight(self.event_definition.trainer_def.trainer_name)
-    
+
     def do_render(self, search=None, filter_types=None):
         if filter_types is not None and self.has_errors() and const.ERROR_SEARCH in filter_types:
             # Workaround to preserve and-ing behavior of search string + filter types
@@ -1034,19 +1054,45 @@ class EventGroup:
                 return True
 
         return self.event_definition.do_render(search=search, filter_types=filter_types)
-    
+
     def get_tags(self):
         if self.has_errors():
             return [const.EVENT_TAG_ERRORS]
-        
+
         if self.event_definition.is_highlighted():
             return [const.HIGHLIGHT_LABEL]
 
         if self.is_major_fight():
             return [const.EVENT_TAG_IMPORTANT]
-        
+
         return []
-    
+
+    def serialize_metadata(self, deep=True):
+        result = {
+            "definition": self.event_definition.serialize(),
+            "group_id": self.group_id,
+            "parent_group_id": self.parent.group_id,
+            "children_ids": [x.group_id for x in self.event_items],
+            "children": [],
+            "pkmn_after_levelups": self.get_pkmn_after_levelups(),
+            "pkmn_level": self.pkmn_level(),
+            "xp_to_next_level": self.xp_to_next_level(),
+            "percent_xp_to_next_level": self.percent_xp_to_next_level(),
+            "xp_gain": self.xp_gain(),
+            "total_xp": self.total_xp(),
+            "level_gain": self.level_gain(),
+            "experience_per_second": self.experience_per_second(),
+            "has_errors": self.has_errors(),
+            "is_enabled": self.is_enabled(),
+            "is_major_fight": self.is_major_fight(),
+            "tags": self.get_tags(),
+            "name": self.__repr__(),
+        }
+
+        if deep:
+            result["children"] = [x.serialize_metadata(deep=deep) for x in self.event_items]
+        return result
+
     def __repr__(self):
         return f"EventGroup: {self.event_definition}"
 
@@ -1068,18 +1114,18 @@ class EventFolder:
         self.final_state = None
         self.child_errors = False
         self.children = []
-    
+
     def add_child(self, child_obj, force_recalculation=False):
         self.children.append(child_obj)
         child_obj.parent = self
 
         if force_recalculation:
             self.apply(self.init_state)
-    
+
     def insert_child_after(self, child_obj, after_obj=None, before_obj=None):
         if after_obj is None and before_obj is None:
             self.add_child(child_obj=child_obj)
-        
+
         elif after_obj is not None:
             try:
                 insert_idx = self.children.index(after_obj)
@@ -1105,10 +1151,10 @@ class EventFolder:
             insert_idx = max(idx - 1, 0)
         else:
             insert_idx = min(idx + 1, len(self.children) - 1)
-        
+
         self.children.remove(child_obj)
         self.children.insert(insert_idx, child_obj)
-    
+
     def remove_child(self, child_obj, force_recalculation=False):
         try:
             self.children.remove(child_obj)
@@ -1133,13 +1179,13 @@ class EventFolder:
             cur_state = cur_group.final_state
             if cur_group.has_errors():
                 self.child_errors = True
-        
+
         self.final_state = cur_state
-    
+
     def contains_id(self, id_val):
         if self.group_id == id_val:
             return True
-        
+
         return any([x.contains_id(id_val) for x in self.event_items])
 
     def get_pkmn_after_levelups(self):
@@ -1147,7 +1193,7 @@ class EventFolder:
 
     def pkmn_level(self):
         return ""
-    
+
     def xp_to_next_level(self):
         return ""
 
@@ -1181,10 +1227,10 @@ class EventFolder:
 
     def set_enabled_status(self, is_enabled):
         self._enabled = is_enabled
-    
+
     def has_errors(self):
         return self.child_errors
-    
+
     def do_render(self, search=None, filter_types=None):
         # make sure to show empty folders when no filters are set
         if len(self.children) == 0 and search is None and filter_types is None:
@@ -1195,11 +1241,11 @@ class EventFolder:
                 return True
 
         return False
-    
+
     def get_tags(self):
         if self.has_errors():
             return [const.EVENT_TAG_ERRORS]
-        
+
         if self.expanded:
             return []
 
@@ -1208,8 +1254,37 @@ class EventFolder:
             if const.HIGHLIGHT_LABEL in cur_group.get_tags():
                 result.append(const.HIGHLIGHT_LABEL)
                 break
-        
+
         return result
-    
+
+    def is_major_fight(self):
+        return False
+
+    def serialize_metadata(self, deep=True):
+        result = {
+            "definition": None,
+            "group_id": self.group_id,
+            "parent_group_id": -1 if self.parent is None else self.parent.group_id,
+            "children_ids": [x.group_id for x in self.children],
+            "children": [],
+            "pkmn_after_levelups": self.get_pkmn_after_levelups(),
+            "pkmn_level": self.pkmn_level(),
+            "xp_to_next_level": self.xp_to_next_level(),
+            "percent_xp_to_next_level": self.percent_xp_to_next_level(),
+            "xp_gain": self.xp_gain(),
+            "total_xp": self.total_xp(),
+            "level_gain": self.level_gain(),
+            "experience_per_second": self.experience_per_second(),
+            "has_errors": self.has_errors(),
+            "is_enabled": self.is_enabled(),
+            "is_major_fight": self.is_major_fight(),
+            "tags": self.get_tags(),
+            "name": self.__repr__(),
+        }
+
+        if deep:
+            result["children"] = [x.serialize_metadata(deep=deep) for x in self.children]
+        return result
+
     def __repr__(self):
         return f"EventFolder: {self.name}"

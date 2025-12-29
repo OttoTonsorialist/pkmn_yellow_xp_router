@@ -35,13 +35,24 @@ class Inventory:
         self._bag_limit = bag_limit
         self._item_lookup = dict()
         self._reindex_lookup()
-    
+
+    def serialize(self):
+        return {
+            const.MONEY: self.cur_money,
+            const.ITEMS_KEY: [
+                {
+                    const.COUNT_KEY: x.num,
+                    const.NAME_KEY: x.base_item.name,
+                } for x in self.cur_items
+            ],
+        }
+
     def _reindex_lookup(self):
         self._item_lookup = {x.base_item.name: idx for idx, x in enumerate(self.cur_items)}
-    
+
     def _copy(self):
         return Inventory(cur_money=self.cur_money, cur_items=self.cur_items, bag_limit=self._bag_limit)
-    
+
     def add_item(self, base_item:pkmn.universal_data_objects.BaseItem, num, is_purchase=False, force=False):
         result = self._copy()
         if is_purchase:
@@ -66,9 +77,9 @@ class Inventory:
         elif self._bag_limit is None:
             result._item_lookup[base_item.name] = len(result.cur_items)
             result.cur_items.append(BagItem(base_item, num))
-        
+
         return result
-    
+
     def remove_item(self, base_item:pkmn.universal_data_objects.BaseItem, num, is_sale=False, force=False):
         if base_item.name not in self._item_lookup:
             if force:
@@ -82,36 +93,36 @@ class Inventory:
 
         if base_item.is_key_item and is_sale and not force:
             raise ValueError(f"Cannot sell key item: {base_item.name}")
-        
+
         result = self._copy()
         bag_item = result.cur_items[result._item_lookup[base_item.name]]
         if bag_item.num < num and not force:
             raise ValueError(f"Cannot sell/use {num} {base_item.name} when you only have {bag_item.num}")
-        
+
         bag_item.num -= num
         if bag_item.num <= 0:
             del result.cur_items[result._item_lookup[base_item.name]]
             result._reindex_lookup()
-        
+
         if is_sale:
             result.cur_money += (base_item.sell_price * num)
-        
+
         return result
-    
+
     def __eq__(self, other):
         if not isinstance(other, Inventory):
             return False
-        
+
         if self.cur_money != other.cur_money:
             return False
 
         if len(self.cur_items) != len(other.cur_items):
             return False
-        
+
         for cur_idx in range(len(self.cur_items)):
             if self.cur_items[cur_idx] != other.cur_items[cur_idx]:
                 return False
-        
+
         return True
 
 class SoloPokemon:
@@ -187,7 +198,7 @@ class SoloPokemon:
 
         if gained_stat_xp is None:
             gained_stat_xp = copy(self._empty_stat_block)
-        
+
         if const.DEBUG_MODE:
             logger.info(f"Gaining {gained_xp}, was at {self.cur_xp}, now at {self.cur_xp + gained_xp}. Before gain, needed {self.xp_to_next_level} TNL")
         self.cur_xp += gained_xp
@@ -221,7 +232,7 @@ class SoloPokemon:
                 self.xp_to_next_level = level_info[1]
                 if const.DEBUG_MODE:
                     logger.info(f"Now level {self.cur_level}, {self.xp_to_next_level} TNL")
-        
+
         if const.DEBUG_MODE:
             logger.info(f"Realized StatXP {self.realized_stat_xp}")
             logger.info(f"Unrealized StatXP {self.unrealized_stat_xp}")
@@ -234,11 +245,28 @@ class SoloPokemon:
             self.percent_xp_to_next_level = int((self.xp_to_next_level / (self.cur_xp + self.xp_to_next_level - last_level_xp)) * 100)
             self.percent_xp_to_next_level_str = f"{self.percent_xp_to_next_level} %"
         self.cur_stats = self.species_def.stats.calc_level_stats(self.cur_level, self.dvs, self.realized_stat_xp, badges, nature, self.held_item)
-    
+
+    def serialize(self):
+        return {
+            const.SPECIES_KEY: self.species_def.name,
+            const.LEVEL: self.cur_level,
+            const.XP: self.cur_xp,
+            const.XP: self.cur_xp,
+            const.DVS_KEY: self.dvs.serialize(),
+            const.REALIZED_STAT_XP_KEY: self.realized_stat_xp.serialize(),
+            const.UNREALIZED_STAT_XP_KEY: self.unrealized_stat_xp.serialize(),
+            const.STATS_KEY: self.cur_stats.serialize(),
+            const.HELD_ITEM_KEY: self.held_item,
+            const.ABILITY_KEY: self.ability,
+            const.NATURE_KEY: str(self.nature),
+            const.XP_TO_NEXT_LEVEL: self.xp_to_next_level,
+            const.XP_TO_NEXT_LEVEL: self.percent_xp_to_next_level,
+        }
+
     def __eq__(self, other):
         if not isinstance(other, SoloPokemon):
             return False
-        
+
         if (
             self.species_def.name != other.species_def.name or
             self.cur_level != other.cur_level or
@@ -250,15 +278,15 @@ class SoloPokemon:
             self.held_item != other.held_item
         ):
             return False
-        
+
         if len(self.move_list) != len(other.move_list):
             return False
         for move_idx in range(len(self.move_list)):
             if self.move_list[move_idx] != other.move_list[move_idx]:
                 return False
-        
+
         return True
-    
+
     def get_net_gain_from_stat_xp(self, badges):
         if badges is None:
             badges = pkmn.universal_data_objects.BadgeList()
@@ -278,7 +306,7 @@ class SoloPokemon:
         # allow badge boosting, and also normal stat boosting
         if stage_modifiers is None:
             stage_modifiers = pkmn.universal_data_objects.StageModifiers()
-        
+
         battle_stats = self.species_def.stats.calc_battle_stats(self.cur_level, self.dvs, self.realized_stat_xp, stage_modifiers, badges, self.nature, self.held_item)
 
         return pkmn.universal_data_objects.EnemyPkmn(
@@ -300,7 +328,7 @@ class SoloPokemon:
     def get_move_destination(self, move_name, dest):
         # if one were to attempt to learn a move defined by the params
         # return what would the actual destination would be
-        
+
         # if we are forgetting the move, always respect dest
         if move_name is None:
             return dest, True
@@ -308,13 +336,13 @@ class SoloPokemon:
         # if we already know the move, ignore dest entirely and just don't learn it
         if move_name in self.move_list:
             return None, False
-        
+
         added = False
         for cur_idx in range(len(self.move_list)):
             # if we're learning the move and we have empty slots, always learn the move
             if self.move_list[cur_idx] is None:
                 return cur_idx, False
-        
+
         # if we have 4 moves already, and none of those moves are what we're trying to learn
         # Then, we finally care about the destination passed in
         if dest is None:

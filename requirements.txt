@@ -1,0 +1,17 @@
+appdirs==1.4.4
+blinker==1.9.0
+certifi==2024.12.14
+charset-normalizer==3.4.1
+click==8.3.1
+Flask==3.1.2
+idna==3.10
+itsdangerous==2.2.0
+Jinja2==3.1.6
+MarkupSafe==3.0.3
+msgpack==1.0.2
+pillow==11.1.0
+requests==2.32.3
+signalrcore==0.9.5
+urllib3==2.3.0
+websocket-client==1.0.0
+Werkzeug==3.1.4

@@ -3,6 +3,7 @@ import logging
 from typing import List, Tuple
 
 import controllers.main_controller
+import pkmn.gen_factory
 from route_recording.gamehook_client import GameHookClient
 import routing.route_events
 from utils.constants import const
@@ -18,12 +19,12 @@ def skip_if_inactive(controller_fn):
             controller_fn(*args, **kwargs)
         else:
             logger.warning(f"Ignoring recorder function call due to recorder being inactive: {controller_fn} with args: {args} and kwargs: {kwargs}")
-    
+
     return wrapper
 
 class RecorderController:
     """
-    Serves as a "translator" between the actual client reading 
+    Serves as a "translator" between the actual client reading
     """
     def __init__(self, controller:controllers.main_controller.MainController):
         self._controller = controller
@@ -33,61 +34,88 @@ class RecorderController:
         self._status = None
         self._ready = None
         self._game_state = None
+        self._gamehook_client:RecorderGameHookClient = None
 
         # metadata for tracking/organizing events in the generated route
         self._potential_new_area_name = None
         self._potential_new_folder_name = None
         self._active_area_name = None
         self._active_folder_name = const.ROOT_FOLDER_NAME
-    
+
     def register_recorder_status_change(self, tk_obj):
         new_event_name = const.EVENT_RECORDER_STATUS_CHANGE.format(len(self._status_events))
         self._status_events.append((tk_obj, new_event_name))
         return new_event_name
-    
+
     def register_recorder_ready_change(self, tk_obj):
         new_event_name = const.EVENT_RECORDER_READY_CHANGE.format(len(self._ready_events))
         self._ready_events.append((tk_obj, new_event_name))
         return new_event_name
-    
+
     def register_recorder_game_state_change(self, tk_obj):
         new_event_name = const.EVENT_RECORDER_GAME_STATE_CHANGE.format(len(self._game_state_events))
         self._game_state_events.append((tk_obj, new_event_name))
         return new_event_name
-    
+
     def _on_status_change(self):
         for tk_obj, cur_event_name in self._status_events:
             tk_obj.event_generate(cur_event_name, when="tail")
-    
+
     def _on_ready_change(self):
         for tk_obj, cur_event_name in self._ready_events:
             tk_obj.event_generate(cur_event_name, when="tail")
-    
+
     def _on_game_state_change(self):
         for tk_obj, cur_event_name in self._game_state_events:
             tk_obj.event_generate(cur_event_name, when="tail")
-    
+
     def set_status(self, new_val):
         self._status = new_val
         self._on_status_change()
-    
+
     def get_status(self):
         return self._status
-    
+
     def set_ready(self, new_val):
         self._ready = new_val
         self._on_ready_change()
-    
+
     def is_ready(self):
         return self._ready
-    
+
     def set_game_state(self, new_val):
         self._game_state = new_val
         self._on_game_state_change()
-    
+
     def get_game_state(self):
         return self._game_state
-    
+
+    ####
+    # NOTE: methods below are largely "internal", meant to be called by the gamehook client bubbling actions back up
+    # they are not intended for direct access from external non-recorder objects
+    ####
+
+    def on_recording_mode_changed(self, is_record_mode_active):
+        if is_record_mode_active:
+            if self._gamehook_client is not None:
+                logger.warning("Recording mode set to active, but gamehook client was already active")
+                return
+
+            try:
+                self._gamehook_client = pkmn.gen_factory.current_gen_info().get_recorder_client(self)
+                self._gamehook_client.connect()
+            except NotImplementedError as e:
+                self._controller.trigger_exception("No recorder has been created yet for the current version")
+                self._controller.set_record_mode(False)
+            except Exception as e:
+                logger.error("General exception trying to create and connect gamehook client")
+                logger.exception(e)
+                self._controller.trigger_exception(f"Exception encountered trying to connect to gamehook: {type(e)}. Check logs for more details")
+        else:
+            if self._gamehook_client is not None:
+                self._gamehook_client.disconnect()
+                self._gamehook_client = None
+
     def route_restarted(self):
         # this function is called when we detect that a new game-file has been started
         # silently allow this if we haven't actually recording any events
@@ -95,18 +123,6 @@ class RecorderController:
         if not self._controller.is_empty():
             # TODO: need to complain to the user somehow...
             self.set_ready(False)
-    
-    def _on_enable(self):
-        self._potential_new_area_name = None
-        self._potential_new_folder_name = None
-
-        if not self._controller.is_empty():
-            test_obj = self._controller.get_previous_event()
-            self._active_folder_name = test_obj.parent.name
-            self._active_area_name = self._extract_area_name_from_folder_name(self._active_folder_name)
-        else:
-            self._active_folder_name = const.ROOT_FOLDER_NAME
-            self._active_area_name = None
 
     @skip_if_inactive
     def entered_new_area(self, new_area_name):
@@ -187,7 +203,7 @@ class RecorderController:
                 self._potential_new_area_name = None
                 self._potential_new_folder_name = None
                 self._controller.finalize_new_folder(self._active_folder_name)
-        
+
         if self._active_folder_name not in self._controller.get_all_folder_names():
             self._controller.finalize_new_folder(self._active_folder_name)
 
@@ -261,7 +277,7 @@ class RecorderGameHookClient(GameHookClient):
         super().__init__(clear_callbacks_on_load=True)
         self._controller = controller
         self._expected_names = expected_names
-    
+
     def on_mapper_loaded(self):
         game_name = self.meta.get("gameName")
 
@@ -278,7 +294,7 @@ class RecorderGameHookClient(GameHookClient):
         else:
             self._controller.set_ready(False)
             self._controller.set_status(const.RECORDING_STATUS_WRONG_MAPPER)
-    
+
     def validate_constants(self, constants):
         real_vals = [x for x in self.properties.keys()]
         lower_vals = [x.lower() for x in real_vals]
@@ -326,7 +342,7 @@ class RecorderGameHookClient(GameHookClient):
                 
                 if is_replacement_needed:
                     setattr(constants, cur_attr, replacement_val)
-        
+
         if invalid_props:
             logger.error(f"Likely due to mismatching GameHook version, invalid GameHook properties: {list(invalid_props)}")
             self._controller._controller.trigger_exception(f"Likely due to mismatching GameHook version, invalid GameHook properties: {list(invalid_props)}")
@@ -336,19 +352,19 @@ class RecorderGameHookClient(GameHookClient):
     def on_mapper_load_error(self, err):
         self._controller.set_ready(False)
         self._controller.set_status(const.RECORDING_STATUS_NO_MAPPER)
-    
+
     def on_disconnected(self):
         self._controller.set_ready(False)
         self._controller.set_status(const.RECORDING_STATUS_DISCONNECTED)
-    
+
     def on_connected(self):
         self._controller.set_ready(False)
         self._controller.set_status(const.RECORDING_STATUS_CONNECTED)
-    
+
     def on_connection_error(self):
         self._controller.set_ready(False)
         self._controller.set_status(const.RECORDING_STATUS_FAILED_CONNECTION)
-    
+
     def on_game_hook_error(self, err):
         self._controller.set_ready(False)
         self._controller._controller.trigger_exception(f"{type(err)}: {err}")

@@ -99,6 +99,16 @@ class Constants:
         self.TARGET_KEY = "target"
         self.NATURE_KEY = "nature"
 
+        self.REALIZED_STAT_XP_KEY = "realized_stat_xp"
+        self.UNREALIZED_STAT_XP_KEY = "unrealized_stat_xp"
+        self.SOLO_MON_KEY = "solo_mon"
+        self.BADGES_KEY = "badges"
+        self.INVENTORY_KEY = "inventory"
+        self.XP_TO_NEXT_LEVEL = "xp_to_next_level"
+        self.PERCENT_XP_TO_NEXT_LEVEL = "percent_xp_to_next_level"
+        self.ITEMS_KEY = "items"
+        self.COUNT_KEY = "count"
+
         self.LEVEL = "level"
         self.HP = "hp"
         self.ATK = "atk"

@@ -2,10 +2,12 @@ import os
 import threading
 import logging
 import time
+import requests
 
 import tkinter as tk
 from tkinter import ttk, font, messagebox
 
+from controllers.battle_summary_controller import BattleSummaryController
 from controllers.main_controller import MainController
 from gui import custom_components, quick_add_components
 from gui.event_details import EventDetails
@@ -34,10 +36,11 @@ flag_to_auto_update = False
 
 
 class MainWindow(tk.Tk):
-    def __init__(self, controller:MainController):
+    def __init__(self, controller:MainController, battle_controller:BattleSummaryController, recorder_controller:RecorderController):
         super().__init__()
         self._controller = controller
-        self._recorder_controller = RecorderController(self._controller)
+        self._battle_controller = battle_controller
+        self._recorder_controller = recorder_controller
 
         geometry = config.get_window_geometry()
         if not geometry:
@@ -220,7 +223,7 @@ class MainWindow(tk.Tk):
         self.event_list.configure(yscrollcommand=self.scroll_bar.set)
 
         # right panel for event details
-        self.event_details = EventDetails(self._controller, self.info_panel)
+        self.event_details = EventDetails(self._controller, self._battle_controller, self.info_panel)
         self.event_details.grid(row=0, column=1, sticky=tk.NSEW)
         self.event_details.pack_propagate(0)
 
@@ -292,7 +295,7 @@ class MainWindow(tk.Tk):
                 return
 
         self.destroy()
-    
+
     def _on_exception(self, *args, **kwargs):
         exception_message = self._controller.get_next_exception_info()
         while exception_message is not None:
@@ -383,7 +386,7 @@ class MainWindow(tk.Tk):
             init_state,
             allow_updates=False
         )
-    
+
     def _report_new_selection(self, *args, **kwargs):
         # this is different from _handle_new_selection as we are reporting the new selection
         # from the users action (via a tk event) to the controller
@@ -393,7 +396,7 @@ class MainWindow(tk.Tk):
         cur_treeview_selected = self.event_list.get_all_selected_event_ids()
         if self._controller.get_all_selected_ids() != cur_treeview_selected:
             self._controller.select_new_events(cur_treeview_selected)
-    
+
     def _handle_new_selection(self, *args, **kwargs):
         # just re-use the variable temporarily
         all_event_ids = self._controller.get_all_selected_ids()
@@ -408,16 +411,16 @@ class MainWindow(tk.Tk):
             event_group = None
         else:
             event_group = self._controller.get_event_by_id(all_event_ids[0])
-        
+
         disable_all = False
         if self._controller.is_record_mode_active() or self._controller.get_raw_route().init_route_state is None:
             disable_all = True
-        
+
         if not disable_all and isinstance(event_group, EventFolder):
             self.rename_folder_button.enable()
         else:
             self.rename_folder_button.disable()
-        
+
         if not disable_all and (event_group is not None or len(all_event_ids) > 0):
             # As long as we have any editable events selected, toggle the buttons to allow editing those events
             self.delete_event_button.enable()
@@ -431,7 +434,7 @@ class MainWindow(tk.Tk):
             self.move_group_down_button.disable()
             self.move_group_up_button.disable()
             self.highlight_toggle_button.disable()
-        
+
         if not disable_all and (event_group is not None or len(self.event_list.get_all_selected_event_ids()) == 0):
             # as long as we have a finite place to create a new folder, enable the option
             # either only a single event is selected, or no events are selected
@@ -439,19 +442,19 @@ class MainWindow(tk.Tk):
             self.new_folder_button.enable()
         else:
             self.new_folder_button.disable()
-    
+
     def open_app_config_window(self, *args, **kwargs):
         DataDirConfigWindow(self, self.cancel_and_quit)
-    
+
     def open_custom_gens_window(self, *args, **kwargs):
         CustomGenWindow(self, self._controller)
-    
+
     def open_config_window(self, *args, **kwargs):
         ConfigWindow(self)
-    
+
     def open_new_route_window(self, *args, **kwargs):
         NewRouteWindow(self, self._controller)
-    
+
     def open_load_route_window(self, *args, **kwargs):
         LoadRouteWindow(self, self._controller)
 
@@ -490,7 +493,7 @@ class MainWindow(tk.Tk):
         all_event_ids = self.event_list.get_all_selected_event_ids(allow_event_items=False)
         if len(all_event_ids) == 0:
             return
-        
+
         do_prompt = False
         if len(all_event_ids) == 1:
             cur_event_id = all_event_ids[0]
@@ -499,7 +502,7 @@ class MainWindow(tk.Tk):
                 do_prompt = True
         else:
             do_prompt = True
-        
+
         if do_prompt:
             DeleteConfirmation(self, self._controller, all_event_ids)
         else:
@@ -517,7 +520,7 @@ class MainWindow(tk.Tk):
         for cur_event_id in all_event_ids:
             for cur_invalid in self._controller.get_invalid_folders(cur_event_id):
                 invalid_folders.add(cur_invalid)
-        
+
         self.new_event_window = TransferEventWindow(
             self,
             self._controller,

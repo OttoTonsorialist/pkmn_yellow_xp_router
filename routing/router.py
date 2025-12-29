@@ -33,11 +33,11 @@ class Router:
         self.event_item_lookup = {}
 
         self.defeated_trainers = set()
-    
+
     def _change_version(self, new_version):
         self.pkmn_version = new_version
         change_version(self.pkmn_version)
-    
+
     def get_event_obj(self, event_id):
         return self.event_lookup.get(event_id, self.event_item_lookup.get(event_id))
 
@@ -45,7 +45,7 @@ class Router:
         if len(self.root_folder.children):
             return self.root_folder.final_state
         return self.init_route_state
-    
+
     def set_solo_pkmn(
             self,
             pkmn_name:str,
@@ -57,15 +57,15 @@ class Router:
         pkmn_base = current_gen_info().pkmn_db().get_pkmn(pkmn_name)
         if pkmn_base is None:
             raise ValueError(f"Could not find base stats for Pokemon: {pkmn_name}")
-        
+
         if custom_ability_idx is None:
             custom_ability_idx = 0
-        
+
         if custom_nature is None:
             custom_nature = universal_data_objects.Nature.HARDY
         elif not isinstance(custom_nature, universal_data_objects.Nature):
             custom_nature = universal_data_objects.Nature(custom_nature)
-        
+
         if custom_dvs is not None:
             # when setting custom DVs, should expect a dict of all values
             # Convert that to a StatBlock here when appropriate
@@ -397,37 +397,34 @@ class Router:
             if event_group_obj.event_definition.trainer_def is not None:
                 if event_group_obj.event_definition.trainer_def.trainer_name in self.defeated_trainers:
                     self.defeated_trainers.remove(event_group_obj.event_definition.trainer_def.trainer_name)
-            
+
             if new_event_def.trainer_def is not None and not current_gen_info().trainer_db().get_trainer(new_event_def.trainer_def.trainer_name).refightable:
                 self.defeated_trainers.add(new_event_def.trainer_def.trainer_name)
-            
+
             event_group_obj.event_definition = new_event_def
 
         self._recalc()
-    
+
     def replace_levelup_move_event(self, new_event_def:route_events.LearnMoveEventDefinition):
         self.level_up_move_defs[new_event_def.get_level_up_key()] = new_event_def
         self._recalc()
-    
+
     def is_valid_levelup_move(self, new_event_def:route_events.LearnMoveEventDefinition):
         return new_event_def.get_level_up_key() in self.level_up_move_defs
-    
+
     def rename_event_folder(self, cur_name, new_name):
         folder_obj = self.folder_lookup[cur_name]
         folder_obj.name = new_name
         del self.folder_lookup[cur_name]
         self.folder_lookup[new_name] = folder_obj
-    
-    def save(self, name):
-        if not os.path.exists(const.SAVED_ROUTES_DIR):
-            os.mkdir(const.SAVED_ROUTES_DIR)
 
-        final_path = os.path.join(const.SAVED_ROUTES_DIR, f"{name}.json")
-        io_utils.backup_file_if_exists(final_path)
+    def serialize_metadata(self, deep=False):
+        return self.root_folder.serialize_metadata(deep=deep)
 
-        out_obj = {
+    def serialize(self):
+        return {
             const.NAME_KEY: self.init_route_state.solo_pkmn.name,
-            const.DVS_KEY: self.init_route_state.solo_pkmn.dvs.serialize(current_gen_info().get_generation()),
+            const.DVS_KEY: self.init_route_state.solo_pkmn.dvs.serialize(),
             const.ABILITY_KEY: self.init_route_state.solo_pkmn.ability_idx,
             const.NATURE_KEY: self.init_route_state.solo_pkmn.nature.value,
             const.PKMN_VERSION_KEY: self.pkmn_version,
@@ -435,9 +432,16 @@ class Router:
             const.EVENTS: [self.root_folder.serialize()]
         }
 
+    def save(self, name):
+        if not os.path.exists(const.SAVED_ROUTES_DIR):
+            os.mkdir(const.SAVED_ROUTES_DIR)
+
+        final_path = os.path.join(const.SAVED_ROUTES_DIR, f"{name}.json")
+        io_utils.backup_file_if_exists(final_path)
+
         with open(final_path, 'w') as f:
-            json.dump(out_obj, f, indent=4)
-    
+            json.dump(self.serialize(), f, indent=4)
+
     def new_route(self, solo_mon, base_route_path=None, pkmn_version=const.YELLOW_VERSION, custom_dvs=None, custom_ability_idx=None, custom_nature=None):
         self._change_version(pkmn_version)
         self._reset_events()

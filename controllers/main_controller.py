@@ -1,7 +1,7 @@
 from __future__ import annotations
 import os
 import logging
-from typing import List, Tuple
+from typing import Callable, List, Tuple
 import tkinter
 from PIL import ImageGrab
 
@@ -27,12 +27,19 @@ def handle_exceptions(controller_fn):
             logger.exception(e)
             controller:MainController = args[0]
             controller._on_exception(f"{type(e)}: {e}")
-    
+
     return wrapper
 
 
+_export_to_webserver_fns = []
+def export_webserver(inner_fn):
+    _export_to_webserver_fns.append(inner_fn)
+    return inner_fn
+
+
 class MainController:
-    def __init__(self):
+    def __init__(self, headless=False):
+        self._headless = headless
         self._data:routing.router.Router = routing.router.Router()
         self._current_preview_event = None
         self._route_name = ""
@@ -51,6 +58,7 @@ class MainController:
         self._event_selection_events = []
         self._event_preview_events = []
         self._record_mode_change_events = []
+        self._sync_record_mode_change_events:List[Callable] = []
         self._message_events = []
         self._exception_events = []
 
@@ -72,58 +80,95 @@ class MainController:
     #####
 
     def register_name_change(self, tk_obj):
+        if self._headless:
+            raise ValueError(f"Cannot register events when running in headless mode")
+
         new_event_name = const.EVENT_NAME_CHANGE.format(len(self._name_change_events))
         self._name_change_events.append((tk_obj, new_event_name))
         return new_event_name
 
     def register_version_change(self, tk_obj):
+        if self._headless:
+            raise ValueError(f"Cannot register events when running in headless mode")
+
         new_event_name = const.EVENT_VERSION_CHANGE.format(len(self._version_change_events))
         self._version_change_events.append((tk_obj, new_event_name))
         return new_event_name
 
     def register_route_change(self, tk_obj):
+        if self._headless:
+            raise ValueError(f"Cannot register events when running in headless mode")
+
         new_event_name = const.EVENT_ROUTE_CHANGE.format(len(self._route_change_events))
         self._route_change_events.append((tk_obj, new_event_name))
         return new_event_name
 
     def register_event_update(self, tk_obj):
+        if self._headless:
+            raise ValueError(f"Cannot register events when running in headless mode")
+
         new_event_name = const.EVENT_EVENT_CHANGE.format(len(self._event_change_events))
         self._event_change_events.append((tk_obj, new_event_name))
         return new_event_name
 
     def register_event_selection(self, tk_obj):
+        if self._headless:
+            raise ValueError(f"Cannot register events when running in headless mode")
+
         new_event_name = const.EVENT_SELECTION_CHANGE.format(len(self._event_selection_events))
         self._event_selection_events.append((tk_obj, new_event_name))
         return new_event_name
 
     def register_event_preview(self, tk_obj):
+        if self._headless:
+            raise ValueError(f"Cannot register events when running in headless mode")
+
         new_event_name = const.EVENT_PREVIEW_CHANGE.format(len(self._event_preview_events))
         self._event_preview_events.append((tk_obj, new_event_name))
         return new_event_name
 
     def register_record_mode_change(self, tk_obj):
+        if self._headless:
+            raise ValueError(f"Cannot register events when running in headless mode")
+
         new_event_name = const.EVENT_RECORD_MODE_CHANGE.format(len(self._record_mode_change_events))
         self._record_mode_change_events.append((tk_obj, new_event_name))
         return new_event_name
 
+    def sync_register_record_mode_change(self, fn_obj):
+        self._sync_record_mode_change_events.append(fn_obj)
+
     def register_message_callback(self, tk_obj):
+        if self._headless:
+            raise ValueError(f"Cannot register events when running in headless mode")
+
         new_event_name = const.MESSAGE_EXCEPTION.format(len(self._message_events))
         self._message_events.append((tk_obj, new_event_name))
         return new_event_name
 
     def register_exception_callback(self, tk_obj):
+        if self._headless:
+            raise ValueError(f"Cannot register events when running in headless mode")
+
         new_event_name = const.EVENT_EXCEPTION.format(len(self._exception_events))
         self._exception_events.append((tk_obj, new_event_name))
         return new_event_name
 
     def register_pre_save_hook(self, fn_obj):
+        if self._headless:
+            raise ValueError(f"Cannot register events when running in headless mode")
+
         self._pre_save_hooks.append(fn_obj)
-    
+
     #####
     # Event callbacks
     #####
 
     def _safely_generate_events(self, event_list):
+        if self._headless:
+            # TODO: if we want to push events over a websocket, that will need to happen here
+            return
+
         to_delete = []
         for cur_idx, (tk_obj, cur_event_name) in enumerate(event_list):
             try:
@@ -131,16 +176,16 @@ class MainController:
             except tkinter.TclError:
                 logger.info(f"Removing the following event due to TclError: {cur_event_name}")
                 to_delete.append(cur_idx)
-        
+
         for cur_idx in sorted(to_delete, reverse=True):
             del event_list[cur_idx]
-    
+
     def _on_name_change(self):
         self._safely_generate_events(self._name_change_events)
-    
+
     def _on_version_change(self):
         self._safely_generate_events(self._version_change_events)
-    
+
     def _on_route_change(self):
         self._unsaved_changes = True
         self._safely_generate_events(self._route_change_events)
@@ -157,6 +202,8 @@ class MainController:
 
     def _on_record_mode_change(self):
         self._safely_generate_events(self._record_mode_change_events)
+        for cur_sync_fn in self._sync_record_mode_change_events:
+            cur_sync_fn(self.is_record_mode_active())
 
     def _on_info_message(self, info_message):
         self._message_info.append(info_message)
@@ -165,7 +212,7 @@ class MainController:
     def _on_exception(self, exception_message):
         self._exception_info.append(exception_message)
         self._safely_generate_events(self._exception_events)
-    
+
     def _fire_pre_save_hooks(self):
         for cur_hook in self._pre_save_hooks:
             try:
@@ -211,7 +258,7 @@ class MainController:
     def update_levelup_move(self, new_learn_move_event):
         self._data.replace_levelup_move_event(new_learn_move_event)
         self._on_event_change()
-    
+
     @handle_exceptions
     def add_area(self, area_name, include_rematches, insert_after_id):
         self._data.add_area(
@@ -241,7 +288,7 @@ class MainController:
             self._on_version_change()
             self._on_event_selection()
             self._on_route_change()
-    
+
     @handle_exceptions
     def load_route(self, full_path_to_route):
         try:
@@ -310,7 +357,7 @@ class MainController:
                 self.delete_events(deleted_ids)
             else:
                 break
-    
+
     @handle_exceptions
     def transfer_to_folder(self, event_ids, new_folder_name):
         self._data.transfer_events(event_ids, new_folder_name)
@@ -358,15 +405,15 @@ class MainController:
         self._route_search = search
         self._on_route_change()
         self._on_event_selection()
-    
+
     @handle_exceptions
     def load_all_custom_versions(self):
         gen_factory._gen_factory.reload_all_custom_gens()
-    
+
     @handle_exceptions
     def create_custom_version(self, base_version, custom_version):
         gen_factory._gen_factory.get_specific_version(base_version).create_new_custom_gen(custom_version)
-    
+
     def send_message(self, message):
         self._on_info_message(message)
 
@@ -392,13 +439,13 @@ class MainController:
 
     def get_event_by_id(self, event_id) -> EventGroup:
         return self._data.get_event_obj(event_id)
-    
+
     def has_errors(self):
         return self._data.root_folder.has_errors()
-    
+
     def get_version(self):
         return self._data.pkmn_version
-    
+
     def get_state_after(self, previous_event_id=None):
         if previous_event_id is None:
             return self._data.init_route_state
@@ -406,84 +453,84 @@ class MainController:
         prev_event = self.get_event_by_id(previous_event_id)
         if prev_event is None:
             return self._data.init_route_state
-        
+
         return prev_event.init_state
-    
+
     def get_init_state(self):
         return self._data.init_route_state
-    
+
     def get_final_state(self):
         return self._data.get_final_state()
-    
+
     def get_all_folder_names(self):
         return list(self._data.folder_lookup.keys())
-    
+
     def get_invalid_folders(self, event_id):
         return self._data.get_invalid_folder_transfers(event_id)
-    
+
     def get_dvs(self):
         return self._data.init_route_state.solo_pkmn.dvs
-    
+
     def get_ability_idx(self):
         return self._data.init_route_state.solo_pkmn.ability_idx
-    
+
     def get_ability(self):
         return self._data.init_route_state.solo_pkmn.ability
-    
+
     def get_nature(self):
         return self._data.init_route_state.solo_pkmn.nature
-    
+
     def get_defeated_trainers(self):
         return self._data.defeated_trainers
-    
+
     def get_route_search_string(self) -> str:
         if not self._route_search:
             return None
         return self._route_search
-    
+
     def get_route_filter_types(self) -> List[str]:
         if len(self._route_filter_types) == 0:
             return None
         return self._route_filter_types
-    
+
     def is_empty(self):
         return len(self._data.root_folder.children) == 0
-    
+
     def is_valid_levelup_move(self, new_move_def):
         return self._data.is_valid_levelup_move(new_move_def)
-    
+
     def can_evolve_into(self, species_name):
         target_mon = gen_factory.current_gen_info().pkmn_db().get_pkmn(species_name)
         if target_mon is None:
             return False
-        
+
         return target_mon.growth_rate == self.get_final_state().solo_pkmn.species_def.growth_rate
 
     def has_unsaved_changes(self) -> routing.router.Router:
         return self._unsaved_changes
-    
+
     def get_all_selected_ids(self, allow_event_items=True):
         if allow_event_items:
             return self._selected_ids
 
         return [x for x in self._selected_ids if not isinstance(self.get_event_by_id(x), EventItem)]
-    
+
     def get_single_selected_event_id(self, allow_event_items=True):
         if len(self._selected_ids) == 0 or len(self._selected_ids) > 1:
             return None
-        
+
         if not allow_event_items:
             event_obj = self.get_event_by_id(self._selected_ids[0])
             if isinstance(event_obj, EventItem):
                 return None
 
         return self._selected_ids[0]
-    
+
     def get_single_selected_event_obj(self, allow_event_items=True) -> EventGroup:
         return self.get_event_by_id(
             self.get_single_selected_event_id(allow_event_items=allow_event_items)
         )
-    
+
     def get_active_state(self):
         # The idea here is we want to get the current state to operate on
         # MOST of the time, this is just the final state of the selected event
@@ -491,27 +538,26 @@ class MainController:
         result = self.get_single_selected_event_obj(allow_event_items=False)
         if result is not None:
             return result.final_state
-        
+
         # If no event is selected, because we are looking at an empty route
         # then just get the initial route state
         if self.is_empty():
             return self._data.init_route_state
-        
+
         # If no event is selected, but the route is non-empty
         # then we will insert after the final event
         return self.get_final_state()
 
-    
     def can_insert_after_current_selection(self):
         # Can always insert if the route is empty
         if self.is_empty():
             return True
-        
+
         # Can't insert is if the route is non-empty, and nothing is selected
         cur_obj = self.get_single_selected_event_obj()
         if cur_obj is None:
             return False
-        
+
         # Can't insert after EventItems, only other event types
         return not isinstance(cur_obj, EventItem)
 
@@ -523,11 +569,11 @@ class MainController:
             self._unsaved_changes = False
         except Exception as e:
             self.trigger_exception(f"Couldn't save route due to exception! {type(e)}: {e}")
-    
+
     def export_notes(self, route_name):
         out_path = self._data.export_notes(route_name)
         self.send_message(f"Exported notes to: {out_path}")
-    
+
     def take_screenshot(self, image_name, bbox):
         try:
             if self.is_empty():
@@ -545,20 +591,20 @@ class MainController:
 
     def is_record_mode_active(self):
         return self._is_record_mode_active
-    
+
     def get_move_idx(self, move_name, state=None):
         if state is None:
             state = self.get_final_state()
-        
+
         move_idx = None
         move_name = sanitize_string(move_name)
         for cur_idx, cur_move in enumerate(state.solo_pkmn.move_list):
             if sanitize_string(cur_move) == move_name:
                 move_idx = cur_idx
                 break
-        
+
         return move_idx
-    
+
     def _walk_events_helper(self, cur_folder:EventFolder, cur_event_id:int, cur_event_found:bool, enabled_only:bool, walk_forward=True) -> Tuple[bool, EventGroup]:
         if walk_forward:
             iterable = cur_folder.children

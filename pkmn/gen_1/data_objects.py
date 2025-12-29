@@ -17,7 +17,7 @@ class GenOneBadgeList(universal_data_objects.BadgeList):
         self.marsh = marsh
         self.volcano = volcano
         self.earth = earth
-    
+
     def award_badge(self, trainer_name) -> GenOneBadgeList:
         reward = self._badge_rewards.get(trainer_name)
         result = self.copy()
@@ -39,24 +39,24 @@ class GenOneBadgeList(universal_data_objects.BadgeList):
             result.earth = True
         else:
             return self
-        
+
         return result
-    
+
     def is_attack_boosted(self):
         return self.boulder
-    
+
     def is_defense_boosted(self):
         return self.thunder
-    
+
     def is_speed_boosted(self):
         return self.soul
-    
+
     def is_special_attack_boosted(self):
         return self.volcano
 
     def is_special_defense_boosted(self):
         return self.volcano
-    
+
     def copy(self) -> GenOneBadgeList:
         return GenOneBadgeList(
             self._badge_rewards,
@@ -69,7 +69,7 @@ class GenOneBadgeList(universal_data_objects.BadgeList):
             volcano=self.volcano,
             earth=self.earth
         )
-    
+
     def to_string(self, verbose=False):
         if not verbose:
             result = []
@@ -93,14 +93,14 @@ class GenOneBadgeList(universal_data_objects.BadgeList):
             return "Badges: " + ", ".join(result)
         else:
             return f"Boulder: {self.boulder}, Cascade: {self.cascade}, Thunder: {self.thunder}, Rainbow: {self.rainbow}, Soul: {self.soul}, Marsh: {self.marsh}, Volcano: {self.volcano}, Earth: {self.earth}"
-    
+
     def __repr__(self):
         return self.to_string(verbose=True)
-    
+
     def __eq__(self, other):
         if not isinstance(other, GenOneBadgeList):
             return False
-        
+
         return (
             self.boulder == other.boulder and
             self.cascade == other.cascade and

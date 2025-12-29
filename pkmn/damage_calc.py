@@ -23,12 +23,12 @@ class DamageRange:
                 self.min_damage = cur_damage
             if self.max_damage is None or cur_damage > self.max_damage:
                 self.max_damage = cur_damage
-        
+
         if self.max_damage is None or self.min_damage is None:
             raise Exception
 
         self.num_attacks = num_attacks
-    
+
     def add(self, other):
         if not isinstance(other, DamageRange):
             raise ValueError("Can only add DamageRange to other DamageRanges")
@@ -42,7 +42,7 @@ class DamageRange:
                     result_damage_vals[cur_total_damage] = 0
 
                 result_damage_vals[cur_total_damage] += my_count + your_count
-        
+
         return DamageRange(result_damage_vals, num_attacks=(self.num_attacks + other.num_attacks))
 
     def split_kills(self, hp_threshold):
@@ -50,7 +50,7 @@ class DamageRange:
             return None, self
         elif hp_threshold <= self.min_damage:
             return self, None
-        
+
         kill_damage_vals = {}
         non_kill_damage_vals = {}
 
@@ -64,7 +64,7 @@ class DamageRange:
 
     def __len__(self):
         return self.size
-    
+
     def to_string(self, max_num=5, percent_of=None):
         result = []
 
@@ -74,16 +74,16 @@ class DamageRange:
                 result.append(f"{cur_percent:.1f} x{self.damage_vals[cur_dam]}")
             else:
                 result.append(f"{cur_dam} x{self.damage_vals[cur_dam]}")
-        
+
         if max_num is not None and max_num > 1 and len(result) > max_num:
             parts = max_num // 2
             result = result[:parts] + ['...'] + result[-parts:]
         
         return ", ".join(result)
-    
+
     def __repr__(self):
         return self.to_string()
-    
+
     def __add__(self, other):
         return self.add(other)
 

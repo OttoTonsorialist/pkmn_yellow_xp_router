@@ -1,10 +1,10 @@
 import tkinter as tk
 from tkinter import ttk
 import logging
-from controllers.battle_summary_controller import BattleSummaryController
 import time
 
 from controllers.main_controller import MainController
+from controllers.battle_summary_controller import BattleSummaryController
 from gui import custom_components, route_event_components, battle_summary
 from gui.pkmn_components.state_viewer import StateViewer
 from routing.route_events import EventDefinition, EventFolder, EventGroup, EventItem
@@ -17,7 +17,7 @@ logger = logging.getLogger(__name__)
 
 
 class EventDetails(ttk.Frame):
-    def __init__(self, controller:MainController, *args, **kwargs):
+    def __init__(self, controller:MainController, battle_controller:BattleSummaryController, *args, **kwargs):
         self.state_summary_width = 900
         self.battle_summary_width = 1400
         self.save_delay = 2
@@ -25,7 +25,7 @@ class EventDetails(ttk.Frame):
         self.grid_propagate(False)
 
         self._controller = controller
-        self._battle_summary_controller = BattleSummaryController(self._controller)
+        self._battle_summary_controller = battle_controller
         self._ignore_tab_switching = False
         self._cur_delayed_event_id = None
         self._cur_delayed_event_start = None

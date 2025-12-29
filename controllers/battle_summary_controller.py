@@ -1,5 +1,5 @@
 from __future__ import annotations
-from dataclasses import dataclass
+from dataclasses import dataclass, asdict
 import copy
 import logging
 from typing import Dict, List, Tuple
@@ -20,8 +20,10 @@ logger = logging.getLogger(__name__)
 class MoveRenderInfo:
     name:str
     attack_flavor:List[str]
-    damage_ranges:DamageRange
-    crit_damage_ranges:DamageRange
+    min_damage:int
+    max_damage:int
+    crit_min_damage:int
+    crit_max_damage:int
     defending_mon_hp:int
     kill_ranges:List[Tuple[int, float]]
     mimic_data:str
@@ -29,6 +31,9 @@ class MoveRenderInfo:
     custom_data_options:List[str]
     custom_data_selection:str
     is_best_move:bool=False
+
+    def serialize(self):
+        return asdict(self)
 
 @dataclass
 class PkmnRenderInfo:
@@ -40,6 +45,9 @@ class PkmnRenderInfo:
     defending_mon_speed:int
     defending_mon_hp:int
 
+    def serialize(self):
+        return asdict(self)
+
     def __str__(self) -> str:
         if self.attacking_mon_speed > self.defending_mon_speed:
             verb = "outspeeds"
@@ -47,7 +55,7 @@ class PkmnRenderInfo:
             verb = "underspeeds"
         else:
             verb = "speed-ties"
-        
+
         return f"Lv {self.attacking_mon_level}: {self.attacking_mon_name} {verb} Lv {self.defending_mon_level}: {self.defending_mon_name} ({self.defending_mon_hp} HP)"
 
 
@@ -97,7 +105,7 @@ class BattleSummaryController:
 
         self.load_empty()
 
-    
+
     #####
     # Registration methods
     #####
@@ -115,15 +123,15 @@ class BattleSummaryController:
     #####
     # Event callbacks
     #####
-    
+
     def _on_refresh(self):
         for tk_obj, cur_event_name in self._refresh_events:
             tk_obj.event_generate(cur_event_name, when="tail")
-    
+
     def _on_nonload_change(self):
         for tk_obj, cur_event_name in self._nonload_change_events:
             tk_obj.event_generate(cur_event_name, when="tail")
-    
+
     ######
     # Methods that induce a state change
     ######
@@ -135,12 +143,12 @@ class BattleSummaryController:
             if not target_found:
                 if new_value in self._original_enemy_mon_list[mon_idx].move_list:
                     target_found = True
-            
+
             if not target_found:
                 move_name = "Leer"
             else:
                 move_name = self._mimic_selection
-            
+
             if const.MIMIC_MOVE_NAME in self._original_player_mon_list[mon_idx].move_list:
                 cur_mimic_idx = self._original_player_mon_list[mon_idx].move_list.index(const.MIMIC_MOVE_NAME)
                 self._player_move_data[mon_idx][cur_mimic_idx] = self._recalculate_single_move(mon_idx, True, move_name, move_display_name=const.MIMIC_MOVE_NAME)
@@ -188,7 +196,7 @@ class BattleSummaryController:
     def update_player_field_moves(self, new_field_moves):
         self._player_field_move_list = new_field_moves
         self._full_refresh()
-    
+
     def update_player_transform(self, is_transformed):
         self._is_player_transformed = is_transformed
         self._full_refresh()
@@ -196,7 +204,7 @@ class BattleSummaryController:
     def update_prefight_candies(self, num_candies):
         if self._event_group_id is None:
             return
-        
+
         prev_event = self._main_controller.get_previous_event(self._event_group_id, enabled_only=True)
         if prev_event is None or prev_event.event_definition is None or prev_event.event_definition.rare_candy is None:
             # If num_candies is 0 and we don't have a number to update, don't create a pointless "use 0 candies" event
@@ -212,21 +220,21 @@ class BattleSummaryController:
                 prev_event.group_id,
                 EventDefinition(rare_candy=RareCandyEventDefinition(amount=num_candies)),
             )
-        
+
         self._full_refresh()
-    
+
     def update_player_strategy(self, strat):
         config.set_player_highlight_strategy(strat)
         self._full_refresh()
-    
+
     def update_enemy_strategy(self, strat):
         config.set_enemy_highlight_strategy(strat)
         self._full_refresh()
-    
+
     def update_consistent_threshold(self, threshold:int):
         config.set_consistent_threshold(threshold)
         self._full_refresh()
-    
+
     def _update_best_move_inplace(self, pkmn_idx, is_player_mon):
         # NOTE: this is a helper function that induces a state change, but does not directly (or indirectly) trigger any events
         # If you call this function, it is your responsibility to properly trigger an appropriate event independently
@@ -251,7 +259,7 @@ class BattleSummaryController:
             ):
                 best_move = cur_move
                 best_move_idx = idx
-        
+
         for idx, cur_move in enumerate(move_data[pkmn_idx]):
             if cur_move is None:
                 continue
@@ -306,11 +314,11 @@ class BattleSummaryController:
                             can_mimic_yet = True
                         else:
                             move_name = "Leer"
-                    
+
                     if not move_name and not struggle_set:
                         struggle_set = True
                         move_name = const.STRUGGLE_MOVE_NAME
-                    
+
                     cur_player_move_data = self._recalculate_single_move(mon_idx, True, move_name, move_display_name=move_display_name)
                 else:
                     cur_player_move_data = None
@@ -323,7 +331,6 @@ class BattleSummaryController:
                     cur_enemy_move_data = self._recalculate_single_move(mon_idx, False, move_name)
                 else:
                     cur_enemy_move_data = None
-                
 
                 #####
                 # Now the info has been generated for both sides of the fight. Add to the data structure, if appropriate
@@ -336,7 +343,7 @@ class BattleSummaryController:
             #####
             self._update_best_move_inplace(mon_idx, True)
             self._update_best_move_inplace(mon_idx, False)
-        
+
         # finally done calculating everything. Refresh and exit
         self._on_refresh()
         if not is_load:
@@ -415,7 +422,7 @@ class BattleSummaryController:
         if move.name == const.HIDDEN_POWER_MOVE_NAME:
             hidden_power_type, hidden_power_base_power = current_gen_info().get_hidden_power(attacking_mon.dvs)
             move_display_name = f"{move.name} ({hidden_power_type}: {hidden_power_base_power})"
-        
+
         if move_display_name is None:
             move_display_name = move.name
 
@@ -423,7 +430,7 @@ class BattleSummaryController:
         custom_data_options = current_gen_info().get_move_custom_data(move.name)
         if custom_data_options is None and const.FLAVOR_MULTI_HIT in move.attack_flavor:
             custom_data_options = const.MULTI_HIT_CUSTOM_DATA
-        
+
         if custom_data_options is None:
             custom_data_selection = None
         elif custom_data_selection not in custom_data_options:
@@ -483,8 +490,10 @@ class BattleSummaryController:
         return MoveRenderInfo(
             move_display_name,
             move.attack_flavor,
-            normal_ranges,
-            crit_ranges,
+            -1 if normal_ranges is None else normal_ranges.min_damage,
+            -1 if normal_ranges is None else normal_ranges.max_damage,
+            -1 if crit_ranges is None else crit_ranges.min_damage,
+            -1 if crit_ranges is None else crit_ranges.max_damage,
             defending_mon.cur_stats.hp,
             kill_ranges,
             self._mimic_selection,
@@ -591,7 +600,7 @@ class BattleSummaryController:
             self._transformed_mon_list[-1].cur_stats.hp = self._original_player_mon_list[-1].cur_stats.hp
 
             cur_state = cur_state.defeat_pkmn(cur_enemy)[0]
-        
+
         trainer_obj = current_gen_info().trainer_db().get_trainer(trainer_name)
         if trainer_obj is None:
             self._double_battle_flag = False
@@ -599,7 +608,7 @@ class BattleSummaryController:
             self._double_battle_flag = trainer_obj.double_battle
 
         self._full_refresh(is_load=True)
-    
+
     def load_empty(self):
         self._event_group_id = None
         self._trainer_name = ""
@@ -632,7 +641,7 @@ class BattleSummaryController:
             if len(cur_test[const.PLAYER_KEY]) > 0 or len(cur_test[const.ENEMY_KEY]) > 0:
                 is_custom_move_data_present = True
                 break
-        
+
         if is_custom_move_data_present:
             final_custom_move_data = [self._custom_move_data[x] for x in self._cached_definition_order]
         else:
@@ -659,10 +668,10 @@ class BattleSummaryController:
             cur_data = self._player_pkmn_matchup_data
         else:
             cur_data = self._enemy_pkmn_matchup_data
-        
+
         if pkmn_idx < 0 or pkmn_idx >= len(cur_data):
             return None
-        
+
         return cur_data[pkmn_idx]
 
     def get_move_info(self, pkmn_idx, move_idx, is_player_mon) -> MoveRenderInfo:
@@ -673,7 +682,7 @@ class BattleSummaryController:
 
         if pkmn_idx < 0 or pkmn_idx >= len(cur_move_data) or move_idx < 0 or move_idx >= 4:
             return None
-        
+
         return cur_move_data[pkmn_idx][move_idx]
 
     def get_weather(self) -> str:
@@ -690,7 +699,7 @@ class BattleSummaryController:
 
     def get_enemy_field_moves(self) -> List[str]:
         return self._enemy_field_move_list
-    
+
     def is_double_battle(self) -> bool:
         return self._double_battle_flag
 
@@ -707,19 +716,19 @@ class BattleSummaryController:
         ):
             return False
 
-        if new_move is None or new_move.damage_ranges is None:
+        if new_move is None or new_move.min_damage == -1:
             return False
 
-        if prev_move is None or prev_move.damage_ranges is None:
+        if prev_move is None or prev_move.min_damage == -1:
             return True
 
         # special case for recharge moves (e.g. Hyper Beam)
         # If a one-hit is not possible without a crit, always prefer other damage dealing moves
-        if const.FLAVOR_RECHARGE in new_move.attack_flavor and new_move.damage_ranges.max_damage < other_mon.defending_mon_hp:
+        if const.FLAVOR_RECHARGE in new_move.attack_flavor and new_move.max_damage < other_mon.defending_mon_hp:
             return False
-        elif const.FLAVOR_RECHARGE in prev_move.attack_flavor and prev_move.damage_ranges.max_damage < other_mon.defending_mon_hp:
+        elif const.FLAVOR_RECHARGE in prev_move.attack_flavor and prev_move.max_damage < other_mon.defending_mon_hp:
             return True
-        
+
         new_fastest_kill = 1000000
         new_accuracy = -2
         if len(new_move.kill_ranges) > 0:
@@ -735,7 +744,7 @@ class BattleSummaryController:
                     if test_kill[1] >= config.get_consistent_threshold():
                         new_fastest_kill, new_accuracy = test_kill
                         break
-        
+
         prev_fastest_kill = new_fastest_kill + 1
         prev_accuracy = -2
         if len(prev_move.kill_ranges) > 0:
@@ -749,13 +758,12 @@ class BattleSummaryController:
                         prev_fastest_kill, prev_accuracy = test_kill
                         break
 
-        
         # always prefer lower number of turns
         if new_fastest_kill < prev_fastest_kill:
             return True
         elif prev_fastest_kill < new_fastest_kill:
             return False
-        
+
         # if number of turns is tied, then prefer higher accuracy
         # note that accuracy might be "-1" in the case of auto-calculated kills
         # but that's fine, because we want higher accuracy, so it will always "lose", which is desirable
@@ -775,9 +783,9 @@ class BattleSummaryController:
             const.FLAVOR_TWO_TURN_INVULN in new_move.attack_flavor
         ):
             return False
-        
+
         # Only rely on damage for tie breakers
-        return new_move.damage_ranges.max_damage > prev_move.damage_ranges.max_damage
+        return new_move.max_damage > prev_move.max_damage
 
     @staticmethod
     def _calc_stage_modifier(move_list) -> StageModifiers:
@@ -785,7 +793,7 @@ class BattleSummaryController:
 
         for cur_move in move_list:
             result = result.apply_stat_mod(current_gen_info().move_db().get_stat_mod(cur_move))
-        
+
         return result
 
     def _calc_field_status(self, is_player:bool) -> FieldStatus:
@@ -798,29 +806,28 @@ class BattleSummaryController:
 
         for cur_move_name in move_list:
             result = result.apply_move(cur_move_name)
-        
+
         return result
-    
+
     def can_support_prefight_candies(self):
         return self._event_group_id is not None
-    
+
     def get_prefight_candy_count(self):
         if self._event_group_id is None:
             return 0
-        
+
         prev_event = self._main_controller.get_previous_event(self._event_group_id, enabled_only=True)
         if prev_event is None or prev_event.event_definition.rare_candy is None:
             return 0
-        
+
         return prev_event.event_definition.rare_candy.amount
-    
+
     def take_screenshot(self, bbox):
         if not self._trainer_name:
             self._main_controller.send_message(f"No active battle to screenshot")
             return
-        
+
         self._main_controller.take_screenshot(
             self._trainer_name.replace(" ", "_"),
             bbox
         )
-        

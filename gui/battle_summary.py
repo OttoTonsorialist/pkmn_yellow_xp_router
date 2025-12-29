@@ -480,7 +480,7 @@ class DamageSummary(ttk.Frame):
             self.unflag_as_best_move()
         else:
             self.flag_as_best_move()
-        
+
         custom_data_options = None
         custom_data_selection = None
         if move is not None:
@@ -509,24 +509,23 @@ class DamageSummary(ttk.Frame):
             self.crit_pct_damage_range.configure(text="")
         else:
             self.move_name_label.configure(text=f"{move.name}")
-            if move.damage_ranges is None:
+            if move.min_damage == -1:
                 self.damage_range.configure(text="")
                 self.pct_damage_range.configure(text="")
                 self.crit_damage_range.configure(text="")
                 self.crit_pct_damage_range.configure(text="")
-            
+
             else:
-                self.damage_range.configure(text=f"{move.damage_ranges.min_damage} - {move.damage_ranges.max_damage}")
-                pct_min_damage = f"{round(move.damage_ranges.min_damage / move.defending_mon_hp * 100)}%"
-                pct_max_damage = f"{round(move.damage_ranges.max_damage / move.defending_mon_hp * 100)}%"
+                self.damage_range.configure(text=f"{move.min_damage} - {move.max_damage}")
+                pct_min_damage = f"{round(move.min_damage / move.defending_mon_hp * 100)}%"
+                pct_max_damage = f"{round(move.max_damage / move.defending_mon_hp * 100)}%"
                 self.pct_damage_range.configure(text=f"{pct_min_damage} - {pct_max_damage}")
 
-                self.crit_damage_range.configure(text=f"{move.crit_damage_ranges.min_damage} - {move.crit_damage_ranges.max_damage}")
-                crit_pct_min_damage = f"{round(move.crit_damage_ranges.min_damage / move.defending_mon_hp * 100)}%"
-                crit_pct_max_damage = f"{round(move.crit_damage_ranges.max_damage / move.defending_mon_hp * 100)}%"
+                self.crit_damage_range.configure(text=f"{move.crit_min_damage} - {move.crit_max_damage}")
+                crit_pct_min_damage = f"{round(move.crit_min_damage / move.defending_mon_hp * 100)}%"
+                crit_pct_max_damage = f"{round(move.crit_max_damage / move.defending_mon_hp * 100)}%"
                 self.crit_pct_damage_range.configure(text=f"{crit_pct_min_damage} - {crit_pct_max_damage}")
 
-            
             max_num_messages = 3
             kill_ranges = move.kill_ranges
             if len(kill_ranges) > max_num_messages:

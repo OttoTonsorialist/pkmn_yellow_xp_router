@@ -210,17 +210,24 @@ class RouteState:
         self.solo_pkmn = solo_pkmn
         self.badges = badges
         self.inventory = inventory
-    
+
     def __eq__(self, other):
         if not isinstance(other, RouteState):
             return False
-        
+
         return (
             self.solo_pkmn == other.solo_pkmn and
             self.badges == other.badges and
             self.inventory == other.inventory
         )
-    
+
+    def serialize(self):
+        return {
+            const.SOLO_MON_KEY: self.solo_pkmn.serialize(),
+            const.BADGES_KEY: str(self.badges),
+            const.INVENTORY_KEY: self.inventory.serialize(),
+        }
+
     def learn_move(self, move_name, dest, source):
         error_message = ""
         if source == const.MOVE_SOURCE_LEVELUP or source == const.MOVE_SOURCE_TUTOR:
@@ -285,7 +292,7 @@ class RouteState:
             new_badges,
             _defeat_trainer(self.inventory, self.solo_pkmn, pkmn.gen_factory.current_gen_info().trainer_db().get_trainer(trainer_name), pay_day_amount)
         ), ""
-    
+
     def add_item(self, item_name, amount, is_purchase):
         error_message = ""
 
@@ -307,7 +314,7 @@ class RouteState:
             inv = self.inventory.remove_item(pkmn.gen_factory.current_gen_info().item_db().get_item(item_name), amount, is_purchase, force=True)
 
         return RouteState(self.solo_pkmn, self.badges, inv), error_message
-    
+
     def hold_item(self, item_name, consumed):
         error_message = ""
 
@@ -322,7 +329,7 @@ class RouteState:
             except Exception as e:
                 error_message = str(e)
                 inv = inv.remove_item(pkmn.gen_factory.current_gen_info().item_db().get_item(item_name), 1, force=True)
-        
+
         return RouteState(
             _hold_item(self.solo_pkmn, item_name, self.badges),
             self.badges,
@@ -356,7 +363,6 @@ class RouteState:
                 error_message = f"Cannot evolve into species ({new_species.name}) with different growth rate: {new_species.growth_rate}"
             else:
                 result_mon = _evolve(self.solo_pkmn, new_species, self.badges)
-        
 
         if by_stone is not None:
             try:

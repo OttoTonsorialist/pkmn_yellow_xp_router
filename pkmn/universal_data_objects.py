@@ -72,25 +72,25 @@ class Nature(Enum):
 class BadgeList:
     def award_badge(self, trainer_name):
         raise NotImplementedError()
-    
+
     def to_string(self, verbose=False) -> str:
         raise NotImplementedError()
-    
+
     def is_attack_boosted(self):
         raise NotImplementedError()
-    
+
     def is_defense_boosted(self):
         raise NotImplementedError()
-    
+
     def is_speed_boosted(self):
         raise NotImplementedError()
-    
+
     def is_special_attack_boosted(self):
         raise NotImplementedError()
 
     def is_special_defense_boosted(self):
         raise NotImplementedError()
-    
+
     def copy(self):
         raise NotImplementedError()
 
@@ -276,8 +276,8 @@ class StatBlock:
             self.special_attack == other.special_attack and 
             self.special_defense == other.special_defense
         )
-    
-    def serialize(self, gen):
+
+    def serialize(self):
         return {
             const.HP: self.hp,
             const.ATTACK: self.attack,
